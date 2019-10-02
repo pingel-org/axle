@@ -11,6 +11,7 @@ import spire.random.Dist
 //import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 
+import axle.algebra._
 import axle.stats.ProbabilityModel
 import axle.syntax.probabilitymodel._
 
@@ -52,7 +53,7 @@ package object game {
     val openStateModel: PM[S, V] = prob.filter(stateModel)((s: S) => evGame.mover(game, s).isDefined)
 
     val fromState: S = prob.observe(openStateModel)(gen)
-    val probabilityOfFromState: V = prob.probabilityOf(stateModel)(eqS.eqv(_, fromState))
+    val probabilityOfFromState: V = prob.probabilityOf(stateModel)(RegionEq(fromState))
 
     evGame.mover(game, fromState).map(mover => {
       val strategyFn = evGame.strategyFor(game, mover)
@@ -64,7 +65,7 @@ package object game {
       if( fromState === toState ) {
         (Some((fromState, move)), stateModel)
       } else {
-        val probabilityOfMove: V = prob.probabilityOf(strategy)(eqM.eqv(_, move))
+        val probabilityOfMove: V = prob.probabilityOf(strategy)(RegionEq(move))
         val mass = probabilityOfFromState * probabilityOfMove
         // TODO scale mass down
         val redistributed = prob.redistribute(stateModel)(fromState, toState, mass)

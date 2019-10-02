@@ -90,8 +90,9 @@ package object stats {
     pIn:  ProbabilityModel[C],
     pOut: ProbabilityModel[M]): M[T, N] = {
 
-    val pTrue: N = pIn.probabilityOf(conditionModel)(identity[Boolean])
-    val pFalse: N = pIn.probabilityOf(conditionModel)(x => !x)
+    implicit val eqBool = cats.kernel.Eq.fromUniversalEquals[Boolean]
+    val pTrue: N = pIn.probabilityOf(conditionModel)(RegionEq(true))
+    val pFalse: N = pIn.probabilityOf(conditionModel)(RegionEq(false))
 
     pOut.mapValues(pOut.adjoin(trueBranchModel)(falseBranchModel))({ case (v1, v2) => (v1 * pTrue) + (v2 * pFalse) })
   }

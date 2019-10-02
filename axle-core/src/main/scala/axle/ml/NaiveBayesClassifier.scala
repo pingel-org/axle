@@ -10,15 +10,13 @@ import spire.implicits.MapInnerProductSpace
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 
-import axle.algebra.Aggregatable
-import axle.algebra.Talliable
-import axle.algebra.functorIndexedSeq
+import axle.algebra._
 import axle.math._
 import axle.stats.Variable
 import axle.stats.TallyDistribution
 import axle.stats.ProbabilityModel
 import axle.syntax.aggregatable._
-import axle.syntax.talliable._
+//import axle.syntax.talliable._
 
 case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N: Field: Order](
   data:                      F[DATA],
@@ -51,8 +49,9 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
       },
       _ + _)
 
+
   val classTally: Map[CLASS, N] =
-    data.map(classExtractor).tally.withDefaultValue(Field[N].zero)
+    talliableF.tally[CLASS, N](data.map(classExtractor)).withDefaultValue(Field[N].zero)
 
   val C = TallyDistribution(classTally, Variable[CLASS]("class"))
 
@@ -87,7 +86,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
         }
       }))
 
-    def g(c: CLASS): N = probTally0.probabilityOf(C)(_ === c) * f(c)
+    def g(c: CLASS): N = probTally0.probabilityOf(C)(RegionEq(c)) * f(c)
 
     argmax(C.values, g).get // TODO: will be None if C.values is empty
   }
