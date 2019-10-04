@@ -51,7 +51,7 @@ trait ProbabilityModel[M[_, _]] {
 
   def probabilityOf[A, V](model: M[A, V])(predicate: Region[A])(implicit fieldV: Field[V]): V
 
-  def filter[A, V](model: M[A, V])(predicate: A => Boolean)(implicit fieldV: Field[V]): M[A, V]
+  def filter[A, V](model: M[A, V])(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V]
 
   def observe[A, V: Dist: Ring: Order](model: M[A, V])(gen: Generator): A
 

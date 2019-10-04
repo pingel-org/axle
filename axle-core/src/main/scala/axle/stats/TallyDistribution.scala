@@ -89,7 +89,7 @@ object TallyDistribution {
         TallyDistribution(p, Variable[B]("?"))
       }
   
-      def filter[A, V](model: TallyDistribution[A, V])(predicate: A => Boolean)(implicit fieldV: Field[V]): TallyDistribution[A, V] = {
+      def filter[A, V](model: TallyDistribution[A, V])(predicate: Region[A])(implicit fieldV: Field[V]): TallyDistribution[A, V] = {
         val newMap: Map[A, V] = model.tally.toVector.filter({ case (a, v) => predicate(a)}).groupBy(_._1).map( bvs => bvs._1 -> Σ(bvs._2.map(_._2)) )
         val newDenominator: V = Σ(newMap.values)
         TallyDistribution[A, V](newMap.mapValues(v => v / newDenominator), model.variable)

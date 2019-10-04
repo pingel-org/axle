@@ -28,6 +28,7 @@ object Region {
 
     def show(ra: Region[A]): String = ra match {
       case re @ RegionEq(x) => show"_ === ${x}"
+      case rl @ RegionLambda(_) => "𝛌x.…"
       case ret12 @ RegionEqTuple1of2(x) => {
         import ret12._
         show"_._1 === ${x}"
@@ -61,11 +62,9 @@ case class RegionEq[A](x: A)(implicit val eqA: Eq[A]) extends Region[A] {
   def apply(y: A): Boolean = eqA.eqv(x, y)
 }
 
-object RegionEq {
+case class RegionLambda[A](lambda: A => Boolean) extends Region[A] {
 
-  // implicit def reqEq[A]: Eq[RegionEq[A]] = new Eq[RegionEq[A]] {
-  //   def eqv(left: RegionEq[A], right: RegionEq[A]): Boolean = left.eqA.eqv(left.x, right.x)
-  // }
+  def apply(x: A): Boolean = lambda(x)
 }
 
 case class RegionEqTuple1of2[A, B](a: A)(

@@ -116,7 +116,7 @@ object ConditionalProbabilityTable {
         ConditionalProbabilityTable(p, Variable[B]("?"))
       }
 
-      def filter[A, V](model: ConditionalProbabilityTable[A, V])(predicate: A => Boolean)(implicit fieldV: Field[V]): ConditionalProbabilityTable[A, V] = {
+      def filter[A, V](model: ConditionalProbabilityTable[A, V])(predicate: Region[A])(implicit fieldV: Field[V]): ConditionalProbabilityTable[A, V] = {
         val newMap: Map[A, V] = model.p.toVector.filter({ case (a, v) => predicate(a)}).groupBy(_._1).map( bvs => bvs._1 -> Σ(bvs._2.map(_._2)) )
         val newDenominator: V = Σ(newMap.values)
         import model.eqA
