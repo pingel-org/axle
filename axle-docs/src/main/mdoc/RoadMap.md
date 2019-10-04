@@ -46,8 +46,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `chain`, `adjoin`, `mapValues`, `redistribute`
 
-* `ProbabilityModel.filter`'s predicate should be a `Region`
-* rm PExpr, PMultiply
 * Replace `CaseIs` with `Region`
 * `Show[Factor]` should include `Show[A => Boolean]`
 * Is `ProbabilityModel.mapValues` really needed? (maybe we need a map that maps keys and values together, which could be used to implement `redistribute`)
