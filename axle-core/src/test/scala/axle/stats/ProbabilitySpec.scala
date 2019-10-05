@@ -2,6 +2,7 @@ package axle.stats
 
 import org.scalatest._
 
+import cats.implicits._
 import spire.math._
 import axle.game.Dice._
 import axle.syntax.probabilitymodel._
@@ -47,8 +48,8 @@ class ProbabilitySpec extends FunSuite with Matchers {
 
     bothDieModel.P(RegionNegate(RegionEqTuple1of2(3))) should be(Rational(5, 6))
 
-    bothDieModel.P(
-      { rolls: (Int, Int) => (rolls._1 === 1) && (rolls._2 === 2)}
-    ) should be(Rational(1, 36))
+    bothDieModel.P(RegionLambda({ rolls: (Int, Int) =>
+      (rolls._1 === 1) && (rolls._2 === 2)
+    })) should be(Rational(1, 36))
   }
 }
