@@ -1,6 +1,10 @@
 package axle.stats
 
+import axle.algebra.RegionEq
+
 case class Variable[T](name: String) {
+
+  def is(t: T): (Variable[T], RegionEq[T]) = (this, RegionEq(t))
 
   def charWidth: Int = name.length
 }
