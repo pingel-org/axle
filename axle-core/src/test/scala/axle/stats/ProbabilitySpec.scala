@@ -40,16 +40,12 @@ class ProbabilitySpec extends FunSuite with Matchers {
 
   test("two independent d6") {
 
-    implicit val eqInt: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra
-
     val bothDieModel = prob.chain(die(6))(die(6))
 
     bothDieModel.P(RegionEqTuple1of2(1)) should be(Rational(1, 6))
 
     bothDieModel.P(RegionNegate(RegionEqTuple1of2(3))) should be(Rational(5, 6))
 
-    bothDieModel.P(RegionLambda({ rolls: (Int, Int) =>
-      (rolls._1 === 1) && (rolls._2 === 2)
-    })) should be(Rational(1, 36))
+    bothDieModel.P(RegionAnd(RegionEqTuple1of2(1), RegionEqTuple2of2(2))) should be(Rational(1, 36))
   }
 }
