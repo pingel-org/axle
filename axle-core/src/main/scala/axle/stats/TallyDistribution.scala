@@ -43,7 +43,7 @@ object TallyDistribution {
          key -> value
         }).toMap
 
-        TallyDistribution[A, (V1, V2)](newTally, model.variable)
+        TallyDistribution[A, (V1, V2)](newTally)
       }
   
       def chain[A, B, V](model: TallyDistribution[A, V])(other: TallyDistribution[B, V])(
@@ -52,14 +52,14 @@ object TallyDistribution {
           a <- model.values
           b <- other.values
         } yield ((a, b) -> (probabilityOf(model)(RegionEq(a)) * probabilityOf(other)(RegionEq(b))))).toMap
-        TallyDistribution[(A, B), V](abvMap, Variable[(A, B)](model.variable.name + " " + other.variable.name))
+        TallyDistribution[(A, B), V](abvMap)
       }
 
       def map[A, B, V](model: TallyDistribution[A, V])(f: A => B)(implicit eqB: cats.kernel.Eq[B]): TallyDistribution[B, V] = {
         import model.ringV
         TallyDistribution[B, V](
-          model.tally.map({ case (a, v) => f(a) -> v }), // TODO use eqA to unique
-          Variable[B](model.variable.name + "'"))
+          model.tally.map({ case (a, v) => f(a) -> v }) // TODO use eqA to unique
+        )
       }
 
       def redistribute[A: cats.kernel.Eq, V: Ring](model: TallyDistribution[A, V])(
@@ -72,10 +72,10 @@ object TallyDistribution {
           } else {
             a -> v
           }
-        }), model.variable)
-      
+        }))
+
       def mapValues[A, V, V2](model: TallyDistribution[A, V])(f: V => V2)(implicit fieldV: Field[V], ringV2: Ring[V2]): TallyDistribution[A, V2] =
-        TallyDistribution[A, V2](model.tally.mapValues(f), model.variable)
+        TallyDistribution[A, V2](model.tally.mapValues(f))
   
       def flatMap[A, B, V](model: TallyDistribution[A, V])(f: A => TallyDistribution[B, V])(implicit eqB: cats.kernel.Eq[B]): TallyDistribution[B, V] = {
         val p = model.values.toVector.flatMap { a =>
@@ -86,17 +86,17 @@ object TallyDistribution {
           }
         }.groupBy(_._1).map({ case (b, bvs) => b -> bvs.map(_._2).reduce(model.ringV.plus)})
         import model.ringV
-        TallyDistribution(p, Variable[B]("?"))
+        TallyDistribution(p)
       }
   
       def filter[A, V](model: TallyDistribution[A, V])(predicate: Region[A])(implicit fieldV: Field[V]): TallyDistribution[A, V] = {
         val newMap: Map[A, V] = model.tally.toVector.filter({ case (a, v) => predicate(a)}).groupBy(_._1).map( bvs => bvs._1 -> Σ(bvs._2.map(_._2)) )
         val newDenominator: V = Σ(newMap.values)
-        TallyDistribution[A, V](newMap.mapValues(v => v / newDenominator), model.variable)
+        TallyDistribution[A, V](newMap.mapValues(v => v / newDenominator))
       }
 
-      def unit[A, V](a: A, variable: Variable[A])(implicit eqA: cats.kernel.Eq[A], ringV: Ring[V]): TallyDistribution[A, V] =
-        TallyDistribution(Map(a -> ringV.one), variable)
+      def unit[A, V](a: A)(implicit eqA: cats.kernel.Eq[A], ringV: Ring[V]): TallyDistribution[A, V] =
+        TallyDistribution(Map(a -> ringV.one))
 
       def observe[A, V](model: TallyDistribution[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
         val r: V = model.totalCount * gen.next[V]
@@ -110,8 +110,7 @@ object TallyDistribution {
 
 }
 case class TallyDistribution[A, V](
-  tally:    Map[A, V],
-  variable: Variable[A])(implicit val ringV: Ring[V]) {
+  tally:    Map[A, V])(implicit val ringV: Ring[V]) {
 
   val values: IndexedSeq[A] = tally.keys.toVector
 
