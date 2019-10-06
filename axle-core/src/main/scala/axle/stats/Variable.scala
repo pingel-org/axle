@@ -5,7 +5,9 @@ import axle.algebra.RegionEq
 
 case class Variable[T](name: String) {
 
-  def is(t: T)(implicit eqT: Eq[T]): (Variable[T], RegionEq[T]) = (this, RegionEq(t))
+  def is(t: T)(implicit eqT: Eq[T]): RegionEq[T] = RegionEq(t)
+
+//  def is(t: T)(implicit eqT: Eq[T]): (Variable[T], RegionEq[T]) = (this, RegionEq(t))
 
   def charWidth: Int = name.length
 }
