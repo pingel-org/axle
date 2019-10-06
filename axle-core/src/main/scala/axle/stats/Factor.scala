@@ -10,7 +10,7 @@ import cats.Order.catsKernelOrderingForOrder
 
 import spire.algebra.Field
 import spire.algebra.MultiplicativeMonoid
-import spire.implicits.convertableOps
+//import spire.implicits.convertableOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
@@ -134,20 +134,27 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
     a: Variable[T],
     b: Variable[T])(
     implicit
-    la: LinearAlgebra[M, Int, Int, Double]): M =
-    la.matrix(
+    la: LinearAlgebra[M, Int, Int, Double],
+    cf: ConvertableFrom[N]): M = {
+    val foo = la.matrix(
       valuesOfVariable(a).size,
       valuesOfVariable(b).size,
-      (r: Int, c: Int) => spire.optional.unicode.Σ(
-        cases.filter( regions =>
-          isSupersetOf(
-            variables.zip(regions),
-            Vector(
-              (a, RegionEq(valuesOfVariable(a).apply(r))),
-              (b, RegionEq(valuesOfVariable(b).apply(c))))
-          )
-        ).map(this(_)).toVector).toDouble
+      {(r: Int, c: Int) => {
+        val sumN = spire.optional.unicode.Σ({
+          cases.filter(regions => {
+            isSupersetOf(
+              variables.zip(regions),
+              Vector(
+                (a, RegionEq(valuesOfVariable(a).apply(r))),
+                (b, RegionEq(valuesOfVariable(b).apply(c))))
+              )
+            }).map(this(_)).toIterable
+          })
+        cf.toDouble(sumN)
+      }}
     )
+    foo
+  }
 
   def Σ(varToSumOut: Variable[T]): Factor[T, N] = this.sumOut(varToSumOut)
 
