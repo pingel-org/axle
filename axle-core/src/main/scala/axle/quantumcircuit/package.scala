@@ -21,7 +21,7 @@ package object quantumcircuit {
     val m: Map[Vector[Binary], T] = xs.zipWithIndex.map({ case (x, i) =>
        (0 until xs.size).map({ j => if(i === j) B1 else B0 }).toVector -> (x*x).real
     }).toMap
-    ConditionalProbabilityTable(m, Variable("Q"))
+    ConditionalProbabilityTable(m)
   }
 
   implicit class EnrichedVector[T](vector: Vector[T]) {

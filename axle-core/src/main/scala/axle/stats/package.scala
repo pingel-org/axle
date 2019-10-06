@@ -52,13 +52,11 @@ package object stats {
     ConditionalProbabilityTable[Symbol, Rational](
       Map(
         'HEAD -> pHead,
-        'TAIL -> (1 - pHead)),
-
-      Variable(s"coin $pHead"))
+        'TAIL -> (1 - pHead)))
 
   def binaryDecision(yes: Rational): ConditionalProbabilityTable[Boolean, Rational] = {
     import cats.implicits._
-    ConditionalProbabilityTable(Map(true -> yes, false -> (1 - yes)), Variable("binary"))
+    ConditionalProbabilityTable(Map(true -> yes, false -> (1 - yes)))
   }
 
   def uniformDistribution[T: Eq](values: Seq[T], variable: Variable[T]): ConditionalProbabilityTable[T, Rational] = {
@@ -70,7 +68,7 @@ package object stats {
        rk -> v
     })
 
-    ConditionalProbabilityTable(dist, variable)
+    ConditionalProbabilityTable(dist)
   }
 
   def iffy[T, N, C[_, _], M[_, _]](

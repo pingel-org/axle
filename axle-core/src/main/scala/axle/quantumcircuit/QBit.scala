@@ -25,7 +25,7 @@ case class QBit[T: Field](a: Complex[T], b: Complex[T]) {
       CBit0 -> (a * a).real,
       CBit1 -> (b * b).real
     )
-    ConditionalProbabilityTable.apply(m, Variable("Q"))
+    ConditionalProbabilityTable.apply(m)
   }
     
 }

@@ -53,7 +53,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
   val classTally: Map[CLASS, N] =
     talliableF.tally[CLASS, N](data.map(classExtractor)).withDefaultValue(Field[N].zero)
 
-  val C = TallyDistribution(classTally, Variable[CLASS]("class"))
+  val C = TallyDistribution(classTally)
 
   val probTally0 = implicitly[ProbabilityModel[TallyDistribution]]
   // TODO val probTally1 = implicitly[Probability[({ type λ[T] = TallyDistribution1[T, CLASS, N] })#λ, N]]
@@ -68,7 +68,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
   // Note: The "parent" (or "given") of these feature variables is C
   val Fs = featureVariablesAndValues.map {
     case (featureVariable, _) =>
-      TallyDistribution[(FEATURE, CLASS), N](tallyFor(featureVariable).withDefaultValue(Field[N].zero), Variable[(FEATURE, CLASS)]("F C"))
+      TallyDistribution[(FEATURE, CLASS), N](tallyFor(featureVariable).withDefaultValue(Field[N].zero))
   }
 
   def classes: IndexedSeq[CLASS] = classTally.keySet.toVector.sorted

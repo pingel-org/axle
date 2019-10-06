@@ -47,7 +47,7 @@ trait ProbabilityModel[M[_, _]] {
 
   def flatMap[A, B, V](model: M[A, V])(f: A => M[B, V])(implicit eqB: cats.kernel.Eq[B]): M[B, V]
 
-  def unit[A, V](a: A, variable: Variable[A])(implicit eqA: cats.kernel.Eq[A], ringV: Ring[V]): M[A, V]
+  def unit[A, V](a: A)(implicit eqA: cats.kernel.Eq[A], ringV: Ring[V]): M[A, V]
 
   def probabilityOf[A, V](model: M[A, V])(predicate: Region[A])(implicit fieldV: Field[V]): V
 

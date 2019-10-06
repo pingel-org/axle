@@ -12,7 +12,6 @@ import spire.math.ConvertableTo
 
 //import axle.algebra.RegionEq
 import axle.stats.ConditionalProbabilityTable
-import axle.stats.Variable
 
 object Strategies {
 
@@ -30,8 +29,7 @@ object Strategies {
     evEqM: Eq[M]): (G, S) => PM[M, V] =
     (ttt: G, state: S) => {
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
-      val v = Variable[M]("ai move")
-      evGame.probabilityModelPM.unit[M, V](move, v)
+      evGame.probabilityModelPM.unit[M, V](move)
     }
 
   def hardCodedStringStrategy[G, S, O, M, MS, MM, V: Order: Field, PM[_, _]](
@@ -44,8 +42,7 @@ object Strategies {
       val parsed = evGameIO.parseMove(game, input(game, state)).right.toOption.get
       val validated = evGame.isValid(game, state, parsed)
       val move = validated.right.toOption.get
-      val v = Variable[M]("hard-coded")
-      ConditionalProbabilityTable[M, V](Map(move -> Field[V].one), v)
+      ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
     }
 
   def userInputStream(display: String => Unit, read: () => String): Stream[String] = {
@@ -78,8 +75,7 @@ object Strategies {
         })
 
       val move = stream.find(esm => esm.isRight).get.right.toOption.get
-      val v = Variable[M]("interactive")
-      ConditionalProbabilityTable[M, V](Map(move -> Field[V].one), v)
+      ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
     }
 
   def randomMove[G, S, O, M, MS, MM, V: Order: Field: ConvertableTo, PM[_, _]](
@@ -89,8 +85,7 @@ object Strategies {
     (game: G, state: MS) => {
       val opens = evGame.moves(game, state).toVector
       val p = Field[V].reciprocal(ConvertableTo[V].fromInt(opens.length))
-      val v = Variable[M]("random")
-      ConditionalProbabilityTable[M, V](opens.map(open => open -> p).toMap, v)
+      ConditionalProbabilityTable[M, V](opens.map(open => open -> p).toMap)
     }
 
   /**
