@@ -2,8 +2,6 @@ package axle.stats
 
 case class Variable[T](name: String) {
 
-  def is(t: T): CaseIs[T] = CaseIs(t, this)
-
   def charWidth: Int = name.length
 }
 

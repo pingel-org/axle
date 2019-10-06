@@ -1,8 +1,8 @@
 package axle.pgm
 
+import cats.implicits._
 import cats.Show
 import cats.kernel.Eq
-import cats.implicits._
 
 import spire.algebra.Field
 
@@ -27,7 +27,7 @@ object BayesianNetworkNode {
             {
               bnn.cpt.cases.map(kase =>
                 <tr>
-                  { kase.map(ci => <td>{ ci.value.show }</td>) }
+                  { kase.map(ci => <td>{ show"${ci}" }</td>) }
                   <td>{ bnn.cpt(kase) }</td>
                 </tr>)
             }

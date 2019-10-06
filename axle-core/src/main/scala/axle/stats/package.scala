@@ -2,12 +2,9 @@ package axle
 
 import scala.Stream.cons
 import scala.Vector
-import scala.language.implicitConversions
 
-//import cats.Monad
 import cats.Functor
 import cats.kernel.Eq
-//import cats.implicits._
 
 import spire.algebra.Field
 import spire.algebra.NRoot
@@ -48,9 +45,6 @@ package object stats {
   //   implicit val bigintDist: Dist[BigInt] = Dist.bigint(2)
   //   Dist.rational
   // }
-
-  implicit def enrichCaseGenTraversable[R, A: Manifest, N: Field](cgt: Iterable[CaseIs[A]]): EnrichedCaseGenTraversable[R, A, N] =
-    EnrichedCaseGenTraversable(cgt)
 
   def coinSides = Vector('HEAD, 'TAIL)
 

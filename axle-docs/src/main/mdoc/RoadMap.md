@@ -46,15 +46,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `chain`, `adjoin`, `mapValues`, `redistribute`
 
-* Replace `CaseIs` with `Region`
-* `Show[Factor]` should include `Show[A => Boolean]`
 * Is `ProbabilityModel.mapValues` really needed? (maybe we need a map that maps keys and values together, which could be used to implement `redistribute`)
 * Is `ConditionalProbabilityTable.variable` necessary?
 * `ProbabilityModel.unit` shouldn't take a `Variable`?
 
-* Fix GeneticAlgorithmSpec, GeneticAlgorithms.md
-* Fix NaiveBayesClassifier, NaiveBayesSpec, + .md
-
+* Fix NaiveBayesClassifier, NaiveBayesSpec
+* Fix GeneticAlgorithmSpec
 * LogisticMap md back to 4k x 4k
 * Release and publish site
 
@@ -72,7 +69,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Figure out better way to reference images
 
 * `Region` DSL
-* rename `CPT`
+* rename `ConditionalProbabilityTable`
 * Get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
 * "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
 * alias `uniform` as `Bernoulli`
@@ -101,7 +98,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Sort out MapFrom, FromStream, FromSet
 * Test `axle.algebra.tuple2Field`
 
-## 0.5.2 (July 2020)
+## 0.5.3 (July 2020)
 
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 * Also use HLists for `ProbabilityModel` type parameter `A`
