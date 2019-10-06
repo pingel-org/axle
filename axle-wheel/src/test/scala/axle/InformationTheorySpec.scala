@@ -28,7 +28,7 @@ class InformationTheorySpec extends FunSuite with Matchers {
       ConditionalProbabilityTable(Map(
         "A" -> Rational(2, 10),
         "B" -> Rational(1, 10),
-        "C" -> Rational(7, 10)), Variable[String]("d"))
+        "C" -> Rational(7, 10)))
 
     val e = entropy[String, Rational](d)
 
