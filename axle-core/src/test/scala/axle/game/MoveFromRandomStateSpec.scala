@@ -84,10 +84,8 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
         move
 
       def strategyFor(game: TestGame, player: Player): (TestGame, TestGameState) => ConditionalProbabilityTable[TestGameMove, Rational] =
-        (game: TestGame, state: TestGameState) => {
-          val mm = movesMap(state).mapValues(_._2)
-          ConditionalProbabilityTable(mm, Variable("S"))
-        }
+        (game: TestGame, state: TestGameState) =>
+          ConditionalProbabilityTable(movesMap(state).mapValues(_._2))
 
       def isValid(game: TestGame, state: TestGameState, move: TestGameMove): Either[String, TestGameMove] =
         Right(move)
@@ -109,7 +107,7 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
   val pm = ConditionalProbabilityTable.probabilityWitness
 
   val currentStateModelMap = Map(Sa -> Rational(1, 3), Sb -> Rational(2, 3))
-  val currentStateModel = ConditionalProbabilityTable(currentStateModelMap, Variable("S"))
+  val currentStateModel = ConditionalProbabilityTable(currentStateModelMap)
 
   test("moveFromRandomState on hard-coded graph from start state") {
 
@@ -141,11 +139,11 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
       (Some((Sa, Maa)), currentStateModel),
       (Some((Sa, Mab)), ConditionalProbabilityTable(Map(
         Sa -> Rational(1, 4),
-        Sb -> Rational(3, 4)), Variable("S"))),
+        Sb -> Rational(3, 4)))),
       (Some((Sa, Mac)), ConditionalProbabilityTable(Map(
         Sa -> Rational(1, 4),
         Sb -> Rational(2, 3),
-        Sc -> Rational(1, 12)), Variable("S"))),
+        Sc -> Rational(1, 12)))),
       (Some((Sb, Mbb)), currentStateModel)
     )
 

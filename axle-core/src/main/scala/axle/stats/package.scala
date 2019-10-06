@@ -59,7 +59,7 @@ package object stats {
     ConditionalProbabilityTable(Map(true -> yes, false -> (1 - yes)))
   }
 
-  def uniformDistribution[T: Eq](values: Seq[T], variable: Variable[T]): ConditionalProbabilityTable[T, Rational] = {
+  def uniformDistribution[T: Eq](values: Seq[T]): ConditionalProbabilityTable[T, Rational] = {
 
     val grouped = values.groupBy(identity)
     val dist: Map[T, Rational] = grouped.map({ kvs =>

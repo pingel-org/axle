@@ -21,8 +21,7 @@ class DistributionSpec extends FunSuite with Matchers {
       Map(
         List(1, 2, 3) -> Rational(1, 3),
         List(1, 2, 8) -> Rational(1, 2),
-        List(8, 9) -> Rational(1, 6)),
-      Variable("c"))
+        List(8, 9) -> Rational(1, 6)))
 
     val modelSize = prob.map(listDist)(_.size)
 

@@ -53,8 +53,8 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
 
     implicit val eqInt = cats.kernel.Eq.fromUniversalEquals[Int]
     
-    val xDist: F[Int] = uniformDistribution(0 to n, Variable[Int]("x"))
-    val yDist: F[Int] = uniformDistribution(0 to n, Variable[Int]("y"))
+    val xDist: F[Int] = uniformDistribution(0 to n)
+    val yDist: F[Int] = uniformDistribution(0 to n)
 
     val piDist = prob.flatMap(xDist) { x =>
       prob.map(yDist) { y =>

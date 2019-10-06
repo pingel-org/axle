@@ -46,12 +46,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `GuessRiffle` game
 * `ProbabilityModel` `chain`, `adjoin`, `mapValues`, `redistribute`
 
+* Is `ProbabilityModel.mapValues` really needed? (maybe we need a map that maps keys and values together, which could be used to implement `redistribute`)
+
 * Fix BayesianNetwork failure
 * Fix MoveFromRandomStateSpec failure ?
 * Fix awt/gl failure
 * Fix quantum failure (comment out)
-
-* Is `ProbabilityModel.mapValues` really needed? (maybe we need a map that maps keys and values together, which could be used to implement `redistribute`)
 
 * Fix NaiveBayesClassifier, NaiveBayesSpec
 * Fix GeneticAlgorithmSpec
