@@ -48,13 +48,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Is `ProbabilityModel.mapValues` really needed? (maybe we need a map that maps keys and values together, which could be used to implement `redistribute`)
 
-* Fix BayesianNetwork failure
-* Fix MoveFromRandomStateSpec failure ?
-* Fix awt/gl failure
-* Fix quantum failure (comment out)
-
-* Fix NaiveBayesClassifier, NaiveBayesSpec
+* Fix AlarmBurglaryEarthquakeSpec
+* Fix NaiveBayesSpecification
 * Fix GeneticAlgorithmSpec
+
+* Fix quantum failure (comment out)
+* Fix awt/gl warnings
 * LogisticMap md back to 4k x 4k
 * Release and publish site
 
