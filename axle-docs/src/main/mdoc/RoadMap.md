@@ -45,23 +45,18 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `Deck.riffleShuffle`
 * `GuessRiffle` game
 * `ProbabilityModel` `chain`, `adjoin`, `mapValues`, `redistribute`
-
-* Is `ProbabilityModel.mapValues` really needed? (maybe we need a map that maps keys and values together, which could be used to implement `redistribute`)
-
-* Fix AlarmBurglaryEarthquakeSpec
-* Fix NaiveBayesSpecification
-* Fix GeneticAlgorithmSpec
-
-* Fix quantum failure (comment out)
-* Fix awt/gl warnings
-* LogisticMap md back to 4k x 4k
-* Release and publish site
-
-## 0.5.1 (January 2020)
+* `etc` via `axle.algebra.EnrichedRinged`
 
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
-* … (aka "etc") as Stream.from(Int)
+* Fix quantum failure (comment out)
+* test `etc`
+* Fix `BayesianNetwork` visualization
+* Fix `GeneticAlgorithmSpec`
+* Fix `LogisticRegression` and move `LogisticRegression.md` back
+* alias `uniformDistribution` as `bernoulli`
 
+* Fix awt/gl warnings
+* LogisticMap md back to 4k x 4k
 * Fix sbt-release plugin (use sbt-sonatype?)
 * Site
   * Fix markdown lint warnings
@@ -69,18 +64,19 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Copy css using makeSite (not update-docs.sh)
   * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
   * Figure out better way to reference images
+* Release and publish site
+
+## 0.5.1 (January 2020)
 
 * `Region` DSL
-* rename `ConditionalProbabilityTable`
+* rename `ConditionalProbabilityTable`?
 * Get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
 * "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
-* alias `uniform` as `Bernoulli`
-
+* Is `ProbabilityModel.mapValues` really needed? (maybe we need a map that maps keys and values together, which could be used to implement `redistribute`)
 * Demo Mandelbrot with Rational
 * Friend of Spire
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
 * Review groupBy uses -- they use university equality.  Replace with Eq
-* Fix logistic regression and move LogisticRegression.md back
 
 ## 0.5.2 (April 2020)
 
@@ -121,10 +117,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Machinist?
 * replace some refs to {CPT0,TallyDist0} with ProbabilityModel
 * Tics should take an argument
-* Factor tics and tics-{joda,algebra,spire} into separate libs
 * Update Spire (to match cats version)
 * Most MapRedicible witnesses are inefficient (eg calling toVector, toSeq, etc)
 * remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
+* Factor tics and tics-{joda,algebra,spire} into separate libs
 * Fix `axle.algebra.GeoMetricSpaceSpec`
 
 ## 0.6.x (Winter 2021)

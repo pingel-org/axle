@@ -125,7 +125,7 @@ class ScalaFigures extends FunSuite with Matchers {
         B -> bFactor,
         C -> cFactor))
 
-    (((bn.cpt(B) * bn.cpt(A)).sumOut(A)) * bn.cpt(C)).sumOut(C) // pB
+    (((bn.factorFor(B) * bn.factorFor(A)).sumOut(A)) * bn.factorFor(C)).sumOut(C) // pB
 
     bn
   }
@@ -163,19 +163,19 @@ class ScalaFigures extends FunSuite with Matchers {
     val f61 = figure6_1
 
     val τ = {
-      val a = f61.cpt(A)
-      val b = f61.cpt(B)
-      val c = f61.cpt(C)
-      val d = f61.cpt(D)
-      val e = f61.cpt(E)
+      val a = f61.factorFor(A)
+      val b = f61.factorFor(B)
+      val c = f61.factorFor(C)
+      val d = f61.factorFor(D)
+      val e = f61.factorFor(E)
       EliminationTree[Boolean, Rational, UndirectedSparseGraph[Factor[Boolean, Rational], EliminationTreeEdge]](
         Vector(a, b, c, d, e),
         List((a, b), (a, d), (d, c), (c, e)))
     }
 
     // factorElimination2 on figure6.1 with Q={C} and τ={...} and r=n3
-    val (f68, elim) = f61.factorElimination2(Set(C), τ, f61.cpt(C))
-    (f68, τ, f61.cpt(C))
+    val (f68, elim) = f61.factorElimination2(Set(C), τ, f61.factorFor(C))
+    (f68, τ, f61.factorFor(C))
   }
 
   // factorElimination3 on figure6.1 with Q={C} and τ={...} and r=n3

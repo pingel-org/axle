@@ -1,13 +1,16 @@
-package axle.stats
+package axle.pgm
 
 import org.scalatest._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.implicits._
 import spire.math._
-import axle.pgm._
+
+import axle.stats._
 import axle.jung.directedGraphJung
 
-class ABE extends FunSuite with Matchers {
+class AlarmBurglaryEarthquakeSpec extends FunSuite with Matchers {
+
+  implicit val showRat = cats.Show.fromToString[Rational]
 
   val bools = Vector(true, false)
 
@@ -70,7 +73,7 @@ class ABE extends FunSuite with Matchers {
     val sansAll: Factor[Boolean, Rational] = jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
 
     import spire.implicits.multiplicativeSemigroupOps
-    (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E) // dropping "abe"
+    (bn.factorFor(A) * bn.factorFor(B)) * bn.factorFor(E) // dropping "abe"
 
     // val Q: Set[Variable[Boolean]] = Set(E, B, A)
     // val order = List(J, M)

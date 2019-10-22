@@ -74,11 +74,16 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
         .toMap)
   }
 
-  def cpt(variable: Variable[T]): Factor[T, N] =
+  def factorFor(variable: Variable[T]): Factor[T, N] =
     graph.findVertex(_.variable === variable).map(_.cpt).get
 
-  def probabilityOf(cs: Seq[(Variable[T], RegionEq[T])]): N =
-    Π[N, Vector](cs.map({ case (variable, region) => cpt(variable)(cs.map(_._2)) }).toVector)
+  def probabilityOf(cs: Seq[(Variable[T], RegionEq[T])]): N = {
+    Π[N, Vector](cs.map({ case (variable, _) =>
+      val factor = factorFor(variable)
+      val row = cs.filter(vr => factor.mentions(vr._1)).map(_._2)
+      factor(row)
+    }).toVector)
+  }
 
   def markovAssumptionsFor(rv: Variable[T]): Independence[T] = {
     val rvVertex = graph.findVertex(_.variable === rv).get
@@ -116,7 +121,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   def variableEliminationPriorMarginalI(
     Q: Set[Variable[T]],
     π: List[Variable[T]]): Factor[T, N] =
-    Π[Factor[T, N], Set](π.foldLeft(randomVariables.map(cpt).toSet)((S, rv) => {
+    Π[Factor[T, N], Set](π.foldLeft(randomVariables.map(factorFor).toSet)((S, rv) => {
       val allMentions: Set[Factor[T, N]] = S.filter(_.mentions(rv))
       val mentionsWithout = Π[Factor[T, N], Set](allMentions).sumOut(rv)
       (S -- allMentions) + mentionsWithout
@@ -139,7 +144,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
     Π[Factor[T, N], Set](
       π.foldLeft(
         randomVariables.map { rv =>
-          cpt(rv).projectRowsConsistentWith(Some(List(e)))
+          factorFor(rv).projectRowsConsistentWith(Some(List(e)))
         }.toSet
       ) { (S, rv) => {
             val allMentions = S.filter(_.mentions(rv))
@@ -341,7 +346,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   }
 
   def factorElimination1(Q: Set[Variable[T]]): Factor[T, N] =
-    _factorElimination1(Q, randomVariables.map(cpt).toList)
+    _factorElimination1(Q, randomVariables.map(factorFor).toList)
 
   // TODO: Make immutable: this should not be calling delete or setPayload
   // the variables Q appear on the CPT for the product of Factors assigned to node r
