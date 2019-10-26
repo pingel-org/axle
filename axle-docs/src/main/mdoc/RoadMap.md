@@ -45,16 +45,19 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `Deck.riffleShuffle`
 * `GuessRiffle` game
 * `ProbabilityModel` `chain`, `adjoin`, `mapValues`, `redistribute`
-* `etc` via `axle.algebra.EnrichedRinged`
+* `axle.algebra.etc` via `axle.algebra.EnrichedRinged`
+* `bernoulliDistribution`
+* `axle.stats.expectation(CPT)`
 
-* Alias `uniformDistribution` as `bernoulli`
-* Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `find */src -name '*.scala' | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
-* Fix `BayesianNetwork` visualization
 * Fix `GeneticAlgorithmSpec`
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
 
+* Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `find */src -name '*.scala' | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
+
+* Fix `BayesianNetwork` visualization
 * Fix awt/gl warnings
 * LogisticMap md back to 4k x 4k
+
 * Fix sbt-release plugin (use sbt-sonatype?)
 * Site
   * Fix markdown lint warnings
