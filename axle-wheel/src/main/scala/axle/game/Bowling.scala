@@ -31,7 +31,7 @@ object Bowling {
   object Bowlers {
     val randomBowler =
       Bowler(
-        firstRoll = uniformDistribution(0 to 10, Variable("firstRoll")),
+        firstRoll = uniformDistribution(0 to 10),
         spare = binaryDecision(Rational(1, 2)))
 
     // bad bowler.  50% gutter-ball, even (5%) distribution of 1-10
@@ -48,7 +48,7 @@ object Bowling {
           7 -> Rational(1, 20),
           8 -> Rational(1, 20),
           9 -> Rational(1, 20),
-          10 -> Rational(1, 20)), Variable("firstRoll")),
+          10 -> Rational(1, 20))),
         spare = binaryDecision(Rational(1, 10)))
 
     // decent bowler.  5%  over 0-5, 10% 6, 15% over 7-10
@@ -65,7 +65,7 @@ object Bowling {
           7 -> Rational(3, 20),
           8 -> Rational(3, 20),
           9 -> Rational(3, 20),
-          10 -> Rational(3, 20)), Variable[Int]("firstRoll")),
+          10 -> Rational(3, 20))),
         spare = binaryDecision(Rational(1, 10)))
 
     // 1% over 0-6, 13% 7, 20% 8, 30% 9, 30% 10
@@ -81,7 +81,7 @@ object Bowling {
         7 -> Rational(13, 100),
         8 -> Rational(1, 5),
         9 -> Rational(3, 10),
-        10 -> Rational(3, 10)), Variable[Int]("firstRoll")),
+        10 -> Rational(3, 10))),
       spare = binaryDecision(Rational(8, 10)))
 
   }
@@ -92,17 +92,22 @@ object Bowling {
 
     import bowler._
 
+    implicit val eqBS = cats.kernel.Eq.fromUniversalEquals[Bowling.State]
+
+    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+
     val startState: F[State] = ConditionalProbabilityTable(
-      Map(State(0, false, false, false) -> Rational(1)),
-      Variable[State]("startState"))
+      Map(State(0, false, false, false) -> Rational(1)))
 
     (1 to numFrames).foldLeft(startState)({
       case (currentState, frameNumber) =>
-        for {
-          c <- currentState
-          f <- firstRoll : F[Int]
-          s <- spare : F[Boolean]
-        } yield next(c, frameNumber === numFrames, f, s)
+        prob.flatMap(currentState) { c =>
+          prob.flatMap(firstRoll) { f =>
+            prob.map(spare) { s =>
+              next(c, frameNumber === numFrames, f, s)
+            }
+          }
+        }
     })
   }
 

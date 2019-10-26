@@ -1,5 +1,6 @@
 package axle.quantumcircuit
 
+import spire.algebra._
 import spire.math._
 
 import QBit._
@@ -8,7 +9,7 @@ import org.scalatest._
 
 class HadamardSpec extends FunSuite with Matchers {
 
-  implicit val fieldReal = new spire.math.RealAlgebra
+  implicit val fieldReal: Field[Real] = new spire.math.RealAlgebra
 
   val sqrtHalf = Complex(Real(1) / sqrt(Real(2)), Real(0))
 
@@ -17,10 +18,10 @@ class HadamardSpec extends FunSuite with Matchers {
     // Takes a 1 or 0 and puts them into exactly equal superposition
 
     // H|0> = (1/sqrt(2)  1/sqrt(2))
-    hadamard[Real](constant0[Real]) should be(QBit[Real](sqrtHalf, sqrtHalf))
+    hadamard(constant0[Real]) should be(QBit[Real](sqrtHalf, sqrtHalf))
 
     // H|1> = (1/sqrt(2) -1/sqrt(2))
-    hadamard[Real](constant1[Real]) should be(QBit[Real](sqrtHalf, -sqrtHalf))
+    hadamard(constant1[Real]) should be(QBit[Real](sqrtHalf, -sqrtHalf))
   }
 
   test("Hadamard is its own inverse") {

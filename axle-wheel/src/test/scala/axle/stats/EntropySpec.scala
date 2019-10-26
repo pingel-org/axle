@@ -25,7 +25,7 @@ class EntropySpec extends FunSuite with Matchers {
     val biasToEntropy = new collection.immutable.TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
       (0 to 100).map(i => {
         val r = Rational(i.toLong, 100)
-        val e = entropy[ConditionalProbabilityTable, Symbol, Rational](coin(r))
+        val e = entropy[Symbol, Rational](coin(r))
         r -> e
       }).toMap
 

@@ -76,7 +76,7 @@ class GraphVisSpec extends FunSuite with Matchers {
     import cats.Show
     implicit val showEdge: Show[Edge] = _ => ""
 
-    val vis = DirectedGraphVisualization(dg, 200, 200, 10)
+    val vis = DirectedGraphVisualization[DirectedSparseGraph[String, Edge], String](dg, 200, 200, 10)
 
     // import axle._
     import axle.jung._

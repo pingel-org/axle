@@ -3,6 +3,8 @@ package axle.game
 import cats.implicits._
 
 import spire.math.Rational
+
+import axle.algebra.RegionEq
 import axle.stats._
 import axle.syntax.probabilitymodel._
 
@@ -12,12 +14,12 @@ object OldMontyHall {
 
   type F[T] = ConditionalProbabilityTable[T, Rational]
 
-  val prizeDoorModel: F[Int] = uniformDistribution(1 to numDoors, Variable("prize"))
+  val prizeDoorModel: F[Int] = uniformDistribution(1 to numDoors)
 
-  val chosenDoorModel: F[Int] = uniformDistribution(1 to numDoors, Variable("chosen"))
+  val chosenDoorModel: F[Int] = uniformDistribution(1 to numDoors)
 
   def reveal(prizeDoor: Int, chosenDoor: Int): F[Int] =
-    uniformDistribution((1 to numDoors).filterNot(d => d === prizeDoor || d === chosenDoor), Variable("reveal"))
+    uniformDistribution((1 to numDoors).filterNot(d => d === prizeDoor || d === chosenDoor))
 
   def switch(probabilityOfSwitching: Rational, chosenDoor: Int, revealedDoor: Int): F[Int] = {
 
@@ -25,22 +27,28 @@ object OldMontyHall {
 
     iffy( // iffy[Int, Rational, ConditionalProbabilityTable, ConditionalProbabilityTable]
       binaryDecision(probabilityOfSwitching),
-      uniformDistribution(availableDoors, Variable("switch")), // switch
-      uniformDistribution(Seq(chosenDoor), Variable("switch")) // stay
+      uniformDistribution(availableDoors), // switch
+      uniformDistribution(Seq(chosenDoor)) // stay
     )
   }
 
   import cats.syntax.all._
 
-  // TODO: The relationship between probabilityOfSwitching and outcome can be performed more efficiently and directly.
-  val outcome = (probabilityOfSwitching: Rational) => for {
-   prizeDoor <- prizeDoorModel
-   chosenDoor <- chosenDoorModel
-   revealedDoor <- reveal(prizeDoor, chosenDoor)
-   finalChosenDoor <- switch(probabilityOfSwitching, chosenDoor, revealedDoor)
-  } yield finalChosenDoor === prizeDoor
+  val prob = ProbabilityModel[ConditionalProbabilityTable]
 
+  // TODO: The relationship between probabilityOfSwitching and outcome can be performed more efficiently and directly.
+  val outcome = (probabilityOfSwitching: Rational) => 
+    prob.flatMap(prizeDoorModel) { prizeDoor =>
+      prob.flatMap(chosenDoorModel) { chosenDoor =>
+        prob.flatMap(reveal(prizeDoor, chosenDoor)) { revealedDoor =>
+          prob.map(switch(probabilityOfSwitching, chosenDoor, revealedDoor)) { finalChosenDoor =>
+            finalChosenDoor === prizeDoor
+          }
+        }
+      }
+    }
+ 
   val chanceOfWinning =
-    (probabilityOfSwitching: Rational) => outcome(probabilityOfSwitching).P(true)
+    (probabilityOfSwitching: Rational) => outcome(probabilityOfSwitching).P(RegionEq(true))
 
 }

@@ -16,6 +16,8 @@ import axle.stats.rationalProbabilityDist
 
 package object montyhall {
 
+  implicit val eqMove = cats.kernel.Eq.fromUniversalEquals[MontyHallMove]
+
   implicit val evGame: Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational, ConditionalProbabilityTable] =
     new Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational, ConditionalProbabilityTable] {
 

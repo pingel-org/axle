@@ -1,9 +1,10 @@
 package axle.quantumcircuit
 
+import cats.implicits._
 import spire.math._
 
-import axle.algebra._
 import axle.syntax.probabilitymodel._
+import axle.algebra.RegionEq
 
 import org.scalatest._
 
@@ -17,8 +18,8 @@ class QBitSpec extends FunSuite with Matchers {
 
     val distribution = qEven.probabilityModel
 
-    distribution.P(B0) should be(Real(1 / 2d))
-    distribution.P(B1) should be(Real(1 / 2d))
+    distribution.P(RegionEq(CBit0)) should be(Real(1 / 2d))
+    distribution.P(RegionEq(CBit1)) should be(Real(1 / 2d))
   }
 
   test("multiple QBit distribution") {
@@ -36,10 +37,10 @@ class QBitSpec extends FunSuite with Matchers {
 
     tensored.zip(tensored).map({ case (x, y) => x * y}).reduce(_+_).real should be(Real(1))
     tensored should be(Vector[Complex[Real]](half, half, half, half))
-    distribution.P(|("00").>.unindex) should be(Real(1 / 4d))
-    distribution.P(|("01").>.unindex) should be(Real(1 / 4d))
-    distribution.P(|("10").>.unindex) should be(Real(1 / 4d))
-    distribution.P(|("11").>.unindex) should be(Real(1 / 4d))
+    distribution.P(RegionEq(|("00").>.unindex)) should be(Real(1 / 4d))
+    distribution.P(RegionEq(|("01").>.unindex)) should be(Real(1 / 4d))
+    distribution.P(RegionEq(|("10").>.unindex)) should be(Real(1 / 4d))
+    distribution.P(RegionEq(|("11").>.unindex)) should be(Real(1 / 4d))
   }
 
   import axle.quantumcircuit.QBit._
@@ -67,13 +68,13 @@ class QBitSpec extends FunSuite with Matchers {
     constant1(QBit0) should be(QBit1)
     constant1(QBit1) should be(QBit1)
   }
-  
+
   test("CNOT") {
 
-    cnot(QBit0, QBit0) should be((QBit0, QBit0))
-    cnot(QBit0, QBit1) should be((QBit0, QBit1))
-    cnot(QBit1, QBit0) should be((QBit1, QBit1))
-    cnot(QBit1, QBit1) should be((QBit1, QBit0))
+    QBit2.cnot(QBit2(QBit0.unindex ⊗ QBit0.unindex)).unindex should be((QBit0.unindex ⊗ QBit0.unindex))
+    QBit2.cnot(QBit2(QBit0.unindex ⊗ QBit1.unindex)).unindex should be((QBit0.unindex ⊗ QBit1.unindex))
+    QBit2.cnot(QBit2(QBit1.unindex ⊗ QBit0.unindex)).unindex should be((QBit1.unindex ⊗ QBit1.unindex))
+    QBit2.cnot(QBit2(QBit1.unindex ⊗ QBit1.unindex)).unindex should be((QBit1.unindex ⊗ QBit0.unindex))
   }
 
 }

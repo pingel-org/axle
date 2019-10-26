@@ -1,5 +1,6 @@
 package axle.ml
 
+import cats.Show
 import cats.Functor
 import cats.kernel.Eq
 import cats.kernel.Order
@@ -10,15 +11,12 @@ import spire.implicits.MapInnerProductSpace
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 
-import axle.algebra.Aggregatable
-import axle.algebra.Talliable
-import axle.algebra.functorIndexedSeq
+import axle.algebra._
 import axle.math._
 import axle.stats.Variable
 import axle.stats.TallyDistribution
 import axle.stats.ProbabilityModel
 import axle.syntax.aggregatable._
-import axle.syntax.talliable._
 
 case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N: Field: Order](
   data:                      F[DATA],
@@ -29,7 +27,9 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
   implicit
   aggregatableF: Aggregatable[F],
   functorF:      Functor[F],
-  talliableF:    Talliable[F])
+  talliableF:    Talliable[F],
+  showF:         Show[FEATURE],
+  showC:         Show[CLASS])
   extends Function1[DATA, CLASS] {
 
   val featureVariables = featureVariablesAndValues map { _._1 }
@@ -51,13 +51,13 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
       },
       _ + _)
 
-  val classTally: Map[CLASS, N] =
-    data.map(classExtractor).tally.withDefaultValue(Field[N].zero)
 
-  val C = TallyDistribution(classTally, Variable[CLASS]("class"))
+  val classTally: Map[CLASS, N] =
+    talliableF.tally[CLASS, N](data.map(classExtractor)).withDefaultValue(Field[N].zero)
+
+  val C = TallyDistribution(classTally)
 
   val probTally0 = implicitly[ProbabilityModel[TallyDistribution]]
-  // TODO val probTally1 = implicitly[Probability[({ type λ[T] = TallyDistribution1[T, CLASS, N] })#λ, N]]
 
   def tallyFor(featureVariable: Variable[FEATURE]): Map[(FEATURE, CLASS), N] =
     featureTally.filter {
@@ -69,7 +69,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
   // Note: The "parent" (or "given") of these feature variables is C
   val Fs = featureVariablesAndValues.map {
     case (featureVariable, _) =>
-      TallyDistribution[(FEATURE, CLASS), N](tallyFor(featureVariable).withDefaultValue(Field[N].zero), Variable[(FEATURE, CLASS)]("F C"))
+      TallyDistribution[(FEATURE, CLASS), N](tallyFor(featureVariable).withDefaultValue(Field[N].zero))
   }
 
   def classes: IndexedSeq[CLASS] = classTally.keySet.toVector.sorted
@@ -81,13 +81,13 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
     def f(c: CLASS): N =
       Π(featureVariables.zip(fs).zip(Fs).map({
         case ((featureVariable, featureValue), featureGivenModel) => {
-          // TODO val featureModel = probTally1.condition(featureGivenModel, CaseIs(c, classVariable))
-          // TODO probTally.probabilityOf(featureModel, featureValue)
-          Field[N].zero
+          probTally0.probabilityOf(
+            probTally0.filter(featureGivenModel)(RegionEqTuple2of2(c))
+          )(RegionEqTuple1of2(featureValue))
         }
       }))
 
-    def g(c: CLASS): N = probTally0.probabilityOf(C)(c) * f(c)
+    def g(c: CLASS): N = probTally0.probabilityOf(C)(RegionEq(c)) * f(c)
 
     argmax(C.values, g).get // TODO: will be None if C.values is empty
   }

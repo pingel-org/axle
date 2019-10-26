@@ -16,6 +16,8 @@ import axle.stats.rationalProbabilityDist
 
 package object prisoner {
 
+  implicit val eqMove = cats.kernel.Eq.fromUniversalEquals[PrisonersDilemmaMove]
+
   implicit val evGame: Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable] =
     new Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable] {
 

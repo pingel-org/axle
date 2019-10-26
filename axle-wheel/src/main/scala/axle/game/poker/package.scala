@@ -11,6 +11,8 @@ import axle.stats.rationalProbabilityDist
 
 package object poker {
 
+  implicit val eqMove = cats.kernel.Eq.fromUniversalEquals[PokerMove]
+
   lazy val moveParser = MoveParser()
 
   // TODO: is there a limit to the number of raises that can occur?

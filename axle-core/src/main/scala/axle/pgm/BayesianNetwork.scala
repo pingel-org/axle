@@ -11,9 +11,9 @@ import spire.algebra.Field
 // import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
 
-import axle.algebra.DirectedGraph
+import axle.algebra.RegionEq
 import axle.algebra.UndirectedGraph
-import axle.stats.CaseIs
+import axle.algebra.DirectedGraph
 import axle.stats.Variable
 import axle.stats.Independence
 import axle.stats.Factor
@@ -68,16 +68,22 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
     val newVars = randomVariables
     Factor(
       newVars.map({ variable => (variable, variableFactorMap(variable).valuesOfVariable(variable)) }),
-      Factor.cases(newVars.map({ variable => (variable, variableFactorMap(variable).valuesOfVariable(variable)) }))
-        .map(kase => (kase, probabilityOf(kase)))
+      Factor
+        .cases(newVars.map({ variable => (variable, variableFactorMap(variable).valuesOfVariable(variable)) }))
+        .map({ regions => (regions, probabilityOf(newVars.zip(regions))) })
         .toMap)
   }
 
-  def cpt(variable: Variable[T]): Factor[T, N] =
+  def factorFor(variable: Variable[T]): Factor[T, N] =
     graph.findVertex(_.variable === variable).map(_.cpt).get
 
-  def probabilityOf(cs: Seq[CaseIs[T]]): N =
-    Π[N, Vector](cs.map(c => cpt(c.variable)(cs)).toVector)
+  def probabilityOf(cs: Seq[(Variable[T], RegionEq[T])]): N = {
+    Π[N, Vector](cs.map({ case (variable, _) =>
+      val factor = factorFor(variable)
+      val row = cs.filter(vr => factor.mentions(vr._1)).map(_._2)
+      factor(row)
+    }).toVector)
+  }
 
   def markovAssumptionsFor(rv: Variable[T]): Independence[T] = {
     val rvVertex = graph.findVertex(_.variable === rv).get
@@ -88,7 +94,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
     Independence(X, Z, randomVariables.filterNot(Dvars.contains).toSet)
   }
 
-  def computeFullCase(c: List[CaseIs[T]]): Double = {
+  def computeFullCase(c: List[RegionEq[T]]): Double = {
 
     // not an airtight check
     assert(numVariables === c.size)
@@ -115,7 +121,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   def variableEliminationPriorMarginalI(
     Q: Set[Variable[T]],
     π: List[Variable[T]]): Factor[T, N] =
-    Π[Factor[T, N], Set](π.foldLeft(randomVariables.map(cpt).toSet)((S, rv) => {
+    Π[Factor[T, N], Set](π.foldLeft(randomVariables.map(factorFor).toSet)((S, rv) => {
       val allMentions: Set[Factor[T, N]] = S.filter(_.mentions(rv))
       val mentionsWithout = Π[Factor[T, N], Set](allMentions).sumOut(rv)
       (S -- allMentions) + mentionsWithout
@@ -134,12 +140,18 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   def variableEliminationPriorMarginalII(
     Q: Set[Variable[T]],
     π: List[Variable[T]],
-    e: CaseIs[T]): Factor[T, N] =
-    Π[Factor[T, N], Set](π.foldLeft(randomVariables.map(cpt(_).projectRowsConsistentWith(Some(List(e)))).toSet)(
-      (S, rv) => {
-        val allMentions = S.filter(_.mentions(rv))
-        (S -- allMentions) + Π[Factor[T, N], Set](allMentions).sumOut(rv)
-      }))
+    e: (Variable[T], RegionEq[T])): Factor[T, N] =
+    Π[Factor[T, N], Set](
+      π.foldLeft(
+        randomVariables.map { rv =>
+          factorFor(rv).projectRowsConsistentWith(Some(List(e)))
+        }.toSet
+      ) { (S, rv) => {
+            val allMentions = S.filter(_.mentions(rv))
+            (S -- allMentions) + Π[Factor[T, N], Set](allMentions).sumOut(rv)
+        }
+      }
+    )
 
   def interactsWith(v1: Variable[T], v2: Variable[T]): Boolean =
     graph.vertices.map(_.cpt).exists(f => f.mentions(v1) && f.mentions(v2))
@@ -183,7 +195,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
    * 6.8.2
    */
 
-  def pruneEdges(resultName: String, eOpt: Option[List[CaseIs[T]]]): BayesianNetwork[T, N, DG] = {
+  def pruneEdges(resultName: String, eOpt: Option[List[RegionEq[T]]]): BayesianNetwork[T, N, DG] = {
     //    val result = BayesianNetwork[T, N, DG](resultName, ???)
     //    eOpt.map(e => {
     //      e.map(_.distribution) foreach { U =>
@@ -207,9 +219,9 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
     ???
   }
 
-  def pruneNodes(Q: Set[Variable[T]], eOpt: Option[List[CaseIs[T]]], g: BayesianNetwork[T, N, DG]): BayesianNetwork[T, N, DG] = {
+  def pruneNodes(Q: Set[Variable[T]], eOpt: Option[List[Variable[T]]], g: BayesianNetwork[T, N, DG]): BayesianNetwork[T, N, DG] = {
 
-    val vars = eOpt.map(Q ++ _.map(_.variable)).getOrElse(Q)
+    val vars = eOpt.map(Q ++ _).getOrElse(Q)
 
     def nodePruneStream(g: BayesianNetwork[T, N, DG]): Stream[BayesianNetwork[T, N, DG]] = {
       val xVertices = g.graph.leaves.toSet -- vars.map(rv => g.graph.findVertex(_.variable === rv).get)
@@ -233,7 +245,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
 
   def pruneNetworkVarsAndEdges(
     Q:    Set[Variable[T]],
-    eOpt: Option[List[CaseIs[T]]]): BayesianNetwork[T, N, DG] = {
+    eOpt: Option[List[RegionEq[T]]]): BayesianNetwork[T, N, DG] = {
     // TODO pruneNodes(Q, eOpt, pruneEdges("pruned", eOpt).getGraph)
     // BayesianNetwork(this.name, ???)
     ???
@@ -287,7 +299,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
    * see ch 6 page 31: Algorithm 8
    */
 
-  def variableEliminationMAP(Q: Set[Variable[T]], e: List[Variable[T]]): List[CaseIs[T]] = {
+  def variableEliminationMAP(Q: Set[Variable[T]], e: List[Variable[T]]): List[RegionEq[T]] = {
     // TODO
     Nil
   }
@@ -334,7 +346,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   }
 
   def factorElimination1(Q: Set[Variable[T]]): Factor[T, N] =
-    _factorElimination1(Q, randomVariables.map(cpt).toList)
+    _factorElimination1(Q, randomVariables.map(factorFor).toList)
 
   // TODO: Make immutable: this should not be calling delete or setPayload
   // the variables Q appear on the CPT for the product of Factors assigned to node r
@@ -376,7 +388,7 @@ case class BayesianNetwork[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Ma
   // Note: not sure about this return type:
   def factorElimination[UG](
     τ: EliminationTree[T, N, UG],
-    e: List[CaseIs[T]])(implicit ug: UndirectedGraph[UG, Factor[T, N], EliminationTreeEdge]): Map[Factor[T, N], Factor[T, N]] =
+    e: List[RegionEq[T]])(implicit ug: UndirectedGraph[UG, Factor[T, N], EliminationTreeEdge]): Map[Factor[T, N], Factor[T, N]] =
     {
       τ.graph.vertices foreach { i =>
         e foreach { ci =>

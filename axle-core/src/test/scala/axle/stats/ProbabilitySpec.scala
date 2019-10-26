@@ -2,72 +2,50 @@ package axle.stats
 
 import org.scalatest._
 
+import cats.implicits._
 import spire.math._
 import axle.game.Dice._
 import axle.syntax.probabilitymodel._
+import axle.algebra._
 
 class ProbabilitySpec extends FunSuite with Matchers {
 
-  type CPTR[T] = ConditionalProbabilityTable[T, Rational]
+  implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+  // implicit val rat = new spire.math.RationalAlgebra()
 
   test("two independent coins") {
 
     val coin1 = coin()
     val coin2 = coin()
 
-    import cats.syntax.all._
+    import cats.implicits._
 
-    val bothCoinsModel: CPTR[(Symbol, Symbol)] = for {
-      a <- coin1: CPTR[Symbol]
-      b <- coin2: CPTR[Symbol]
-    } yield (a, b)
+    val bothCoinsModel = prob.chain(coin1)(coin2)
 
-    bothCoinsModel.P(
-      { coins: (Symbol, Symbol) => (coins._1 === 'HEAD) && (coins._2 === 'HEAD)}
-    ) should be(Rational(1, 4))
+    bothCoinsModel.P(RegionEqTuple1of2('HEAD) and RegionEqTuple2of2('HEAD)) should be(Rational(1, 4))
 
-    bothCoinsModel.P(('HEAD, 'HEAD)) should be(Rational(1, 4))
+    bothCoinsModel.P(RegionEq(('HEAD, 'HEAD))) should be(Rational(1, 4))
 
-    bothCoinsModel.P(
-      { coins: (Symbol, Symbol) => coins._1 === 'HEAD }
-    ) should be(Rational(1, 2))
+    bothCoinsModel.P(RegionEqTuple1of2('HEAD)) should be(Rational(1, 2))
 
-    bothCoinsModel.P(
-      { coins: (Symbol, Symbol) => (coins._1 === 'HEAD) || (coins._2 === 'HEAD)}
-    ) should be(Rational(3, 4))
+    bothCoinsModel.P(RegionEqTuple1of2('HEAD) or RegionEqTuple2of2('HEAD)) should be(Rational(3, 4))
 
-    import cats.syntax.all._
-    import axle.stats._
-    val coin2Conditioned = (bothCoinsModel
-      .filter({ coins: (Symbol, Symbol) => coins._2 === 'TAIL }): CPTR[(Symbol, Symbol)])
-      .map({ coins: (Symbol, Symbol) => coins._1})
+    val coin2Conditioned = prob.map(bothCoinsModel.filter(RegionEqTuple2of2('TAIL))) {
+      _._1
+    }
 
-    coin2Conditioned.P('HEAD) should be(Rational(1, 2))
+    coin2Conditioned.P(RegionEq('HEAD)) should be(Rational(1, 2))
   
  }
 
   test("two independent d6") {
 
-    val d6a = die(6)
-    val d6b = die(6)
+    val bothDieModel = prob.chain(die(6))(die(6))
 
-    import cats.syntax.all._
+    bothDieModel.P(RegionEqTuple1of2(1)) should be(Rational(1, 6))
 
-    val bothDieModel: CPTR[(Int, Int)] = for {
-      a <- d6a: CPTR[Int]
-      b <- d6b: CPTR[Int]
-    } yield (a, b)
+    bothDieModel.P(RegionNegate(RegionEqTuple1of2(3))) should be(Rational(5, 6))
 
-    bothDieModel.P(
-      { rolls: (Int, Int) => (rolls._1 === 1) }
-    ) should be(Rational(1, 6))
-
-    bothDieModel.P(
-      { rolls: (Int, Int) => (rolls._1 !== 3) }
-    ) should be(Rational(5, 6))
-
-    bothDieModel.P(
-      { rolls: (Int, Int) => (rolls._1 === 1) && (rolls._2 === 2)}
-    ) should be(Rational(1, 36))
+    bothDieModel.P(RegionAnd(RegionEqTuple1of2(1), RegionEqTuple2of2(2))) should be(Rational(1, 36))
   }
 }

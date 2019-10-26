@@ -10,7 +10,6 @@ import spire.math.Rational
 import spire.algebra._
 
 import axle.stats.ConditionalProbabilityTable
-import axle.stats.Variable
 import axle.stats.coin
 import axle.stats.entropy
 import axle.quanta.Information
@@ -28,9 +27,9 @@ class InformationTheorySpec extends FunSuite with Matchers {
       ConditionalProbabilityTable(Map(
         "A" -> Rational(2, 10),
         "B" -> Rational(1, 10),
-        "C" -> Rational(7, 10)), Variable[String]("d"))
+        "C" -> Rational(7, 10)))
 
-    val e = entropy[ConditionalProbabilityTable, String, Rational](d)
+    val e = entropy[String, Rational](d)
 
     e.magnitude should ===(1.1567796494470395)
   }
@@ -43,10 +42,10 @@ class InformationTheorySpec extends FunSuite with Matchers {
     implicit val id = Information.converterGraphK2[Double, DirectedSparseGraph]
 
     // assumes entropy is in bits
-    val biasedCoinEntropy = entropy[ConditionalProbabilityTable, Symbol, Rational](biasedCoin)
+    val biasedCoinEntropy = entropy[Symbol, Rational](biasedCoin)
     biasedCoinEntropy.magnitude should be(0.4689955935892812)
 
-    val fairCoinEntropy = entropy[ConditionalProbabilityTable, Symbol, Rational](fairCoin)
+    val fairCoinEntropy = entropy[Symbol, Rational](fairCoin)
     fairCoinEntropy.magnitude should be(1d)
   }
 

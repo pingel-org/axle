@@ -12,6 +12,7 @@ class MontyHallSpec extends FunSuite with Matchers {
   import axle.game.montyhall.evGameIO._
 
   implicit val dist = axle.stats.rationalProbabilityDist
+  implicit val rat = new spire.math.RationalAlgebra()
 
   val contestant = Player("C", "Contestant")
   val monty = Player("M", "Monty Hall")

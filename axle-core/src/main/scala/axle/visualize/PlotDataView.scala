@@ -10,7 +10,7 @@ import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
 
 import axle.algebra.Plottable
-import axle.stats.ProbabilityModel
+import axle.stats.ConditionalProbabilityTable
 
 @implicitNotFound("Witness not found for PlotDataView[${X}, ${Y}, ${D}]")
 trait PlotDataView[S, X, Y, D] {
@@ -140,17 +140,15 @@ object PlotDataView {
   //      }
   //    }
 
-  implicit def probabilityDataView[S, X: Order: AdditiveMonoid: Plottable, Y: Order: Field: Plottable, M[_, _]](
-    implicit
-    prob: ProbabilityModel[M]): PlotDataView[S, X, Y, M[X, Y]] =
-    new PlotDataView[S, X, Y, M[X, Y]] {
+  implicit def cptDataView[S, X: Order: AdditiveMonoid: Plottable, Y: Order: Field: Plottable]: PlotDataView[S, X, Y, ConditionalProbabilityTable[X, Y]] =
+    new PlotDataView[S, X, Y, ConditionalProbabilityTable[X, Y]] {
 
-      def xsOf(model: M[X, Y]): Traversable[X] = prob.values(model)
+      def xsOf(cpt: ConditionalProbabilityTable[X, Y]): Traversable[X] = cpt.values
 
-      def valueOf(model: M[X, Y], x: X): Y =
-        prob.probabilityOf(model)(x)
+      def valueOf(cpt: ConditionalProbabilityTable[X, Y], x: X): Y =
+        cpt.p.get(x).getOrElse(Field[Y].zero)
 
-      def xRange(data: Seq[(S, M[X, Y])], include: Option[X]): (X, X) = {
+      def xRange(data: Seq[(S, ConditionalProbabilityTable[X, Y])], include: Option[X]): (X, X) = {
 
         val minXCandidates = include.toList ++ (data flatMap {
           case (label, model) => xsOf(model).headOption
@@ -165,7 +163,7 @@ object PlotDataView {
         (minX, maxX)
       }
 
-      def yRange(data: Seq[(S, M[X, Y])], include: Option[Y]): (Y, Y) = {
+      def yRange(data: Seq[(S, ConditionalProbabilityTable[X, Y])], include: Option[Y]): (Y, Y) = {
 
         val minYCandidates = include.toList ++ (data flatMap {
           case (label, model) =>

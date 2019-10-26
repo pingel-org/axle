@@ -8,10 +8,10 @@ import spire.algebra.Field
 import spire.algebra.Ring
 import spire.random.Generator
 import spire.random.Dist
-import spire.implicits.additiveSemigroupOps
+//import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 
-import axle.stats.Variable
+import axle.algebra._
 import axle.stats.ProbabilityModel
 import axle.syntax.probabilitymodel._
 
@@ -45,35 +45,31 @@ package object game {
     evGame: Game[G, S, O, M, MS, MM, V, PM],
     prob:   ProbabilityModel[PM],
     eqS:    cats.kernel.Eq[S],
+    eqM:    cats.kernel.Eq[M],
     distV:  Dist[V],
     fieldV: Field[V],
     orderV: Order[V]): (Option[(S, M)], PM[S, V]) = {
 
-    val openStateModel: PM[S, V] = prob.filter(stateModel)((s: S) => evGame.mover(game, s).isDefined)
+    val openStateModel: PM[S, V] = prob.filter(stateModel)(RegionLambda(evGame.mover(game, _).isDefined))
 
     val fromState: S = prob.observe(openStateModel)(gen)
-    val probabilityOfFromState: V = prob.probabilityOf(stateModel)(fromState)
+    val probabilityOfFromState: V = prob.probabilityOf(stateModel)(RegionEq(fromState))
 
     evGame.mover(game, fromState).map(mover => {
       val strategyFn = evGame.strategyFor(game, mover)
       val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
       val move = strategy.observe(gen)
-      val probabilityOfMove: V = prob.probabilityOf(strategy)(move)
       val toState = evGame.applyMove(game, fromState, move)
 
       import cats.syntax.all._
       if( fromState === toState ) {
         (Some((fromState, move)), stateModel)
       } else {
-        val updateM = Map(fromState -> fieldV.negate(probabilityOfMove), toState -> probabilityOfMove)
-        val updatingModel = prob.construct(Variable[S]("S"), updateM.keys, updateM)
-        // Note that updatingModel violates probability axioms
-        val summed = prob.sum(stateModel)(updatingModel)
-        import axle.algebra.tuple2Field
-        val mapped = prob.mapValues[S, (V, V), V](summed)({ case (v1, v2) => 
-          v1 + (probabilityOfFromState * v2)
-        })
-        (Some((fromState, move)), mapped)
+        val probabilityOfMove: V = prob.probabilityOf(strategy)(RegionEq(move))
+        val mass = probabilityOfFromState * probabilityOfMove
+        // TODO scale mass down
+        val redistributed = prob.redistribute(stateModel)(fromState, toState, mass)
+        (Some((fromState, move)), redistributed)
       }
     }) getOrElse {
       (None, stateModel)

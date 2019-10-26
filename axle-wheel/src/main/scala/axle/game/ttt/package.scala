@@ -10,6 +10,8 @@ import axle.stats.rationalProbabilityDist
 
 package object ttt {
 
+  implicit val eqMove = cats.kernel.Eq.fromUniversalEquals[TicTacToeMove]
+
   implicit val evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable] =
     new Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable] {
 

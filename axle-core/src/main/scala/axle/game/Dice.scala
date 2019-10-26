@@ -2,16 +2,17 @@ package axle.game
 
 import scala.Vector
 
-import axle.stats.ConditionalProbabilityTable
-import axle.stats.Variable
 import spire.math.Rational
+
+import axle.stats.ConditionalProbabilityTable
 
 object Dice {
 
-  def die(n: Int): ConditionalProbabilityTable[Int, Rational] =
+  def die(n: Int): ConditionalProbabilityTable[Int, Rational] = {
+    import cats.implicits._
     ConditionalProbabilityTable(
-      (1 to n).map(i => (i, Rational(1, n.toLong))).toMap,
-      Variable[Int](s"D$n"))
+      (1 to n).map(i => (i, Rational(1, n.toLong))).toMap)
+  }
 
   val sixth = Rational(1, 6)
 

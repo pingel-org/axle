@@ -2,12 +2,9 @@ package axle
 
 import scala.Stream.cons
 import scala.Vector
-import scala.language.implicitConversions
 
-import cats.Monad
 import cats.Functor
 import cats.kernel.Eq
-//import cats.implicits._
 
 import spire.algebra.Field
 import spire.algebra.NRoot
@@ -26,6 +23,9 @@ import spire.random.Dist
 import spire.random.Generator
 
 import axle.math.Σ
+//import axle.algebra.Partition
+//import axle.algebra.Region
+import axle.algebra.RegionEq
 import axle.algebra.Aggregatable
 import axle.algebra.tuple2Field
 import axle.quanta.Information
@@ -46,27 +46,29 @@ package object stats {
   //   Dist.rational
   // }
 
-  implicit def enrichCaseGenTraversable[R, A: Manifest, N: Field](cgt: Iterable[CaseIs[A]]): EnrichedCaseGenTraversable[R, A, N] =
-    EnrichedCaseGenTraversable(cgt)
-
-  val sides = Vector('HEAD, 'TAIL)
+  def coinSides = Vector('HEAD, 'TAIL)
 
   def coin(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable[Symbol, Rational] =
     ConditionalProbabilityTable[Symbol, Rational](
       Map(
         'HEAD -> pHead,
-        'TAIL -> (1 - pHead)),
+        'TAIL -> (1 - pHead)))
 
-      Variable(s"coin $pHead"))
+  def binaryDecision(yes: Rational): ConditionalProbabilityTable[Boolean, Rational] = {
+    import cats.implicits._
+    ConditionalProbabilityTable(Map(true -> yes, false -> (1 - yes)))
+  }
 
-  def binaryDecision(yes: Rational): ConditionalProbabilityTable[Boolean, Rational] =
-    ConditionalProbabilityTable(Map(true -> yes, false -> (1 - yes)), Variable("binary"))
+  def uniformDistribution[T: Eq](values: Seq[T]): ConditionalProbabilityTable[T, Rational] = {
 
-  def uniformDistribution[T](values: Seq[T], variable: Variable[T]): ConditionalProbabilityTable[T, Rational] = {
+    val grouped = values.groupBy(identity)
+    val dist: Map[T, Rational] = grouped.map({ kvs =>
+       val rk = kvs._1
+       val v = Rational(kvs._2.size.toLong, values.size.toLong)
+       rk -> v
+    })
 
-    val dist = values.groupBy(identity).mapValues({ ks => Rational(ks.size.toLong, values.size.toLong) }).toMap
-
-    ConditionalProbabilityTable(dist, variable)
+    ConditionalProbabilityTable(dist)
   }
 
   def iffy[T, N, C[_, _], M[_, _]](
@@ -74,15 +76,17 @@ package object stats {
     trueBranchModel:  M[T, N],
     falseBranchModel: M[T, N])(
     implicit
+    eqT: Eq[T],
     fieldN: Field[N],
     eqN: cats.kernel.Eq[N],
     pIn:  ProbabilityModel[C],
     pOut: ProbabilityModel[M]): M[T, N] = {
 
-    val pTrue: N = pIn.probabilityOf(conditionModel)(true)
-    val pFalse: N = pIn.probabilityOf(conditionModel)(false)
+    implicit val eqBool = cats.kernel.Eq.fromUniversalEquals[Boolean]
+    val pTrue: N = pIn.probabilityOf(conditionModel)(RegionEq(true))
+    val pFalse: N = pIn.probabilityOf(conditionModel)(RegionEq(false))
 
-    pOut.mapValues(pOut.sum(trueBranchModel)(falseBranchModel))({ case (v1, v2) => (v1 * pTrue) + (v2 * pFalse) })
+    pOut.mapValues(pOut.adjoin(trueBranchModel)(falseBranchModel))({ case (v1, v2) => (v1 * pTrue) + (v2 * pFalse) })
   }
 
   def log2[N: Field: ConvertableFrom](x: N): Double =
@@ -111,36 +115,38 @@ package object stats {
    * http://en.wikipedia.org/wiki/Standard_deviation
    */
 
-  def standardDeviation[M[_, _], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M[A, N])(implicit prob: ProbabilityModel[M]): A = {
+  def standardDeviation[A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: ConditionalProbabilityTable[A, N]): A = {
+
+    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    val μ: A = Σ[A, IndexedSeq](prob.values(model).map({ x => n2a(prob.probabilityOf(model)(x)) * x }))
+    val μ: A = Σ[A, IndexedSeq](model.values.toVector.map({ x => n2a(prob.probabilityOf(model)(RegionEq(x))) * x }))
 
-    val sum: A = Σ[A, IndexedSeq](prob.values(model) map { x => n2a(prob.probabilityOf(model)(x)) * square(x - μ) })
+    val sum: A = Σ[A, IndexedSeq](model.values.toVector map { x => n2a(prob.probabilityOf(model)(RegionEq(x))) * square(x - μ) })
 
     NRoot[A].sqrt(sum)
   }
 
-  def σ[M[_, _], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M[A, N])(implicit prob: ProbabilityModel[M]): A =
-    standardDeviation[M, A, N](model)
+  def σ[A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: ConditionalProbabilityTable[A, N]): A =
+    standardDeviation[A, N](model)
 
-  def stddev[M[_, _], A: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
-    model: M[A, N])(implicit prob: ProbabilityModel[M]): A =
-    standardDeviation[M, A, N](model)
+  def stddev[ A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+    model: ConditionalProbabilityTable[A, N]): A =
+    standardDeviation[A, N](model)
 
-  def entropy[M[_, _], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A, N])(
-    implicit
-    prob:    ProbabilityModel[M],
-    convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
+  def entropy[A: Eq: Manifest, N: Field: Eq: ConvertableFrom](model: ConditionalProbabilityTable[A, N])(
+    implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
+    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+
     val convertN = ConvertableFrom[N]
-    val H = Σ[Double, IndexedSeq](prob.values(model) map { x =>
-      val px: N = P(model, x).apply()
+    val H = Σ[Double, Iterable](model.values map { a: A =>
+      val px: N = prob.probabilityOf(model)(RegionEq(a))
       import cats.syntax.all._
       if (px === Field[N].zero) {
         0d
@@ -151,10 +157,8 @@ package object stats {
     UnittedQuantity(H, convert.bit)
   }
 
-  def H[M[_, _], A: Manifest, N: Field: Eq: ConvertableFrom](model: M[A, N])(
-    implicit
-    prob:    ProbabilityModel[M],
-    convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
+  def H[A: Eq: Manifest, N: Field: Eq: ConvertableFrom](model: ConditionalProbabilityTable[A, N])(
+    implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
     entropy(model)
 
   def _reservoirSampleK[N](k: Int, i: Int, reservoir: List[N], xs: Stream[N], gen: Generator): Stream[List[N]] =
@@ -180,44 +184,47 @@ package object stats {
     _reservoirSampleK(k, 0, Nil, xs, gen)
 
 
-  implicit def monadForProbabilityModel[M[_, _], V](implicit fieldV: Field[V], prob: ProbabilityModel[M]): Monad[({ type λ[T] = M[T, V] })#λ] =
-    new Monad[({ type λ[T] = M[T, V] })#λ] {
+  // implicit def monadForProbabilityModel[M[_, _], V](
+  //   implicit
+  //    fieldV: Field[V],
+  //    prob: ProbabilityModel[M]): Monad[({ type λ[T] = M[T, V] })#λ] =
+  //   new Monad[({ type λ[T] = M[T, V] })#λ] {
 
-      def pure[A](a: A): M[A, V] =
-        prob.construct(Variable[A]("a"), Vector(a), (a: A) => fieldV.one)
+  //     def pure[A](a: A): M[A, V] =
+  //       prob.construct(Variable[A]("a"), Vector(a), (a: A) => fieldV.one)
 
-      def tailRecM[A, B](a: A)(f: A => M[Either[A, B], V]): M[B, V] =
-        ???
+  //     def tailRecM[A, B](a: A)(f: A => M[Either[A, B], V]): M[B, V] =
+  //       ???
 
-      override def map[A, B](model: M[A, V])(f: A => B): M[B, V] = {
+  //     override def map[A, B](model: M[A, V])(f: A => B): M[B, V] = {
 
-        val b2n = prob
-          .values(model)
-          .map({ v => f(v) -> prob.probabilityOf(model)(v) })
-          .groupBy(_._1)
-          .mapValues(_.map(_._2).reduce(fieldV.plus))
+  //       val b2n = prob
+  //         .values(model)
+  //         .map({ v => f(v) -> prob.probabilityOfExpression(model)(v) })
+  //         .groupBy(_._1)
+  //         .mapValues(_.map(_._2).reduce(fieldV.plus))
 
-          prob.construct(Variable[B]("b"), b2n.keys, b2n)
-      }
+  //         prob.construct(Variable[B]("b"), b2n.keys, b2n)
+  //     }
 
-      override def flatMap[A, B](model: M[A, V])(f: A => M[B, V]): M[B, V] = {
+  //     override def flatMap[A, B](model: M[A, V])(f: A => M[B, V]): M[B, V] = {
 
-        val foo = prob.values(model)
-          .flatMap(a => {
-            val p = prob.probabilityOf(model)(a)
-            val subDistribution = f(a)
-            prob.values(subDistribution).map(b => {
-              b -> (fieldV.times(p, prob.probabilityOf(subDistribution)(b)))
-            })
-          })
+  //       val foo = prob.values(model)
+  //         .flatMap(a => {
+  //           val p = prob.probabilityOfExpression(model)(a)
+  //           val subDistribution = f(a)
+  //           prob.values(subDistribution).map(b => {
+  //             b -> (fieldV.times(p, prob.probabilityOf(subDistribution)(b)))
+  //           })
+  //         })
 
-        val b2n =
-          foo
-            .groupBy(_._1)
-            .mapValues(_.map(_._2).reduce(fieldV.plus))
+  //       val b2n =
+  //         foo
+  //           .groupBy(_._1)
+  //           .mapValues(_.map(_._2).reduce(fieldV.plus))
 
-            prob.construct(Variable[B]("b"), b2n.keys, b2n)
-      }
-    }
+  //           prob.construct(Variable[B]("b"), b2n.keys, b2n)
+  //     }
+  //   }
 
 }

@@ -3,7 +3,7 @@ package axle.visualize
 import Color.yellow
 import Color.black
 
-case class DirectedGraphVisualization[DG](
+case class DirectedGraphVisualization[DG, VP](
   dg:          DG,
   width:       Int   = 700,
   height:      Int   = 700,
@@ -12,4 +12,5 @@ case class DirectedGraphVisualization[DG](
   arrowLength: Int   = 10,
   color:       Color = yellow,
   borderColor: Color = black,
-  fontSize:    Int   = 12)
+  fontSize:    Int   = 12,
+  layoutOpt:   Option[GraphVertexLayout[Double, VP]] = None)

@@ -14,6 +14,28 @@ import spire.math.Real.apply
 
 package object algebra {
 
+  implicit class EnrichedRinged[N](x: N)(implicit ringN: Ring[N]) {
+
+    // a.k.a. `…`
+
+    def etc: Iterable[N] =
+      new Iterable[N] {
+        def iterator: Iterator[N] = new Iterator[N] {
+
+          var current = x
+
+          def next(): N = {
+            val rc = current
+            current = ringN.plus(current, ringN.one)
+            rc
+          }
+
+          def hasNext: Boolean = true
+        }
+      }
+
+  }
+
   def tensorProduct[T](xs: Vector[T], ys: Vector[T])(implicit multT: MultiplicativeSemigroup[T]): Vector[T] = 
     for {
       x <- xs

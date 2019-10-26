@@ -1,9 +1,11 @@
 package axle.game.poker
 
+//import cats.implicits._
+import spire.math.Rational
+
 import axle.game._
 import axle.game.Strategies._
 import axle.stats.ConditionalProbabilityTable
-import spire.math.Rational
 
 case class Poker(
   playersStrategiesDisplayers: IndexedSeq[(Player, (Poker, PokerStateMasked) => ConditionalProbabilityTable[PokerMove, Rational], String => Unit)],
@@ -16,6 +18,8 @@ case class Poker(
   val numPlayers = players.length
 
   val dealer = Player("D", "Dealer")
+
+  implicit val eqMove = cats.kernel.Eq.fromUniversalEquals[PokerMove]
 
   val allPlayers = (dealer, randomMove, dealerDisplayer) +: playersStrategiesDisplayers
 

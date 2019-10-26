@@ -23,10 +23,10 @@ object GuessRiffle {
   val dealerStrategy: (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
     (game: GuessRiffle, state: GuessRiffleState) => {
       if ( state.remaining.isEmpty ) {
-        ConditionalProbabilityTable[GuessRiffleMove, Rational](Map(Riffle() -> Rational(1)), dealerMoveVariable)
+        ConditionalProbabilityTable[GuessRiffleMove, Rational](Map(Riffle() -> Rational(1)))
       } else {
         assert(! state.guess.isEmpty)
-        ConditionalProbabilityTable[GuessRiffleMove, Rational](Map(RevealAndScore() -> Rational(1)), dealerMoveVariable)
+        ConditionalProbabilityTable[GuessRiffleMove, Rational](Map(RevealAndScore() -> Rational(1)))
       }
     }
 
@@ -50,9 +50,9 @@ object GuessRiffle {
           }
         })
       if(bottomPointerOpt.isEmpty) {
-        uniformDistribution[GuessRiffleMove](topPointer.map(GuessCard), playerMoveVariable)
+        uniformDistribution[GuessRiffleMove](topPointer.map(GuessCard))
       } else {
-        uniformDistribution[GuessRiffleMove]((List(topPointer.headOption, bottomPointerOpt.get.headOption).flatten).map(GuessCard), playerMoveVariable)
+        uniformDistribution[GuessRiffleMove]((List(topPointer.headOption, bottomPointerOpt.get.headOption).flatten).map(GuessCard))
       }
     }
 

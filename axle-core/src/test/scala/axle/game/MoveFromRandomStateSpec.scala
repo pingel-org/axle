@@ -23,6 +23,7 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
   val Sc = TestGameState("c")
 
   implicit val eqS: Eq[TestGameState] = Eq.fromUniversalEquals[TestGameState]
+  implicit val eqM: Eq[TestGameMove] = Eq.fromUniversalEquals[TestGameMove]
 
   case class TestGameMove(name: String)
   val Maa = TestGameMove("aa")
@@ -83,10 +84,8 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
         move
 
       def strategyFor(game: TestGame, player: Player): (TestGame, TestGameState) => ConditionalProbabilityTable[TestGameMove, Rational] =
-        (game: TestGame, state: TestGameState) => {
-          val mm = movesMap(state)
-          pm.construct(Variable("S"), mm.keys, s => mm(s)._2)
-        }
+        (game: TestGame, state: TestGameState) =>
+          ConditionalProbabilityTable(movesMap(state).mapValues(_._2))
 
       def isValid(game: TestGame, state: TestGameState, move: TestGameMove): Either[String, TestGameMove] =
         Right(move)
@@ -108,18 +107,29 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
   val pm = ConditionalProbabilityTable.probabilityWitness
 
   val currentStateModelMap = Map(Sa -> Rational(1, 3), Sb -> Rational(2, 3))
-  val currentStateModel = pm.construct(Variable("S"), currentStateModelMap.keys, currentStateModelMap)
+  val currentStateModel = ConditionalProbabilityTable(currentStateModelMap)
 
   test("moveFromRandomState on hard-coded graph from start state") {
 
-    // Randomly select Sa then Mab
-    //   Sa: (1/3, -1/4) => 1/3 + (1/3 . -1/4) = 1/4
-    //   Sb: (2/3,  1/4) => 2/3 + (1/3 . -1/4) = 3/4
+    // Original non-zero transitions:
+    // from \ to
+    //   a    b    c
+    // a 1/2  1/4  1/4
+    // b 0    1    0
+    // c 0    0    1
 
-    // (Sa, Mac) yields
-    //   Sa: (1/3, -1/4) => 1/3 + (1/3 . -1/4) = 1/4
-    //   Sb: (2/3,  0  ) => 2/3 + (1/3 .  0  ) = 2/3
-    //   Sc: (0  ,  1/4) => 0   + (1/3 .  1/4) = 1/12
+    // Current state distribution
+    // a 1/3
+    // b 2/3
+
+    // Randomly select Sa then Mab
+    //  Sa: (1/3, -1/4) => 1/3 + (1/3 . -1/4) = 1/4
+    //  Sb: (2/3,  1/4) => 2/3 + (1/3 . -1/4) = 3/4
+
+    // Randomly select Sa then Mac
+    //  Sa: (1/3, -1/4) => 1/3 + (1/3 . -1/4) = 1/4
+    //  Sb: (2/3,  0  ) => 2/3 + (1/3 .  0  ) = 2/3
+    //  Sc: (0  ,  1/4) => 0   + (1/3 .  1/4) = 1/12
 
     val actualResult = ((1 to 1000) map { i =>
       moveFromRandomState(game, currentStateModel, rng)
@@ -127,10 +137,10 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
 
     val expectedResult = Set(
       (Some((Sa, Maa)), currentStateModel),
-      (Some((Sa, Mab)), pm.construct(Variable("S"), List(Sa, Sb), Map(
+      (Some((Sa, Mab)), ConditionalProbabilityTable(Map(
         Sa -> Rational(1, 4),
         Sb -> Rational(3, 4)))),
-      (Some((Sa, Mac)), pm.construct(Variable("S"), List(Sa, Sb, Sc), Map(
+      (Some((Sa, Mac)), ConditionalProbabilityTable(Map(
         Sa -> Rational(1, 4),
         Sb -> Rational(2, 3),
         Sc -> Rational(1, 12)))),

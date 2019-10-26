@@ -5,6 +5,7 @@ import org.scalatest._
 import spire.algebra._
 import spire.math.Rational
 
+import axle.algebra.RegionEq
 import axle.enrichGenSeq
 import axle.game.Dice.die
 import axle.syntax.probabilitymodel._
@@ -12,6 +13,7 @@ import axle.syntax.probabilitymodel._
 class TwoD6Histogram extends FunSuite with Matchers {
 
   implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
+  implicit val intEq: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra
 
   test("tally") {
 
@@ -29,17 +31,20 @@ class TwoD6Histogram extends FunSuite with Matchers {
 
   test("distribution monad: combine 2 D6 correctly") {
 
-    import cats.syntax.all._
-    type F[T] = ConditionalProbabilityTable[T, Rational]
+    // import cats.syntax.all._
+    // type F[T] = ConditionalProbabilityTable[T, Rational]
 
-    val twoDiceSummed = for {
-      a <- die(6) : F[Int]
-      b <- die(6) : F[Int]
-    } yield a + b
+    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
-    twoDiceSummed.P(2) should be(Rational(1, 36))
-    twoDiceSummed.P(7) should be(Rational(1, 6))
-    twoDiceSummed.P(12) should be(Rational(1, 36))
+    val twoDiceSummed = prob.flatMap(die(6)) { a =>
+      prob.map(die(6)) { b =>
+        a + b
+      }
+    }
+
+    twoDiceSummed.P(RegionEq(2)) should be(Rational(1, 36))
+    twoDiceSummed.P(RegionEq(7)) should be(Rational(1, 6))
+    twoDiceSummed.P(RegionEq(12)) should be(Rational(1, 36))
   }
 
 }

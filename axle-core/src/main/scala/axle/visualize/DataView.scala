@@ -8,7 +8,9 @@ import cats.implicits._
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
 
+import axle.algebra.RegionEq
 import axle.algebra.Plottable
+import axle.stats.ConditionalProbabilityTable
 import axle.stats.ProbabilityModel
 
 /**
@@ -50,19 +52,19 @@ object DataView {
 
     }
 
-  implicit def probabilityDataView[X: Order, Y: Plottable: Field: Order, M[_, _]](
-    implicit
-    prob: ProbabilityModel[M]): DataView[X, Y, M[X, Y]] =
-    new DataView[X, Y, M[X, Y]] {
+  implicit def cptDataView[X: Order, Y: Plottable: Field: Order]: DataView[X, Y, ConditionalProbabilityTable[X, Y]] =
+    new DataView[X, Y, ConditionalProbabilityTable[X, Y]] {
+
+      val prob = ProbabilityModel[ConditionalProbabilityTable]
 
       val yPlottable = Plottable[Y]
       val fieldY = Field[Y]
 
-      def keys(d: M[X, Y]): Traversable[X] = prob.values(d)
+      def keys(d: ConditionalProbabilityTable[X, Y]): Traversable[X] = d.values
 
-      def valueOf(d: M[X, Y], x: X): Y = prob.probabilityOf(d)(x)
+      def valueOf(d: ConditionalProbabilityTable[X, Y], x: X): Y = prob.probabilityOf(d)(RegionEq(x))
 
-      def yRange(d: M[X, Y]): (Y, Y) = {
+      def yRange(d: ConditionalProbabilityTable[X, Y]): (Y, Y) = {
 
         val ks = keys(d)
 

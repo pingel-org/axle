@@ -1,9 +1,13 @@
 package axle.stats
 
-import cats.syntax.all._
-import spire.math.Rational
 import org.scalatest._
-import axle.syntax.probabilitymodel._
+
+//import cats.syntax.all._
+import cats.implicits._
+import spire.math.Rational
+//import axle.syntax.probabilitymodel._
+
+import axle.algebra.RegionEq
 
 class DistributionSpec extends FunSuite with Matchers {
 
@@ -11,18 +15,17 @@ class DistributionSpec extends FunSuite with Matchers {
 
     type F[T] = ConditionalProbabilityTable[T, Rational]
 
+    val prob = ProbabilityModel[ConditionalProbabilityTable]
+
     val listDist: F[List[Int]] = ConditionalProbabilityTable[List[Int], Rational](
       Map(
         List(1, 2, 3) -> Rational(1, 3),
         List(1, 2, 8) -> Rational(1, 2),
-        List(8, 9) -> Rational(1, 6)),
-      Variable("c"))
+        List(8, 9) -> Rational(1, 6)))
 
-    val modelSize = for {
-      l <- listDist
-    } yield l.size
+    val modelSize = prob.map(listDist)(_.size)
 
-    modelSize.P(3) should be(Rational(5, 6))
+    prob.probabilityOf(modelSize)(RegionEq(3)) should be(Rational(5, 6))
   }
 
 }

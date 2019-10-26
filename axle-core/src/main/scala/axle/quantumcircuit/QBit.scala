@@ -1,15 +1,14 @@
 package axle.quantumcircuit
 
 import cats.kernel.Eq
-import cats.syntax.all._
 
-import spire.math.Complex
-import spire.algebra.Field
+import spire.algebra._
+import spire.math._
+import spire.implicits.additiveSemigroupOps
+import spire.implicits.multiplicativeGroupOps
 
-import axle.algebra.Binary
-import axle.algebra.{B0, B1}
-import axle.stats.Variable
-import axle.stats.ConditionalProbabilityTable
+import axle.stats._
+//import axle.algebra.RegionEq
 
 case class QBit[T: Field](a: Complex[T], b: Complex[T]) {
 
@@ -17,19 +16,20 @@ case class QBit[T: Field](a: Complex[T], b: Complex[T]) {
 
   def unindex: Vector[Complex[T]] = Vector(a, b)
 
-  // A QBit (a b) collapses to an actual value of 0 or 1
-  //  0 with probability a^2
-  //  1 with probability b^2
+  // A QBit (a b) collapses to
+  // |0> with probability a^2
+  // |1> with probability b^2
 
-  def probabilityModel: ConditionalProbabilityTable[Binary, T] = {
-    val m = Map[Binary, T](
-      B0 -> (a * a).real,
-      B1 -> (b * b).real
+  def probabilityModel: ConditionalProbabilityTable[CBit, T] = {
+    val m = Map[CBit, T](
+      CBit0 -> (a * a).real,
+      CBit1 -> (b * b).real
     )
-    ConditionalProbabilityTable.apply(m, Variable("Q"))
+    ConditionalProbabilityTable.apply(m)
   }
     
 }
+
 
 object QBit {
 
@@ -56,25 +56,23 @@ object QBit {
   def constant1[T](qbit: QBit[T])(implicit fieldT: Field[T]): QBit[T] =
     QBit[T](Complex(fieldT.zero), Complex(fieldT.one))
 
-  // CNOT
-  def cnot[T](control: QBit[T], target: QBit[T])(implicit fieldT: Field[T]): (QBit[T], QBit[T]) =
-    if(control === constant1[T]) {
-      (control, negate(target))
-    } else {
-      (control, target)
-    }
+  def X[T](qbit: QBit[T])(implicit fieldT: Field[T]): QBit[T] =
+    negate(qbit)
 
-  import spire.math._
-  //import spire.implicits.multiplicativeSemigroupOps
-  import spire.implicits._
-  import spire.algebra._
 
-  // Hadamard
-  //
-  // can be implemented with a 2x2 matrix
-  // [1/sqrt(2) 1/sqrt(2); 1/sqrt(2) -1/sqrt(2)]
+  /**
+   * Hadamard
+   *
+   * Can be implemented with a 2x2 matrix:
+   * 
+   *   1/sqrt(2)  1/sqrt(2)
+   *   1/sqrt(2) -1/sqrt(2)
+   * 
+   */
 
   def hadamard[T](qbit: QBit[T])(implicit fieldT: Field[T], nrootT: NRoot[T]): QBit[T] = {
+
+    import spire.implicits._
 
     val two = fieldT.one + fieldT.one
     val sqrtHalf = Complex[T](fieldT.one / sqrt(two), fieldT.zero)
@@ -84,5 +82,28 @@ object QBit {
      sqrtHalf * qbit.a - sqrtHalf * qbit.b)
   }
 
+  def H[T](qbit: QBit[T])(implicit fieldT: Field[T], nrootT: NRoot[T]): QBit[T] =
+    hadamard(qbit)
+
+  def commonQBits[T: Field: NRoot]: List[QBit[T]] = {
+
+    val zero = Field[T].zero
+    val one = Field[T].one
+    val two = one + one
+
+    val cZero = Complex(zero, zero)
+    val cOne = Complex(one, zero)
+    val cSqrtHalf = Complex(one / sqrt(two), zero)
+        
+    List(
+      QBit(cOne, cZero),
+      QBit(cSqrtHalf, cSqrtHalf),
+      QBit(cZero, cOne),
+      QBit(-cSqrtHalf, cSqrtHalf),
+      QBit(-cOne, cZero),
+      QBit(-cSqrtHalf, -cSqrtHalf),
+      QBit(cZero, -cOne),
+      QBit(cSqrtHalf, -cSqrtHalf)
+    )}
 
 }

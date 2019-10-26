@@ -1,8 +1,6 @@
 package axle.stats
 
-import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
-
 import org.scalacheck.Prop
 import org.scalacheck.Prop.forAll
 
@@ -12,34 +10,65 @@ import cats.kernel.Eq
 import spire.algebra.Field
 import spire.implicits.additiveSemigroupOps
 
+import axle.algebra.Region
+import axle.algebra.RegionAll
+import axle.algebra.RegionEmpty
 import axle.syntax.probabilitymodel._
 
 object KolmogorovProbabilityAxioms {
 
-  import cats.implicits._
+  import cats.syntax.order._
 
-  def basicMeasure[M[_, _]: ProbabilityModel, E, V: Field: Order](implicit arbModel: Arbitrary[M[E, V]]): Prop = {
-    forAll { (model: M[E, V]) => 
-      implicit val arbEvent = Arbitrary(Gen.oneOf(model.values))
-      forAll { (event: E) =>
-        model.P(event) >= Field[V].zero
+  // import org.scalacheck.Gen
+  // implicit val arbEvent = Arbitrary(Gen.oneOf(model.values))
+  // implicit val arbitraryExpression: Arbitrary[E => Boolean] = Arbitrary(Gen.oneOf(ProbabilityModel[M].values(model)).map( e => (v: E) => v === e) )
+
+  def basicMeasure[T, M[_, _]: ProbabilityModel, E, V: Field: Order](
+    arbT: Arbitrary[T],
+    modelFn: T => M[E, V],
+    arbRegionFn: T => Arbitrary[Region[E]]): Prop = {
+
+    implicit val implicitArbT = arbT
+
+    forAll { t: T => 
+
+      val model: M[E, V] = modelFn(t)
+      implicit val arbRegion = arbRegionFn(t)
+
+      forAll { (region: Region[E]) =>
+        model.P(region) >= Field[V].zero
       }
     }
   }
 
-  def unitMeasure[M[_, _]: ProbabilityModel, E, V: Field: Order](implicit arbModel: Arbitrary[M[E, V]]): Prop =
-    forAll { (model: M[E, V]) =>
-      model.values.map({ e: E => model.P(e) }).reduce(Field[V].plus) == Field[V].one
+  def unitMeasure[T, M[_, _]: ProbabilityModel, E, V: Field: Order](
+    arbT: Arbitrary[T],
+    modelFn: T => M[E, V]): Prop = {
+
+    implicit val implicitArbT = arbT
+
+    forAll { t: T =>
+      val model: M[E, V] = modelFn(t)
+      model.P(RegionAll()) === Field[V].one
     }
+  }
 
-  def combination[M[_, _]: ProbabilityModel, E: Eq, V: Field: Order](implicit arbModel: Arbitrary[M[E, V]]): Prop =
-    forAll { (model: M[E, V]) =>
+  def combination[T, M[_, _]: ProbabilityModel, E: Eq, V: Field: Order](
+    arbT: Arbitrary[T],
+    modelFn: T => M[E, V],
+    arbRegionFn: T => Arbitrary[Region[E]],
+    eqREFn: T => Eq[Region[E]]): Prop = {
 
-      implicit val arbitraryExpression: Arbitrary[E => Boolean] =
-        Arbitrary(Gen.oneOf(ProbabilityModel[M].values(model)).map( e => (v: E) => v === e) )
-  
-      forAll { (f: E => Boolean, g: E => Boolean) =>
-        (!(model.values.filter(e => f(e) && g(e)).size === 0)) || (model.P( e => f(e) || g(e) ) === model.P(f) + model.P(g))
+      implicit val implicitArbT = arbT
+
+      forAll { t: T =>
+        val model: M[E, V] = modelFn(t)
+        implicit val arbRegion = arbRegionFn(t)
+        implicit val eqRE = eqREFn(t)
+        forAll { (e1: Region[E], e2: Region[E]) =>
+          (!((e1 and e2) === RegionEmpty() )) || (model.P(e1 or e2) === model.P(e1) + model.P(e2))
+        }
       }
     }
+
 }
