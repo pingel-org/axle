@@ -23,8 +23,6 @@ import spire.random.Dist
 import spire.random.Generator
 
 import axle.math.Σ
-//import axle.algebra.Partition
-//import axle.algebra.Region
 import axle.algebra.RegionEq
 import axle.algebra.Aggregatable
 import axle.algebra.tuple2Field
@@ -41,11 +39,6 @@ package object stats {
     Dist(x)(y)
   }
 
-  // val rationalProbabilityDist: Dist[Rational] = {
-  //   implicit val bigintDist: Dist[BigInt] = Dist.bigint(2)
-  //   Dist.rational
-  // }
-
   def coinSides = Vector('HEAD, 'TAIL)
 
   def coin(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable[Symbol, Rational] =
@@ -53,6 +46,15 @@ package object stats {
       Map(
         'HEAD -> pHead,
         'TAIL -> (1 - pHead)))
+
+  def bernoulliDistribution(pOne: Rational): ConditionalProbabilityTable[Int, Rational] = {
+    import cats.implicits._
+    ConditionalProbabilityTable[Int, Rational](
+      Map(
+        1 -> pOne,
+        0 -> (1 - pOne)))
+  }
+    
 
   def binaryDecision(yes: Rational): ConditionalProbabilityTable[Boolean, Rational] = {
     import cats.implicits._
@@ -110,6 +112,18 @@ package object stats {
     import cats.syntax.all._
     nroot.sqrt(Σ[X, C](data.map(x => square(x - estimator(x)))))
   }
+
+  def expectation[A: Eq: Field: ConvertableTo, N: Field: ConvertableFrom](model: ConditionalProbabilityTable[A, N]): A = {
+
+    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+
+    def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
+
+    Σ[A, IndexedSeq](model.values.toVector.map { x =>
+      n2a(prob.probabilityOf(model)(RegionEq(x))) * x
+    })
+  }
+
 
   /**
    * http://en.wikipedia.org/wiki/Standard_deviation

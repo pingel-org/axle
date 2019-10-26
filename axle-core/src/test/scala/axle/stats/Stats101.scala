@@ -32,4 +32,13 @@ class Stats101 extends FunSuite with Matchers {
     standardDeviation[Real, Rational](dist) should be(Real(2))
   }
 
+  test("bernoulliDistribution expectation (mean)") {
+
+    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+
+    val dist = bernoulliDistribution(Rational(1, 4))
+
+    expectation[Rational, Rational](prob.map(dist){Rational.apply}) should be(Rational(1, 4))
+  }
+
 }
