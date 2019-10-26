@@ -113,14 +113,14 @@ package object stats {
     nroot.sqrt(Σ[X, C](data.map(x => square(x - estimator(x)))))
   }
 
-  def expectation[A: Eq: Field: ConvertableFrom, N: Field: ConvertableTo](model: ConditionalProbabilityTable[A, N]): N = {
+  def expectation[A: Eq: Field: ConvertableTo, N: Field: ConvertableFrom](model: ConditionalProbabilityTable[A, N]): A = {
 
     implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
-    def a2n(a: A): N = ConvertableFrom[A].toType[N](a)(ConvertableTo[N])
+    def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    Σ[N, IndexedSeq](model.values.toVector.map { x =>
-      prob.probabilityOf(model)(RegionEq(x)) * a2n(x)
+    Σ[A, IndexedSeq](model.values.toVector.map { x =>
+      n2a(prob.probabilityOf(model)(RegionEq(x))) * x
     })
   }
 
