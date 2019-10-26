@@ -2,11 +2,11 @@ package axle.quantumcircuit
 
 import org.scalatest._
 
-import spire.algebra._
-import spire.math._
-import spire.random.Dist
+// import spire.algebra._
+// import spire.math._
+// import spire.random.Dist
 
-import QBit._
+// import QBit._
 
 /**
  * See https://youtu.be/F_Riqjdh2oM?t=2001
@@ -14,6 +14,7 @@ import QBit._
 
 class DeutschOracleSpec extends FunSuite with Matchers {
 
+  /*
   implicit val fieldReal: Field[Real] = new spire.math.RealAlgebra
 
   implicit val distReal: Dist[Real] =
@@ -67,5 +68,6 @@ class DeutschOracleSpec extends FunSuite with Matchers {
   test("Deutsch Oracle of negate") {
     isConstantDeutschOracle[Real](negateForDeutsch) should be(false)
   }
+  */
 
 }

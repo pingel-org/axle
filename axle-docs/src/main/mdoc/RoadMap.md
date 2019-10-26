@@ -47,13 +47,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `ProbabilityModel` `chain`, `adjoin`, `mapValues`, `redistribute`
 * `etc` via `axle.algebra.EnrichedRinged`
 
-* Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `fext scala | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
-* Fix quantum failure (comment out)
 * test `etc`
+* alias `uniformDistribution` as `bernoulli`
+* Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `find */src -name '*.scala' | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
 * Fix `BayesianNetwork` visualization
 * Fix `GeneticAlgorithmSpec`
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
-* alias `uniformDistribution` as `bernoulli`
 
 * Fix awt/gl warnings
 * LogisticMap md back to 4k x 4k
@@ -127,6 +126,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * QuantumCircuit.md
 * QBit2.factor
+* Fix and enable DeutschOracleSpec
 * QBit CCNot
 * Property test reversibility (& own inverse)
 * Typeclass for "negate" (etc), Binary, CBit
