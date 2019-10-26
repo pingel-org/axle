@@ -47,8 +47,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `ProbabilityModel` `chain`, `adjoin`, `mapValues`, `redistribute`
 * `etc` via `axle.algebra.EnrichedRinged`
 
-* test `etc`
-* alias `uniformDistribution` as `bernoulli`
+* Alias `uniformDistribution` as `bernoulli`
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `find */src -name '*.scala' | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
 * Fix `BayesianNetwork` visualization
 * Fix `GeneticAlgorithmSpec`
