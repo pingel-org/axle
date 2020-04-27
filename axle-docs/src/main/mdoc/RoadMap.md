@@ -6,7 +6,7 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.0 (December 2019)
+## 0.5.0 (June 2020)
 
 * Move to Scala 2.12
 * Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`
@@ -72,7 +72,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Figure out better way to reference images
 * Release and publish site
 
-## 0.5.1 (January 2020)
+## 0.5.1 (Late 2020)
 
 * `Region` DSL
 * rename `ConditionalProbabilityTable`?
@@ -84,7 +84,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
 * Review groupBy uses -- they use university equality.  Replace with Eq
 
-## 0.5.2 (April 2020)
+## 0.5.2 (Winter 2021)
 
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
   * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
@@ -102,7 +102,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Sort out MapFrom, FromStream, FromSet
 * Test `axle.algebra.tuple2Field`
 
-## 0.5.3 (July 2020)
+## 0.5.3 (Spring 2021)
 
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 * Also use HLists for `ProbabilityModel` type parameter `A`
@@ -129,7 +129,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Factor tics and tics-{joda,algebra,spire} into separate libs
 * Fix `axle.algebra.GeoMetricSpaceSpec`
 
-## 0.6.x (Winter 2021)
+## 0.6.x (Autumn 2021)
 
 * QuantumCircuit.md
 * QBit2.factor
@@ -139,7 +139,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Typeclass for "negate" (etc), Binary, CBit
 * Typeclass for unindex
 
-## 0.7.x (Summer 2021)
+## 0.7.x (Winter 2022)
 
 * Factor `axle.game.moveFromRandomState` in terms of a random walk on a graph.
   * Compare to Brownian motion, Random walk, Ito process, ...
