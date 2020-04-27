@@ -33,21 +33,21 @@ object Util {
       total  <- transmit(origin, destination, buffer, 0L)
     } yield total
 
-  def inputStream(f: File, guard: Semaphore[IO]): Resource[IO, FileInputStream] =
+  def inputStream[F[_]: Sync](f: File, guard: Semaphore[F]): Resource[F, FileInputStream] =
     Resource.make {
-      IO(new FileInputStream(f))
+      Sync[F].delay(new FileInputStream(f))
     } { inStream => 
       guard.withPermit {
-       IO(inStream.close()).handleErrorWith(_ => IO.unit)
+       Sync[F].delay(inStream.close()).handleErrorWith(_ => Sync[F].unit)
       }
     }
   
-  def outputStream(f: File, guard: Semaphore[IO]): Resource[IO, FileOutputStream] =
+  def outputStream[F[_]: Sync](f: File, guard: Semaphore[F]): Resource[F, FileOutputStream] =
     Resource.make {
-      IO(new FileOutputStream(f))
+      Sync[F].delay(new FileOutputStream(f))
     } { outStream =>
       guard.withPermit {
-       IO(outStream.close()).handleErrorWith(_ => IO.unit)
+       Sync[F].delay(outStream.close()).handleErrorWith(_ => Sync[F].unit)
       }
     }
 
