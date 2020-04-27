@@ -25,7 +25,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Scanner`, `Aggregator`, `Zipper`, `Indexed`, `Talliable`, `Finite`: Refactored as Kind-1 typeclasses
 * Vertex and Edge projections for jung graphs
 * Fix `axle.joda.TicsSpec` handling of timezones
-* Update Monix, Kittens, Cats
 * ScaleExp works with negative exponent
 * ScalaCheck tests for
   * Group and Module of UnittedQuantity
@@ -49,11 +48,17 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `bernoulliDistribution`
 * `axle.stats.expectation(CPT)`
 
-* Fix `GeneticAlgorithmSpec`
-* Fix `LogisticRegression` and move `LogisticRegression.md` back
+* Migrate all `scala.io` and `java.io` to use `cats.effect` (`F[_]` with context bounds such as `ContextShift` and `Sync`)
 
 * Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `find */src -name '*.scala' | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
+  * 1x axle-core/src/main/scala/axle/package.scala
+  * 1x axle-core/src/main/scala/axle/awt/package.scala
+  * 1x axle-core/src/main/scala/axle/ast/Language.scala
+  * 3x axle-core/src/main/scala/axle/ast/Util.scala
+  * 2x axle-core/src/main/scala/axle/web/package.scala
 
+* Fix `GeneticAlgorithmSpec`
+* Fix `LogisticRegression` and move `LogisticRegression.md` back
 * Fix `BayesianNetwork` visualization
 * Fix awt/gl warnings
 * LogisticMap md back to 4k x 4k
@@ -112,7 +117,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Tests for `axle.ast`
 * Kind projector for projections of jung graphs for Finite
 * Functors for jung should use projections (study cats disjunction, scala Either)
-* kittens 1.0.0-RC3 or magnolia
+* kittens or magnolia
   * pattern match in FirstOrderPredicateLogic
   * subtyping for Suit and Rank
 * Machinist?
