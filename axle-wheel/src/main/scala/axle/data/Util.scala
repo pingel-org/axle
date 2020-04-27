@@ -19,20 +19,17 @@ object Util {
    * From https://typelevel.org/cats-effect/tutorial/tutorial.html
    */
 
-  def transmit(
-    origin: InputStream,
-    destination: OutputStream,
-    buffer: Array[Byte],
-    acc: Long): IO[Long] =
+  def transmit[F[_]: Sync](
+    origin: InputStream, destination: OutputStream, buffer: Array[Byte], acc: Long): F[Long] =
     for {
-      amount <- IO(origin.read(buffer, 0, buffer.size))
-      count  <- if(amount > -1) IO(destination.write(buffer, 0, amount)) >> transmit(origin, destination, buffer, acc + amount)
-                else IO.pure(acc) // End of read stream reached (by java.io.InputStream contract), nothing to write
-    } yield count
+      amount <- Sync[F].delay(origin.read(buffer, 0, buffer.size))
+      count  <- if(amount > -1) Sync[F].delay(destination.write(buffer, 0, amount)) >> transmit(origin, destination, buffer, acc + amount)
+                else Sync[F].pure(acc) // End of read stream reached (by java.io.InputStream contract), nothing to write
+    } yield count // Returns the actual amount of bytes transmitted
 
-  def transfer(origin: InputStream, destination: OutputStream): IO[Long] =
+  def transfer[F[_]: Sync](origin: InputStream, destination: OutputStream): F[Long] =
     for {
-      buffer <- IO(new Array[Byte](1024 * 10)) // Allocated only when the IO is evaluated
+      buffer <- Sync[F].delay(new Array[Byte](1024 * 10)) // Allocated only when the IO is evaluated
       total  <- transmit(origin, destination, buffer, 0L)
     } yield total
 
