@@ -47,15 +47,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.algebra.etc` via `axle.algebra.EnrichedRinged`
 * `bernoulliDistribution`
 * `axle.stats.expectation(CPT)`
+* `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 
-* Migrate all `scala.io` and `java.io` to use `cats.effect` (`F[_]` with context bounds such as `ContextShift` and `Sync`)
-
-* Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `find */src -name '*.scala' | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
-  * 1x axle-core/src/main/scala/axle/package.scala
-  * 1x axle-core/src/main/scala/axle/awt/package.scala
-  * 1x axle-core/src/main/scala/axle/ast/Language.scala
-  * 3x axle-core/src/main/scala/axle/ast/Util.scala
-  * 2x axle-core/src/main/scala/axle/web/package.scala
+* Remove `getLine` in `axle-core` `axle` package object
+* Remove `ImageIO` in `axle-core` `axle.awt` package object
 
 * Fix `GeneticAlgorithmSpec`
 * Fix `LogisticRegression` and move `LogisticRegression.md` back

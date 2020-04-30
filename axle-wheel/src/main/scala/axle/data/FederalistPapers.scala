@@ -8,6 +8,8 @@ import cats.kernel.Eq
 import cats.effect._
 import cats.implicits._
 
+import axle.IO.urlToCachedFileToLines
+
 /**
  *
  * http://www.gutenberg.org/files/18/18.txt
@@ -30,7 +32,7 @@ object FederalistPapers {
 
   def articles[F[_]: ContextShift: Sync](blocker: Blocker): F[List[Article]] = {
 
-    Util.urlToCachedFileToLines(source, filename, blocker).map( lines => {
+    urlToCachedFileToLines(source, Util.dataCacheDir, filename, blocker).map( lines => {
 
       val starts = lines.zipWithIndex.collect({ case (line, i) if line.startsWith("FEDERALIST") => i })
 

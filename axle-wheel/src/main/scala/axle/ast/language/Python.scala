@@ -11,6 +11,7 @@ object Python {
 
   implicit val enrichRuleName = (name: String) => RuleBuilder(name)
 
+
   val expressions = List(
     "Module" := Sub("node"),
     "Stmt" := Spread(),
@@ -200,7 +201,7 @@ object Python {
       os.close
 
       val is = p.getInputStream()
-      val json = Util.convertStreamToString(is)
+      val json = axle.IO.convertStreamToString(is)
       val rc = p.waitFor()
       if (rc != 0) {
         throw new Exception("error parsing python or converting it to json")
