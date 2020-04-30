@@ -93,6 +93,7 @@ class KMeansSpecification
     import axle.data.Irises
     import axle.data.Iris
 
+
     val ec = ExecutionContext.global
     val blocker = Blocker.liftExecutionContext(ec)
     implicit val cs = IO.contextShift(ec)

@@ -2,10 +2,10 @@ package axle.nlp
 
 import org.scalatest._
 
+import scala.concurrent.ExecutionContext
+
 import cats.effect._
 import cats.implicits._
-
-import scala.concurrent.ExecutionContext
 
 import spire.algebra._
 import spire.random.Generator.rng
