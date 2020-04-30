@@ -1,8 +1,14 @@
 package axle.data
 
-import scala.Vector
 import java.net.URL
+
+import scala.Vector
+
 import cats.kernel.Eq
+import cats.effect._
+import cats.implicits._
+
+import axle.IO.urlToCachedFileToLines
 
 /**
  *
@@ -10,7 +16,7 @@ import cats.kernel.Eq
  *
  */
 
-object FederalistPapers extends Util {
+object FederalistPapers {
 
   val idPattern = """FEDERALIST.? No. (\d+)""".r
 
@@ -24,26 +30,24 @@ object FederalistPapers extends Util {
 
   val filename = "gutenberg18.txt"
 
-  val file = urlToCachedFile(source, filename)
+  def articles[F[_]: ContextShift: Sync](blocker: Blocker): F[List[Article]] = {
 
-  lazy val articles: List[Article] = {
+    urlToCachedFileToLines(source, Util.dataCacheDir, filename, blocker).map( lines => {
 
-    val lines = scala.io.Source.fromFile(file).getLines.toList
+      val starts = lines.zipWithIndex.collect({ case (line, i) if line.startsWith("FEDERALIST") => i })
 
-    val starts = lines.zipWithIndex.collect({ case (line, i) if line.startsWith("FEDERALIST") => i })
+      val last = lines.zipWithIndex.find(_._1.startsWith("End of the Project Gutenberg EBook")).get._2 - 1
 
-    val last = lines.zipWithIndex.find(_._1.startsWith("End of the Project Gutenberg EBook")).get._2 - 1
+      val ranges = starts.zip(starts.drop(1) ++ Vector(last))
 
-    val ranges = starts.zip(starts.drop(1) ++ Vector(last))
-
-    ranges map {
-      case (first, last) =>
-        val id = idPattern.findFirstMatchIn(lines(first)).map(_.group(1).toInt).getOrElse(0)
-        val authorIndex = ((first + 1) to last).find(i => allCaps.unapplySeq(lines(i)).isDefined).getOrElse(0)
-        val metadata = ((first + 1) to authorIndex - 1).map(lines).mkString("\n")
-        val text = ((authorIndex + 1) to last).map(lines).mkString("\n")
-        Article(id, lines(authorIndex), text, metadata)
-    }
+      ranges map {
+        case (first, last) =>
+          val id = idPattern.findFirstMatchIn(lines(first)).map(_.group(1).toInt).getOrElse(0)
+          val authorIndex = ((first + 1) to last).find(i => allCaps.unapplySeq(lines(i)).isDefined).getOrElse(0)
+          val metadata = ((first + 1) to authorIndex - 1).map(lines).mkString("\n")
+          val text = ((authorIndex + 1) to last).map(lines).mkString("\n")
+          Article(id, lines(authorIndex), text, metadata)
+      }})
   }
 
 }

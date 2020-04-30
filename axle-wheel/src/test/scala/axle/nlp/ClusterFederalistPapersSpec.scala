@@ -2,6 +2,9 @@ package axle.nlp
 
 import org.scalatest._
 
+import scala.concurrent.ExecutionContext
+
+import cats.effect._
 import cats.implicits._
 
 import spire.algebra._
@@ -11,17 +14,24 @@ import axle.nlp.language.English
 
 class ClusterFederalistPapersSpec extends FunSuite with Matchers {
 
+  val ec = ExecutionContext.global
+  val blocker = Blocker.liftExecutionContext(ec)
+  implicit val cs = IO.contextShift(ec)
+
   test("k-means clusters federal papers") {
 
     import axle.data.FederalistPapers._
 
-    val corpus = Corpus(articles.map(_.text), English)
+    val artcls = articles[IO](blocker).unsafeRunSync()
+
+    val corpus = Corpus(artcls.map(_.text), English)
 
     val frequentWords = corpus.wordsMoreFrequentThan(100)
     val topBigrams = corpus.topKBigrams(200)
     val numDimensions = frequentWords.size + topBigrams.size
 
     def featureExtractor(fp: Article): List[Double] = {
+
       import axle.enrichGenSeq
       implicit val ringLong: Ring[Long] = spire.implicits.LongAlgebra
 
@@ -53,7 +63,7 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
     val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
     val classifier = KMeans[Article, List, DoubleMatrix](
-      articles,
+      artcls,
       N = numDimensions,
       featureExtractor,
       normalizer,
@@ -64,12 +74,12 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
 
     val confusion = ConfusionMatrix[Article, Int, String, Vector, DoubleMatrix](
       classifier,
-      articles.toVector,
+      artcls.toVector,
       _.author,
       0 to 3)
 
     corpus.show should include("Top 10 words")
-    articles.size should be > 50
+    artcls.size should be > 50
     confusion.counts.rows should be(5)
   }
 

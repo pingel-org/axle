@@ -1,13 +1,17 @@
 package axle.data
 
 import java.net.URL
-import scala.Option.option2Iterable
+//import scala.Option.option2Iterable
 import scala.util.Try
 
+import cats.effect._
+import cats.implicits._
 import cats.kernel.Eq
+
 import axle.quanta.Distance
 import axle.quanta.DistanceConverter
 import axle.quanta.UnittedQuantity
+import axle.IO.urlToCachedFileToLines
 
 /**
  *
@@ -44,25 +48,26 @@ object Iris {
   implicit val irisEq = Eq.fromUniversalEquals[Iris]
 }
 
-class Irises(implicit converter: DistanceConverter[Double]) extends Util {
+class Irises[F[_]: ContextShift: Sync](blocker: Blocker)(implicit converter: DistanceConverter[Double]) {
 
   val source = new URL("http://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data")
   val filename = "iris.data"
 
-  val file = urlToCachedFile(source, filename)
+  val linesF = urlToCachedFileToLines(source, Util.dataCacheDir, filename, blocker)
 
   import converter.centimeter
 
-  val irises = scala.io.Source.fromFile(file).getLines().toList flatMap { line =>
-    Try {
-      val fields = line.split(",")
-      Iris(
-        fields(0).toDouble *: centimeter,
-        fields(1).toDouble *: centimeter,
-        fields(2).toDouble *: centimeter,
-        fields(3).toDouble *: centimeter,
-        fields(4))
-    } toOption
-  }
+  val irises: F[List[Iris]] = linesF.map(
+    lines => lines flatMap { line =>
+      Try {
+        val fields = line.split(",")
+        Iris(
+          fields(0).toDouble *: centimeter,
+          fields(1).toDouble *: centimeter,
+          fields(2).toDouble *: centimeter,
+          fields(3).toDouble *: centimeter,
+          fields(4))
+      } toOption
+    })
 
 }

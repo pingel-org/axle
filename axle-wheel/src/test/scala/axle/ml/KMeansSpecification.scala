@@ -5,7 +5,10 @@ import org.scalatest._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import org.jblas.DoubleMatrix
 
+import scala.concurrent.ExecutionContext
+
 import cats.kernel.Eq
+import cats.effect._
 import cats.implicits._
 
 import spire.algebra._
@@ -90,7 +93,13 @@ class KMeansSpecification
     import axle.data.Irises
     import axle.data.Iris
 
-    val irisesData = new Irises
+
+    val ec = ExecutionContext.global
+    val blocker = Blocker.liftExecutionContext(ec)
+    implicit val cs = IO.contextShift(ec)
+
+    val irisesIO = new Irises[IO](blocker)
+    val irises = irisesIO.irises.unsafeRunSync
 
     import axle.algebra.distance.Euclidean
     import axle.jblas.linearAlgebraDoubleMatrix
@@ -117,7 +126,7 @@ class KMeansSpecification
 
     val classifier: KMeans[Iris, List, DoubleMatrix] =
       KMeans[Iris, List, DoubleMatrix](
-        irisesData.irises,
+        irises,
         N = 2,
         irisFeaturizer,
         normalizer,
@@ -132,7 +141,7 @@ class KMeansSpecification
 
     val confusion = ConfusionMatrix[Iris, Int, String, Vector, DoubleMatrix](
       classifier,
-      irisesData.irises.toVector,
+      irises.toVector,
       _.species,
       0 to 2)
 
@@ -167,7 +176,7 @@ class KMeansSpecification
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)
     new java.io.File(plotSvgName).exists should be(true)
-    confusion.rowSums.columnSums.get(0, 0) should be(irisesData.irises.size)
+    confusion.rowSums.columnSums.get(0, 0) should be(irises.size)
     confusion.show should include("versicolor")
   }
 

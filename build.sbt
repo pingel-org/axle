@@ -11,7 +11,8 @@ lazy val spireVersion = "0.14.1"
 lazy val shapelessVersion = "2.3.2"
 lazy val kittensVersion = "2.0.0"
 //lazy val catsVersion = "0.9.0" // match spire's algebra's catsVersion (and monix)
-lazy val catsVersion = "2.0.0"
+lazy val catsVersion = "2.1.1"
+lazy val catsEffectVersion = "2.1.3"
 
 lazy val disciplineVersion = "0.7.2"
 lazy val scalaCheckVersion = "1.13.4"
@@ -33,14 +34,14 @@ lazy val scoverageSettings = Seq(
   coverageHighlighting := true
 )
 
-scalaVersion := "2.12.10"
+scalaVersion := "2.12.11"
 
 autoCompilerPlugins := true
 
 lazy val buildSettings = Seq(
   organization := "org.axle-lang",
-  scalaVersion := "2.12.10",
-  crossScalaVersions := Seq("2.12.10")
+  scalaVersion := "2.12.11",
+  crossScalaVersions := Seq("2.12.11")
 )
 
 lazy val axleDoctestSettings = Seq(
@@ -55,6 +56,7 @@ lazy val axleCore = Project("axle-core", file("axle-core"))
       "org.typelevel"          %% "spire"                    % spireVersion,
       "org.typelevel"          %% "spire-laws"               % spireVersion,
       "org.typelevel"          %% "cats-core"                % catsVersion,
+      "org.typelevel"          %% "cats-effect"              % catsEffectVersion,
       "org.typelevel"          %% "cats-free"                % catsVersion,
       "com.chuusai"            %% "shapeless"                % shapelessVersion,
       "org.typelevel"          %% "kittens"                  % kittensVersion,

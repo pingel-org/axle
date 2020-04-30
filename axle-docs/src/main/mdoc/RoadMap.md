@@ -6,7 +6,7 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.0 (December 2019)
+## 0.5.0 (June 2020)
 
 * Move to Scala 2.12
 * Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`
@@ -25,7 +25,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `Scanner`, `Aggregator`, `Zipper`, `Indexed`, `Talliable`, `Finite`: Refactored as Kind-1 typeclasses
 * Vertex and Edge projections for jung graphs
 * Fix `axle.joda.TicsSpec` handling of timezones
-* Update Monix, Kittens, Cats
 * ScaleExp works with negative exponent
 * ScalaCheck tests for
   * Group and Module of UnittedQuantity
@@ -48,12 +47,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.algebra.etc` via `axle.algebra.EnrichedRinged`
 * `bernoulliDistribution`
 * `axle.stats.expectation(CPT)`
+* `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
+
+* Remove `getLine` in `axle-core` `axle` package object
+* Remove `ImageIO` in `axle-core` `axle.awt` package object
 
 * Fix `GeneticAlgorithmSpec`
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
-
-* Cats effect/io, FS2, or similar for all `png`, `html`, data fetches, and all `find */src -name '*.scala' | xargs egrep -e 'scala.io|java.io' | grep -v 'should be'`
-
 * Fix `BayesianNetwork` visualization
 * Fix awt/gl warnings
 * LogisticMap md back to 4k x 4k
@@ -67,7 +67,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Figure out better way to reference images
 * Release and publish site
 
-## 0.5.1 (January 2020)
+## 0.5.1 (Late 2020)
 
 * `Region` DSL
 * rename `ConditionalProbabilityTable`?
@@ -79,7 +79,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
 * Review groupBy uses -- they use university equality.  Replace with Eq
 
-## 0.5.2 (April 2020)
+## 0.5.2 (Winter 2021)
 
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
   * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
@@ -97,7 +97,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Sort out MapFrom, FromStream, FromSet
 * Test `axle.algebra.tuple2Field`
 
-## 0.5.3 (July 2020)
+## 0.5.3 (Spring 2021)
 
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 * Also use HLists for `ProbabilityModel` type parameter `A`
@@ -112,7 +112,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Tests for `axle.ast`
 * Kind projector for projections of jung graphs for Finite
 * Functors for jung should use projections (study cats disjunction, scala Either)
-* kittens 1.0.0-RC3 or magnolia
+* kittens or magnolia
   * pattern match in FirstOrderPredicateLogic
   * subtyping for Suit and Rank
 * Machinist?
@@ -124,7 +124,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Factor tics and tics-{joda,algebra,spire} into separate libs
 * Fix `axle.algebra.GeoMetricSpaceSpec`
 
-## 0.6.x (Winter 2021)
+## 0.6.x (Autumn 2021)
 
 * QuantumCircuit.md
 * QBit2.factor
@@ -134,7 +134,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Typeclass for "negate" (etc), Binary, CBit
 * Typeclass for unindex
 
-## 0.7.x (Summer 2021)
+## 0.7.x (Winter 2022)
 
 * Factor `axle.game.moveFromRandomState` in terms of a random walk on a graph.
   * Compare to Brownian motion, Random walk, Ito process, ...

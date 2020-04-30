@@ -13,13 +13,8 @@ package object web {
       <body>{ inner }</body>
     </html>
 
-  val svgStyleStream = this.getClass.getResourceAsStream("/svgstyle.css")
-  val svgStyle = scala.io.Source.fromInputStream(svgStyleStream).mkString
-  svgStyleStream.close()
-
-  val svgScriptStream = this.getClass.getResourceAsStream("/svgfunctions.js")
-  val svgScript = scala.io.Source.fromInputStream(svgScriptStream).mkString
-  svgScriptStream.close()
+  val svgStyle = axle.IO.classpathResourceAsString("/svgstyle.css")
+  val svgScript = axle.IO.classpathResourceAsString("/svgfunctions.js")
 
   // optional svg attribute: viewBox={ s"0 0 ${width} ${height}" }
   def svgFrame(inner: NodeSeq, width: Double, height: Double): Node =

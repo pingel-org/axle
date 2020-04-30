@@ -1,25 +1,10 @@
 
 package axle.ast
 
-case class DocumentFromString(val grammar: Language, val name: String, content: String) extends Document {
-
-  def ast: Option[AstNode] = grammar.parseString(content)
-}
-
-case class DocumentFromFile(val grammar: Language, shortFilename: String, filename: String) extends Document {
-
-  def ast: Option[AstNode] = grammar.parseFile(filename)
-
-  def name: String = shortFilename
-}
-
-trait Document {
-
-  def ast: Option[AstNode]
-
-  def grammar: Language
-
-  def name: String
+case class Document(
+  ast: Option[AstNode],
+  grammar: Language,
+  name: String)
 
   //  def makeHtml = {
   //    val htmlFilename = Config.htmlDirectory + File.separator + shortFilename + ".html"
@@ -31,4 +16,3 @@ trait Document {
   //    out.close()
   //  }
 
-}

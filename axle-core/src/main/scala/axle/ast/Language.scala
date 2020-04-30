@@ -11,6 +11,7 @@ trait Language {
 
   val name2rule = rules.map(r => r.name -> r).toMap
 
+
   val rulename2precedence = precedenceGroups.zipWithIndex.flatMap({
     case ((names, assoc), i) => names.map((_, i))
   }).toMap
@@ -20,8 +21,6 @@ trait Language {
   }).toMap
 
   def trim(ast: AstNode): AstNode = trimmer(ast)
-
-  def parseFile(filename: String): Option[AstNode] = parser(scala.io.Source.fromFile(filename).mkString)
 
   def parseString(code: String): Option[AstNode] = parser(code)
 
