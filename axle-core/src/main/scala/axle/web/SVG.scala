@@ -37,6 +37,7 @@ import axle.visualize.element.XTics
 import axle.visualize.element.YTics
 import axle.xml._
 
+
 @implicitNotFound("Witness not found for SVG[${S}]")
 trait SVG[S] {
 

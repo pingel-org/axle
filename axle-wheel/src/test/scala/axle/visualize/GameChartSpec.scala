@@ -43,27 +43,28 @@ class GameChartSpec extends FunSuite with Matchers {
 
     import axle.web._
     import axle.awt._
+    import cats.effect._
 
     val svgPlotName = "bowl_plot.svg"
-    svg(plot, svgPlotName)
+    plot.svg[IO](svgPlotName).unsafeRunSync()
 
     val svgName = "bowl.svg"
-    svg(chart, svgName)
+    chart.svg[IO](svgName).unsafeRunSync()
 
     val pngName = "bowl.png"
-    png(chart, pngName)
+    chart.png[IO](pngName).unsafeRunSync()
 
     val jpegName = "bowl.jpg"
-    jpeg(chart, jpegName)
+    chart.jpeg[IO](jpegName).unsafeRunSync()
 
     val gifName = "bowl.gif"
-    gif(chart, gifName)
+    chart.gif[IO](gifName).unsafeRunSync()
 
     val bmpName = "bowl.bmp"
-    bmp(chart, bmpName)
+    chart.bmp[IO](bmpName).unsafeRunSync()
 
     val htmlName = "bowl.html"
-    html(chart, htmlName)
+    chart.html[IO](htmlName).unsafeRunSync()
 
     new java.io.File(svgPlotName).exists should be(true)
     new java.io.File(svgName).exists should be(true)

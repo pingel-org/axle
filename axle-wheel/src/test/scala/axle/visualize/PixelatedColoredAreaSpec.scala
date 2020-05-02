@@ -20,10 +20,11 @@ class PixelatedColoredAreaSpec extends FunSuite with Matchers {
     val pca = PixelatedColoredArea(f, toColor, 400, 400, 0d, 1000d, 0d, 1000d)
 
     import axle.awt._
+    import cats.effect._
 
     val filename = "roy_diagonal.png"
 
-    png(pca, filename)
+    pca.png[IO](filename).unsafeRunSync()
 
     new java.io.File(filename).exists should be(true)
   }
@@ -60,9 +61,10 @@ class PixelatedColoredAreaSpec extends FunSuite with Matchers {
     val pca = PixelatedColoredArea(f, v2c, 100, 100, 2.9, 4d, 0d, 1d)
 
     import axle.awt._
+    import cats.effect._
 
     val filename = "logMap.png"
-    png(pca, filename)
+    pca.png[IO](filename).unsafeRunSync()
 
     new java.io.File(filename).exists should be(true)
   }

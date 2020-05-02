@@ -50,15 +50,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 
 * Remove `getLine` in `axle-core` `axle` package object
-* Remove `ImageIO` in `axle-core` `axle.awt` package object
-
 * Fix `GeneticAlgorithmSpec`
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
 * Fix `BayesianNetwork` visualization
 * Fix awt/gl warnings
 * LogisticMap md back to 4k x 4k
 
-* Fix sbt-release plugin (use sbt-sonatype?)
+* Use sbt-ci-release (rm sbt-release)
+* Use sbt-sonatype?
+
 * Site
   * Fix markdown lint warnings
   * Configure makeSite to preview: previewFixedPort := Some(9999)

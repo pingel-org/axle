@@ -3,6 +3,7 @@ package axle.pgm
 import org.scalatest._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.implicits._
+import cats.effect.IO
 import spire.math._
 
 import axle.stats._
@@ -101,14 +102,17 @@ class AlarmBurglaryEarthquakeSpec extends FunSuite with Matchers {
     val svgGName = "gnGraph.svg"
     val graphVis = DirectedGraphVisualization[DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge], BayesianNetworkNode[Boolean, Rational] ](
       bn.graph, 200, 200, 10)
-    png(graphVis, pngGName)
-    svg(graphVis, svgGName)
 
     val pngName = "bn.png"
     val svgName = "bn.svg"
     val vis = BayesianNetworkVisualization[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]](bn, 200, 200, 10)
-    png(vis, pngName)
-    svg(vis, svgName)
+
+    (for {
+      _ <- graphVis.png[IO](pngGName)
+      _ <- graphVis.svg[IO](svgGName)
+      _ <- vis.png[IO](pngName)
+      _ <- vis.svg[IO](svgName)
+    } yield ()).unsafeRunSync()
 
     new java.io.File(pngGName).exists should be(true)
     new java.io.File(pngName).exists should be(true)

@@ -4,6 +4,7 @@ import org.scalatest._
 
 import scala.collection.immutable.TreeMap
 
+import cats.effect._
 import cats.implicits._
 
 import spire.math.Rational
@@ -12,6 +13,7 @@ import spire.algebra._
 import axle.stats.H
 import axle.stats.coin
 import axle.visualize._
+import axle.web._
 
 class CoinEntropyPlotSpec extends FunSuite with Matchers {
 
@@ -63,11 +65,10 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
       yAxisLabel = Some("H"),
       title = Some("Entropy")).zeroAxes
 
-    import axle.web._
     SVG[Plot[String, Rational, UnittedQuantity[Information, Double], D]]
 
     val svgName = "coinentropyplot.svg"
-    svg(plot, svgName)
+    plot.svg[IO](svgName).unsafeRunSync()
     new java.io.File(svgName).exists should be(true)
   }
 

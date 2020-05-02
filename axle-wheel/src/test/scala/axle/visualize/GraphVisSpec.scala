@@ -37,12 +37,13 @@ class GraphVisSpec extends FunSuite with Matchers {
 
     import axle.jung._
     import axle.web._
+    import cats.effect._
     val svgName = "ug.svg"
-    svg(vis, svgName)
+    vis.svg[IO](svgName).unsafeRunSync()
 
     import axle.awt._
     val pngName = "ug.png"
-    png(vis, pngName)
+    vis.png[IO](pngName).unsafeRunSync()
 
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)
@@ -81,12 +82,13 @@ class GraphVisSpec extends FunSuite with Matchers {
     // import axle._
     import axle.jung._
     import axle.web._
+    import cats.effect._
     val svgName = "dg.svg"
-    svg(vis, svgName)
+    vis.svg[IO](svgName).unsafeRunSync()
 
     import axle.awt._
     val pngName = "dg.png"
-    png(vis, pngName)
+    vis.png[IO](pngName).unsafeRunSync()
 
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)

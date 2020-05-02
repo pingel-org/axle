@@ -4,6 +4,7 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 import scala.xml._
 
+import cats.effect._
 import spire.math._
 
 import axle._
@@ -55,7 +56,7 @@ class StateMachineVisSpec extends FunSuite with Matchers {
 
     val svgName = "qc_hx_state_machine.svg"
     // SVG[DirectedGraphVisualization[DirectedSparseGraph[QBit[Real],Edge], QBit[Real]] ]
-    svg(vis, svgName)
+    vis.svg[IO](svgName).unsafeRunSync()
 
     new java.io.File(svgName).exists should be(true)
   }

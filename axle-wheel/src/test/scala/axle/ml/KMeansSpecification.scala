@@ -8,7 +8,8 @@ import org.jblas.DoubleMatrix
 import scala.concurrent.ExecutionContext
 
 import cats.kernel.Eq
-import cats.effect._
+//import cats.effect._
+import cats.effect.IO
 import cats.implicits._
 
 import spire.algebra._
@@ -95,7 +96,7 @@ class KMeansSpecification
 
 
     val ec = ExecutionContext.global
-    val blocker = Blocker.liftExecutionContext(ec)
+    val blocker = cats.effect.Blocker.liftExecutionContext(ec)
     implicit val cs = IO.contextShift(ec)
 
     val irisesIO = new Irises[IO](blocker)
@@ -152,12 +153,13 @@ class KMeansSpecification
     val vis = KMeansVisualization(classifier, colors)
 
     import axle.web._
+    import cats.effect._
     val svgName = "kmeans.svg"
-    svg(vis, svgName)
+    vis.svg[IO](svgName).unsafeRunSync()
 
     import axle.awt._
     val pngName = "kmeans.png"
-    png(vis, pngName)
+    vis.png[IO](pngName).unsafeRunSync()
 
     val plot = axle.visualize.Plot(
       () => classifier.distanceLogSeries,
@@ -171,7 +173,7 @@ class KMeansSpecification
       yAxisLabel = Some("average distance to centroid"))
     
     val plotSvgName = "kmeansvsiteration.svg"
-    svg(plot, plotSvgName)
+    plot.svg[IO](plotSvgName).unsafeRunSync()
 
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)

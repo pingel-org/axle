@@ -24,7 +24,6 @@ import axle.syntax.undirectedgraph.undirectedGraphOps
 import axle.math.arcTangent2
 import axle.web.SVG
 import axle.web.SVG.rgb
-import axle.web.svgFrame
 import axle.visualize.angleDouble
 import axle.visualize.Color.black
 import axle.awt.Draw
@@ -518,7 +517,7 @@ package object jung {
 
         val nodes = lines ++ arrows ++ circles ++ labels ++ edgeLabels
 
-        svgFrame(nodes, width.toDouble, height.toDouble)
+        axle.web.svgFrame(nodes, width.toDouble, height.toDouble)
       }
 
     }
@@ -570,7 +569,7 @@ package object jung {
 
       val nodes = lines ++ circles ++ labels ++ edgeLabels
 
-      svgFrame(nodes, width.toDouble, height.toDouble)
+      axle.web.svgFrame(nodes, width.toDouble, height.toDouble)
     }
 
   }
