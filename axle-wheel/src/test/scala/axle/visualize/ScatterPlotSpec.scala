@@ -33,12 +33,13 @@ class ScatterPlotSpec extends FunSuite with Matchers {
       labelOf = labeller)
 
     import axle.web._
+    import cats.effect._
     val svgName = "scatter.svg"
-    svg(plot, svgName)
+    plot.svg[IO](svgName).unsafeRunSync()
 
     import axle.awt._
     val pngName = "scatter.png"
-    png(plot, pngName)
+    plot.png[IO](pngName).unsafeRunSync()
 
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)

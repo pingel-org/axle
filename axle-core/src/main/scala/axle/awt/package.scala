@@ -28,6 +28,7 @@ import axle.quanta.UnittedQuantity
 import axle.visualize._
 import axle.visualize.element._
 
+
 package object awt {
 
   def draw[T: Draw](t: T): Unit = {
@@ -222,24 +223,31 @@ package object awt {
     }
 
   /**
-   * image2file
+   * EnrichedBufferedImage
    *
    * encoding: PNG, JPEG, gif, BMP
    *
    */
 
-  def image2file[T: Image](t: T, filename: String, encoding: String): Boolean = {
-    val image = Image[T].image(t)
-    ImageIO.write(image, encoding, new File(filename)) // returns Boolean
+  implicit class EnrichedBufferedImage[T](t: T)(implicit ti: Image[T]) {
+
+    import cats.effect._
+    def toFile[F[_]: Sync](filename: String, encoding: String): F[Boolean] = {
+      val image = Image[T].image(t)
+      Sync[F].delay {
+        ImageIO.write(image, encoding, new File(filename)) // returns Boolean
+      }
+    }
+
+    def png[F[_]: Sync](filename: String): F[Boolean] = toFile(filename, "PNG")
+
+    def jpeg[F[_]: Sync](filename: String): F[Boolean] = toFile(filename, "JPEG")
+
+    def gif[F[_]: Sync](filename: String): F[Boolean] = toFile(filename, "gif")
+
+    def bmp[F[_]: Sync](filename: String): F[Boolean] = toFile(filename, "BMP")
+
   }
-
-  def png[T: Image](t: T, filename: String): Boolean = image2file(t, filename, "PNG")
-
-  def jpeg[T: Image](t: T, filename: String): Boolean = image2file(t, filename, "JPEG")
-
-  def gif[T: Image](t: T, filename: String): Boolean = image2file(t, filename, "gif")
-
-  def bmp[T: Image](t: T, filename: String): Boolean = image2file(t, filename, "BMP")
 
   implicit def paintDataLines[S, X, Y, D]: Paintable[DataLines[S, X, Y, D]] = new Paintable[DataLines[S, X, Y, D]] {
 

@@ -6,6 +6,7 @@ import org.joda.time.DateTime
 import org.scalatest._
 
 import cats.implicits._
+import cats.effect._
 
 import spire.math.sin
 import spire.random.Generator
@@ -55,11 +56,11 @@ class PlotWavesSpec extends FunSuite with Matchers {
 
     import axle.web._
     val svgName = "waves.svg"
-    svg(plot, svgName)
+    plot.svg[IO](svgName).unsafeRunSync()
 
     import axle.awt._
     val pngName = "waves.png"
-    png(plot, pngName)
+    plot.png[IO](pngName).unsafeRunSync()
 
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)

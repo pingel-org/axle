@@ -36,13 +36,14 @@ class PokerHandChartSpec extends FunSuite with Matchers {
       keyTitle = Some("Initial Hand Size"))
 
     import axle.web._
-    SVG[BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int], String]]
+    import cats.effect._
+    // SVG[BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory, Int), Int], String]]
     val svgName = "poker.svg"
-    svg(chart, svgName)
+    chart.svg[IO](svgName).unsafeRunSync()
 
     import axle.awt._
     val pngName = "poker.png"
-    png(chart, pngName)
+    chart.png[IO](pngName).unsafeRunSync()
 
     new java.io.File(svgName).exists should be(true)
     new java.io.File(pngName).exists should be(true)
