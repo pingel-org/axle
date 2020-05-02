@@ -49,16 +49,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.stats.expectation(CPT)`
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 
-* Fix `GeneticAlgorithmSpec`
-* Fix `LogisticRegression` and move `LogisticRegression.md` back
-* Fix `BayesianNetwork` visualization
 * Split out `axle.awt` and fix warnings
 * Split out `axle.gl` and fix warnings
-* LogisticMap md back to 4k x 4k
+* Split out `axle.web`
+* Fix `BayesianNetwork` visualization
 
 * Use sbt-ci-release (rm sbt-release)
 * Use sbt-sonatype?
-
 * Site
   * Fix markdown lint warnings
   * Configure makeSite to preview: previewFixedPort := Some(9999)
@@ -67,20 +64,25 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Figure out better way to reference images
 * Release and publish site
 
-## 0.5.1 (Late 2020)
+## 0.5.1 (Summer 2020)
+
+* `LogisticMap.md` back to 4k x 4k
+* Fix `LogisticRegression` and move `LogisticRegression.md` back
+* Demo Mandelbrot with Rational
+* Friend of Spire
+* Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
+* Tics should take an argument
+* Factor tics and tics-{joda,algebra,spire} into separate libs
+* Tests for `axle.ast`
+* Fix `axle.algebra.GeoMetricSpaceSpec`
+
+## 0.6.x (Autumn 2020)
 
 * `Region` DSL
 * rename `ConditionalProbabilityTable`?
 * Get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
 * "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
 * Is `ProbabilityModel.mapValues` really needed? (maybe we need a map that maps keys and values together, which could be used to implement `redistribute`)
-* Demo Mandelbrot with Rational
-* Friend of Spire
-* Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
-* Review groupBy uses -- they use university equality.  Replace with Eq
-
-## 0.5.2 (Winter 2021)
-
 * KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
   * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 * Actually provide random `Region` (vs just a `RegionEq`) to all `KolmogorovProbabilityProperties`
@@ -92,49 +94,36 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Move KolmogorovProbabilityAxioms to `axle.stats.laws`
 * Pare down `ProbabilityModel` methods (and ensure all have axioms)
 * ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
-* Replace with Cats: FoldLeft, Bijection, FunctionPair, Endofunctor
-* Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
-* Sort out MapFrom, FromStream, FromSet
-* Test `axle.algebra.tuple2Field`
 
-## 0.5.3 (Spring 2021)
+## 0.7.x (Spring 2021)
 
+* Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 * Also use HLists for `ProbabilityModel` type parameter `A`
 * Simplify/eliminate `RegionEqTuple1of2` using HList
-
 * Replace Finite with Shapeless's version
 * Delete Finite conversions for jung (replace with NaturalTransformation?)
-
+* Replace with Cats: FoldLeft, Bijection, FunctionPair, Endofunctor
+* Review remaining usage of: `asInstanceOf`, `ClassTag`, and `Manifest`
+* Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
+* Sort out MapFrom, FromStream, FromSet
+* Test `axle.algebra.tuple2Field`
 * Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
 * Kind projector instead of type lambdas
 * `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
-* Tests for `axle.ast`
 * Kind projector for projections of jung graphs for Finite
+* Review groupBy uses -- they use university equality.  Replace with Eq
 * Functors for jung should use projections (study cats disjunction, scala Either)
 * kittens or magnolia
   * pattern match in FirstOrderPredicateLogic
   * subtyping for Suit and Rank
 * Machinist?
 * replace some refs to {CPT0,TallyDist0} with ProbabilityModel
-* Tics should take an argument
 * Update Spire (to match cats version)
 * Most MapRedicible witnesses are inefficient (eg calling toVector, toSeq, etc)
 * remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
-* Factor tics and tics-{joda,algebra,spire} into separate libs
-* Fix `axle.algebra.GeoMetricSpaceSpec`
 
-## 0.6.x (Autumn 2021)
-
-* QuantumCircuit.md
-* QBit2.factor
-* Fix and enable DeutschOracleSpec
-* QBit CCNot
-* Property test reversibility (& own inverse)
-* Typeclass for "negate" (etc), Binary, CBit
-* Typeclass for unindex
-
-## 0.7.x (Winter 2022)
+## 0.8.x (Autumn 2021)
 
 * Wrap `axle.IO.getLine` in `F[_]`
 * Wrap `axle.IO.prefixedDisplay` in `F[_]`
@@ -170,12 +159,21 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Max bet for Poker
 * syntax for `Game` typeclass
 
-## 0.8.x (Spring 2022)
+## 0.9.x (Spring 2022)
+
+* QuantumCircuit.md
+* QBit2.factor
+* Fix and enable DeutschOracleSpec
+* QBit CCNot
+* Property test reversibility (& own inverse)
+* Typeclass for "negate" (etc), Binary, CBit
+* Typeclass for unindex
+
+## 0.10.x (Autumn 2022)
 
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
-* Make the `Int` abstract in KMeans{,Visualization}, LinearAlgebra, etc
+* Make the `Int` abstract in `KMeans{,Visualization}`, `LinearAlgebra`, etc
 * Redo Logic using Abstract Algebra
-* Review remaining usage of: `asInstanceOf`, `ClassTag`, and `Manifest`
 * Fix "unreachable" default pattern match cases
 
 Far future backlog ideas:
