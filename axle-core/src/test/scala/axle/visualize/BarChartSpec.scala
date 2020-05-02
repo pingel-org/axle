@@ -2,6 +2,7 @@ package axle.visualize
 
 import org.scalatest._
 
+import cats.effect._
 import cats.implicits._
 
 import spire.math.Rational
@@ -38,7 +39,7 @@ class BarChartSpec extends FunSuite with Matchers {
 
     val filename = "fruit_sales.svg"
 
-    svg(chart, filename)
+    chart.svg[IO](filename).unsafeRunSync()
 
     chart.title.get should be("fruit sales")
     new java.io.File(filename).exists should be(true)
@@ -70,7 +71,7 @@ class BarChartSpec extends FunSuite with Matchers {
 
     val filename = "fruit_sales_grouped.svg"
 
-    svg(chart, filename)
+    chart.svg[IO](filename).unsafeRunSync()
 
     chart.title.get should be("fruit sales")
     new java.io.File(filename).exists should be(true)
@@ -97,7 +98,7 @@ class BarChartSpec extends FunSuite with Matchers {
 
     val filename = "d6plusd6.svg"
 
-    svg(chart, filename)
+    chart.svg[IO](filename).unsafeRunSync()
 
     chart.title.get should be("d6 + d6")
     new java.io.File(filename).exists should be(true)
