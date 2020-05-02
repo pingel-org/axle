@@ -49,8 +49,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.stats.expectation(CPT)`
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 
-* Split out `axle.awt` and fix warnings
-* Split out `axle.gl` and fix warnings
+* Create `axle-jogl`, leaving `axle.scene.{Shape,Color}` in `axle-core`
+  * Fix warnings
+
+* Split out `axle-awt` and fix warnings
 * Split out `axle.web`
 * Fix `BayesianNetwork` visualization
 
