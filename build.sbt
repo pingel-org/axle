@@ -132,6 +132,19 @@ lazy val commonJvmSettings = Seq(
 
 lazy val axleSettings = buildSettings ++ commonSettings ++ publishSettings ++ scoverageSettings
 
+lazy val axleAwt = Project("axle-awt", file("axle-awt"))
+ .settings(axleSettings)
+ .settings(
+  name := "axle-awt",
+  libraryDependencies ++= Seq(
+    // jung is needed for unitted quantities
+    "net.sf.jung"         %  "jung-visualization"    % jungVersion        % "provided",
+    "net.sf.jung"         %  "jung-algorithms"       % jungVersion        % "provided",
+    "net.sf.jung"         %  "jung-api"              % jungVersion        % "provided",
+    "net.sf.jung"         %  "jung-graph-impl"       % jungVersion        % "provided"
+  )
+).dependsOn(axleCore)
+
 lazy val axleJogl = Project("axle-jogl", file("axle-jogl"))
  .settings(axleSettings)
  .settings(
@@ -186,6 +199,7 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
   )
 ).dependsOn(
   axleCore,
+  axleAwt,
   axleJogl,
   axleJoda,
   axleJblas
