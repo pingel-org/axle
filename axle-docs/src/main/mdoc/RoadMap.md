@@ -49,11 +49,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.stats.expectation(CPT)`
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 
-* Remove `getLine` in `axle-core` `axle` package object
 * Fix `GeneticAlgorithmSpec`
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
 * Fix `BayesianNetwork` visualization
-* Fix awt/gl warnings
+* Split out `axle.awt` and fix warnings
+* Split out `axle.gl` and fix warnings
 * LogisticMap md back to 4k x 4k
 
 * Use sbt-ci-release (rm sbt-release)
@@ -135,6 +135,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Typeclass for unindex
 
 ## 0.7.x (Winter 2022)
+
+* Wrap `axle.IO.getLine` in `F[_]`
+* Wrap `axle.IO.prefixedDisplay` in `F[_]`
 
 * Factor `axle.game.moveFromRandomState` in terms of a random walk on a graph.
   * Compare to Brownian motion, Random walk, Ito process, ...
