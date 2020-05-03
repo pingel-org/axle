@@ -50,10 +50,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-jogl`, leaving `axle.scene.{Shape,Color}` in `axle-core`
 * Create `axle-awt`
+* Create `axle-xml`
 
-* Create `axle-web`?
+* Move `axle-core/src/main/scala/axle/ast/view/ViewXhtml.scala`
+
 * Fix `BayesianNetwork` visualization
-
 * Use sbt-ci-release (rm sbt-release)
 * Use sbt-sonatype?
 * Site

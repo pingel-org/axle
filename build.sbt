@@ -18,7 +18,7 @@ lazy val disciplineVersion = "0.7.2"
 lazy val scalaCheckVersion = "1.13.4"
 lazy val scalaTestVersion = "3.0.0"
 
-lazy val scalaXmlVersion = "1.0.5"
+lazy val scalaXmlVersion = "1.3.0"
 lazy val scalaParserCombinatorsVersion = "1.0.4"
 lazy val jungVersion = "2.1"
 lazy val jblasVersion = "1.2.4"
@@ -63,7 +63,6 @@ lazy val axleCore = Project("axle-core", file("axle-core"))
       // "eu.timepit"          %% "singleton-ops"            % "0.0.4"
       "io.monix"               %% "monix-reactive"           % monixVersion,
       // "io.monix"               %% "monix-cats"               % monixVersion,
-      "org.scala-lang.modules" %% "scala-xml"                % scalaXmlVersion,
       "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion,
       "org.scalatest"          %% "scalatest"                % scalaTestVersion, // TODO % "test",
       "org.scalacheck"         %% "scalacheck"               % scalaCheckVersion  % "test",
@@ -145,6 +144,20 @@ lazy val axleAwt = Project("axle-awt", file("axle-awt"))
   )
 ).dependsOn(axleCore)
 
+lazy val axleXml = Project("axle-xml", file("axle-xml"))
+ .settings(axleSettings)
+ .settings(
+  name := "axle-xml",
+  libraryDependencies ++= Seq(
+    "org.scala-lang.modules" %% "scala-xml"          % scalaXmlVersion,
+    // for visualizations (until jung is pulled out of axle-core)
+    "net.sf.jung"            %  "jung-visualization"       % jungVersion        % "provided",
+    "net.sf.jung"            %  "jung-algorithms"          % jungVersion        % "provided",
+    "net.sf.jung"            %  "jung-api"                 % jungVersion        % "provided",
+    "net.sf.jung"            %  "jung-graph-impl"          % jungVersion        % "provided",
+  )
+).dependsOn(axleCore)
+
 lazy val axleJogl = Project("axle-jogl", file("axle-jogl"))
  .settings(axleSettings)
  .settings(
@@ -200,6 +213,7 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
 ).dependsOn(
   axleCore,
   axleAwt,
+  axleXml,
   axleJogl,
   axleJoda,
   axleJblas

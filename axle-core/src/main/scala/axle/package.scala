@@ -218,6 +218,4 @@ package object axle {
 
   def print[T: Show](t: T): Unit = println(t.show)
 
-  def html[T: HtmlFrom](t: T): scala.xml.Node = HtmlFrom[T].toHtml(t)
-
 }

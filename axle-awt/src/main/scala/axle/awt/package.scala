@@ -28,7 +28,6 @@ import axle.quanta.UnittedQuantity
 import axle.visualize._
 import axle.visualize.element._
 
-
 package object awt {
 
   def draw[T: Draw](t: T): Unit = {
@@ -674,7 +673,7 @@ package object awt {
     }
 
   import edu.uci.ics.jung.graph.DirectedSparseGraph
-  implicit def drawJungDirectedSparseGraphVisualization[VP: HtmlFrom, EP: Show]: Draw[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]] =
+  implicit def drawJungDirectedSparseGraphVisualization[VP: Show, EP: Show]: Draw[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]] =
     new Draw[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]] {
 
       import java.awt.BasicStroke
@@ -720,13 +719,7 @@ package object awt {
         }
 
         val vertexLabelTransformer = new GoogleFunction[VP, String]() {
-          def apply(v: VP): String = {
-            val label = html(v)
-            label match {
-              case scala.xml.Text(text) => text
-              case _                    => (<html>{ label }</html>).asInstanceOf[scala.xml.Node].show
-            }
-          }
+          def apply(v: VP): String = v.show
         }
 
         val edgeLabelTransformer = new GoogleFunction[EP, String]() {

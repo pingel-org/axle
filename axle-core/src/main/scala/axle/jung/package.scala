@@ -1,35 +1,22 @@
 package axle
 
-import java.awt.Dimension
-import edu.uci.ics.jung.algorithms.layout.FRLayout
+//import java.awt.Dimension
+//import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import scala.collection.JavaConverters._
-import scala.xml.Node
-import scala.xml.NodeSeq
-import scala.xml.Text
+//import scala.xml.Node
+//import scala.xml.NodeSeq
+//import scala.xml.Text
 
-import cats.Eq
+//import cats.Eq
 import cats.Functor
-import cats.Show
+//import cats.Show
 import cats.implicits._
-
-import spire.algebra._
 
 import axle.algebra.DirectedGraph
 import axle.algebra.Finite
 import axle.algebra.UndirectedGraph
-import axle.syntax.directedgraph.directedGraphOps
-import axle.syntax.undirectedgraph.undirectedGraphOps
-import axle.math.arcTangent2
-import axle.web.SVG
-import axle.web.SVG.rgb
-import axle.visualize.angleDouble
-import axle.visualize.Color.black
-
-import axle.visualize.GraphVertexLayout
-import axle.visualize.DirectedGraphVisualization
-import axle.visualize.UndirectedGraphVisualization
 
 class DirectedSparseGraphVertices[V](val dsg: DirectedSparseGraph[V, _])
 
@@ -450,128 +437,5 @@ package object jung {
       }
 
     }
-
-
-  implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
-  implicit val mmDouble: MultiplicativeMonoid[Double] = spire.implicits.DoubleAlgebra
-
-  implicit def svgJungDirectedGraphVisualization[VP: Eq: HtmlFrom, EP: Show]: SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]] =
-    new SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]] {
-
-      def svg(vis: DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]): NodeSeq = {
-
-        import vis._
-
-        val layout: GraphVertexLayout[Double, VP] =
-          vis.layoutOpt.getOrElse {
-             val fr = new FRLayout(dg)
-             fr.setSize(new Dimension(width, height))
-             new GraphVertexLayout[Double, VP] {
-               def x(v: VP): Double = fr.getX(v)
-               def y(v: VP): Double = fr.getY(v)
-             }
-          }
-
-        val lines: List[Node] = dg.getEdges.asScala.map { edge =>
-          <line x1={ s"${layout.x(dg.getSource(edge))}" } y1={ s"${layout.y(dg.getSource(edge))}" } x2={ s"${layout.x(dg.getDest(edge))}" } y2={ s"${layout.y(dg.getDest(edge))}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
-        } toList
-
-        val arrows: List[Node] = dg.getEdges.asScala.map { edge =>
-          val height = layout.y(dg.getSource(edge)) - layout.y(dg.getDest(edge))
-          val width = layout.x(dg.getDest(edge)) - layout.x(dg.getSource(edge))
-          val svgRotationAngle = 180d - (arcTangent2(height, width) in angleDouble.degree).magnitude
-          <polygon points={ s"${radius},0 ${radius + arrowLength},3 ${radius + arrowLength},-3" } fill="black" transform={ s"translate(${layout.x(dg.getDest(edge))},${layout.y(dg.getDest(edge))}) rotate($svgRotationAngle)" }/>
-        } toList
-
-        val circles: List[Node] = dg.getVertices.asScala.map { vertex =>
-          <circle cx={ s"${layout.x(vertex)}" } cy={ s"${layout.y(vertex)}" } r={ s"${radius}" } fill={ s"${rgb(color)}" } stroke={ s"${rgb(borderColor)}" } stroke-width="1"/>
-        } toList
-
-        val labels: List[Node] = dg.getVertices.asScala.map { vertex =>
-          val node = HtmlFrom[VP].toHtml(vertex)
-          node match {
-            case scala.xml.Text(text) =>
-              <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.x(vertex)}" } y={ s"${layout.y(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
-            case _ =>
-              <foreignObject x={ s"${layout.x(vertex)}" } y={ s"${layout.y(vertex)}" } width="100%" height="100%">
-                <html xmlns="http://www.w3.org/1999/xhtml">
-                  { node }
-                </html>
-              </foreignObject>
-          }
-        } toList
-
-        val edgeLabels: List[Node] = dg.getEdges.asScala.map { edge =>
-          val node = HtmlFrom[EP].toHtml(edge)
-          val cx = (layout.x(dg.getDest(edge)) - layout.x(dg.getSource(edge))) * 0.6 + layout.x(dg.getSource(edge))
-          val cy = (layout.y(dg.getDest(edge)) - layout.y(dg.getSource(edge))) * 0.6 + layout.y(dg.getSource(edge))
-          node match {
-            case Text(text) =>
-              <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
-            case _ =>
-              <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="100%" height="100%">
-                { node }
-              </foreignObject>
-          }
-        } toList
-
-        val nodes = lines ++ arrows ++ circles ++ labels ++ edgeLabels
-
-        axle.web.svgFrame(nodes, width.toDouble, height.toDouble)
-      }
-
-    }
-
-  implicit def svgJungUndirectedGraphVisualization[VP: Eq: HtmlFrom, EP: Show]: SVG[UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]] = new SVG[UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]] {
-
-    def svg(vis: UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]): NodeSeq = {
-
-      import vis._
-
-      val layout = new FRLayout(ug)
-      layout.setSize(new Dimension(width, height))
-
-      val lines: List[Node] = ug.getEdges.asScala.map { edge =>
-        val (v1, v2) = ug.vertices(edge)
-        <line x1={ s"${layout.getX(v1)}" } y1={ s"${layout.getY(v1)}" } x2={ s"${layout.getX(v2)}" } y2={ s"${layout.getY(v2)}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
-      } toList
-
-      val circles: List[Node] = ug.getVertices.asScala.map { vertex =>
-        <circle cx={ s"${layout.getX(vertex)}" } cy={ s"${layout.getY(vertex)}" } r={ s"${radius}" } fill={ s"${rgb(color)}" } stroke={ s"${rgb(borderColor)}" } stroke-width="1"/>
-      } toList
-
-      val labels: List[Node] = ug.getVertices.asScala.map { vertex =>
-        val node = HtmlFrom[VP].toHtml(vertex)
-        node match {
-          case Text(t) =>
-            <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ axle.html(vertex) }</text>
-          case _ =>
-            <foreignObject x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } width="100%" height="100%">
-              { node }
-            </foreignObject>
-        }
-      } toList
-
-      val edgeLabels: List[Node] = ug.getEdges.asScala.map { edge =>
-        val node = HtmlFrom[EP].toHtml(edge)
-        val (v1, v2) = ug.vertices(edge)
-        val cx = (layout.getX(v2) - layout.getX(v1)) * 0.5 + layout.getX(v1)
-        val cy = (layout.getY(v2) - layout.getY(v1)) * 0.5 + layout.getY(v1)
-        node match {
-          case Text(text) =>
-            <text text-anchor="middle" alignment-baseline="middle" x={ s"${cx}" } y={ s"${cy}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ text }</text>
-          case _ =>
-            <foreignObject x={ s"${cx}" } y={ s"${cy}" } width="100%" height="100%">
-              { node }
-            </foreignObject>
-        }
-      } toList
-
-      val nodes = lines ++ circles ++ labels ++ edgeLabels
-
-      axle.web.svgFrame(nodes, width.toDouble, height.toDouble)
-    }
-
-  }
 
 }
