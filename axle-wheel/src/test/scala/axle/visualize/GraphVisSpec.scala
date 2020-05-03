@@ -35,7 +35,6 @@ class GraphVisSpec extends FunSuite with Matchers {
 
     val vis = UndirectedGraphVisualization(g, width = 200, height = 200, border = 10)
 
-    import axle.jung._
     import axle.web._
     import cats.effect._
     val svgName = "ug.svg"
