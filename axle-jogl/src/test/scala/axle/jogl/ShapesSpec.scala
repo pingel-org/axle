@@ -17,6 +17,7 @@ import axle.algebra.modules.floatRationalModule
 import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.quanta.Distance
+import axle.scene._
 
 class ShapesSpec extends FunSuite with Matchers {
 

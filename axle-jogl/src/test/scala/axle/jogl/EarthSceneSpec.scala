@@ -21,6 +21,7 @@ import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
+import axle.scene._
 
 class EarthSceneSpec extends FunSuite with Matchers {
 

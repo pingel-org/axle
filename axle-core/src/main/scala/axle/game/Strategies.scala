@@ -63,7 +63,7 @@ object Strategies {
 
       val display = evGameIO.displayerFor(game, mover)
 
-      val stream = userInputStream(display, () => axle.getLine).
+      val stream = userInputStream(display, () => axle.IO.getLine()).
         map(input => {
           val parsed = evGameIO.parseMove(game, input)
           parsed.left.foreach(display)

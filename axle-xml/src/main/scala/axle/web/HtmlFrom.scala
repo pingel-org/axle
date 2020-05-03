@@ -1,4 +1,4 @@
-package axle
+package axle.web
 
 import scala.annotation.implicitNotFound
 import scala.xml.Node

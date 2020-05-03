@@ -13,6 +13,8 @@ import com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_SHININESS
 import com.jogamp.opengl.fixedfunc.GLLightingFunc.GL_SPECULAR
 import com.jogamp.opengl.glu.GLU
 
+import axle.scene._
+
 @implicitNotFound("Witness not found for Render[${A}]")
 trait Render[A] {
   def render(value: A, rc: RenderContext, gl: GL2): Unit

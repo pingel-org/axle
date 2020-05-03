@@ -14,6 +14,14 @@ import cats.implicits._
 
 object IO {
 
+  // TODO wrap F[_]
+  // TODO echo characters as typed (shouldn't have to use jline for this)
+  def getLine(): String = scala.io.StdIn.readLine()
+
+  // TODO wrap in F[_]
+  def prefixedDisplay(prefix: String)(display: String => Unit): String => Unit =
+    (s: String) => s.split("\n").foreach(line => display(prefix + "> " + line))
+
   def classpathResourceAsString(filename: String): String = {
 
     // TODO wrap this in cats.effect

@@ -1,4 +1,4 @@
-package axle.jogl
+package axle.scene
 
 case class Color(red: Float, green: Float, blue: Float)
 

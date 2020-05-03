@@ -82,14 +82,6 @@ package object axle {
 
   def id[A](x: A): A = x
 
-  // IO
-
-  def prefixedDisplay(prefix: String)(display: String => Unit): String => Unit =
-    (s: String) => s.split("\n").foreach(line => display(prefix + "> " + line))
-
-  // TODO echo characters as typed (shouldn't have to use jline for this)
-  def getLine(): String = scala.io.StdIn.readLine()
-
   // Seq operations
 
   /**
@@ -225,7 +217,5 @@ package object axle {
   // Typeclass-based method invocations
 
   def print[T: Show](t: T): Unit = println(t.show)
-
-  def html[T: HtmlFrom](t: T): scala.xml.Node = HtmlFrom[T].toHtml(t)
 
 }

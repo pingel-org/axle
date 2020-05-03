@@ -1,4 +1,4 @@
-package axle.jogl
+package axle.scene
 
 import java.net.URL
 
