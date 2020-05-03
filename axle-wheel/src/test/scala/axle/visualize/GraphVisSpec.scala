@@ -78,8 +78,6 @@ class GraphVisSpec extends FunSuite with Matchers {
 
     val vis = DirectedGraphVisualization[DirectedSparseGraph[String, Edge], String](dg, 200, 200, 10)
 
-    // import axle._
-    import axle.jung._
     import axle.web._
     import cats.effect._
     val svgName = "dg.svg"

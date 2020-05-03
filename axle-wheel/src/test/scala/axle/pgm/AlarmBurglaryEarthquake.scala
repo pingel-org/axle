@@ -93,7 +93,6 @@ class AlarmBurglaryEarthquakeSpec extends FunSuite with Matchers {
 
   test("bayesian network visualization") {
 
-    import axle.jung._
     import axle.visualize._
     import axle.awt._
     import axle.web._
