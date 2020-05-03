@@ -1,15 +1,19 @@
 
-package axle.ast.view
+package axle.xml.ast
 
 import spire.math.max
 import spire.math.min
 import scala.xml.NodeSeq.seqToNodeSeq
 
-import Emission.emit
+import axle.ast.view.Emission.emit
 import axle.ast.AstNode
 import axle.ast.Document
 import axle.ast.LLLanguage
 import axle.ast.Language
+import axle.ast.view.View
+import axle.ast.view.XhtmlAstNodeFormatter
+import axle.ast.view.FormatterConfig
+import axle.ast.view.FormatterState
 
 object ViewXhtml extends View[xml.NodeSeq] {
   // <html><head><link ref=... /></head><body>...</body><html>

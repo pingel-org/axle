@@ -52,11 +52,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Create `axle-awt`
 * Create `axle-xml`
 
-* Move `axle-core/src/main/scala/axle/ast/view/ViewXhtml.scala`
-
 * Fix `BayesianNetwork` visualization
 * Use sbt-ci-release (rm sbt-release)
 * Use sbt-sonatype?
+* Use githug to build and publish artifacts?
 * Site
   * Fix markdown lint warnings
   * Configure makeSite to preview: previewFixedPort := Some(9999)
