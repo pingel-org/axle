@@ -1,4 +1,4 @@
-import com.typesafe.sbt.pgp.PgpKeys.publishSigned
+import com.jsuereth.sbtpgp.PgpKeys.publishSigned
 import com.typesafe.sbt.SbtSite.SiteKeys._
 import ReleaseTransformations._
 // import ScoverageSbtPlugin._
