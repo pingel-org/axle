@@ -48,14 +48,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `bernoulliDistribution`
 * `axle.stats.expectation(CPT)`
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
-* Create `axle-jogl`, leaving `axle.scene.{Shape,Color}` in `axle-core`
-* Create `axle-awt`
-* Create `axle-xml`
+* Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
-* Fix `BayesianNetwork` visualization
-* Use sbt-ci-release (rm sbt-release)
-* Use sbt-sonatype?
-* Use githug to build and publish artifacts?
 * Site
   * Fix markdown lint warnings
   * Configure makeSite to preview: previewFixedPort := Some(9999)
@@ -63,8 +57,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
   * Figure out better way to reference images
 
+* Fix `BayesianNetwork` visualization
 * Fix axle-awt warnings during test
 * Fix "NSWindow drag regions should only be invalidated on the Main Thread! This will throw an exception in the future." warning during axle-jogl test
+
+* Use sbt-ci-release (rm sbt-release)
+* Use sbt-sonatype?
+* Use github to build and publish artifacts?
 * Release and publish site
 
 ## 0.5.1 (Summer 2020)
