@@ -57,9 +57,10 @@ val chart = BarChart[Int, Int, Map[Int, Int], String](
 Create SVG
 
 ```scala mdoc
+import cats.effect._
 import axle.web._
 
-svg(chart, "d6plusd6.svg")
+chart.svg[IO]("d6plusd6.svg").unsafeRunSync()
 ```
 
 ![Observed d6 + d6](/tutorial/images/d6plusd6.svg)
@@ -81,13 +82,14 @@ import axle.game.Dice.die
 Create probability distribution of the addition of two 6-sided die:
 
 ```scala mdoc
-import cats.syntax.all._
-type F[T] = ConditionalProbabilityTable[T, Rational]
+implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+implicit val intEq: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra
 
-val twoDiceSummed = for {
-  a <- die(6) : F[Int]
-  b <- die(6) : F[Int]
-} yield a + b
+val twoDiceSummed = prob.flatMap(die(6)) { a =>
+  prob.map(die(6)) { b =>
+    a + b
+  }
+}
 ```
 
 Define visualization
@@ -111,9 +113,10 @@ val chart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], 
 Create SVG
 
 ```scala mdoc
+import cats.effect._
 import axle.web._
 
-svg(chart, "distributionMonad.svg")
+chart.svg[IO]("distributionMonad.svg").unsafeRunSync()
 ```
 
 ![Monadic d6 + d6](/tutorial/images/distributionMonad.svg)
