@@ -23,7 +23,7 @@ implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 Example
 
 ```scala mdoc
-val X = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d), Variable("X"))
+val X = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d))
 ```
 
 ## Standard Deviation
@@ -95,7 +95,6 @@ val bothDie = for {
   a <- d6a : F[Symbol]
   b <- d6b : F[Symbol]
 } yield (a, b)
-
 ```
 
 Create and query distributions
