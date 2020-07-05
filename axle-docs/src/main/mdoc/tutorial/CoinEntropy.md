@@ -35,7 +35,6 @@ implicit val or: Order[Rational] = new cats.kernel.Order[Rational] {
   def compare(x: Rational, y: Rational): Int = doubleOrder.compare(x.toDouble, y.toDouble)
 }
 implicit val bitDouble = id.bit
-import axle.stats.ConditionalProbabilityTable
 ```
 
 Create dataset
