@@ -81,6 +81,7 @@ As a game of "imperfect information", poker introduces the concept of Informatio
 
 ```scala mdoc
 import axle._
+import axle.IO.prefixedDisplay
 import axle.game._
 import axle.game.poker._
 import axle.game.poker.evGame._
