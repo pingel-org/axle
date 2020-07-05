@@ -42,10 +42,11 @@ Create the SVG
 
 ```scala mdoc:silent
 import axle.web._
+import cats.effect._
 ```
 
 ```scala mdoc
-svg(chart, "fruitsales.svg")
+chart.svg[IO]("fruitsales.svg").unsafeRunSync()
 ```
 
 <object data="/tutorial/images/fruitsales.svg" type="image/svg+xml" alt="fruit sales"/>

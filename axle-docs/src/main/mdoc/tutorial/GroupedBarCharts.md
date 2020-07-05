@@ -49,8 +49,9 @@ Create the SVG
 
 ```scala mdoc
 import axle.web._
+import cats.effect._
 
-svg(chart, "barchart1.svg")
+chart.svg[IO]("barchart1.svg").unsafeRunSync()
 ```
 
 ![barchart1](/tutorial/images/barchart1.svg)
@@ -73,8 +74,9 @@ Create the second SVG
 
 ```scala mdoc
 import axle.web._
+import cats.effect._
 
-svg(chart2, "barchart2.svg")
+chart.svg[IO]("barchart2.svg").unsafeRunSync()
 ```
 
 ![barchart2](/tutorial/images/barchart2.svg)

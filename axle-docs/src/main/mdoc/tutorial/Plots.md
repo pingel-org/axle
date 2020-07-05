@@ -89,8 +89,9 @@ Create the SVG
 
 ```scala mdoc
 import axle.web._
+import cats.effect._
 
-svg(plot, "waves.svg")
+plot.svg[IO]("waves.svg").unsafeRunSync()
 ```
 
 ![waves](/tutorial/images/waves.svg)
