@@ -75,7 +75,6 @@ Visualize the graph
 
 ```scala mdoc
 import axle.visualize._
-import axle.web._
 
 implicit val showEdge: Show[Edge] = new Show[Edge] {
   def show(e: Edge): String = e.s + " " + e.i
@@ -93,7 +92,10 @@ val dVis = DirectedGraphVisualization(
   fontSize = 12
 )
 
-svg(dVis, "SimpleDirectedGraph.svg")
+import axle.web._
+import cats.effect._
+
+dVis.svg[IO]("SimpleDirectedGraph.svg").unsafeRunSync()
 ```
 
 ![directed graph](/tutorial/images/SimpleDirectedGraph.svg)
@@ -144,10 +146,11 @@ Visualize the graph
 ```scala mdoc
 import axle.visualize._
 import axle.web._
+import cats.effect._
 
 val uVis = UndirectedGraphVisualization(ug, width=300, height=300, border=10, color=Color.yellow)
 
-svg(uVis, "SimpleUndirectedGraph.svg")
+uVis.svg[IO]("SimpleUndirectedGraph.svg").unsafeRunSync()
 ```
 
 ![undirected graph](/tutorial/images/SimpleUndirectedGraph.svg)

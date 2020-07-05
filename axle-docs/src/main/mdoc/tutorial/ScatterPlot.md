@@ -44,10 +44,11 @@ Create the SVG
 
 ```scala mdoc:silent
 import axle.web._
+import cats.effect._
 ```
 
 ```scala mdoc
-svg(plot, "scatter.svg")
+plot.svg[IO]("scatter.svg").unsafeRunSync()
 ```
 
 <object data="/tutorial/images/scatter.svg" type="image/svg+xml" alt="scatter plot"/>

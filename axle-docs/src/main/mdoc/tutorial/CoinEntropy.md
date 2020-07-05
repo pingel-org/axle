@@ -70,8 +70,9 @@ Create the SVG
 
 ```scala mdoc
 import axle.web._
+import cats.effect._
 
-svg(plot, "coinentropy.svg")
+plot.svg[IO]("coinentropy.svg").unsafeRunSync()
 ```
 
 The result is the classic Claude Shannon graph

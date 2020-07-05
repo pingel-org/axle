@@ -84,7 +84,9 @@ val plot = Plot(
   yAxisLabel = Some("fitness"))
 
 import axle.web._
-svg(plot, "ga.svg")
+import cats.effect._
+
+plot.svg[IO]("ga.svg").unsafeRunSync()
 ```
 
 ![ga](/tutorial/images/ga.svg)

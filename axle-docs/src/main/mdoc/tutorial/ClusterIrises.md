@@ -119,7 +119,7 @@ val colors = Vector(red, blue, green)
 
 val vis = KMeansVisualization(classifier, colors)
 
-svg(vis, "kmeans.svg")
+vis.svg[IO]("kmeans.svg").unsafeRunSync()
 ```
 
 ![kmeans](/tutorial/images/kmeans.svg)
@@ -144,7 +144,9 @@ val plot = Plot(
   yAxisLabel = Some("average distance to centroid"))
 
 import axle.web._
-svg(plot, "kmeansvsiteration.svg")
+import cats.effect._
+
+plot.svg[IO]("kmeansvsiteration.svg").unsafeRunSync()
 ```
 
 ![kmeans](/tutorial/images/kmeansvsiteration.svg)

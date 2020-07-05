@@ -70,7 +70,9 @@ val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory,
 )
 
 import axle.web._
-svg(chart, "pokerhands.svg")
+import cats.effect._
+
+chart.svg[IO]("pokerhands.svg").unsafeRunSync()
 ```
 
 ![poker hands](/tutorial/images/pokerhands.svg)
