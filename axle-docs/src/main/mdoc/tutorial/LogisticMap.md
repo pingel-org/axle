@@ -50,14 +50,17 @@ val v2c = (v: Boolean) => if (v) Color.black else Color.white
 Define a `PixelatedColoredArea` to show a range of Logistic Map.
 
 ```scala mdoc
-// TODO was 4000 x 4000
-val pca = PixelatedColoredArea(f, v2c, 40, 40, 2.9, 4d, 0d, 1d)
+// TODO was 4000 by 4000
+val pca = PixelatedColoredArea(f, v2c, 100, 100, 2.9, 4d, 0d, 1d)
 ```
 
 Create the PNG
 
 ```scala mdoc
-png(pca, "logMap.png")
+import axle.awt._
+import cats.effect._
+
+pca.png[IO]("logMap.png").unsafeRunSync()
 ```
 
 ![Logistic Map](/tutorial/images/logMap.png)

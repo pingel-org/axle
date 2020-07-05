@@ -47,7 +47,9 @@ Create PNG
 
 ```scala mdoc
 import axle.awt._
-png(pca, "mandelbrot.png")
+import cats.effect._
+
+pca.png[IO]("mandelbrot.png").unsafeRunSync()
 ```
 
 ![Mandelbrot Set](/tutorial/images/mandelbrot.png)

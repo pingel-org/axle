@@ -50,7 +50,9 @@ Create PNG
 
 ```scala mdoc
 import axle.awt._
-png(pca, "roy_diagonal.png")
+import cats.effect._
+
+pca.png[IO]("roy_diagonal.png").unsafeRunSync()
 ```
 
 ![ROY Diagonal](/tutorial/images/roy_diagonal.png)
@@ -66,15 +68,17 @@ val m = 200
 
 val greens = (0 until m).map(i => Color(0, ((i / m.toDouble) * 255).toInt, 0)).toArray
 
-png(
-  PixelatedColoredArea(
+val gpPca = PixelatedColoredArea(
     (x0: Double, x1: Double, y0: Double, y1: Double) => sqrt(x0*x0 + y0*y0),
     (v: Double) => greens(v.toInt % m),
     400, 400,
     0d, 1000d,
-    0d, 1000d),
-  "green_polar.png"
-)
+    0d, 1000d)
+
+import axle.awt._
+import cats.effect._
+
+gpPca.png[IO]("green_polar.png").unsafeRunSync()
 ```
 
 ![Green Polar](/tutorial/images/green_polar.png)
