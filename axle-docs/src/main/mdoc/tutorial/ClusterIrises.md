@@ -37,7 +37,12 @@ import axle.data.Iris
 ```
 
 ```scala mdoc
-val irisesData = new Irises
+val ec = scala.concurrent.ExecutionContext.global
+val blocker = cats.effect.Blocker.liftExecutionContext(ec)
+implicit val cs = cats.effect.IO.contextShift(ec)
+
+val irisesIO = new Irises[cats.effect.IO](blocker)
+val irises = irisesIO.irises.unsafeRunSync
 ```
 
 Make a 2-D Euclidean space implicitly available for clustering
@@ -76,7 +81,7 @@ val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
 val classifier: KMeans[Iris, List, DoubleMatrix] =
   KMeans[Iris, List, DoubleMatrix](
-    irisesData.irises,
+    irises,
     N = 2,
     irisFeaturizer,
     normalizer,
@@ -99,7 +104,7 @@ import axle.ml.ConfusionMatrix
 ```scala mdoc
 val confusion = ConfusionMatrix[Iris, Int, String, Vector, DoubleMatrix](
   classifier,
-  irisesData.irises.toVector,
+  irises.toVector,
   _.species,
   0 to 2)
 
