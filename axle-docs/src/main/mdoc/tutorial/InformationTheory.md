@@ -39,7 +39,7 @@ Entropy of fair 6-sided die
 ```scala mdoc
 val d6 = die(6)
 
-H[ConditionalProbabilityTable, Int, Rational](d6).show
+H[Int, Rational](d6).show
 ```
 
 Entropy of fair and biased coins
@@ -47,11 +47,11 @@ Entropy of fair and biased coins
 ```scala mdoc
 val fairCoin = coin()
 
-H[ConditionalProbabilityTable, Symbol, Rational](fairCoin).show
+H[Symbol, Rational](fairCoin).show
 
 val biasedCoin = coin(Rational(7, 10))
 
-entropy[ConditionalProbabilityTable, Symbol, Rational](biasedCoin).show
+entropy[Symbol, Rational](biasedCoin).show
 ```
 
 See also the [Coin Entropy](/tutorial/entropy_biased_coin/) example.
