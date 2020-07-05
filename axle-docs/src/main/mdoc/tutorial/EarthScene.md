@@ -30,7 +30,8 @@ import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
 
 import axle.jogl._
-import Color._
+import axle.scene._
+import axle.scene.Color._
 ```
 
 Distance and Angle unit conversions
