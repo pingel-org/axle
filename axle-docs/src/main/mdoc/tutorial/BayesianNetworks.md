@@ -94,9 +94,11 @@ Create an SVG visualization
 
 ```scala mdoc
 import axle.visualize._
-import axle.web._
 
 val bnVis  = BayesianNetworkVisualization(bn, 1000, 1000, 20)
+
+import axle.web._
+import cats.effect._
 
 bnVis.svg[IO]("alarmbayes.svg").unsafeRunSync()
 ```
