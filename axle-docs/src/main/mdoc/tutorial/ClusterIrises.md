@@ -109,7 +109,6 @@ confusion.show
 Visualize the final (two dimensional) centroid positions
 
 ```scala mdoc:silent
-import axle.web._
 import axle.visualize.KMeansVisualization
 import axle.visualize.Color._
 ```
@@ -118,6 +117,9 @@ import axle.visualize.Color._
 val colors = Vector(red, blue, green)
 
 val vis = KMeansVisualization(classifier, colors)
+
+import axle.web._
+import cats.effect._
 
 vis.svg[IO]("kmeans.svg").unsafeRunSync()
 ```
