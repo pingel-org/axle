@@ -33,7 +33,11 @@ class GraphVisSpec extends FunSuite with Matchers {
     import cats.Show
     implicit val showEdge: Show[Edge] = _ => ""
 
-    val vis = UndirectedGraphVisualization(g, width = 200, height = 200, border = 10)
+    val vis = UndirectedGraphVisualization[UndirectedSparseGraph[String, Edge], String, Edge](
+      g,
+      width = 200,
+      height = 200,
+      border = 10)
 
     import axle.web._
     import cats.effect._
