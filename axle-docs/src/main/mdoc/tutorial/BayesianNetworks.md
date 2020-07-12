@@ -125,11 +125,9 @@ jpt.sumOut(M).sumOut(J).sumOut(A).sumOut(B).sumOut(E)
 
 Multiplication of factors also works:
 
-```scala mdoc:silent
-import spire.implicits.multiplicativeSemigroupOps
-```
-
 ```scala mdoc
+import spire.implicits.multiplicativeSemigroupOps
+
 val f = (bn.cpt(A) * bn.cpt(B)) * bn.cpt(E)
 
 f.show
