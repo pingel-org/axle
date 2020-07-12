@@ -63,13 +63,14 @@ Create a Visualization of the graph
 
 ```scala mdoc
 import cats.Show
-import axle.visualize._
 
 implicit val showEdge: Show[Edge] = new Show[Edge] {
   def show(e: Edge): String = e.s + " " + e.i
 }
 
-val dVis = DirectedGraphVisualization(
+import axle.visualize._
+
+val dVis = DirectedGraphVisualization[DirectedSparseGraph[String, Edge], String, Edge](
   dg,
   width = 300,
   height = 300,
@@ -145,9 +146,20 @@ ug.findVertex(_ == "a").map(v => ug.neighbors(v))
 Create a Visualization of the graph
 
 ```scala mdoc
+import cats.Show
+
+implicit val showEdge: Show[Edge] = new Show[Edge] {
+  def show(e: Edge): String = e.s + " " + e.i
+}
+
 import axle.visualize._
 
-val uVis = UndirectedGraphVisualization(ug, width=300, height=300, border=10, color=Color.yellow)
+val uVis = UndirectedGraphVisualization[UndirectedSparseGraph[String, Edge], String, Edge](
+  ug,
+  width = 300,
+  height = 300,
+  border = 10,
+  color = Color.yellow)
 ```
 
 Render as an SVG file

@@ -3,7 +3,7 @@ package axle.visualize
 import Color.yellow
 import Color.black
 
-case class DirectedGraphVisualization[DG, VP](
+case class DirectedGraphVisualization[DG, VP, EP](
   dg:          DG,
   width:       Int   = 700,
   height:      Int   = 700,
