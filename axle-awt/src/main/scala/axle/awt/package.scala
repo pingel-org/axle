@@ -593,16 +593,17 @@ package object awt {
   import spire.algebra.Field
   import axle.visualize.BayesianNetworkVisualization
   import axle.pgm.BayesianNetworkNode
+  import axle.pgm.Edge
   import cats.Eq
 
   implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
     implicit
-    drawDG: Draw[DirectedGraphVisualization[DG, BayesianNetworkNode[T, N], Unit]]): Draw[BayesianNetworkVisualization[T, N, DG]] = {
+    drawDG: Draw[DirectedGraphVisualization[DG, BayesianNetworkNode[T, N], Edge]]): Draw[BayesianNetworkVisualization[T, N, DG]] = {
     new Draw[BayesianNetworkVisualization[T, N, DG]] {
 
       def component(vis: BayesianNetworkVisualization[T, N, DG]): java.awt.Component = {
         import vis._
-        val subVis = DirectedGraphVisualization[DG, BayesianNetworkNode[T, N], Unit](vis.bn.graph, width, height, border)
+        val subVis = DirectedGraphVisualization[DG, BayesianNetworkNode[T, N], Edge](vis.bn.graph, width, height, border)
         drawDG.component(subVis)
       }
     }

@@ -561,13 +561,13 @@ object SVG {
         NodeSeq.Empty
     }
 
-  implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
+  implicit def svgBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
     implicit
-    svgDGVis: SVG[DirectedGraphVisualization[DG, BayesianNetworkNode[T, N], Unit]] ): SVG[BayesianNetworkVisualization[T, N, DG]] = {
+    svgDGVis: SVG[DirectedGraphVisualization[DG, BayesianNetworkNode[T, N], axle.pgm.Edge]] ): SVG[BayesianNetworkVisualization[T, N, DG]] = {
     new SVG[BayesianNetworkVisualization[T, N, DG]] {
       def svg(vis: BayesianNetworkVisualization[T, N, DG]): NodeSeq = {
         import vis._
-        val subVis = DirectedGraphVisualization[DG, BayesianNetworkNode[T, N], Unit](vis.bn.graph, width, height, border)
+        val subVis = DirectedGraphVisualization[DG, BayesianNetworkNode[T, N], axle.pgm.Edge](vis.bn.graph, width, height, border)
         svgDGVis.svg(subVis)
       }
     }

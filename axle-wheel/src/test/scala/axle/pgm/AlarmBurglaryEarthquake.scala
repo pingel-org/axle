@@ -94,17 +94,18 @@ class AlarmBurglaryEarthquakeSpec extends FunSuite with Matchers {
   test("bayesian network visualization") {
 
     import axle.visualize._
-    import axle.awt._
-    import axle.web._
 
     val pngGName = "gnGraph.png"
     val svgGName = "gnGraph.svg"
-    val graphVis = DirectedGraphVisualization[DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge], BayesianNetworkNode[Boolean, Rational] ](
+    val graphVis = DirectedGraphVisualization[DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge], BayesianNetworkNode[Boolean, Rational], Edge](
       bn.graph, 200, 200, 10)
 
     val pngName = "bn.png"
     val svgName = "bn.svg"
     val vis = BayesianNetworkVisualization[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]](bn, 200, 200, 10)
+
+    import axle.awt._
+    import axle.web._
 
     (for {
       _ <- graphVis.png[IO](pngGName)
@@ -114,8 +115,8 @@ class AlarmBurglaryEarthquakeSpec extends FunSuite with Matchers {
     } yield ()).unsafeRunSync()
 
     new java.io.File(pngGName).exists should be(true)
-    new java.io.File(pngName).exists should be(true)
     new java.io.File(svgGName).exists should be(true)
+    new java.io.File(pngName).exists should be(true)
     new java.io.File(svgName).exists should be(true)
 
   }
