@@ -10,22 +10,17 @@ An N-Player, Imperfect Information, Zero-sum game
 
 The `axle.game.cards` package models decks, cards, ranks, suits, and ordering.
 
-Imports
+Define a function that takes the hand size and returns the best 5-card hand
 
-```scala mdoc:silent
+```scala mdoc
 import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
 
 import axle.game.cards.Deck
 import axle.game.poker.PokerHand
-import axle.game.poker.PokerHandCategory
-```
 
-Define a function that takes the hand size and returns the best 5-card hand
-
-```scala mdoc
 def winnerFromHandSize(handSize: Int) =
-  Deck().cards.take(handSize).combinations(5).map(PokerHand(_)).toList.max
+  Deck().cards.take(handSize).combinations(5).map(cs => PokerHand(cs.toVector)).toList.max
 
 winnerFromHandSize(7).show
 ```
@@ -41,6 +36,8 @@ hands.map({ hand => hand.show + "  " + hand.description }).mkString("\n")
 Record 1000 simulated hands for each drawn hand size from 5 to 9
 
 ```scala mdoc
+import axle.game.poker.PokerHandCategory
+
 val data: IndexedSeq[(PokerHandCategory, Int)] =
   for {
     handSize <- 5 to 9
@@ -68,7 +65,11 @@ val chart = BarChartGrouped[PokerHandCategory, Int, Int, Map[(PokerHandCategory,
   colorOf = (cat: PokerHandCategory, handSize: Int) => colors( (handSize - 5) % colors.size),
   hoverOf = (cat: PokerHandCategory, handSize: Int) => Some(s"${cat.show} from $handSize")
 )
+```
 
+Render as SVG file
+
+```scala mdoc
 import axle.web._
 import cats.effect._
 
