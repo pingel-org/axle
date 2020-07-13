@@ -19,12 +19,8 @@ a fitness function.
 
 ```scala mdoc
 import shapeless._
-//import syntax.singleton._
-//import record._
 
 val gen = Generic[Rabbit]
-
-// val pMutation = 0.003
 
 import axle.ml._
 
@@ -72,7 +68,6 @@ Plot the min, average, and max fitness function by generation
 
 ```scala mdoc
 import scala.collection.immutable.TreeMap
-//import axle.eqTreeMap
 import axle.visualize._
 
 val plot = Plot[String, Int, Double, TreeMap[Int,Double]](
