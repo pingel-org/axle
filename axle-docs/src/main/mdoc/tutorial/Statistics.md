@@ -8,21 +8,15 @@ Topics include: Random Variables, Distributions, Probability, and Standard Devia
 
 ## Uniform Distribution
 
-Imports
-
-```scala mdoc:silent
-import spire.math._
-import spire.algebra._
-
-import axle._
-import axle.stats._
-
-implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
-```
-
 Example
 
 ```scala mdoc
+import cats.implicits._
+import spire.algebra._
+import axle.stats._
+
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+
 val X = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d))
 ```
 
@@ -41,6 +35,8 @@ standardDeviation(X)
 Example fair and biased coins:
 
 ```scala mdoc
+import spire.math._
+
 val fairCoin = coin()
 
 val biasedCoin = coin(Rational(9, 10))
@@ -62,23 +58,21 @@ implicit val dist = axle.stats.rationalProbabilityDist
 Create and query distributions
 
 ```scala mdoc
-val flip1 = coin()
+import axle.algebra._
 
-flip1.P('HEAD)
+fairCoin.P(RegionEq('HEAD))
+```
 
-val flip2 = coin()
+Chain two events' distributions
 
-import cats.syntax.all._
-type F[T] = ConditionalProbabilityTable[T, Rational]
+```scala mdoc
+implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
-val bothFlips = for {
-  a <- flip1 : F[Symbol]
-  b <- flip2 : F[Symbol]
-} yield (a, b)
+val bothCoinsModel = prob.chain(fairCoin)(fairCoin)
 
-bothFlips.P(('HEAD, 'HEAD))
+bothCoinsModel.P(RegionEqTuple1of2('HEAD) and RegionEqTuple2of2('HEAD))
 
-bothFlips.P({ flips: (Symbol, Symbol) => (flips._1 === 'HEAD) || (flips._2 === 'HEAD) })
+bothCoinsModel.P(RegionEqTuple1of2('HEAD) or RegionEqTuple2of2('HEAD))
 ```
 
 ## Dice examples
@@ -88,27 +82,23 @@ Setup
 ```scala mdoc
 import axle.game.Dice._
 
-val d6a = (die(6) : F[Int]).map(numberToUtfFace)
-val d6b = (die(6) : F[Int]).map(numberToUtfFace)
+val d6 = prob.map(die(6))(numberToUtfFace)
 
-val bothDie = for {
-  a <- d6a : F[Symbol]
-  b <- d6b : F[Symbol]
-} yield (a, b)
+val bothDieModel = prob.chain(d6)(d6)
 ```
 
 Create and query distributions
 
 ```scala mdoc
-bothDie.P({ dice: (Symbol, Symbol) => (dice._1 === '⚃) && (dice._2 === '⚃) })
+bothDieModel.P(RegionEqTuple1of2('⚃) and RegionEqTuple2of2('⚃))
 
-bothDie.P({ dice: (Symbol, _) => (dice._1 =!= '⚃) })
+bothDieModel.P(RegionNegate(RegionEqTuple1of2('⚃)))
 ```
 
 Observe rolls of a die
 
 ```scala mdoc
-(1 to 10) map { i => d6a.observe(rng) }
+(1 to 10) map { i => d6.observe(rng) }
 ```
 
 See also [Two Dice](/tutorial/two_dice/) examples.
