@@ -8,24 +8,25 @@ See the wikipedia page on [Genetic Algorithms](https://en.wikipedia.org/wiki/Gen
 
 ## Example
 
-Imports
-
-```scala mdoc:silent
-import shapeless._
-import syntax.singleton._
-import record._
-import cats.implicits._
-import axle.ml._
-```
-
-Define a random rabbit generator and fitness function
+Consider a `Rabbit` class
 
 ```scala mdoc
 case class Rabbit(a: Int, b: Double, c: Double, d: Double, e: Double, f: Double, g: Double, h: Double)
+```
+
+Define the `Species` for a Genetic Algorithm, which requires a random generator and
+a fitness function.
+
+```scala mdoc
+import shapeless._
+//import syntax.singleton._
+//import record._
 
 val gen = Generic[Rabbit]
 
 // val pMutation = 0.003
+
+import axle.ml._
 
 import scala.util.Random.nextDouble
 import scala.util.Random.nextInt
@@ -58,6 +59,8 @@ implicit val rabbitSpecies = new Species[gen.Repr] {
 Run the genetic algorithm
 
 ```scala mdoc
+import cats.implicits._
+
 val ga = GeneticAlgorithm(populationSize = 100, numGenerations = 100)
 
 val log = ga.run(spire.random.Generator.rng)
@@ -69,7 +72,7 @@ Plot the min, average, and max fitness function by generation
 
 ```scala mdoc
 import scala.collection.immutable.TreeMap
-import axle.eqTreeMap
+//import axle.eqTreeMap
 import axle.visualize._
 
 val plot = Plot[String, Int, Double, TreeMap[Int,Double]](
