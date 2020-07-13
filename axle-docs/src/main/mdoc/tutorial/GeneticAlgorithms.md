@@ -11,8 +11,6 @@ See the wikipedia page on [Genetic Algorithms](https://en.wikipedia.org/wiki/Gen
 Imports
 
 ```scala mdoc:silent
-import util.Random.nextDouble
-import util.Random.nextInt
 import shapeless._
 import syntax.singleton._
 import record._
@@ -29,9 +27,13 @@ val gen = Generic[Rabbit]
 
 // val pMutation = 0.003
 
+import scala.util.Random.nextDouble
+import scala.util.Random.nextInt
+
 implicit val rabbitSpecies = new Species[gen.Repr] {
 
-  def random() = {
+  def random(rg: spire.random.Generator): gen.Repr = {
+
     val rabbit = Rabbit(
       1 + nextInt(2),
       5 + 20 * nextDouble(),
@@ -58,7 +60,7 @@ Run the genetic algorithm
 ```scala mdoc
 val ga = GeneticAlgorithm(populationSize = 100, numGenerations = 100)
 
-val log = ga.run()
+val log = ga.run(spire.random.Generator.rng)
 
 val winner = log.winners.last
 ```
@@ -70,7 +72,7 @@ import scala.collection.immutable.TreeMap
 import axle.eqTreeMap
 import axle.visualize._
 
-val plot = Plot(
+val plot = Plot[String, Int, Double, TreeMap[Int,Double]](
   () => List("min" -> log.mins, "ave" -> log.aves, "max" -> log.maxs),
   connect = true,
   colorOf = (label: String) => label match {
@@ -82,7 +84,11 @@ val plot = Plot(
   xAxisLabel = Some("generation"),
   yAxis = Some(0),
   yAxisLabel = Some("fitness"))
+```
 
+Render to an SVG file
+
+```scala mdoc
 import axle.web._
 import cats.effect._
 
