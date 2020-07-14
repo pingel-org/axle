@@ -24,7 +24,6 @@ Fundamental data structures and functions
 * [Algebra](/tutorial/algebra/) Typeclasses Functor, Indexed, Finite, LengthSpace
 * [Linear Algebra](/tutorial/linear_algebra/) including Principal Component Analysis (PCA)
 * [Graph](/tutorial/graph/)
-* [Game Theory](/tutorial/game_theory/) Framework for the `axle-games` jar.
 * [Logic](/tutorial/logic/) First-Order Predicate Logic
 * [Quanta](/tutorial/quanta/) Units (second, mile, gram, etc) for various quanta (Speed, Distance, Mass, etc) and conversions between them
 * [Unitted Trigonometry](/tutorial/unitted_trigonometry/)
@@ -46,6 +45,7 @@ Randomness
   * [Entropy of a Coin](/tutorial/entropy_biased_coin/)
 * [Probabilistic Graphical Models](/tutorial/probabilistic_graphical_models/) (PGM)
   * [Bayesian Networks](/tutorial/bayesian_networks/)
+* [Game Theory](/tutorial/game_theory/) Framework for the game playing jar.
 
 Machine Learning
 
