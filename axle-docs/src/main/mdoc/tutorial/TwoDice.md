@@ -4,9 +4,44 @@ title: Two Dice
 permalink: /tutorial/two_dice/
 ---
 
-This page describes two ways of calculation the sum of two dice rolls.
+Setup
 
-## Simulation
+```scala mdoc
+import axle.eqSymbol
+import axle.stats._
+import axle.game.Dice._
+
+
+implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+
+val d6 = prob.map(die(6))(numberToUtfFace)
+
+val bothDieModel = prob.chain(d6)(d6)
+```
+
+Create and query distributions
+
+```scala mdoc
+import axle.algebra._ // for Region*
+import axle.showSymbol
+import axle.syntax.probabilitymodel._
+
+bothDieModel.P(RegionEqTuple1of2('⚃) and RegionEqTuple2of2('⚃))
+
+bothDieModel.P(RegionNegate(RegionEqTuple1of2('⚃)))
+```
+
+Observe rolls of a die
+
+```scala mdoc
+import spire.random.Generator.rng
+
+implicit val dist = axle.stats.rationalProbabilityDist
+
+(1 to 10) map { i => d6.observe(rng) }
+```
+
+## Simulate the sum of two dice
 
 Imports
 
@@ -18,15 +53,11 @@ import spire.math.Rational
 
 import axle.enrichGenSeq
 import axle.game.Dice.die
-import axle.stats._
-import axle.syntax.probabilitymodel._
 ```
 
 Simulate 10k rolls of two dice
 
 ```scala mdoc
-implicit val dist = axle.stats.rationalProbabilityDist
-
 val seed = spire.random.Seed(42)
 val gen = spire.random.Random.generatorFromSeed(seed)
 val d6a = die(6)
@@ -65,7 +96,7 @@ chart.svg[IO]("d6plusd6.svg").unsafeRunSync()
 
 ![Observed d6 + d6](/tutorial/images/d6plusd6.svg)
 
-## Distribution Monad
+## Direct computation of the sum of two dice by 
 
 The distribution of two rolls combined can be produced with a for comprehension
 and charted directly.
