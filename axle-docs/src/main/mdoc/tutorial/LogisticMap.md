@@ -8,33 +8,22 @@ See the wikipedia page on [Logistic Map](https://en.wikipedia.org/wiki/Logistic_
 
 Create data for a range of the logistic map function
 
-```scala mdoc:silent
-import java.util.TreeSet
-
-import cats.implicits._
-
-import spire.math.abs
+```scala mdoc
 import spire.algebra._
 
-import axle.math.logisticMap
-import axle.{ orbit, applyK }
-import axle.visualize._
-import axle.awt._
+val initial = 0.3
 
-implicit val ringDouble: Ring[Double] = spire.implicits.DoubleAlgebra
-```
-
-```scala mdoc
+import java.util.TreeSet
 val memo = collection.mutable.Map.empty[Double, TreeSet[Double]]
+implicit val ringDouble: Ring[Double] = spire.implicits.DoubleAlgebra
 
-def doubleClose(z: Double)(y: Double) = abs(z - y) < 1e-6
-
-def f(λ: Double, maxX: Double, maxY: Double, minY: Double): Boolean = {
-  val f = logisticMap(λ)
+def lhsContainsMark(minX: Double, maxX: Double, maxY: Double, minY: Double): Boolean = {
+  val λ = minX
+  val f = axle.math.logisticMap(λ)
   val set = memo.get(λ).getOrElse {
     val set = new TreeSet[Double]()
-    orbit(f, applyK(f, 0.3, 100000), doubleClose) foreach { set.add }
-    memo += λ -> set
+    axle.applyForever(f, initial).drop(10000).take(200) foreach { set.add }
+    memo += minX -> set
     set
   }
   !set.tailSet(minY).headSet(maxY).isEmpty
@@ -44,14 +33,24 @@ def f(λ: Double, maxX: Double, maxY: Double, minY: Double): Boolean = {
 Define a "value to color" function.
 
 ```scala mdoc
+import axle.visualize._
+
 val v2c = (v: Boolean) => if (v) Color.black else Color.white
 ```
 
 Define a `PixelatedColoredArea` to show a range of Logistic Map.
 
 ```scala mdoc
-// TODO was 4000 by 4000
-val pca = PixelatedColoredArea(f, v2c, 100, 100, 2.9, 4d, 0d, 1d)
+import cats.implicits._
+
+val pca = PixelatedColoredArea[Double, Double, Boolean](
+  lhsContainsMark,
+  v2c,
+  4000,    // width
+  4000,    // height
+  2.9, 4d, // x range
+  0d, 1d   // y range
+)
 ```
 
 Create the PNG
