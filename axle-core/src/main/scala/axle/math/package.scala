@@ -8,6 +8,7 @@ import cats.implicits._
 import spire.implicits.additiveGroupOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
+import spire.math.log
 import spire.math.Rational
 import spire.math.Rational.apply
 import spire.math.Real.apply
@@ -19,6 +20,7 @@ import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.math.Rational
 import spire.math.ConvertableTo
+import spire.math.ConvertableFrom
 
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
@@ -274,7 +276,9 @@ package object math {
     filterOut(streamFrom(two).takeWhile(i => i < n), notPrimeUpTo(n))
   }
 
-  def square[N: Field](x: N): N = x ** 2
+  def log2[N: Field: ConvertableFrom](x: N): Double = log(ConvertableFrom[N].toDouble(x)) / log(2d)
+
+  def square[N: Ring](x: N): N = x ** 2
 
   def √[N: NRoot](x: N): N = x.sqrt
 

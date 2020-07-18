@@ -8,14 +8,10 @@ import cats.kernel.Eq
 
 import spire.algebra.Field
 import spire.algebra.NRoot
-import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
 import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveSemigroupOps
-import spire.implicits.nrootOps
-import spire.implicits.semiringOps
-import spire.math.log
 import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
 import spire.math.Rational
@@ -23,6 +19,8 @@ import spire.random.Dist
 import spire.random.Generator
 
 import axle.math.Σ
+import axle.math.square
+import axle.math.log2
 import axle.algebra.RegionEq
 import axle.algebra.Aggregatable
 import axle.algebra.tuple2Field
@@ -90,11 +88,6 @@ package object stats {
 
     pOut.mapValues(pOut.adjoin(trueBranchModel)(falseBranchModel))({ case (v1, v2) => (v1 * pTrue) + (v2 * pFalse) })
   }
-
-  def log2[N: Field: ConvertableFrom](x: N): Double =
-    log(ConvertableFrom[N].toDouble(x)) / log(2d)
-
-  def square[N: Ring](x: N): N = x ** 2
 
   /**
    *
