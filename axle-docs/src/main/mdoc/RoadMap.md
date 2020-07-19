@@ -6,7 +6,7 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.0 (June 2020)
+## 0.5.0 (July 2020)
 
 * Move to Scala 2.12
 * Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`
@@ -50,37 +50,48 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
-* Site
-  * Fix markdown lint warnings
-  * Configure makeSite to preview: previewFixedPort := Some(9999)
-  * Copy css using makeSite (not update-docs.sh)
-  * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
-  * Figure out better way to reference images
+* Document "Conditioning Models" (filter)
+* Axiom for observe: val a = observe(gen) => ProbabilityOf(RegionEq(a)) > 0
+* Bayes Theorem: P(A|B)*P(B) = P(B|A)*P(A) = P(A^B)
+* Axiom? pm.filter(X=x).P(X=x) == 1
 
-* Fix `BayesianNetwork` visualization
-* Fix axle-awt warnings during test
-* Fix "NSWindow drag regions should only be invalidated on the Main Thread! This will throw an exception in the future." warning during axle-jogl test
+* `chain` using `flatMap`?
+* Use `axle.syntax.probabilitymodel` more
+* Fix markdown lint warnings
 
-* Use sbt-ci-release (rm sbt-release)
-* Use sbt-sonatype?
-* Use github to build and publish artifacts?
+* Ditch jekyll
+* Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
+* Configure makeSite to preview: previewFixedPort := Some(9999)
+* Copy css using makeSite (not update-docs.sh)
+* Figure out better way to reference images in docs
+
 * Release and publish site
 
-## 0.5.1 (Summer 2020)
+## 0.5.x (Autumn 2020)
 
-* `LogisticMap.md` back to 4k x 4k
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
-* Demo Mandelbrot with Rational
-* Friend of Spire
-* Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
-* Tics should take an argument
-* Factor tics and tics-{joda,algebra,spire} into separate libs
-* Tests for `axle.ast`
 * Fix `axle.algebra.GeoMetricSpaceSpec`
+* Fix "NSWindow drag regions should only be invalidated on the Main Thread! This will throw an exception in the future." warning during axle-jogl test
 
-## 0.6.x (Autumn 2020)
+* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
+* Demo Mandelbrot with Rational
+* Move `coin` out of `axle.stats`
+* Move more stuff out of `axle.math`
+* Tests for `axle.ast`
+* Tics should take an argument
+* Factor tics and tics-{joda,algebra,spire} into separate libs?
+* Create `axle-png` to help avoid “headless” exception or Xvfb requirement during tests
+* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
+* Move more stuff out of `axle-core` package
+* Create a simple graph implementation so that `axle-core` can avoid including `axle-jung`
+
+## 0.6.x (Winter 2021)
+
+* Use sbt-ci-release (rm sbt-release)
+* Use github to build and publish artifacts?
 
 * `Region` DSL
+** Get rid of `RegionEqTuple1of2` and kin
 * rename `ConditionalProbabilityTable`?
 * Get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
 * "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
@@ -89,15 +100,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 * Actually provide random `Region` (vs just a `RegionEq`) to all `KolmogorovProbabilityProperties`
 * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
-* Axiom for observe: val a = observe(gen) => ProbabilityOf(a) > 0
 * Fix third Kolmogorov law
-* Axiom? pm.filter(X=x).P(X=x) == 1
 * Optimize `KolmogorovProbabilityAxioms.combination`
 * Move KolmogorovProbabilityAxioms to `axle.stats.laws`
 * Pare down `ProbabilityModel` methods (and ensure all have axioms)
 * ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 
-## 0.7.x (Spring 2021)
+* Friend of Spire
+
+## 0.7.x (Summer 2021)
 
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
@@ -131,6 +142,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Wrap `axle.IO.prefixedDisplay` in `F[_]`
 
 * Factor `axle.game.moveFromRandomState` in terms of a random walk on a graph.
+  * See "TODO scale mass down"
   * Compare to Brownian motion, Random walk, Ito process, ...
   * Provide some axoms
     * no outgoing with path in from non-zero mass monotonically increases
@@ -154,8 +166,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * SimpsonsParadox.md
 * "You split, I choose" as game
 * Gerrymandering sensitivity
-* game theory axioms
-* axle.game: Observable[T]
+* game theory axioms (Nash?)
+* axle.game: `Observable[T]`
 * move state dist stream
 * Redo original monty hall spec
 * Max bet for Poker
@@ -202,7 +214,6 @@ Far future backlog ideas:
 * Multi-armed bandit
 * Connection between dynamic programming and semiring
 * Recursive grid search
-* Bayes Theorem
 * P-values
 * z & t scores
 * Correlation

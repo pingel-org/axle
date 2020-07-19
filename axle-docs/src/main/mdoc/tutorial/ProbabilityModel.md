@@ -165,33 +165,20 @@ Future versions of `chain` will return HLists rather than 2-tuples.
 At that time, Axle will drop the `RegionEqTuple1of2`-style `Region` classes in
 favor of the Shapeless way of doing things.
 
-See also [Two Dice](/tutorial/two_dice/) examples.
-
-# Conditional probabilities
+# Conditioning Models
 
 TODO `filter` and `|`
 
 
 # Probability Model as Monads
 
-A few methods are defined on `ProbabilityModel` that allow us to think of them as `Monad`s.
-
+The `unit`, `map`, and `flatMap` methods of `ProbabilityModel` allow us to think of them as `Monad`s.
 (They are not (yet) literaly defined as `cats` `Monad`s, but may be at some point.)
 
 For some historical reading on the origins of probability monads, see the literature on the
 Giry Monad.
 
-## unit to create a model
-
-TODO
-
-## map a function over a model
-
-TODO
-
-## flatMap a function over a model
-
-TODO
+To see these in action in Axle, see the [Two Dice](/tutorial/two_dice/) examples.
 
 # Experimental methods and future work
 

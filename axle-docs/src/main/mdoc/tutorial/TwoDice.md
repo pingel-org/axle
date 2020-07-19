@@ -13,15 +13,19 @@ import axle.game.Dice._
 
 
 implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
-
-val d6 = prob.map(die(6))(numberToUtfFace)
-
-val bothDieModel = prob.chain(d6)(d6)
 ```
 
-Create and query distributions
+## Monadic `map` to operate on the event space
 
 ```scala mdoc
+val d6 = prob.map(die(6))(numberToUtfFace)
+```
+
+Chain two rolls together and query the resulting probability model's distribution of 2-roll events.
+
+```
+val bothDieModel = prob.chain(d6)(d6)
+
 import axle.algebra._ // for Region*
 import axle.showSymbol
 import axle.syntax.probabilitymodel._
@@ -96,10 +100,9 @@ chart.svg[IO]("d6plusd6.svg").unsafeRunSync()
 
 ![Observed d6 + d6](/tutorial/images/d6plusd6.svg)
 
-## Direct computation of the sum of two dice by 
+## Direct computation of the sum of two dice
 
-The distribution of two rolls combined can be produced with a for comprehension
-and charted directly.
+The distribution of two rolls combined can be computed directly
 
 Imports (Note: documentation resets interpreter here)
 
@@ -109,6 +112,8 @@ import spire.math._
 import axle.stats._
 import axle.game.Dice.die
 ```
+
+## Monadic `flatMap`
 
 Create probability distribution of the addition of two 6-sided die:
 
