@@ -20,7 +20,7 @@ def coin(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable[Symbol, 
       'TAIL -> (1 - pHead)))
 ```
 
-A `ProbabilityModel` witness is available for the reuslting `ConditionalProbabilityTable[Symbol, Rational]`
+A `ProbabilityModel` witness is available for the resulting `ConditionalProbabilityTable[Symbol, Rational]`
 
 ```scala mdoc
 import cats.implicits._
@@ -165,7 +165,7 @@ Future versions of `chain` will return HLists rather than 2-tuples.
 At that time, Axle will drop the `RegionEqTuple1of2`-style `Region` classes in
 favor of the Shapeless way of doing things.
 
-# Conditioning Models
+# Conditioning and Bayes Theorem
 
 Conditioning a probability model is accomplished with the `filter` method.
 `|` is a synonym.
