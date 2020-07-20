@@ -180,6 +180,8 @@ def filter(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V]
 model.filter(b).P(a) === ( model.filter(a).P(b) * model.P(a) / model.P(b))
 ```
 
+Which is more recognizable as `P(A|B) = P(B|A) * P(A) / P(B)`
+
 # Probability Model as Monads
 
 The `unit`, `map`, and `flatMap` methods of `ProbabilityModel` allow us to think of them as `Monad`s.
