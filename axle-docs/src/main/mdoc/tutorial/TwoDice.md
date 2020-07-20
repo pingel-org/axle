@@ -23,7 +23,7 @@ val d6 = prob.map(die(6))(numberToUtfFace)
 
 Chain two rolls together and query the resulting probability model's distribution of 2-roll events.
 
-```
+```scala mdoc
 val bothDieModel = prob.chain(d6)(d6)
 
 import axle.algebra._ // for Region*
