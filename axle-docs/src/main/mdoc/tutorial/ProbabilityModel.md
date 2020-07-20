@@ -42,7 +42,7 @@ The `observe` method's signature looks like:
 def observe(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A
 ```
 
-The `observe` method selects a value for the random variable based on the distribution.
+The `observe` method selects a specific value within the model's domain type.
 
 ```scala mdoc
 import spire.random.Generator.rng
@@ -86,7 +86,7 @@ Note that a "Random Variable" does not appear in this discussion.
 The `axle.stats.Variable` class does define a `is` method that returns a `RegionEq`,
 but the probability models themselves are not concerned with the notion of a
 `Variable`.
-They are simply distributions over regions of events on their single, opaque type
+They are simply models over regions of events on their single, opaque type
 that adhere to the laws of probability.
 
 The eventual formalization of `Region` should connect it with a ∑ Algebra from Meaasure Theory.
@@ -143,7 +143,7 @@ is equal to the sum of their independent probabilities.
 
 ## Chaining models
 
-Chain two events' distributions
+Chain two events' models
 
 ```scala mdoc
 implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
@@ -151,7 +151,7 @@ implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 val bothCoinsModel = prob.chain(fairCoin)(fairCoin)
 ```
 
-This creates a distribution on events of type `(Symbol, Symbol)`
+This creates a model on events of type `(Symbol, Symbol)`
 
 It can be queried with `P` using `Region` types that check fields within the `Tuple2`.
 
