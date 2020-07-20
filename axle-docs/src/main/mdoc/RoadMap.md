@@ -50,21 +50,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
-* Document "Conditioning Models" (filter)
-* Axiom for observe: val a = observe(gen) => ProbabilityOf(RegionEq(a)) > 0
-* Bayes Theorem: P(A|B)*P(B) = P(B|A)*P(A) = P(A^B)
-* Axiom? pm.filter(X=x).P(X=x) == 1
-
 * `chain` using `flatMap`?
 * Use `axle.syntax.probabilitymodel` more
-* Fix markdown lint warnings
 
 * Ditch jekyll
 * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
 * Configure makeSite to preview: previewFixedPort := Some(9999)
 * Copy css using makeSite (not update-docs.sh)
+* Fix markdown lint warnings
 * Figure out better way to reference images in docs
-
 * Release and publish site
 
 ## 0.5.x (Autumn 2020)
@@ -96,10 +90,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
 * "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
 * Is `ProbabilityModel.mapValues` really needed? (maybe we need a map that maps keys and values together, which could be used to implement `redistribute`)
-* KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
+* Prove Kolmogorov and Bayes Theorem for Alarm-Burglary-Earthquake model
   * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
-* Actually provide random `Region` (vs just a `RegionEq`) to all `KolmogorovProbabilityProperties`
+* More diversity of random `Region` (vs just a `RegionEq`) to `KolmogorovProbabilityProperties` and Bayes Theorem tests
 * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
+* Axiom for observe: val a = observe(gen) => ProbabilityOf(RegionEq(a)) > 0
+* Axiom? pm.filter(X=x).P(X=x) == 1
 * Fix third Kolmogorov law
 * Optimize `KolmogorovProbabilityAxioms.combination`
 * Move KolmogorovProbabilityAxioms to `axle.stats.laws`

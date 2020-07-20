@@ -167,8 +167,18 @@ favor of the Shapeless way of doing things.
 
 # Conditioning Models
 
-TODO `filter` and `|`
+Conditioning a probability model is accomplished with the `filter` method.
+`|` is a synonym.
 
+```scala
+def filter(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V]
+```
+
+`filter` allows Bayes Theorem to be expressed and checked with ScalaCheck.
+
+```scala
+model.filter(b).P(a) === ( model.filter(a).P(b) * model.P(a) / model.P(b))
+```
 
 # Probability Model as Monads
 
