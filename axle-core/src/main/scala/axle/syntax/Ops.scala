@@ -224,21 +224,20 @@ final class ProbabilityModelOps[M[_, _], A, V](val model: M[A, V])(
   implicit
   ev: ProbabilityModel[M]) {
 
-  def adjoin[V2](model: M[A, V])(other: M[A, V2])(implicit eqA: cats.kernel.Eq[A], fieldV1: Field[V], fieldV2: Field[V2], eqV1: cats.kernel.Eq[V], eqV2: cats.kernel.Eq[V2]): M[A, (V, V2)] =
+  def adjoin[V2](other: M[A, V2])(implicit eqA: cats.kernel.Eq[A], fieldV1: Field[V], fieldV2: Field[V2], eqV1: cats.kernel.Eq[V], eqV2: cats.kernel.Eq[V2]): M[A, (V, V2)] =
     ev.adjoin(model)(other)
 
-  def chain[B](model: M[A, V])
-      (other: M[B, V])
+  def chain[B](other: M[B, V])
       (implicit fieldV: Field[V], eqA: cats.kernel.Eq[A], eqB: cats.kernel.Eq[B]): M[(A, B), V] =
     ev.chain(model)(other)
 
-  def map[B](model: M[A, V])(f: A => B)(implicit eqB: cats.kernel.Eq[B]): M[B, V] =
+  def map[B](f: A => B)(implicit eqB: cats.kernel.Eq[B]): M[B, V] =
     ev.map(model)(f)
 
-  def mapValues[V2](model: M[A, V])(f: V => V2)(implicit fieldV: Field[V], ringV2: Ring[V2]): M[A, V2] =
+  def mapValues[V2](f: V => V2)(implicit fieldV: Field[V], ringV2: Ring[V2]): M[A, V2] =
     ev.mapValues(model)(f)
 
-  def flatMap[B](model: M[A, V])(f: A => M[B, V])(implicit eqB: cats.kernel.Eq[B]): M[B, V] =
+  def flatMap[B](f: A => M[B, V])(implicit eqB: cats.kernel.Eq[B]): M[B, V] =
     ev.flatMap(model)(f)
 
   def P(predicate: Region[A])(implicit fieldV: Field[V]): V = ev.probabilityOf(model)(predicate)
