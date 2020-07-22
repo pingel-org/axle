@@ -37,8 +37,8 @@ In the method signatures below a `ProbalityModel[M]` (`M[A, V]`) typeclass witne
 ## Observe
 
 The `observe` method's signature looks like:
-
 ```scala
+
 def observe(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A
 ```
 
@@ -148,7 +148,7 @@ Chain two events' models
 ```scala mdoc
 implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
-val bothCoinsModel = prob.chain(fairCoin)(fairCoin)
+val bothCoinsModel = fairCoin.chain(fairCoin)
 ```
 
 This creates a model on events of type `(Symbol, Symbol)`

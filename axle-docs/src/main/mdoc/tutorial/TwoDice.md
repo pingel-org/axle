@@ -10,7 +10,7 @@ Setup
 import axle.eqSymbol
 import axle.stats._
 import axle.game.Dice._
-
+import axle.syntax.probabilitymodel._
 
 implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 ```
@@ -18,17 +18,20 @@ implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 ## Monadic `map` to operate on the event space
 
 ```scala mdoc
-val d6 = prob.map(die(6))(numberToUtfFace)
+val d6utf = die(6).map(numberToUtfFace)
 ```
 
-Chain two rolls together and query the resulting probability model's distribution of 2-roll events.
+Chain two rolls together
 
 ```scala mdoc
-val bothDieModel = prob.chain(d6)(d6)
+val bothDieModel = d6utf.chain(d6utf)
+```
 
+Then query the resulting probability model's distribution of 2-roll events.
+
+```scala mdoc
 import axle.algebra._ // for Region*
 import axle.showSymbol
-import axle.syntax.probabilitymodel._
 
 bothDieModel.P(RegionEqTuple1of2('⚃) and RegionEqTuple2of2('⚃))
 
@@ -42,7 +45,7 @@ import spire.random.Generator.rng
 
 implicit val dist = axle.stats.rationalProbabilityDist
 
-(1 to 10) map { i => d6.observe(rng) }
+(1 to 10) map { i => d6utf.observe(rng) }
 ```
 
 ## Simulate the sum of two dice
@@ -64,9 +67,8 @@ Simulate 10k rolls of two dice
 ```scala mdoc
 val seed = spire.random.Seed(42)
 val gen = spire.random.Random.generatorFromSeed(seed)
-val d6a = die(6)
-val d6b = die(6)
-val rolls = (0 until 1000) map { i => d6a.observe(gen) + d6b.observe(gen) }
+val d6 = die(6)
+val rolls = (0 until 1000) map { i => d6.observe(gen) + d6.observe(gen) }
 
 implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
 
@@ -109,6 +111,7 @@ Imports (Note: documentation resets interpreter here)
 ```scala mdoc:silent:reset
 import spire.math._
 
+import axle.syntax.probabilitymodel._
 import axle.stats._
 import axle.game.Dice.die
 ```
@@ -119,12 +122,11 @@ Create probability distribution of the addition of two 6-sided die:
 
 ```scala mdoc
 implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+
 implicit val intEq: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra
 
-val twoDiceSummed = prob.flatMap(die(6)) { a =>
-  prob.map(die(6)) { b =>
-    a + b
-  }
+val twoDiceSummed = die(6).flatMap { a =>
+  die(6).map { b => a + b }
 }
 ```
 
