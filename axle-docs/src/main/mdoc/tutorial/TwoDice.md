@@ -7,6 +7,7 @@ permalink: /tutorial/two_dice/
 Setup
 
 ```scala mdoc
+import cats.implicits._
 import axle.eqSymbol
 import axle.stats._
 import axle.game.Dice._
@@ -24,14 +25,15 @@ val d6utf = die(6).map(numberToUtfFace)
 Chain two rolls together
 
 ```scala mdoc
-val bothDieModel = d6utf.chain(d6utf)
+val bothDieModel = d6utf.flatMap({ f1 =>
+  d6utf.map({ f2 => (f1, f2) })
+})
 ```
 
 Then query the resulting probability model's distribution of 2-roll events.
 
 ```scala mdoc
 import axle.algebra._ // for Region*
-import axle.showSymbol
 
 bothDieModel.P(RegionEqTuple1of2('⚃) and RegionEqTuple2of2('⚃))
 

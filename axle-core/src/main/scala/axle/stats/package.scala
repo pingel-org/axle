@@ -11,7 +11,6 @@ import spire.algebra.NRoot
 import spire.implicits.additiveGroupOps
 import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.additiveSemigroupOps
 import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
 import spire.math.Rational
@@ -23,7 +22,6 @@ import axle.math.square
 import axle.math.log2
 import axle.algebra.RegionEq
 import axle.algebra.Aggregatable
-import axle.algebra.tuple2Field
 import axle.quanta.Information
 import axle.quanta.InformationConverter
 import axle.quanta.UnittedQuantity
@@ -71,23 +69,16 @@ package object stats {
     ConditionalProbabilityTable(dist)
   }
 
-  def iffy[T, N, C[_, _], M[_, _]](
-    conditionModel:   C[Boolean, N],
-    trueBranchModel:  M[T, N],
-    falseBranchModel: M[T, N])(
-    implicit
-    eqT: Eq[T],
-    fieldN: Field[N],
-    eqN: cats.kernel.Eq[N],
-    pIn:  ProbabilityModel[C],
-    pOut: ProbabilityModel[M]): M[T, N] = {
-
-    implicit val eqBool = cats.kernel.Eq.fromUniversalEquals[Boolean]
-    val pTrue: N = pIn.probabilityOf(conditionModel)(RegionEq(true))
-    val pFalse: N = pIn.probabilityOf(conditionModel)(RegionEq(false))
-
-    pOut.mapValues(pOut.adjoin(trueBranchModel)(falseBranchModel))({ case (v1, v2) => (v1 * pTrue) + (v2 * pFalse) })
-  }
+  import axle.syntax.probabilitymodel._
+  // TODO allow `condition` to be of different M type
+  def iffy[A: Eq, V, M[_, _]: ProbabilityModel](
+    condition: M[Boolean, V],
+    trueClause: M[A, V],
+    falseClause: M[A, V]): M[A, V] =
+    condition.flatMap({ cond => cond match {
+      case true => trueClause
+      case false => falseClause
+    }})
 
   /**
    *

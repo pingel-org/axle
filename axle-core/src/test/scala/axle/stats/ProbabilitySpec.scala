@@ -15,12 +15,11 @@ class ProbabilitySpec extends FunSuite with Matchers {
 
   test("two independent coins") {
 
-    val coin1 = coin()
-    val coin2 = coin()
+    val fairCoin = coin()
 
     import cats.implicits._
 
-    val bothCoinsModel = prob.chain(coin1)(coin2)
+    val bothCoinsModel = fairCoin.flatMap( c1 => fairCoin.map( c2 => (c1, c2) ))
 
     bothCoinsModel.P(RegionEqTuple1of2('HEAD) and RegionEqTuple2of2('HEAD)) should be(Rational(1, 4))
 
@@ -40,7 +39,8 @@ class ProbabilitySpec extends FunSuite with Matchers {
 
   test("two independent d6") {
 
-    val bothDieModel = prob.chain(die(6))(die(6))
+    val d6 = die(6)
+    val bothDieModel = d6.flatMap( r1 => d6.map( r2 => (r1, r2)) )
 
     bothDieModel.P(RegionEqTuple1of2(1)) should be(Rational(1, 6))
 

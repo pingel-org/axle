@@ -148,7 +148,9 @@ Chain two events' models
 ```scala mdoc
 implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
-val bothCoinsModel = fairCoin.chain(fairCoin)
+val bothCoinsModel = fairCoin.flatMap({ r1 =>
+  fairCoin.map({ r2 => (r1, r2)})
+})
 ```
 
 This creates a model on events of type `(Symbol, Symbol)`
@@ -160,10 +162,6 @@ bothCoinsModel.P(RegionEqTuple1of2('HEAD) and RegionEqTuple2of2('HEAD))
 
 bothCoinsModel.P(RegionEqTuple1of2('HEAD) or RegionEqTuple2of2('HEAD))
 ```
-
-Future versions of `chain` will return HLists rather than 2-tuples.
-At that time, Axle will drop the `RegionEqTuple1of2`-style `Region` classes in
-favor of the Shapeless way of doing things.
 
 # Conditioning and Bayes Theorem
 
@@ -192,20 +190,12 @@ Giry Monad.
 
 To see these in action in Axle, see the [Two Dice](/tutorial/two_dice/) examples.
 
-# Experimental methods and future work
-
-## Supporting `iffy`
-
-The `iffy` method defined in `axle.stats` is the only use of two methods on `ProbabilityModel`:
-
-1. `adjoin` matches the values corresponding to shared keys of two models.
-2. `mapValues` maps a function on the probability values of a model.
-
-## Support for `axle.game`
+# Redistributing probability mass
 
 The `redistribute` method of `ProbabilityModel` exists as an experiment in support of
 `axle.game.moveFromRandomState`.
-It will likely 
+
+# Future work
 
 ## Measure Theory
 

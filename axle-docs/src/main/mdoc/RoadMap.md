@@ -50,8 +50,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
-* `chain` using `flatMap`?
-* Use `axle.syntax.probabilitymodel` more
+* Simplify/eliminate `RegionEqTuple1of2` using just `RegionLambda`
 
 * Ditch jekyll
 * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
@@ -63,33 +62,35 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.x (Autumn 2020)
 
-* Fix `LogisticRegression` and move `LogisticRegression.md` back
-* Fix `axle.algebra.GeoMetricSpaceSpec`
-* Fix "NSWindow drag regions should only be invalidated on the Main Thread! This will throw an exception in the future." warning during axle-jogl test
-
-* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
-* Demo Mandelbrot with Rational
 * Move `coin` out of `axle.stats`
 * Move more stuff out of `axle.math`
-* Tests for `axle.ast`
-* Tics should take an argument
-* Factor tics and tics-{joda,algebra,spire} into separate libs?
 * Create `axle-png` to help avoid “headless” exception or Xvfb requirement during tests
 * `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
 * Move more stuff out of `axle-core` package
 * Create a simple graph implementation so that `axle-core` can avoid including `axle-jung`
-
-## 0.6.x (Winter 2021)
-
+* Fix "NSWindow drag regions should only be invalidated on the Main Thread! This will throw an exception in the future." warning during axle-jogl test
 * Use sbt-ci-release (rm sbt-release)
 * Use github to build and publish artifacts?
 
+* Fix `axle.algebra.GeoMetricSpaceSpec`
+* Fix `LogisticRegression` and move `LogisticRegression.md` back
+
+* Tests for `axle.ast`
+* Tics should take an argument
+* Factor tics and tics-{joda,algebra,spire} into separate libs?
+* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
+* Demo Mandelbrot with Rational
+
+
+## 0.6.x (Winter 2021)
+
 * `Region` DSL
-** Get rid of `RegionEqTuple1of2` and kin
+* Consider whether the witnesses used in some regions (Eg `Eq` for `RegionEq`) should instead be a part of the Region itself.  This may require a separate `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`
+* Separate condition and clause types in `axle.stats.iffy`
 * rename `ConditionalProbabilityTable`?
+* Axioms for `ProbabilityModel.redistribute`
 * Get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
 * "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
-* Is `ProbabilityModel.mapValues` really needed? (maybe we need a map that maps keys and values together, which could be used to implement `redistribute`)
 * Prove Kolmogorov and Bayes Theorem for Alarm-Burglary-Earthquake model
   * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
 * More diversity of random `Region` (vs just a `RegionEq`) to `KolmogorovProbabilityProperties` and Bayes Theorem tests
@@ -100,7 +101,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Optimize `KolmogorovProbabilityAxioms.combination`
 * Move KolmogorovProbabilityAxioms to `axle.stats.laws`
 * Pare down `ProbabilityModel` methods (and ensure all have axioms)
-* ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
+* ScalaCheck `Monad[ProbabilityModel]` (needs missing tailRecM mehod)
 
 * Friend of Spire
 
@@ -108,8 +109,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
-* Also use HLists for `ProbabilityModel` type parameter `A`
-* Simplify/eliminate `RegionEqTuple1of2` using HList
 * Replace Finite with Shapeless's version
 * Delete Finite conversions for jung (replace with NaturalTransformation?)
 * Replace with Cats: FoldLeft, Bijection, FunctionPair, Endofunctor

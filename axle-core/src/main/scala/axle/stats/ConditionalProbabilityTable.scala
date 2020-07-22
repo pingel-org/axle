@@ -2,7 +2,6 @@ package axle.stats
 
 import cats.Show
 import cats.kernel.Order
-//import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
 
 import spire.algebra.Field
@@ -10,7 +9,6 @@ import spire.algebra.Ring
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.implicits.multiplicativeGroupOps
-import spire.implicits.multiplicativeSemigroupOps
 import spire.random.Dist
 import spire.random.Generator
 
@@ -31,44 +29,6 @@ object ConditionalProbabilityTable {
   implicit val probabilityWitness: ProbabilityModel[ConditionalProbabilityTable] =
     new ProbabilityModel[ConditionalProbabilityTable] {
 
-      def adjoin[A, V1, V2](
-        model: ConditionalProbabilityTable[A, V1])(
-        other: ConditionalProbabilityTable[A, V2])(
-        implicit
-        eqA: cats.kernel.Eq[A],
-        fieldV1: Field[V1], fieldV2: Field[V2],
-        eqV1: cats.kernel.Eq[V1],
-        eqV2: cats.kernel.Eq[V2]): ConditionalProbabilityTable[A, (V1, V2)] = {
-
-        val newValues = (model.p.keySet ++ other.p.keySet) // TODO should unique by Eq[A], not universal equality
-
-        implicit val fieldV12: Field[(V1, V2)] = axle.algebra.tuple2Field[V1, V2](fieldV1, fieldV2, eqV1, eqV2)
-
-        ConditionalProbabilityTable[A, (V1, V2)](
-          newValues.map( key => {
-            val valuePair = (probabilityOf(model)(RegionEq(key)), probabilityOf(other)(RegionEq(key)))
-            key -> valuePair
-          }).toMap)
-      }
-
-      def chain[A, B, V]
-        (model: ConditionalProbabilityTable[A, V])
-        (other: ConditionalProbabilityTable[B, V])
-        (implicit fieldV: Field[V], eqA: cats.kernel.Eq[A], eqB: cats.kernel.Eq[B]): ConditionalProbabilityTable[(A, B), V] = {
-
-        val abvMap: Map[(A, B), V] = (
-          for {
-            a <- model.values
-            b <- other.values
-          } yield {
-            val v: V = probabilityOf(model)(RegionEq(a)) * probabilityOf(other)(RegionEq(b))
-            (a, b) -> v
-          }
-        ).toMap
-
-        ConditionalProbabilityTable[(A, B), V](abvMap)
-      }
-
       def map[A, B, V](model: ConditionalProbabilityTable[A, V])(f: A => B)(implicit eqB: cats.kernel.Eq[B]): ConditionalProbabilityTable[B, V] = {
         import model.ringV
         ConditionalProbabilityTable[B, V](
@@ -77,21 +37,6 @@ object ConditionalProbabilityTable {
           }).toVector.groupBy(_._1).map({ case (b, bvs) =>
              b -> bvs.map(_._2).reduce(model.ringV.plus)
           }).toMap) // TODO use eqA to unique
-      }
-
-      def redistribute[A: cats.kernel.Eq, V: Ring](model: ConditionalProbabilityTable[A, V])(
-        from: A, to: A, mass: V): ConditionalProbabilityTable[A, V] = {
-        import model.p
-        ConditionalProbabilityTable(
-          p ++ Map(
-            from -> (p.get(from).getOrElse(Ring[V].zero) - mass),
-            to -> (p.get(to).getOrElse(Ring[V].zero) + mass))
-         )
-        }
-
-      def mapValues[A, V, V2](model: ConditionalProbabilityTable[A, V])(f: V => V2)(implicit fieldV: Field[V], ringV2: Ring[V2]): ConditionalProbabilityTable[A, V2] = {
-        import model.eqA
-        ConditionalProbabilityTable[A, V2](model.p.mapValues(f))
       }
 
       def flatMap[A, B, V](model: ConditionalProbabilityTable[A, V])(f: A => ConditionalProbabilityTable[B, V])(implicit eqB: cats.kernel.Eq[B]): ConditionalProbabilityTable[B, V] = {
@@ -132,6 +77,17 @@ object ConditionalProbabilityTable {
               if (predicate(a)) { model.p(a) } else { fieldV.zero }
             })
         }
+
+      def redistribute[A: cats.kernel.Eq, V: Ring](model: ConditionalProbabilityTable[A, V])(
+        from: A, to: A, mass: V): ConditionalProbabilityTable[A, V] = {
+        import model.p
+        ConditionalProbabilityTable(
+          p ++ Map(
+            from -> (p.get(from).getOrElse(Ring[V].zero) - mass),
+            to -> (p.get(to).getOrElse(Ring[V].zero) + mass))
+         )
+        }
+
   }
 
 }
