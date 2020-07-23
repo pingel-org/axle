@@ -50,8 +50,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
-* Simplify/eliminate `RegionEqTuple1of2` using just `RegionLambda`
-
 * Ditch jekyll
 * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
 * Configure makeSite to preview: previewFixedPort := Some(9999)
@@ -85,6 +83,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## 0.6.x (Winter 2021)
 
 * `Region` DSL
+  * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
 * Consider whether the witnesses used in some regions (Eg `Eq` for `RegionEq`) should instead be a part of the Region itself.  This may require a separate `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`
 * Separate condition and clause types in `axle.stats.iffy`
 * rename `ConditionalProbabilityTable`?

@@ -1,6 +1,5 @@
 package axle.ml
 
-import cats.Show
 import cats.Functor
 import cats.kernel.Eq
 import cats.kernel.Order
@@ -27,9 +26,7 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
   implicit
   aggregatableF: Aggregatable[F],
   functorF:      Functor[F],
-  talliableF:    Talliable[F],
-  showF:         Show[FEATURE],
-  showC:         Show[CLASS])
+  talliableF:    Talliable[F])
   extends Function1[DATA, CLASS] {
 
   val featureVariables = featureVariablesAndValues map { _._1 }
@@ -82,8 +79,8 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
       Π(featureVariables.zip(fs).zip(Fs).map({
         case ((featureVariable, featureValue), featureGivenModel) => {
           probTally0.probabilityOf(
-            probTally0.filter(featureGivenModel)(RegionEqTuple2of2(c))
-          )(RegionEqTuple1of2(featureValue))
+            probTally0.filter(featureGivenModel)(RegionIf(_._2 === c))
+          )(RegionIf(_._1 === featureValue))
         }
       }))
 

@@ -50,7 +50,7 @@ package object game {
     fieldV: Field[V],
     orderV: Order[V]): (Option[(S, M)], PM[S, V]) = {
 
-    val openStateModel: PM[S, V] = prob.filter(stateModel)(RegionLambda(evGame.mover(game, _).isDefined))
+    val openStateModel: PM[S, V] = prob.filter(stateModel)(RegionIf(evGame.mover(game, _).isDefined))
 
     val fromState: S = prob.observe(openStateModel)(gen)
     val probabilityOfFromState: V = prob.probabilityOf(stateModel)(RegionEq(fromState))

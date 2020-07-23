@@ -148,19 +148,21 @@ Chain two events' models
 ```scala mdoc
 implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
-val bothCoinsModel = fairCoin.flatMap({ r1 =>
-  fairCoin.map({ r2 => (r1, r2)})
+val bothCoinsModel = fairCoin.flatMap({ flip1 =>
+  fairCoin.map({ flip2 => (flip1, flip2)})
 })
 ```
 
 This creates a model on events of type `(Symbol, Symbol)`
 
-It can be queried with `P` using `Region` types that check fields within the `Tuple2`.
+It can be queried with `P` using `RegionIf` to check fields within the `Tuple2`.
 
 ```scala mdoc
-bothCoinsModel.P(RegionEqTuple1of2('HEAD) and RegionEqTuple2of2('HEAD))
+type TWOFLIPS = (Symbol, Symbol)
 
-bothCoinsModel.P(RegionEqTuple1of2('HEAD) or RegionEqTuple2of2('HEAD))
+bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == 'HEAD) and RegionIf[TWOFLIPS](_._2 == 'HEAD))
+
+bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == 'HEAD) or RegionIf[TWOFLIPS](_._2 == 'HEAD))
 ```
 
 # Conditioning and Bayes Theorem

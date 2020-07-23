@@ -27,24 +27,16 @@ object Region {
   implicit def showRegion[A: Show]: Show[Region[A]] = new Show[Region[A]] {
 
     def show(ra: Region[A]): String = ra match {
-      case re @ RegionEq(x) => show"_ === ${x}"
-      case rl @ RegionLambda(_) => "𝛌x.…"
-      case ret12 @ RegionEqTuple1of2(x) => {
-        import ret12._
-        show"_._1 === ${x}"
-      }
-      case ret22 @ RegionEqTuple2of2(x) => {
-        import ret22._
-        show"_._2 === ${x}"
-      }
-      case rs @ RegionSet(xs) => show"_ in ${xs}"
-      case rn @ RegionNegate(r) => show"not (${r})"
-      case rg @ RegionGTE(min) => show"${min} <= _"
-      case rl @ RegionLTE(max) => show"_ <= ${max}"
-      case ra @ RegionAnd(left, right) => "(" + left.toString + ") ⋀ (" + right.toString + ")"
-      case ro @ RegionOr(left, right) => "(" + left.toString + ") ⋁ (" + right.toString + ")"
       case RegionEmpty() => "∅"
       case RegionAll() => "ξ"
+      case re @ RegionEq(x) => show"_ === ${x}"
+      case rn @ RegionNegate(r) => show"not (${r})"
+      case ra @ RegionAnd(left, right) => "(" + left.toString + ") ⋀ (" + right.toString + ")"
+      case ro @ RegionOr(left, right) => "(" + left.toString + ") ⋁ (" + right.toString + ")"
+      case ri @ RegionIf(_) => "if(…)"
+      case rs @ RegionSet(xs) => show"_ in ${xs}"
+      case rg @ RegionGTE(min) => show"${min} <= _"
+      case rl @ RegionLTE(max) => show"_ <= ${max}"
     }
   }
 
@@ -62,21 +54,9 @@ case class RegionEq[A](x: A)(implicit val eqA: Eq[A]) extends Region[A] {
   def apply(y: A): Boolean = eqA.eqv(x, y)
 }
 
-case class RegionLambda[A](lambda: A => Boolean) extends Region[A] {
+case class RegionIf[A](filter: A => Boolean) extends Region[A] {
 
-  def apply(x: A): Boolean = lambda(x)
-}
-
-case class RegionEqTuple1of2[A, B](a: A)(
-  implicit val eqA: Eq[A],
-  val showA: Show[A]) extends Region[(A, B)] {
-  def apply(pair: (A, B)): Boolean = eqA.eqv(a, pair._1)
-}
-
-case class RegionEqTuple2of2[A, B](b: B)(
-  implicit val eqB: Eq[B],
-  val showB: Show[B]) extends Region[(A, B)] {
-  def apply(pair: (A, B)): Boolean = eqB.eqv(b, pair._2)
+  def apply(x: A): Boolean = filter(x)
 }
 
 case class RegionSet[A](xs: Set[A]) extends Region[A] {

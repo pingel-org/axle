@@ -25,8 +25,8 @@ val d6utf = die(6).map(numberToUtfFace)
 Chain two rolls together
 
 ```scala mdoc
-val bothDieModel = d6utf.flatMap({ f1 =>
-  d6utf.map({ f2 => (f1, f2) })
+val bothDieModel = d6utf.flatMap({ flip1 =>
+  d6utf.map({ flip2 => (flip1, flip2) })
 })
 ```
 
@@ -35,9 +35,11 @@ Then query the resulting probability model's distribution of 2-roll events.
 ```scala mdoc
 import axle.algebra._ // for Region*
 
-bothDieModel.P(RegionEqTuple1of2('⚃) and RegionEqTuple2of2('⚃))
+type TWOROLLS = (Symbol, Symbol)
 
-bothDieModel.P(RegionNegate(RegionEqTuple1of2('⚃)))
+bothDieModel.P(RegionIf[TWOROLLS](_._1 == '⚃) and RegionIf[TWOROLLS](_._2 == '⚃))
+
+bothDieModel.P(RegionNegate(RegionIf[TWOROLLS](_._1 == '⚃)))
 ```
 
 Observe rolls of a die
