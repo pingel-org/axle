@@ -75,10 +75,13 @@ package object stats {
     condition: M[Boolean, V],
     trueClause: M[A, V],
     falseClause: M[A, V]): M[A, V] =
-    condition.flatMap({ cond => cond match {
-      case true => trueClause
-      case false => falseClause
-    }})
+    condition.flatMap({ cond =>
+      if( cond ) {
+        trueClause
+      } else {
+        falseClause
+      }
+    })
 
   /**
    *
