@@ -73,10 +73,10 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
     stateStrategyMoveStream(game, fromState, Random.generatorFromSeed(Seed(seed)).sync)
     .filter(args => mover(game, args._1).map( _ === game.player).getOrElse(false))
     .map({ case (stateIn, strategy, _, _) =>
-      prob.map(strategy)(isCorrectMoveForState(game, stateIn))
+      strategy.map(isCorrectMoveForState(game, stateIn))
     })
     .reduce({ (incoming, current) =>
-      prob.map(prob.chain(incoming)(current))({ case (a, b) => a && b })
+      incoming.flatMap( a => current.map( b => a && b ))
     })
     .P(RegionEq(true))
 
