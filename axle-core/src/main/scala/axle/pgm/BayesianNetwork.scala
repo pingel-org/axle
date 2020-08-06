@@ -62,7 +62,7 @@ case class BayesianNetwork[
   name:              String,
   variableFactorMap: Map[Variable[T], Factor[T, V]])(
   implicit
-  dg: DirectedGraph[DG, BayesianNetworkNode[T, V], Edge]) {
+  val dg: DirectedGraph[DG, BayesianNetworkNode[T, V], Edge]) {
 
   val bnns = variableFactorMap.map({ case (d, f) => BayesianNetworkNode(d, f) }).toList
 
