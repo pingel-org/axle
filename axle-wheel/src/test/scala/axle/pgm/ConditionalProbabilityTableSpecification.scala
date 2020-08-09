@@ -52,7 +52,6 @@ class ConditionalProbabilityTableSpecification
 
   // edges: ab, ac, bd, cd, ce
   val bn = BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]](
-    "6.1",
     Map(
       A -> aFactor,
       B -> bFactor,

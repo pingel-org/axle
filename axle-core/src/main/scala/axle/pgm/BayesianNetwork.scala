@@ -42,11 +42,10 @@ object Edge {
 object BayesianNetwork {
 
   def withGraphK2[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Manifest, DG[_, _]](
-    name:              String,
     variableFactorMap: Map[Variable[T], Factor[T, N]])(
     implicit
     dg: DirectedGraph[DG[BayesianNetworkNode[T, N], Edge], BayesianNetworkNode[T, N], Edge]) =
-    BayesianNetwork[T, N, DG[BayesianNetworkNode[T, N], Edge]](name, variableFactorMap)
+    BayesianNetwork[T, N, DG[BayesianNetworkNode[T, N], Edge]](variableFactorMap)
   
 
   // Here is where I need to capture the distinction between the `A` type for the ProbabilityModel
@@ -55,14 +54,16 @@ object BayesianNetwork {
     ] = ???
 }
 
-case class BayesianNetwork[
-  T: Manifest: Eq,
-  V: Field: ConvertableFrom: Order: Manifest,
-  DG](
-  name:              String,
+case class BayesianNetwork[T, V, DG](
   variableFactorMap: Map[Variable[T], Factor[T, V]])(
   implicit
-  val dg: DirectedGraph[DG, BayesianNetworkNode[T, V], Edge]) {
+  val manifestT: Manifest[T],
+  val eqT: Eq[T],
+  val dg: DirectedGraph[DG, BayesianNetworkNode[T, V], Edge],
+  val fieldV: Field[V],
+  val convertableFromV: ConvertableFrom[V],
+  val orderV: Order[V],
+  val manifestV: Manifest[V]) {
 
   val bnns = variableFactorMap.map({ case (d, f) => BayesianNetworkNode(d, f) }).toList
 
@@ -245,7 +246,7 @@ case class BayesianNetwork[
         case 0 => empty
         case _ => {
           val result = xVertices.foldLeft(g)(
-            (bn, xV) => BayesianNetwork(bn.name + " - " + xV, bn.variableFactorMap /* TODO filterVertices(v => ! v === xV) */ ))
+            (bn, xV) => BayesianNetwork(bn.variableFactorMap /* TODO filterVertices(v => ! v === xV) */ ))
           cons(result, nodePruneStream(result))
         }
       }

@@ -75,7 +75,6 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 val bn: BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]] =
   BayesianNetwork.withGraphK2[Boolean, Rational, DirectedSparseGraph](
-    "A sounds (due to Burglary or Earthquake) and John or Mary Call",
     Map(
       B -> bFactor,
       E -> eFactor,
