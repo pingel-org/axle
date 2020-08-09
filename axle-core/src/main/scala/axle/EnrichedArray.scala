@@ -1,8 +1,9 @@
 package axle
 
+import scala.reflect.ClassTag
 import cats.implicits._
 
-case class EnrichedArray[T: Manifest](arr: Array[T]) {
+case class EnrichedArray[T: ClassTag](arr: Array[T]) {
 
   def apply(range: Range): Array[T] = {
     assert(range.step === 1)

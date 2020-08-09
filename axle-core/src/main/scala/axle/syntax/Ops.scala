@@ -259,7 +259,7 @@ final class DirectedGraphOps[DG, V, E](val dg: DG)(
 
   def isClique(vs: Iterable[V])(implicit eqV: Eq[V]): Boolean = ev.isClique(dg, vs)
 
-  def forceClique(vs: Set[V], edgeFn: (V, V) => E)(implicit eqV: Eq[V], manV: Manifest[V]): DG =
+  def forceClique(vs: Set[V], edgeFn: (V, V) => E)(implicit eqV: Eq[V]): DG =
     ev.forceClique(dg, vs, edgeFn)
 
   def edgesTouching(v: V) = ev.edgesTouching(dg, v)
@@ -322,7 +322,7 @@ final class UndirectedGraphOps[UG, V, E](val ug: UG)(
 
   def isClique(vs: Iterable[V])(implicit eqV: Eq[V]): Boolean = ev.isClique(ug, vs)
 
-  def forceClique(vs: Set[V], edgeFn: (V, V) => E)(implicit eqV: Eq[V], manV: Manifest[V]): UG =
+  def forceClique(vs: Set[V], edgeFn: (V, V) => E)(implicit eqV: Eq[V]): UG =
     ev.forceClique(ug, vs, edgeFn)
 
   def filterEdges(f: E => Boolean): UG = ev.filterEdges(ug, f)

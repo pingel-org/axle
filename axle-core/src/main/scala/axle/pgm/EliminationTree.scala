@@ -10,7 +10,7 @@ import axle.syntax.undirectedgraph._
 
 class EliminationTreeEdge
 
-case class EliminationTree[T: Eq: Manifest, N: Field: Manifest, UG](
+case class EliminationTree[T: Eq, N: Field, UG](
   vps: Seq[Factor[T, N]],
   ef:  Seq[(Factor[T, N], Factor[T, N])])(
   implicit

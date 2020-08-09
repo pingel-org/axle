@@ -561,7 +561,7 @@ object SVG {
         NodeSeq.Empty
     }
 
-  implicit def svgBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
+  implicit def svgBayesianNetworkVisualization[T: Eq, N: Field: Eq, DG](
     implicit
     svgDGVis: SVG[DirectedGraphVisualization[DG, BayesianNetworkNode[T, N], axle.pgm.Edge]] ): SVG[BayesianNetworkVisualization[T, N, DG]] = {
     new SVG[BayesianNetworkVisualization[T, N, DG]] {

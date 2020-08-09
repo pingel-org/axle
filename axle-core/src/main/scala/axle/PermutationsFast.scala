@@ -4,7 +4,7 @@ import scala.collection.mutable.ListBuffer
 
 import cats.implicits._
 
-case class PermutationsFast[E: Manifest](pool: IndexedSeq[E], r: Int)
+case class PermutationsFast[E](pool: IndexedSeq[E], r: Int)
   extends Iterable[IndexedSeq[E]] {
 
   val n = pool.length

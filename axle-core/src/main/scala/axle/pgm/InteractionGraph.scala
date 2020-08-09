@@ -6,7 +6,7 @@ import cats.kernel.Eq
 
 class InteractionGraphEdge
 
-case class InteractionGraph[T: Manifest: Eq, UG](
+case class InteractionGraph[T: Eq, UG](
   vps: Seq[Variable[T]],
   ef:  Seq[(Variable[T], Variable[T], InteractionGraphEdge)])(
   implicit

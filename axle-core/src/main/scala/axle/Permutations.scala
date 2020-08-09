@@ -1,5 +1,6 @@
 package axle
 
+import scala.reflect.ClassTag
 import scala.Stream.cons
 import scala.Stream.empty
 
@@ -15,7 +16,7 @@ import cats.implicits._
  *
  */
 
-case class Permutations[E: Manifest](pool: IndexedSeq[E], r: Int)
+case class Permutations[E: ClassTag](pool: IndexedSeq[E], r: Int)
   extends Iterable[IndexedSeq[E]] {
 
   val n = pool.length
@@ -37,7 +38,7 @@ case class Permutations[E: Manifest](pool: IndexedSeq[E], r: Int)
     cycles0:  Array[Int],
     i0:       Int): (Array[E], Array[Int]) = {
     val indices1 = indices0.swap(indices0((n - cycles0(i0)) % n), indices0(i0))
-    (untilR.map(indices1).map(pool), indices1)
+    (untilR.map(indices1).map(pool).toArray, indices1)
   }
 
   private[this] def loop2branch(

@@ -9,7 +9,7 @@ class JoinTreeEdge
 
 object JoinTree {
 
-  def makeJoinTree[T: Eq: Manifest, N: Field: Manifest, UG](
+  def makeJoinTree[T: Eq, N: Field, UG](
     vps: Vector[Set[Variable[T]]],
     ef:  Seq[(Set[Variable[T]], Set[Variable[T]])])(
     implicit

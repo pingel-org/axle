@@ -596,7 +596,7 @@ package object awt {
   import axle.pgm.Edge
   import cats.Eq
 
-  implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
+  implicit def drawBayesianNetworkVisualization[T: Eq, N: Field: Eq, DG](
     implicit
     drawDG: Draw[DirectedGraphVisualization[DG, BayesianNetworkNode[T, N], Edge]]): Draw[BayesianNetworkVisualization[T, N, DG]] = {
     new Draw[BayesianNetworkVisualization[T, N, DG]] {

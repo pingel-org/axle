@@ -41,7 +41,7 @@ object Edge {
 
 object BayesianNetwork {
 
-  def withGraphK2[T: Manifest: Eq, N: Field: ConvertableFrom: Order: Manifest, DG[_, _]](
+  def withGraphK2[T: Eq, N: Field: ConvertableFrom: Order, DG[_, _]](
     variableFactorMap: Map[Variable[T], Factor[T, N]])(
     implicit
     dg: DirectedGraph[DG[BayesianNetworkNode[T, N], Edge], BayesianNetworkNode[T, N], Edge]) =
@@ -57,13 +57,11 @@ object BayesianNetwork {
 case class BayesianNetwork[T, V, DG](
   variableFactorMap: Map[Variable[T], Factor[T, V]])(
   implicit
-  val manifestT: Manifest[T],
   val eqT: Eq[T],
   val dg: DirectedGraph[DG, BayesianNetworkNode[T, V], Edge],
   val fieldV: Field[V],
   val convertableFromV: ConvertableFrom[V],
-  val orderV: Order[V],
-  val manifestV: Manifest[V]) {
+  val orderV: Order[V]) {
 
   val bnns = variableFactorMap.map({ case (d, f) => BayesianNetworkNode(d, f) }).toList
 

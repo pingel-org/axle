@@ -116,7 +116,7 @@ package object stats {
    * http://en.wikipedia.org/wiki/Standard_deviation
    */
 
-  def standardDeviation[A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+  def standardDeviation[A: Eq: NRoot: Field: ConvertableTo, N: Field: ConvertableFrom](
     model: ConditionalProbabilityTable[A, N]): A = {
 
     implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
@@ -130,15 +130,15 @@ package object stats {
     NRoot[A].sqrt(sum)
   }
 
-  def σ[A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+  def σ[A: Eq: NRoot: Field: ConvertableTo, N: Field: ConvertableFrom](
     model: ConditionalProbabilityTable[A, N]): A =
     standardDeviation[A, N](model)
 
-  def stddev[ A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+  def stddev[ A: Eq: NRoot: Field: ConvertableTo, N: Field: ConvertableFrom](
     model: ConditionalProbabilityTable[A, N]): A =
     standardDeviation[A, N](model)
 
-  def entropy[A: Eq: Manifest, N: Field: Eq: ConvertableFrom](model: ConditionalProbabilityTable[A, N])(
+  def entropy[A: Eq, N: Field: Eq: ConvertableFrom](model: ConditionalProbabilityTable[A, N])(
     implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
@@ -158,7 +158,7 @@ package object stats {
     UnittedQuantity(H, convert.bit)
   }
 
-  def H[A: Eq: Manifest, N: Field: Eq: ConvertableFrom](model: ConditionalProbabilityTable[A, N])(
+  def H[A: Eq, N: Field: Eq: ConvertableFrom](model: ConditionalProbabilityTable[A, N])(
     implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
     entropy(model)
 
