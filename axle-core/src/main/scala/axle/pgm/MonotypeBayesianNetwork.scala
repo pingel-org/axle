@@ -12,7 +12,8 @@ import spire.random.Dist
 import spire.random.Generator
 
 import axle.dummy
-// import axle.algebra.RegionEq
+// import axle.algebra.DirectedGraph
+import axle.algebra.RegionEq
 import axle.algebra.Region
 //import axle.algebra.RegionEmpty
 //import axle.algebra.RegionAll
@@ -30,15 +31,17 @@ import axle.syntax.directedgraph._
  * 
  */
 
-class MonotypeBayesanNetwork[C, S, X, DG[_, _]](
-  val bayesianNetwork: BayesianNetwork[S, X, DG[BayesianNetworkNode[S, X], Edge]],
-  val select: (Variable[S], C) => S,
-  val combine1: Vector[S] => C,
-  val combine2: (Map[Variable[S], S]) => C)
+case class MonotypeBayesanNetwork[C, S, X, DG[_, _]](
+  bayesianNetwork: BayesianNetwork[S, X, DG[BayesianNetworkNode[S, X], Edge]],
+  select: (Variable[S], C) => S,
+  combine1: Vector[S] => C,
+  combine2: (Map[Variable[S], S]) => C)
   
 object MonotypeBayesanNetwork {
 
-  implicit def probabilityModelForMonotypeBayesanNetwork[I: Eq, DG[_, _]]: ProbabilityModel[({ type L[C, W] = MonotypeBayesanNetwork[C, I, W, DG] })#L] =
+  implicit def probabilityModelForMonotypeBayesanNetwork[
+    I: Eq,
+    DG[_, _]](): ProbabilityModel[({ type L[C, W] = MonotypeBayesanNetwork[C, I, W, DG] })#L] =
     new ProbabilityModel[({ type L[C, W] = MonotypeBayesanNetwork[C, I, W, DG] })#L] {
 
       def observeNodeAndAncestors[A, V: Dist: Ring: Order](
@@ -55,7 +58,7 @@ object MonotypeBayesanNetwork {
             val parents: List[Variable[I]] = model.bayesianNetwork.graph.predecessors(bnnForVariable).toList.map(_.variable)
             parents.foldLeft(acc)({ case (acc, p) => observeNodeAndAncestors(model, p, acc)(gen) })
           }
-          val i: I = {
+          val i: I = { // arguments: model, variable, ancestorMap
             val factor: Factor[I, V] = model.bayesianNetwork.variableFactorMap(variable)
             val index: Int = factor.variablesWithValues.indexWhere(_._1 === variable)
             val p: Map[I, V] = factor.cases.filter { reqs =>
@@ -93,9 +96,63 @@ object MonotypeBayesanNetwork {
         .map(_._2)
         .reduce(Field[V].plus)
 
-      def filter[A, V: Field](model: MonotypeBayesanNetwork[A,I,V,DG])(predicate: Region[A]): MonotypeBayesanNetwork[A,I,V,DG] = ???
+      def filter[A, V: Field](
+        model: MonotypeBayesanNetwork[A,I,V,DG])(
+        predicate: Region[A]): MonotypeBayesanNetwork[A,I,V,DG] = {
 
-      def unit[A: Eq, V: Ring](a: A): MonotypeBayesanNetwork[A,I,V,DG] = ???
+          import model.bayesianNetwork.dg
+          import model.bayesianNetwork.convertableFromV
+          import model.bayesianNetwork.orderV
+
+          val monotypeCases: Iterable[A] =
+            model
+            .bayesianNetwork
+            .jointProbabilityTable
+            .cases
+            .map(_.map(_.x).toVector)
+            .map(model.combine1)
+            .filter(predicate)
+
+          val filteredBayesianNetwork =
+            BayesianNetwork[I, V, DG[BayesianNetworkNode[I, V], Edge]](
+              model.bayesianNetwork.variableFactorMap.map({ case (subV, subVFactor) =>
+                subV -> Factor[I, V](
+                  subVFactor.variablesWithValues,
+                  subVFactor.probabilities.map({ case (reqs, prob) =>
+                    reqs -> Field[V].zero
+                  }) ++ monotypeCases.map( monotypeCase =>
+                          (subVFactor.variablesWithValues.map({ case (vv, _) =>
+                            RegionEq(model.select(vv, monotypeCase))})
+                              -> Field[V].one // TODO not true if there was more than one monotypeCase for the
+                          )
+                        ).toMap.withDefaultValue(Field[V].one)
+                )
+              })
+            )
+
+          MonotypeBayesanNetwork[A, I, V, DG](
+            filteredBayesianNetwork,
+            model.select,
+            model.combine1,
+            model.combine2)
+      }
+
+      def unit[A: Eq, V: Ring](a: A): MonotypeBayesanNetwork[A,I,V,DG] = {
+
+        // val unittedFactorMap: Map[Variable[I], Factor[I, V]] = ???
+
+        // val filteredBayesianNetwork =
+        //   BayesianNetwork[I, V, DG[BayesianNetworkNode[I, V], Edge]](
+        //     unittedFactorMap
+        //   )
+
+        // MonotypeBayesanNetwork[A, I, V, DG](
+        //   filteredBayesianNetwork,
+        //   select,
+        //   combine1,
+        //   combine2)
+        ???
+      }
 
       def flatMap[A, B: Eq, V](model: MonotypeBayesanNetwork[A,I,V,DG])(f: A => MonotypeBayesanNetwork[B,I,V,DG]): MonotypeBayesanNetwork[B,I,V,DG] = ???
 
