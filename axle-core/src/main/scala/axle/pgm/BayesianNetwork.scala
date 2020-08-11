@@ -8,24 +8,15 @@ import cats.kernel.Order
 import cats.implicits._
 
 import spire.algebra.Field
-//import spire.algebra.Ring
-// import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
-//import spire.random.Dist
-//import spire.random.Generator
 
 import axle.algebra.RegionEq
 import axle.algebra.UndirectedGraph
 import axle.algebra.DirectedGraph
-//import axle.algebra.Region
-//import axle.algebra.RegionEmpty
-//import axle.algebra.RegionAll
 import axle.stats.Variable
 import axle.stats.Independence
 import axle.stats.Factor
-import axle.stats.ProbabilityModel
 import axle.math.Π
-//import axle.math.Σ
 import axle.syntax.directedgraph._
 import axle.syntax.undirectedgraph._
 
@@ -46,12 +37,7 @@ object BayesianNetwork {
     implicit
     dg: DirectedGraph[DG[BayesianNetworkNode[T, N], Edge], BayesianNetworkNode[T, N], Edge]) =
     BayesianNetwork[T, N, DG[BayesianNetworkNode[T, N], Edge]](variableFactorMap)
-  
 
-  // Here is where I need to capture the distinction between the `A` type for the ProbabilityModel
-  implicit def probabilityModel[
-    DG[_, _]]: ProbabilityModel[({ type BN[T, V] = BayesianNetwork[T, V, DG[BayesianNetworkNode[T, V], Edge]] })#BN
-    ] = ???
 }
 
 case class BayesianNetwork[T, V, DG](
@@ -92,13 +78,12 @@ case class BayesianNetwork[T, V, DG](
   def factorFor(variable: Variable[T]): Factor[T, V] =
     graph.findVertex(_.variable === variable).map(_.cpt).get
 
-  def probabilityOf(cs: Seq[(Variable[T], RegionEq[T])]): V = {
+  def probabilityOf(cs: Seq[(Variable[T], RegionEq[T])]): V =
     Π[V, Vector](cs.map({ case (variable, _) =>
       val factor = factorFor(variable)
       val row = cs.filter(vr => factor.mentions(vr._1)).map(_._2)
       factor(row)
     }).toVector)
-  }
 
   def markovAssumptionsFor(rv: Variable[T]): Independence[T] = {
     val rvVertex = graph.findVertex(_.variable === rv).get
