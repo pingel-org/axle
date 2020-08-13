@@ -7,7 +7,6 @@ import cats.implicits._
 import spire.algebra.Field
 import spire.algebra.Ring
 import spire.implicits.additiveSemigroupOps
-import spire.implicits.additiveGroupOps
 import spire.implicits.multiplicativeGroupOps
 import spire.random.Dist
 import spire.random.Generator
@@ -76,16 +75,6 @@ object ConditionalProbabilityTable {
             Σ(model.values.map { a =>
               if (predicate(a)) { model.p(a) } else { fieldV.zero }
             })
-        }
-
-      def redistribute[A: cats.kernel.Eq, V: Ring](model: ConditionalProbabilityTable[A, V])(
-        from: A, to: A, mass: V): ConditionalProbabilityTable[A, V] = {
-        import model.p
-        ConditionalProbabilityTable(
-          p ++ Map(
-            from -> (p.get(from).getOrElse(Ring[V].zero) - mass),
-            to -> (p.get(to).getOrElse(Ring[V].zero) + mass))
-         )
         }
 
   }

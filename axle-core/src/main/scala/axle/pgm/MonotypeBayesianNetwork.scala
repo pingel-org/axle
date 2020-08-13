@@ -154,11 +154,19 @@ object MonotypeBayesanNetwork {
         ???
       }
 
-      def flatMap[A, B: Eq, V](model: MonotypeBayesanNetwork[A,I,V,DG])(f: A => MonotypeBayesanNetwork[B,I,V,DG]): MonotypeBayesanNetwork[B,I,V,DG] = ???
+      def flatMap[A, B: Eq, V](
+        model: MonotypeBayesanNetwork[A,I,V,DG])(
+        f: A => MonotypeBayesanNetwork[B,I,V,DG]): MonotypeBayesanNetwork[B,I,V,DG] = {
 
-      def map[A, B: Eq, V](model: MonotypeBayesanNetwork[A,I,V,DG])(f: A => B): MonotypeBayesanNetwork[B,I,V,DG] = ???
+          ???
+        }
 
-      def redistribute[A: Eq, V: Ring](model: MonotypeBayesanNetwork[A,I,V,DG])(from: A, to: A, mass: V): MonotypeBayesanNetwork[A,I,V,DG] = ???
+      def map[A, B: Eq, V](
+        model: MonotypeBayesanNetwork[A,I,V,DG])(
+        f: A => B): MonotypeBayesanNetwork[B,I,V,DG] = {
+
+          ???
+        }
 
    }
 }

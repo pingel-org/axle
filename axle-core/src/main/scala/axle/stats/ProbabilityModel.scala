@@ -32,21 +32,6 @@ trait ProbabilityModel[M[_, _]] {
 
   def flatMap[A, B, V](model: M[A, V])(f: A => M[B, V])(implicit eqB: cats.kernel.Eq[B]): M[B, V]
 
-  /**
-   * 
-   * redistribute
-   * 
-   * val d1 = redistribute(d0)(from, to, weight)
-   * 
-   * d1 has to still satisfy 3 axioms, plus:
-   * 
-   * d0.P(to) + mass = d1.P(to)
-   * d0.P(from) - mass = d1.P(from)
-   * 
-   */
-
-  def redistribute[A: cats.kernel.Eq, V: Ring](model: M[A, V])(from: A, to: A, mass: V): M[A, V]
-
 }
 
 object ProbabilityModel {

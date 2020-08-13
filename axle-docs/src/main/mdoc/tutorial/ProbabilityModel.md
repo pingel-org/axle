@@ -192,11 +192,6 @@ Giry Monad.
 
 To see these in action in Axle, see the [Two Dice](/tutorial/two_dice/) examples.
 
-# Redistributing probability mass
-
-The `redistribute` method of `ProbabilityModel` exists as an experiment in support of
-`axle.game.moveFromRandomState`.
-
 # Future work
 
 ## Measure Theory
