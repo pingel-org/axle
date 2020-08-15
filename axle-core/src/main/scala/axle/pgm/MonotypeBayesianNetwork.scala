@@ -137,33 +137,45 @@ object MonotypeBayesanNetwork {
             model.combine2)
       }
 
-      def unit[A: Eq, V: Ring](a: A): MonotypeBayesanNetwork[A,I,V,DG] = {
+      def unit[A: Eq, V: Ring](
+        a: A): MonotypeBayesanNetwork[A,I,V,DG] = {
 
-        // val unittedFactorMap: Map[Variable[I], Factor[I, V]] = ???
+          val model: MonotypeBayesanNetwork[A,I,V,DG] = ???
+          import model.bayesianNetwork.dg
+          import model.bayesianNetwork.convertableFromV
+          import model.bayesianNetwork.orderV
+          implicit val fieldV: Field[V] = ???
 
-        // val filteredBayesianNetwork =
-        //   BayesianNetwork[I, V, DG[BayesianNetworkNode[I, V], Edge]](
-        //     unittedFactorMap
-        //   )
+          val unitBayesianNetwork =
+            BayesianNetwork[I, V, DG[BayesianNetworkNode[I, V], Edge]](
+              model.bayesianNetwork.variableFactorMap.map({ case (subV, subVFactor) =>
+                subV -> Factor[I, V](
+                  subVFactor.variablesWithValues,
+                  subVFactor.probabilities.map({ case (reqs, prob) =>
+                    reqs -> Ring[V].zero
+                  }) + (subVFactor.variablesWithValues.map({ case (vv, _) =>
+                         RegionEq(model.select(vv, a))}) -> Ring[V].one )
+                )
+              })
+            )
 
-        // MonotypeBayesanNetwork[A, I, V, DG](
-        //   filteredBayesianNetwork,
-        //   select,
-        //   combine1,
-        //   combine2)
-        ???
+          MonotypeBayesanNetwork[A, I, V, DG](
+            unitBayesianNetwork,
+            model.select,
+            model.combine1,
+            model.combine2)
       }
-
-      def flatMap[A, B: Eq, V](
-        model: MonotypeBayesanNetwork[A,I,V,DG])(
-        f: A => MonotypeBayesanNetwork[B,I,V,DG]): MonotypeBayesanNetwork[B,I,V,DG] = {
-
-          ???
-        }
 
       def map[A, B: Eq, V](
         model: MonotypeBayesanNetwork[A,I,V,DG])(
         f: A => B): MonotypeBayesanNetwork[B,I,V,DG] = {
+
+          ???
+        }
+
+      def flatMap[A, B: Eq, V](
+        model: MonotypeBayesanNetwork[A,I,V,DG])(
+        f: A => MonotypeBayesanNetwork[B,I,V,DG]): MonotypeBayesanNetwork[B,I,V,DG] = {
 
           ???
         }
