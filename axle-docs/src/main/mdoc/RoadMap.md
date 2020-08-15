@@ -43,12 +43,47 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Fix Order[Card]
 * `Deck.riffleShuffle`
 * `GuessRiffle` game
-* `ProbabilityModel` `chain`, `adjoin`, `mapValues`, `redistribute`
 * `axle.algebra.etc` via `axle.algebra.EnrichedRinged`
 * `bernoulliDistribution`
 * `axle.stats.expectation(CPT)`
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
+
+* Kolmogorov for Alarm-Burglary-Earthquake
+* fix probabilities in MonotypeBN.filter, Bayes for Alarm-Burglary-Earthquake
+* Reconcile combine1 and combine2
+
+* Should be able to take joint probability table for tuple5[Boolean]
+*   and factor out each variable until
+*   the Alarm-Burglary-Earthquake 5-node network
+* consider usefulness of `Factor` in terms of `Region`
+* MonotypeBayesanNetwork.filter -- could be viewed as "belief updating" (vs "conditioning")
+  * if it took a ProbabilityModel itself
+  * Is there a way of seeing this as flatMap, though?
+* `observe` could return a lower-entropy probability model
+  * Perhaps in exchange for a given amount of energy
+  * Or ask for a 0-entropy model and be told how expensive that was
+* More Measure Theory
+
+* MonotypeBN.unit
+* MonotypeBN.map
+* MonotypeBN.flatMap
+* Monad tests for Alarm-Burglary-Earthquake as MonotypeBN
+
+* Replace `axle.game.moveFromRandomState.mapToProb`
+* Wrap `axle.IO.getLine` in `F[_]`
+* Wrap `axle.IO.prefixedDisplay` in `F[_]`
+
+* Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
+  * "Chance" should be its own player
+  * Each N bits consumed during `Riffle()` is its own move
+  * Chance moves consume `UnittedQuantity[Information, N]`
+* GuessRiffleSpec: use `moveFromRandomState`
+* GuessRiffle.md
+  * Walk through game
+  * Plot distribution of sum(entropy) for both strategies
+  * Plot entropy by turn # for each strategy
+  * Plot simulated score distribution for each strategy
 
 * Ditch jekyll
 * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
@@ -58,7 +93,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Figure out better way to reference images in docs
 * Release and publish site
 
-## 0.5.x (Autumn 2020)
+## 0.5.x
 
 * Move `coin` out of `axle.stats`
 * Move more stuff out of `axle.math`
@@ -73,38 +108,35 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Fix `axle.algebra.GeoMetricSpaceSpec`
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
 
+* Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
+* Laws for `Factor`
+* `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
+* More diversity of `Region` (vs just `RegionEq`) for probability axiom (Kolm. & Bayes) tests
+* Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
+
+* Axiom for observe: val a = observe(gen) => ProbabilityOf(RegionEq(a)) > 0
+* Axioms for `ProbabilityModel.redistribute`
+* Axiom? pm.filter(X=x).P(X=x) == 1
+* Fix third Kolmogorov law
+* Optimize `KolmogorovProbabilityAxioms.combination`
+* Move KolmogorovProbabilityAxioms to `axle.stats.laws`
+* ScalaCheck `Monad[ProbabilityModel]` (needs missing tailRecM mehod)
+
+* rename `ConditionalProbabilityTable`?
+* Get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
+* "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
+
+* Friend of Spire
+
 * Tests for `axle.ast`
 * Tics should take an argument
 * Factor tics and tics-{joda,algebra,spire} into separate libs?
 * Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
 * Demo Mandelbrot with Rational
 
+* Review `InteractionGraph`, `EliminationGraph`, `JoinTree` and the functions they power
 
-## 0.6.x (Winter 2021)
-
-* `Region` DSL
-  * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
-* Consider whether the witnesses used in some regions (Eg `Eq` for `RegionEq`) should instead be a part of the Region itself.  This may require a separate `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`
-* Separate condition and clause types in `axle.stats.iffy`
-* rename `ConditionalProbabilityTable`?
-* Axioms for `ProbabilityModel.redistribute`
-* Get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
-* "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
-* Prove Kolmogorov and Bayes Theorem for Alarm-Burglary-Earthquake model
-  * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
-* More diversity of random `Region` (vs just a `RegionEq`) to `KolmogorovProbabilityProperties` and Bayes Theorem tests
-* Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
-* Axiom for observe: val a = observe(gen) => ProbabilityOf(RegionEq(a)) > 0
-* Axiom? pm.filter(X=x).P(X=x) == 1
-* Fix third Kolmogorov law
-* Optimize `KolmogorovProbabilityAxioms.combination`
-* Move KolmogorovProbabilityAxioms to `axle.stats.laws`
-* Pare down `ProbabilityModel` methods (and ensure all have axioms)
-* ScalaCheck `Monad[ProbabilityModel]` (needs missing tailRecM mehod)
-
-* Friend of Spire
-
-## 0.7.x (Summer 2021)
+## 0.6.x
 
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
@@ -130,10 +162,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Most MapRedicible witnesses are inefficient (eg calling toVector, toSeq, etc)
 * remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
 
-## 0.8.x (Autumn 2021)
-
-* Wrap `axle.IO.getLine` in `F[_]`
-* Wrap `axle.IO.prefixedDisplay` in `F[_]`
+## 0.7.x
 
 * Factor `axle.game.moveFromRandomState` in terms of a random walk on a graph.
   * See "TODO scale mass down"
@@ -146,17 +175,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Think about Information Theory's "Omega" vis-a-vis Sequential Monte Carlo
 * Improve `axle.stats.rationalProbabilityDist` as probabilities become smaller
 
-* Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
-  * "Chance" should be its own player
-  * Each N bits consumed during `Riffle()` is its own move
-  * Chance moves consume `UnittedQuantity[Information, N]`
-* GuessRiffleSpec: use `moveFromRandomState`
-* `Monad[ProbabilityModel]` -- factor `flatMap` in terms of `product`
-* GuessRiffle.md
-  * Walk through game
-  * Plot distribution of sum(entropy) for both strategies
-  * Plot entropy by turn # for each strategy
-  * Plot simulated score distribution for each strategy
 * SimpsonsParadox.md
 * "You split, I choose" as game
 * Gerrymandering sensitivity
@@ -167,7 +185,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Max bet for Poker
 * syntax for `Game` typeclass
 
-## 0.9.x (Spring 2022)
+## 0.8.x
 
 * QuantumCircuit.md
 * QBit2.factor
@@ -177,7 +195,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Typeclass for "negate" (etc), Binary, CBit
 * Typeclass for unindex
 
-## 0.10.x (Autumn 2022)
+## 0.9.x
 
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
 * Make the `Int` abstract in `KMeans{,Visualization}`, `LinearAlgebra`, etc
