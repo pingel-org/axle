@@ -63,28 +63,20 @@ class AlarmBurglaryEarthquakeBayesianNetwork(
   pMaryAlarm: Rational = Rational(7, 10)
 ) {
 
-  val bools = Vector(true, false)
-
-  val one = Rational(1)
-
-  val B = Variable[Boolean]("Burglary")
-  val E = Variable[Boolean]("Earthquake")
-  val A = Variable[Boolean]("Alarm")
-  val J = Variable[Boolean]("John Calls")
-  val M = Variable[Boolean]("Mary Calls")
+  import AlarmBurglaryEarthquakeBayesianNetwork._
 
   val bFactor =
-    Factor(Vector(B -> bools), Map(
+    Factor(Vector(B -> booleans), Map(
       Vector(B is true) -> pBurgle,
       Vector(B is false) -> (1 - pBurgle)))
 
   val eFactor =
-    Factor(Vector(E -> bools), Map(
+    Factor(Vector(E -> booleans), Map(
       Vector(E is true) -> pEarthquake,
       Vector(E is false) -> (1 - pEarthquake)))
 
   val aFactor =
-    Factor(Vector(B -> bools, E -> bools, A -> bools), Map(
+    Factor(Vector(B -> booleans, E -> booleans, A -> booleans), Map(
       Vector(B is false, E is false, A is true) -> pAlarm,
       Vector(B is false, E is false, A is false) -> (1 - pAlarm),
       Vector(B is true, E is false, A is true) -> pAlarmBurglary,
@@ -95,14 +87,14 @@ class AlarmBurglaryEarthquakeBayesianNetwork(
       Vector(B is true, E is true, A is false) -> (1 - pAlarmBurglaryEarthquake)))
 
   val jFactor =
-    Factor(Vector(A -> bools, J -> bools), Map(
+    Factor(Vector(A -> booleans, J -> booleans), Map(
       Vector(A is true, J is true) -> pJohnAlarm,
       Vector(A is true, J is false) -> (1 - pJohnAlarm),
       Vector(A is false, J is true) -> pJohn,
       Vector(A is false, J is false) -> (1 - pJohn)))
 
   val mFactor =
-    Factor(Vector(A -> bools, M -> bools), Map(
+    Factor(Vector(A -> booleans, M -> booleans), Map(
       Vector(A is true, M is true) -> pMaryAlarm,
       Vector(A is true, M is false) -> (1 - pMaryAlarm),
       Vector(A is false, M is true) -> pMary,
@@ -116,5 +108,46 @@ class AlarmBurglaryEarthquakeBayesianNetwork(
         A -> aFactor,
         J -> jFactor,
         M -> mFactor))
+
+}
+
+object AlarmBurglaryEarthquakeBayesianNetwork {
+
+  val booleans = Vector(true, false)
+
+  val domain: Vector[(Boolean, Boolean, Boolean, Boolean, Boolean)] = 
+    for {
+      b <- booleans
+      e <- booleans
+      a <- booleans
+      j <- booleans
+      m <- booleans
+    } yield (b, e, a, j, m)
+
+  val one = Rational(1)
+
+  val B = Variable[Boolean]("Burglary")
+  val E = Variable[Boolean]("Earthquake")
+  val A = Variable[Boolean]("Alarm")
+  val J = Variable[Boolean]("John Calls")
+  val M = Variable[Boolean]("Mary Calls")
+
+  def select(
+    v: Variable[Boolean],
+    c: (Boolean, Boolean, Boolean, Boolean, Boolean)): Boolean =
+    v match {
+      case B => c._1
+      case E => c._2
+      case A => c._3
+      case J => c._4
+      case M => c._5
+      case _ => c._1 // TODO avoid default
+    }
+
+  def combine1(vs: Vector[Boolean]):  (Boolean, Boolean, Boolean, Boolean, Boolean) =
+    (vs(0), vs(1), vs(2), vs(3), vs(4))
+
+  def combine2(m: Map[Variable[Boolean], Boolean]): (Boolean, Boolean, Boolean, Boolean, Boolean) = 
+    (m(B), m(E), m(A), m(J), m(M))
 
 }

@@ -15,6 +15,7 @@ class AlarmBurglaryEarthquakeSpec extends FunSuite with Matchers {
 
   val abe = new AlarmBurglaryEarthquakeBayesianNetwork()
 
+  import AlarmBurglaryEarthquakeBayesianNetwork._
   import abe._
 
   test("bayesian networks produces a Joint Probability Table, which is '1' when all variables are removed") {

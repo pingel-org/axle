@@ -50,25 +50,31 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
 * Kolmogorov for Alarm-Burglary-Earthquake
-* fix probabilities in MonotypeBN.filter, Bayes for Alarm-Burglary-Earthquake
-* Reconcile combine1 and combine2
 
-* Should be able to take joint probability table for tuple5[Boolean]
-*   and factor out each variable until
-*   the Alarm-Burglary-Earthquake 5-node network
-* consider usefulness of `Factor` in terms of `Region`
+* fix probabilities in MonotypeBayesanNetwork.filter, Bayes for Alarm-Burglary-Earthquake
+
+* Reconcile combine1 and combine2 (maybe add to typeclass or trait)
+
+* Joint probability table for tuple5[Boolean]
+  * factor out each variable until
+  * the Alarm-Burglary-Earthquake 5-node network
+  * Basically the inverse of factor multiplication
+
+* MonotypeBayesanNetwork.unit (see the two nulls)
+* MonotypeBayesanNetwork.map
+* MonotypeBayesanNetwork.flatMap
+* Monad tests for Alarm-Burglary-Earthquake as MonotypeBayesanNetwork
+
 * MonotypeBayesanNetwork.filter -- could be viewed as "belief updating" (vs "conditioning")
   * if it took a ProbabilityModel itself
   * Is there a way of seeing this as flatMap, though?
 * `observe` could return a lower-entropy probability model
   * Perhaps in exchange for a given amount of energy
   * Or ask for a 0-entropy model and be told how expensive that was
+
 * More Measure Theory
 
-* MonotypeBN.unit
-* MonotypeBN.map
-* MonotypeBN.flatMap
-* Monad tests for Alarm-Burglary-Earthquake as MonotypeBN
+* consider usefulness of `Factor` in terms of `Region`
 
 * Replace `axle.game.moveFromRandomState.mapToProb`
 * Wrap `axle.IO.getLine` in `F[_]`

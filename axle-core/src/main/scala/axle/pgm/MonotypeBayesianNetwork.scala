@@ -140,11 +140,11 @@ object MonotypeBayesanNetwork {
       def unit[A: Eq, V: Ring](
         a: A): MonotypeBayesanNetwork[A,I,V,DG] = {
 
-          val model: MonotypeBayesanNetwork[A,I,V,DG] = ???
+          val model: MonotypeBayesanNetwork[A,I,V,DG] = null // TODO
           import model.bayesianNetwork.dg
           import model.bayesianNetwork.convertableFromV
           import model.bayesianNetwork.orderV
-          implicit val fieldV: Field[V] = ???
+          implicit val fieldV: Field[V] = null // TODO
 
           val unitBayesianNetwork =
             BayesianNetwork[I, V, DG[BayesianNetworkNode[I, V], Edge]](

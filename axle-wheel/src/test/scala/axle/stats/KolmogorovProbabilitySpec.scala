@@ -8,6 +8,7 @@ import spire.math.Rational
 import axle.eqSymbol
 import axle.algebra.Region
 import axle.algebra.RegionEq
+import axle.pgm.MonotypeBayesanNetwork
 
 class FairCoinIsKolmogorov
   extends KolmogorovProbabilityProperties[Unit, ConditionalProbabilityTable, Symbol, Rational](
@@ -54,3 +55,39 @@ class TwoPlatonicSolidDieAddedKolmogorov
     { case (an, bn) => Arbitrary(Gen.oneOf((1 to an*bn).map(RegionEq(_)))) }, // TODO random expression
     { case (an, bn) => Region.eqRegionIterable(1 to an*bn) }
 )
+
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.example.AlarmBurglaryEarthquakeBayesianNetwork
+import cats.implicits._
+
+class AlarmBurglaryEarthQuakeBayesianNetworkIsKolmogorov
+  extends KolmogorovProbabilityProperties[
+    Rational,
+    ({ type L[C, W] = MonotypeBayesanNetwork[C, Boolean, W, DirectedSparseGraph] })#L,
+    (Boolean, Boolean, Boolean, Boolean, Boolean),
+    Rational](
+    "Alarm-Burglary-Earthquake Bayesian Network",
+    // Arbitrary[T] -- arbitrary seed
+    // TODO non-1 numerators
+    Arbitrary(for {
+      denominator <- Gen.oneOf(1 to 1000)
+      numerator <- Gen.oneOf(1 to denominator)
+    } yield Rational(numerator.toLong, denominator.toLong)),
+    // T => M[E, V]
+    { case seed => MonotypeBayesanNetwork(
+        new AlarmBurglaryEarthquakeBayesianNetwork(pEarthquake = seed).bn,
+        AlarmBurglaryEarthquakeBayesianNetwork.select,
+        AlarmBurglaryEarthquakeBayesianNetwork.combine1,
+        AlarmBurglaryEarthquakeBayesianNetwork.combine2)
+    },
+    // T => Arbitrary[Region[E]]
+    // TODO random expression
+    { case seed => Arbitrary(Gen.oneOf(AlarmBurglaryEarthquakeBayesianNetwork.domain.map(RegionEq(_)))) },
+    // T => Eq[Region[E]]
+    { case seed => Region.eqRegionIterable(AlarmBurglaryEarthquakeBayesianNetwork.domain) }
+  )(
+    axle.pgm.MonotypeBayesanNetwork.probabilityModelForMonotypeBayesanNetwork[Boolean, DirectedSparseGraph],
+    cats.kernel.Eq[(Boolean, Boolean, Boolean, Boolean, Boolean)],
+    spire.algebra.Field[Rational],
+    cats.kernel.Order[Rational]
+  )
