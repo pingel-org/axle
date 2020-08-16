@@ -49,7 +49,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
-* Kolmogorov for Alarm-Burglary-Earthquake
+* sbt "project axle-wheel" "testOnly axle.stats.AlarmBurglaryEarthQuakeBayesianNetworkIsKolmogorov"
+* ^ fialing Unit Measure with 557/834 and 113/439
 
 * fix probabilities in MonotypeBayesanNetwork.filter, Bayes for Alarm-Burglary-Earthquake
 
