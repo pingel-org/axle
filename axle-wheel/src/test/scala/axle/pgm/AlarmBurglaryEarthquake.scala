@@ -7,65 +7,15 @@ import cats.effect.IO
 import spire.math._
 
 import axle.stats._
-import axle.jung.directedGraphJung
+import axle.example.AlarmBurglaryEarthquakeBayesianNetwork
 
 class AlarmBurglaryEarthquakeSpec extends FunSuite with Matchers {
 
   implicit val showRat = cats.Show.fromToString[Rational]
 
-  val bools = Vector(true, false)
+  val abe = new AlarmBurglaryEarthquakeBayesianNetwork()
 
-  val B = Variable[Boolean]("Burglary")
-  val E = Variable[Boolean]("Earthquake")
-  val A = Variable[Boolean]("Alarm")
-  val J = Variable[Boolean]("John Calls")
-  val M = Variable[Boolean]("Mary Calls")
-
-  val bFactor =
-    Factor(Vector(B -> bools), Map(
-      Vector(B is true) -> Rational(1, 1000),
-      Vector(B is false) -> Rational(999, 1000)))
-
-  val eFactor =
-    Factor(Vector(E -> bools), Map(
-      Vector(E is true) -> Rational(1, 500),
-      Vector(E is false) -> Rational(499, 500)))
-
-  val aFactor =
-    Factor(Vector(B -> bools, E -> bools, A -> bools), Map(
-      Vector(B is false, E is false, A is true) -> Rational(1, 1000),
-      Vector(B is false, E is false, A is false) -> Rational(999, 1000),
-      Vector(B is true, E is false, A is true) -> Rational(940, 1000),
-      Vector(B is true, E is false, A is false) -> Rational(60, 1000),
-      Vector(B is false, E is true, A is true) -> Rational(290, 1000),
-      Vector(B is false, E is true, A is false) -> Rational(710, 1000),
-      Vector(B is true, E is true, A is true) -> Rational(950, 1000),
-      Vector(B is true, E is true, A is false) -> Rational(50, 1000)))
-
-  val jFactor =
-    Factor(Vector(A -> bools, J -> bools), Map(
-      Vector(A is true, J is true) -> Rational(9, 10),
-      Vector(A is true, J is false) -> Rational(1, 10),
-      Vector(A is false, J is true) -> Rational(5, 100),
-      Vector(A is false, J is false) -> Rational(95, 100)))
-
-  val mFactor =
-    Factor(Vector(A -> bools, M -> bools), Map(
-      Vector(A is true, M is true) -> Rational(7, 10),
-      Vector(A is true, M is false) -> Rational(3, 10),
-      Vector(A is false, M is true) -> Rational(1, 100),
-      Vector(A is false, M is false) -> Rational(99, 100)))
-
-  // edges: ba, ea, aj, am
-  // A sounds (due to Burglary or Earthquake) and John or Mary Call
-  val bn: BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]] =
-    BayesianNetwork.withGraphK2[Boolean, Rational, DirectedSparseGraph](
-      Map(
-        B -> bFactor,
-        E -> eFactor,
-        A -> aFactor,
-        J -> jFactor,
-        M -> mFactor))
+  import abe._
 
   test("bayesian networks produces a Joint Probability Table, which is '1' when all variables are removed") {
 
