@@ -47,10 +47,40 @@ class TwoPlatonicSolidDieAddedBayes
     { case (an, bn) =>
        ProbabilityModel[ConditionalProbabilityTable].flatMap(die(an)){ a =>
          ProbabilityModel[ConditionalProbabilityTable].map(die(bn)){ b =>
-           a + b
-         }
-       }
+           a + b           
+       }}
     },
     { case (an, bn) => Arbitrary(Gen.oneOf((1 to an*bn).map(RegionEq(_)))) }, // TODO random expression
     { case (an, bn) => Region.eqRegionIterable(1 to an*bn) }
+)
+
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.example.AlarmBurglaryEarthquakeBayesianNetwork
+import axle.pgm.MonotypeBayesanNetwork
+import cats.implicits._
+
+class AlarmBurglaryEarthauakeBayesianNetworkIsBayes
+  extends BayesTheoremProperty[
+    Rational,
+    ({ type L[C, W] = MonotypeBayesanNetwork[C, Boolean, W, DirectedSparseGraph] })#L,
+    (Boolean, Boolean, Boolean, Boolean, Boolean),
+    Rational](
+    "Alarm-Burglary-Earthquake Bayesian Network",
+    Arbitrary(for {
+      denominator <- Gen.oneOf(1 to 1000)
+      numerator <- Gen.oneOf(1 to denominator)
+    } yield Rational(numerator.toLong, denominator.toLong)),
+    { case seed => MonotypeBayesanNetwork(
+        new AlarmBurglaryEarthquakeBayesianNetwork(pEarthquake = seed).bn,
+        AlarmBurglaryEarthquakeBayesianNetwork.select,
+        AlarmBurglaryEarthquakeBayesianNetwork.combine1,
+        AlarmBurglaryEarthquakeBayesianNetwork.combine2)
+    },
+    { case seed => Arbitrary(Gen.oneOf(AlarmBurglaryEarthquakeBayesianNetwork.domain.map(RegionEq(_)))) },
+    { case seed => Region.eqRegionIterable(AlarmBurglaryEarthquakeBayesianNetwork.domain) }
+)(
+    axle.pgm.MonotypeBayesanNetwork.probabilityModelForMonotypeBayesanNetwork[Boolean, DirectedSparseGraph],
+    cats.kernel.Eq[(Boolean, Boolean, Boolean, Boolean, Boolean)],
+    spire.algebra.Field[Rational],
+    cats.kernel.Order[Rational]
 )

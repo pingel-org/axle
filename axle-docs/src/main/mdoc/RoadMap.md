@@ -52,7 +52,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * sbt "project axle-wheel" "testOnly axle.stats.AlarmBurglaryEarthQuakeBayesianNetworkIsKolmogorov"
 * ^ fialing Unit Measure with 557/834 and 113/439
 
-* fix probabilities in MonotypeBayesanNetwork.filter, Bayes for Alarm-Burglary-Earthquake
+* fix probabilities in MonotypeBayesanNetwork.filter
+  * sbt "project axle-wheel" "testOnly axle.stats.AlarmBurglaryEarthauakeBayesianNetworkIsBayes"
 
 * Reconcile combine1 and combine2 (maybe add to typeclass or trait)
 
