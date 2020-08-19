@@ -42,19 +42,30 @@ object Factor {
       val field = Field[N]
 
       def times(x: Factor[T, N], y: Factor[T, N]): Factor[T, N] = {
-        val newVars = (x.variables.toSet union y.variables.toSet).toVector
-        val newVariablesWithValues = newVars.map(variable => (variable, x.valuesOfVariable(variable)))
-        Factor(
-          newVariablesWithValues,
-          Factor.cases(
-            newVars.map({ variable =>
-              (variable, x.valuesOfVariable(variable)) // TODO assert the x is same as y in this regard
-            })).map(kase => (kase, x(kase) * y(kase))).toMap)
+
+        val newVars: Vector[Variable[T]] = (x.variables.toSet union y.variables.toSet).toVector
+
+        val newVariablesWithValues: Vector[(Variable[T], Vector[T])] =
+          newVars.map(variable =>
+            (variable, x.valuesOfVariable.get(variable).getOrElse(y.valuesOfVariable(variable)))
+          )
+
+        val kases: Iterable[Vector[RegionEq[T]]] =
+          Factor.cases(newVariablesWithValues)
+
+        val newProbabilities: Map[Vector[RegionEq[T]], N] = kases.map(kase => {
+          val xFilteredKase = kase.zip(newVars).filter({ case (_, v) => x.variables.contains(v)}).map(_._1)
+          val yFilteredKase = kase.zip(newVars).filter({ case (_, v) => y.variables.contains(v)}).map(_._1)
+          kase -> (x(xFilteredKase) * y(yFilteredKase))
+        }).toMap
+
+        Factor(newVariablesWithValues, newProbabilities)
       }
+    
       def one: Factor[T, N] = Factor(Vector.empty, Map.empty.withDefaultValue(field.one))
     }
 
-  def cases[T: Eq, N: Field](varSeq: Vector[(Variable[T], IndexedSeq[T])]): Iterable[Vector[RegionEq[T]]] =
+  def cases[T: Eq](varSeq: Vector[(Variable[T], IndexedSeq[T])]): Iterable[Vector[RegionEq[T]]] =
     IndexedCrossProduct(varSeq.map(_._2)) map { kase =>
       varSeq.map(_._1).zip(kase) map {
         case (variable, value) => RegionEq(value)
@@ -124,7 +135,7 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
   def projectToOnly(remainingVars: Vector[Variable[T]]): Factor[T, N] =
     Factor(
       remainingVars.map(variable => (variable, valuesOfVariable(variable))),
-      Factor.cases[T, N](remainingVars.map({ variable => (variable, valuesOfVariable(variable)) })).toVector
+      Factor.cases[T](remainingVars.map({ variable => (variable, valuesOfVariable(variable)) })).toVector
         .map(kase => (projectToVars(kase, remainingVars.toSet), this(kase)))
         .groupBy(_._1)
         .map({ case (k, vs) => (k.toVector.map(_._2), spire.optional.unicode.Σ(vs.map(_._2))) })
