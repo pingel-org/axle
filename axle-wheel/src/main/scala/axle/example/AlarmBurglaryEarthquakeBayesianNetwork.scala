@@ -141,7 +141,7 @@ object AlarmBurglaryEarthquakeBayesianNetwork {
       case A => c._3
       case J => c._4
       case M => c._5
-      case _ => c._1 // TODO avoid default
+      case _ => ??? // TODO avoid default
     }
 
   def combine1(vs: Vector[Boolean]):  (Boolean, Boolean, Boolean, Boolean, Boolean) =
