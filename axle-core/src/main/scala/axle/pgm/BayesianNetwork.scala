@@ -79,7 +79,9 @@ case class BayesianNetwork[T, V, DG](
   def probabilityOf(cs: Seq[(Variable[T], RegionEq[T])]): V =
     Π[V, Vector](cs.map({ case (variable, _) =>
       val factor = factorFor(variable)
-      val row = cs.filter(vr => factor.variables.contains(vr._1)).map(_._2)
+      val row = factor.variables.map(v =>
+        cs.find(_._1 === v).get // TODO this is tortured
+      ).map(_._2)
       factor(row)
     }).toVector)
 
