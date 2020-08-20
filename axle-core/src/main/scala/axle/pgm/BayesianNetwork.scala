@@ -67,12 +67,10 @@ case class BayesianNetwork[T, V, DG](
 
   def jointProbabilityTable: Factor[T, V] = {
     val newVars = randomVariables
-    Factor(
-      newVars.map({ variable => (variable, variableFactorMap(variable).valuesOfVariable(variable)) }),
-      Factor
-        .cases(newVars.map({ variable => (variable, variableFactorMap(variable).valuesOfVariable(variable)) }))
-        .map({ regions => (regions, probabilityOf(newVars.zip(regions))) })
-        .toMap)
+    val newVarsWithValues = newVars.map({ variable => (variable, variableFactorMap(variable).valuesOfVariable(variable)) })
+    val kases = Factor.cases( newVarsWithValues )
+    val kase2prob = kases.map({regions => (regions, probabilityOf(newVars.zip(regions)))}).toMap
+    Factor(newVarsWithValues, kase2prob)
   }
 
   def factorFor(variable: Variable[T]): Factor[T, V] =
@@ -81,7 +79,7 @@ case class BayesianNetwork[T, V, DG](
   def probabilityOf(cs: Seq[(Variable[T], RegionEq[T])]): V =
     Π[V, Vector](cs.map({ case (variable, _) =>
       val factor = factorFor(variable)
-      val row = cs.filter(vr => factor.mentions(vr._1)).map(_._2)
+      val row = cs.filter(vr => factor.variables.contains(vr._1)).map(_._2)
       factor(row)
     }).toVector)
 
@@ -122,7 +120,7 @@ case class BayesianNetwork[T, V, DG](
     Q: Set[Variable[T]],
     π: List[Variable[T]]): Factor[T, V] =
     Π[Factor[T, V], Set](π.foldLeft(randomVariables.map(factorFor).toSet)((S, rv) => {
-      val allMentions: Set[Factor[T, V]] = S.filter(_.mentions(rv))
+      val allMentions: Set[Factor[T, V]] = S.filter(_.variables.contains(rv))
       val mentionsWithout = Π[Factor[T, V], Set](allMentions).sumOut(rv)
       (S -- allMentions) + mentionsWithout
     }))
@@ -147,14 +145,14 @@ case class BayesianNetwork[T, V, DG](
           factorFor(rv).projectRowsConsistentWith(Some(List(e)))
         }.toSet
       ) { (S, rv) => {
-            val allMentions = S.filter(_.mentions(rv))
+            val allMentions = S.filter(_.variables.contains(rv))
             (S -- allMentions) + Π[Factor[T, V], Set](allMentions).sumOut(rv)
         }
       }
     )
 
   def interactsWith(v1: Variable[T], v2: Variable[T]): Boolean =
-    graph.vertices.map(_.cpt).exists(f => f.mentions(v1) && f.mentions(v2))
+    graph.vertices.map(_.cpt).exists(f => f.variables.contains(v1) && f.variables.contains(v2))
 
   /**
    * interactionGraph
@@ -339,7 +337,7 @@ case class BayesianNetwork[T, V, DG](
     case fi :: fj :: rest => {
       implicit val mmFactorTN = Factor.factorMultMonoid[T, V]
       val fiSummedOut: Factor[T, V] =
-        fi.sumOut(fi.variables.filter(v => !Q.contains(v) && !S.exists(_.mentions(v))).toSet)
+        fi.sumOut(fi.variables.filter(v => !Q.contains(v) && !S.exists(_.variables.contains(v))).toSet)
       _factorElimination1(Q, rest ++ List(mmFactorTN.times(fj, fiSummedOut)))
     }
 

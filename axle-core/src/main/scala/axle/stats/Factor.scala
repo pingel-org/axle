@@ -1,7 +1,7 @@
 package axle.stats
 
 import cats.Show
-import cats.implicits.catsKernelStdOrderForString
+//import cats.implicits.catsKernelStdOrderForString
 import cats.implicits.catsSyntaxEq
 //import cats.implicits._
 import cats.kernel.Eq
@@ -203,9 +203,6 @@ case class Factor[T: Eq, N: Field: Order: ConvertableFrom](
         (regions, if (isSupersetOf(e.map(_._1).zip(regions), e)) this(regions) else field.zero)
       }.toMap)
   }
-
-  def mentions(variable: Variable[T]): Boolean =
-    variables.exists(v => variable.name === v.name)
 
   def isSupersetOf(
     left: Seq[(Variable[T], RegionEq[T])],
