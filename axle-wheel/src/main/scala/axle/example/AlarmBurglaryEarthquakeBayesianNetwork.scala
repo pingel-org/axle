@@ -109,6 +109,13 @@ class AlarmBurglaryEarthquakeBayesianNetwork(
         J -> jFactor,
         M -> mFactor))
 
+  import axle.pgm.MonotypeBayesanNetwork
+
+  lazy val monotype = MonotypeBayesanNetwork(bn,
+    AlarmBurglaryEarthquakeBayesianNetwork.select,
+    AlarmBurglaryEarthquakeBayesianNetwork.combine1,
+    AlarmBurglaryEarthquakeBayesianNetwork.combine2)
+
 }
 
 object AlarmBurglaryEarthquakeBayesianNetwork {
