@@ -69,7 +69,7 @@ import axle.example.AlarmBurglaryEarthquakeBayesianNetwork
 import axle.pgm.MonotypeBayesanNetwork
 import cats.implicits._
 
-class AlarmBurglaryEarthauakeBayesianNetworkIsBayes
+class AlarmBurglaryEarthquakeBayesianNetworkIsBayes
   extends BayesTheoremProperty[
     Rational,
     ({ type L[C, W] = MonotypeBayesanNetwork[C, Boolean, W, DirectedSparseGraph] })#L,
