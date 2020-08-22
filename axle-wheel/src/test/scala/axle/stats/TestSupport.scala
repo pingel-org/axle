@@ -26,6 +26,7 @@ object TestSupport {
 
   def genRegion[T: Eq](xs: IndexedSeq[T]): Gen[Region[T]] =
     Gen.oneOf(
+      genRegionLeaf(xs),
       genRegionLeaf(xs).map(RegionNegate(_)),
       genRegionLeaf(xs).flatMap(l => genRegionLeaf(xs).map(r => RegionAnd(l, r))),
       genRegionLeaf(xs).flatMap(l => genRegionLeaf(xs).map(r => RegionOr(l, r)))
