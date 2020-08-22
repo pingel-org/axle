@@ -3,8 +3,7 @@ package axle.stats
 import org.scalacheck.Gen
 import cats.kernel.Eq
 import spire.math.Rational
-import axle.algebra.Region
-import axle.algebra.RegionEq
+import axle.algebra._
 
 object TestSupport {
 
@@ -14,9 +13,22 @@ object TestSupport {
       numerator <- Gen.oneOf(0 to denominator)
     } yield Rational(numerator.toLong, denominator.toLong)
 
-  def genRegion[T: Eq](xs: IndexedSeq[T]): Gen[Region[T]] = 
+  def genRegionLeaf[T: Eq](xs: IndexedSeq[T]): Gen[Region[T]] =
     Gen.oneOf(
-      xs.map(RegionEq(_))
+      Gen.oneOf(List(RegionEmpty[T]())),
+      Gen.oneOf(List(RegionAll[T]())),
+      Gen.oneOf(xs).map(RegionEq(_))
+      // TODO RegionSet
+      // TODO RegionIf
+    )
+
+  // TODO: With Order[T], include RegionGTE and RegionLTE
+
+  def genRegion[T: Eq](xs: IndexedSeq[T]): Gen[Region[T]] =
+    Gen.oneOf(
+      genRegionLeaf(xs).map(RegionNegate(_)),
+      genRegionLeaf(xs).flatMap(l => genRegionLeaf(xs).map(r => RegionAnd(l, r))),
+      genRegionLeaf(xs).flatMap(l => genRegionLeaf(xs).map(r => RegionOr(l, r)))
     )
 
 }
