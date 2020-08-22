@@ -94,7 +94,7 @@ object MonotypeBayesanNetwork {
         .filter({ case (a, p) => predicate.apply(a) })
         .toVector
         .map(_._2)
-        .reduce(Field[V].plus)
+        .foldLeft(Field[V].zero)(Field[V].plus)
 
       def filter[A, V: Field](
         model: MonotypeBayesanNetwork[A,I,V,DG])(
