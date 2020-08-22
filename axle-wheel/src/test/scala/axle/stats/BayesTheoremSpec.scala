@@ -9,6 +9,16 @@ import axle.eqSymbol
 import axle.algebra.Region
 import axle.algebra.RegionEq
 
+object TestSupport {
+
+  val arbitraryPortion: Arbitrary[Rational] =
+    Arbitrary(for {
+      denominator <- Gen.oneOf(1 to 1000)
+      numerator <- Gen.oneOf(0 to denominator)
+    } yield Rational(numerator.toLong, denominator.toLong))  
+
+}
+
 class FairCoinIsBayes
   extends BayesTheoremProperty[Unit, ConditionalProbabilityTable, Symbol, Rational](
     "Fair coin",
@@ -66,16 +76,14 @@ class AlarmBurglaryEarthauakeBayesianNetworkIsBayes
     (Boolean, Boolean, Boolean, Boolean, Boolean),
     Rational](
     "Alarm-Burglary-Earthquake Bayesian Network",
-    Arbitrary(for {
-      denominator <- Gen.oneOf(1 to 1000)
-      numerator <- Gen.oneOf(1 to denominator)
-    } yield Rational(numerator.toLong, denominator.toLong)),
+    TestSupport.arbitraryPortion,
     { case seed => MonotypeBayesanNetwork(
         new AlarmBurglaryEarthquakeBayesianNetwork(pEarthquake = seed).bn,
         AlarmBurglaryEarthquakeBayesianNetwork.select,
         AlarmBurglaryEarthquakeBayesianNetwork.combine1,
         AlarmBurglaryEarthquakeBayesianNetwork.combine2)
     },
+    // TODO random expression
     { case seed => Arbitrary(Gen.oneOf(AlarmBurglaryEarthquakeBayesianNetwork.domain.map(RegionEq(_)))) },
     { case seed => Region.eqRegionIterable(AlarmBurglaryEarthquakeBayesianNetwork.domain) }
 )(
