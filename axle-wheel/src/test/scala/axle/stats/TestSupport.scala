@@ -1,6 +1,7 @@
 package axle.stats
 
 import org.scalacheck.Gen
+import cats.kernel.Eq
 import spire.math.Rational
 import axle.algebra.Region
 import axle.algebra.RegionEq
@@ -13,7 +14,9 @@ object TestSupport {
       numerator <- Gen.oneOf(0 to denominator)
     } yield Rational(numerator.toLong, denominator.toLong)
 
-  def genRegion[T: cats.kernel.Eq](xs: IndexedSeq[T]): Gen[Region[T]] = 
-    Gen.oneOf(xs.map(RegionEq(_)))
+  def genRegion[T: Eq](xs: IndexedSeq[T]): Gen[Region[T]] = 
+    Gen.oneOf(
+      xs.map(RegionEq(_))
+    )
 
 }

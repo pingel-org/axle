@@ -8,12 +8,14 @@ import spire.math.Rational
 import axle.eqSymbol
 import axle.algebra.Region
 
+import axle.stats.TestSupport._
+
 class FairCoinIsBayes
   extends BayesTheoremProperty[Unit, ConditionalProbabilityTable, Symbol, Rational](
     "Fair coin",
     Arbitrary(Gen.oneOf(List(()))),
     u => coin(),
-    m => Arbitrary(TestSupport.genRegion(coinSides)),
+    m => Arbitrary(genRegion(coinSides)),
     m => Region.eqRegionIterable(coinSides))
 
 import spire.math.Rational
@@ -22,7 +24,7 @@ class BiasedCoinIsBayes
     "Arbitrarily biased coins",
     Arbitrary(Gen.choose(0d,1d).map(Rational.apply)),
     coin,
-    bias => Arbitrary(TestSupport.genRegion(coinSides)),
+    bias => Arbitrary(genRegion(coinSides)),
     bias => Region.eqRegionIterable(coinSides))
 
 import spire.implicits.IntAlgebra
@@ -33,7 +35,7 @@ class D6IsBayes
     "dice",
     Arbitrary(Gen.oneOf(List(4,6,8,10,12,20))),
     die,
-    n => Arbitrary(TestSupport.genRegion(1 to n)),
+    n => Arbitrary(genRegion(1 to n)),
     n => Region.eqRegionIterable(1 to n))
 
 class TwoPlatonicSolidDieAddedBayes
@@ -49,7 +51,7 @@ class TwoPlatonicSolidDieAddedBayes
            a + b           
        }}
     },
-    { case (an, bn) => Arbitrary(TestSupport.genRegion(1 to an + bn)) },
+    { case (an, bn) => Arbitrary(genRegion(1 to an + bn)) },
     { case (an, bn) => Region.eqRegionIterable(1 to an + bn) }
 )
 
@@ -65,9 +67,9 @@ class AlarmBurglaryEarthquakeBayesianNetworkIsBayes
     (Boolean, Boolean, Boolean, Boolean, Boolean),
     Rational](
     "Alarm-Burglary-Earthquake Bayesian Network",
-    Arbitrary(TestSupport.genPortion),
+    Arbitrary(genPortion),
     { case seed => new AlarmBurglaryEarthquakeBayesianNetwork(pEarthquake = seed).monotype },
-    { case seed => Arbitrary(TestSupport.genRegion(AlarmBurglaryEarthquakeBayesianNetwork.domain)) },
+    { case seed => Arbitrary(genRegion(AlarmBurglaryEarthquakeBayesianNetwork.domain)) },
     { case seed => Region.eqRegionIterable(AlarmBurglaryEarthquakeBayesianNetwork.domain) }
 )(
     axle.pgm.MonotypeBayesanNetwork.probabilityModelForMonotypeBayesanNetwork[Boolean, DirectedSparseGraph],

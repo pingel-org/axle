@@ -7,15 +7,16 @@ import spire.math.Rational
 
 import axle.eqSymbol
 import axle.algebra.Region
-import axle.algebra.RegionEq
 import axle.pgm.MonotypeBayesanNetwork
+
+import axle.stats.TestSupport._
 
 class FairCoinIsKolmogorov
   extends KolmogorovProbabilityProperties[Unit, ConditionalProbabilityTable, Symbol, Rational](
     "Fair coin",
     Arbitrary(Gen.oneOf(List(()))),
     u => coin(),
-    m => Arbitrary(Gen.oneOf(coinSides.map(RegionEq(_)))),
+    m => Arbitrary(genRegion(coinSides)),
     m => Region.eqRegionIterable(coinSides))
 
 import spire.math.Rational
@@ -24,7 +25,7 @@ class BiasedCoinIsKolmogorov
     "Arbitrarily biased coins",
     Arbitrary(Gen.choose(0d,1d).map(Rational.apply)),
     coin,
-    bias => Arbitrary(Gen.oneOf(coinSides.map(RegionEq(_)))),
+    bias => Arbitrary(genRegion(coinSides)),
     bias => Region.eqRegionIterable(coinSides))
 
 import spire.implicits.IntAlgebra
@@ -35,7 +36,7 @@ class D6IsKolmogorov
     "dice",
     Arbitrary(Gen.oneOf(List(4,6,8,10,12,20))),
     die,
-    n => Arbitrary(Gen.oneOf((1 to n).map(RegionEq(_)))), // TODO random expression
+    n => Arbitrary(genRegion(1 to n)),
     n => Region.eqRegionIterable(1 to n))
 
 class TwoPlatonicSolidDieAddedKolmogorov
@@ -52,8 +53,8 @@ class TwoPlatonicSolidDieAddedKolmogorov
          }
        }
     },
-    { case (an, bn) => Arbitrary(Gen.oneOf((1 to an*bn).map(RegionEq(_)))) }, // TODO random expression
-    { case (an, bn) => Region.eqRegionIterable(1 to an*bn) }
+    { case (an, bn) => Arbitrary(genRegion(1 to an + bn)) },
+    { case (an, bn) => Region.eqRegionIterable(1 to an + bn) }
 )
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
@@ -74,16 +75,8 @@ class AlarmBurglaryEarthQuakeBayesianNetworkIsKolmogorov
       numerator <- Gen.oneOf(1 to denominator)
     } yield Rational(numerator.toLong, denominator.toLong)),
     // T => M[E, V]
-    { case seed => MonotypeBayesanNetwork(
-        new AlarmBurglaryEarthquakeBayesianNetwork(pEarthquake = seed).bn,
-        AlarmBurglaryEarthquakeBayesianNetwork.select,
-        AlarmBurglaryEarthquakeBayesianNetwork.combine1,
-        AlarmBurglaryEarthquakeBayesianNetwork.combine2)
-    },
-    // T => Arbitrary[Region[E]]
-    // TODO random expression
-    { case seed => Arbitrary(Gen.oneOf(AlarmBurglaryEarthquakeBayesianNetwork.domain.map(RegionEq(_)))) },
-    // T => Eq[Region[E]]
+    { case seed => new AlarmBurglaryEarthquakeBayesianNetwork(pEarthquake = seed).monotype },
+    { case seed => Arbitrary(genRegion(AlarmBurglaryEarthquakeBayesianNetwork.domain)) },
     { case seed => Region.eqRegionIterable(AlarmBurglaryEarthquakeBayesianNetwork.domain) }
   )(
     axle.pgm.MonotypeBayesanNetwork.probabilityModelForMonotypeBayesanNetwork[Boolean, DirectedSparseGraph],
