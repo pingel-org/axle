@@ -49,8 +49,8 @@ class TwoPlatonicSolidDieAddedBayes
            a + b           
        }}
     },
-    { case (an, bn) => Arbitrary(TestSupport.genRegion(1 to an*bn)) },
-    { case (an, bn) => Region.eqRegionIterable(1 to an*bn) }
+    { case (an, bn) => Arbitrary(TestSupport.genRegion(1 to an + bn)) },
+    { case (an, bn) => Region.eqRegionIterable(1 to an + bn) }
 )
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
