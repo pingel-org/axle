@@ -28,7 +28,7 @@ install:
 sudo: false
 
 jdk:
-  - oraclejdk11
+  - openjdk11
 
 services:
   - xvfb
