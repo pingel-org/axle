@@ -17,7 +17,7 @@ abstract class BayesTheoremProperty[T, M[_, _]: ProbabilityModel, E: Eq, V: Fiel
     eqREFn: T => Eq[Region[E]])
     extends Properties("Probability Model (Bayes Theorem)") {
   
-      property(s"$name Bayes Theorem: P(A|B) = P(B|A) * P(A) / P(B)") =
+      property(s"$name Bayes Theorem: P(A|B) * P(B) = P(B|A) * P(A)") =
         BayesTheoremAxiom.axiom(arbT, modelFn, arbRegionFn, eqREFn)
 
 }
