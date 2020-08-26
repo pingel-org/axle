@@ -104,28 +104,25 @@ object MonotypeBayesanNetwork {
           import model.bayesianNetwork.convertableFromV
           import model.bayesianNetwork.orderV
 
-          val monotypeCases: Iterable[A] =
+          val filteredCases: Iterable[(A, Seq[RegionEq[I]])] =
             model
             .bayesianNetwork
             .jointProbabilityTable
             .cases
-            .map(_.map(_.x).toVector)
-            .map(model.combine1)
-            .filter(predicate)
+            .map({ kase => model.combine1(kase.map(_.x).toVector) -> kase })
+            .filter({ case (monotype, kase) => predicate(monotype) })
 
           val filteredBayesianNetwork =
             BayesianNetwork[I, V, DG[BayesianNetworkNode[I, V], Edge]](
               model.bayesianNetwork.variableFactorMap.map({ case (subV, subVFactor) =>
                 subV -> Factor[I, V](
-                  subVFactor.variablesWithValues,
-                  subVFactor.probabilities.map({ case (reqs, prob) =>
-                    reqs -> Field[V].zero
-                  }) ++ monotypeCases.map( monotypeCase =>
-                          (subVFactor.variablesWithValues.map({ case (vv, _) =>
-                            RegionEq(model.select(vv, monotypeCase))})
-                              -> Field[V].one // TODO not true if there was more than one monotypeCase for the
-                          )
-                        ).toMap.withDefaultValue(Field[V].one)
+                  subVFactor.variablesWithValues, {
+                    filteredCases.map( monotypeCase => {
+                      // subVFactor.probabilities: Map[Vector[RegionEq[I]], N]
+                      val k: Vector[RegionEq[I]] = subVFactor.variablesWithValues.map({ case (vv, _) => RegionEq(model.select(vv, monotypeCase))})
+                      k -> Field[V].one
+                    }).toMap.withDefaultValue(Field[V].zero)
+                  }
                 )
               })
             )

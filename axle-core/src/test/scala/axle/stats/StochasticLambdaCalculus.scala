@@ -2,8 +2,6 @@ package axle.stats
 
 import org.scalatest._
 
-// import cats.syntax.all._
-
 import spire.math.Rational
 import spire.math.sqrt
 
@@ -19,7 +17,7 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
   implicit val eqInt: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra
   implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
-  test("iffy (stochastic if) maps fair boolean to d6 + (d6+d6)") {
+  test("stochastic if maps fair boolean to d6 + (d6+d6)") {
 
     val ab = prob.flatMap(die(6)) { a =>
       prob.map(die(6)) { b =>
@@ -27,11 +25,14 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
       }
     }
 
+    // "iffy" construction
     val distribution =
-      iffy(
-        binaryDecision(Rational(1, 3)),
-        die(6),
-        ab)
+      binaryDecision(Rational(1, 3)).flatMap { cond =>
+        if( cond ) {
+          die(6)
+        } else {
+          ab
+        }
 
     distribution.P(RegionEq(1)) should be(Rational(1, 18))
 

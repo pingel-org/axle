@@ -25,11 +25,13 @@ object OldMontyHall {
 
     val availableDoors = (1 to numDoors).filterNot(d => d === revealedDoor || d === chosenDoor)
 
-    iffy( // iffy[Int, Rational, ConditionalProbabilityTable, ConditionalProbabilityTable]
-      binaryDecision(probabilityOfSwitching),
-      uniformDistribution(availableDoors), // switch
-      uniformDistribution(Seq(chosenDoor)) // stay
-    )
+    binaryDecision(probabilityOfSwitching).flatMap { cond =>
+      if( cond ) {
+        uniformDistribution(availableDoors) // switch
+      } else {
+        uniformDistribution(Seq(chosenDoor)) // stay
+      }
+    }
   }
 
   import cats.syntax.all._

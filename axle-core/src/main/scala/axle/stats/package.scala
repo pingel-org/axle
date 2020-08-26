@@ -69,20 +69,6 @@ package object stats {
     ConditionalProbabilityTable(dist)
   }
 
-  import axle.syntax.probabilitymodel._
-  // TODO allow `condition` to be of different M type
-  def iffy[A: Eq, V, M[_, _]: ProbabilityModel](
-    condition: M[Boolean, V],
-    trueClause: M[A, V],
-    falseClause: M[A, V]): M[A, V] =
-    condition.flatMap({ cond =>
-      if( cond ) {
-        trueClause
-      } else {
-        falseClause
-      }
-    })
-
   /**
    *
    * https://en.wikipedia.org/wiki/Root-mean-square_deviation
