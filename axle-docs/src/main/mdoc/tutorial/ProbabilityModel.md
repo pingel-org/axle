@@ -192,6 +192,19 @@ Giry Monad.
 
 To see these in action in Axle, see the [Two Dice](/tutorial/two_dice/) examples.
 
+A stochastic version of `if` (aka `iffy`) can be implemented in terms of `flatMap`
+using this pattern:
+
+```scala
+input.flatMap { i =>
+  if( predicate(i) ) {
+    trueClause
+  } else {
+    falseClause
+  }
+}
+```
+
 # Future work
 
 ## Measure Theory
