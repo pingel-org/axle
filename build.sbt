@@ -20,6 +20,7 @@ lazy val scalaTestVersion = "3.2.0"
 
 lazy val scalaXmlVersion = "1.3.0"
 lazy val scalaParserCombinatorsVersion = "1.1.2"
+lazy val scalaParallelCollectionsVersion = "0.2.0"
 lazy val jungVersion = "2.1"
 lazy val jblasVersion = "1.2.4"
 lazy val jacksonVersion = "2.11.2"
@@ -64,6 +65,7 @@ lazy val axleCore = Project("axle-core", file("axle-core"))
       "io.monix"               %% "monix-reactive"           % monixVersion,
       // "io.monix"               %% "monix-cats"               % monixVersion,
       "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion,
+      "org.scala-lang.modules" %% "scala-parallel-collections" % scalaParallelCollectionsVersion,
       "org.scalatest"          %% "scalatest"                % scalaTestVersion, // TODO % "test",
       "org.scalacheck"         %% "scalacheck"               % scalaCheckVersion  % "test",
       "org.typelevel"          %% "discipline-core"          % disciplineVersion,
