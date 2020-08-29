@@ -14,7 +14,7 @@ import cats.implicits._
 import spire.math.Rational
 import spire.algebra._
 import axle.stats.H
-import axle.stats.coin
+import axle.data.Coin
 import axle.quanta.UnittedQuantity
 import axle.quanta.Information
 
@@ -44,7 +44,7 @@ val hm: D =
   new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
     (0 to 100).map({ i =>
       val r = Rational(i / 100d)
-      r -> H[Symbol, Rational](coin(r))
+      r -> H[Symbol, Rational](Coin.flipModel(r))
     }).toMap
 ```
 

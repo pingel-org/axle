@@ -9,11 +9,11 @@ They are foundational and will continue to be the basis for further exploration.
 
 # Creating Probability Models
 
-The `coin` method demonstrates a very simple probability model for type `Symbol`.
+`axle.data.Coin.flipModel` demonstrates a very simple probability model for type `Symbol`.
 This is its implementation:
 
 ```scala
-def coin(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable[Symbol, Rational] =
+def flipModel(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable[Symbol, Rational] =
   ConditionalProbabilityTable[Symbol, Rational](
     Map(
       'HEAD -> pHead,
@@ -26,10 +26,11 @@ A `ProbabilityModel` witness is available for the resulting `ConditionalProbabil
 import cats.implicits._
 import axle.stats._
 import spire.math._
+import axle.data.Coin
 
-val fairCoin = coin()
+val fairCoin = Coin.flipModel()
 
-val biasedCoin = coin(Rational(9, 10))
+val biasedCoin = Coin.flipModel(Rational(9, 10))
 ```
 
 In the method signatures below a `ProbalityModel[M]` (`M[A, V]`) typeclass witness, `prob`, is defined for these `ConditionalProbabilityTable`s.
@@ -177,10 +178,12 @@ def filter(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V]
 `filter` allows Bayes Theorem to be expressed and checked with ScalaCheck.
 
 ```scala
-model.filter(b).P(a) === ( model.filter(a).P(b) * model.P(a) / model.P(b))
+model.filter(b).P(a) * model.P(b) === model.filter(a).P(b) * model.P(a)
 ```
 
-Which is more recognizable as `P(A|B) = P(B|A) * P(A) / P(B)`
+For non-zero `model.P(a)` and `model.P(b)`
+
+The theorem is more recognizable as `P(A|B) = P(B|A) * P(A) / P(B)`
 
 # Probability Model as Monads
 

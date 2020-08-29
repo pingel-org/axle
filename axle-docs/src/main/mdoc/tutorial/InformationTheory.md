@@ -23,6 +23,7 @@ import axle._
 import axle.stats._
 import axle.quanta.Information
 import axle.jung.directedGraphJung
+import axle.data.Coin
 import axle.game.Dice.die
 
 implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
@@ -45,11 +46,11 @@ H[Int, Rational](d6).show
 Entropy of fair and biased coins
 
 ```scala mdoc
-val fairCoin = coin()
+val fairCoin = Coin.flipModel()
 
 H[Symbol, Rational](fairCoin).show
 
-val biasedCoin = coin(Rational(7, 10))
+val biasedCoin = Coin.flipModel(Rational(7, 10))
 
 entropy[Symbol, Rational](biasedCoin).show
 ```
