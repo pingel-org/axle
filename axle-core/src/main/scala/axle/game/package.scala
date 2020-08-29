@@ -9,7 +9,8 @@ import spire.algebra.Ring
 import spire.random.Generator
 import spire.random.Dist
 //import spire.implicits.additiveSemigroupOps
-import spire.implicits.multiplicativeSemigroupOps
+import spire.implicits.additiveGroupOps
+//import spire.implicits.multiplicativeSemigroupOps
 
 import axle.algebra._
 import axle.stats.ProbabilityModel
@@ -40,6 +41,7 @@ package object game {
   def moveFromRandomState[G, S, O, M, MS, MM, V, PM[_, _]](
     game:      G,
     stateModel: PM[S, V],
+    mapToProb: Map[S, V] => PM[S, V], // TODO replace this
     gen:       Generator)(
     implicit
     evGame: Game[G, S, O, M, MS, MM, V, PM],
@@ -50,10 +52,10 @@ package object game {
     fieldV: Field[V],
     orderV: Order[V]): (Option[(S, M)], PM[S, V]) = {
 
-    val openStateModel: PM[S, V] = prob.filter(stateModel)(RegionLambda(evGame.mover(game, _).isDefined))
+    val openStateModel: PM[S, V] = prob.filter(stateModel)(RegionIf(evGame.mover(game, _).isDefined))
 
     val fromState: S = prob.observe(openStateModel)(gen)
-    val probabilityOfFromState: V = prob.probabilityOf(stateModel)(RegionEq(fromState))
+    // val probabilityOfFromState: V = prob.probabilityOf(stateModel)(RegionEq(fromState))
 
     evGame.mover(game, fromState).map(mover => {
       val strategyFn = evGame.strategyFor(game, mover)
@@ -66,9 +68,13 @@ package object game {
         (Some((fromState, move)), stateModel)
       } else {
         val probabilityOfMove: V = prob.probabilityOf(strategy)(RegionEq(move))
-        val mass = probabilityOfFromState * probabilityOfMove
-        // TODO scale mass down
-        val redistributed = prob.redistribute(stateModel)(fromState, toState, mass)
+        // val mass = probabilityOfFromState * probabilityOfMove // TODO scale mass down
+        val redistributed = stateModel.flatMap( s =>
+          if( s === fromState) {
+            mapToProb(Map(fromState -> (Field[V].one - probabilityOfMove), toState -> probabilityOfMove))
+          } else {
+            prob.unit(s)
+          })
         (Some((fromState, move)), redistributed)
       }
     }) getOrElse {

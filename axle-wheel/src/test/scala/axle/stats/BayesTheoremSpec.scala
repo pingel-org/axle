@@ -7,12 +7,11 @@ import spire.math.Rational
 
 import axle.eqSymbol
 import axle.algebra.Region
-import axle.pgm.MonotypeBayesanNetwork
 
 import axle.stats.TestSupport._
 
-class FairCoinIsKolmogorov
-  extends KolmogorovProbabilityProperties[Unit, ConditionalProbabilityTable, Symbol, Rational](
+class FairCoinIsBayes
+  extends BayesTheoremProperty[Unit, ConditionalProbabilityTable, Symbol, Rational](
     "Fair coin",
     Arbitrary(Gen.oneOf(List(()))),
     u => coin(),
@@ -20,8 +19,8 @@ class FairCoinIsKolmogorov
     m => Region.eqRegionIterable(coinSides))
 
 import spire.math.Rational
-class BiasedCoinIsKolmogorov
-  extends KolmogorovProbabilityProperties[Rational, ConditionalProbabilityTable, Symbol, Rational](
+class BiasedCoinIsBayes
+  extends BayesTheoremProperty[Rational, ConditionalProbabilityTable, Symbol, Rational](
     "Arbitrarily biased coins",
     Arbitrary(Gen.choose(0d,1d).map(Rational.apply)),
     coin,
@@ -31,16 +30,16 @@ class BiasedCoinIsKolmogorov
 import spire.implicits.IntAlgebra
 import axle.game.Dice._
 
-class D6IsKolmogorov
-  extends KolmogorovProbabilityProperties[Int, ConditionalProbabilityTable, Int, Rational](
+class D6IsBayes
+  extends BayesTheoremProperty[Int, ConditionalProbabilityTable, Int, Rational](
     "dice",
     Arbitrary(Gen.oneOf(List(4,6,8,10,12,20))),
     die,
     n => Arbitrary(genRegion(1 to n)),
     n => Region.eqRegionIterable(1 to n))
 
-class TwoPlatonicSolidDieAddedKolmogorov
-  extends KolmogorovProbabilityProperties[(Int, Int), ConditionalProbabilityTable, Int, Rational](
+class TwoPlatonicSolidDieAddedBayes
+  extends BayesTheoremProperty[(Int, Int), ConditionalProbabilityTable, Int, Rational](
     "Two Random Platonic solid die added",
     Arbitrary(for {
         an <- Gen.oneOf(List(4,6,8,12,20))
@@ -49,9 +48,8 @@ class TwoPlatonicSolidDieAddedKolmogorov
     { case (an, bn) =>
        ProbabilityModel[ConditionalProbabilityTable].flatMap(die(an)){ a =>
          ProbabilityModel[ConditionalProbabilityTable].map(die(bn)){ b =>
-           a + b
-         }
-       }
+           a + b           
+       }}
     },
     { case (an, bn) => Arbitrary(genRegion(1 to an + bn)) },
     { case (an, bn) => Region.eqRegionIterable(1 to an + bn) }
@@ -59,28 +57,23 @@ class TwoPlatonicSolidDieAddedKolmogorov
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import axle.example.AlarmBurglaryEarthquakeBayesianNetwork
+import axle.pgm.MonotypeBayesanNetwork
 import cats.implicits._
 
-class AlarmBurglaryEarthQuakeBayesianNetworkIsKolmogorov
-  extends KolmogorovProbabilityProperties[
+class AlarmBurglaryEarthquakeBayesianNetworkIsBayes
+  extends BayesTheoremProperty[
     Rational,
     ({ type L[C, W] = MonotypeBayesanNetwork[C, Boolean, W, DirectedSparseGraph] })#L,
     (Boolean, Boolean, Boolean, Boolean, Boolean),
     Rational](
     "Alarm-Burglary-Earthquake Bayesian Network",
-    // Arbitrary[T] -- arbitrary seed
-    // TODO non-1 numerators
-    Arbitrary(for {
-      denominator <- Gen.oneOf(1 to 1000)
-      numerator <- Gen.oneOf(1 to denominator)
-    } yield Rational(numerator.toLong, denominator.toLong)),
-    // T => M[E, V]
+    Arbitrary(genPortion),
     { case seed => new AlarmBurglaryEarthquakeBayesianNetwork(pEarthquake = seed).monotype },
     { case seed => Arbitrary(genRegion(AlarmBurglaryEarthquakeBayesianNetwork.domain)) },
     { case seed => Region.eqRegionIterable(AlarmBurglaryEarthquakeBayesianNetwork.domain) }
-  )(
+)(
     axle.pgm.MonotypeBayesanNetwork.probabilityModelForMonotypeBayesanNetwork[Boolean, DirectedSparseGraph],
     cats.kernel.Eq[(Boolean, Boolean, Boolean, Boolean, Boolean)],
     spire.algebra.Field[Rational],
     cats.kernel.Order[Rational]
-  )
+)

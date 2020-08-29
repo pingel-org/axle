@@ -9,7 +9,21 @@ import cats.kernel.Eq
 import spire.algebra.Field
 import axle.algebra.Region
 
-abstract class KolmogorovProbabilityProperties[T, M[_, _]: ProbabilityModel, E: Eq, V: Field: Order](
+/**
+ * Types
+ * 
+ * T seed type
+ * M model type
+ * E event type -- M[E, _]
+ * V probability value type -- M[_, V]
+ * 
+ */
+
+abstract class KolmogorovProbabilityProperties[
+  T,
+  M[_, _]: ProbabilityModel,
+  E: Eq,
+  V: Field: Order](
     name: String,
     arbT: Arbitrary[T],
     modelFn: T => M[E, V],

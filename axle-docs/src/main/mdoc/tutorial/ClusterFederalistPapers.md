@@ -7,10 +7,23 @@ permalink: /tutorial/cluster_federalist_papers_k_means/
 Imports
 
 ```scala mdoc:silent
-import axle.data.FederalistPapers._
+import axle.data.FederalistPapers
+import FederalistPapers.Article
 ```
 
-The Federalist articles:
+Download (and cache) the Federalist articles downloader:
+
+```scala mdoc
+val ec = scala.concurrent.ExecutionContext.global
+val blocker = cats.effect.Blocker.liftExecutionContext(ec)
+implicit val cs = cats.effect.IO.contextShift(ec)
+
+val articlesIO = FederalistPapers.articles[cats.effect.IO](blocker)
+
+val articles = articlesIO.unsafeRunSync
+```
+
+The result is a `List[Article]`.  How many articles are there?
 
 ```scala mdoc
 articles.size

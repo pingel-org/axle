@@ -6,7 +6,7 @@ import scala.annotation.tailrec
 
 import cats.implicits._
 
-case class Combinations[E: Manifest](pool: IndexedSeq[E], r: Int) extends Iterable[IndexedSeq[E]] {
+case class Combinations[E](pool: IndexedSeq[E], r: Int) extends Iterable[IndexedSeq[E]] {
 
   val n = pool.size
 

@@ -3,7 +3,7 @@ package axle
 import scala.collection.GenTraversable
 import scala.collection.Seq
 
-case class EnrichedGenTraversable[+T: Manifest](gt: GenTraversable[T]) {
+case class EnrichedGenTraversable[+T](gt: GenTraversable[T]) {
 
   def doubles: Seq[(T, T)] = gt.toIndexedSeq.permutations(2).map(d => (d(0), d(1))).toSeq
 

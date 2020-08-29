@@ -18,34 +18,47 @@ Core
 "org.axle-lang" %% "axle-jblas" % "@RELEASE_VERSION@"
 ```
 
+Fundamental data structures and functions
+
 * [Package Object](/tutorial/axle_package_object/) Extensions to core Scala data types. Indexed Power Set, Indexed Cross Product, Combinations, Permutations, and UTF aliases
 * [Algebra](/tutorial/algebra/) Typeclasses Functor, Indexed, Finite, LengthSpace
 * [Linear Algebra](/tutorial/linear_algebra/) including Principal Component Analysis (PCA)
 * [Graph](/tutorial/graph/)
-* [Game Theory](/tutorial/game_theory/) Framework for the `axle-games` jar.
 * [Logic](/tutorial/logic/) First-Order Predicate Logic
 * [Quanta](/tutorial/quanta/) Units (second, mile, gram, etc) for various quanta (Speed, Distance, Mass, etc) and conversions between them
 * [Unitted Trigonometry](/tutorial/unitted_trigonometry/)
 * [Pythagorean Means](/tutorial/pythagorean_means/) Arithmetic, Harmonic, Geometric, and Generalized means
+* [MAP@K](/tutorial/map_at_k) Mean Average Precision at K (ranking metric)
+* Historically important functions
+  * [π](/tutorial/pi/) estimation
+  * [Fibonacci](/tutorial/fibonacci/)
+  * [Ackermann](/tutorial/ackermann/)
+
+Randomness
+
+* [Probability Models](/tutorial/probability_model) axiomatic probability models
+  * [Two Dice](/tutorial/two_dice/) simulation vs flat mapping distribution monads
 * [Statistics](/tutorial/statistics/) Random Variables, Probability, Distributions, Standard Deviation
   * [Root-mean-square deviation](/tutorial/rmsd/) (aka RMSE)
   * [Reservoir Sampling](/tutorial/reservoir_sampling/)
-  * [Two Dice](/tutorial/two_dice/) simulation vs flat mapping distribution monads
 * [Information Theory](/tutorial/information_theory/)
   * [Entropy of a Coin](/tutorial/entropy_biased_coin/)
-* [Geo Coordinates](/tutorial/geo_coordinates/)
-* Historically important functions
-  * [Ackermann](/tutorial/ackermann/)
-  * [π](/tutorial/pi/)
-  * [Fibonacci](/tutorial/fibonacci/)
+* [Probabilistic Graphical Models](/tutorial/probabilistic_graphical_models/) (PGM)
+  * [Bayesian Networks](/tutorial/bayesian_networks/)
+* [Game Theory](/tutorial/game_theory/) Framework for the game playing jar.
+
+Machine Learning
+
 * [Linear Regression](/tutorial/linear_regression/)
 * [Naive Bayes Clustering](/tutorial/naive_bayes/) Tennis example
 * k-Means Clustering
   * [Cluster Irises](/tutorial/cluster_irises_k_means/)
   * [Cluster Federalist Papers](/tutorial/cluster_federalist_papers_k_means/)
 * [Genetic Algorithms](/tutorial/genetic_algorithms/)
-* [Probabilistic Graphical Models](/tutorial/probabilistic_graphical_models/) (PGM)
-  * [Bayesian Networks](/tutorial/bayesian_networks/)
+
+Domain-specific functions
+
+* [Geo Coordinates](/tutorial/geo_coordinates/)
 * [Natural Langage Processing (NLP)](/tutorial/natural_language_processing/)
   * [Language Modules](/tutorial/language_modules/) including Stemming and Stop Words
   * [Edit Distance](/tutorial/edit_distance/) Levenshtein
@@ -53,7 +66,6 @@ Core
 * [Linguistics](/tutorial/linguistics/)
   * [Angluin Learner](/tutorial/angluin_learner/)
   * [Gold Paradigm](/tutorial/gold_paradigm/)
-* [MAP@K](/tutorial/map_at_k) Mean Average Precision at K (ranking metric)
 * [Bioinformatics](/tutorial/bioinformatics/) DNA Sequence alignment algorithms
   * [Smith Waterman](/tutorial/smith_waterman/)
   * [Needleman Wunsch](/tutorial/needleman_wunsch/)
@@ -65,6 +77,9 @@ Core
   * Evolution
   * Federalist Papers
   * Irises
+
+Visualization
+
 * [Visualize](/tutorial/visualize/)
   * [Plots](/tutorial/plots/)
   * [ScatterPlot](/tutorial/scatterplot/)

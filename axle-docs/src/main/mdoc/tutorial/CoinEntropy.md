@@ -35,7 +35,6 @@ implicit val or: Order[Rational] = new cats.kernel.Order[Rational] {
   def compare(x: Rational, y: Rational): Int = doubleOrder.compare(x.toDouble, y.toDouble)
 }
 implicit val bitDouble = id.bit
-import axle.stats.ConditionalProbabilityTable
 ```
 
 Create dataset
@@ -45,7 +44,7 @@ val hm: D =
   new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
     (0 to 100).map({ i =>
       val r = Rational(i / 100d)
-      r -> H[ConditionalProbabilityTable, Symbol, Rational](coin(r))
+      r -> H[Symbol, Rational](coin(r))
     }).toMap
 ```
 
@@ -70,8 +69,9 @@ Create the SVG
 
 ```scala mdoc
 import axle.web._
+import cats.effect._
 
-svg(plot, "coinentropy.svg")
+plot.svg[IO]("coinentropy.svg").unsafeRunSync()
 ```
 
 The result is the classic Claude Shannon graph

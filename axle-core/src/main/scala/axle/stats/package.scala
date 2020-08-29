@@ -8,14 +8,9 @@ import cats.kernel.Eq
 
 import spire.algebra.Field
 import spire.algebra.NRoot
-import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
 import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.multiplicativeSemigroupOps
-import spire.implicits.additiveSemigroupOps
-import spire.implicits.nrootOps
-import spire.implicits.semiringOps
-import spire.math.log
 import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
 import spire.math.Rational
@@ -23,9 +18,10 @@ import spire.random.Dist
 import spire.random.Generator
 
 import axle.math.Σ
+import axle.math.square
+import axle.math.log2
 import axle.algebra.RegionEq
 import axle.algebra.Aggregatable
-import axle.algebra.tuple2Field
 import axle.quanta.Information
 import axle.quanta.InformationConverter
 import axle.quanta.UnittedQuantity
@@ -73,29 +69,6 @@ package object stats {
     ConditionalProbabilityTable(dist)
   }
 
-  def iffy[T, N, C[_, _], M[_, _]](
-    conditionModel:   C[Boolean, N],
-    trueBranchModel:  M[T, N],
-    falseBranchModel: M[T, N])(
-    implicit
-    eqT: Eq[T],
-    fieldN: Field[N],
-    eqN: cats.kernel.Eq[N],
-    pIn:  ProbabilityModel[C],
-    pOut: ProbabilityModel[M]): M[T, N] = {
-
-    implicit val eqBool = cats.kernel.Eq.fromUniversalEquals[Boolean]
-    val pTrue: N = pIn.probabilityOf(conditionModel)(RegionEq(true))
-    val pFalse: N = pIn.probabilityOf(conditionModel)(RegionEq(false))
-
-    pOut.mapValues(pOut.adjoin(trueBranchModel)(falseBranchModel))({ case (v1, v2) => (v1 * pTrue) + (v2 * pFalse) })
-  }
-
-  def log2[N: Field: ConvertableFrom](x: N): Double =
-    log(ConvertableFrom[N].toDouble(x)) / log(2d)
-
-  def square[N: Ring](x: N): N = x ** 2
-
   /**
    *
    * https://en.wikipedia.org/wiki/Root-mean-square_deviation
@@ -129,7 +102,7 @@ package object stats {
    * http://en.wikipedia.org/wiki/Standard_deviation
    */
 
-  def standardDeviation[A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+  def standardDeviation[A: Eq: NRoot: Field: ConvertableTo, N: Field: ConvertableFrom](
     model: ConditionalProbabilityTable[A, N]): A = {
 
     implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
@@ -143,15 +116,15 @@ package object stats {
     NRoot[A].sqrt(sum)
   }
 
-  def σ[A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+  def σ[A: Eq: NRoot: Field: ConvertableTo, N: Field: ConvertableFrom](
     model: ConditionalProbabilityTable[A, N]): A =
     standardDeviation[A, N](model)
 
-  def stddev[ A: Eq: NRoot: Field: Manifest: ConvertableTo, N: Field: Manifest: ConvertableFrom](
+  def stddev[ A: Eq: NRoot: Field: ConvertableTo, N: Field: ConvertableFrom](
     model: ConditionalProbabilityTable[A, N]): A =
     standardDeviation[A, N](model)
 
-  def entropy[A: Eq: Manifest, N: Field: Eq: ConvertableFrom](model: ConditionalProbabilityTable[A, N])(
+  def entropy[A: Eq, N: Field: Eq: ConvertableFrom](model: ConditionalProbabilityTable[A, N])(
     implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] = {
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
@@ -171,7 +144,7 @@ package object stats {
     UnittedQuantity(H, convert.bit)
   }
 
-  def H[A: Eq: Manifest, N: Field: Eq: ConvertableFrom](model: ConditionalProbabilityTable[A, N])(
+  def H[A: Eq, N: Field: Eq: ConvertableFrom](model: ConditionalProbabilityTable[A, N])(
     implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
     entropy(model)
 

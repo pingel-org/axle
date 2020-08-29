@@ -6,7 +6,7 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.0 (June 2020)
+## 0.5.0 (August 2020)
 
 * Move to Scala 2.12
 * Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`
@@ -40,74 +40,127 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Lawful ScalaCheck tests for
   * `Module`s in `axle.algebra`
   * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
-* Fix Order[Card]
+* Fix `Order[Card]`
 * `Deck.riffleShuffle`
 * `GuessRiffle` game
-* `ProbabilityModel` `chain`, `adjoin`, `mapValues`, `redistribute`
 * `axle.algebra.etc` via `axle.algebra.EnrichedRinged`
 * `bernoulliDistribution`
 * `axle.stats.expectation(CPT)`
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
-* Create `axle-jogl`, leaving `axle.scene.{Shape,Color}` in `axle-core`
-* Create `axle-awt`
-* Create `axle-xml`
+* Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
-* Fix `BayesianNetwork` visualization
-* Use sbt-ci-release (rm sbt-release)
-* Use sbt-sonatype?
-* Use githug to build and publish artifacts?
-* Site
-  * Fix markdown lint warnings
-  * Configure makeSite to preview: previewFixedPort := Some(9999)
-  * Copy css using makeSite (not update-docs.sh)
-  * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
-  * Figure out better way to reference images
-
-* Fix axle-awt warnings during test
-* Fix "NSWindow drag regions should only be invalidated on the Main Thread! This will throw an exception in the future." warning during axle-jogl test
+* Ditch jekyll
+* Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
 * Release and publish site
 
-## 0.5.1 (Summer 2020)
+## 0.5.1
 
-* `LogisticMap.md` back to 4k x 4k
-* Fix `LogisticRegression` and move `LogisticRegression.md` back
-* Demo Mandelbrot with Rational
-* Friend of Spire
-* Get rid of implicit arg passing to KMeans in ClusterIrises.md (and KMeansSpecification)
-* Tics should take an argument
-* Factor tics and tics-{joda,algebra,spire} into separate libs
-* Tests for `axle.ast`
-* Fix `axle.algebra.GeoMetricSpaceSpec`
+* Scala 2.13
+* Move `coin` out of `axle.stats`
+* Move more stuff out of `axle.math`
+* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
+* Move more stuff out of `axle-core` package
+* Move KolmogorovProbabilityAxioms and Bayes to `axle.stats.laws` (in `axle-laws`?)
 
-## 0.6.x (Autumn 2020)
+## 0.5.2
 
-* `Region` DSL
+* MonotypeBayesanNetwork.unit (see the two nulls)
+* MonotypeBayesanNetwork.map
+* MonotypeBayesanNetwork.flatMap
+* Reconcile combine1 and combine2 (maybe add to typeclass or trait)
+* ScalaCheck `Monad[ProbabilityModel]` (needs missing tailRecM mehod)
+* Monad tests for Alarm-Burglary-Earthquake as MonotypeBayesanNetwork
+
+## 0.5.3
+
+* Test: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
+  * factor out each variable until
+  * the Alarm-Burglary-Earthquake 5-node network is reached
+  * Basically the inverse of factor multiplication
+  * `bn.factorFor(B) * bn.factorFor(E)` should be defined? (It errors)
+  * `MonotypeBayesanNetwork.filter` collapase into a single BNN
+
+* Review `InteractionGraph`, `EliminationGraph`, `JoinTree` and the functions they power
+
+* Consider a "case" to be a `Map` vs a `Vector`
+* Consider usefulness of `Factor` in terms of `Region`
+
+## 0.5.4
+
+* Replace `axle.game.moveFromRandomState.mapToProb`
+* Wrap `axle.IO.getLine` in `F[_]`
+* Wrap `axle.IO.prefixedDisplay` in `F[_]`
+
+## 0.5.5
+
+* Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
+  * "Chance" should be its own player
+  * Each N bits consumed during `Riffle()` is its own move
+  * Chance moves consume `UnittedQuantity[Information, N]`
+* GuessRiffleSpec: use `moveFromRandomState`
+* GuessRiffle.md
+  * Walk through game
+  * Plot distribution of sum(entropy) for both strategies
+  * Plot entropy by turn # for each strategy
+  * Plot simulated score distribution for each strategy
+
+## 0.5.6+
+
+* MonotypeBayesanNetwork.filter -- could be viewed as "belief updating" (vs "conditioning")
+  * If it took a ProbabilityModel itself
+  * Is there a way of seeing this as flatMap, though?
+* `observe` could return a lower-entropy probability model
+  * Perhaps in exchange for a given amount of energy
+  * Or ask for a 0-entropy model and be told how expensive that was
+
+* Measure Theory
+
+* Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
+* Laws for `Factor`
+* `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
+* More diversity of `Region` (vs just `RegionEq`) for probability axiom (Kolm. & Bayes) tests
+* Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
+
+* Axiom for observe: val a = observe(gen) => ProbabilityOf(RegionEq(a)) > 0
+* Axiom? pm.filter(X=x).P(X=x) == 1
+* Fix third Kolmogorov law
+* Optimize `KolmogorovProbabilityAxioms.combination`
+
 * rename `ConditionalProbabilityTable`?
 * Get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
 * "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
-* Is `ProbabilityModel.mapValues` really needed? (maybe we need a map that maps keys and values together, which could be used to implement `redistribute`)
-* KolmogorovProbabilityAxioms for Alarm-Burglary-Earthquake model
-  * Requires ProbabilityModel[BayesianNetwork] (using Interaction graph, Elimination graph, Jointree)
-* Actually provide random `Region` (vs just a `RegionEq`) to all `KolmogorovProbabilityProperties`
-* Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
-* Axiom for observe: val a = observe(gen) => ProbabilityOf(a) > 0
-* Fix third Kolmogorov law
-* Axiom? pm.filter(X=x).P(X=x) == 1
-* Optimize `KolmogorovProbabilityAxioms.combination`
-* Move KolmogorovProbabilityAxioms to `axle.stats.laws`
-* Pare down `ProbabilityModel` methods (and ensure all have axioms)
-* ScalaCheck Monad[ProbabilityModel] (needs missing tailRecM mehod)
 
-## 0.7.x (Spring 2021)
+## After that
+
+* Configure makeSite to preview: previewFixedPort := Some(9999)
+* Copy css using makeSite (not update-docs.sh)
+* Fix markdown lint warnings
+* Figure out better way to reference images in docs
+
+* Fix `axle.algebra.GeoMetricSpaceSpec`
+* Fix `LogisticRegression` and move `LogisticRegression.md` back
+
+* Create a simple graph implementation so that `axle-core` can avoid including `axle-jung`
+* Create `axle-png` to help avoid “headless” exception or Xvfb requirement during tests
+* Fix "NSWindow drag regions should only be invalidated on the Main Thread! This will throw an exception in the future." warning during axle-jogl test
+* Use sbt-ci-release (rm sbt-release)
+* Friend of Spire
+
+* Redo Logic using Abstract Algebra
+
+* axioms of partial differentiation
+
+* Tests for `axle.ast`
+* Tics should take an argument
+* Factor tics and tics-{joda,algebra,spire} into separate libs?
+* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
+* Demo Mandelbrot with Rational
 
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
-* Also use HLists for `ProbabilityModel` type parameter `A`
-* Simplify/eliminate `RegionEqTuple1of2` using HList
 * Replace Finite with Shapeless's version
 * Delete Finite conversions for jung (replace with NaturalTransformation?)
 * Replace with Cats: FoldLeft, Bijection, FunctionPair, Endofunctor
-* Review remaining usage of: `asInstanceOf`, `ClassTag`, and `Manifest`
 * Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
 * Sort out MapFrom, FromStream, FromSet
 * Test `axle.algebra.tuple2Field`
@@ -115,7 +168,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Kind projector instead of type lambdas
 * `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
 * Kind projector for projections of jung graphs for Finite
-* Review groupBy uses -- they use university equality.  Replace with Eq
 * Functors for jung should use projections (study cats disjunction, scala Either)
 * kittens or magnolia
   * pattern match in FirstOrderPredicateLogic
@@ -124,14 +176,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * replace some refs to {CPT0,TallyDist0} with ProbabilityModel
 * Update Spire (to match cats version)
 * Most MapRedicible witnesses are inefficient (eg calling toVector, toSeq, etc)
-* remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
+* Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
+* Make the `Int` abstract in `KMeans{,Visualization}`, `LinearAlgebra`, etc
 
-## 0.8.x (Autumn 2021)
+Future backlog ideas:
 
-* Wrap `axle.IO.getLine` in `F[_]`
-* Wrap `axle.IO.prefixedDisplay` in `F[_]`
+## Game Theory and Examples
 
 * Factor `axle.game.moveFromRandomState` in terms of a random walk on a graph.
+  * See "TODO scale mass down"
   * Compare to Brownian motion, Random walk, Ito process, ...
   * Provide some axoms
     * no outgoing with path in from non-zero mass monotonically increases
@@ -140,29 +193,17 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Iterative game playing algorithm is intractible, but shares intent with sequential monte carlo
 * Think about Information Theory's "Omega" vis-a-vis Sequential Monte Carlo
 * Improve `axle.stats.rationalProbabilityDist` as probabilities become smaller
-
-* Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
-  * "Chance" should be its own player
-  * Each N bits consumed during `Riffle()` is its own move
-  * Chance moves consume `UnittedQuantity[Information, N]`
-* GuessRiffleSpec: use `moveFromRandomState`
-* `Monad[ProbabilityModel]` -- factor `flatMap` in terms of `product`
-* GuessRiffle.md
-  * Walk through game
-  * Plot distribution of sum(entropy) for both strategies
-  * Plot entropy by turn # for each strategy
-  * Plot simulated score distribution for each strategy
 * SimpsonsParadox.md
 * "You split, I choose" as game
 * Gerrymandering sensitivity
-* game theory axioms
-* axle.game: Observable[T]
+* Game theory axioms (Nash?)
+* `axle.game`: `Observable[T]`
 * move state dist stream
 * Redo original monty hall spec
 * Max bet for Poker
 * syntax for `Game` typeclass
 
-## 0.9.x (Spring 2022)
+## Quantum Circuits
 
 * QuantumCircuit.md
 * QBit2.factor
@@ -171,15 +212,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Property test reversibility (& own inverse)
 * Typeclass for "negate" (etc), Binary, CBit
 * Typeclass for unindex
-
-## 0.10.x (Autumn 2022)
-
-* Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
-* Make the `Int` abstract in `KMeans{,Visualization}`, `LinearAlgebra`, etc
-* Redo Logic using Abstract Algebra
-* Fix "unreachable" default pattern match cases
-
-Far future backlog ideas:
+* Deutsch-Jozsa algorithm (D.O. for n-bits) (Oracle separation between EQP and P)
+* Simon's periodicity problem (oracle separation between BQP and BPP)
+* Shor's algorithm
+* Grover's algorithm
+* Quantum cryptographic key exchange
 
 ## Algorithm / Concept breadth
 
@@ -203,7 +240,6 @@ Far future backlog ideas:
 * Multi-armed bandit
 * Connection between dynamic programming and semiring
 * Recursive grid search
-* Bayes Theorem
 * P-values
 * z & t scores
 * Correlation
@@ -215,14 +251,6 @@ Far future backlog ideas:
 * Fourier transformations
 * Abadi Plotkin pathology
 * JVP: Jacobian
-
-## Quantum Circuits
-
-* Deutsch-Jozsa algorithm (D.O. for n-bits) (Oracle separation between EQP and P)
-* Simon's periodicity problem (oracle separation between BQP and BPP)
-* Shor's algorithm
-* Grover's algorithm
-* Quantum cryptographic key exchange
 
 ## Platform
 
@@ -253,6 +281,10 @@ Far future backlog ideas:
 
 ## Hygiene
 
+* remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
+* Fix "unreachable" default pattern match cases
+* Review remaining usage of: `asInstanceOf`, `ClassTag`, and `Manifest`
+* Review groupBy uses -- they use university equality.  Replace with Eq
 * axle.algorithms coverage > 80%
 * axle.core coverage > 80%
 * Rm throws from axle.quanta.UnitConverterGraph

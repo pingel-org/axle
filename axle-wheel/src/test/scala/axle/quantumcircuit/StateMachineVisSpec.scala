@@ -51,7 +51,7 @@ class StateMachineVisSpec extends FunSuite with Matchers {
       def y(q: QBit[Real]): Double = height - (centerY + radius*(q.b.real.toDouble))
     }
 
-    val vis = DirectedGraphVisualization[DirectedSparseGraph[QBit[Real],Edge], QBit[Real]](
+    val vis = DirectedGraphVisualization[DirectedSparseGraph[QBit[Real],Edge], QBit[Real], Edge](
       dg, width, height, border, layoutOpt = Some(layout))
 
     val svgName = "qc_hx_state_machine.svg"

@@ -2,6 +2,7 @@ package axle.game
 
 import cats.kernel.Eq
 
+import spire.algebra.Ring
 import spire.math._
 import spire.random.Dist
 import spire.random.Generator.rng
@@ -132,7 +133,11 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
     //  Sc: (0  ,  1/4) => 0   + (1/3 .  1/4) = 1/12
 
     val actualResult = ((1 to 1000) map { i =>
-      moveFromRandomState(game, currentStateModel, rng)
+      moveFromRandomState(
+        game,
+        currentStateModel,
+        (m: Map[TestGameState, Rational]) => ConditionalProbabilityTable.apply(m)(Ring[Rational], Eq[TestGameState]),
+        rng)
     }) toSet
 
     val expectedResult = Set(

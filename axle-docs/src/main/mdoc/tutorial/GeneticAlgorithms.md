@@ -8,30 +8,29 @@ See the wikipedia page on [Genetic Algorithms](https://en.wikipedia.org/wiki/Gen
 
 ## Example
 
-Imports
-
-```scala mdoc:silent
-import util.Random.nextDouble
-import util.Random.nextInt
-import shapeless._
-import syntax.singleton._
-import record._
-import cats.implicits._
-import axle.ml._
-```
-
-Define a random rabbit generator and fitness function
+Consider a `Rabbit` class
 
 ```scala mdoc
 case class Rabbit(a: Int, b: Double, c: Double, d: Double, e: Double, f: Double, g: Double, h: Double)
+```
+
+Define the `Species` for a Genetic Algorithm, which requires a random generator and
+a fitness function.
+
+```scala mdoc
+import shapeless._
 
 val gen = Generic[Rabbit]
 
-// val pMutation = 0.003
+import axle.ml._
+
+import scala.util.Random.nextDouble
+import scala.util.Random.nextInt
 
 implicit val rabbitSpecies = new Species[gen.Repr] {
 
-  def random() = {
+  def random(rg: spire.random.Generator): gen.Repr = {
+
     val rabbit = Rabbit(
       1 + nextInt(2),
       5 + 20 * nextDouble(),
@@ -56,9 +55,11 @@ implicit val rabbitSpecies = new Species[gen.Repr] {
 Run the genetic algorithm
 
 ```scala mdoc
+import cats.implicits._
+
 val ga = GeneticAlgorithm(populationSize = 100, numGenerations = 100)
 
-val log = ga.run()
+val log = ga.run(spire.random.Generator.rng)
 
 val winner = log.winners.last
 ```
@@ -67,10 +68,9 @@ Plot the min, average, and max fitness function by generation
 
 ```scala mdoc
 import scala.collection.immutable.TreeMap
-import axle.eqTreeMap
 import axle.visualize._
 
-val plot = Plot(
+val plot = Plot[String, Int, Double, TreeMap[Int,Double]](
   () => List("min" -> log.mins, "ave" -> log.aves, "max" -> log.maxs),
   connect = true,
   colorOf = (label: String) => label match {
@@ -82,9 +82,15 @@ val plot = Plot(
   xAxisLabel = Some("generation"),
   yAxis = Some(0),
   yAxisLabel = Some("fitness"))
+```
 
+Render to an SVG file
+
+```scala mdoc
 import axle.web._
-svg(plot, "ga.svg")
+import cats.effect._
+
+plot.svg[IO]("ga.svg").unsafeRunSync()
 ```
 
 ![ga](/tutorial/images/ga.svg)

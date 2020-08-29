@@ -10,6 +10,7 @@ A Perfect Information, Zero-sum game
 
 ```scala mdoc
 import axle._
+import axle.IO.prefixedDisplay
 import axle.game._
 import axle.game.ttt._
 import axle.game.ttt.evGame._

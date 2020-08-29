@@ -10,6 +10,7 @@ The `axl.game.prisoner._` package uses `axle.game` typeclasses to model the game
 
 ```scala mdoc
 import axle._
+import axle.IO.prefixedDisplay
 import axle.game._
 import axle.game.prisoner._
 import axle.game.prisoner.evGame._

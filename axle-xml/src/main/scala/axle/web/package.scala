@@ -78,10 +78,10 @@ package object web {
   implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
   implicit val mmDouble: MultiplicativeMonoid[Double] = spire.implicits.DoubleAlgebra
 
-  implicit def svgJungDirectedGraphVisualization[VP: Eq: HtmlFrom, EP: Show]: SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]] =
-    new SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]] {
+  implicit def svgJungDirectedGraphVisualization[VP: Eq: HtmlFrom, EP: Show]: SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP, EP]] =
+    new SVG[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP, EP]] {
 
-      def svg(vis: DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]): NodeSeq = {
+      def svg(vis: DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP, EP]): NodeSeq = {
 
         import vis._
 
@@ -150,10 +150,10 @@ package object web {
   import axle.jung._
 
   
-  implicit def svgJungUndirectedGraphVisualization[VP: Eq: HtmlFrom, EP: Show]: SVG[UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]] =
-    new SVG[UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]] {
+  implicit def svgJungUndirectedGraphVisualization[V: Eq: HtmlFrom, E: Show]: SVG[UndirectedGraphVisualization[UndirectedSparseGraph[V, E], V, E]] =
+    new SVG[UndirectedGraphVisualization[UndirectedSparseGraph[V, E], V, E]] {
 
-    def svg(vis: UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]): NodeSeq = {
+    def svg(vis: UndirectedGraphVisualization[UndirectedSparseGraph[V, E], V, E]): NodeSeq = {
 
       import vis._
 
@@ -161,7 +161,7 @@ package object web {
       layout.setSize(new java.awt.Dimension(width, height))
 
       val lines: List[Node] = ug.getEdges.asScala.map { edge =>
-        val (v1, v2): (VP, VP) = ug.vertices(edge)
+        val (v1, v2): (V, V) = ug.vertices(edge)
         <line x1={ s"${layout.getX(v1)}" } y1={ s"${layout.getY(v1)}" } x2={ s"${layout.getX(v2)}" } y2={ s"${layout.getY(v2)}" } stroke={ s"${rgb(black)}" } stroke-width="1"/>
       } toList
 
@@ -170,7 +170,7 @@ package object web {
       } toList
 
       val labels: List[Node] = ug.getVertices.asScala.map { vertex =>
-        val node = HtmlFrom[VP].toHtml(vertex)
+        val node = HtmlFrom[V].toHtml(vertex)
         node match {
           case Text(t) =>
             <text text-anchor="middle" alignment-baseline="middle" x={ s"${layout.getX(vertex)}" } y={ s"${layout.getY(vertex)}" } fill={ s"${rgb(black)}" } font-size={ s"${fontSize}" }>{ axle.web.html(vertex) }</text>
@@ -182,9 +182,9 @@ package object web {
       } toList
 
       val edgeLabels: List[Node] = ug.getEdges.asScala.map { edge =>
-        val node = HtmlFrom[EP].toHtml(edge)
+        val node = HtmlFrom[E].toHtml(edge)
 
-        val (v1, v2): (VP, VP) = ug.vertices(edge)
+        val (v1, v2): (V, V) = ug.vertices(edge)
         val cx = (layout.getX(v2) - layout.getX(v1)) * 0.5 + layout.getX(v1)
         val cy = (layout.getY(v2) - layout.getY(v1)) * 0.5 + layout.getY(v1)
         node match {

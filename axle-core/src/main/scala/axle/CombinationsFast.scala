@@ -2,7 +2,7 @@ package axle
 
 import scala.collection.mutable.ListBuffer
 
-case class CombinationsFast[E: Manifest](pool: IndexedSeq[E], r: Int)
+case class CombinationsFast[E](pool: IndexedSeq[E], r: Int)
   extends Iterable[IndexedSeq[E]] {
 
   val n = pool.size

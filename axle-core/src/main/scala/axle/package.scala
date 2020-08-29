@@ -1,5 +1,6 @@
 import scala.collection.mutable.Buffer
 
+import scala.reflect.ClassTag
 import scala.collection.immutable.TreeMap
 import scala.language.implicitConversions
 
@@ -140,9 +141,9 @@ package object axle {
 
   implicit def enrichGenSeq[T](genSeq: collection.GenSeq[T]): EnrichedGenSeq[T] = EnrichedGenSeq(genSeq)
 
-  implicit def enrichGenTraversable[T: Manifest](gt: collection.GenTraversable[T]): EnrichedGenTraversable[T] = EnrichedGenTraversable(gt)
+  implicit def enrichGenTraversable[T](gt: collection.GenTraversable[T]): EnrichedGenTraversable[T] = EnrichedGenTraversable(gt)
 
-  implicit def enrichIndexedSeq[T: Manifest](is: IndexedSeq[T]): EnrichedIndexedSeq[T] = EnrichedIndexedSeq(is)
+  implicit def enrichIndexedSeq[T](is: IndexedSeq[T]): EnrichedIndexedSeq[T] = EnrichedIndexedSeq(is)
 
   implicit def enrichIterator[T](it: Iterator[T]) = new EnrichedIterator(it)
 
@@ -150,7 +151,7 @@ package object axle {
 
   implicit def enrichMutableBuffer[T](buffer: Buffer[T]): EnrichedMutableBuffer[T] = EnrichedMutableBuffer(buffer)
 
-  implicit def enrichArray[T: Manifest](arr: Array[T]): EnrichedArray[T] = EnrichedArray(arr)
+  implicit def enrichArray[T: ClassTag](arr: Array[T]): EnrichedArray[T] = EnrichedArray(arr)
 
   implicit def enrichInt(n: Int): EnrichedInt = EnrichedInt(n)
 

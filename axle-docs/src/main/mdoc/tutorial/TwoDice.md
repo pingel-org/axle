@@ -4,9 +4,55 @@ title: Two Dice
 permalink: /tutorial/two_dice/
 ---
 
-This page describes two ways of calculation the sum of two dice rolls.
+Setup
 
-## Simulation
+```scala mdoc
+import cats.implicits._
+import axle.eqSymbol
+import axle.stats._
+import axle.game.Dice._
+import axle.syntax.probabilitymodel._
+
+implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+```
+
+## Monadic `map` to operate on the event space
+
+```scala mdoc
+val d6utf = die(6).map(numberToUtfFace)
+```
+
+Chain two rolls together
+
+```scala mdoc
+val bothDieModel = d6utf.flatMap({ flip1 =>
+  d6utf.map({ flip2 => (flip1, flip2) })
+})
+```
+
+Then query the resulting probability model's distribution of 2-roll events.
+
+```scala mdoc
+import axle.algebra._ // for Region*
+
+type TWOROLLS = (Symbol, Symbol)
+
+bothDieModel.P(RegionIf[TWOROLLS](_._1 == '⚃) and RegionIf[TWOROLLS](_._2 == '⚃))
+
+bothDieModel.P(RegionNegate(RegionIf[TWOROLLS](_._1 == '⚃)))
+```
+
+Observe rolls of a die
+
+```scala mdoc
+import spire.random.Generator.rng
+
+implicit val dist = axle.stats.rationalProbabilityDist
+
+(1 to 10) map { i => d6utf.observe(rng) }
+```
+
+## Simulate the sum of two dice
 
 Imports
 
@@ -18,20 +64,15 @@ import spire.math.Rational
 
 import axle.enrichGenSeq
 import axle.game.Dice.die
-import axle.stats._
-import axle.syntax.probabilitymodel._
 ```
 
 Simulate 10k rolls of two dice
 
 ```scala mdoc
-implicit val dist = axle.stats.rationalProbabilityDist
-
 val seed = spire.random.Seed(42)
 val gen = spire.random.Random.generatorFromSeed(seed)
-val d6a = die(6)
-val d6b = die(6)
-val rolls = (0 until 1000) map { i => d6a.observe(gen) + d6b.observe(gen) }
+val d6 = die(6)
+val rolls = (0 until 1000) map { i => d6.observe(gen) + d6.observe(gen) }
 
 implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
 
@@ -57,37 +98,40 @@ val chart = BarChart[Int, Int, Map[Int, Int], String](
 Create SVG
 
 ```scala mdoc
+import cats.effect._
 import axle.web._
 
-svg(chart, "d6plusd6.svg")
+chart.svg[IO]("d6plusd6.svg").unsafeRunSync()
 ```
 
 ![Observed d6 + d6](/tutorial/images/d6plusd6.svg)
 
-## Distribution Monad
+## Direct computation of the sum of two dice
 
-The distribution of two rolls combined can be produced with a for comprehension
-and charted directly.
+The distribution of two rolls combined can be computed directly
 
 Imports (Note: documentation resets interpreter here)
 
 ```scala mdoc:silent:reset
 import spire.math._
 
+import axle.syntax.probabilitymodel._
 import axle.stats._
 import axle.game.Dice.die
 ```
 
+## Monadic `flatMap`
+
 Create probability distribution of the addition of two 6-sided die:
 
 ```scala mdoc
-import cats.syntax.all._
-type F[T] = ConditionalProbabilityTable[T, Rational]
+implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
-val twoDiceSummed = for {
-  a <- die(6) : F[Int]
-  b <- die(6) : F[Int]
-} yield a + b
+implicit val intEq: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra
+
+val twoDiceSummed = die(6).flatMap { a =>
+  die(6).map { b => a + b }
+}
 ```
 
 Define visualization
@@ -111,9 +155,10 @@ val chart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], 
 Create SVG
 
 ```scala mdoc
+import cats.effect._
 import axle.web._
 
-svg(chart, "distributionMonad.svg")
+chart.svg[IO]("distributionMonad.svg").unsafeRunSync()
 ```
 
 ![Monadic d6 + d6](/tutorial/images/distributionMonad.svg)

@@ -32,6 +32,7 @@ The newer `axl.game.montyhall._` package uses `axle.game` typeclasses to model t
 
 ```scala mdoc
 import axle._
+import axle.IO.prefixedDisplay
 import axle.game._
 import axle.game.montyhall._
 import axle.game.montyhall.evGame._

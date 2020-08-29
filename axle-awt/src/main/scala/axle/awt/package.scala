@@ -593,24 +593,25 @@ package object awt {
   import spire.algebra.Field
   import axle.visualize.BayesianNetworkVisualization
   import axle.pgm.BayesianNetworkNode
+  import axle.pgm.Edge
   import cats.Eq
 
-  implicit def drawBayesianNetworkVisualization[T: Manifest: Eq, N: Field: Manifest: Eq, DG](
+  implicit def drawBayesianNetworkVisualization[T: Eq, N: Field: Eq, DG](
     implicit
-    drawDG: Draw[DirectedGraphVisualization[DG, BayesianNetworkNode[T, N]]]): Draw[BayesianNetworkVisualization[T, N, DG]] = {
+    drawDG: Draw[DirectedGraphVisualization[DG, BayesianNetworkNode[T, N], Edge]]): Draw[BayesianNetworkVisualization[T, N, DG]] = {
     new Draw[BayesianNetworkVisualization[T, N, DG]] {
 
       def component(vis: BayesianNetworkVisualization[T, N, DG]): java.awt.Component = {
         import vis._
-        val subVis = DirectedGraphVisualization[DG, BayesianNetworkNode[T, N]](vis.bn.graph, width, height, border)
+        val subVis = DirectedGraphVisualization[DG, BayesianNetworkNode[T, N], Edge](vis.bn.graph, width, height, border)
         drawDG.component(subVis)
       }
     }
   }
 
   import edu.uci.ics.jung.graph.UndirectedSparseGraph
-  implicit def drawJungUndirectedGraph[VP: Show, EP: Show]: Draw[UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]] =
-    new Draw[UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]] {
+  implicit def drawJungUndirectedGraph[V: Show, E: Show]: Draw[UndirectedGraphVisualization[UndirectedSparseGraph[V, E], V, E]] =
+    new Draw[UndirectedGraphVisualization[UndirectedSparseGraph[V, E], V, E]] {
 
       import java.awt.BasicStroke
       import java.awt.Color
@@ -628,7 +629,7 @@ package object awt {
 
       import com.google.common.base.{ Function => GoogleFunction }
 
-      def component(vis: UndirectedGraphVisualization[UndirectedSparseGraph[VP, EP]]) = {
+      def component(vis: UndirectedGraphVisualization[UndirectedSparseGraph[V, E], V, E]) = {
         import vis._
         val layout = new FRLayout(ug)
         layout.setSize(new Dimension(width, height))
@@ -636,24 +637,24 @@ package object awt {
         vv.setPreferredSize(new Dimension(width + border, height + border))
         vv.setMinimumSize(new Dimension(width + border, height + border))
 
-        val vertexPaint = new GoogleFunction[VP, Paint]() {
-          def apply(i: VP): Paint = Color.GREEN // TODO use color.{r,g,b}
+        val vertexPaint = new GoogleFunction[V, Paint]() {
+          def apply(i: V): Paint = Color.GREEN // TODO use color.{r,g,b}
         }
 
         val dash = List(10f).toArray
 
         val edgeStroke = new BasicStroke(1f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_MITER, 10f, dash, 0f)
 
-        val edgeStrokeTransformer = new GoogleFunction[EP, Stroke]() {
-          def apply(edge: EP): BasicStroke = edgeStroke
+        val edgeStrokeTransformer = new GoogleFunction[E, Stroke]() {
+          def apply(edge: E): BasicStroke = edgeStroke
         }
 
-        val vertexLabelTransformer = new GoogleFunction[VP, String]() {
-          def apply(vertex: VP): String = vertex.show
+        val vertexLabelTransformer = new GoogleFunction[V, String]() {
+          def apply(vertex: V): String = vertex.show
         }
 
-        val edgeLabelTransformer = new GoogleFunction[EP, String]() {
-          def apply(edge: EP): String = edge.show
+        val edgeLabelTransformer = new GoogleFunction[E, String]() {
+          def apply(edge: E): String = edge.show
         }
 
         vv.getRenderContext.setVertexFillPaintTransformer(vertexPaint)
@@ -673,8 +674,8 @@ package object awt {
     }
 
   import edu.uci.ics.jung.graph.DirectedSparseGraph
-  implicit def drawJungDirectedSparseGraphVisualization[VP: Show, EP: Show]: Draw[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]] =
-    new Draw[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]] {
+  implicit def drawJungDirectedSparseGraphVisualization[VP: Show, EP: Show]: Draw[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP, EP]] =
+    new Draw[DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP, EP]] {
 
       import java.awt.BasicStroke
       import java.awt.Color
@@ -692,7 +693,7 @@ package object awt {
 
       import com.google.common.base.{ Function => GoogleFunction }
 
-      def component(vis: DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP]) = {
+      def component(vis: DirectedGraphVisualization[DirectedSparseGraph[VP, EP], VP, EP]) = {
         // see
         // http://www.grotto-networking.com/JUNG/
         // http://www.grotto-networking.com/JUNG/JUNG2-Tutorial.pdf

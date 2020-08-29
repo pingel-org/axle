@@ -68,7 +68,9 @@ val errorPlot = Plot(
   yAxisLabel = Some("error"))
 
 import axle.web._
-svg(errorPlot, "lrerror.svg")
+import cats.effect._
+
+errorPlot.svg[IO]("lrerror.svg").unsafeRunSync()
 ```
 
 ![lr error](/tutorial/images/lrerror.svg)

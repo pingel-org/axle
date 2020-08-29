@@ -5,7 +5,7 @@ import scala.collection.IndexedSeq
 import cats.implicits._
 import spire.random.Generator
 
-case class EnrichedIndexedSeq[T: Manifest](is: IndexedSeq[T]) {
+case class EnrichedIndexedSeq[T](is: IndexedSeq[T]) {
 
   def apply(range: Range): IndexedSeq[T] = {
     assert(range.step === 1)

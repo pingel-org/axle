@@ -8,31 +8,11 @@ DirectedGraph typeclass and witnesses for the Jung package
 
 ## Directed Graph
 
-Imports and implicits
-
-```scala mdoc:silent
-import cats.implicits._
-import cats.Show
-import axle._
-
-import edu.uci.ics.jung.graph.DirectedSparseGraph
-import axle.jung._
-
-import axle.algebra._
-import axle.syntax.directedgraph.directedGraphOps
-import axle.syntax.undirectedgraph.undirectedGraphOps
-import axle.syntax.finite.finiteOps
-```
-
-Example with `String` is the vertex value
+Example with `String` is the vertex value and an `Edge` type with two values (a `String` and an `Int`) to represent the edges
 
 ```scala mdoc
 val (a, b, c, d) = ("a", "b", "c", "d")
-```
 
-And an `Edge` type with two values (a `String` and an `Int`) to represent the edges
-
-```scala mdoc
 class Edge(val s: String, val i: Int)
 ```
 
@@ -41,6 +21,10 @@ that we will use Jung's `DirectedSparseGraph` as the graph type, with
 `String` and `Edge` as vertex and edge values, respectively.
 
 ```scala mdoc
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import axle.algebra._
+import axle.jung._
+
 val jdg = DirectedGraph.k2[DirectedSparseGraph, String, Edge]
 ```
 
@@ -58,6 +42,10 @@ val dg = jdg.make(List(a, b, c, d),
 ```
 
 ```scala mdoc
+import cats.implicits._
+import axle.syntax.directedgraph.directedGraphOps
+import axle.syntax.finite.finiteOps
+
 dg.vertexProjection.size
 
 dg.edgeProjection.size
@@ -71,17 +59,18 @@ dg.findVertex(_ === "c").map(v => dg.predecessors(v))
 dg.findVertex(_ === "c").map(v => dg.neighbors(v))
 ```
 
-Visualize the graph
+Create a Visualization of the graph
 
 ```scala mdoc
-import axle.visualize._
-import axle.web._
+import cats.Show
 
 implicit val showEdge: Show[Edge] = new Show[Edge] {
   def show(e: Edge): String = e.s + " " + e.i
 }
 
-val dVis = DirectedGraphVisualization(
+import axle.visualize._
+
+val dVis = DirectedGraphVisualization[DirectedSparseGraph[String, Edge], String, Edge](
   dg,
   width = 300,
   height = 300,
@@ -92,27 +81,38 @@ val dVis = DirectedGraphVisualization(
   borderColor = Color.black,
   fontSize = 12
 )
+```
 
-svg(dVis, "SimpleDirectedGraph.svg")
+Render as sn SVG file
+
+```scala mdoc
+import axle.web._
+import cats.effect._
+
+dVis.svg[IO]("SimpleDirectedGraph.svg").unsafeRunSync()
 ```
 
 ![directed graph](/tutorial/images/SimpleDirectedGraph.svg)
 
 ## Undirected Graph
 
-Imports
+An undirected graph using the same dataa:
 
-```scala mdoc
-import edu.uci.ics.jung.graph.UndirectedSparseGraph
+```scala mdoc:reset
+val (a, b, c, d) = ("a", "b", "c", "d")
+
+class Edge(val s: String, val i: Int)
 ```
-
-Example using the `Edge` edge value defined above and the same vertex values defined above.
 
 Invoke the `UndirectedGraph` typeclass with type parameters that denote
 that we will use Jung's `UndirectedSparseGraph` as the graph type, with
 `String` and `Edge` as vertex and edge values, respectively.
 
 ```scala mdoc
+import edu.uci.ics.jung.graph.UndirectedSparseGraph
+import axle.algebra._
+import axle.jung._
+
 val jug = UndirectedGraph.k2[UndirectedSparseGraph, String, Edge]
 ```
 
@@ -130,6 +130,10 @@ val ug = jug.make(List(a, b, c, d),
 ```
 
 ```scala mdoc
+import cats.implicits._
+import axle.syntax.undirectedgraph.undirectedGraphOps
+import axle.syntax.finite.finiteOps
+
 ug.vertexProjection.size
 
 ug.edgeProjection.size
@@ -139,15 +143,32 @@ ug.findVertex(_ == "c").map(v => ug.neighbors(v))
 ug.findVertex(_ == "a").map(v => ug.neighbors(v))
 ```
 
-Visualize the graph
+Create a Visualization of the graph
 
 ```scala mdoc
+import cats.Show
+
+implicit val showEdge: Show[Edge] = new Show[Edge] {
+  def show(e: Edge): String = e.s + " " + e.i
+}
+
 import axle.visualize._
+
+val uVis = UndirectedGraphVisualization[UndirectedSparseGraph[String, Edge], String, Edge](
+  ug,
+  width = 300,
+  height = 300,
+  border = 10,
+  color = Color.yellow)
+```
+
+Render as an SVG file
+
+```scala mdoc
 import axle.web._
+import cats.effect._
 
-val uVis = UndirectedGraphVisualization(ug, width=300, height=300, border=10, color=Color.yellow)
-
-svg(uVis, "SimpleUndirectedGraph.svg")
+uVis.svg[IO]("SimpleUndirectedGraph.svg").unsafeRunSync()
 ```
 
 ![undirected graph](/tutorial/images/SimpleUndirectedGraph.svg)

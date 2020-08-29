@@ -37,7 +37,12 @@ import axle.data.Iris
 ```
 
 ```scala mdoc
-val irisesData = new Irises
+val ec = scala.concurrent.ExecutionContext.global
+val blocker = cats.effect.Blocker.liftExecutionContext(ec)
+implicit val cs = cats.effect.IO.contextShift(ec)
+
+val irisesIO = new Irises[cats.effect.IO](blocker)
+val irises = irisesIO.irises.unsafeRunSync
 ```
 
 Make a 2-D Euclidean space implicitly available for clustering
@@ -76,7 +81,7 @@ val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
 
 val classifier: KMeans[Iris, List, DoubleMatrix] =
   KMeans[Iris, List, DoubleMatrix](
-    irisesData.irises,
+    irises,
     N = 2,
     irisFeaturizer,
     normalizer,
@@ -99,7 +104,7 @@ import axle.ml.ConfusionMatrix
 ```scala mdoc
 val confusion = ConfusionMatrix[Iris, Int, String, Vector, DoubleMatrix](
   classifier,
-  irisesData.irises.toVector,
+  irises.toVector,
   _.species,
   0 to 2)
 
@@ -109,7 +114,6 @@ confusion.show
 Visualize the final (two dimensional) centroid positions
 
 ```scala mdoc:silent
-import axle.web._
 import axle.visualize.KMeansVisualization
 import axle.visualize.Color._
 ```
@@ -119,7 +123,10 @@ val colors = Vector(red, blue, green)
 
 val vis = KMeansVisualization(classifier, colors)
 
-svg(vis, "kmeans.svg")
+import axle.web._
+import cats.effect._
+
+vis.svg[IO]("kmeans.svg").unsafeRunSync()
 ```
 
 ![kmeans](/tutorial/images/kmeans.svg)
@@ -144,7 +151,9 @@ val plot = Plot(
   yAxisLabel = Some("average distance to centroid"))
 
 import axle.web._
-svg(plot, "kmeansvsiteration.svg")
+import cats.effect._
+
+plot.svg[IO]("kmeansvsiteration.svg").unsafeRunSync()
 ```
 
 ![kmeans](/tutorial/images/kmeansvsiteration.svg)

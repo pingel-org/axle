@@ -24,7 +24,7 @@ trait DirectedGraph[DG, V, E] {
 
   def isClique(jdg: DG, vs: Iterable[V])(implicit eqV: Eq[V]): Boolean
 
-  def forceClique(jdg: DG, among: Set[V], payload: (V, V) => E)(implicit eqV: Eq[V], mV: Manifest[V]): DG
+  def forceClique(jdg: DG, among: Set[V], payload: (V, V) => E)(implicit eqV: Eq[V]): DG
 
   def degree(jdg: DG, v: V): Int
 
