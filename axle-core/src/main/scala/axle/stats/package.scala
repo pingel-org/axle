@@ -1,7 +1,6 @@
 package axle
 
 import scala.Stream.cons
-import scala.Vector
 
 import cats.Functor
 import cats.kernel.Eq
@@ -34,14 +33,6 @@ package object stats {
     val y = Dist.intrange(0, denominator)
     Dist(x)(y)
   }
-
-  def coinSides = Vector('HEAD, 'TAIL)
-
-  def coin(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable[Symbol, Rational] =
-    ConditionalProbabilityTable[Symbol, Rational](
-      Map(
-        'HEAD -> pHead,
-        'TAIL -> (1 - pHead)))
 
   def bernoulliDistribution(pOne: Rational): ConditionalProbabilityTable[Int, Rational] = {
     import cats.implicits._

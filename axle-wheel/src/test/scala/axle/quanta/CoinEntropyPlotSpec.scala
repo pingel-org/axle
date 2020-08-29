@@ -11,7 +11,7 @@ import spire.math.Rational
 import spire.algebra._
 
 import axle.stats.H
-import axle.stats.coin
+import axle.data.Coin
 import axle.visualize._
 import axle.web._
 
@@ -42,7 +42,7 @@ class CoinEntropyPlotSpec extends FunSuite with Matchers {
       new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
         (0 to 100).map({ i =>
           val r = Rational(i / 100d)
-          r -> H[Symbol, Rational](coin(r))
+          r -> H[Symbol, Rational](Coin.flipModel(r))
         }).toMap
 
     // implicit val zr = Zero[Rational]

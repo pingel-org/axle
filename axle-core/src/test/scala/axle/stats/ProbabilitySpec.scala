@@ -15,7 +15,10 @@ class ProbabilitySpec extends FunSuite with Matchers {
 
   test("two independent coins") {
 
-    val fairCoin = coin()
+    val fairCoin = ConditionalProbabilityTable[Symbol, Rational](
+      Map(
+        'HEAD -> Rational(1, 2),
+        'TAIL -> Rational(1, 2)))
 
     import cats.implicits._
 
