@@ -281,31 +281,31 @@ object FirstOrderPredicateLogic {
       if (incoming)
         Or(moveNegation(left, true), moveNegation(right, true))
       else
-        And(moveNegation(left), moveNegation(right))
+        And(moveNegation(left, false), moveNegation(right, false))
 
     case Or(left, right) =>
       if (incoming)
         And(moveNegation(left, true), moveNegation(right, true))
       else
-        Or(moveNegation(left), moveNegation(right))
+        Or(moveNegation(left, false), moveNegation(right, false))
 
     case Iff(left, right)     => ??? // Iff(moveNegation(left), moveNegation(right))
 
     case Implies(left, right) => ??? //Implies(moveNegation(left), moveNegation(right))
 
-    case ¬(inner)             => if (incoming) moveNegation(inner) else moveNegation(inner, true)
+    case ¬(inner)             => if (incoming) moveNegation(inner, false) else moveNegation(inner, true)
 
     case ∃(symbolSet, e) =>
       if (incoming)
         ∀(symbolSet, moveNegation(e, true))
       else
-        ∃(symbolSet, moveNegation(e))
+        ∃(symbolSet, moveNegation(e, false))
 
     case ∀(symbolSet, e) =>
       if (incoming)
         ∃(symbolSet, moveNegation(e, true))
       else
-        ∀(symbolSet, moveNegation(e))
+        ∀(symbolSet, moveNegation(e, false))
 
     case _ => if (incoming) ¬(s) else s
   }
