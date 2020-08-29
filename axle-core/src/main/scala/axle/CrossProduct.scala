@@ -1,7 +1,6 @@
 package axle
 
 import scala.Stream.cons
-import scala.Stream.empty
 
 import cats.implicits._
 
@@ -16,7 +15,7 @@ case class CrossProduct[E](collections: IndexedSeq[IndexedSeq[E]])
 
   def tail(indices0: IndexedSeq[Int], i0: Int): Stream[List[E]] =
     if (i0 === collections.size) {
-      empty
+      Stream.empty
     } else {
       if (indices0(i0) === -1) {
         if (collections(i0).size > 0) {
@@ -27,7 +26,7 @@ case class CrossProduct[E](collections: IndexedSeq[IndexedSeq[E]])
             cons(current(indices1), tail(indices1, 0))
           }
         } else {
-          empty
+          Stream.empty
         }
       } else if (indices0(i0) + 1 < collections(i0).size) {
         val indices1 = indices0.updated(i0, indices0(i0) + 1)
