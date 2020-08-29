@@ -55,6 +55,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.1
 
+* Scala 2.13
 * Move `coin` out of `axle.stats`
 * Move more stuff out of `axle.math`
 * `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
@@ -72,21 +73,25 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.3
 
-* Test idea: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
+* Test: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
   * factor out each variable until
   * the Alarm-Burglary-Earthquake 5-node network is reached
   * Basically the inverse of factor multiplication
   * `bn.factorFor(B) * bn.factorFor(E)` should be defined? (It errors)
   * `MonotypeBayesanNetwork.filter` collapase into a single BNN
 
+* Review `InteractionGraph`, `EliminationGraph`, `JoinTree` and the functions they power
+
 * Consider a "case" to be a `Map` vs a `Vector`
 * Consider usefulness of `Factor` in terms of `Region`
 
-## 0.5.4+
+## 0.5.4
 
 * Replace `axle.game.moveFromRandomState.mapToProb`
 * Wrap `axle.IO.getLine` in `F[_]`
 * Wrap `axle.IO.prefixedDisplay` in `F[_]`
+
+## 0.5.5
 
 * Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
   * "Chance" should be its own player
@@ -99,6 +104,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Plot entropy by turn # for each strategy
   * Plot simulated score distribution for each strategy
 
+## 0.5.6+
+
 * MonotypeBayesanNetwork.filter -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself
   * Is there a way of seeing this as flatMap, though?
@@ -107,9 +114,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Or ask for a 0-entropy model and be told how expensive that was
 
 * Measure Theory
-
-* Fix `axle.algebra.GeoMetricSpaceSpec`
-* Fix `LogisticRegression` and move `LogisticRegression.md` back
 
 * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
 * Laws for `Factor`
@@ -126,12 +130,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
 * "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
 
-* Scala 2.13
+## After that
 
 * Configure makeSite to preview: previewFixedPort := Some(9999)
 * Copy css using makeSite (not update-docs.sh)
 * Fix markdown lint warnings
 * Figure out better way to reference images in docs
+
+* Fix `axle.algebra.GeoMetricSpaceSpec`
+* Fix `LogisticRegression` and move `LogisticRegression.md` back
 
 * Create a simple graph implementation so that `axle-core` can avoid including `axle-jung`
 * Create `axle-png` to help avoid “headless” exception or Xvfb requirement during tests
@@ -148,8 +155,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Factor tics and tics-{joda,algebra,spire} into separate libs?
 * Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
 * Demo Mandelbrot with Rational
-
-* Review `InteractionGraph`, `EliminationGraph`, `JoinTree` and the functions they power
 
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
