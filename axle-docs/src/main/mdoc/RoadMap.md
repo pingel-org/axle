@@ -49,16 +49,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
-* fix MonotypeBayesanNetwork.filter
-* sbt "project axle-wheel" "testOnly axle.stats.AlarmBurglaryEarthauakeBayesianNetworkIsBayes"
-* Merge
-
 * Ditch jekyll
 * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
-* Configure makeSite to preview: previewFixedPort := Some(9999)
-* Copy css using makeSite (not update-docs.sh)
-* Fix markdown lint warnings
-* Figure out better way to reference images in docs
 * Release and publish site
 
 ## 0.5.1
@@ -85,6 +77,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * the Alarm-Burglary-Earthquake 5-node network is reached
   * Basically the inverse of factor multiplication
   * `bn.factorFor(B) * bn.factorFor(E)` should be defined? (It errors)
+  * `MonotypeBayesanNetwork.filter` collapase into a single BNN
 
 * Consider a "case" to be a `Map` vs a `Vector`
 * Consider usefulness of `Factor` in terms of `Region`
@@ -135,6 +128,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Scala 2.13
 
+* Configure makeSite to preview: previewFixedPort := Some(9999)
+* Copy css using makeSite (not update-docs.sh)
+* Fix markdown lint warnings
+* Figure out better way to reference images in docs
+
 * Create a simple graph implementation so that `axle-core` can avoid including `axle-jung`
 * Create `axle-png` to help avoid “headless” exception or Xvfb requirement during tests
 * Fix "NSWindow drag regions should only be invalidated on the Main Thread! This will throw an exception in the future." warning during axle-jogl test
@@ -142,6 +140,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Friend of Spire
 
 * Redo Logic using Abstract Algebra
+
+* axioms of partial differentiation
 
 * Tests for `axle.ast`
 * Tics should take an argument

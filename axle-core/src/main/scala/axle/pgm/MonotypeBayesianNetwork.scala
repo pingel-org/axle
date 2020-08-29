@@ -6,7 +6,7 @@ import cats.implicits._
 
 import spire.algebra.Field
 import spire.algebra.Ring
-// import spire.implicits.multiplicativeSemigroupOps
+import spire.implicits.multiplicativeGroupOps
 import spire.implicits.additiveSemigroupOps
 import spire.random.Dist
 import spire.random.Generator
@@ -104,25 +104,35 @@ object MonotypeBayesanNetwork {
           import model.bayesianNetwork.convertableFromV
           import model.bayesianNetwork.orderV
 
-          val filteredCases: Iterable[(A, Seq[RegionEq[I]])] =
+          val originalJPT: Factor[I, V] =
             model
             .bayesianNetwork
             .jointProbabilityTable
+
+          val filteredProbability: V =
+            originalJPT
             .cases
             .map({ kase => model.combine1(kase.map(_.x).toVector) -> kase })
             .filter({ case (monotype, kase) => predicate(monotype) })
+            .map({ case (monotype, kase) => originalJPT.apply(kase) })
+            .foldLeft(Ring[V].zero)( Ring[V].additive.combine )
+          
+          val newProbabilities: Map[Vector[RegionEq[I]], V] =
+            originalJPT.probabilities.map({ case (k, p) =>
+              if( predicate(model.combine1(k.map(_.x).toVector)) ) {
+                k -> (p / filteredProbability)
+              } else {
+                k -> Ring[V].zero
+              }
+            }).toMap
 
+          // TODO collapase into a single BNN
           val filteredBayesianNetwork =
             BayesianNetwork[I, V, DG[BayesianNetworkNode[I, V], Edge]](
               model.bayesianNetwork.variableFactorMap.map({ case (subV, subVFactor) =>
                 subV -> Factor[I, V](
-                  subVFactor.variablesWithValues, {
-                    filteredCases.map( monotypeCase => {
-                      // subVFactor.probabilities: Map[Vector[RegionEq[I]], N]
-                      val k: Vector[RegionEq[I]] = subVFactor.variablesWithValues.map({ case (vv, _) => RegionEq(model.select(vv, monotypeCase))})
-                      k -> Field[V].one
-                    }).toMap.withDefaultValue(Field[V].zero)
-                  }
+                  subVFactor.variablesWithValues,
+                  newProbabilities
                 )
               })
             )
