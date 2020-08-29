@@ -10,8 +10,8 @@ import spire.math.Rational
 import spire.algebra._
 
 import axle.stats.ConditionalProbabilityTable
-import axle.stats.coin
 import axle.stats.entropy
+import axle.data.Coin
 import axle.quanta.Information
 import axle.jung.directedGraphJung
 
@@ -36,8 +36,8 @@ class InformationTheorySpec extends FunSuite with Matchers {
 
   test("coins") {
 
-    val biasedCoin = coin(Rational(9, 10))
-    val fairCoin = coin()
+    val biasedCoin = Coin.flipModel(Rational(9, 10))
+    val fairCoin = Coin.flipModel()
 
     implicit val id = Information.converterGraphK2[Double, DirectedSparseGraph]
 

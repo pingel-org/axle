@@ -9,24 +9,25 @@ import axle.eqSymbol
 import axle.algebra.Region
 import axle.pgm.MonotypeBayesanNetwork
 
+import axle.data.Coin
 import axle.stats.TestSupport._
 
 class FairCoinIsKolmogorov
   extends KolmogorovProbabilityProperties[Unit, ConditionalProbabilityTable, Symbol, Rational](
     "Fair coin",
     Arbitrary(Gen.oneOf(List(()))),
-    u => coin(),
-    m => Arbitrary(genRegion(coinSides)),
-    m => Region.eqRegionIterable(coinSides))
+    u => Coin.flipModel(),
+    m => Arbitrary(genRegion(Coin.sides)),
+    m => Region.eqRegionIterable(Coin.sides))
 
 import spire.math.Rational
 class BiasedCoinIsKolmogorov
   extends KolmogorovProbabilityProperties[Rational, ConditionalProbabilityTable, Symbol, Rational](
     "Arbitrarily biased coins",
     Arbitrary(Gen.choose(0d,1d).map(Rational.apply)),
-    coin,
-    bias => Arbitrary(genRegion(coinSides)),
-    bias => Region.eqRegionIterable(coinSides))
+    Coin.flipModel,
+    bias => Arbitrary(genRegion(Coin.sides)),
+    bias => Region.eqRegionIterable(Coin.sides))
 
 import spire.implicits.IntAlgebra
 import axle.game.Dice._

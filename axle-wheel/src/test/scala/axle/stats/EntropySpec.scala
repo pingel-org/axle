@@ -12,6 +12,7 @@ import spire.math.Rational
 import axle.jung.directedGraphJung
 import axle.quanta.Information
 import axle.quanta.UnittedQuantity
+import axle.data.Coin
 
 class EntropySpec extends FunSuite with Matchers {
 
@@ -25,7 +26,7 @@ class EntropySpec extends FunSuite with Matchers {
     val biasToEntropy = new collection.immutable.TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
       (0 to 100).map(i => {
         val r = Rational(i.toLong, 100)
-        val e = entropy[Symbol, Rational](coin(r))
+        val e = entropy[Symbol, Rational](Coin.flipModel(r))
         r -> e
       }).toMap
 

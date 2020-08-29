@@ -49,14 +49,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
+* Scala 2.13
 * Ditch jekyll
 * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
 * Release and publish site
 
 ## 0.5.1
 
-* Scala 2.13
-* Move `coin` out of `axle.stats`
 * Move more stuff out of `axle.math`
 * `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
 * Move more stuff out of `axle-core` package
