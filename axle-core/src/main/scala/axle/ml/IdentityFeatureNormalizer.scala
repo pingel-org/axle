@@ -14,5 +14,5 @@ case class IdentityFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Int,
   def unapply(featureRow: M): Seq[Double] =
     featureRow.toList
 
-  def random(): M = la.fromColumnMajorArray(1, X.columns, (0 until X.columns).map(i => math.random).toArray)
+  def random(): M = la.fromColumnMajorArray(1, X.columns, (0 until X.columns).map(i => math.random()).toArray)
 }

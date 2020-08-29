@@ -61,8 +61,8 @@ package object math {
     //    import spire.implicits.multiplicativeGroupOps
 
     val randomPointInCircle: () => V = () => {
-      val x = random * 2 - 1
-      val y = random * 2 - 1
+      val x = random() * 2 - 1
+      val y = random() * 2 - 1
       if (x * x + y * y < 1) field.one else field.zero
     }
 
