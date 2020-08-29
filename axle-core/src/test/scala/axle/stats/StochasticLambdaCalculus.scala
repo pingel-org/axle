@@ -33,6 +33,7 @@ class StochasticLambdaCalculus extends FunSuite with Matchers {
         } else {
           ab
         }
+    }
 
     distribution.P(RegionEq(1)) should be(Rational(1, 18))
 
