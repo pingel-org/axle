@@ -1,12 +1,12 @@
 package axle
 
+import scala.reflect.ClassTag
 import scala.Stream.cons
-import scala.Stream.empty
 import scala.annotation.tailrec
 
 import cats.implicits._
 
-case class Combinations[E](pool: IndexedSeq[E], r: Int) extends Iterable[IndexedSeq[E]] {
+case class Combinations[E: ClassTag](pool: IndexedSeq[E], r: Int) extends Iterable[IndexedSeq[E]] {
 
   val n = pool.size
 
@@ -30,7 +30,7 @@ case class Combinations[E](pool: IndexedSeq[E], r: Int) extends Iterable[Indexed
   def loop2(indices0: Array[Int]): (Stream[IndexedSeq[E]], Array[Int], Boolean) = {
     val (broken1, i0) = loop3(indices0, r - 1, false)
     if (!broken1) {
-      (empty, indices0, true)
+      (Stream.empty, indices0, true)
     } else {
       val indices1 = indices0.zipWithIndex.map({
         case (v, j) =>
@@ -50,7 +50,7 @@ case class Combinations[E](pool: IndexedSeq[E], r: Int) extends Iterable[Indexed
 
   def loop1(indices0: Array[Int], done0: Boolean): Stream[IndexedSeq[E]] =
     if (done0) {
-      empty
+      Stream.empty
     } else {
       val (subStream, indices1, done1) = loop2(indices0)
       subStream ++ loop1(indices1, done1)

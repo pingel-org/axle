@@ -10,21 +10,21 @@ import cats.kernel.Eq
 import cats.implicits._
 
 import spire.algebra.AdditiveMonoid
-import spire.algebra.Module
 import spire.algebra.Ring
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
-import spire.implicits.moduleOps
 
 import axle.algebra.Aggregatable
 import axle.algebra.Finite
 import axle.algebra.FromStream
 import axle.algebra.Indexed
 import axle.algebra.LinearAlgebra
+import axle.algebra.Module
 import axle.algebra.Zipper
 import axle.algebra.SimilaritySpace
 import axle.math._
 import axle.syntax.finite.finiteOps
+import axle.syntax.module.moduleOps
 import axle.syntax.indexed.indexedOps
 import axle.syntax.linearalgebra.matrixOps
 

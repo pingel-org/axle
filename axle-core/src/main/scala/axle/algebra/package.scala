@@ -8,7 +8,6 @@ import spire.algebra._
 import spire.implicits.additiveGroupOps
 
 import spire.math.Rational
-import spire.math.Rational.apply
 import spire.math.Real
 import spire.math.Real.apply
 
@@ -72,11 +71,11 @@ package object algebra {
 
   implicit val rationalDoubleMetricSpace: MetricSpace[Rational, Double] =
     (v: Rational, w: Rational) =>
-      (v.toDouble - w.toDouble).abs
+      spire.math.abs(v.toDouble - w.toDouble)
 
   implicit val realDoubleMetricSpace: MetricSpace[Real, Double] =
     (v: Real, w: Real) =>
-      (v.toDouble - w.toDouble).abs
+      spire.math.abs(v.toDouble - w.toDouble)
 
   // implicit val doubleDoubleMetricSpace: MetricSpace[Double, Double] =
   //   (v: Double, w: Double) =>
@@ -140,6 +139,7 @@ package object algebra {
   object modules {
 
     val rat = new spire.math.RationalAlgebra()
+    val realAlgebra = new spire.math.RealAlgebra
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
@@ -178,7 +178,7 @@ package object algebra {
     implicit val realDoubleModule: Module[Real, Double] =
       new Module[Real, Double] {
 
-        def negate(x: Real): Real = -x
+        def negate(x: Real): Real = realAlgebra.negate(x)
 
         def zero: Real = Real(0)
 
@@ -192,7 +192,7 @@ package object algebra {
     implicit val realRationalModule: Module[Real, Rational] =
       new Module[Real, Rational] {
 
-        def negate(x: Real): Real = -x
+        def negate(x: Real): Real = realAlgebra.negate(x)
 
         def zero: Real = Real(0)
 

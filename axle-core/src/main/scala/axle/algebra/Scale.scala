@@ -1,12 +1,12 @@
 package axle.algebra
 
 import spire.algebra.Field
-import spire.algebra.Module
 import spire.math.abs
 import spire.math.ConvertableTo
 import spire.math.Rational
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
+import axle.algebra.Module
 
 // TODO this needs less than a Field
 case class Scale[N](factor: Rational)(implicit module: Module[N, Rational]) extends Bijection[N, N] {

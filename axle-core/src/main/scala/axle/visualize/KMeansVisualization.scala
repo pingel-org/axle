@@ -10,7 +10,7 @@ import axle.visualize.element.Oval
 import axle.visualize.element.Rectangle
 import axle.visualize.element.XTics
 import axle.visualize.element.YTics
-import axle.syntax.linearalgebra._
+//import axle.syntax.linearalgebra._
 import cats.implicits._
 
 case class KMeansVisualization[D, F[_], M](

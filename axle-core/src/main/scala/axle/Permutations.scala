@@ -2,7 +2,6 @@ package axle
 
 import scala.reflect.ClassTag
 import scala.Stream.cons
-import scala.Stream.empty
 
 import cats.implicits._
 
@@ -64,7 +63,7 @@ case class Permutations[E: ClassTag](pool: IndexedSeq[E], r: Int)
       val (subStream, indices3, cycles3, broken3) = loop2(indices2, cycles2, i2, broken2)
       (if (result.isDefined) cons(result.get, subStream) else subStream, indices3, cycles3, broken3)
     } else {
-      (empty, indices0, cycles0, broken0)
+      (Stream.empty, indices0, cycles0, broken0)
     }
 
   private[this] def loop1(indices: Array[Int], cycles: Array[Int]): Stream[IndexedSeq[E]] = {
@@ -77,7 +76,7 @@ case class Permutations[E: ClassTag](pool: IndexedSeq[E], r: Int)
     val head = untilR.map(indices(_)).map(pool(_))
     cons(head, loop1(indices, n.until(n - r, -1).toArray))
   } else {
-    empty
+    Stream.empty
   }
 
   def iterator: Iterator[IndexedSeq[E]] = result.iterator

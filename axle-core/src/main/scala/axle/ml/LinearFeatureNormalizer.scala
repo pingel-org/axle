@@ -23,6 +23,6 @@ case class LinearFeatureNormalizer[M](X: M)(implicit la: LinearAlgebra[M, Int, I
     (featureRow.mulPointwise(colRanges) + colMins).toList
 
   def random(): M =
-    la.fromColumnMajorArray(1, X.columns, (0 until X.columns).map(i => math.random).toArray).mulPointwise(colRanges) + colMins
+    la.fromColumnMajorArray(1, X.columns, (0 until X.columns).map(i => math.random()).toArray).mulPointwise(colRanges) + colMins
 
 }

@@ -17,6 +17,12 @@ object Dice {
   val sixth = Rational(1, 6)
 
   val numberToUtfFace: Int => Symbol =
-    (1 to 6).zip(Vector('⚀, '⚁, '⚂, '⚃, '⚄, '⚅)).toMap
+    (1 to 6).zip(Vector(
+      Symbol("⚀"),
+      Symbol("⚁"),
+      Symbol("⚂"),
+      Symbol("⚃"),
+      Symbol("⚄"),
+      Symbol("⚅"))).toMap
 
 }

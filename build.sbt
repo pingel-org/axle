@@ -7,22 +7,23 @@ import ReleaseTransformations._
 // TODO scoverage, noPublishSettings, release plugin
 // TODO minimum sbt version
 
-lazy val spireVersion = "0.14.1"
-lazy val shapelessVersion = "2.3.2"
-lazy val kittensVersion = "2.0.0"
+lazy val spireVersion = "0.17.0-M1"
+lazy val shapelessVersion = "2.4.0-M1"
+lazy val kittensVersion = "2.1.0"
 //lazy val catsVersion = "0.9.0" // match spire's algebra's catsVersion (and monix)
-lazy val catsVersion = "2.1.1"
-lazy val catsEffectVersion = "2.1.3"
+lazy val catsVersion = "2.2.0-RC4"
+lazy val catsEffectVersion = "2.1.4"
 
-lazy val disciplineVersion = "0.7.2"
-lazy val scalaCheckVersion = "1.13.4"
-lazy val scalaTestVersion = "3.0.0"
+lazy val disciplineVersion = "1.0.0"
+lazy val scalaCheckVersion = "1.14.1"
+lazy val scalaTestVersion = "3.2.0"
 
 lazy val scalaXmlVersion = "1.3.0"
-lazy val scalaParserCombinatorsVersion = "1.0.4"
+lazy val scalaParserCombinatorsVersion = "1.1.2"
+lazy val scalaParallelCollectionsVersion = "0.2.0"
 lazy val jungVersion = "2.1"
 lazy val jblasVersion = "1.2.4"
-lazy val jacksonVersion = "2.8.4"
+lazy val jacksonVersion = "2.11.2"
 lazy val jodaTimeVersion = "2.9.4"
 lazy val jodaConvertVersion = "1.8.1"
 lazy val monixVersion = "3.1.0"
@@ -34,14 +35,14 @@ lazy val scoverageSettings = Seq(
   coverageHighlighting := true
 )
 
-scalaVersion := "2.12.11"
+scalaVersion := "2.13.3"
 
 autoCompilerPlugins := true
 
 lazy val buildSettings = Seq(
   organization := "org.axle-lang",
-  scalaVersion := "2.12.11",
-  crossScalaVersions := Seq("2.12.11")
+  scalaVersion := "2.13.3",
+  crossScalaVersions := Seq("2.12.12", "2.13.3")
 )
 
 lazy val axleDoctestSettings = Seq(
@@ -64,9 +65,10 @@ lazy val axleCore = Project("axle-core", file("axle-core"))
       "io.monix"               %% "monix-reactive"           % monixVersion,
       // "io.monix"               %% "monix-cats"               % monixVersion,
       "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion,
+      "org.scala-lang.modules" %% "scala-parallel-collections" % scalaParallelCollectionsVersion,
       "org.scalatest"          %% "scalatest"                % scalaTestVersion, // TODO % "test",
       "org.scalacheck"         %% "scalacheck"               % scalaCheckVersion  % "test",
-      "org.typelevel"          %% "discipline"               % disciplineVersion,
+      "org.typelevel"          %% "discipline-core"          % disciplineVersion,
       // needed for visualizations
       "net.sf.jung"            %  "jung-visualization"       % jungVersion        % "provided",
       "net.sf.jung"            %  "jung-algorithms"          % jungVersion        % "provided",
@@ -255,9 +257,6 @@ lazy val commonScalacOptions = Seq(
   "-Xlint",
 //  "-Yliteral-types",
 //  "-Yinline-warnings",
-  "-Ypartial-unification",
-  "-Ywarn-unused-import",
-  "-Yno-adapted-args",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Ywarn-value-discard",
@@ -266,8 +265,11 @@ lazy val commonScalacOptions = Seq(
 
 // http://www.scala-sbt.org/using_sonatype.html
 
+sonatypeProfileName := "org.axle-lang"
+
 lazy val sharedPublishSettings = Seq(
   releaseCrossBuild := true,
+  sonatypeProfileName := "org.axle-lang",
   releaseTagName := tagName.value,
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
   publishMavenStyle := true,
