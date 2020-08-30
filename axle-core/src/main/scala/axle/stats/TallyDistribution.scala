@@ -77,6 +77,8 @@ case class TallyDistribution[A, V](
   val totalCount: V = Σ[V, Iterable](tally.values)
 
   val bars: Map[A, V] =
-    tally.scanLeft((dummy[A], ringV.zero))((x, y) => (y._1, ringV.plus(x._2, y._2))).drop(1)
+    tally.scanLeft((dummy[A], ringV.zero))((x, y) =>
+     (y._1, ringV.plus(x._2, y._2))
+    ).drop(1).toMap
 
 }
