@@ -7,11 +7,11 @@ import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
 import axle.math.sine
 import cats.kernel.Eq
-import spire.algebra.Module
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.Trig
-import spire.implicits.moduleOps
 import spire.implicits.multiplicativeSemigroupOps
+import axle.algebra.Module
+import axle.syntax.module.moduleOps
 
 /**
  *

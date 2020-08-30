@@ -59,7 +59,7 @@ trait TimeConverter[N] extends UnitConverter[Time, N] with TimeUnits {
 
 object Time {
 
-  import spire.algebra.Module
+  import axle.algebra.Module
   import spire.math._
 
   def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
