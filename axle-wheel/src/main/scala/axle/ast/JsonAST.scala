@@ -65,8 +65,8 @@ object JsonAST {
     case x: Map[_, _] =>
       mapToRuleNode(x.asInstanceOf[Map[String, Any]], parentLineNo)
 
-    case x: collection.convert.Wrappers.JMapWrapper[_, _] =>
-      mapToRuleNode(x.toMap.asInstanceOf[Map[String, Any]], parentLineNo)
+    // case x: collection.convert.Wrappers.JMapWrapper[_, _] =>
+    //   mapToRuleNode(x.toMap.asInstanceOf[Map[String, Any]], parentLineNo)
 
     case arr: Array[_]   => AstNodeList(arr.map(obj2ast(_, parentLineNo)).toList, parentLineNo)
 

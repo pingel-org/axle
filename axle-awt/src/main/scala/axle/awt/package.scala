@@ -98,7 +98,7 @@ package object awt {
 
       def paint(plot: Plot[S, X, Y, D], g2d: Graphics2D): Unit = {
         import plot._
-        Option(dataFn.apply) foreach { data =>
+        Option(dataFn()) foreach { data =>
 
           val view = PlotView(plot, data)
           import view._
@@ -259,7 +259,7 @@ package object awt {
           g2d.setColor(cachedColor(colorOf(label)))
           val xs = orderedXs(d).toVector
           if (connect && xs.size > 1) {
-            val xsStream = xs.toStream
+            val xsStream = xs.to(LazyList)
             xsStream.zip(xsStream.tail) foreach {
               case (x0, x1) =>
                 drawLine(g2d, scaledArea, Point2D(x0, x2y(d, x0)), Point2D(x1, x2y(d, x1)))

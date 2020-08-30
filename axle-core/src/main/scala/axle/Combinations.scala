@@ -43,7 +43,7 @@ case class Combinations[E: ClassTag](pool: IndexedSeq[E], r: Int) extends Iterab
       })
       val head = indices1.map(pool)
       val (tail, indices2, done) = loop2(indices1)
-      (LazyList.cons(head, tail), indices2, done)
+      (LazyList.cons(head.toIndexedSeq, tail), indices2, done)
     }
   }
 
@@ -56,8 +56,8 @@ case class Combinations[E: ClassTag](pool: IndexedSeq[E], r: Int) extends Iterab
     }
 
   lazy val result: LazyList[IndexedSeq[E]] = {
-    val indices = (0 until r).toArray
-    LazyList.cons(indices.map(pool), loop1(indices, false))
+    val indices = (0 until r)
+    LazyList.cons(indices.map(pool), loop1(indices.toArray, false))
   }
 
   def iterator: Iterator[IndexedSeq[E]] = result.iterator

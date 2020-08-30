@@ -48,7 +48,7 @@ case class Permutations[E: ClassTag](pool: IndexedSeq[E], r: Int)
       (None, indices1, cycles1, i0 - 1, false)
     } else {
       val (result2, indices2) = loop2branchFalse(indices0, cycles0, i0)
-      (Some(result2), indices2, cycles0, i0, true)
+      (Some(result2.toIndexedSeq), indices2, cycles0, i0, true)
     }
 
   private[this] def loop2(
@@ -73,7 +73,7 @@ case class Permutations[E: ClassTag](pool: IndexedSeq[E], r: Int)
   lazy val result: LazyList[IndexedSeq[E]] = if (r <= n && n > 0) {
     val indices = untilN
     val head = untilR.map(indices(_)).map(pool(_))
-    LazyList.cons(head, loop1(indices, n.until(n - r, -1).toArray))
+    LazyList.cons(head.toIndexedSeq, loop1(indices, n.until(n - r, -1).toArray))
   } else {
     LazyList.empty
   }

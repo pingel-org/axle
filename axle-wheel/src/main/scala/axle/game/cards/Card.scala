@@ -7,7 +7,7 @@ import cats.implicits._
 object Card {
 
   def fromString(s: String): IndexedSeq[Card] =
-    s.split(",").map(Card(_))
+    s.split(",").map(Card(_)).toVector
 
   val orderRank = Order[Rank]
   val orderSuit = Order[Suit]

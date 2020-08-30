@@ -8,7 +8,7 @@ import scala.xml.NodeSeq
 import scala.xml.Node
 import scala.xml.XML
 import scala.xml.Text
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 import cats.Show
 import cats.implicits._

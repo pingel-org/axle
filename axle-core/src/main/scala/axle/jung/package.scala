@@ -4,7 +4,7 @@ package axle
 //import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 //import scala.xml.Node
 //import scala.xml.NodeSeq
 //import scala.xml.Text
@@ -110,9 +110,6 @@ package object jung {
   implicit def directedGraphJung[V, E]: DirectedGraph[DirectedSparseGraph[V, E], V, E] =
     new DirectedGraph[DirectedSparseGraph[V, E], V, E] {
 
-      import scala.collection.JavaConverters.asScalaBufferConverter
-      import scala.collection.JavaConverters.collectionAsScalaIterableConverter
-
       import axle.enrichIndexedSeq
       import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
       import edu.uci.ics.jung.graph.DirectedSparseGraph
@@ -134,7 +131,7 @@ package object jung {
       }
 
       def vertices(jdsg: DirectedSparseGraph[V, E]): Iterable[V] =
-        jdsg.getVertices.asScala
+        jdsg.getVertices.asInstanceOf[java.util.Collection[V]].asScala
 
       def edges(jdsg: DirectedSparseGraph[V, E]): Iterable[E] =
         jdsg.getEdges.asScala
@@ -308,8 +305,6 @@ package object jung {
 
   implicit def undirectedGraphJung[V, E]: UndirectedGraph[UndirectedSparseGraph[V, E], V, E] =
     new UndirectedGraph[UndirectedSparseGraph[V, E], V, E] {
-
-      import scala.collection.JavaConverters.collectionAsScalaIterableConverter
 
       import edu.uci.ics.jung.graph.UndirectedSparseGraph
       import cats.kernel.Eq

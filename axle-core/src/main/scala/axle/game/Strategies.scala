@@ -37,9 +37,9 @@ object Strategies {
     evGameIO: GameIO[G, O, M, MS, MM],
     evEqM: Eq[M]): (G, MS) => ConditionalProbabilityTable[M, V] =
     (game: G, state: MS) => {
-      val parsed = evGameIO.parseMove(game, input(game, state)).right.toOption.get
+      val parsed = evGameIO.parseMove(game, input(game, state)).toOption.get
       val validated = evGame.isValid(game, state, parsed)
-      val move = validated.right.toOption.get
+      val move = validated.toOption.get
       ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
     }
 
@@ -65,14 +65,14 @@ object Strategies {
         map(input => {
           val parsed = evGameIO.parseMove(game, input)
           parsed.left.foreach(display)
-          parsed.right.flatMap(move => {
+          parsed.flatMap(move => {
             val validated = evGame.isValid(game, state, move)
             validated.left.foreach(display)
             validated
           })
         })
 
-      val move = stream.find(esm => esm.isRight).get.right.toOption.get
+      val move = stream.find(esm => esm.isRight).get.toOption.get
       ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
     }
 

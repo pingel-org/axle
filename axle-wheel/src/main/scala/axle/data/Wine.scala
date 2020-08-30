@@ -1,7 +1,7 @@
 package axle.data
 
 import spire.algebra.Field
-import spire.implicits.moduleOps
+import axle.syntax.module.moduleOps
 
 import axle.quanta._
 

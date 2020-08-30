@@ -2,7 +2,7 @@ package axle.data
 
 import spire.algebra.Field
 import axle.quanta._
-import spire.implicits.moduleOps
+import axle.syntax.module.moduleOps
 
 case class CelestialBody(
   name:        String,

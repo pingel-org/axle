@@ -25,7 +25,7 @@ object Deck {
   implicit def showDeck: Show[Deck] = deck =>
     deck.cards.map(_.show).mkString(" ")
 
-  def riffle(left: List[Card], right: List[Card], booleanStream: Stream[Boolean]): List[Card] =
+  def riffle(left: List[Card], right: List[Card], booleanStream: LazyList[Boolean]): List[Card] =
     if( left.isEmpty ) {
       right
     } else if ( right.isEmpty ) {
@@ -39,7 +39,7 @@ object Deck {
   def riffleShuffle(deck: Deck, rng: Generator): Deck = {
 
     val splitAt = rng.nextInt(1, deck.cards.size -1)
-    val booleanStream = Stream.continually(spire.random.Generator.rng.nextBoolean)
+    val booleanStream = LazyList.continually(spire.random.Generator.rng.nextBoolean())
 
     val left = deck.cards.take(splitAt)
     val right = deck.cards.drop(splitAt)

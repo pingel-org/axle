@@ -157,7 +157,6 @@ package object algebra {
         implicit def scalar: Rng[Int] = ringInt
 
         def timesl(r: Int, v: Double): Double = r * v
-
       }
 
     implicit val doubleDoubleModule: Module[Double, Double] =

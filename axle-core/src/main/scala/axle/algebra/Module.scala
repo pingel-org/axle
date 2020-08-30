@@ -10,10 +10,10 @@ trait Module[T, S] {
 
     def plus(x: T, y: T): T
 
-    implicit def scalar: Rng[T]
+    implicit def scalar: Rng[S]
 
-    def timesl(r: S, v: T): T
+    def timesl(s: S, v: T): T
 
-    def timesr(v: T, l: S): T
+    def timesr(v: T, s: S): T = timesl(s, v)
 
 }

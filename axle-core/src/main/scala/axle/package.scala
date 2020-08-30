@@ -139,9 +139,7 @@ package object axle {
 
   // Axle enrichments of scala collections
 
-  implicit def enrichGenSeq[T](genSeq: collection.GenSeq[T]): EnrichedGenSeq[T] = EnrichedGenSeq(genSeq)
-
-  implicit def enrichGenTraversable[T](gt: collection.GenTraversable[T]): EnrichedGenTraversable[T] = EnrichedGenTraversable(gt)
+  implicit def enrichIterable[T](ita: Iterable[T]): EnrichedIterable[T] = EnrichedIterable(ita)
 
   implicit def enrichIndexedSeq[T](is: IndexedSeq[T]): EnrichedIndexedSeq[T] = EnrichedIndexedSeq(is)
 

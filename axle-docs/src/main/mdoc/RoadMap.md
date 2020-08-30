@@ -153,6 +153,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
 * Demo Mandelbrot with Rational
 
+* `axle.nlp.Corpus` should support `Aggregatable`
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 * Replace Finite with Shapeless's version
