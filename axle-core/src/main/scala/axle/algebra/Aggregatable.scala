@@ -57,13 +57,4 @@ object Aggregatable {
         s.aggregate(zeroValue)(seqOp, combOp)
     }
 
-  import scala.collection.immutable.{ IndexedSeq => ImmIndexedSeq }
-
-  implicit val aggregatableImmutableIndexedSeq =
-    new Aggregatable[ImmIndexedSeq] {
-
-      def aggregate[A, B](is: ImmIndexedSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
-        is.aggregate(zeroValue)(seqOp, combOp)
-    }
-
 }
