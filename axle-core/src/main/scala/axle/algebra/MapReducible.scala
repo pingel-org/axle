@@ -28,6 +28,7 @@ object MapReducible {
         input
           .map(mapper)
           .groupBy(_._1)
+          .view
           .mapValues(kbs => kbs.map(_._2).foldLeft(zero)(reduce))
           .toSeq
     }
@@ -43,6 +44,7 @@ object MapReducible {
         input
           .map(mapper)
           .groupBy(_._1)
+          .view
           .mapValues(kbs => kbs.map(_._2).foldLeft(zero)(reduce))
           .toVector
     }
@@ -58,6 +60,7 @@ object MapReducible {
         input
           .map(mapper)
           .groupBy(_._1)
+          .view
           .mapValues(kbs => kbs.map(_._2).foldLeft(zero)(reduce))
           .toList
     }

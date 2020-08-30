@@ -24,13 +24,13 @@ object Aggregatable {
   implicit val aggregatableList =
     new Aggregatable[List] {
       def aggregate[A, B](as: List[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
-        as.aggregate(zeroValue)(seqOp, combOp)
+        as.foldLeft(zeroValue)(seqOp)
     }
 
   implicit val aggregatableVector =
     new Aggregatable[Vector] {
       def aggregate[A, B](as: Vector[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
-        as.aggregate(zeroValue)(seqOp, combOp)
+        as.foldLeft(zeroValue)(seqOp)
     }
 
   implicit val aggregatableParSeq =
@@ -42,19 +42,19 @@ object Aggregatable {
   implicit val aggregatableIndexedSeq =
     new Aggregatable[IndexedSeq] {
       def aggregate[A, B](is: IndexedSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
-        is.aggregate(zeroValue)(seqOp, combOp)
+        is.foldLeft(zeroValue)(seqOp)
     }
 
   implicit val aggregatableIterable =
     new Aggregatable[Iterable] {
       def aggregate[A, B](i: Iterable[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
-        i.aggregate(zeroValue)(seqOp, combOp)
+        i.foldLeft(zeroValue)(seqOp)
     }
 
   implicit val aggregatableSet =
     new Aggregatable[Set] {
       def aggregate[A, B](s: Set[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
-        s.aggregate(zeroValue)(seqOp, combOp)
+        s.foldLeft(zeroValue)(seqOp)
     }
 
 }

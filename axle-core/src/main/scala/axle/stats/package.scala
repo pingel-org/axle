@@ -1,7 +1,5 @@
 package axle
 
-import scala.Stream.cons
-
 import cats.Functor
 import cats.kernel.Eq
 
@@ -139,9 +137,9 @@ package object stats {
     implicit convert: InformationConverter[Double]): UnittedQuantity[Information, Double] =
     entropy(model)
 
-  def _reservoirSampleK[N](k: Int, i: Int, reservoir: List[N], xs: Stream[N], gen: Generator): Stream[List[N]] =
+  def _reservoirSampleK[N](k: Int, i: Int, reservoir: List[N], xs: LazyList[N], gen: Generator): LazyList[List[N]] =
     if (xs.isEmpty) {
-      cons(reservoir, Stream.empty)
+      LazyList.cons(reservoir, LazyList.empty)
     } else {
       val newReservoir =
         if (i < k) {
@@ -155,10 +153,10 @@ package object stats {
             reservoir
           }
         }
-      cons(newReservoir, _reservoirSampleK(k, i + 1, newReservoir, xs.tail, gen))
+      LazyList.cons(newReservoir, _reservoirSampleK(k, i + 1, newReservoir, xs.tail, gen))
     }
 
-  def reservoirSampleK[N](k: Int, xs: Stream[N], gen: Generator) =
+  def reservoirSampleK[N](k: Int, xs: LazyList[N], gen: Generator) =
     _reservoirSampleK(k, 0, Nil, xs, gen)
 
 

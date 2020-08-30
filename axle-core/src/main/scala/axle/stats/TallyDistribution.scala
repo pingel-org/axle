@@ -52,7 +52,7 @@ object TallyDistribution {
       def filter[A, V](model: TallyDistribution[A, V])(predicate: Region[A])(implicit fieldV: Field[V]): TallyDistribution[A, V] = {
         val newMap: Map[A, V] = model.tally.toVector.filter({ case (a, v) => predicate(a)}).groupBy(_._1).map( bvs => bvs._1 -> Σ(bvs._2.map(_._2)) )
         val newDenominator: V = Σ(newMap.values)
-        TallyDistribution[A, V](newMap.mapValues(v => v / newDenominator).toMap)
+        TallyDistribution[A, V](newMap.view.mapValues(v => v / newDenominator).toMap)
       }
 
       def unit[A, V](a: A)(implicit eqA: cats.kernel.Eq[A], ringV: Ring[V]): TallyDistribution[A, V] =

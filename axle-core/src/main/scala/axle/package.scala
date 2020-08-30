@@ -164,12 +164,12 @@ package object axle {
 
   def applyForever[N](f: N => N, x0: N): Iterator[N] =
     Iterator
-      .continually(Unit)
+      .continually(())
       .scanLeft(x0)({ case (x, _) => f(x) })
 
   def trace[N](f: N => N, x0: N): Iterator[(N, Set[N])] =
     Iterator
-      .continually(Unit)
+      .continually(())
       .scanLeft((x0, Set.empty[N]))({
         case ((x, points), _) =>
           (f(x), points + x)

@@ -5,6 +5,7 @@ import cats.kernel.Order
 
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
+import spire.algebra.CRing
 import spire.algebra.Ring
 import spire.random.Generator
 import spire.random.Dist
@@ -350,7 +351,7 @@ final class AggregatableOps[G[_], A](val ts: G[A])(
 final class TalliableOps[F[_], A, N](val as: F[A])(
   implicit
   talliable: Talliable[F],
-  ring:      Ring[N]) {
+  ring:      CRing[N]) {
 
   def tally = talliable.tally(as)
 }

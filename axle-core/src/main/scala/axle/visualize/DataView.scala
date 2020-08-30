@@ -21,7 +21,7 @@ import axle.stats.ProbabilityModel
 @implicitNotFound("Witness not found for DataView[${X}, ${Y}, ${D}]")
 trait DataView[X, Y, D] {
 
-  def keys(d: D): Traversable[X]
+  def keys(d: D): Iterable[X]
 
   def valueOf(d: D, x: X): Y
 
@@ -38,7 +38,7 @@ object DataView {
       val yPlottable = Plottable[Y]
       val yAdditiveMonoid = AdditiveMonoid[Y]
 
-      def keys(d: Map[X, Y]): Traversable[X] = d.keys.toList.sorted
+      def keys(d: Map[X, Y]): Iterable[X] = d.keys.toList.sorted
 
       def valueOf(d: Map[X, Y], x: X): Y = d.get(x).getOrElse(yAdditiveMonoid.zero)
 
@@ -60,7 +60,7 @@ object DataView {
       val yPlottable = Plottable[Y]
       val fieldY = Field[Y]
 
-      def keys(d: ConditionalProbabilityTable[X, Y]): Traversable[X] = d.values
+      def keys(d: ConditionalProbabilityTable[X, Y]): Iterable[X] = d.values
 
       def valueOf(d: ConditionalProbabilityTable[X, Y], x: X): Y = prob.probabilityOf(d)(RegionEq(x))
 

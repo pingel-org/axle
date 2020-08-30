@@ -1,7 +1,5 @@
 package axle
 
-import scala.Stream.cons
-
 import cats.kernel.Order
 
 import spire.algebra.Field
@@ -27,15 +25,15 @@ package object game {
     prob:   ProbabilityModel[PM],
     distV:  Dist[V],
     ringV:  Ring[V],
-    orderV: Order[V]): Stream[(S, M, S)] =
+    orderV: Order[V]): LazyList[(S, M, S)] =
     evGame.mover(game, fromState).map(mover => {
       val strategyFn = evGame.strategyFor(game, mover)
       val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
       val move = strategy.observe(gen)
       val toState = evGame.applyMove(game, fromState, move)
-      cons((fromState, move, toState), moveStateStream(game, toState, gen))
+      LazyList.cons((fromState, move, toState), moveStateStream(game, toState, gen))
     }) getOrElse {
-      Stream.empty
+      LazyList.empty
     }
 
   def moveFromRandomState[G, S, O, M, MS, MM, V, PM[_, _]](
@@ -92,15 +90,15 @@ package object game {
     prob:   ProbabilityModel[PM],
     distV:  Dist[V],
     ringV:  Ring[V],
-    orderV: Order[V]): Stream[(S, T, S)] =
+    orderV: Order[V]): LazyList[(S, T, S)] =
     evGame.mover(game, fromState).map(mover => {
       val strategyFn = evGame.strategyFor(game, mover)
       val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
       val move = strategy.observe(gen)
       val toState = evGame.applyMove(game, fromState, move)
-      cons((fromState, strategyToT(game, fromState, strategy), toState), stateStreamMap(game, toState, strategyToT, gen))
+      LazyList.cons((fromState, strategyToT(game, fromState, strategy), toState), stateStreamMap(game, toState, strategyToT, gen))
     }) getOrElse {
-      Stream.empty
+      LazyList.empty
     }
 
   def stateStrategyMoveStream[G, S, O, M, MS, MM, V, PM[_, _]](
@@ -112,15 +110,15 @@ package object game {
     prob:   ProbabilityModel[PM],
     distV:  Dist[V],
     ringV:  Ring[V],
-    orderV: Order[V]): Stream[(S, PM[M, V], M, S)] =
+    orderV: Order[V]): LazyList[(S, PM[M, V], M, S)] =
     evGame.mover(game, fromState).map(mover => {
       val strategyFn = evGame.strategyFor(game, mover)
       val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
       val move = strategy.observe(gen)
       val toState = evGame.applyMove(game, fromState, move)
-      cons((fromState, strategy, move, toState), stateStrategyMoveStream(game, toState, gen))
+      LazyList.cons((fromState, strategy, move, toState), stateStrategyMoveStream(game, toState, gen))
     }) getOrElse {
-      Stream.empty
+      LazyList.empty
     }
     
   def play[G, S, O, M, MS, MM, V, PM[_, _]](game: G, gen: Generator)(
@@ -154,7 +152,7 @@ package object game {
       display(evGameIO.displayStateTo(game, evGame.maskState(game, start, observer), observer))
     }
 
-    val mss: Stream[(S, M, S)] = moveStateStream(game, start, gen)
+    val mss: LazyList[(S, M, S)] = moveStateStream(game, start, gen)
 
     val lastState = mss map {
       case (fromState, move, toState) => {
@@ -193,9 +191,9 @@ package object game {
     evGameIO: GameIO[G, O, M, MS, MM],
     distV:    Dist[V],
     ringV:    Ring[V],
-    orderV:   Order[V]): Stream[S] = {
+    orderV:   Order[V]): LazyList[S] = {
     val end = play(game, start, intro, gen)
-    cons(end, gameStream(game, evGame.startFrom(game, end).get, false, gen))
+    LazyList.cons(end, gameStream(game, evGame.startFrom(game, end).get, false, gen))
   }
 
   def playContinuously[G, S, O, M, MS, MM, V, PM[_, _]](

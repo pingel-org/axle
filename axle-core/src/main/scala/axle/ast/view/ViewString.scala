@@ -41,7 +41,7 @@ object ViewString extends View[String] {
 
   override def llRules(g: LLLanguage): String =
     "Rules:\n\n" +
-      g._llRules.map(rule => (rule.id + ". " + rule.show)).mkString("\n")
+      g._llRules.map(rule => (rule.id.show + ". " + rule.show)).mkString("\n")
 
   override def llParseTable(g: LLLanguage): String =
     "Parse Table:\n\n" +

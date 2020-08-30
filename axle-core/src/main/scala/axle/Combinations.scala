@@ -1,7 +1,6 @@
 package axle
 
 import scala.reflect.ClassTag
-import scala.Stream.cons
 import scala.annotation.tailrec
 
 import cats.implicits._
@@ -27,10 +26,10 @@ case class Combinations[E: ClassTag](pool: IndexedSeq[E], r: Int) extends Iterab
       (broken0, i0)
     }
 
-  def loop2(indices0: Array[Int]): (Stream[IndexedSeq[E]], Array[Int], Boolean) = {
+  def loop2(indices0: Array[Int]): (LazyList[IndexedSeq[E]], Array[Int], Boolean) = {
     val (broken1, i0) = loop3(indices0, r - 1, false)
     if (!broken1) {
-      (Stream.empty, indices0, true)
+      (LazyList.empty, indices0, true)
     } else {
       val indices1 = indices0.zipWithIndex.map({
         case (v, j) =>
@@ -44,21 +43,21 @@ case class Combinations[E: ClassTag](pool: IndexedSeq[E], r: Int) extends Iterab
       })
       val head = indices1.map(pool)
       val (tail, indices2, done) = loop2(indices1)
-      (cons(head, tail), indices2, done)
+      (LazyList.cons(head, tail), indices2, done)
     }
   }
 
-  def loop1(indices0: Array[Int], done0: Boolean): Stream[IndexedSeq[E]] =
+  def loop1(indices0: Array[Int], done0: Boolean): LazyList[IndexedSeq[E]] =
     if (done0) {
-      Stream.empty
+      LazyList.empty
     } else {
       val (subStream, indices1, done1) = loop2(indices0)
       subStream ++ loop1(indices1, done1)
     }
 
-  lazy val result: Stream[IndexedSeq[E]] = {
+  lazy val result: LazyList[IndexedSeq[E]] = {
     val indices = (0 until r).toArray
-    cons(indices.map(pool), loop1(indices, false))
+    LazyList.cons(indices.map(pool), loop1(indices, false))
   }
 
   def iterator: Iterator[IndexedSeq[E]] = result.iterator

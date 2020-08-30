@@ -44,7 +44,7 @@ case class BarChartGroupedView[G, S, Y, D, H](
 
   val gTics = XTics(
     scaledArea,
-    groups.toStream.zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, g.show) }).toList,
+    groups.to(LazyList).zipWithIndex.map({ case (g, i) => (padding + (i + 0.5) * widthPerGroup, g.show) }).toList,
     normalFontName,
     normalFontSize.toDouble,
     bold = true,
@@ -58,7 +58,7 @@ case class BarChartGroupedView[G, S, Y, D, H](
 
   val bars = for {
     (s, i) <- slices.toVector.zipWithIndex
-    (g, j) <- groups.toStream.zipWithIndex
+    (g, j) <- groups.to(LazyList).zipWithIndex
   } yield {
     val leftX = padding + (whiteSpace / 2d) + j * widthPerGroup + i * barSliceWidth
     val rightX = leftX + barSliceWidth

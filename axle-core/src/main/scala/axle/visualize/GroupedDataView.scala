@@ -15,9 +15,9 @@ import axle.algebra.Plottable
 @implicitNotFound("Witness not found for GroupedDataView[${G}, ${S}, ${Y}, ${D}]")
 trait GroupedDataView[G, S, Y, D] {
 
-  def groups(d: D): Traversable[G]
+  def groups(d: D): Iterable[G]
 
-  def slices(d: D): Traversable[S]
+  def slices(d: D): Iterable[S]
 
   def valueOf(d: D, gs: (G, S)): Y
 
@@ -35,10 +35,10 @@ object GroupedDataView {
       val yAdditiveMonoid = AdditiveMonoid[Y]
       val yPlottable = Plottable[Y]
 
-      def groups(d: Map[(G, S), Y]): Traversable[G] =
+      def groups(d: Map[(G, S), Y]): Iterable[G] =
         d.keys.map(_._1).toSet.toList.sorted // TODO cache
 
-      def slices(d: Map[(G, S), Y]): Traversable[S] =
+      def slices(d: Map[(G, S), Y]): Iterable[S] =
         d.keys.map(_._2).toSet.toList.sorted // TODO cache
 
       def valueOf(d: Map[(G, S), Y], gs: (G, S)): Y =

@@ -1,7 +1,5 @@
 package axle.game
 
-import scala.Stream.cons
-
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.implicits._
@@ -45,11 +43,11 @@ object Strategies {
       ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
     }
 
-  def userInputStream(display: String => Unit, read: () => String): Stream[String] = {
+  def userInputStream(display: String => Unit, read: () => String): LazyList[String] = {
     display("Enter move: ")
     val command = read()
     display(command)
-    cons(command, userInputStream(display, read))
+    LazyList.cons(command, userInputStream(display, read))
   }
 
   def interactiveMove[G, S, O, M, MS, MM, V: Order: Field, PM[_, _]](

@@ -39,12 +39,12 @@ case class GeoCoordinates[N](
 
 object GeoCoordinates {
 
-  implicit def showGC[N: MultiplicativeMonoid: Eq](
+  implicit def showGC[N: MultiplicativeMonoid: Eq: Show](
     implicit
     converter: AngleConverter[N]): Show[GeoCoordinates[N]] =
     p => {
       import converter.°
-      (p.latitude in °).magnitude + "° N " + (p.longitude in °).magnitude + "° W"
+      (p.latitude in °).magnitude.show + "° N " + (p.longitude in °).magnitude.show + "° W"
     }
 
   implicit def eqgcd[N: Eq: MultiplicativeMonoid](

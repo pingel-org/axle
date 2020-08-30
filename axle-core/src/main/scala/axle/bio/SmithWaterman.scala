@@ -1,9 +1,6 @@
 package axle.bio
 
 import scala.Vector
-import scala.collection.immutable.Stream
-import scala.collection.immutable.Stream.cons
-import scala.collection.immutable.Stream.empty
 
 import cats.implicits._
 import cats.kernel.Eq
@@ -102,13 +99,13 @@ object SmithWaterman {
     H:               M)(
     implicit
     la:      LinearAlgebra[M, I, I, V],
-    indexed: Indexed[S, I]): Stream[(C, C)] = {
+    indexed: Indexed[S, I]): LazyList[(C, C)] = {
     val iZero = Ring[I].zero
     if (i > iZero || j > iZero) {
       val (preA, preB, newI, newJ) = alignStep[S, C, M, I, V](i, j, A, B, w, H, mismatchPenalty, gap)
-      cons((preA, preB), _optimalAlignment[S, C, M, I, V](newI, newJ, A, B, w, mismatchPenalty, gap, H))
+      LazyList.cons((preA, preB), _optimalAlignment[S, C, M, I, V](newI, newJ, A, B, w, mismatchPenalty, gap, H))
     } else {
-      empty
+      LazyList.empty
     }
   }
 

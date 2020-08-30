@@ -1,7 +1,5 @@
 package axle.bio
 
-import scala.Stream.cons
-import scala.Stream.empty
 import scala.Vector
 
 import cats.Functor
@@ -158,15 +156,15 @@ object NeedlemanWunsch {
     F:          M)(
     implicit
     la:      LinearAlgebra[M, I, I, V],
-    indexed: Indexed[S, I]): Stream[(N, N)] = {
+    indexed: Indexed[S, I]): LazyList[(N, N)] = {
 
     val zero = Ring[I].zero
 
     if ((i > zero) || (j > zero)) {
       val (preA, preB, newI, newJ) = alignStep(i, j, A, B, F, similarity, gap, gapPenalty)
-      cons((preA, preB), _optimalAlignment(newI, newJ, A, B, similarity, gap, gapPenalty, F))
+      LazyList.cons((preA, preB), _optimalAlignment(newI, newJ, A, B, similarity, gap, gapPenalty, F))
     } else {
-      empty
+      LazyList.empty
     }
   }
 

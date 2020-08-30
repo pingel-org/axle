@@ -46,7 +46,7 @@ case class BarChartView[C, Y, D, H](
 
   val gTics = XTics(
     scaledArea,
-    slices.toStream.zipWithIndex.map({ case (c, i) => (padding + (i + 0.5) * widthPerSlice, showC.show(c)) }).toList,
+    slices.to(LazyList).zipWithIndex.map({ case (c, i) => (padding + (i + 0.5) * widthPerSlice, showC.show(c)) }).toList,
     normalFontName,
     normalFontSize.toDouble,
     bold = true,
@@ -56,7 +56,7 @@ case class BarChartView[C, Y, D, H](
 
   val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), normalFontName, normalFontSize.toDouble, true, black)
 
-  val bars = slices.toStream.zipWithIndex.map({
+  val bars = slices.to(LazyList).zipWithIndex.map({
     case (c, i) => {
       val y = dataView.valueOf(data, c)
       val color = colorOf(c)
