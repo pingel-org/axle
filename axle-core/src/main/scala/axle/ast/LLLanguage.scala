@@ -1,8 +1,6 @@
 
 package axle.ast
 
-import scala.Stream.cons
-import scala.Stream.empty
 import cats.Show
 import cats.implicits._
 
@@ -153,16 +151,16 @@ case class LLLanguage(
 
   def parseTable: Map[(NonTerminal, Symbol), LLRule] = _parseTable
 
-  def parseStateStream(state: LLParserState): Stream[(LLParserAction, LLParserState)] =
+  def parseStateStream(state: LLParserState): LazyList[(LLParserAction, LLParserState)] =
     if (state.finished) {
-      empty
+      LazyList.empty
     } else {
       val action = state.nextAction()
       action match {
-        case ParseError(x) => empty
+        case ParseError(x) => LazyList.empty
         case _ => {
           val nextState = state(action)
-          cons((action, nextState), parseStateStream(nextState))
+          LazyList.cons((action, nextState), parseStateStream(nextState))
         }
       }
     }

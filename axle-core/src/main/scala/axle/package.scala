@@ -190,30 +190,30 @@ package object axle {
    *
    */
 
-  def mergeStreams[T](streams: Seq[Stream[T]])(
+  def mergeStreams[T](streams: Seq[LazyList[T]])(
     implicit
-    orderT: Order[T]): Stream[T] = {
+    orderT: Order[T]): LazyList[T] = {
 
     val frontier = streams.flatMap(_.headOption)
 
     if (frontier.size === 0) {
-      Stream.empty
+      LazyList.empty
     } else {
       val head = frontier.min
-      Stream.cons(head, mergeStreams(streams.map(_.dropWhile(_ === head))))
+      LazyList.cons(head, mergeStreams(streams.map(_.dropWhile(_ === head))))
     }
   }
 
-  def filterOut[T](stream: Stream[T], toRemove: Stream[T])(implicit orderT: Order[T]): Stream[T] =
+  def filterOut[T](stream: LazyList[T], toRemove: LazyList[T])(implicit orderT: Order[T]): LazyList[T] =
     if (stream.isEmpty || toRemove.isEmpty) {
       stream
     } else {
       val remove = toRemove.head
-      stream.takeWhile(_ < remove) append filterOut(stream.dropWhile(_ <= remove), toRemove.drop(1))
+      stream.takeWhile(_ < remove) ++ filterOut(stream.dropWhile(_ <= remove), toRemove.drop(1))
     }
 
-  def streamFrom[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Stream[N] =
-    Stream.cons(n, streamFrom(ringN.plus(n, ringN.one)))
+  def lazyListsFrom[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): LazyList[N] =
+    LazyList.cons(n, lazyListsFrom(ringN.plus(n, ringN.one)))
 
   // Typeclass-based method invocations
 

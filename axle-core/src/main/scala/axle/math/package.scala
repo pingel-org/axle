@@ -251,7 +251,7 @@ package object math {
 
     (2 to floor(sqrt(n.toDouble)).toInt) foreach { i =>
       if (A(i)) {
-        Stream.from(0).map(i * i + i * _).takeWhile(_ < n) foreach { j =>
+        LazyList.from(0).map(i * i + i * _).takeWhile(_ < n) foreach { j =>
           A(j) = false
         }
       }
@@ -259,26 +259,26 @@ package object math {
 
     (2 until n) filter { A }
   }
-  def notPrimeUpTo[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Stream[N] = {
+  def notPrimeUpTo[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): LazyList[N] = {
 
     val two = ringN.plus(ringN.one, ringN.one)
 
-    val bases = streamFrom(two).takeWhile(i => ringN.times(i, i) < n)
+    val bases = lazyListsFrom(two).takeWhile(i => ringN.times(i, i) < n)
 
     val notPrimeStreams =
-      filterOut(bases, if (!bases.isEmpty) notPrimeUpTo(bases.last) else Stream.empty) map { i =>
-        streamFrom(ringN.zero).map(j => ringN.plus(i * i, i * j))
+      filterOut(bases, if (!bases.isEmpty) notPrimeUpTo(bases.last) else LazyList.empty) map { i =>
+        lazyListsFrom(ringN.zero).map(j => ringN.plus(i * i, i * j))
       }
 
     mergeStreams(notPrimeStreams)
   }
 
-  def primeStream[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Stream[N] = {
+  def primeStream[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): LazyList[N] = {
 
     require(n > ringN.one)
 
     val two = ringN.plus(ringN.one, ringN.one)
-    filterOut(streamFrom(two).takeWhile(i => i < n), notPrimeUpTo(n))
+    filterOut(lazyListsFrom(two).takeWhile(i => i < n), notPrimeUpTo(n))
   }
 
   def log2[N: Field: ConvertableFrom](x: N): Double = log(ConvertableFrom[N].toDouble(x)) / log(2d)

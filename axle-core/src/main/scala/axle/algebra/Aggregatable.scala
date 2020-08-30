@@ -18,7 +18,7 @@ object Aggregatable {
   implicit val aggregatableSeq =
     new Aggregatable[Seq] {
       def aggregate[A, B](as: Seq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
-        as.aggregate(zeroValue)(seqOp, combOp)
+        as.foldLeft(zeroValue)(seqOp)
     }
 
   implicit val aggregatableList =

@@ -31,13 +31,13 @@ trait MonoidLaws[A] extends Laws {
     new MonoidRuleSet {
 
       def props: Seq[(String, Prop)] = Seq(
-        "left zero" → forAll { (x: A) =>
+        "left zero" -> forAll { (x: A) =>
           m.combine(m.empty, x) === x
         },
-        "right zero" → forAll { (x: A) =>
+        "right zero" -> forAll { (x: A) =>
           m.combine(x, m.empty) === x
         },
-        "associativity" → forAll { (x: A, y: A, z: A) =>
+        "associativity" -> forAll { (x: A, y: A, z: A) =>
           m.combine(m.combine(x, y), z) === m.combine(x, m.combine(y, z))
         })
     }
