@@ -71,7 +71,7 @@ object GeoCoordinates {
         val dLat = w.latitude - v.latitude
         val dLon = w.longitude - v.longitude
         val a = square(sine(dLat :* half)) + square(sine(dLon :* half)) * cosine(v.latitude) * cosine(w.latitude)
-        arcTangent2(sqrt(a), sqrt(1 - a)) :* 2
+        arcTangent2(sqrt(a), sqrt(1 - a)) :* ConvertableTo[N].fromInt(2)
       }
     }
 
