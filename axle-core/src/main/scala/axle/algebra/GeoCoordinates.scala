@@ -18,7 +18,6 @@ import spire.algebra.Trig
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.literalIntAdditiveGroupOps
-import spire.implicits.moduleOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableTo
@@ -27,6 +26,7 @@ import spire.math.sqrt
 import cats.kernel.Eq
 import cats.Show
 import cats.implicits._
+import axle.syntax.module.moduleOps
 
 case class GeoCoordinates[N](
   latitude:  UnittedQuantity[Angle, N],

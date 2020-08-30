@@ -33,7 +33,7 @@ trait AccelerationConverter[N] extends UnitConverter[Acceleration, N] with Accel
 
 object Acceleration {
 
-  import spire.algebra.Module
+  import axle.algebra.Module
   import spire.math._
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](

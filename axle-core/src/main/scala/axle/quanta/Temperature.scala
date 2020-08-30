@@ -32,7 +32,7 @@ trait TemperatureConverter[N] extends UnitConverter[Temperature, N] with Tempera
 
 object Temperature {
 
-  import spire.algebra.Module
+  import axle.algebra.Module
   import spire.math._
 
   def converterGraphK2[N: ConvertableTo: Eq, DG[_, _]](

@@ -16,6 +16,7 @@ import axle.algebra.Finite
 import axle.algebra.Indexed
 import axle.algebra.MapFrom
 import axle.algebra.MapReducible
+import axle.algebra.Module
 import axle.algebra.LinearAlgebra
 import axle.algebra.Region
 //import axle.algebra.RegionEq
@@ -392,4 +393,18 @@ final class MapFromOps[F, K, V](val fkv: F)(
   mf: MapFrom[F, K, V]) {
 
   def toMap = mf.toMap(fkv)
+}
+
+final class ModuleOps[T, S](val x: T)(
+  implicit module: Module[T, S]
+) {
+
+  def -:(): T = module.negate(x)
+
+  def +(y: T): T = module.plus(x, y)
+
+  def *:(s: S): T = module.timesl(s, x)
+
+  def :*(s: S): T = module.timesr(x, s)
+
 }

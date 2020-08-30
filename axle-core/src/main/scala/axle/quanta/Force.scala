@@ -2,12 +2,12 @@ package axle.quanta
 
 import cats.kernel.Eq
 import spire.algebra.Field
-import spire.algebra.Module
 import spire.math.ConvertableTo
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Scale
 import axle.algebra.Scale10s
+import axle.algebra.Module
 
 case class Force() extends Quantum {
 

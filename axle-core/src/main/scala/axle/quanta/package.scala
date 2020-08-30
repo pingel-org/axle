@@ -14,6 +14,7 @@ import spire.implicits.signedOps
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
+import axle.algebra.Module
 
 package object quanta {
 

@@ -34,7 +34,7 @@ trait SpeedConverter[N] extends UnitConverter[Speed, N] with SpeedUnits {
 
 object Speed {
 
-  import spire.algebra.Module
+  import axle.algebra.Module
   import spire.math._
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](

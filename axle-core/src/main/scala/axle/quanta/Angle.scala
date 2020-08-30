@@ -41,7 +41,7 @@ trait AngleConverter[N] extends UnitConverter[Angle, N] with AngleUnits {
 
 object Angle {
 
-  import spire.algebra.Module
+  import axle.algebra.Module
   import spire.math._
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](

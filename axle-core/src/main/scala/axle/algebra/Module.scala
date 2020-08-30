@@ -2,7 +2,7 @@ package axle.algebra
 
 import spire.algebra.Rng
 
-trait Module[T, U] {
+trait Module[T, S] {
 
     def negate(x: T): T
 
@@ -12,8 +12,8 @@ trait Module[T, U] {
 
     implicit def scalar: Rng[T]
 
-    def timesl(r: U, v: T): T
+    def timesl(r: S, v: T): T
 
-    def timesr(v: T, l: U): T
+    def timesr(v: T, l: S): T
 
 }

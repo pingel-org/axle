@@ -54,7 +54,7 @@ trait DistanceConverter[N] extends UnitConverter[Distance, N] with DistanceUnits
 
 object Distance {
 
-  import spire.algebra.Module
+  import axle.algebra.Module
   import spire.math._
 
   def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
