@@ -50,18 +50,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
 * Scala 2.13
-* Ditch jekyll
-* Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
-* Release and publish site
-
-## 0.5.1
-
 * Move more stuff out of `axle.math`
 * `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
 * Move more stuff out of `axle-core` package
 * Move KolmogorovProbabilityAxioms and Bayes to `axle.stats.laws` (in `axle-laws`?)
 
-## 0.5.2
+* Release jars
+* Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
+
+## 0.5.1
 
 * MonotypeBayesanNetwork.unit (see the two nulls)
 * MonotypeBayesanNetwork.map
@@ -70,7 +67,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * ScalaCheck `Monad[ProbabilityModel]` (needs missing tailRecM mehod)
 * Monad tests for Alarm-Burglary-Earthquake as MonotypeBayesanNetwork
 
-## 0.5.3
+## 0.5.2
 
 * Test: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
   * factor out each variable until
@@ -84,13 +81,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Consider a "case" to be a `Map` vs a `Vector`
 * Consider usefulness of `Factor` in terms of `Region`
 
-## 0.5.4
+## 0.5.3
 
 * Replace `axle.game.moveFromRandomState.mapToProb`
 * Wrap `axle.IO.getLine` in `F[_]`
 * Wrap `axle.IO.prefixedDisplay` in `F[_]`
 
-## 0.5.5
+## 0.5.4
 
 * Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
   * "Chance" should be its own player
@@ -103,7 +100,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Plot entropy by turn # for each strategy
   * Plot simulated score distribution for each strategy
 
-## 0.5.6+
+## 0.5.5+
 
 * MonotypeBayesanNetwork.filter -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself
