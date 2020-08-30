@@ -24,7 +24,7 @@ import axle.algebra.Zipper
 import axle.algebra.SimilaritySpace
 import axle.math._
 import axle.syntax.finite.finiteOps
-import axle.syntax.module.moduleOps
+//import axle.syntax.module.moduleOps
 import axle.syntax.indexed.indexedOps
 import axle.syntax.linearalgebra.matrixOps
 
@@ -110,8 +110,8 @@ object NeedlemanWunsch {
       A.size + one,
       B.size + one,
       implicitly[AdditiveMonoid[V]].zero,
-      (i: I) => i *: gapPenalty,
-      (j: I) => j *: gapPenalty,
+      (i: I) => module.timesr(gapPenalty, i),
+      (j: I) => module.timesr(gapPenalty, j),
       (i: I, j: I, aboveleft: V, left: V, above: V) => {
         Vector(
           aboveleft + similarity(A.at(i - one), B.at(j - one)),

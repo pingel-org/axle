@@ -5,15 +5,14 @@ import cats.kernel.Eq
 import cats.kernel.Order
 import cats.implicits._
 
-import spire.implicits.additiveGroupOps
+//import spire.implicits.additiveGroupOps
 import spire.implicits.multiplicativeGroupOps
-import spire.implicits.multiplicativeSemigroupOps
+//import spire.implicits.multiplicativeSemigroupOps
 import spire.math.log
-import spire.math.Rational
-import spire.math.Rational.apply
+//import spire.math.Rational
+//import spire.math.Rational.apply
 import spire.math.Real.apply
 import spire.algebra._
-import spire.implicits.moduleOps
 import spire.implicits.nrootOps
 import spire.implicits.semiringOps
 import spire.implicits.multiplicativeSemigroupOps
@@ -30,6 +29,7 @@ import axle.algebra._
 
 import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps
+import axle.syntax.module.moduleOps
 
 package object math {
 
@@ -38,7 +38,12 @@ package object math {
    *
    */
   def wallisΠ(iterations: Int = 10000) =
-    2 * Π[Rational, IndexedSeq]((1 to iterations) map { n => Rational((2 * n) * (2 * n), (2 * n - 1) * (2 * n + 1)) })
+    2 * Π[Rational, IndexedSeq]((1 to iterations) map { n =>
+      val nl = n.toLong
+      Rational(
+        (2L * nl) * (2L * nl),
+        (2L * nl - 1L) * (2L * nl + 1L))
+    })
 
   /**
    * Monte Carlo approximation of pi http://en.wikipedia.org/wiki/Monte_Carlo_method
@@ -149,11 +154,11 @@ package object math {
 
     if (eqN.eqv(pow, one)) {
       base
-    } else if (eqN.eqv(eucRingN.mod(pow, two), zero)) {
-      val half = exponentiateByRecursiveSquaring(base, eucRingN.quot(pow, two))
+    } else if (eqN.eqv(eucRingN.emod(pow, two), zero)) {
+      val half = exponentiateByRecursiveSquaring(base, eucRingN.equot(pow, two))
       half * half
     } else {
-      val half = exponentiateByRecursiveSquaring(base, eucRingN.quot(eucRingN.minus(pow, one), two))
+      val half = exponentiateByRecursiveSquaring(base, eucRingN.equot(eucRingN.minus(pow, one), two))
       half * half * base
     }
   }
