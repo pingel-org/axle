@@ -108,9 +108,8 @@ lazy val publishSettings = Seq(
 lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions,
   resolvers ++= Seq(
-    "Concurrent Maven Repo" at "http://conjars.org/repo",
-    // "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases", // needed transitively by specs2
-    "bintray/non" at "http://dl.bintray.com/non/maven",
+    "Concurrent Maven Repo" at "https://conjars.org/repo",
+    "bintray/non" at "https://dl.bintray.com/non/maven",
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")
   ),
@@ -259,8 +258,7 @@ lazy val commonScalacOptions = Seq(
 //  "-Yinline-warnings",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
-  "-Ywarn-value-discard",
-  "-Xfuture"
+  "-Ywarn-value-discard"
 )
 
 // http://www.scala-sbt.org/using_sonatype.html
