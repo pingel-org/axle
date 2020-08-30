@@ -1,7 +1,7 @@
 package axle.nlp
 
 import spire.algebra.Ring
-import spire.implicits.MapRng
+import spire.implicits.MapCRng
 import spire.implicits.additiveSemigroupOps
 
 case class TermVectorizer[V: Ring](stopwords: Set[String])

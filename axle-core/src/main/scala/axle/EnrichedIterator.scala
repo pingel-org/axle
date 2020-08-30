@@ -8,9 +8,9 @@ class EnrichedIterator[T](it: Iterator[T]) {
 
   def lastOption: Option[T] = {
     if (it.hasNext) {
-      var last = it.next
+      var last = it.next()
       while (it.hasNext) {
-        last = it.next
+        last = it.next()
       }
       Option(last)
     } else {

@@ -2,7 +2,6 @@ package axle.quanta
 
 import cats.kernel.Eq
 import spire.algebra.Field
-import spire.math.ConvertableTo
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Scale

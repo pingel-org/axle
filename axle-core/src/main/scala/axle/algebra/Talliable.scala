@@ -2,7 +2,7 @@ package axle.algebra
 
 import scala.annotation.implicitNotFound
 import spire.algebra.Ring
-import spire.implicits.MapRng
+import spire.implicits.MapCRng
 import spire.implicits.additiveSemigroupOps
 
 @implicitNotFound("Witness not found for Talliable[${F}]")

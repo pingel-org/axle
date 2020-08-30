@@ -49,7 +49,7 @@ object Volume {
       def links: Seq[(UnitOfMeasurement[Volume], UnitOfMeasurement[Volume], Bijection[N, N])] =
         List[(UnitOfMeasurement[Volume], UnitOfMeasurement[Volume], Bijection[N, N])](
           (milliliter, liter, Scale10s(3)),
-          (cm3, milliliter, BijectiveIdentity[N]))
+          (cm3, milliliter, BijectiveIdentity[N]()))
 
     }
 }

@@ -1,7 +1,6 @@
 package axle.quanta
 
 import cats.kernel.Eq
-import spire.math.ConvertableTo
 import spire.algebra.Field
 import axle.algebra.Module
 import axle.algebra.Bijection

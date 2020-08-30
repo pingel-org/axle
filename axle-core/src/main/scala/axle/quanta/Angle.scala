@@ -60,7 +60,7 @@ object Angle {
         List[(UnitOfMeasurement[Angle], UnitOfMeasurement[Angle], Bijection[N, N])](
           (degree, circleDegrees, Scale(Rational(360))),
           (radian, circleRadians, Scale(2 * π)),
-          (circleDegrees, circleRadians, BijectiveIdentity[N]))
+          (circleDegrees, circleRadians, BijectiveIdentity[N]()))
 
     }
 

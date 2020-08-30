@@ -157,7 +157,7 @@ case class LLLanguage(
     if (state.finished) {
       empty
     } else {
-      val action = state.nextAction
+      val action = state.nextAction()
       action match {
         case ParseError(x) => empty
         case _ => {
