@@ -33,8 +33,8 @@ class ClusterFederalistPapersSpec extends AnyFunSuite with Matchers {
 
     def featureExtractor(fp: Article): List[Double] = {
 
-      import axle.enrichGenSeq
-      implicit val ringLong: Ring[Long] = spire.implicits.LongAlgebra
+      import axle.enrichIterable
+      implicit val ringLong: CRing[Long] = spire.implicits.LongAlgebra
 
       val tokens = English.tokenize(fp.text.toLowerCase)
       val wordCounts = tokens.tally[Long]
@@ -45,7 +45,7 @@ class ClusterFederalistPapersSpec extends AnyFunSuite with Matchers {
     }
 
     import org.jblas.DoubleMatrix
-    import axle.algebra.distance._
+    // import axle.algebra.distance._
     import axle.algebra.distance.Euclidean
     import axle.jblas.linearAlgebraDoubleMatrix
 

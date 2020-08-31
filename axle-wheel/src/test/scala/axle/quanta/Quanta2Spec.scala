@@ -9,7 +9,7 @@ import spire.math.Real
 import spire.algebra._
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.additiveGroupOps
-import spire.implicits.CModuleOps
+import spire.implicits.rightModuleOps
 import spire.laws.GroupLaws
 import spire.laws.VectorSpaceLaws
 
@@ -55,7 +55,7 @@ class QuantaSpec extends AnyFunSuite with Matchers with Discipline {
   {
     import axle.algebra.modules.realRationalModule
     implicit val dd = Distance.converterGraphK2[Real, DirectedSparseGraph]
-    val mudr = Module[UnittedQuantity[Distance, Real], Real]
+    val mudr = CModule[UnittedQuantity[Distance, Real], Real]
 
     import ArbitraryUnittedQuantityStuff._
 

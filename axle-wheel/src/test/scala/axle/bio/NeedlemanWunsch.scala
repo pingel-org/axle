@@ -12,15 +12,14 @@ import cats.implicits._
 
 import spire.algebra._
 
-import axle.algebra.Module
 import axle.algebra.functorIndexedSeq
 
 object SharedNeedlemanWunsch {
 
   import NeedlemanWunschDefaults._
 
-  implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
-  implicit val dim: Module[Double, Int] = axle.algebra.modules.doubleIntModule
+  implicit val ringInt: CRing[Int] = spire.implicits.IntAlgebra
+  implicit val dim: CModule[Double, Int] = axle.algebra.modules.doubleIntModule
 
   implicit val laJblasDouble = {
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
