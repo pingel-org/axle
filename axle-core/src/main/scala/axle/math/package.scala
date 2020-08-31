@@ -17,6 +17,7 @@ import spire.implicits.nrootOps
 import spire.implicits.semiringOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
+import spire.implicits.rightModuleOps
 import spire.math.Rational
 import spire.math.ConvertableTo
 import spire.math.ConvertableFrom
@@ -29,7 +30,6 @@ import axle.algebra._
 
 import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps
-import axle.syntax.module.moduleOps
 
 package object math {
 
@@ -91,7 +91,7 @@ package object math {
     angleConverter: AngleConverter[N],
     //ctn: ConvertableTo[N],
     //angleModule: Module[UnittedQuantity[Angle, N], N],
-    distanceModule: Module[UnittedQuantity[Distance, N], N]): UnittedQuantity[Distance, N] =
+    distanceModule: RightModule[UnittedQuantity[Distance, N], N]): UnittedQuantity[Distance, N] =
     sphereRadius :* ((angle in angleConverter.radian).magnitude)
 
   def sine[N: MultiplicativeMonoid: Eq: Trig](

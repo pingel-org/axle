@@ -2,6 +2,7 @@ package axle.quanta
 
 import cats.kernel.Eq
 
+import spire.algebra.RightModule
 import spire.algebra.Field
 import spire.math.{ pi => π }
 
@@ -41,18 +42,17 @@ trait AngleConverter[N] extends UnitConverter[Angle, N] with AngleUnits {
 
 object Angle {
 
-  import axle.algebra.Module
   import spire.math._
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](
     implicit
-    moduleRational: Module[N, Rational],
+    moduleRational: RightModule[N, Rational],
     evDG:           DirectedGraph[DG[UnitOfMeasurement[Angle], N => N], UnitOfMeasurement[Angle], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Angle], N => N]]
 
   def converterGraph[N: Field: Eq, DG](
     implicit
-    moduleRational: Module[N, Rational],
+    moduleRational: RightModule[N, Rational],
     evDG:           DirectedGraph[DG, UnitOfMeasurement[Angle], N => N]) =
     new UnitConverterGraph[Angle, N, DG] with AngleConverter[N] {
 

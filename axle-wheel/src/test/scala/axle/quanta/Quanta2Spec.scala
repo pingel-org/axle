@@ -9,7 +9,7 @@ import spire.math.Real
 import spire.algebra._
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.additiveGroupOps
-import spire.implicits.moduleOps
+import spire.implicits.rightModuleOps
 import spire.laws.GroupLaws
 import spire.laws.VectorSpaceLaws
 
@@ -68,7 +68,7 @@ class QuantaSpec extends AnyFunSuite with Matchers with Discipline {
       arbitraryUQ[Distance, Real](genUQ[Distance, Real]),
       implicitly[Eq[Real]],
       arb.real,
-      new org.typelevel.discipline.Predicate[Real] { def apply(a: Real) = true }).module(mudr)
+      new org.typelevel.discipline.Predicate[Real] { def apply(a: Real) = true }).cModule(mudr)
 
     val agudr: cats.kernel.Group[UnittedQuantity[Distance, Real]] =
       axle.quanta.quantumAdditiveGroup[Distance, Real](

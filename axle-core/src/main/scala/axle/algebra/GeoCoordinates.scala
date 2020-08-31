@@ -1,5 +1,24 @@
 package axle.algebra
 
+import cats.kernel.Eq
+import cats.Show
+import cats.implicits._
+import spire.algebra.Field
+import spire.algebra.MetricSpace
+import spire.algebra.MultiplicativeMonoid
+import spire.algebra.MultiplicativeSemigroup
+import spire.algebra.NRoot
+import spire.algebra.Trig
+//import spire.algebra.RightModule
+import spire.implicits.additiveGroupOps
+import spire.implicits.additiveSemigroupOps
+import spire.implicits.literalIntAdditiveGroupOps
+import spire.implicits.multiplicativeGroupOps
+import spire.implicits.multiplicativeSemigroupOps
+import spire.implicits.rightModuleOps
+import spire.math.ConvertableTo
+import spire.math.Rational
+import spire.math.sqrt
 import axle.math.arcTangent2
 import axle.math.cosine
 import axle.quanta.Angle
@@ -9,24 +28,6 @@ import axle.quanta.modulize
 import axle.math.sine
 import axle.math.square
 import axle.math.{ √ => √ }
-import spire.algebra.Field
-import spire.algebra.MetricSpace
-import spire.algebra.MultiplicativeMonoid
-import spire.algebra.MultiplicativeSemigroup
-import spire.algebra.NRoot
-import spire.algebra.Trig
-import spire.implicits.additiveGroupOps
-import spire.implicits.additiveSemigroupOps
-import spire.implicits.literalIntAdditiveGroupOps
-import spire.implicits.multiplicativeGroupOps
-import spire.implicits.multiplicativeSemigroupOps
-import spire.math.ConvertableTo
-import spire.math.Rational
-import spire.math.sqrt
-import cats.kernel.Eq
-import cats.Show
-import cats.implicits._
-import axle.syntax.module.moduleOps
 
 case class GeoCoordinates[N](
   latitude:  UnittedQuantity[Angle, N],

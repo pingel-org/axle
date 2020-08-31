@@ -14,7 +14,6 @@ import spire.implicits.signedOps
 import axle.algebra.LengthSpace
 import axle.algebra.Plottable
 import axle.algebra.Tics
-import axle.algebra.Module
 
 package object quanta {
 
@@ -40,11 +39,11 @@ package object quanta {
   implicit def modulize[N, Q](
     implicit
     fieldn:    Field[N],
-    converter: UnitConverter[Q, N]): Module[UnittedQuantity[Q, N], N] = {
+    converter: UnitConverter[Q, N]): RightModule[UnittedQuantity[Q, N], N] = {
 
     val additiveGroup = quantumAdditiveGroup[Q, N]
 
-    new Module[UnittedQuantity[Q, N], N] {
+    new RightModule[UnittedQuantity[Q, N], N] {
 
       def negate(x: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
         additiveGroup.negate(x)
@@ -55,10 +54,10 @@ package object quanta {
       def plus(x: UnittedQuantity[Q, N], y: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
         additiveGroup.plus(x, y)
 
-      implicit def scalar: Rng[N] = fieldn // Module
+      implicit def scalar: Ring[N] = fieldn // Module
 
-      def timesl(r: N, v: UnittedQuantity[Q, N]): UnittedQuantity[Q, N] =
-        UnittedQuantity(v.magnitude * r, v.unit)
+      def timesr(v: UnittedQuantity[Q, N], s: N): UnittedQuantity[Q, N] =
+        UnittedQuantity(v.magnitude * s, v.unit)
     }
   }
 

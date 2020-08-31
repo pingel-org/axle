@@ -1,5 +1,6 @@
 package axle.algebra
 
+import scala.jdk.CollectionConverters
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.scalatest.funsuite._

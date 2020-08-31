@@ -150,11 +150,3 @@ trait MapFromSyntax {
     mf: MapFrom[F, K, V]) =
     new MapFromOps(fkv)
 }
-
-trait ModuleSyntax {
-
-  import axle.algebra.Module
-
-  implicit def moduleOps[T, S](x: T)(implicit module: Module[T, S]) =
-    new ModuleOps(x)
-}

@@ -9,20 +9,20 @@ import cats.implicits._
 
 import spire.algebra.AdditiveMonoid
 import spire.algebra.Ring
+import spire.algebra.RightModule
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
+//import spire.implicits.rightModuleOps
 
 import axle.algebra.Aggregatable
 import axle.algebra.Finite
 import axle.algebra.FromStream
 import axle.algebra.Indexed
 import axle.algebra.LinearAlgebra
-import axle.algebra.Module
 import axle.algebra.Zipper
 import axle.algebra.SimilaritySpace
 import axle.math._
 import axle.syntax.finite.finiteOps
-//import axle.syntax.module.moduleOps
 import axle.syntax.indexed.indexedOps
 import axle.syntax.linearalgebra.matrixOps
 
@@ -100,7 +100,7 @@ object NeedlemanWunsch {
     la:      LinearAlgebra[M, I, I, V],
     indexed: Indexed[S, I],
     finite:  Finite[S, I],
-    module:  Module[V, I]): M = {
+    module:  RightModule[V, I]): M = {
 
     val one = Ring[I].one
 
@@ -179,7 +179,7 @@ object NeedlemanWunsch {
     indexed: Indexed[S, I],
     finite:  Finite[S, I],
     fs:      FromStream[S[N], N],
-    module:  Module[V, I]): (S[N], S[N]) = {
+    module:  RightModule[V, I]): (S[N], S[N]) = {
 
     val F = computeF(A, B, similarity, gapPenalty)
 
@@ -205,7 +205,7 @@ case class NeedlemanWunschSimilaritySpace[S[_], N: Eq, M, I: Ring: Order, V: Add
   la:      LinearAlgebra[M, I, I, V],
   indexed: Indexed[S, I],
   finite:  Finite[S, I],
-  module:  Module[V, I])
+  module:  RightModule[V, I])
   extends SimilaritySpace[S[N], V] {
 
   def similarity(s1: S[N], s2: S[N]): V =

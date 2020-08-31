@@ -25,6 +25,4 @@ package object syntax {
   object mapfrom extends MapFromSyntax
 
   object linearalgebra extends LinearAlgebraSyntax
-
-  object module extends ModuleSyntax
 }

@@ -1,11 +1,12 @@
 package axle.quanta
 
+import spire.algebra.Field
+import spire.algebra.RightModule
+import cats.kernel.Eq
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Scale
 import axle.algebra.Scale10s
-import cats.kernel.Eq
-import spire.algebra.Field
 
 case class Time() extends Quantum {
 
@@ -59,18 +60,17 @@ trait TimeConverter[N] extends UnitConverter[Time, N] with TimeUnits {
 
 object Time {
 
-  import axle.algebra.Module
   import spire.math._
 
   def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit
-    moduleRational: Module[N, Rational],
+    moduleRational: RightModule[N, Rational],
     evDG: DirectedGraph[DG[UnitOfMeasurement[Time], N => N], UnitOfMeasurement[Time], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Time], N => N]]
 
   def converterGraph[N: Field: ConvertableTo: Eq, DG](
     implicit
-    moduleRational: Module[N, Rational],
+    moduleRational: RightModule[N, Rational],
     evDG: DirectedGraph[DG, UnitOfMeasurement[Time], N => N]) =
     new UnitConverterGraph[Time, N, DG] with TimeConverter[N] {
 
