@@ -91,7 +91,7 @@ package object math {
     angleConverter: AngleConverter[N],
     //ctn: ConvertableTo[N],
     //angleModule: Module[UnittedQuantity[Angle, N], N],
-    distanceModule: RightModule[UnittedQuantity[Distance, N], N]): UnittedQuantity[Distance, N] =
+    distanceModule: CModule[UnittedQuantity[Distance, N], N]): UnittedQuantity[Distance, N] =
     sphereRadius :* ((angle in angleConverter.radian).magnitude)
 
   def sine[N: MultiplicativeMonoid: Eq: Trig](

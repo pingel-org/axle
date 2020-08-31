@@ -9,7 +9,7 @@ import spire.math.Real
 import spire.algebra._
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.additiveGroupOps
-import spire.implicits.rightModuleOps
+import spire.implicits.CModuleOps
 import spire.laws.GroupLaws
 import spire.laws.VectorSpaceLaws
 

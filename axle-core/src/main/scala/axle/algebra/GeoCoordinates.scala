@@ -9,7 +9,6 @@ import spire.algebra.MultiplicativeMonoid
 import spire.algebra.MultiplicativeSemigroup
 import spire.algebra.NRoot
 import spire.algebra.Trig
-//import spire.algebra.RightModule
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.literalIntAdditiveGroupOps

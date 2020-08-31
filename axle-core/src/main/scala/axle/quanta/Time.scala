@@ -1,7 +1,7 @@
 package axle.quanta
 
 import spire.algebra.Field
-import spire.algebra.RightModule
+import spire.algebra.CModule
 import cats.kernel.Eq
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
@@ -64,13 +64,13 @@ object Time {
 
   def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit
-    moduleRational: RightModule[N, Rational],
+    moduleRational: CModule[N, Rational],
     evDG: DirectedGraph[DG[UnitOfMeasurement[Time], N => N], UnitOfMeasurement[Time], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Time], N => N]]
 
   def converterGraph[N: Field: ConvertableTo: Eq, DG](
     implicit
-    moduleRational: RightModule[N, Rational],
+    moduleRational: CModule[N, Rational],
     evDG: DirectedGraph[DG, UnitOfMeasurement[Time], N => N]) =
     new UnitConverterGraph[Time, N, DG] with TimeConverter[N] {
 

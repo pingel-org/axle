@@ -3,7 +3,7 @@ package axle.algebra
 import cats.kernel.Eq
 import spire.algebra.MultiplicativeMonoid
 import spire.algebra.Trig
-import spire.algebra.RightModule
+import spire.algebra.CModule
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.rightModuleOps
 import axle.math.cosine
@@ -39,7 +39,7 @@ case class SphericalVector[N](
     mult: MultiplicativeMonoid[N],
     eqn:  Eq[N],
     trig: Trig[N],
-    modn: RightModule[UnittedQuantity[Distance, N], N]): P =
+    modn: CModule[UnittedQuantity[Distance, N], N]): P =
     (
       ρ :* (sine(θ) * cosine(φ)),
       ρ :* (sine(θ) * sine(φ)),

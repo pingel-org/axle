@@ -54,18 +54,18 @@ trait DistanceConverter[N] extends UnitConverter[Distance, N] with DistanceUnits
 
 object Distance {
 
-  import spire.algebra.RightModule
+  import spire.algebra.CModule
   import spire.math._
 
   def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit
-    moduleRational: RightModule[N, Rational],
+    moduleRational: CModule[N, Rational],
     evDG:           DirectedGraph[DG[UnitOfMeasurement[Distance], N => N], UnitOfMeasurement[Distance], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Distance], N => N]]
 
   def converterGraph[N: Field: Eq: ConvertableTo, DG](
     implicit
-    moduleRational: RightModule[N, Rational],
+    moduleRational: CModule[N, Rational],
     evDG:           DirectedGraph[DG, UnitOfMeasurement[Distance], N => N]) =
     new UnitConverterGraph[Distance, N, DG] with DistanceConverter[N] {
 

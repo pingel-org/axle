@@ -13,6 +13,7 @@ import cats.implicits._
 
 import spire.algebra._
 import spire.implicits.additiveGroupOps
+import spire.implicits.leftModuleOps
 
 import axle.algebra.GeoCoordinates
 import axle.algebra.SphericalVector
@@ -22,7 +23,6 @@ import axle.quanta.Angle
 import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
 import axle.scene._
-import axle.syntax.module.moduleOps
 
 class EarthSceneSpec extends AnyFunSuite with Matchers {
 

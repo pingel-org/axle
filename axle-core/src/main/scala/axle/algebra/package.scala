@@ -142,11 +142,11 @@ package object algebra {
     val realAlgebra = new spire.math.RealAlgebra
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
-    implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+    implicit val ringInt: CRing[Int] = spire.implicits.IntAlgebra
     implicit val fieldFloat: Field[Float] = spire.implicits.FloatAlgebra
 
-    implicit val doubleIntModule: RightModule[Double, Int] =
-      new RightModule[Double, Int] {
+    implicit val doubleIntModule: CModule[Double, Int] =
+      new CModule[Double, Int] {
 
         def negate(x: Double): Double = fieldDouble.negate(x)
 
@@ -154,13 +154,13 @@ package object algebra {
 
         def plus(x: Double, y: Double): Double = fieldDouble.plus(x, y)
 
-        implicit def scalar: Ring[Int] = ringInt
+        implicit def scalar: CRing[Int] = ringInt
 
-        def timesr(v: Double, s: Int): Double = s * v
+        def timesl(s: Int, v: Double): Double = s * v
       }
 
-    implicit val doubleDoubleModule: RightModule[Double, Double] =
-      new RightModule[Double, Double] {
+    implicit val doubleDoubleModule: CModule[Double, Double] =
+      new CModule[Double, Double] {
 
         def negate(x: Double): Double = fieldDouble.negate(x)
 
@@ -168,14 +168,14 @@ package object algebra {
 
         def plus(x: Double, y: Double): Double = fieldDouble.plus(x, y)
 
-        implicit def scalar: Ring[Double] = fieldDouble
+        implicit def scalar: CRing[Double] = fieldDouble
 
-        def timesr(v: Double, s: Double): Double = v * s
+        def timesl(s: Double, v: Double): Double = s * v
 
       }
 
-    implicit val realDoubleModule: RightModule[Real, Double] =
-      new RightModule[Real, Double] {
+    implicit val realDoubleModule: CModule[Real, Double] =
+      new CModule[Real, Double] {
 
         def negate(x: Real): Real = realAlgebra.negate(x)
 
@@ -183,13 +183,13 @@ package object algebra {
 
         def plus(x: Real, y: Real): Real = x + y
 
-        implicit def scalar: Ring[Double] = fieldDouble
+        implicit def scalar: CRing[Double] = fieldDouble
 
-        def timesr(v: Real, s: Double): Real = v * s
+        def timesl(s: Double, v: Real): Real = s * v
       }
 
-    implicit val realRationalModule: RightModule[Real, Rational] =
-      new RightModule[Real, Rational] {
+    implicit val realRationalModule: CModule[Real, Rational] =
+      new CModule[Real, Rational] {
 
         def negate(x: Real): Real = realAlgebra.negate(x)
 
@@ -197,13 +197,13 @@ package object algebra {
 
         def plus(x: Real, y: Real): Real = x + y
 
-        implicit def scalar: Ring[Rational] = rat
+        implicit def scalar: CRing[Rational] = rat
 
-        def timesr(v: Real, s: Rational): Real = v * s
+        def timesl(s: Rational, v: Real): Real = s * v
       }
 
-    implicit val doubleRationalModule: RightModule[Double, Rational] =
-      new RightModule[Double, Rational] {
+    implicit val doubleRationalModule: CModule[Double, Rational] =
+      new CModule[Double, Rational] {
 
         def negate(x: Double): Double = fieldDouble.negate(x)
 
@@ -211,14 +211,14 @@ package object algebra {
 
         def plus(x: Double, y: Double): Double = fieldDouble.plus(x, y)
 
-        implicit def scalar: Ring[Rational] = rat
+        implicit def scalar: CRing[Rational] = rat
 
-        def timesr(v: Double, s: Rational): Double = v * s.toDouble
+        def timesl(s: Rational, v: Double): Double = s.toDouble * v
 
     }
 
-    implicit val floatRationalModule: RightModule[Float, Rational] =
-      new RightModule[Float, Rational] {
+    implicit val floatRationalModule: CModule[Float, Rational] =
+      new CModule[Float, Rational] {
 
         def negate(x: Float): Float = fieldFloat.negate(x)
 
@@ -226,14 +226,14 @@ package object algebra {
 
         def plus(x: Float, y: Float): Float = fieldFloat.plus(x, y)
 
-        implicit def scalar: Ring[Rational] = rat
+        implicit def scalar: CRing[Rational] = rat
 
-        def timesr(v: Float, s: Rational): Float = v * s.toDouble.toFloat
+        def timesl(s: Rational, v: Float): Float = s.toDouble.toFloat * v
 
     }
 
-    implicit val floatDoubleModule: RightModule[Float, Double] =
-      new RightModule[Float, Double] {
+    implicit val floatDoubleModule: CModule[Float, Double] =
+      new CModule[Float, Double] {
 
         def negate(x: Float): Float = fieldFloat.negate(x)
 
@@ -241,14 +241,14 @@ package object algebra {
 
         def plus(x: Float, y: Float): Float = fieldFloat.plus(x, y)
 
-        implicit def scalar: Ring[Double] = fieldDouble
+        implicit def scalar: CRing[Double] = fieldDouble
 
-        def timesr(v: Float, s: Double): Float = (v * s).toFloat
+        def timesl(s: Double, v: Float): Float = (s * v).toFloat
 
       }
 
-    implicit val rationalDoubleModule: RightModule[Rational, Double] =
-      new RightModule[Rational, Double] {
+    implicit val rationalDoubleModule: CModule[Rational, Double] =
+      new CModule[Rational, Double] {
 
         def negate(x: Rational): Rational = rat.negate(x)
 
@@ -256,9 +256,9 @@ package object algebra {
 
         def plus(x: Rational, y: Rational): Rational = rat.plus(x, y)
 
-        implicit def scalar: Ring[Double] = fieldDouble
+        implicit def scalar: CRing[Double] = fieldDouble
 
-        def timesr(v: Rational, s: Double): Rational = v * s
+        def timesl(s: Double, v: Rational): Rational = s * v
 
     }
 

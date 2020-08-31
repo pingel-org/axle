@@ -2,7 +2,7 @@ package axle.quanta
 
 import cats.kernel.Eq
 import spire.algebra.Field
-import spire.algebra.RightModule
+import spire.algebra.CModule
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Scale
@@ -39,13 +39,13 @@ object Speed {
 
   def converterGraphK2[N: Field: Eq, DG[_, _]](
     implicit
-    moduleRational: RightModule[N, Rational],
+    moduleRational: CModule[N, Rational],
     evDG:           DirectedGraph[DG[UnitOfMeasurement[Speed], N => N], UnitOfMeasurement[Speed], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Speed], N => N]]
 
   def converterGraph[N: Field: Eq, DG](
     implicit
-    moduleRational: RightModule[N, Rational],
+    moduleRational: CModule[N, Rational],
     evDG:           DirectedGraph[DG, UnitOfMeasurement[Speed], N => N]) =
     new UnitConverterGraph[Speed, N, DG] with SpeedConverter[N] {
 

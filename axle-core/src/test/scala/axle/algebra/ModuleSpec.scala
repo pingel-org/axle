@@ -16,7 +16,7 @@ class ModuleSpec() extends AnyFunSuite with Matchers with Discipline {
   {
     import axle.algebra.modules.realRationalModule
     implicit val predRational = Predicate.const[Rational](true)
-    checkAll("Module[Real, Rational]", VectorSpaceLaws[Real, Rational].rightModule)
+    checkAll("Module[Real, Rational]", VectorSpaceLaws[Real, Rational].cModule)
   }
 
   // Lawless "dogs"

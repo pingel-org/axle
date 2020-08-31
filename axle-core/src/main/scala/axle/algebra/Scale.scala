@@ -1,7 +1,7 @@
 package axle.algebra
 
 import spire.algebra.Field
-import spire.algebra.RightModule
+import spire.algebra.CModule
 import spire.math.abs
 import spire.math.ConvertableTo
 import spire.math.Rational
@@ -9,7 +9,7 @@ import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 
 // TODO this needs less than a Field
-case class Scale[N](factor: Rational)(implicit module: RightModule[N, Rational]) extends Bijection[N, N] {
+case class Scale[N](factor: Rational)(implicit module: CModule[N, Rational]) extends Bijection[N, N] {
 
   val inverseFactor: Rational = Field[Rational].multiplicative.inverse(factor)
 
