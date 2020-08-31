@@ -7,7 +7,6 @@ import scala.xml._
 import cats.effect._
 import spire.math._
 
-import axle._
 import axle.jung._
 import axle.algebra.DirectedGraph
 import axle.visualize._
