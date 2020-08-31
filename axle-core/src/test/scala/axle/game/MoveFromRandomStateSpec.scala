@@ -87,7 +87,7 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
 
       def strategyFor(game: TestGame, player: Player): (TestGame, TestGameState) => ConditionalProbabilityTable[TestGameMove, Rational] =
         (game: TestGame, state: TestGameState) =>
-          ConditionalProbabilityTable(movesMap(state).mapValues(_._2).toMap)
+          ConditionalProbabilityTable(movesMap(state).view.mapValues(_._2).toMap)
 
       def isValid(game: TestGame, state: TestGameState, move: TestGameMove): Either[String, TestGameMove] =
         Right(move)

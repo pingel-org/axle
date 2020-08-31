@@ -69,11 +69,11 @@ class EnrichmentsSpec extends AnyFunSuite with Matchers {
   }
 
   test("enriched iterator supports lastOption") {
-    assertResult((1 to 10).toIterator.lastOption)(Some(10))
+    assertResult((1 to 10).iterator.lastOption)(Some(10))
   }
 
   test("enriched iterator supports terminatesWithin") {
-    assertResult((1 to 10).toIterator.terminatesWithin(20))(true)
-    assertResult((1 to 10).toIterator.terminatesWithin(5))(false)
+    assertResult((1 to 10).iterator.terminatesWithin(20))(true)
+    assertResult((1 to 10).iterator.terminatesWithin(5))(false)
   }
 }
