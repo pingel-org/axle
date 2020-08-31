@@ -7,13 +7,13 @@ import spire.algebra._
 import spire.math.Rational
 
 import axle.algebra.RegionEq
-import axle.enrichGenSeq
+import axle.enrichIterable
 import axle.game.Dice.die
 import axle.syntax.probabilitymodel._
 
 class TwoD6Histogram extends AnyFunSuite with Matchers {
 
-  implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
+  implicit val intRing: CRing[Int] = spire.implicits.IntAlgebra
   implicit val intEq: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra
 
   test("tally") {
