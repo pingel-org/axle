@@ -1,12 +1,13 @@
 package axle.game.montyhall
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import spire.random.Generator.rng
 import axle.game._
 import axle.game.Strategies._
 
-class MontyHallSpec extends FunSuite with Matchers {
+class MontyHallSpec extends AnyFunSuite with Matchers {
 
   import axle.game.montyhall.evGame._
   import axle.game.montyhall.evGameIO._

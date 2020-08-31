@@ -1,6 +1,7 @@
 package axle.jogl
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import java.util.Date
 import java.nio.file.Paths
@@ -19,7 +20,7 @@ import axle.quanta.Angle
 import axle.quanta.Distance
 import axle.scene._
 
-class ShapesSpec extends FunSuite with Matchers {
+class ShapesSpec extends AnyFunSuite with Matchers {
 
   implicit val fieldFloat: Field[Float] = spire.implicits.FloatAlgebra
   implicit val trigFloat: Trig[Float] = spire.implicits.FloatAlgebra

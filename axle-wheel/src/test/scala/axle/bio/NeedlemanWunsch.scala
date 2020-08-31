@@ -1,7 +1,8 @@
 package axle.bio
 
 import org.jblas.DoubleMatrix
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import org.scalacheck.Properties
@@ -11,6 +12,7 @@ import cats.implicits._
 
 import spire.algebra._
 
+import axle.algebra.Module
 import axle.algebra.functorIndexedSeq
 
 object SharedNeedlemanWunsch {
@@ -31,7 +33,7 @@ object SharedNeedlemanWunsch {
 
 }
 
-class NeedlemanWunschSpec extends FunSuite with Matchers {
+class NeedlemanWunschSpec extends AnyFunSuite with Matchers {
 
   import NeedlemanWunsch.alignmentScore
   import NeedlemanWunsch.optimalAlignment

@@ -1,11 +1,12 @@
 package axle
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import spire.algebra._
 import cats.implicits._
 
-class BasePackageSpec extends FunSuite with Matchers {
+class BasePackageSpec extends AnyFunSuite with Matchers {
 
   implicit val boolBoolean: Bool[Boolean] = spire.implicits.BooleanStructure
 

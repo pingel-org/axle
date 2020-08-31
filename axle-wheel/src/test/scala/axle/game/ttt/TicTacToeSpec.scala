@@ -1,6 +1,7 @@
 package axle.game.ttt
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import spire.random.Generator.rng
 import spire.math.Rational
@@ -11,7 +12,7 @@ import axle.stats.ConditionalProbabilityTable
 import axle.game._
 import axle.game.Strategies._
 
-class TicTacToeSpec extends FunSuite with Matchers {
+class TicTacToeSpec extends AnyFunSuite with Matchers {
 
   import axle.game.ttt.evGame._
   import axle.game.ttt.evGameIO._

@@ -1,10 +1,11 @@
 package axle.game
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import axle.game.cards.Card
 
-class CardSpec extends FunSuite with Matchers {
+class CardSpec extends AnyFunSuite with Matchers {
 
   test("cards serialize") {
     Card("6♡").serialize should be("6♡")

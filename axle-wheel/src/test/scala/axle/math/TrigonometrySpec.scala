@@ -1,6 +1,7 @@
 package axle
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
@@ -13,7 +14,7 @@ import axle.quanta.UnittedQuantity
 import axle.algebra.modules.doubleRationalModule
 import axle.jung.directedGraphJung
 
-class TrigonometrySpec extends FunSuite with Matchers {
+class TrigonometrySpec extends AnyFunSuite with Matchers {
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra

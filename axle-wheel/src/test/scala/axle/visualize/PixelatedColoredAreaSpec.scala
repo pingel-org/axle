@@ -1,10 +1,11 @@
 package axle.visualize
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import spire.algebra._
 import cats.implicits._
 
-class PixelatedColoredAreaSpec extends FunSuite with Matchers {
+class PixelatedColoredAreaSpec extends AnyFunSuite with Matchers {
 
   test("PixelatedColoredArea renders a PNG") {
 

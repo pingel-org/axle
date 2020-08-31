@@ -1,7 +1,8 @@
 package axle.algebra
 
 import org.scalacheck.Arbitrary.arbInt
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import org.typelevel.discipline.scalatest.Discipline
 
 import cats.implicits._
@@ -10,7 +11,7 @@ import spire.algebra._
 
 import axle.algebra.laws.MonoidLaws
 
-class MonoidLawsSpec() extends FunSuite with Matchers with Discipline {
+class MonoidLawsSpec() extends AnyFunSuite with Matchers with Discipline {
 
   implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
 

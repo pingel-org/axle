@@ -1,7 +1,7 @@
 package axle.stats
 
-import org.scalatest._
-
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 //import cats.syntax.all._
 import cats.implicits._
 import spire.math.Rational
@@ -9,7 +9,7 @@ import spire.math.Rational
 
 import axle.algebra.RegionEq
 
-class DistributionSpec extends FunSuite with Matchers {
+class DistributionSpec extends AnyFunSuite with Matchers {
 
   test("Distribution map") {
 

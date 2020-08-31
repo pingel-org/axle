@@ -1,6 +1,7 @@
 package axle.algebra
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.typelevel.discipline.Predicate
@@ -16,7 +17,7 @@ import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 
 class GeoMetricSpaceSpec
-  extends FunSuite
+  extends AnyFunSuite
   with Matchers
   with Discipline {
 

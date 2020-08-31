@@ -1,11 +1,12 @@
 package axle.game.poker
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import cats.kernel.Eq
 import cats.Order.catsKernelOrderingForOrder
 import cats.implicits._
 
-class PokerHandSpec extends FunSuite with Matchers {
+class PokerHandSpec extends AnyFunSuite with Matchers {
 
   test("poker hand ranking") {
 

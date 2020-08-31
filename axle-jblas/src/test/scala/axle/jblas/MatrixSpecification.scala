@@ -1,6 +1,7 @@
 package axle.jblas
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import spire.algebra._
 import spire.implicits.additiveSemigroupOps
@@ -9,7 +10,7 @@ import axle.syntax.LinearAlgebraOps
 import axle.syntax.linearalgebra.matrixOps
 import axle.syntax.endofunctor.endofunctorOps
 
-class MatrixSpecification extends FunSuite with Matchers {
+class MatrixSpecification extends AnyFunSuite with Matchers {
 
   implicit val rngDouble: Rng[Double] = spire.implicits.DoubleAlgebra
   implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra

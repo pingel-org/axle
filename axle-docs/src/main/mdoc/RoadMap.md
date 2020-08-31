@@ -53,7 +53,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Move KolmogorovProbabilityAxioms and Bayes to `axle.stats.laws` (in `axle-laws`?)
 * Create `axle-parallel`?
 * `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
-* Move more stuff out of `axle-core` package
+* Move more stuff out of `axle-core` package (SamplePredicates, ...)
 * Move more stuff out of `axle.math`
 
 * Release jars

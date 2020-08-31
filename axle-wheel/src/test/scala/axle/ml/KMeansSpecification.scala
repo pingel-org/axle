@@ -1,6 +1,7 @@
 package axle.ml
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import org.jblas.DoubleMatrix
@@ -18,7 +19,7 @@ import spire.random.Generator.rng
 import axle.shuffle
 
 class KMeansSpecification
-  extends FunSuite with Matchers {
+  extends AnyFunSuite with Matchers {
 
   test("K-Means Clustering: cluster random 2d points with small gaussian distribution around a center into 2 clusters") {
 
@@ -34,7 +35,7 @@ class KMeansSpecification
     def randomPoint(center: Foo, σ2: Double): Foo = {
       implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
       val distance = rng.nextGaussian() * σ2
-      val angle = 2 * pi * rng.nextDouble
+      val angle = 2 * pi * rng.nextDouble()
       Foo(center.x + distance * cos(angle), center.y + distance * sin(angle))
     }
 
@@ -100,7 +101,7 @@ class KMeansSpecification
     implicit val cs = IO.contextShift(ec)
 
     val irisesIO = new Irises[IO](blocker)
-    val irises = irisesIO.irises.unsafeRunSync
+    val irises = irisesIO.irises.unsafeRunSync()
 
     import axle.algebra.distance.Euclidean
     import axle.jblas.linearAlgebraDoubleMatrix

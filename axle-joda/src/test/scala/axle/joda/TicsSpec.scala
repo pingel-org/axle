@@ -1,12 +1,13 @@
 package axle.joda
 
 import axle.algebra.Tics
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import org.joda.time.DateTime
 import org.joda.time.DateTimeZone
 
-class TicsSpec extends FunSuite with Matchers {
+class TicsSpec extends AnyFunSuite with Matchers {
 
   val pacificTimeZone = DateTimeZone.forID("America/Los_Angeles")
 

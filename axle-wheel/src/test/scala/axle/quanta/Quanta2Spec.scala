@@ -19,7 +19,8 @@ import axle.jung.directedGraphJung
 
 import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import org.typelevel.discipline.scalatest.Discipline
 
 object ArbitraryUnittedQuantityStuff {
@@ -45,7 +46,7 @@ object ArbitraryUnittedQuantityStuff {
     Arbitrary(gq)
 }
 
-class QuantaSpec extends FunSuite with Matchers with Discipline {
+class QuantaSpec extends AnyFunSuite with Matchers with Discipline {
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra

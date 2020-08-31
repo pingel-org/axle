@@ -1,6 +1,7 @@
 package axle.visualize
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import cats.effect._
 import cats.implicits._
@@ -14,7 +15,7 @@ import axle.stats.ConditionalProbabilityTable
 import axle.visualize.Color.blue
 import axle.web._
 
-class BarChartSpec extends FunSuite with Matchers {
+class BarChartSpec extends AnyFunSuite with Matchers {
 
   type F[T] = ConditionalProbabilityTable[T, Rational]
 

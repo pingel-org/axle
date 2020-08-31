@@ -1,6 +1,7 @@
 package axle.pgm
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.implicits._
 import cats.effect.IO
@@ -9,7 +10,7 @@ import spire.math._
 import axle.stats._
 import axle.example.AlarmBurglaryEarthquakeBayesianNetwork
 
-class AlarmBurglaryEarthquakeSpec extends FunSuite with Matchers {
+class AlarmBurglaryEarthquakeSpec extends AnyFunSuite with Matchers {
 
   implicit val showRat = cats.Show.fromToString[Rational]
 

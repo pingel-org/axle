@@ -1,6 +1,7 @@
 package axle.algebra
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
@@ -16,7 +17,7 @@ import axle.jung.directedGraphJung
 import axle.quanta.Angle
 import axle.quanta.Distance
 
-class GeoLengthSpaceSpec extends FunSuite with Matchers {
+class GeoLengthSpaceSpec extends AnyFunSuite with Matchers {
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra

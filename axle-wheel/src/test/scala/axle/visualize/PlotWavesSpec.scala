@@ -3,7 +3,8 @@ package axle.visualize
 import scala.collection.immutable.TreeMap
 
 import org.joda.time.DateTime
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import cats.implicits._
 import cats.effect._
@@ -19,7 +20,7 @@ import axle.joda.dateTimePlottable
 import axle.joda.dateTimeTics
 import axle.joda.dateTimeDurationLengthSpace
 
-class PlotWavesSpec extends FunSuite with Matchers {
+class PlotWavesSpec extends AnyFunSuite with Matchers {
 
   implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
 

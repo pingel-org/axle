@@ -14,9 +14,10 @@ import axle.visualize._
 import axle.web._
 import QBit._
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
-class StateMachineVisSpec extends FunSuite with Matchers {
+class StateMachineVisSpec extends AnyFunSuite with Matchers {
 
   test("State Machine for X and H as DirectedGraph") {
 

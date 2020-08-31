@@ -1,6 +1,7 @@
 package axle.stats
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import cats.implicits._
 import spire.math._
@@ -8,7 +9,10 @@ import axle.game.Dice._
 import axle.syntax.probabilitymodel._
 import axle.algebra._
 
-class ProbabilitySpec extends FunSuite with Matchers {
+class ProbabilitySpec extends AnyFunSuite with Matchers {
+
+  val head = Symbol("HEAD")
+  val tail = Symbol("TAIL")
 
   implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
   // implicit val rat = new spire.math.RationalAlgebra()
@@ -17,8 +21,8 @@ class ProbabilitySpec extends FunSuite with Matchers {
 
     val fairCoin = ConditionalProbabilityTable[Symbol, Rational](
       Map(
-        'HEAD -> Rational(1, 2),
-        'TAIL -> Rational(1, 2)))
+        head -> Rational(1, 2),
+        tail -> Rational(1, 2)))
 
     import cats.implicits._
 
@@ -26,17 +30,17 @@ class ProbabilitySpec extends FunSuite with Matchers {
 
     type TWOFLIPS = (Symbol, Symbol)
 
-    bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == 'HEAD) and RegionIf[TWOFLIPS](_._2 == 'HEAD)) should be(Rational(1, 4))
+    bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) and RegionIf[TWOFLIPS](_._2 == head)) should be(Rational(1, 4))
 
-    bothCoinsModel.P(RegionEq(('HEAD, 'HEAD))) should be(Rational(1, 4))
+    bothCoinsModel.P(RegionEq((head, head))) should be(Rational(1, 4))
 
-    bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == 'HEAD)) should be(Rational(1, 2))
+    bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head)) should be(Rational(1, 2))
 
-    bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == 'HEAD) or RegionIf[TWOFLIPS](_._2 == 'HEAD)) should be(Rational(3, 4))
+    bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) or RegionIf[TWOFLIPS](_._2 == head)) should be(Rational(3, 4))
 
-    val coin2Conditioned = bothCoinsModel.filter(RegionIf[TWOFLIPS](_._2 == 'TAIL)).map(_._1)
+    val coin2Conditioned = bothCoinsModel.filter(RegionIf[TWOFLIPS](_._2 == tail)).map(_._1)
 
-    coin2Conditioned.P(RegionEq('HEAD)) should be(Rational(1, 2))
+    coin2Conditioned.P(RegionEq(head)) should be(Rational(1, 2))
   
  }
 

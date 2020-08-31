@@ -1,10 +1,11 @@
 package axle.quantumcircuit
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import axle.quantumcircuit.CBit._
 
-class CBitSpec extends FunSuite with Matchers {
+class CBitSpec extends AnyFunSuite with Matchers {
 
   // TODO put Binary.negate and others in typeclass
   // TODO put CBit.negate and others in typeclass

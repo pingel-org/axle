@@ -1,11 +1,12 @@
 package axle.game.poker
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 //import cats.implicits._
 import axle.game._
 import axle.game.Strategies._
 
-class PokerMoveValidationSpec extends FunSuite with Matchers {
+class PokerMoveValidationSpec extends AnyFunSuite with Matchers {
 
   import axle.game.poker.evGame._
   implicit val rat = new spire.math.RationalAlgebra()

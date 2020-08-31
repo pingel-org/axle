@@ -5,9 +5,10 @@ import spire.math._
 
 import QBit._
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
-class HadamardSpec extends FunSuite with Matchers {
+class HadamardSpec extends AnyFunSuite with Matchers {
 
   implicit val fieldReal: Field[Real] = new spire.math.RealAlgebra
 

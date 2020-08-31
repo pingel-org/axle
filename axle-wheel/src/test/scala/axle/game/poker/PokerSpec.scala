@@ -1,12 +1,13 @@
 package axle.game.poker
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import spire.random.Generator.rng
 import axle.game._
 import axle.game.Strategies._
 
-class PokerSpec extends FunSuite with Matchers {
+class PokerSpec extends AnyFunSuite with Matchers {
 
   import axle.game.poker.evGame._
   import axle.game.poker.evGameIO._

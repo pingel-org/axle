@@ -1,12 +1,13 @@
 package axle.visualize
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import cats.implicits._
 
 import spire.algebra._
 
-class PokerHandChartSpec extends FunSuite with Matchers {
+class PokerHandChartSpec extends AnyFunSuite with Matchers {
 
   test("poker hand chart") {
 

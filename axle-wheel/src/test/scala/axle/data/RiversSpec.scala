@@ -1,6 +1,8 @@
 package axle.data
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
+
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 import cats.implicits._
@@ -12,7 +14,7 @@ import axle.quanta.Flow
 import axle.algebra.modules.doubleRationalModule
 import axle.jung.directedGraphJung
 
-class RiversSpec extends FunSuite with Matchers {
+class RiversSpec extends AnyFunSuite with Matchers {
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra

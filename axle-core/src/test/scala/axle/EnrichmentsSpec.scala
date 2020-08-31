@@ -1,10 +1,11 @@
 package axle
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import spire.algebra._
 import cats.implicits._
 
-class EnrichmentsSpec extends FunSuite with Matchers {
+class EnrichmentsSpec extends AnyFunSuite with Matchers {
 
   implicit val boolBoolean: Bool[Boolean] = spire.implicits.BooleanStructure
 
@@ -48,7 +49,7 @@ class EnrichmentsSpec extends FunSuite with Matchers {
 
   test("EnrichedIndexdSeq ℘ also creates powerset") {
     val xs = (1 to 3).toVector
-    assertResult(xs.℘)(xs.powerset)
+    assertResult(xs.℘())(xs.powerset)
   }
 
   test("EnrichedIndexdSeq permutations(n) creates permutations") {

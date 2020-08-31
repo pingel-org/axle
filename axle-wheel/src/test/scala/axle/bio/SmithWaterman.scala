@@ -1,11 +1,13 @@
 package axle.bio
 
 import org.jblas.DoubleMatrix
-import org.scalatest._
 import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import org.scalacheck.Properties
 import org.scalacheck.Prop.forAll
+
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import cats.implicits._
 
@@ -24,7 +26,7 @@ object SharedSmithWaterman {
 
 }
 
-class SmithWatermanSpec extends FunSuite with Matchers {
+class SmithWatermanSpec extends AnyFunSuite with Matchers {
 
   import SharedSmithWaterman._
   import SmithWatermanDefaults._

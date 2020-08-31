@@ -1,6 +1,7 @@
 package axle.data
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.implicits._
 import spire.algebra._
@@ -8,7 +9,7 @@ import axle.quanta._
 import axle.algebra.modules.doubleRationalModule
 import axle.jung.directedGraphJung
 
-class AstronomySpec extends FunSuite with Matchers {
+class AstronomySpec extends AnyFunSuite with Matchers {
 
   test("ordering celestial bodies by mass") {
 

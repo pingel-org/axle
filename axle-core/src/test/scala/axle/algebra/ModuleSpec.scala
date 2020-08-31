@@ -1,6 +1,7 @@
 package axle.algebra
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.scalatest.Discipline
 
@@ -8,14 +9,14 @@ import spire.algebra._
 import spire.math._
 import spire.laws._
 import spire.laws.arb._
-import spire.implicits.moduleOps
+import axle.syntax.module.moduleOps
 
-class ModuleSpec() extends FunSuite with Matchers with Discipline {
+class ModuleSpec() extends AnyFunSuite with Matchers with Discipline {
 
   {
     import axle.algebra.modules.realRationalModule
     implicit val predRational = Predicate.const[Rational](true)
-    checkAll("Module[Real, Rational]", VectorSpaceLaws[Real, Rational].module)
+    checkAll("Module[Real, Rational]", VectorSpaceLaws[Real, Rational].cModule)
   }
 
   // Lawless "dogs"

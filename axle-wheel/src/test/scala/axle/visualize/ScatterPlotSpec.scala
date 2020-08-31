@@ -1,9 +1,10 @@
 package axle.visualize
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import cats.implicits._
 
-class ScatterPlotSpec extends FunSuite with Matchers {
+class ScatterPlotSpec extends AnyFunSuite with Matchers {
 
   test("ScatterPlot") {
 

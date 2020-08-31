@@ -1,6 +1,7 @@
 package axle.quantumcircuit
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 // import spire.algebra._
 // import spire.math._
@@ -12,7 +13,7 @@ import org.scalatest._
  * See https://youtu.be/F_Riqjdh2oM?t=2001
  */
 
-class DeutschOracleSpec extends FunSuite with Matchers {
+class DeutschOracleSpec extends AnyFunSuite with Matchers {
 
   /*
   implicit val fieldReal: Field[Real] = new spire.math.RealAlgebra

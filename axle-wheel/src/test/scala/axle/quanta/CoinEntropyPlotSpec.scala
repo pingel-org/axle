@@ -1,6 +1,7 @@
 package axle.quanta
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import scala.collection.immutable.TreeMap
 
@@ -15,7 +16,7 @@ import axle.data.Coin
 import axle.visualize._
 import axle.web._
 
-class CoinEntropyPlotSpec extends FunSuite with Matchers {
+class CoinEntropyPlotSpec extends AnyFunSuite with Matchers {
 
   test("coin entropy plot") {
 

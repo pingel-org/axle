@@ -1,6 +1,7 @@
 package axle
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
@@ -15,7 +16,7 @@ import axle.data.Coin
 import axle.quanta.Information
 import axle.jung.directedGraphJung
 
-class InformationTheorySpec extends FunSuite with Matchers {
+class InformationTheorySpec extends AnyFunSuite with Matchers {
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 

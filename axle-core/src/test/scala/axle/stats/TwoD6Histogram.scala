@@ -1,6 +1,7 @@
 package axle.stats
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import spire.algebra._
 import spire.math.Rational
@@ -10,7 +11,7 @@ import axle.enrichGenSeq
 import axle.game.Dice.die
 import axle.syntax.probabilitymodel._
 
-class TwoD6Histogram extends FunSuite with Matchers {
+class TwoD6Histogram extends AnyFunSuite with Matchers {
 
   implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
   implicit val intEq: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra

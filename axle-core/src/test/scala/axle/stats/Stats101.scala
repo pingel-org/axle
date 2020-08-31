@@ -1,11 +1,12 @@
 package axle.stats
 
 import cats.implicits._
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import spire.algebra._
 import spire.math._
 
-class Stats101 extends FunSuite with Matchers {
+class Stats101 extends AnyFunSuite with Matchers {
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
