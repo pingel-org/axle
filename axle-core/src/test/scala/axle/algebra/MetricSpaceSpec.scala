@@ -1,6 +1,6 @@
 package axle.algebra
 
-import scala.jdk.CollectionConverters
+import scala.jdk.CollectionConverters._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import org.scalatest.funsuite._
@@ -56,8 +56,10 @@ object ArbitrarySpaceStuff {
 
   implicit val arbReal2: Arbitrary[(Real, Real)] = Arbitrary(genTuple2[Real, Real])
 
-  def genRealSeqLengthN(n: Int): Gen[Seq[Real]] =
-    Gen.sequence((1 to n).map(i => gen.real)).map(_.asScala)
+  def genRealSeqLengthN(n: Int): Gen[Seq[Real]] = {
+    val rs: Vector[Gen[Real]] = (1 to n).toVector.map(i => gen.real)
+    Gen.sequence(rs).map(_.iterator().asScala.toList)
+  }
 
   def arbitraryRealSeqLengthN(n: Int): Arbitrary[Seq[Real]] =
     Arbitrary(genRealSeqLengthN(n))
