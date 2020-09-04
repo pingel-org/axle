@@ -67,16 +67,4 @@ object Indexed {
       def drop[A](xs: ParSeq[A])(i: Int): ParSeq[A] = xs.drop(i)
     }
 
-  import scala.collection.immutable.{ IndexedSeq => MIS }
-
-  implicit val indexedImmutableIndexedSeq: Indexed[MIS, Int] =
-    new Indexed[MIS, Int] {
-
-      def at[A](is: MIS[A])(i: Int): A = is(i)
-
-      def take[A](xs: MIS[A])(i: Int): MIS[A] = xs.take(i)
-
-      def drop[A](xs: MIS[A])(i: Int): MIS[A] = xs.take(i)
-    }
-
 }
