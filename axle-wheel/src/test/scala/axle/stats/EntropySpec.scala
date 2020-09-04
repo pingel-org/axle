@@ -22,7 +22,7 @@ class EntropySpec extends AnyFunSuite with Matchers {
 
   test("entropy of coin") {
 
-    implicit val id = Information.converterGraphK2[Double, DirectedSparseGraph]()
+    implicit val id = Information.converterGraphK2[Double, DirectedSparseGraph]
 
     val biasToEntropy = new collection.immutable.TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
       (0 to 100).map(i => {

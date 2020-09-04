@@ -85,8 +85,8 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
     evGameIO.parseMove(game, "foo") should be(Left("foo is not a valid move.  Please select again"))
 
-    evGameIO.parseMove(game, "silence").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
-    evGameIO.parseMove(game, "betrayal").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
+    evGameIO.parseMove(game, "silence").flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
+    evGameIO.parseMove(game, "betrayal").flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
   }
 
   //  test("A.I. strategy") {

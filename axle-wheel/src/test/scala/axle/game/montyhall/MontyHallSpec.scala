@@ -91,8 +91,8 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
     val firstMove = PlaceCar(1)
     val secondState = applyMove(game, startState(game), firstMove)
 
-    evGameIO.parseMove(game, "pick 1").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
-    evGameIO.parseMove(game, "pick 3").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
+    evGameIO.parseMove(game, "pick 1").flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
+    evGameIO.parseMove(game, "pick 3").flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
   }
 
 }

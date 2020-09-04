@@ -101,8 +101,8 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
     evGameIO.parseMove(game, "14") should be(Left("Please enter a number between 1 and 9"))
     evGameIO.parseMove(game, "foo") should be(Left("foo is not a valid move.  Please select again"))
 
-    evGameIO.parseMove(game, "1").right.flatMap(move => evGame.isValid(game, secondState, move)).right.toOption.get.position should be(1)
-    evGameIO.parseMove(game, "2").right.flatMap(move => evGame.isValid(game, secondState, move)) should be(Left("That space is occupied."))
+    evGameIO.parseMove(game, "1").flatMap(move => evGame.isValid(game, secondState, move)).toOption.get.position should be(1)
+    evGameIO.parseMove(game, "2").flatMap(move => evGame.isValid(game, secondState, move)) should be(Left("That space is occupied."))
   }
 
   test("random strategy makes a move") {
