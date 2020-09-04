@@ -11,7 +11,7 @@ lazy val spireVersion = "0.17.0-M1"
 lazy val shapelessVersion = "2.4.0-M1"
 lazy val kittensVersion = "2.1.0"
 //lazy val catsVersion = "0.9.0" // match spire's algebra's catsVersion (and monix)
-lazy val catsVersion = "2.2.0-RC4"
+lazy val catsVersion = "2.2.0"
 lazy val catsEffectVersion = "2.1.4"
 
 lazy val disciplineVersion = "1.0.0"
@@ -67,6 +67,7 @@ lazy val axleCore = Project("axle-core", file("axle-core"))
       "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion,
       "org.scala-lang.modules" %% "scala-parallel-collections" % scalaParallelCollectionsVersion,
       "org.scalatest"          %% "scalatest"                % scalaTestVersion, // TODO % "test",
+      "org.scalatest"          %% "scalatest-funsuite"       % scalaTestVersion, // TODO % "test",
       "org.scalacheck"         %% "scalacheck"               % scalaCheckVersion  % "test",
       "org.typelevel"          %% "discipline-core"          % disciplineVersion,
       // needed for visualizations
