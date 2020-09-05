@@ -10,11 +10,11 @@ import spire.algebra._
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.additiveGroupOps
 import spire.implicits.rightModuleOps
-import spire.laws.GroupLaws
-import spire.laws.VectorSpaceLaws
+import spire.implicits.leftModuleOps
 
 import axle.algebra._
 import axle.algebra.modules.doubleRationalModule
+import axle.algebra.modules.rationalRationalModule
 import axle.jung.directedGraphJung
 
 import org.scalacheck.Gen
@@ -158,7 +158,7 @@ class QuantaSpec extends AnyFunSuite with Matchers with Discipline {
 
     // val mx = axle.quanta.modulize4[Double, Distance[Double], JungDirectedGraph] // fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement4[Q, N], N => N]
 
-    val module = Module[UnittedQuantity[Distance, Double], Double]
+    val module = CModule[UnittedQuantity[Distance, Double], Double]
     val d1 = 1d *: meter
     val d2 = 1d *: foot
     module.plus(d1, d2)

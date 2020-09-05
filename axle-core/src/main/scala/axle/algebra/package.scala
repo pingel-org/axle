@@ -262,5 +262,20 @@ package object algebra {
 
     }
 
+    implicit val rationalRationalModule: CModule[Rational, Rational] =
+      new CModule[Rational, Rational] {
+
+        def negate(x: Rational): Rational = rat.negate(x)
+
+        def zero: Rational = rat.zero
+
+        def plus(x: Rational, y: Rational): Rational = rat.plus(x, y)
+
+        implicit def scalar: CRing[Rational] = rat
+
+        def timesl(s: Rational, v: Rational): Rational = s * v
+
+    }
+
   }
 }
