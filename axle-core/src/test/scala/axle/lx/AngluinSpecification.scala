@@ -1,8 +1,9 @@
 package axle.lx
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
-class AngluinSpecification extends FunSuite with Matchers {
+class AngluinSpecification extends AnyFunSuite with Matchers {
 
   import axle.lx.Angluin._
 

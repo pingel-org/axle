@@ -1,6 +1,7 @@
 package axle.stats
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
@@ -14,7 +15,7 @@ import axle.quanta.Information
 import axle.quanta.UnittedQuantity
 import axle.data.Coin
 
-class EntropySpec extends FunSuite with Matchers {
+class EntropySpec extends AnyFunSuite with Matchers {
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra

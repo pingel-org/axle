@@ -2,7 +2,8 @@ package axle.algebra
 
 import scala.Vector
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.kernel.Eq
@@ -12,7 +13,7 @@ import axle.quanta.Information
 import axle.quanta.UnittedQuantity
 import axle.jung.directedGraphJung
 
-class UnittedTicsSpec extends FunSuite with Matchers {
+class UnittedTicsSpec extends AnyFunSuite with Matchers {
 
   implicit val mmd: MultiplicativeMonoid[Double] = spire.implicits.DoubleAlgebra
 

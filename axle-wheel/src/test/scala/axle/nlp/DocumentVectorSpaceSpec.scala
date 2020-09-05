@@ -4,7 +4,8 @@ import scala.Vector
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import org.typelevel.discipline.scalatest.Discipline
 import org.typelevel.discipline.Predicate
 
@@ -15,7 +16,7 @@ import spire.math.Real
 import axle.algebra.DistanceMatrix
 
 class DocumentVectorSpaceSpec
-  extends FunSuite with Matchers
+  extends AnyFunSuite with Matchers
   with Discipline {
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra

@@ -1,6 +1,7 @@
 package axle.jung
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import cats.implicits._
@@ -9,7 +10,7 @@ import axle.algebra.UndirectedGraph
 import axle.syntax.finite._
 import axle.syntax.undirectedgraph._
 
-class UndirectedGraphSpec extends FunSuite with Matchers {
+class UndirectedGraphSpec extends AnyFunSuite with Matchers {
 
   test("Undirected Graph") {
 

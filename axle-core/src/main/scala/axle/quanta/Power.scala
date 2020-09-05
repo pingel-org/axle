@@ -1,9 +1,8 @@
 package axle.quanta
 
 import cats.kernel.Eq
-import spire.math.ConvertableTo
 import spire.algebra.Field
-import spire.algebra.Module
+import spire.algebra.CModule
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Scale10s
@@ -46,13 +45,13 @@ object Power {
 
   def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit
-    module: Module[N, Rational],
+    module: CModule[N, Rational],
     evDG:   DirectedGraph[DG[UnitOfMeasurement[Power], N => N], UnitOfMeasurement[Power], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Power], N => N]]
 
   def converterGraph[N: Field: Eq: ConvertableTo, DG](
     implicit
-    module: Module[N, Rational],
+    module: CModule[N, Rational],
     evDG:   DirectedGraph[DG, UnitOfMeasurement[Power], N => N]) =
     new UnitConverterGraph[Power, N, DG] with PowerConverter[N] {
 

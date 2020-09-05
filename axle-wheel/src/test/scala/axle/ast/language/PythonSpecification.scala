@@ -3,9 +3,10 @@ package axle.ast.language
 
 import axle.ast._
 import axle.ast.view.ViewString
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
-class PythonSpecification extends FunSuite with Matchers {
+class PythonSpecification extends AnyFunSuite with Matchers {
 
   test("conversion from JSON to AstNode turn 3 into 3") {
 

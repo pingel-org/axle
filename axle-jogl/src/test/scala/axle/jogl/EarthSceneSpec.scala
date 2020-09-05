@@ -1,6 +1,7 @@
 package axle.jogl
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import java.util.Date
 
@@ -12,7 +13,7 @@ import cats.implicits._
 
 import spire.algebra._
 import spire.implicits.additiveGroupOps
-import spire.implicits.moduleOps
+import spire.implicits.leftModuleOps
 
 import axle.algebra.GeoCoordinates
 import axle.algebra.SphericalVector
@@ -23,7 +24,7 @@ import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
 import axle.scene._
 
-class EarthSceneSpec extends FunSuite with Matchers {
+class EarthSceneSpec extends AnyFunSuite with Matchers {
 
   test("axle.jogl earth scene") {
 

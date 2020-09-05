@@ -1,10 +1,10 @@
 package axle.algebra
 
-import scala.collection.JavaConverters.asScalaBufferConverter
-
+import scala.jdk.CollectionConverters._
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.scalatest.Discipline
 
@@ -25,13 +25,13 @@ trait ScalarDoubleSpace extends MetricSpace[Double, Double] {
 
 trait ScalarRealSpace extends MetricSpace[Real, Real] {
 
-  def distance(v: Real, w: Real): Real = (v - w).abs
+  def distance(v: Real, w: Real): Real = (v - w).abs()
 }
 
 trait RealTuple2Space extends MetricSpace[(Real, Real), Real] {
 
   def distance(v: (Real, Real), w: (Real, Real)): Real =
-    ((v._1 - w._1) ** 2 + (v._2 - w._2) ** 2).sqrt
+    ((v._1 - w._1) ** 2 + (v._2 - w._2) ** 2).sqrt()
 }
 
 trait SeqRealSpace extends MetricSpace[Seq[Real], Real] {
@@ -40,7 +40,7 @@ trait SeqRealSpace extends MetricSpace[Seq[Real], Real] {
     assert(v.length == w.length)
     val parts = v.zip(w).map({ case (x, y) => (x - y) * (x - y) })
     val s = parts.reduce(implicitly[AdditiveMonoid[Real]].plus _)
-    s.sqrt
+    s.sqrt()
   }
 }
 
@@ -56,14 +56,16 @@ object ArbitrarySpaceStuff {
 
   implicit val arbReal2: Arbitrary[(Real, Real)] = Arbitrary(genTuple2[Real, Real])
 
-  def genRealSeqLengthN(n: Int): Gen[Seq[Real]] =
-    Gen.sequence((1 to n).map(i => gen.real)).map(_.asScala)
+  def genRealSeqLengthN(n: Int): Gen[Seq[Real]] = {
+    val rs: Vector[Gen[Real]] = (1 to n).toVector.map(i => gen.real)
+    Gen.sequence(rs).map(_.iterator().asScala.toList)
+  }
 
   def arbitraryRealSeqLengthN(n: Int): Arbitrary[Seq[Real]] =
     Arbitrary(genRealSeqLengthN(n))
 }
 
-class MetricSpaceSpec() extends FunSuite with Matchers with Discipline {
+class MetricSpaceSpec() extends AnyFunSuite with Matchers with Discipline {
 
   import ArbitrarySpaceStuff._
 

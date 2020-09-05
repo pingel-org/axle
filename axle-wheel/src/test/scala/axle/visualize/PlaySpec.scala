@@ -1,6 +1,7 @@
 package axle.visualize
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import java.net.URL
 import edu.uci.ics.jung.graph.DirectedSparseGraph
@@ -17,7 +18,7 @@ import axle.jung.directedGraphJung
 import axle.reactive.CurrentValueSubscriber
 import axle.awt.play
 
-class PlaySpec extends FunSuite with Matchers {
+class PlaySpec extends AnyFunSuite with Matchers {
 
   test("BarChart play to awt fruit sales") {
 

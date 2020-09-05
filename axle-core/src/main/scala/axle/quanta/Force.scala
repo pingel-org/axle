@@ -2,8 +2,7 @@ package axle.quanta
 
 import cats.kernel.Eq
 import spire.algebra.Field
-import spire.algebra.Module
-import spire.math.ConvertableTo
+import spire.algebra.CModule
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Scale
@@ -38,13 +37,13 @@ object Force {
 
   def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit
-    module: Module[N, Rational],
+    module: CModule[N, Rational],
     evDG:   DirectedGraph[DG[UnitOfMeasurement[Force], N => N], UnitOfMeasurement[Force], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Force], N => N]]
 
   def converterGraph[N: Field: Eq: ConvertableTo, DG](
     implicit
-    module: Module[N, Rational], evDG: DirectedGraph[DG, UnitOfMeasurement[Force], N => N]) =
+    module: CModule[N, Rational], evDG: DirectedGraph[DG, UnitOfMeasurement[Force], N => N]) =
     new UnitConverterGraph[Force, N, DG] with ForceConverter[N] {
 
       def links: Seq[(UnitOfMeasurement[Force], UnitOfMeasurement[Force], Bijection[N, N])] =

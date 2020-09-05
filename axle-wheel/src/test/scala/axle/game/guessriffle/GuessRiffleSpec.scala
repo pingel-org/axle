@@ -1,6 +1,7 @@
 package axle.game.guessriffle
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 //import org.scalacheck.Gen
 //import org.scalacheck.Arbitrary
@@ -10,7 +11,7 @@ import spire.random.Generator.rng
 import axle.game._
 import axle.game.Strategies._
 
-class GuessRiffleSpec extends FunSuite with Matchers {
+class GuessRiffleSpec extends AnyFunSuite with Matchers {
 
   import axle.game.guessriffle.evGame._
   import axle.game.guessriffle.evGameIO._

@@ -9,7 +9,7 @@ case class BarChartGroupedKey[G, S, Y, D, H](
   implicit
   groupedDataView: GroupedDataView[G, S, Y, D]) {
 
-  val data = chart.dataFn.apply
+  val data = chart.dataFn()
 
   val slices =
     groupedDataView.slices(data)

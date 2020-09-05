@@ -2,6 +2,7 @@ package axle.quanta
 
 import cats.kernel.Eq
 import spire.algebra.Field
+import spire.algebra.CModule
 
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
@@ -32,18 +33,17 @@ trait TemperatureConverter[N] extends UnitConverter[Temperature, N] with Tempera
 
 object Temperature {
 
-  import spire.algebra.Module
   import spire.math._
 
   def converterGraphK2[N: ConvertableTo: Eq, DG[_, _]](
     implicit
-    module: Module[N, Rational], field: Field[N],
+    module: CModule[N, Rational], field: Field[N],
     evDG: DirectedGraph[DG[UnitOfMeasurement[Temperature], N => N], UnitOfMeasurement[Temperature], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Temperature], N => N]]
 
   def converterGraph[N: ConvertableTo: Eq, DG](
     implicit
-    module: Module[N, Rational], field: Field[N],
+    module: CModule[N, Rational], field: Field[N],
     evDG: DirectedGraph[DG, UnitOfMeasurement[Temperature], N => N]) =
     new UnitConverterGraph[Temperature, N, DG] with TemperatureConverter[N] {
 

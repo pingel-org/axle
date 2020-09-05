@@ -1,14 +1,16 @@
 package axle.pgm
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
+
 import cats.implicits._
 import spire.math._
 import axle.stats._
 import axle.jung.directedGraphJung
 
 class ConditionalProbabilityTableSpecification
-  extends FunSuite with Matchers {
+  extends AnyFunSuite with Matchers {
 
   val bools = Vector(true, false)
 

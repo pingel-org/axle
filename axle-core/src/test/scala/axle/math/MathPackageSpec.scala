@@ -1,9 +1,10 @@
 package axle.math
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import cats.implicits._
 
-class MathPackageSpec extends FunSuite with Matchers {
+class MathPackageSpec extends AnyFunSuite with Matchers {
 
   test("monte carlo pi be at least 2.9") {
     import spire.algebra.Field

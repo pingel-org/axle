@@ -2,12 +2,13 @@ package axle.algebra
 
 import scala.Vector
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import cats.kernel.Eq
 import cats.implicits._
 
-class TicsSpec extends FunSuite with Matchers {
+class TicsSpec extends AnyFunSuite with Matchers {
 
   test("Tics[Double]") {
 

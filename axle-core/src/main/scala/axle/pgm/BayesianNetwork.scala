@@ -1,8 +1,5 @@
 package axle.pgm
 
-import scala.Stream.cons
-import scala.Stream.empty
-
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.implicits._
@@ -223,14 +220,14 @@ case class BayesianNetwork[T, V, DG](
 
     val vars = eOpt.map(Q ++ _).getOrElse(Q)
 
-    def nodePruneStream(g: BayesianNetwork[T, V, DG]): Stream[BayesianNetwork[T, V, DG]] = {
+    def nodePruneStream(g: BayesianNetwork[T, V, DG]): LazyList[BayesianNetwork[T, V, DG]] = {
       val xVertices = g.graph.leaves.toSet -- vars.map(rv => g.graph.findVertex(_.variable === rv).get)
       xVertices.size match {
-        case 0 => empty
+        case 0 => LazyList.empty
         case _ => {
           val result = xVertices.foldLeft(g)(
             (bn, xV) => BayesianNetwork(bn.variableFactorMap /* TODO filterVertices(v => ! v === xV) */ ))
-          cons(result, nodePruneStream(result))
+          LazyList.cons(result, nodePruneStream(result))
         }
       }
     }

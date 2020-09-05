@@ -1,9 +1,10 @@
 package axle.lx
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import Gold._
 
-class GoldSpecification extends FunSuite with Matchers {
+class GoldSpecification extends AnyFunSuite with Matchers {
 
   test("Gold Paradigm: memorizing learner memorizes") {
 

@@ -2,7 +2,8 @@ package axle.algebra.distance
 
 import org.jblas.DoubleMatrix
 import org.scalacheck.Arbitrary
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.scalatest.Discipline
 
@@ -17,7 +18,7 @@ import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.eqDoubleMatrix
 
 class ManhattanSpec
-  extends FunSuite with Matchers
+  extends AnyFunSuite with Matchers
   with Discipline {
 
   implicit val additiveGroupInt: AdditiveGroup[Int] = spire.implicits.IntAlgebra

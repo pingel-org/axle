@@ -84,8 +84,10 @@ package object poker {
           case Deal() => {
             // TODO clean up these range calculations
             val cards = Vector() ++ deck.cards
-            val hands = game.players.zipWithIndex.map({ case (player, i) => (player, cards(i * 2 to i * 2 + 1)) }).toMap
-            val shared = cards(game.players.size * 2 to game.players.size * 2 + 4)
+            val hands = game.players.zipWithIndex.map({ case (player, i) =>
+              (player, cards(i * 2 to i * 2 + 1).toVector)
+            }).toMap
+            val shared = cards(game.players.size * 2 to game.players.size * 2 + 4).toVector
             val unused = cards((game.players.size * 2 + 5) until cards.length).toList
 
             // TODO: should blinds be a part of the "deal" or are they minimums during first round of betting?
@@ -103,7 +105,7 @@ package object poker {
               Deck(unused),
               shared,
               numShown,
-              hands,
+              hands.toMap,
               pot + smallBlind + bigBlind,
               bigBlind,
               stillIn,
@@ -248,9 +250,9 @@ package object poker {
           shownShared = state.shared.take(state.numShown),
           hands =
             if (state._outcome.isDefined && state.stillIn.size > 1) {
-              state.hands.filterKeys { state.stillIn.contains }
+              state.hands.view.filterKeys { state.stillIn.contains } toMap
             } else {
-              state.hands.filterKeys { _ === observer }
+              state.hands.view.filterKeys { _ === observer } toMap
             },
           pot = state.pot,
           currentBet = state.currentBet,

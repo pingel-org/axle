@@ -61,7 +61,7 @@ object Mass {
 
       def links: Seq[(UnitOfMeasurement[Mass], UnitOfMeasurement[Mass], Bijection[N, N])] =
         List[(UnitOfMeasurement[Mass], UnitOfMeasurement[Mass], Bijection[N, N])](
-          (tonne, megagram, BijectiveIdentity[N]),
+          (tonne, megagram, BijectiveIdentity[N]()),
           (milligram, gram, Scale10s(3)),
           (gram, kilogram, Scale10s(3)),
           (gram, megagram, Scale10s(6)),

@@ -1,6 +1,7 @@
 package axle.data
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 
@@ -11,7 +12,7 @@ import axle.quanta.Time
 import axle.algebra.modules.doubleRationalModule
 import axle.jung.directedGraphJung
 
-class EvolutionSpec extends FunSuite with Matchers {
+class EvolutionSpec extends AnyFunSuite with Matchers {
 
   test("Evolution data: development modern humans is most recent event") {
 

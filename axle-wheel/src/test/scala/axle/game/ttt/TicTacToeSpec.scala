@@ -1,6 +1,7 @@
 package axle.game.ttt
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import spire.random.Generator.rng
 import spire.math.Rational
@@ -11,7 +12,7 @@ import axle.stats.ConditionalProbabilityTable
 import axle.game._
 import axle.game.Strategies._
 
-class TicTacToeSpec extends FunSuite with Matchers {
+class TicTacToeSpec extends AnyFunSuite with Matchers {
 
   import axle.game.ttt.evGame._
   import axle.game.ttt.evGameIO._
@@ -100,8 +101,8 @@ class TicTacToeSpec extends FunSuite with Matchers {
     evGameIO.parseMove(game, "14") should be(Left("Please enter a number between 1 and 9"))
     evGameIO.parseMove(game, "foo") should be(Left("foo is not a valid move.  Please select again"))
 
-    evGameIO.parseMove(game, "1").right.flatMap(move => evGame.isValid(game, secondState, move)).right.toOption.get.position should be(1)
-    evGameIO.parseMove(game, "2").right.flatMap(move => evGame.isValid(game, secondState, move)) should be(Left("That space is occupied."))
+    evGameIO.parseMove(game, "1").flatMap(move => evGame.isValid(game, secondState, move)).toOption.get.position should be(1)
+    evGameIO.parseMove(game, "2").flatMap(move => evGame.isValid(game, secondState, move)) should be(Left("That space is occupied."))
   }
 
   test("random strategy makes a move") {

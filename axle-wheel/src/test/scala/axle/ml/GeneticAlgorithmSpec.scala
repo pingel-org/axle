@@ -1,13 +1,14 @@
 package axle.ml
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import shapeless._
 //import nat._
 //import spire.random.Generator
 //import spire.random.Generator.rng
 
-class GeneticAlgorithmSpec extends FunSuite with Matchers {
+class GeneticAlgorithmSpec extends AnyFunSuite with Matchers {
 
   type G = Int :: Double :: Double :: Double :: Double :: HNil
   type GG = (Int, Int) :: (Double, Double) :: (Double, Double) :: (Double, Double) :: (Double, Double) :: HNil

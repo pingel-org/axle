@@ -1,7 +1,8 @@
 package axle.bio
 
 import org.jblas.DoubleMatrix
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 import org.scalacheck.Properties
@@ -17,8 +18,8 @@ object SharedNeedlemanWunsch {
 
   import NeedlemanWunschDefaults._
 
-  implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
-  implicit val dim: Module[Double, Int] = axle.algebra.modules.doubleIntModule
+  implicit val ringInt: CRing[Int] = spire.implicits.IntAlgebra
+  implicit val dim: CModule[Double, Int] = axle.algebra.modules.doubleIntModule
 
   implicit val laJblasDouble = {
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
@@ -31,7 +32,7 @@ object SharedNeedlemanWunsch {
 
 }
 
-class NeedlemanWunschSpec extends FunSuite with Matchers {
+class NeedlemanWunschSpec extends AnyFunSuite with Matchers {
 
   import NeedlemanWunsch.alignmentScore
   import NeedlemanWunsch.optimalAlignment

@@ -1,13 +1,14 @@
 package axle.math
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import spire.algebra._
 import cats.implicits._
 
 import axle.algebra.Bijection
 
-class Mean extends FunSuite with Matchers {
+class Mean extends AnyFunSuite with Matchers {
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra

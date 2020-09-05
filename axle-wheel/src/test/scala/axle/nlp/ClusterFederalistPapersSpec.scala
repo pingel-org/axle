@@ -1,6 +1,7 @@
 package axle.nlp
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import scala.concurrent.ExecutionContext
 
@@ -12,7 +13,7 @@ import spire.random.Generator.rng
 
 import axle.nlp.language.English
 
-class ClusterFederalistPapersSpec extends FunSuite with Matchers {
+class ClusterFederalistPapersSpec extends AnyFunSuite with Matchers {
 
   val ec = ExecutionContext.global
   val blocker = Blocker.liftExecutionContext(ec)
@@ -32,8 +33,8 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
 
     def featureExtractor(fp: Article): List[Double] = {
 
-      import axle.enrichGenSeq
-      implicit val ringLong: Ring[Long] = spire.implicits.LongAlgebra
+      import axle.enrichIterable
+      implicit val ringLong: CRing[Long] = spire.implicits.LongAlgebra
 
       val tokens = English.tokenize(fp.text.toLowerCase)
       val wordCounts = tokens.tally[Long]
@@ -44,7 +45,7 @@ class ClusterFederalistPapersSpec extends FunSuite with Matchers {
     }
 
     import org.jblas.DoubleMatrix
-    import axle.algebra.distance._
+    // import axle.algebra.distance._
     import axle.algebra.distance.Euclidean
     import axle.jblas.linearAlgebraDoubleMatrix
 

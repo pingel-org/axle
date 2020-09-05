@@ -67,11 +67,4 @@ object Finite {
       def size[A](is: IndexedSeq[A]): Int = is.length
     }
 
-  implicit val finiteImmutableIndexedSeq: Finite[scala.collection.immutable.IndexedSeq, Int] =
-    new Finite[scala.collection.immutable.IndexedSeq, Int] {
-
-      def size[A](is: scala.collection.immutable.IndexedSeq[A]): Int =
-        is.length
-    }
-
 }

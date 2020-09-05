@@ -1,9 +1,10 @@
 package axle.visualize
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import cats.implicits._
 
-class GraphVisSpec extends FunSuite with Matchers {
+class GraphVisSpec extends AnyFunSuite with Matchers {
 
   test("UndirectedGraph visualization renders an SVG") {
 

@@ -1,7 +1,8 @@
 
 package axle.jung
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.implicits._
@@ -10,7 +11,7 @@ import axle.syntax.finite._
 import axle.syntax.directedgraph._
 import axle.algebra.DirectedGraph
 
-class DirectedGraphSpec extends FunSuite with Matchers {
+class DirectedGraphSpec extends AnyFunSuite with Matchers {
 
   test("Directed Graph") {
 

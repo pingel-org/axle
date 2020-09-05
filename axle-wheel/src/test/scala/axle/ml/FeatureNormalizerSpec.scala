@@ -1,10 +1,11 @@
 package axle.ml
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import spire.algebra._
 import axle.jblas._
 
-class FeatureNormalizerSpec extends FunSuite with Matchers {
+class FeatureNormalizerSpec extends AnyFunSuite with Matchers {
 
   import org.scalactic._
 

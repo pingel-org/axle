@@ -1,14 +1,14 @@
 package axle.nlp
 
-import scala.collection.GenSeq
-
 import cats.Show
-import spire.algebra.Ring
-import axle.enrichGenSeq
+import spire.algebra.CRing
+import axle.enrichIterable
 
-case class Corpus(val documents: GenSeq[String], language: Language) {
+case class Corpus(
+  val documents: Iterable[String], // TODO support any F[_] with an Aggregatable
+  language: Language) {
 
-  implicit val ringLong: Ring[Long] = spire.implicits.LongAlgebra
+  implicit val ringLong: CRing[Long] = spire.implicits.LongAlgebra
 
   lazy val wordCountMap: Map[String, Long] =
     documents.flatMap(doc => language.tokenize(doc.toLowerCase)).tally[Long]
@@ -53,7 +53,7 @@ object Corpus {
     val wordCutoff = 20L
 
     s"""
-Corpus of ${documents.length} documents.
+Corpus of ${documents.size} documents.
 There are ${wordsMoreFrequentThan(wordCutoff).length} unique words used more than $wordCutoff time(s).
 Top 10 words: ${topKWords(10).mkString(", ")}
 Top 10 bigrams: ${topKBigrams(10).mkString(", ")}

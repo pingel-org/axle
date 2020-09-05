@@ -2,14 +2,14 @@ package axle.algebra
 
 trait FromStream[S, A] {
 
-  def fromStream(stream: Stream[A]): S
+  def fromStream(stream: LazyList[A]): S
 }
 
 object FromStream {
 
-  implicit def indexedSeqFromStream[A] =
+  implicit def indexedSeqFromLazyList[A] =
     new FromStream[IndexedSeq[A], A] {
 
-      def fromStream(stream: Stream[A]): IndexedSeq[A] = stream.toIndexedSeq
+      def fromStream(stream: LazyList[A]): IndexedSeq[A] = stream.toIndexedSeq
     }
 }

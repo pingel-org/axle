@@ -1,14 +1,8 @@
 package axle.algebra
 
-import axle.math.arcTangent2
-import axle.math.cosine
-import axle.quanta.Angle
-import axle.quanta.AngleConverter
-import axle.quanta.UnittedQuantity
-import axle.quanta.modulize
-import axle.math.sine
-import axle.math.square
-import axle.math.{ √ => √ }
+import cats.kernel.Eq
+import cats.Show
+import cats.implicits._
 import spire.algebra.Field
 import spire.algebra.MetricSpace
 import spire.algebra.MultiplicativeMonoid
@@ -18,15 +12,21 @@ import spire.algebra.Trig
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.literalIntAdditiveGroupOps
-import spire.implicits.moduleOps
 import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
+import spire.implicits.rightModuleOps
 import spire.math.ConvertableTo
 import spire.math.Rational
 import spire.math.sqrt
-import cats.kernel.Eq
-import cats.Show
-import cats.implicits._
+import axle.math.arcTangent2
+import axle.math.cosine
+import axle.quanta.Angle
+import axle.quanta.AngleConverter
+import axle.quanta.UnittedQuantity
+import axle.quanta.modulize
+import axle.math.sine
+import axle.math.square
+import axle.math.{ √ => √ }
 
 case class GeoCoordinates[N](
   latitude:  UnittedQuantity[Angle, N],
@@ -39,12 +39,12 @@ case class GeoCoordinates[N](
 
 object GeoCoordinates {
 
-  implicit def showGC[N: MultiplicativeMonoid: Eq](
+  implicit def showGC[N: MultiplicativeMonoid: Eq: Show](
     implicit
     converter: AngleConverter[N]): Show[GeoCoordinates[N]] =
     p => {
       import converter.°
-      (p.latitude in °).magnitude + "° N " + (p.longitude in °).magnitude + "° W"
+      (p.latitude in °).magnitude.show + "° N " + (p.longitude in °).magnitude.show + "° W"
     }
 
   implicit def eqgcd[N: Eq: MultiplicativeMonoid](
@@ -71,7 +71,7 @@ object GeoCoordinates {
         val dLat = w.latitude - v.latitude
         val dLon = w.longitude - v.longitude
         val a = square(sine(dLat :* half)) + square(sine(dLon :* half)) * cosine(v.latitude) * cosine(w.latitude)
-        arcTangent2(sqrt(a), sqrt(1 - a)) :* 2
+        arcTangent2(sqrt(a), sqrt(1 - a)) :* ConvertableTo[N].fromInt(2)
       }
     }
 

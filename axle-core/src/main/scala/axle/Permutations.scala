@@ -1,8 +1,6 @@
 package axle
 
 import scala.reflect.ClassTag
-import scala.Stream.cons
-import scala.Stream.empty
 
 import cats.implicits._
 
@@ -50,34 +48,34 @@ case class Permutations[E: ClassTag](pool: IndexedSeq[E], r: Int)
       (None, indices1, cycles1, i0 - 1, false)
     } else {
       val (result2, indices2) = loop2branchFalse(indices0, cycles0, i0)
-      (Some(result2), indices2, cycles0, i0, true)
+      (Some(result2.toIndexedSeq), indices2, cycles0, i0, true)
     }
 
   private[this] def loop2(
     indices0: Array[Int],
     cycles0:  Array[Int],
     i0:       Int,
-    broken0:  Boolean): (Stream[IndexedSeq[E]], Array[Int], Array[Int], Boolean) =
+    broken0:  Boolean): (LazyList[IndexedSeq[E]], Array[Int], Array[Int], Boolean) =
     if (i0 >= 0 && !broken0) {
       val cycles1 = cycles0.updated(i0, cycles0(i0) - 1)
       val (result, indices2, cycles2, i2, broken2) = loop2branch(indices0, cycles1, i0)
       val (subStream, indices3, cycles3, broken3) = loop2(indices2, cycles2, i2, broken2)
-      (if (result.isDefined) cons(result.get, subStream) else subStream, indices3, cycles3, broken3)
+      (if (result.isDefined) LazyList.cons(result.get, subStream) else subStream, indices3, cycles3, broken3)
     } else {
-      (empty, indices0, cycles0, broken0)
+      (LazyList.empty, indices0, cycles0, broken0)
     }
 
-  private[this] def loop1(indices: Array[Int], cycles: Array[Int]): Stream[IndexedSeq[E]] = {
+  private[this] def loop1(indices: Array[Int], cycles: Array[Int]): LazyList[IndexedSeq[E]] = {
     val (subStream, indicesOut, cyclesOut, broken) = loop2(indices, cycles, r - 1, false)
     subStream ++ (if (broken) loop1(indicesOut, cyclesOut) else empty)
   }
 
-  lazy val result: Stream[IndexedSeq[E]] = if (r <= n && n > 0) {
+  lazy val result: LazyList[IndexedSeq[E]] = if (r <= n && n > 0) {
     val indices = untilN
     val head = untilR.map(indices(_)).map(pool(_))
-    cons(head, loop1(indices, n.until(n - r, -1).toArray))
+    LazyList.cons(head.toIndexedSeq, loop1(indices, n.until(n - r, -1).toArray))
   } else {
-    empty
+    LazyList.empty
   }
 
   def iterator: Iterator[IndexedSeq[E]] = result.iterator

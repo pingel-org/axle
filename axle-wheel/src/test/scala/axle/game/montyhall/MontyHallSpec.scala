@@ -1,12 +1,13 @@
 package axle.game.montyhall
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import spire.random.Generator.rng
 import axle.game._
 import axle.game.Strategies._
 
-class MontyHallSpec extends FunSuite with Matchers {
+class MontyHallSpec extends AnyFunSuite with Matchers {
 
   import axle.game.montyhall.evGame._
   import axle.game.montyhall.evGameIO._
@@ -90,8 +91,8 @@ class MontyHallSpec extends FunSuite with Matchers {
     val firstMove = PlaceCar(1)
     val secondState = applyMove(game, startState(game), firstMove)
 
-    evGameIO.parseMove(game, "pick 1").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
-    evGameIO.parseMove(game, "pick 3").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
+    evGameIO.parseMove(game, "pick 1").flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
+    evGameIO.parseMove(game, "pick 3").flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
   }
 
 }

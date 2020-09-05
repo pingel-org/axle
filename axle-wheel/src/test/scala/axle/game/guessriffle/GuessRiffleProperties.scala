@@ -7,7 +7,7 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 import cats.implicits._
 
-import spire.math._
+//import spire.math._
 import spire.random.Random
 import spire.random.Seed
 import spire.math.Rational

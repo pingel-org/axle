@@ -5,19 +5,19 @@ import cats.kernel.Eq
 import cats.kernel.Order
 import cats.implicits._
 
-import spire.implicits.additiveGroupOps
+//import spire.implicits.additiveGroupOps
 import spire.implicits.multiplicativeGroupOps
-import spire.implicits.multiplicativeSemigroupOps
+//import spire.implicits.multiplicativeSemigroupOps
 import spire.math.log
-import spire.math.Rational
-import spire.math.Rational.apply
+//import spire.math.Rational
+//import spire.math.Rational.apply
 import spire.math.Real.apply
 import spire.algebra._
-import spire.implicits.moduleOps
 import spire.implicits.nrootOps
 import spire.implicits.semiringOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
+import spire.implicits.rightModuleOps
 import spire.math.Rational
 import spire.math.ConvertableTo
 import spire.math.ConvertableFrom
@@ -38,7 +38,12 @@ package object math {
    *
    */
   def wallisΠ(iterations: Int = 10000) =
-    2 * Π[Rational, IndexedSeq]((1 to iterations) map { n => Rational((2 * n) * (2 * n), (2 * n - 1) * (2 * n + 1)) })
+    2 * Π[Rational, IndexedSeq]((1 to iterations) map { n =>
+      val nl = n.toLong
+      Rational(
+        (2L * nl) * (2L * nl),
+        (2L * nl - 1L) * (2L * nl + 1L))
+    })
 
   /**
    * Monte Carlo approximation of pi http://en.wikipedia.org/wiki/Monte_Carlo_method
@@ -61,8 +66,8 @@ package object math {
     //    import spire.implicits.multiplicativeGroupOps
 
     val randomPointInCircle: () => V = () => {
-      val x = random * 2 - 1
-      val y = random * 2 - 1
+      val x = random() * 2 - 1
+      val y = random() * 2 - 1
       if (x * x + y * y < 1) field.one else field.zero
     }
 
@@ -86,7 +91,7 @@ package object math {
     angleConverter: AngleConverter[N],
     //ctn: ConvertableTo[N],
     //angleModule: Module[UnittedQuantity[Angle, N], N],
-    distanceModule: Module[UnittedQuantity[Distance, N], N]): UnittedQuantity[Distance, N] =
+    distanceModule: CModule[UnittedQuantity[Distance, N], N]): UnittedQuantity[Distance, N] =
     sphereRadius :* ((angle in angleConverter.radian).magnitude)
 
   def sine[N: MultiplicativeMonoid: Eq: Trig](
@@ -149,11 +154,11 @@ package object math {
 
     if (eqN.eqv(pow, one)) {
       base
-    } else if (eqN.eqv(eucRingN.mod(pow, two), zero)) {
-      val half = exponentiateByRecursiveSquaring(base, eucRingN.quot(pow, two))
+    } else if (eqN.eqv(eucRingN.emod(pow, two), zero)) {
+      val half = exponentiateByRecursiveSquaring(base, eucRingN.equot(pow, two))
       half * half
     } else {
-      val half = exponentiateByRecursiveSquaring(base, eucRingN.quot(eucRingN.minus(pow, one), two))
+      val half = exponentiateByRecursiveSquaring(base, eucRingN.equot(eucRingN.minus(pow, one), two))
       half * half * base
     }
   }
@@ -246,7 +251,7 @@ package object math {
 
     (2 to floor(sqrt(n.toDouble)).toInt) foreach { i =>
       if (A(i)) {
-        Stream.from(0).map(i * i + i * _).takeWhile(_ < n) foreach { j =>
+        LazyList.from(0).map(i * i + i * _).takeWhile(_ < n) foreach { j =>
           A(j) = false
         }
       }
@@ -254,26 +259,26 @@ package object math {
 
     (2 until n) filter { A }
   }
-  def notPrimeUpTo[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Stream[N] = {
+  def notPrimeUpTo[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): LazyList[N] = {
 
     val two = ringN.plus(ringN.one, ringN.one)
 
-    val bases = streamFrom(two).takeWhile(i => ringN.times(i, i) < n)
+    val bases = lazyListsFrom(two).takeWhile(i => ringN.times(i, i) < n)
 
     val notPrimeStreams =
-      filterOut(bases, if (!bases.isEmpty) notPrimeUpTo(bases.last) else Stream.empty) map { i =>
-        streamFrom(ringN.zero).map(j => ringN.plus(i * i, i * j))
+      filterOut(bases, if (!bases.isEmpty) notPrimeUpTo(bases.last) else LazyList.empty) map { i =>
+        lazyListsFrom(ringN.zero).map(j => ringN.plus(i * i, i * j))
       }
 
     mergeStreams(notPrimeStreams)
   }
 
-  def primeStream[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Stream[N] = {
+  def primeStream[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): LazyList[N] = {
 
     require(n > ringN.one)
 
     val two = ringN.plus(ringN.one, ringN.one)
-    filterOut(streamFrom(two).takeWhile(i => i < n), notPrimeUpTo(n))
+    filterOut(lazyListsFrom(two).takeWhile(i => i < n), notPrimeUpTo(n))
   }
 
   def log2[N: Field: ConvertableFrom](x: N): Double = log(ConvertableFrom[N].toDouble(x)) / log(2d)

@@ -1,7 +1,8 @@
 package axle.nlp
 
 import org.jblas.DoubleMatrix
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.scalatest.Discipline
 
@@ -11,7 +12,7 @@ import spire.laws.VectorSpaceLaws
 import axle.jblas.linearAlgebraDoubleMatrix
 
 class LevenshteinSpecification
-  extends FunSuite with Matchers
+  extends AnyFunSuite with Matchers
   with Discipline {
 
   implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra

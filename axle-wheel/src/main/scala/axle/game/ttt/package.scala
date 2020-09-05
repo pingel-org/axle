@@ -97,7 +97,7 @@ package object ttt {
             Left(input + " is not a valid move.  Please select again")
           }
         }
-        eitherI.right.map { position =>
+        eitherI.map { position =>
           TicTacToeMove(position, g.boardSize)
         }
       }

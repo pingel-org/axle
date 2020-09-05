@@ -8,9 +8,10 @@ import spire.random.Dist
 import spire.random.Generator.rng
 import axle.stats._
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
-class MoveFromRandomStateSpec extends FunSuite with Matchers {
+class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
 
   val player = Player("P", "player")
 
@@ -86,7 +87,7 @@ class MoveFromRandomStateSpec extends FunSuite with Matchers {
 
       def strategyFor(game: TestGame, player: Player): (TestGame, TestGameState) => ConditionalProbabilityTable[TestGameMove, Rational] =
         (game: TestGame, state: TestGameState) =>
-          ConditionalProbabilityTable(movesMap(state).mapValues(_._2))
+          ConditionalProbabilityTable(movesMap(state).view.mapValues(_._2).toMap)
 
       def isValid(game: TestGame, state: TestGameState, move: TestGameMove): Either[String, TestGameMove] =
         Right(move)

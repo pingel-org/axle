@@ -1,6 +1,7 @@
 package axle.game
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import cats.implicits._
 import spire.math.Rational
 import axle.stats.ProbabilityModel
@@ -8,7 +9,7 @@ import axle.stats.ConditionalProbabilityTable
 import axle.algebra.RegionEq
 import axle.syntax.probabilitymodel._
 
-class BowlingSpec extends FunSuite with Matchers {
+class BowlingSpec extends AnyFunSuite with Matchers {
 
   test("bowling") {
 

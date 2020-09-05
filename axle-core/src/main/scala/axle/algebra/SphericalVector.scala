@@ -1,17 +1,17 @@
 package axle.algebra
 
+import cats.kernel.Eq
+import spire.algebra.MultiplicativeMonoid
+import spire.algebra.Trig
+import spire.algebra.CModule
+import spire.implicits.multiplicativeSemigroupOps
+import spire.implicits.rightModuleOps
 import axle.math.cosine
 import axle.quanta.Angle
 import axle.quanta.AngleConverter
 import axle.quanta.Distance
 import axle.quanta.UnittedQuantity
 import axle.math.sine
-import cats.kernel.Eq
-import spire.algebra.Module
-import spire.algebra.MultiplicativeMonoid
-import spire.algebra.Trig
-import spire.implicits.moduleOps
-import spire.implicits.multiplicativeSemigroupOps
 
 /**
  *
@@ -39,7 +39,7 @@ case class SphericalVector[N](
     mult: MultiplicativeMonoid[N],
     eqn:  Eq[N],
     trig: Trig[N],
-    modn: Module[UnittedQuantity[Distance, N], N]): P =
+    modn: CModule[UnittedQuantity[Distance, N], N]): P =
     (
       ρ :* (sine(θ) * cosine(φ)),
       ρ :* (sine(θ) * sine(φ)),

@@ -2,7 +2,7 @@ package axle.quanta
 
 import cats.kernel.Eq
 import spire.algebra.Field
-import spire.math.ConvertableTo
+import spire.algebra.CModule
 import axle.algebra.Bijection
 import axle.algebra.DirectedGraph
 import axle.algebra.Scale
@@ -41,18 +41,17 @@ trait EnergyConverter[N] extends UnitConverter[Energy, N] with EnergyUnits {
 
 object Energy {
 
-  import spire.algebra.Module
   import spire.math._
 
   def converterGraphK2[N: Field: Eq: ConvertableTo, DG[_, _]](
     implicit
-    module: Module[N, Rational],
+    module: CModule[N, Rational],
     evDG:   DirectedGraph[DG[UnitOfMeasurement[Energy], N => N], UnitOfMeasurement[Energy], N => N]) =
     converterGraph[N, DG[UnitOfMeasurement[Energy], N => N]]
 
   def converterGraph[N: Field: Eq: ConvertableTo, DG](
     implicit
-    module: Module[N, Rational],
+    module: CModule[N, Rational],
     evDG:   DirectedGraph[DG, UnitOfMeasurement[Energy], N => N]) =
     new UnitConverterGraph[Energy, N, DG] with EnergyConverter[N] {
 

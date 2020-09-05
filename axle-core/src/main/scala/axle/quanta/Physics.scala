@@ -1,6 +1,6 @@
 package axle.quanta
 
-import scala.Vector
+//import scala.Vector
 
 /**
  * The "Physics" objects models the graph of units
@@ -11,25 +11,25 @@ import scala.Vector
 
 object Physics {
 
-  val qs = Vector(
-    Acceleration,
-    Angle,
-    Area,
-    Distance,
-    Energy,
-    Flow,
-    Force,
-    Frequency,
-    Information,
-    Mass,
-    Money,
-    MoneyFlow,
-    MoneyPerForce,
-    Power,
-    Speed,
-    Temperature,
-    Time,
-    Volume)
+  // val qs = Vector[Quantum](
+  //   Acceleration,
+  //   Angle,
+  //   Area,
+  //   Distance,
+  //   Energy,
+  //   Flow,
+  //   Force,
+  //   Frequency,
+  //   Information,
+  //   Mass,
+  //   Money,
+  //   MoneyFlow,
+  //   MoneyPerForce,
+  //   Power,
+  //   Speed,
+  //   Temperature,
+  //   Time,
+  //   Volume)
 
   // TODO derived units
   //      derive(mps.over[Time.type, this.type](second, this)),

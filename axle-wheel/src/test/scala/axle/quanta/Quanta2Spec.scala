@@ -9,17 +9,18 @@ import spire.math.Real
 import spire.algebra._
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.additiveGroupOps
-import spire.implicits.moduleOps
-import spire.laws.GroupLaws
-import spire.laws.VectorSpaceLaws
+import spire.implicits.rightModuleOps
+import spire.implicits.leftModuleOps
 
 import axle.algebra._
 import axle.algebra.modules.doubleRationalModule
+import axle.algebra.modules.rationalRationalModule
 import axle.jung.directedGraphJung
 
 import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import org.typelevel.discipline.scalatest.Discipline
 
 object ArbitraryUnittedQuantityStuff {
@@ -45,7 +46,7 @@ object ArbitraryUnittedQuantityStuff {
     Arbitrary(gq)
 }
 
-class QuantaSpec extends FunSuite with Matchers with Discipline {
+class QuantaSpec extends AnyFunSuite with Matchers with Discipline {
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
@@ -54,7 +55,7 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
   {
     import axle.algebra.modules.realRationalModule
     implicit val dd = Distance.converterGraphK2[Real, DirectedSparseGraph]
-    val mudr = Module[UnittedQuantity[Distance, Real], Real]
+    val mudr = CModule[UnittedQuantity[Distance, Real], Real]
 
     import ArbitraryUnittedQuantityStuff._
 
@@ -67,7 +68,7 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
       arbitraryUQ[Distance, Real](genUQ[Distance, Real]),
       implicitly[Eq[Real]],
       arb.real,
-      new org.typelevel.discipline.Predicate[Real] { def apply(a: Real) = true }).module(mudr)
+      new org.typelevel.discipline.Predicate[Real] { def apply(a: Real) = true }).cModule(mudr)
 
     val agudr: cats.kernel.Group[UnittedQuantity[Distance, Real]] =
       axle.quanta.quantumAdditiveGroup[Distance, Real](
@@ -157,7 +158,7 @@ class QuantaSpec extends FunSuite with Matchers with Discipline {
 
     // val mx = axle.quanta.modulize4[Double, Distance[Double], JungDirectedGraph] // fieldn: Field[N], eqn: Eq[N], cg: DG[UnitOfMeasurement4[Q, N], N => N]
 
-    val module = Module[UnittedQuantity[Distance, Double], Double]
+    val module = CModule[UnittedQuantity[Distance, Double], Double]
     val d1 = 1d *: meter
     val d2 = 1d *: foot
     module.plus(d1, d2)

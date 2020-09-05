@@ -1,6 +1,8 @@
 package axle.ml
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
+
 import spire.math.Rational
 import RankedClassifierPerformance._
 
@@ -9,7 +11,7 @@ import RankedClassifierPerformance._
  *
  */
 
-class RankedClassifierPerformanceSpec extends FunSuite with Matchers {
+class RankedClassifierPerformanceSpec extends AnyFunSuite with Matchers {
 
   test("Average Precision") {
 

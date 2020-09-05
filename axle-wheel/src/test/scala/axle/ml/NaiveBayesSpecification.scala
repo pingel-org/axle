@@ -1,13 +1,14 @@
 package axle.ml
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import cats.implicits._
 import spire.math.Rational
 import axle.stats.Variable
 // import axle.stats.rationalProbabilityDist
 
-class NaiveBayesSpecification extends FunSuite with Matchers {
+class NaiveBayesSpecification extends AnyFunSuite with Matchers {
 
   case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)
 

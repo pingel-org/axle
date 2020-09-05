@@ -1,11 +1,12 @@
 package axle.stats
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import cats.implicits._
 import spire.algebra._
 
-class RootMeanSquareDeviationSpec extends FunSuite with Matchers {
+class RootMeanSquareDeviationSpec extends AnyFunSuite with Matchers {
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra

@@ -1,7 +1,5 @@
 package axle.bio
 
-import scala.Stream.cons
-import scala.Stream.empty
 import scala.Vector
 
 import cats.Functor
@@ -10,11 +8,10 @@ import cats.kernel.Eq
 import cats.implicits._
 
 import spire.algebra.AdditiveMonoid
-import spire.algebra.Module
 import spire.algebra.Ring
+import spire.algebra.CModule
 import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
-import spire.implicits.moduleOps
 
 import axle.algebra.Aggregatable
 import axle.algebra.Finite
@@ -102,7 +99,7 @@ object NeedlemanWunsch {
     la:      LinearAlgebra[M, I, I, V],
     indexed: Indexed[S, I],
     finite:  Finite[S, I],
-    module:  Module[V, I]): M = {
+    module:  CModule[V, I]): M = {
 
     val one = Ring[I].one
 
@@ -110,8 +107,8 @@ object NeedlemanWunsch {
       A.size + one,
       B.size + one,
       implicitly[AdditiveMonoid[V]].zero,
-      (i: I) => i *: gapPenalty,
-      (j: I) => j *: gapPenalty,
+      (i: I) => module.timesr(gapPenalty, i),
+      (j: I) => module.timesr(gapPenalty, j),
       (i: I, j: I, aboveleft: V, left: V, above: V) => {
         Vector(
           aboveleft + similarity(A.at(i - one), B.at(j - one)),
@@ -158,15 +155,15 @@ object NeedlemanWunsch {
     F:          M)(
     implicit
     la:      LinearAlgebra[M, I, I, V],
-    indexed: Indexed[S, I]): Stream[(N, N)] = {
+    indexed: Indexed[S, I]): LazyList[(N, N)] = {
 
     val zero = Ring[I].zero
 
     if ((i > zero) || (j > zero)) {
       val (preA, preB, newI, newJ) = alignStep(i, j, A, B, F, similarity, gap, gapPenalty)
-      cons((preA, preB), _optimalAlignment(newI, newJ, A, B, similarity, gap, gapPenalty, F))
+      LazyList.cons((preA, preB), _optimalAlignment(newI, newJ, A, B, similarity, gap, gapPenalty, F))
     } else {
-      empty
+      LazyList.empty
     }
   }
 
@@ -181,7 +178,7 @@ object NeedlemanWunsch {
     indexed: Indexed[S, I],
     finite:  Finite[S, I],
     fs:      FromStream[S[N], N],
-    module:  Module[V, I]): (S[N], S[N]) = {
+    module:  CModule[V, I]): (S[N], S[N]) = {
 
     val F = computeF(A, B, similarity, gapPenalty)
 
@@ -207,7 +204,7 @@ case class NeedlemanWunschSimilaritySpace[S[_], N: Eq, M, I: Ring: Order, V: Add
   la:      LinearAlgebra[M, I, I, V],
   indexed: Indexed[S, I],
   finite:  Finite[S, I],
-  module:  Module[V, I])
+  module:  CModule[V, I])
   extends SimilaritySpace[S[N], V] {
 
   def similarity(s1: S[N], s2: S[N]): V =

@@ -1,9 +1,10 @@
 package axle.game.poker
 
 import axle.game.Player
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
-class PokerMoveParserSpec extends FunSuite with Matchers {
+class PokerMoveParserSpec extends AnyFunSuite with Matchers {
 
   val p1 = Player("P1", "Player 1")
   val moveParser = MoveParser()

@@ -2,9 +2,10 @@
 package axle.ast.language
 
 import axle.ast._
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
-class LLTest1 extends FunSuite with Matchers {
+class LLTest1 extends AnyFunSuite with Matchers {
 
   test("LL Grammar #1") {
 

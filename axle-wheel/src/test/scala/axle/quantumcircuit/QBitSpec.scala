@@ -6,9 +6,10 @@ import spire.math._
 import axle.syntax.probabilitymodel._
 import axle.algebra.RegionEq
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
-class QBitSpec extends FunSuite with Matchers {
+class QBitSpec extends AnyFunSuite with Matchers {
 
   test("fair coin QBit") {
 
@@ -37,10 +38,10 @@ class QBitSpec extends FunSuite with Matchers {
 
     tensored.zip(tensored).map({ case (x, y) => x * y}).reduce(_+_).real should be(Real(1))
     tensored should be(Vector[Complex[Real]](half, half, half, half))
-    distribution.P(RegionEq(|("00").>.unindex)) should be(Real(1 / 4d))
-    distribution.P(RegionEq(|("01").>.unindex)) should be(Real(1 / 4d))
-    distribution.P(RegionEq(|("10").>.unindex)) should be(Real(1 / 4d))
-    distribution.P(RegionEq(|("11").>.unindex)) should be(Real(1 / 4d))
+    distribution.P(RegionEq(|("00").>().unindex)) should be(Real(1 / 4d))
+    distribution.P(RegionEq(|("01").>().unindex)) should be(Real(1 / 4d))
+    distribution.P(RegionEq(|("10").>().unindex)) should be(Real(1 / 4d))
+    distribution.P(RegionEq(|("11").>().unindex)) should be(Real(1 / 4d))
   }
 
   import axle.quantumcircuit.QBit._

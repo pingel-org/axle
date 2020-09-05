@@ -1,6 +1,7 @@
 package axle.stats
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import spire.math.Rational
 import spire.math.sqrt
@@ -10,7 +11,7 @@ import axle.game.Dice.die
 import axle.math.Σ
 import axle.syntax.probabilitymodel._
 
-class StochasticLambdaCalculus extends FunSuite with Matchers {
+class StochasticLambdaCalculus extends AnyFunSuite with Matchers {
 
   type F[T] = ConditionalProbabilityTable[T, Rational]
 

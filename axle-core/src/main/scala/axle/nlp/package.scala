@@ -1,10 +1,8 @@
 package axle
 
-import scala.collection.GenSeq
-
 package object nlp {
 
-  def bigrams[T](xs: GenSeq[T]): GenSeq[(T, T)] =
+  def bigrams[T](xs: Iterable[T]): Iterable[(T, T)] =
     xs.zip(xs.tail)
 
 }

@@ -15,7 +15,7 @@ import axle.stats.ConditionalProbabilityTable
 @implicitNotFound("Witness not found for PlotDataView[${X}, ${Y}, ${D}]")
 trait PlotDataView[S, X, Y, D] {
 
-  def xsOf(d: D): Traversable[X]
+  def xsOf(d: D): Iterable[X]
 
   def valueOf(d: D, x: X): Y
 
@@ -37,7 +37,7 @@ object PlotDataView {
   implicit def treeMapDataView[S, X: Order: Plottable, Y: Order: Plottable]: PlotDataView[S, X, Y, TreeMap[X, Y]] =
     new PlotDataView[S, X, Y, TreeMap[X, Y]] {
 
-      def xsOf(d: TreeMap[X, Y]): Traversable[X] = d.keys
+      def xsOf(d: TreeMap[X, Y]): Iterable[X] = d.keys
 
       def valueOf(d: TreeMap[X, Y], x: X): Y = d.apply(x)
 
@@ -143,7 +143,7 @@ object PlotDataView {
   implicit def cptDataView[S, X: Order: AdditiveMonoid: Plottable, Y: Order: Field: Plottable]: PlotDataView[S, X, Y, ConditionalProbabilityTable[X, Y]] =
     new PlotDataView[S, X, Y, ConditionalProbabilityTable[X, Y]] {
 
-      def xsOf(cpt: ConditionalProbabilityTable[X, Y]): Traversable[X] = cpt.values
+      def xsOf(cpt: ConditionalProbabilityTable[X, Y]): Iterable[X] = cpt.values
 
       def valueOf(cpt: ConditionalProbabilityTable[X, Y], x: X): Y =
         cpt.p.get(x).getOrElse(Field[Y].zero)

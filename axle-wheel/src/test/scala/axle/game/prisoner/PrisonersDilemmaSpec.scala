@@ -1,12 +1,13 @@
 package axle.game.prisoner
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import spire.random.Generator.rng
 import axle.game._
 import axle.game.Strategies._
 
-class PrisonersDilemmaSpec extends FunSuite with Matchers {
+class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
   import axle.game.prisoner.evGame._
   import axle.game.prisoner.evGameIO._
@@ -84,8 +85,8 @@ class PrisonersDilemmaSpec extends FunSuite with Matchers {
 
     evGameIO.parseMove(game, "foo") should be(Left("foo is not a valid move.  Please select again"))
 
-    evGameIO.parseMove(game, "silence").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
-    evGameIO.parseMove(game, "betrayal").right.flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
+    evGameIO.parseMove(game, "silence").flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
+    evGameIO.parseMove(game, "betrayal").flatMap(move => evGame.isValid(game, secondState, move)).isRight should be(true)
   }
 
   //  test("A.I. strategy") {

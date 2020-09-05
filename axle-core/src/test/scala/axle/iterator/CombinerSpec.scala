@@ -2,9 +2,10 @@ package axle.iterator
 
 import axle._
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
-class CombinerSpec extends FunSuite with Matchers {
+class CombinerSpec extends AnyFunSuite with Matchers {
 
   test("Combine (a, b) 2") {
     val cAB2 = Combinations(Vector("a", "b"), 2).toList

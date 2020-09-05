@@ -46,12 +46,12 @@ package object joda {
         (_.plusSeconds(1), "mm:ss")
       }
 
-    def ticStream(from: DateTime, to: DateTime, stepFn: DateTime => DateTime, formatter: DateTimeFormatter): Stream[(DateTime, String)] = {
+    def ticStream(from: DateTime, to: DateTime, stepFn: DateTime => DateTime, formatter: DateTimeFormatter): LazyList[(DateTime, String)] = {
       val nextTic = stepFn(from)
       if (nextTic.isAfter(to)) {
-        Stream.empty
+        LazyList.empty
       } else {
-        Stream.cons((nextTic, formatter.print(nextTic)), ticStream(nextTic, to, stepFn, formatter))
+        LazyList.cons((nextTic, formatter.print(nextTic)), ticStream(nextTic, to, stepFn, formatter))
       }
     }
 

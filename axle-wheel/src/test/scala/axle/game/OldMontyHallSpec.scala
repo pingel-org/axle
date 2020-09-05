@@ -1,6 +1,7 @@
 package axle.game
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import cats.implicits._
@@ -18,7 +19,7 @@ class OldMontyHallHalfIsKolmogorov
     switchProb => Region.eqRegionIterable(List(true, false))
   )
 
-class OldMontyHallSpec extends FunSuite with Matchers {
+class OldMontyHallSpec extends AnyFunSuite with Matchers {
 
   test("Monty Hall contestant should always pick the other door") {
 

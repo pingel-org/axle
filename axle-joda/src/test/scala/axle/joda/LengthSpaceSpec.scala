@@ -1,11 +1,12 @@
 package axle.joda
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import org.joda.time.DateTime
 import org.joda.time.Duration
 
-class LengthSpaceSpec extends FunSuite with Matchers {
+class LengthSpaceSpec extends AnyFunSuite with Matchers {
 
   val start = new DateTime("2016-01-04T12:10:05.000-08:00")
 

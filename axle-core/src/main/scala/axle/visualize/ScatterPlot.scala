@@ -56,7 +56,7 @@ case class ScatterPlot[S, X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
 
   def minMax[T: Ordering](xs: List[T]): (T, T) = (xs.min, xs.max)
 
-  val domain = dataView.dataToDomain(dataFn.apply)
+  val domain = dataView.dataToDomain(dataFn())
 
   val (minX, maxX) = xRange.getOrElse(minMax(yAxis.toList ++ domain.map(_._1).toList))
   val (minY, maxY) = yRange.getOrElse(minMax(xAxis.toList ++ domain.map(_._2).toList))
@@ -75,6 +75,6 @@ case class ScatterPlot[S, X: Eq: Tics: Order, Y: Eq: Tics: Order, D](
   val xTics = XTics(scaledArea, Tics[X].tics(minX, maxX), fontName, fontSize, bold = true, drawLines = drawXTicLines, Some(0d *: angleDouble.degree), black)
   val yTics = YTics(scaledArea, Tics[Y].tics(minY, maxY), fontName, fontSize, drawLines = drawYTicLines, black)
 
-  val dataPoints = DataPoints(scaledArea, dataFn.apply, diameterOf, colorOf, labelOf)
+  val dataPoints = DataPoints(scaledArea, dataFn(), diameterOf, colorOf, labelOf)
 
 }

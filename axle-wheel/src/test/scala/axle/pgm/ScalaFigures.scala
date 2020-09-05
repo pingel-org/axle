@@ -1,7 +1,8 @@
 
 package axle.pgm
 
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
@@ -16,7 +17,7 @@ import axle.stats._
 import axle.jung.undirectedGraphJung
 import axle.jung.directedGraphJung
 
-class ScalaFigures extends FunSuite with Matchers {
+class ScalaFigures extends AnyFunSuite with Matchers {
 
   val bools = Vector(true, false)
 

@@ -2,9 +2,11 @@
 package axle.iterator
 
 import axle._
-import org.scalatest._
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
 
-class PermuterSpec extends FunSuite with Matchers {
+
+class PermuterSpec extends AnyFunSuite with Matchers {
 
   test("Permute () 0") {
     val p0 = Permutations(Vector(), 0)
