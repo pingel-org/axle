@@ -10,7 +10,7 @@ import spire.algebra.AdditiveMonoid
 import spire.algebra.Field
 
 import axle.algebra.Plottable
-import axle.stats.ConditionalProbabilityTable
+import axle.probability.ConditionalProbabilityTable
 
 @implicitNotFound("Witness not found for PlotDataView[${X}, ${Y}, ${D}]")
 trait PlotDataView[S, X, Y, D] {

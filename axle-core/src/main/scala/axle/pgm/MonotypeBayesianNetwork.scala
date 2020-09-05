@@ -17,9 +17,7 @@ import axle.algebra.RegionEq
 import axle.algebra.Region
 //import axle.algebra.RegionEmpty
 //import axle.algebra.RegionAll
-import axle.stats.Variable
-import axle.stats.Factor
-import axle.stats.ProbabilityModel
+import axle.probability._
 //import axle.math.Π
 //import axle.math.Σ
 import axle.syntax.directedgraph._

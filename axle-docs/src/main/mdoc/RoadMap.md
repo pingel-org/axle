@@ -49,12 +49,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
-* Scala 2.13
-* Move KolmogorovProbabilityAxioms and Bayes to `axle.stats.laws` (in `axle-laws`?)
+* Move `SamplePredicates` to wheel
+
 * Create `axle-parallel`?
 * `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
-* Move more stuff out of `axle-core` package (SamplePredicates, ...)
+
 * Move more stuff out of `axle.math`
+* `federalist.txt`?
+* `axle-ast-python`
+* `cats.effect` for `axle.ast.python2`
 
 * Release jars
 * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3

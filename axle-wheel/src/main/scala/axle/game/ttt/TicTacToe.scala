@@ -1,10 +1,12 @@
 
 package axle.game.ttt
 
-import axle.game._
-import axle.stats.ConditionalProbabilityTable
-import spire.math.Rational
 import cats.implicits._
+
+import spire.math.Rational
+
+import axle.game._
+import axle.probability.ConditionalProbabilityTable
 
 /**
  * TicTacToe is a 2-player perfect information zero-sum game

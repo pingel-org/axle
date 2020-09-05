@@ -4,9 +4,9 @@ import cats.implicits._
 import spire.math.Rational
 import spire.random.Dist
 
-import axle.stats.ProbabilityModel
-import axle.stats.ConditionalProbabilityTable
-import axle.stats.rationalProbabilityDist
+import axle.probability.ProbabilityModel
+import axle.probability.ConditionalProbabilityTable
+import axle.probability.rationalProbabilityDist
 
 /**
  * Prisoner's Dilemma

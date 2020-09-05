@@ -5,8 +5,7 @@ import org.scalatest.matchers.should.Matchers
 
 import cats.implicits._
 import spire.math.Rational
-import axle.stats.Variable
-// import axle.stats.rationalProbabilityDist
+import axle.probability.Variable
 
 class NaiveBayesSpecification extends AnyFunSuite with Matchers {
 

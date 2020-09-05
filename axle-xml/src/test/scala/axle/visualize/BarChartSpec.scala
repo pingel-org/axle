@@ -10,8 +10,8 @@ import spire.math.Rational
 import spire.algebra._
 
 import axle.game.Dice.die
-import axle.stats.ProbabilityModel
-import axle.stats.ConditionalProbabilityTable
+import axle.probability.ProbabilityModel
+import axle.probability.ConditionalProbabilityTable
 import axle.visualize.Color.blue
 import axle.web._
 

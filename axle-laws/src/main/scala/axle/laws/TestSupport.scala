@@ -1,4 +1,4 @@
-package axle.stats
+package axle.laws
 
 import org.scalacheck.Gen
 import cats.kernel.Eq

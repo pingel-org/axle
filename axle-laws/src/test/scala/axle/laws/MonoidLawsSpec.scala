@@ -1,4 +1,4 @@
-package axle.algebra
+package axle.laws
 
 import org.scalacheck.Arbitrary.arbInt
 import org.scalatest.funsuite._
@@ -8,8 +8,6 @@ import org.typelevel.discipline.scalatest.Discipline
 import cats.implicits._
 
 import spire.algebra._
-
-import axle.algebra.laws.MonoidLaws
 
 class MonoidLawsSpec() extends AnyFunSuite with Matchers with Discipline {
 

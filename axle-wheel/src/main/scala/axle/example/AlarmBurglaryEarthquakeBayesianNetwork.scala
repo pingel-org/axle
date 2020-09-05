@@ -5,7 +5,7 @@ import cats.implicits._
 import spire.math._
 import spire.implicits.additiveGroupOps
 
-import axle.stats._
+import axle.probability._
 import axle.pgm.BayesianNetwork
 import axle.pgm.BayesianNetworkNode
 import axle.pgm.Edge

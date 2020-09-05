@@ -1,8 +1,8 @@
 package axle.game.prisoner
 
-import axle.game._
-import axle.stats.ConditionalProbabilityTable
 import spire.math.Rational
+import axle.game._
+import axle.probability.ConditionalProbabilityTable
 
 case class PrisonersDilemma(
   p1:          Player,

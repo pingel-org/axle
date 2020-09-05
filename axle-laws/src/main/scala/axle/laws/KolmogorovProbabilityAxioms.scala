@@ -1,4 +1,4 @@
-package axle.stats
+package axle.laws
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
@@ -13,6 +13,7 @@ import spire.implicits.additiveSemigroupOps
 import axle.algebra.Region
 import axle.algebra.RegionAll
 import axle.algebra.RegionEmpty
+import axle.probability._
 import axle.syntax.probabilitymodel._
 
 object KolmogorovProbabilityAxioms {

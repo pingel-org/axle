@@ -4,8 +4,8 @@ import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 import cats.implicits._
 import spire.math.Rational
-import axle.stats.ProbabilityModel
-import axle.stats.ConditionalProbabilityTable
+import axle.probability.ProbabilityModel
+import axle.probability.ConditionalProbabilityTable
 import axle.algebra.RegionEq
 import axle.syntax.probabilitymodel._
 

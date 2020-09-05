@@ -5,7 +5,7 @@ import cats.implicits._
 import spire.math.Rational
 
 import axle.algebra.RegionEq
-import axle.stats._
+import axle.probability._
 import axle.syntax.probabilitymodel._
 
 object OldMontyHall {

@@ -194,6 +194,14 @@ lazy val axleJblas = Project("axle-jblas", file("axle-jblas"))
    )
 ).dependsOn(axleCore)
 
+lazy val axleLaws = Project("axle-laws", file("axle-laws"))
+ .settings(axleSettings)
+ .settings(
+  name := "axle-laws",
+  testOptions in Test += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "3"),
+  libraryDependencies ++= Seq()
+).dependsOn(axleCore)
+
 lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
  .settings(axleSettings)
  .settings(
@@ -214,6 +222,7 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
   )
 ).dependsOn(
   axleCore,
+  axleLaws,
   axleAwt,
   axleXml,
   axleJogl,

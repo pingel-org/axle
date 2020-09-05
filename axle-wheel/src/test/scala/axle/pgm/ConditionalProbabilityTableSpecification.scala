@@ -6,7 +6,7 @@ import org.scalatest.matchers.should.Matchers
 
 import cats.implicits._
 import spire.math._
-import axle.stats._
+import axle.probability._
 import axle.jung.directedGraphJung
 
 class ConditionalProbabilityTableSpecification

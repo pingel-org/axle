@@ -23,7 +23,7 @@ import axle.algebra.Region
 import axle.algebra.SetFrom
 import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
-import axle.stats.ProbabilityModel
+import axle.probability.ProbabilityModel
 
 final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(
   implicit

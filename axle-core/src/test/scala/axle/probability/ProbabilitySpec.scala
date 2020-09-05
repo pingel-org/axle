@@ -1,4 +1,4 @@
-package axle.stats
+package axle.probability
 
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
@@ -6,6 +6,7 @@ import org.scalatest.matchers.should.Matchers
 import cats.implicits._
 import spire.math._
 import axle.game.Dice._
+import axle.probability._
 import axle.syntax.probabilitymodel._
 import axle.algebra._
 

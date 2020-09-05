@@ -16,6 +16,7 @@ import axle.math.Σ
 import axle.dummy
 import axle.algebra.Region
 import axle.algebra.RegionEq
+import axle.probability._
 
 object TallyDistribution {
 

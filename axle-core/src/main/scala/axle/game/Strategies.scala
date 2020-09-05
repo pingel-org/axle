@@ -9,7 +9,7 @@ import spire.algebra.Ring
 import spire.math.ConvertableTo
 
 //import axle.algebra.RegionEq
-import axle.stats.ConditionalProbabilityTable
+import axle.probability.ConditionalProbabilityTable
 
 object Strategies {
 

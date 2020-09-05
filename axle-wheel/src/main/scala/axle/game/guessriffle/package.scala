@@ -9,9 +9,9 @@ import spire.math.Rational
 import spire.random.Dist
 import spire.random.Generator.rng
 
-import axle.stats.ProbabilityModel
-import axle.stats.ConditionalProbabilityTable
-import axle.stats.rationalProbabilityDist
+import axle.probability.ProbabilityModel
+import axle.probability.ConditionalProbabilityTable
+import axle.probability.rationalProbabilityDist
 
 import axle.game.cards._
 

@@ -1,4 +1,4 @@
-package axle.stats
+package axle.probability
 
 import cats.Show
 //import cats.implicits.catsKernelStdOrderForString

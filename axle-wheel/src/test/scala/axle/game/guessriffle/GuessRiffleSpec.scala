@@ -16,7 +16,7 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
   import axle.game.guessriffle.evGame._
   import axle.game.guessriffle.evGameIO._
 
-  implicit val dist = axle.stats.rationalProbabilityDist
+  implicit val dist = axle.probability.rationalProbabilityDist
 
   val player = Player("P", "Player")
 

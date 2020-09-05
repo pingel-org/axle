@@ -2,7 +2,7 @@ package axle.game.guessriffle
 
 import cats.syntax.all._
 import spire.math._
-import axle.stats._
+import axle.probability._
 import axle.game._
 import axle.game.cards._
 

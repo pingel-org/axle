@@ -10,7 +10,7 @@ package axle.game
  */
 
 import spire.random.Dist
-import axle.stats.ProbabilityModel
+import axle.probability.ProbabilityModel
 
 trait Game[G, S, O, M, MS, MM, V, PM[_, _]] {
 

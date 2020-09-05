@@ -1,14 +1,62 @@
 package axle.pgm
 
-import org.scalatest.funsuite._
-import org.scalatest.matchers.should.Matchers
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.implicits._
 import cats.effect.IO
 import spire.math._
 
-import axle.stats._
+import axle.probability._
+import axle.laws._
+import axle.algebra.Region
 import axle.example.AlarmBurglaryEarthquakeBayesianNetwork
+import axle.pgm.MonotypeBayesanNetwork
+
+import org.scalacheck.Gen
+import org.scalacheck.Arbitrary
+import org.scalatest.funsuite._
+import org.scalatest.matchers.should.Matchers
+
+class AlarmBurglaryEarthQuakeBayesianNetworkIsKolmogorov
+  extends KolmogorovProbabilityProperties[
+    Rational,
+    ({ type L[C, W] = MonotypeBayesanNetwork[C, Boolean, W, DirectedSparseGraph] })#L,
+    (Boolean, Boolean, Boolean, Boolean, Boolean),
+    Rational](
+    "Alarm-Burglary-Earthquake Bayesian Network",
+    // Arbitrary[T] -- arbitrary seed
+    // TODO non-1 numerators
+    Arbitrary(for {
+      denominator <- Gen.oneOf(1 to 1000)
+      numerator <- Gen.oneOf(1 to denominator)
+    } yield Rational(numerator.toLong, denominator.toLong)),
+    // T => M[E, V]
+    { case seed => new AlarmBurglaryEarthquakeBayesianNetwork(pEarthquake = seed).monotype },
+    { case seed => Arbitrary(TestSupport.genRegion(AlarmBurglaryEarthquakeBayesianNetwork.domain)) },
+    { case seed => Region.eqRegionIterable(AlarmBurglaryEarthquakeBayesianNetwork.domain) }
+  )(
+    axle.pgm.MonotypeBayesanNetwork.probabilityModelForMonotypeBayesanNetwork[Boolean, DirectedSparseGraph](),
+    cats.kernel.Eq[(Boolean, Boolean, Boolean, Boolean, Boolean)],
+    spire.algebra.Field[Rational],
+    cats.kernel.Order[Rational]
+  )
+
+class AlarmBurglaryEarthquakeBayesianNetworkIsBayes
+  extends BayesTheoremProperty[
+    Rational,
+    ({ type L[C, W] = MonotypeBayesanNetwork[C, Boolean, W, DirectedSparseGraph] })#L,
+    (Boolean, Boolean, Boolean, Boolean, Boolean),
+    Rational](
+    "Alarm-Burglary-Earthquake Bayesian Network",
+    Arbitrary(TestSupport.genPortion),
+    { case seed => new AlarmBurglaryEarthquakeBayesianNetwork(pEarthquake = seed).monotype },
+    { case seed => Arbitrary(TestSupport.genRegion(AlarmBurglaryEarthquakeBayesianNetwork.domain)) },
+    { case seed => Region.eqRegionIterable(AlarmBurglaryEarthquakeBayesianNetwork.domain) }
+)(
+    axle.pgm.MonotypeBayesanNetwork.probabilityModelForMonotypeBayesanNetwork[Boolean, DirectedSparseGraph](),
+    cats.kernel.Eq[(Boolean, Boolean, Boolean, Boolean, Boolean)],
+    spire.algebra.Field[Rational],
+    cats.kernel.Order[Rational]
+)
 
 class AlarmBurglaryEarthquakeSpec extends AnyFunSuite with Matchers {
 

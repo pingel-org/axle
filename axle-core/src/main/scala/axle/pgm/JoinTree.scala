@@ -1,9 +1,9 @@
 package axle.pgm
 
-import axle.algebra.UndirectedGraph
-import axle.stats.Variable
 import cats.kernel.Eq
 import spire.algebra.Field
+import axle.algebra.UndirectedGraph
+import axle.probability.Variable
 
 class JoinTreeEdge
 
