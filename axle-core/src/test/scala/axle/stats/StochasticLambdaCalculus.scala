@@ -6,6 +6,7 @@ import org.scalatest.matchers.should.Matchers
 import spire.math.Rational
 import spire.math.sqrt
 
+import axle.probability._
 import axle.algebra.RegionEq
 import axle.game.Dice.die
 import axle.math.Σ

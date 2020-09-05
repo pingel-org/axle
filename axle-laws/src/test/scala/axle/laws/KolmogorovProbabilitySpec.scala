@@ -6,7 +6,7 @@ import org.scalacheck.Arbitrary
 import spire.math.Rational
 
 import axle.algebra.Region
-import axle.stats._
+import axle.probability._
 import axle.laws.TestSupport._
 
 class BernoulliIsKolmogorov

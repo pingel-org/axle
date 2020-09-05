@@ -5,6 +5,7 @@ import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 import spire.algebra._
 import spire.math._
+import axle.probability._
 
 class Stats101 extends AnyFunSuite with Matchers {
 

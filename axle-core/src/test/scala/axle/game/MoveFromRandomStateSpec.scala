@@ -6,7 +6,7 @@ import spire.algebra.Ring
 import spire.math._
 import spire.random.Dist
 import spire.random.Generator.rng
-import axle.stats._
+import axle.probability._
 
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers

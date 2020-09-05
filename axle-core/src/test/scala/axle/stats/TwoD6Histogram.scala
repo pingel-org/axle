@@ -6,6 +6,7 @@ import org.scalatest.matchers.should.Matchers
 import spire.algebra._
 import spire.math.Rational
 
+import axle.probability._
 import axle.algebra.RegionEq
 import axle.enrichIterable
 import axle.game.Dice.die
@@ -18,7 +19,7 @@ class TwoD6Histogram extends AnyFunSuite with Matchers {
 
   test("tally") {
 
-    implicit val dist = axle.stats.rationalProbabilityDist
+    implicit val dist = axle.probability.rationalProbabilityDist
 
     val seed = spire.random.Seed(42)
     val gen = spire.random.Random.generatorFromSeed(seed)

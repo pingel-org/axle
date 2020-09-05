@@ -5,7 +5,7 @@ import org.scalacheck.Arbitrary
 
 import axle.algebra.Region
 
-import axle.stats._
+import axle.probability._
 import axle.laws.TestSupport._
 
 import spire.math.Rational
