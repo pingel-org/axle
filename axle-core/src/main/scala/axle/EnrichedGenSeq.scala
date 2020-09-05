@@ -1,6 +1,5 @@
 package axle
 
-//import scala.collection.GenSeq
 import scala.collection.immutable.TreeMap
 
 import cats.kernel.Order
@@ -14,7 +13,7 @@ case class EnrichedIterable[T](ita: Iterable[T]) {
     val ring = Ring[N]
     val mapCR = new spire.std.MapCRng[T, N]()
     ita.foldLeft(Map.empty[T, N].withDefaultValue(ring.zero))(
-      (m, x) => mapCR.plus(m, Map(x -> ring.plus(m(x), ring.one))))
+      (m, x) => mapCR.plus(m, Map(x -> ring.plus(m(x), ring.one))).withDefaultValue(ring.zero) )
   }
 
   def orderedTally[N: CRing](implicit o: Order[T]): TreeMap[T, N] = {
