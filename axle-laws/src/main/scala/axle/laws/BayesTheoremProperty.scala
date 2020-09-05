@@ -1,4 +1,4 @@
-package axle.stats
+package axle.laws
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Properties
@@ -7,7 +7,9 @@ import cats.Order
 import cats.kernel.Eq
 
 import spire.algebra.Field
+
 import axle.algebra.Region
+import axle.stats._
 
 abstract class BayesTheoremProperty[T, M[_, _]: ProbabilityModel, E: Eq, V: Field: Order](
     name: String,

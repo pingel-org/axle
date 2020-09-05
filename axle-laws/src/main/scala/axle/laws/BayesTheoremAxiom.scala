@@ -1,4 +1,4 @@
-package axle.stats
+package axle.laws
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
@@ -8,6 +8,7 @@ import cats.kernel.Eq
 
 import spire.algebra.Field
 
+import axle.stats._
 import axle.algebra.Region
 import axle.syntax.probabilitymodel._
 

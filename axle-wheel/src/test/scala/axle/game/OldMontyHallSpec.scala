@@ -6,6 +6,7 @@ import org.scalacheck.Arbitrary
 import org.scalacheck.Gen
 import cats.implicits._
 import spire.math._
+import axle.laws._
 import axle.stats._
 import axle.algebra.Region
 import axle.algebra.RegionEq

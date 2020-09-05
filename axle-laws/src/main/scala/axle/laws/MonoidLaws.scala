@@ -1,4 +1,4 @@
-package axle.algebra.laws
+package axle.laws
 
 import org.scalacheck.Arbitrary
 import org.scalacheck.Prop
