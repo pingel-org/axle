@@ -15,7 +15,7 @@ import axle.algebra.MapReducible
 import axle.algebra.LinearAlgebra
 import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
-import axle.stats.ProbabilityModel
+import axle.probability.ProbabilityModel
 
 trait LinearAlgebraSyntax {
 

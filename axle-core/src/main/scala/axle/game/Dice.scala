@@ -4,7 +4,7 @@ import scala.Vector
 
 import spire.math.Rational
 
-import axle.stats.ConditionalProbabilityTable
+import axle.probability.ConditionalProbabilityTable
 
 object Dice {
 

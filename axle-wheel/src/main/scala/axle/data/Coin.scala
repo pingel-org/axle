@@ -2,7 +2,7 @@ package axle.data
 
 import cats.implicits._
 import spire.math.Rational
-import axle.stats.ConditionalProbabilityTable
+import axle.probability.ConditionalProbabilityTable
 
 object Coin {
 

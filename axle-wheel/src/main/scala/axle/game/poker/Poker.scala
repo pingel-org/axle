@@ -5,7 +5,7 @@ import spire.math.Rational
 
 import axle.game._
 import axle.game.Strategies._
-import axle.stats.ConditionalProbabilityTable
+import axle.probability.ConditionalProbabilityTable
 
 case class Poker(
   playersStrategiesDisplayers: IndexedSeq[(Player, (Poker, PokerStateMasked) => ConditionalProbabilityTable[PokerMove, Rational], String => Unit)],

@@ -13,7 +13,7 @@ import spire.implicits.additiveSemigroupOps
 import axle.algebra.Region
 import axle.algebra.RegionAll
 import axle.algebra.RegionEmpty
-import axle.stats._
+import axle.probability._
 import axle.syntax.probabilitymodel._
 
 object KolmogorovProbabilityAxioms {

@@ -6,12 +6,10 @@ import spire.algebra.Field
 import spire.algebra.Ring
 import spire.random.Generator
 import spire.random.Dist
-//import spire.implicits.additiveSemigroupOps
 import spire.implicits.additiveGroupOps
-//import spire.implicits.multiplicativeSemigroupOps
 
 import axle.algebra._
-import axle.stats.ProbabilityModel
+import axle.probability.ProbabilityModel
 import axle.syntax.probabilitymodel._
 
 package object game {

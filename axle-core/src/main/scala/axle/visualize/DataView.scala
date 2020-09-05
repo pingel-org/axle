@@ -10,8 +10,8 @@ import spire.algebra.Field
 
 import axle.algebra.RegionEq
 import axle.algebra.Plottable
-import axle.stats.ConditionalProbabilityTable
-import axle.stats.ProbabilityModel
+import axle.probability.ConditionalProbabilityTable
+import axle.probability.ProbabilityModel
 
 /**
  * implicits for Plot and BarChart

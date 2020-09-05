@@ -9,7 +9,7 @@ import spire.random._
 import spire.random.Generator.rng
 
 import axle.algebra._
-import axle.stats._
+import axle.probability._
 import axle.syntax.probabilitymodel._
 
 package object quantumcircuit {

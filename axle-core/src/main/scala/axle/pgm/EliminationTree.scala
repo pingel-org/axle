@@ -1,11 +1,13 @@
 package axle.pgm
 
-import axle.algebra.UndirectedGraph
-import axle.stats.Variable
-import axle.stats.Factor
 import cats.kernel.Eq
-import spire.algebra.Field
 import cats.implicits._
+
+import spire.algebra.Field
+
+import axle.algebra.UndirectedGraph
+import axle.probability.Variable
+import axle.probability.Factor
 import axle.syntax.undirectedgraph._
 
 class EliminationTreeEdge

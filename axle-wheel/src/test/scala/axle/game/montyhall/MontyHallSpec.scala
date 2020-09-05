@@ -12,7 +12,7 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
   import axle.game.montyhall.evGame._
   import axle.game.montyhall.evGameIO._
 
-  implicit val dist = axle.stats.rationalProbabilityDist
+  implicit val dist = axle.probability.rationalProbabilityDist
   implicit val rat = new spire.math.RationalAlgebra()
 
   val contestant = Player("C", "Contestant")

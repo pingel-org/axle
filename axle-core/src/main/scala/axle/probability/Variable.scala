@@ -1,4 +1,4 @@
-package axle.stats
+package axle.probability
 
 import cats.kernel.Eq
 import axle.algebra.RegionEq

@@ -5,7 +5,7 @@ import cats.implicits._
 import cats.effect.IO
 import spire.math._
 
-import axle.stats._
+import axle.probability._
 import axle.laws._
 import axle.algebra.Region
 import axle.example.AlarmBurglaryEarthquakeBayesianNetwork

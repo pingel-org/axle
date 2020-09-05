@@ -8,7 +8,7 @@ import spire.math.Rational
 import spire.algebra._
 
 import axle.syntax.probabilitymodel._
-import axle.stats.ConditionalProbabilityTable
+import axle.probability.ConditionalProbabilityTable
 import axle.game._
 import axle.game.Strategies._
 
@@ -17,7 +17,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
   import axle.game.ttt.evGame._
   import axle.game.ttt.evGameIO._
 
-  implicit val dist = axle.stats.rationalProbabilityDist
+  implicit val dist = axle.probability.rationalProbabilityDist
   implicit val rat = new spire.math.RationalAlgebra()
 
   val x = Player("X", "Player X")
@@ -108,7 +108,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
   test("random strategy makes a move") {
 
     implicit val rat = new spire.math.RationalAlgebra()
-    implicit val dist = axle.stats.rationalProbabilityDist
+    implicit val dist = axle.probability.rationalProbabilityDist
 
     val mover = randomMove
     val moveCpt = mover(game, startState(game))
@@ -119,7 +119,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
   test("A.I. strategy makes a move") {
 
-    implicit val dist = axle.stats.rationalProbabilityDist
+    implicit val dist = axle.probability.rationalProbabilityDist
     import cats.implicits._ // for Order[Double]
 
     val firstMove = TicTacToeMove(2, game.boardSize)

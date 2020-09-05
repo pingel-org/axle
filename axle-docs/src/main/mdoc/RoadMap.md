@@ -49,7 +49,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
-* `axle.probability`
 * Create `axle-parallel`?
 * `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
 * `federalist.txt`?

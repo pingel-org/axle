@@ -9,7 +9,7 @@ import cats.kernel.Eq
 import spire.algebra.Field
 
 import axle.algebra.Region
-import axle.stats._
+import axle.probability._
 
 /**
  * Types

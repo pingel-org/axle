@@ -1,8 +1,8 @@
 package axle.pgm
 
-import axle.stats.Variable
 import cats.kernel.Eq
 import spire.algebra.Field
+import axle.probability.Variable
 
 case class DTreeEdge()
 

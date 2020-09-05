@@ -10,7 +10,7 @@ import cats.implicits._
 import spire.math.Rational
 import spire.algebra._
 
-import axle.stats.ConditionalProbabilityTable
+import axle.probability.ConditionalProbabilityTable
 import axle.stats.entropy
 import axle.data.Coin
 import axle.quanta.Information

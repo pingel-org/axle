@@ -12,9 +12,8 @@ import spire.implicits.multiplicativeSemigroupOps
 
 import axle.algebra._
 import axle.math._
-import axle.stats.Variable
+import axle.probability._
 import axle.stats.TallyDistribution
-import axle.stats.ProbabilityModel
 import axle.syntax.aggregatable._
 
 case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N: Field: Order](

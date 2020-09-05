@@ -5,8 +5,8 @@ import cats.kernel.Eq
 
 import spire.algebra.Field
 
-import axle.stats.Variable
-import axle.stats.Factor
+import axle.probability.Variable
+import axle.probability.Factor
 
 case class BayesianNetworkNode[T, N](variable: Variable[T], cpt: Factor[T, N])
 

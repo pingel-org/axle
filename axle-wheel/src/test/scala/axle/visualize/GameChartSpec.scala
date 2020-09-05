@@ -10,8 +10,8 @@ import spire.math.Rational
 
 import axle.game.Bowling.Bowlers.goodBowler
 import axle.game.Bowling._
-import axle.stats.ProbabilityModel
-import axle.stats.ConditionalProbabilityTable
+import axle.probability.ProbabilityModel
+import axle.probability.ConditionalProbabilityTable
 
 class GameChartSpec extends AnyFunSuite with Matchers {
 

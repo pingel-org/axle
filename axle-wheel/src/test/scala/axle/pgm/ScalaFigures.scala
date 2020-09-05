@@ -13,7 +13,7 @@ import spire.algebra._
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math._
 
-import axle.stats._
+import axle.probability._
 import axle.jung.undirectedGraphJung
 import axle.jung.directedGraphJung
 

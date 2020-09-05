@@ -2,7 +2,7 @@ package axle.game
 
 import cats.implicits._
 import spire.math.Rational
-import axle.stats._
+import axle.probability._
 
 object Bowling {
 

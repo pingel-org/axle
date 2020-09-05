@@ -16,6 +16,7 @@ import axle.algebra.RegionEq
 import axle.math.Σ
 import axle.game.Strategies._
 import axle.game.guessriffle.evGame._
+import axle.probability._
 import axle.stats._
 import axle.game._
 import axle.quanta._
@@ -23,7 +24,7 @@ import axle.syntax.probabilitymodel._
 
 class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
 
-  implicit val dist = axle.stats.rationalProbabilityDist
+  implicit val dist = axle.probability.rationalProbabilityDist
 
   def containsCorrectGuess(game: GuessRiffle, fromState: GuessRiffleState, moveDist: ConditionalProbabilityTable[GuessRiffleMove, Rational]): Boolean =
     mover(game, fromState).map( mover =>

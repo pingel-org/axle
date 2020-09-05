@@ -10,9 +10,9 @@ import spire.math.ConvertableFrom
 import axle.algebra.RegionEq
 import axle.algebra.UndirectedGraph
 import axle.algebra.DirectedGraph
-import axle.stats.Variable
-import axle.stats.Independence
-import axle.stats.Factor
+import axle.probability.Variable
+import axle.probability.Factor
+import axle.probability.Independence
 import axle.math.Π
 import axle.syntax.directedgraph._
 import axle.syntax.undirectedgraph._

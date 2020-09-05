@@ -8,7 +8,7 @@ import cats.kernel.Eq
 
 import spire.algebra.Field
 
-import axle.stats._
+import axle.probability._
 import axle.algebra.Region
 import axle.syntax.probabilitymodel._
 

@@ -12,7 +12,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
   import axle.game.prisoner.evGame._
   import axle.game.prisoner.evGameIO._
 
-  implicit val dist = axle.stats.rationalProbabilityDist
+  implicit val dist = axle.probability.rationalProbabilityDist
   implicit val rat = new spire.math.RationalAlgebra()
 
   val p1 = Player("P1", "Prisoner 1")

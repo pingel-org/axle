@@ -1,8 +1,8 @@
 package axle.pgm
 
-import axle.algebra.UndirectedGraph
-import axle.stats.Variable
 import cats.kernel.Eq
+import axle.algebra.UndirectedGraph
+import axle.probability.Variable
 
 class InteractionGraphEdge
 
