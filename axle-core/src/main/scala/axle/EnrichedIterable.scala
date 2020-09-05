@@ -11,9 +11,9 @@ case class EnrichedIterable[T](ita: Iterable[T]) {
 
   def tally[N: CRing]: Map[T, N] = {
     val ring = Ring[N]
-    val mapCR = new spire.std.MapCRng[T, N]()
     ita.foldLeft(Map.empty[T, N].withDefaultValue(ring.zero))(
-      (m, x) => mapCR.plus(m, Map(x -> ring.plus(m(x), ring.one))).withDefaultValue(ring.zero) )
+      (m, x) => m + (x -> ring.plus(m.get(x).getOrElse(ring.zero), ring.one) )
+    )
   }
 
   def orderedTally[N: CRing](implicit o: Order[T]): TreeMap[T, N] = {
