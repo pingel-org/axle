@@ -32,12 +32,14 @@ object BayesTheoremAxiom {
       implicit val implicitArbT = arbT
       import spire.implicits._
 
+      val v0 = Field[V].zero
+
       forAll { t: T =>
         val model: M[E, V] = modelFn(t)
         implicit val arbRegion = arbRegionFn(t)
         forAll { (a: Region[E], b: Region[E]) =>
-          (model.P(a) == 0) ||
-          (model.P(b) == 0) ||
+          (model.P(a) === v0 && model.filter(b).P(a) === v0) ||
+          (model.P(b) === v0 && model.filter(a).P(b) === v0) ||
           (model.filter(b).P(a) * model.P(b)) === ( model.filter(a).P(b) * model.P(a) )
         }
       }
