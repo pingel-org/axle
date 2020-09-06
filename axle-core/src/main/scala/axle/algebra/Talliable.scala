@@ -31,6 +31,14 @@ object Talliable {
       }
     }
 
+  implicit val tallyVector =
+    new Talliable[Vector] {
+      def tally[A, N](xs: Vector[A])(implicit ring: CRing[N]): Map[A, N] = {
+        xs.foldLeft(Map.empty[A, N].withDefaultValue(ring.zero))(
+          (m, x) => m + (x -> ring.plus(m(x), ring.one)))
+      }
+    }
+
   implicit val tallyList =
     new Talliable[List] {
 

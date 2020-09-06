@@ -39,4 +39,17 @@ object Cephalate {
 
     }
 
+  implicit val cephalateVector: Cephalate[Vector] =
+    new Cephalate[Vector] {
+
+      def nil[A]: Vector[A] = Vector.empty[A]
+
+      def head[A](xs: Vector[A]): A = xs.head
+
+      def tail[A](xs: Vector[A]): Vector[A] = xs.tail
+
+      def cons[A](xs: Vector[A], x: A): Vector[A] = x +: xs
+
+    }
+
 }

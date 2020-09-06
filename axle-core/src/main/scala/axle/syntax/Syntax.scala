@@ -103,11 +103,9 @@ trait AggregatableSyntax {
 
 trait TalliableSyntax {
 
-  import spire.algebra.CRing
-
-  implicit def talliableOps[F[_], A, N](at: F[A])(
+  implicit def talliableOps[F[_], A](at: F[A])(
     implicit
-    tal: Talliable[F], ring: CRing[N]) =
+    tal: Talliable[F]) =
     new TalliableOps(at)
 }
 

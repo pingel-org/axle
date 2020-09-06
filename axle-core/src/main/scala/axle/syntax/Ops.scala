@@ -349,12 +349,11 @@ final class AggregatableOps[G[_], A](val ts: G[A])(
     agg.aggregate(ts)(zeroValue)(seqOp, combOp)
 }
 
-final class TalliableOps[F[_], A, N](val as: F[A])(
+final class TalliableOps[F[_], A](val as: F[A])(
   implicit
-  talliable: Talliable[F],
-  ring:      CRing[N]) {
+  talliable: Talliable[F]) {
 
-  def tally = talliable.tally(as)
+  def tally[N](implicit ring: CRing[N]) = talliable.tally[A, N](as)
 }
 
 final class ZipperOps[F[_], A](val as: F[A])(implicit zf: Zipper[F]) {

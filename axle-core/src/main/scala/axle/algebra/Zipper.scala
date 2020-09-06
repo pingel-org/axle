@@ -45,4 +45,14 @@ object Zipper {
         zipped.unzip
     }
 
+  implicit val zipVector: Zipper[Vector] =
+    new Zipper[Vector] {
+
+      def zip[A, B](left: Vector[A], right: Vector[B]): Vector[(A, B)] =
+        left.zip(right)
+
+      def unzip[A, B](zipped: Vector[(A, B)]): (Vector[A], Vector[B]) =
+        zipped.unzip
+    }
+
 }
