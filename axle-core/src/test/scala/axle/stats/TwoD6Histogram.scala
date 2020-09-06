@@ -8,9 +8,9 @@ import spire.math.Rational
 
 import axle.probability._
 import axle.algebra.RegionEq
-import axle.enrichIterable
 import axle.game.Dice.die
-import axle.syntax.probabilitymodel._
+import axle.syntax.probabilitymodel.probabilityModelOps
+import axle.syntax.talliable.talliableOps
 
 class TwoD6Histogram extends AnyFunSuite with Matchers {
 

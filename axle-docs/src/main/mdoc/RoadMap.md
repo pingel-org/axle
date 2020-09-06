@@ -49,14 +49,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
-* Inline all versions in buils.sbt (except where used more than once)
-* Create `axle-parallel`?
-* move ast view xml (how is it able to refer to `xml.Node`?)
-* Move `EnrichedIterable.tally` to a `Talliable` witness
 * jogl tests
+* move ast view xml (how is it able to refer to `xml.Node`?)
 * `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
-* `federalist.txt`?
+* Fix mdocs
 
+* Gold and Angluin coverage
+* `federalist.txt`?
 * Release jars
 * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
 

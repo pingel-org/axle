@@ -7,6 +7,9 @@ import cats.implicits._
 
 import spire.algebra._
 
+//import axle.algebra.Talliable
+import axle.syntax.talliable.talliableOps
+
 class PokerHandChartSpec extends AnyFunSuite with Matchers {
 
   test("poker hand chart") {
@@ -18,7 +21,7 @@ class PokerHandChartSpec extends AnyFunSuite with Matchers {
     def winnerFromHandSize(handSize: Int) =
       Deck().cards.take(handSize).toVector.combinations(5).map(PokerHand(_)).toList.max
 
-    val data: IndexedSeq[(PokerHandCategory, Int)] =
+    val data: Seq[(PokerHandCategory, Int)] =
       for {
         handSize <- 5 to 9
         trial <- 1 to 1000

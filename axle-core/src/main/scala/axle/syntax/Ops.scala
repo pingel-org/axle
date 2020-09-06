@@ -12,6 +12,7 @@ import spire.random.Dist
 
 import axle.algebra.Aggregatable
 import axle.algebra.DirectedGraph
+import axle.algebra.Cephalate
 import axle.algebra.Endofunctor
 import axle.algebra.Finite
 import axle.algebra.Indexed
@@ -23,6 +24,7 @@ import axle.algebra.Region
 import axle.algebra.SetFrom
 import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
+import axle.algebra.Zipper
 import axle.probability.ProbabilityModel
 
 final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(
@@ -347,12 +349,29 @@ final class AggregatableOps[G[_], A](val ts: G[A])(
     agg.aggregate(ts)(zeroValue)(seqOp, combOp)
 }
 
-final class TalliableOps[F[_], A, N](val as: F[A])(
+final class TalliableOps[F[_], A](val as: F[A])(
   implicit
-  talliable: Talliable[F],
-  ring:      CRing[N]) {
+  talliable: Talliable[F]) {
 
-  def tally = talliable.tally(as)
+  def tally[N](implicit ring: CRing[N]) = talliable.tally[A, N](as)
+}
+
+final class ZipperOps[F[_], A](val as: F[A])(implicit zf: Zipper[F]) {
+
+  def zip[R](right: F[R]): F[(A, R)] = zf.zip(as, right)
+
+  // def unzip[R](zipped: M[(L, R)]): (M[L], M[R])
+}
+
+final class CephalateOps[F[_], A](val as: F[A])(implicit cf: Cephalate[F]) {
+
+  // def nil[A]: F[A] = cf.nil
+
+  def head: A = cf.head(as)
+
+  def tail: F[A] = cf.tail(as)
+
+  def cons(x: A): F[A] = cf.cons(as, x)
 }
 
 final class FiniteOps[F[_], A, N](val as: F[A])(

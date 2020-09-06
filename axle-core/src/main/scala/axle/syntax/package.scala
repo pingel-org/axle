@@ -16,6 +16,10 @@ package object syntax {
 
   object talliable extends TalliableSyntax
 
+  object zipper extends ZipperSyntax
+
+  object cephalate extends CephalateSyntax
+
   object indexed extends IndexedSyntax
 
   object mapreducible extends MapReducibleSyntax

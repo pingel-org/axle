@@ -12,6 +12,7 @@ import spire.algebra._
 import spire.random.Generator.rng
 
 import axle.nlp.language.English
+import axle.syntax.talliable.talliableOps
 
 class ClusterFederalistPapersSpec extends AnyFunSuite with Matchers {
 
@@ -25,16 +26,15 @@ class ClusterFederalistPapersSpec extends AnyFunSuite with Matchers {
 
     val artcls = articles[IO](blocker).unsafeRunSync()
 
-    val corpus = Corpus(artcls.map(_.text), English)
+    implicit val ringLong: CRing[Long] = spire.implicits.LongAlgebra
+
+    val corpus = Corpus[Vector, Long](artcls.map(_.text).toVector, English)
 
     val frequentWords = corpus.wordsMoreFrequentThan(100)
     val topBigrams = corpus.topKBigrams(200)
     val numDimensions = frequentWords.size + topBigrams.size
 
     def featureExtractor(fp: Article): List[Double] = {
-
-      import axle.enrichIterable
-      implicit val ringLong: CRing[Long] = spire.implicits.LongAlgebra
 
       val tokens = English.tokenize(fp.text.toLowerCase)
       val wordCounts = tokens.tally[Long]
