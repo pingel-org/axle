@@ -30,7 +30,7 @@ class StemmerActor(stemmer: SnowballStemmer) extends Actor {
 
 */
 
-object English extends Language {
+object English extends Language[Vector] {
 
   // From Lucene's list of stopwords:
 
@@ -41,11 +41,11 @@ object English extends Language {
     "that", "the", "their", "then", "there", "these",
     "they", "this", "to", "was", "will", "with")
 
-  def tokenize(s: String): IndexedSeq[String] = s
+  def tokenize(s: String): Vector[String] = s
     .replaceAll("""([\?!()\";\|\[\]\.\,'])""", " ")
     .trim
     .split("\\s+")
-    .toIndexedSeq
+    .toVector
 
   val stemmer = new englishStemmer()
 

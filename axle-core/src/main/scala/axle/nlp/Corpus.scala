@@ -1,17 +1,22 @@
 package axle.nlp
 
 import cats.Show
+import cats.Monad
+import cats.syntax.all._
 import spire.algebra.CRing
-import axle.enrichIterable
+import axle.algebra.Cephalate
+import axle.algebra.Talliable
+import axle.algebra.Zipper
+import axle.syntax.talliable.talliableOps
 
-case class Corpus(
-  val documents: Iterable[String], // TODO support any F[_] with an Aggregatable
-  language: Language) {
+case class Corpus[F[_]: Talliable: Zipper: Cephalate: Monad](
+  val documents: F[String],
+  language: Language[F]) {
 
   implicit val ringLong: CRing[Long] = spire.implicits.LongAlgebra
 
   lazy val wordCountMap: Map[String, Long] =
-    documents.flatMap(doc => language.tokenize(doc.toLowerCase)).tally[Long]
+    documents.flatMap(doc => language.tokenize(doc.toLowerCase)).tally
 
   def wordCount(word: String): Option[Long] = wordCountMap.get(word)
 
@@ -30,7 +35,7 @@ case class Corpus(
 
   lazy val bigramCounts = documents.flatMap({ d =>
     bigrams(language.tokenize(d.toLowerCase))
-  }).tally[Long]
+  }).tally
 
   def sortedBigramCounts: List[((String, String), Long)] =
     bigramCounts
@@ -46,7 +51,10 @@ case class Corpus(
 
 object Corpus {
 
-  implicit val showCorpus: Show[Corpus] = corpus => {
+  import axle.algebra.Finite
+  import axle.syntax.finite.finiteOps
+
+  implicit def showCorpus[F[_], N](implicit fin: Finite[F, N]): Show[Corpus[F]] = corpus => {
 
     import corpus._
 

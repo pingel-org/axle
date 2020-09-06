@@ -111,6 +111,22 @@ trait TalliableSyntax {
     new TalliableOps(at)
 }
 
+trait ZipperSyntax {
+
+  import axle.algebra.Zipper
+
+  implicit def zipperOps[F[_], A](xs: F[A])(implicit zf: Zipper[F]) =
+    new ZipperOps(xs)
+}
+
+trait CephalateSyntax {
+
+  import axle.algebra.Cephalate
+
+  implicit def cephalateOps[F[_], A](xs: F[A])(implicit cf: Cephalate[F]) =
+    new CephalateOps(xs)
+}
+
 trait FiniteSyntax {
 
   implicit def finiteOps[F[_], A, N](fa: F[A])(

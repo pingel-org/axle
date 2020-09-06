@@ -1,10 +1,10 @@
 package axle.nlp
 
-trait Language {
+trait Language[F[_]] {
 
   def stopWords: Set[String]
 
-  def tokenize(s: String): IndexedSeq[String]
+  def tokenize(s: String): F[String]
 
   def stem(word: String): String
 
