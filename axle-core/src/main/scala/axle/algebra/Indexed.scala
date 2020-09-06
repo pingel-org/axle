@@ -1,7 +1,6 @@
 package axle.algebra
 
 import scala.annotation.implicitNotFound
-import scala.collection.parallel.immutable.ParSeq
 
 @implicitNotFound("Witness not found for Indexed[${C}, ${I}]")
 trait Indexed[C[_], I] {
@@ -55,16 +54,6 @@ object Indexed {
       def take[A](xs: Vector[A])(i: Int): Vector[A] = xs.take(i)
 
       def drop[A](xs: Vector[A])(i: Int): Vector[A] = xs.drop(i)
-    }
-
-  implicit val indexedParSeq: Indexed[ParSeq, Int] =
-    new Indexed[ParSeq, Int] {
-
-      def at[A](ps: ParSeq[A])(i: Int): A = ps(i)
-
-      def take[A](xs: ParSeq[A])(i: Int): ParSeq[A] = xs.take(i)
-
-      def drop[A](xs: ParSeq[A])(i: Int): ParSeq[A] = xs.drop(i)
     }
 
 }

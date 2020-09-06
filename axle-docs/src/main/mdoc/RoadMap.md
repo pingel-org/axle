@@ -49,15 +49,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
 
-* Move `SamplePredicates` to wheel
-
+* Inline all versions in buils.sbt (except where used more than once)
 * Create `axle-parallel`?
+* move ast view xml (how is it able to refer to `xml.Node`?)
+* Move `EnrichedIterable.tally` to a `Talliable` witness
+* jogl tests
 * `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
-
-* Move more stuff out of `axle.math`
 * `federalist.txt`?
-* `axle-ast-python`
-* `cats.effect` for `axle.ast.python2`
 
 * Release jars
 * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
@@ -136,6 +134,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Copy css using makeSite (not update-docs.sh)
 * Fix markdown lint warnings
 * Figure out better way to reference images in docs
+
+* Move more stuff out of `axle.math`
+* `axle-ast-python`
+* `cats.effect` for `axle.ast.python2`
 
 * Fix `axle.algebra.GeoMetricSpaceSpec`
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
