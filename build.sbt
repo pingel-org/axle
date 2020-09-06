@@ -72,10 +72,7 @@ lazy val axleCore = Project("axle-core", file("axle-core"))
       "net.sf.jung"            %  "jung-algorithms"          % jungVersion        % "provided",
       "net.sf.jung"            %  "jung-api"                 % jungVersion        % "provided",
       "net.sf.jung"            %  "jung-graph-impl"          % jungVersion        % "provided",
-      // "net.sf.jung"            %  "jung-io"                  % jungVersion        % "provided",
-      // other jogl deps: http://jogamp.org/wiki/index.php/Maven
-      // something references this.  would be nice to remove:
-      "com.google.code.findbugs" % "jsr305"                  % "3.0.0"            % "provided"
+      // "net.sf.jung"            %  "jung-io"                  % jungVersion        % "provided"
   ))
   .settings(axleSettings)
   .settings(commonJvmSettings)
@@ -166,21 +163,6 @@ lazy val axleXml = Project("axle-xml", file("axle-xml"))
   )
 ).dependsOn(axleCore)
 
-lazy val axleJogl = Project("axle-jogl", file("axle-jogl"))
- .settings(axleSettings)
- .settings(
-  name := "axle-jogl",
-  libraryDependencies ++= Seq(
-    "org.jogamp.gluegen"           %  "gluegen-rt-main"      % jogampVersion      % "provided",
-    "org.jogamp.jogl"              %  "jogl-all-main"        % jogampVersion      % "provided",
-    // jung is needed for unitted quantities
-    // "net.sf.jung"         %  "jung-visualization"       % jungVersion        % "provided",
-    "net.sf.jung"            %  "jung-algorithms"          % jungVersion        % "provided",
-    "net.sf.jung"            %  "jung-api"                 % jungVersion        % "provided",
-    "net.sf.jung"            %  "jung-graph-impl"          % jungVersion        % "provided",
-  )
-).dependsOn(axleCore)
-
 lazy val axleJoda = Project("axle-joda", file("axle-joda"))
  .settings(axleSettings)
  .settings(
@@ -221,10 +203,8 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
     "net.sf.jung"                  %  "jung-visualization"   % jungVersion,
     "net.sf.jung"                  %  "jung-algorithms"      % jungVersion,
     "net.sf.jung"                  %  "jung-api"             % jungVersion,
-    "net.sf.jung"                  %  "jung-graph-impl"      % jungVersion,
+    "net.sf.jung"                  %  "jung-graph-impl"      % jungVersion
     // "net.sf.jung"                  %  "jung-io"              % jungVersion
-    "org.jogamp.gluegen"           %  "gluegen-rt-main"      % jogampVersion,
-    "org.jogamp.jogl"              %  "jogl-all-main"        % jogampVersion
   )
 ).dependsOn(
   axleCore,
@@ -232,7 +212,6 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
   axleAwt,
   axleXml,
   axleParallel,
-  axleJogl,
   axleJoda,
   axleJblas
 )
