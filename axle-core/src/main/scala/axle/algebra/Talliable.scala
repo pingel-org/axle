@@ -39,6 +39,14 @@ object Talliable {
       }
     }
 
+  implicit val tallyIndexedSeq =
+    new Talliable[IndexedSeq] {
+      def tally[A, N](xs: IndexedSeq[A])(implicit ring: CRing[N]): Map[A, N] = {
+        xs.foldLeft(Map.empty[A, N].withDefaultValue(ring.zero))(
+          (m, x) => m + (x -> ring.plus(m(x), ring.one)))
+      }
+    }
+
   implicit val tallyList =
     new Talliable[List] {
 
