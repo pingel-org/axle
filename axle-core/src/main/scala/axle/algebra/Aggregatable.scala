@@ -1,7 +1,6 @@
 package axle.algebra
 
 import scala.annotation.implicitNotFound
-import scala.collection.parallel.immutable.ParSeq
 
 @implicitNotFound("Witness not found for Aggregatable[${F}]")
 trait Aggregatable[F[_]] {
@@ -31,12 +30,6 @@ object Aggregatable {
     new Aggregatable[Vector] {
       def aggregate[A, B](as: Vector[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
         as.foldLeft(zeroValue)(seqOp)
-    }
-
-  implicit val aggregatableParSeq =
-    new Aggregatable[ParSeq] {
-      def aggregate[A, B](ps: ParSeq[A])(zeroValue: B)(seqOp: (B, A) => B, combOp: (B, B) => B): B =
-        ps.aggregate(zeroValue)(seqOp, combOp)
     }
 
   implicit val aggregatableIndexedSeq =

@@ -1,7 +1,6 @@
 package axle.algebra
 
 import scala.annotation.implicitNotFound
-import scala.collection.parallel.immutable.ParSeq
 import spire.math.Real
 import spire.math.Rational
 
@@ -52,13 +51,6 @@ object Finite {
 
       def size[A](vector: Vector[A]): Int =
         vector.length
-    }
-
-  implicit val finiteParSeq: Finite[ParSeq, Int] =
-    new Finite[ParSeq, Int] {
-
-      def size[A](ps: ParSeq[A]): Int =
-        ps.length
     }
 
   implicit val finiteIndexedSeq: Finite[IndexedSeq, Int] =

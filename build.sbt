@@ -10,8 +10,7 @@ import ReleaseTransformations._
 lazy val spireVersion = "0.17.0-M1"
 lazy val shapelessVersion = "2.4.0-M1"
 lazy val kittensVersion = "2.1.0"
-//lazy val catsVersion = "0.9.0" // match spire's algebra's catsVersion (and monix)
-lazy val catsVersion = "2.2.0"
+lazy val catsVersion = "2.2.0" // match spire's algebra's catsVersion (and monix)
 lazy val catsEffectVersion = "2.1.4"
 
 lazy val disciplineVersion = "1.0.0"
@@ -63,9 +62,7 @@ lazy val axleCore = Project("axle-core", file("axle-core"))
       "org.typelevel"          %% "kittens"                  % kittensVersion,
       // "eu.timepit"          %% "singleton-ops"            % "0.0.4"
       "io.monix"               %% "monix-reactive"           % monixVersion,
-      // "io.monix"               %% "monix-cats"               % monixVersion,
       "org.scala-lang.modules" %% "scala-parser-combinators" % scalaParserCombinatorsVersion,
-      "org.scala-lang.modules" %% "scala-parallel-collections" % scalaParallelCollectionsVersion,
       "org.scalatest"          %% "scalatest"                % scalaTestVersion, // TODO % "test",
       "org.scalatest"          %% "scalatest-funsuite"       % scalaTestVersion, // TODO % "test",
       "org.scalacheck"         %% "scalacheck"               % scalaCheckVersion  % "test",
@@ -143,6 +140,15 @@ lazy val axleAwt = Project("axle-awt", file("axle-awt"))
     "net.sf.jung"         %  "jung-algorithms"       % jungVersion        % "provided",
     "net.sf.jung"         %  "jung-api"              % jungVersion        % "provided",
     "net.sf.jung"         %  "jung-graph-impl"       % jungVersion        % "provided"
+  )
+).dependsOn(axleCore)
+
+lazy val axleParallel = Project("axle-parallel", file("axle-parallel"))
+ .settings(axleSettings)
+ .settings(
+  name := "axle-parallel",
+  libraryDependencies ++= Seq(
+    "org.scala-lang.modules" %% "scala-parallel-collections" % scalaParallelCollectionsVersion
   )
 ).dependsOn(axleCore)
 
@@ -225,6 +231,7 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
   axleLaws,
   axleAwt,
   axleXml,
+  axleParallel,
   axleJogl,
   axleJoda,
   axleJblas
