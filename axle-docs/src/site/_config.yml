@@ -10,6 +10,8 @@ url: "http://axle-lang.org"
 twitter_username: axledsl
 github_username:  axlelang
 
+google_analytics: UA-8146066-2
+
 header_pages:
   - Architecture.md
   - Resources.md
