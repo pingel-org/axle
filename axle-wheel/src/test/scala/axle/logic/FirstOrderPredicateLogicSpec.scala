@@ -10,7 +10,7 @@ import FirstOrderPredicateLogic._
 
 class FirstOrderPredicateLogicSpec extends AnyFunSuite with Matchers {
 
-  import example.SamplePredicates._
+  import axle.logic.example.SamplePredicates._
 
   // This spec especially suffers from the conflicting specs "equalTo" and spire's ===
   // which results in this code being much less readable than it should be

@@ -1,4 +1,4 @@
-package axle.logic
+package axle.logic.example
 
 import FirstOrderPredicateLogic.Predicate
 
