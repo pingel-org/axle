@@ -6,53 +6,6 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.0 (August 2020)
-
-* Move to Scala 2.12
-* Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`
-* Redo `axle.stats`
-  * `ProbabilityModel` typeclass (refactored from `Distribution`) including syntactic support
-  * Implicitly conjurable `cats.Monad` from a `ProbabilityModel`, which supports for comprehensions via cats syntax support
-  * `Variable` instead of `RandomVariable`
-  * remove `Bayes`
-* `axle.quantumcircuit` package for modelling computing with quantum circuits
-* Replace `axle.agebra.Zero` with `spire.algebra.AdditiveMonoid.zero`
-* Remove `axle-spark` (Spark "spoke") for now
-* Move `axle.ml.distance` to `axle.algebra.distance`
-* `axle.dummy` for a handful of scanLeft calls
-* Remove Spark impacts on typeclasses in `axle.algebra`. Eg: Spark's `ClassTag` requirement `map` created the difficulty:
-  * `Functor`: removed and replaced with `cats.Functor`
-  * `Scanner`, `Aggregator`, `Zipper`, `Indexed`, `Talliable`, `Finite`: Refactored as Kind-1 typeclasses
-* Vertex and Edge projections for jung graphs
-* Fix `axle.joda.TicsSpec` handling of timezones
-* ScaleExp works with negative exponent
-* ScalaCheck tests for
-  * Group and Module of UnittedQuantity
-  * MetricSpace axle.algebra.GeoMetricSpace
-* `axle.ml.GeneticAlgorithm` rewritten in terms of [kittens](https://github.com/milessabin/kittens)
-* `Show`, `Order`, `Eq` witnesses
-  * Eq.fromUniversalEquals where applicable
-  * SAM inference elsewhere
-* Remove `axle.string` and `axle.show`.
-  * Replace uses with `.show` from `cats.implicits` or show string interpolation
-* Remove extraneous `cutoff` argument for `PCA`
-* Replace Tut with MDoc
-* Lawful ScalaCheck tests for
-  * `Module`s in `axle.algebra`
-  * `SimilaritySpace`s for `SmithWaterman` & `NeedlemanWunsch`
-* Fix `Order[Card]`
-* `Deck.riffleShuffle`
-* `GuessRiffle` game
-* `axle.algebra.etc` via `axle.algebra.EnrichedRinged`
-* `bernoulliDistribution`
-* `axle.stats.expectation(CPT)`
-* `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
-* Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
-* Remove `axle-jogl` due to instability of underlying dependencies
-
-* Fix mdocs
-* Release jars
-
 ## 0.5.1
 
 * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
