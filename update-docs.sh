@@ -18,6 +18,6 @@ cp -R axle-docs/target/site/* $BUILDDIR
 mv *.svg *.png $BUILDDIR/tutorial/images/
 cp -R axle-docs/src/site/css $BUILDDIR
 
-jekyll build --source $BUILDDIR --destination $STAGEDIR
+JEKYLL_ENV=production jekyll build --source $BUILDDIR --destination $STAGEDIR
 
 (cd $STAGEDIR; python -m SimpleHTTPServer 8000)
