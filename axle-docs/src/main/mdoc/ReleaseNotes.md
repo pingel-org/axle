@@ -6,7 +6,7 @@ permalink: /release_notes/
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
-## 0.5.0 (September 2020)
+## 0.5.2 (September 7, 2020)
 
 * Move to Scala 2.12 and 2.13
 * Changes in `axle.game` to provide `Generator` where needed, and return a `ConditionalProbabilityTable0`

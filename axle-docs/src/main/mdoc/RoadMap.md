@@ -6,7 +6,14 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.1
+## 0.5.3 (October 2020)
+
+* MonotypeBayesanNetwork.unit (see the two nulls)
+* MonotypeBayesanNetwork.map
+* MonotypeBayesanNetwork.flatMap
+* Reconcile combine1 and combine2 (maybe add to typeclass or trait)
+* ScalaCheck `Monad[ProbabilityModel]` (needs missing tailRecM mehod)
+* Monad tests for Alarm-Burglary-Earthquake as MonotypeBayesanNetwork
 
 * Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
 
@@ -26,14 +33,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Fix occasional MetricSpace failure
 
-## 0.5.2
-
-* MonotypeBayesanNetwork.unit (see the two nulls)
-* MonotypeBayesanNetwork.map
-* MonotypeBayesanNetwork.flatMap
-* Reconcile combine1 and combine2 (maybe add to typeclass or trait)
-* ScalaCheck `Monad[ProbabilityModel]` (needs missing tailRecM mehod)
-* Monad tests for Alarm-Burglary-Earthquake as MonotypeBayesanNetwork
+## 0.5.4 (December 2020)
 
 * Test: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
   * factor out each variable until
@@ -49,13 +49,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Consider a "case" to be a `Map` vs a `Vector`
 * Consider usefulness of `Factor` in terms of `Region`
 
-## 0.5.3
+## 0.5.5 (2021)
 
 * Replace `axle.game.moveFromRandomState.mapToProb`
 * Wrap `axle.IO.getLine` in `F[_]`
 * Wrap `axle.IO.prefixedDisplay` in `F[_]`
 
-## 0.5.4
+## 0.5.6 (2021)
 
 * Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
   * "Chance" should be its own player
@@ -68,7 +68,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Plot entropy by turn # for each strategy
   * Plot simulated score distribution for each strategy
 
-## 0.5.5+
+## 0.5.7+ (2021)
 
 * MonotypeBayesanNetwork.filter -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself
