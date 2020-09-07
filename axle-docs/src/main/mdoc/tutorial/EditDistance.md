@@ -21,7 +21,6 @@ import spire.algebra.Ring
 import spire.algebra.NRoot
 
 import axle._
-import axle.nlp._
 import axle.nlp.Levenshtein
 import axle.jblas._
 

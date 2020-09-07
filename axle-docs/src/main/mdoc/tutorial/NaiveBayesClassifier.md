@@ -31,7 +31,6 @@ Build a classifier to predict the Boolean feature 'play' given all the other fea
 ```scala mdoc:silent
 import cats.implicits._
 
-import spire.algebra._
 import spire.math._
 
 import axle._
