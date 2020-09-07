@@ -102,7 +102,7 @@ Define stream of data updates
 val groups = Vector("foo", "bar")
 val initial = Map("foo" -> 1d, "bar" -> 1d)
 
-val tick = (previous: Map[String, Double]) => previous + ("foo" -> nextDouble)
+val tick = (previous: Map[String, Double]) => previous + ("foo" -> nextDouble())
 
 implicit val timeConverter = {
   import axle.algebra.modules.doubleRationalModule

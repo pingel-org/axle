@@ -42,7 +42,7 @@ val blocker = cats.effect.Blocker.liftExecutionContext(ec)
 implicit val cs = cats.effect.IO.contextShift(ec)
 
 val irisesIO = new Irises[cats.effect.IO](blocker)
-val irises = irisesIO.irises.unsafeRunSync
+val irises = irisesIO.irises.unsafeRunSync()
 ```
 
 Make a 2-D Euclidean space implicitly available for clustering
@@ -121,7 +121,7 @@ import axle.visualize.Color._
 ```scala mdoc
 val colors = Vector(red, blue, green)
 
-val vis = KMeansVisualization(classifier, colors)
+val vis = KMeansVisualization[Iris, List, DoubleMatrix](classifier, colors)
 
 import axle.web._
 import cats.effect._

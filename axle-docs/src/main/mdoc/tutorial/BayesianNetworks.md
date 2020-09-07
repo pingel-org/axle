@@ -11,7 +11,7 @@ See the Wikipedia page on [Bayesian networks](https://en.wikipedia.org/wiki/Baye
 Define random variables
 
 ```scala mdoc
-import axle.stats._
+import axle.probability._
 
 val bools = Vector(true, false)
 

@@ -20,6 +20,7 @@ import spire.math._
 import spire.algebra._
 
 import axle._
+import axle.probability._
 import axle.stats._
 import axle.quanta.Information
 import axle.jung.directedGraphJung

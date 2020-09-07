@@ -20,7 +20,7 @@ implicit val cs = cats.effect.IO.contextShift(ec)
 
 val articlesIO = FederalistPapers.articles[cats.effect.IO](blocker)
 
-val articles = articlesIO.unsafeRunSync
+val articles = articlesIO.unsafeRunSync()
 ```
 
 The result is a `List[Article]`.  How many articles are there?
@@ -35,7 +35,10 @@ Construct a `Corpus` object to assist with content analysis
 import axle.nlp._
 import axle.nlp.language.English
 
-val corpus = Corpus(articles.map(_.text), English)
+import spire.algebra.CRing
+implicit val ringLong: CRing[Long] = spire.implicits.LongAlgebra
+
+val corpus = Corpus[Vector, Long](articles.map(_.text).toVector, English)
 ```
 
 Define a feature extractor using top words and bigrams.
@@ -47,11 +50,9 @@ val topBigrams = corpus.topKBigrams(200)
 
 val numDimensions = frequentWords.size + topBigrams.size
 
-import spire.algebra.Ring
-implicit val ringLong: Ring[Long] = spire.implicits.LongAlgebra
+import axle.syntax.talliable.talliableOps
 
 def featureExtractor(fp: Article): List[Double] = {
-  import axle.enrichGenSeq
 
   val tokens = English.tokenize(fp.text.toLowerCase)
   val wordCounts = tokens.tally[Long]
@@ -68,7 +69,6 @@ measure similarity of Articles.
 ```scala mdoc:silent
 import spire.algebra._
 
-import axle.algebra.distance._
 import axle.algebra.distance.Euclidean
 
 import org.jblas.DoubleMatrix

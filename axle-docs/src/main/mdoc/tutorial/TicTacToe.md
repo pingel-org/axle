@@ -28,7 +28,7 @@ Compute the end state from the start state
 
 ```scala mdoc
 import spire.random.Generator.rng
-implicit val dist = axle.stats.rationalProbabilityDist
+implicit val dist = axle.probability.rationalProbabilityDist
 
 play(game, startState(game), false, rng)
 ```

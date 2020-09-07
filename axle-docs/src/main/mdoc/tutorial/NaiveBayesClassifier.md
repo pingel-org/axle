@@ -35,7 +35,7 @@ import spire.algebra._
 import spire.math._
 
 import axle._
-import axle.stats._
+import axle.probability._
 import axle.ml.NaiveBayesClassifier
 ```
 
