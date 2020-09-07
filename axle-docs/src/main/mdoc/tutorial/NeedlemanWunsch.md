@@ -22,7 +22,6 @@ import spire.algebra.Field
 
 import axle.algebra._
 import axle.bio._
-import NeedlemanWunsch.alignmentScore
 import NeedlemanWunsch.optimalAlignment
 import NeedlemanWunschDefaults._
 

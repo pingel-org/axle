@@ -172,10 +172,10 @@ Addition and subtraction between different quanta is rejected at compile time:
 (1d *: gram) + (2d *: foot)
 ```
 
-Multiplication comes from spire's Module typeclass:
+Multiplication comes from Spire's `CModule` typeclass:
 
 ```scala mdoc
-import spire.implicits.moduleOps
+import spire.implicits.rightModuleOps
 
 (5.4 *: second) :* 100d
 

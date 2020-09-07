@@ -53,9 +53,9 @@ TODO: document `and`, `∧`, `or`, `∨`, `implies`
 ## Indexed Power Set
 
 ```scala mdoc
-(0 until 4).℘
+(0 until 4).℘()
 
-val ps = Vector("a", "b", "c").℘
+val ps = Vector("a", "b", "c").℘()
 
 ps.size
 

@@ -113,7 +113,6 @@ import monix.reactive._
 
 import spire.algebra.Field
 
-import axle.joda._
 import axle.jung._
 import axle.quanta.Time
 import axle.visualize._

@@ -24,7 +24,7 @@ A `ProbabilityModel` witness is available for the resulting `ConditionalProbabil
 
 ```scala mdoc
 import cats.implicits._
-import axle.stats._
+import axle.probability._
 import spire.math._
 import axle.data.Coin
 
@@ -49,7 +49,7 @@ The `observe` method selects a specific value within the model's domain type.
 import spire.random.Generator.rng
 import axle.syntax.probabilitymodel._
 
-implicit val dist = axle.stats.rationalProbabilityDist
+implicit val dist = axle.probability.rationalProbabilityDist
 
 (1 to 10) map { i => fairCoin.observe(rng) }
 
@@ -84,7 +84,7 @@ In order of arity, they are:
 * `RegionOr` is the disjunction of both arguments.  It can be created using the `or` method in the `Region` trait.
 
 Note that a "Random Variable" does not appear in this discussion.
-The `axle.stats.Variable` class does define a `is` method that returns a `RegionEq`,
+The `axle.probability.Variable` class does define a `is` method that returns a `RegionEq`,
 but the probability models themselves are not concerned with the notion of a
 `Variable`.
 They are simply models over regions of events on their single, opaque type
@@ -113,7 +113,7 @@ fairCoin.P(RegionEq('HEAD))
 # Kolmogorov's Axioms
 
 The methods above are enough to define Kolmogorov's Axioms of Probablity.
-These are literally implemented in `axle.stats.KolmogorovProbabilityAxioms` and
+These are literally implemented in `axle.laws.KolmogorovProbabilityAxioms` and
 checked during testng with ScalaCheck.
 The ability to show adherance to theories such as this is a tenet of Axle's design.
 

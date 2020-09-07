@@ -19,7 +19,7 @@ import axle.math.arithmeticMean
 Demonstrate it uniformly sampling 15 of the first 100 integers
 
 ```scala mdoc
-val sample = reservoirSampleK(15, Stream.from(1), rng).drop(100).head
+val sample = reservoirSampleK(15, LazyList.from(1), rng).drop(100).head
 
 arithmeticMean(sample.map(_.toDouble))
 ```

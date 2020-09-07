@@ -48,18 +48,32 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.stats.expectation(CPT)`
 * `axle.IO` consolidates IO to `cats.effect` (eg `[F[_]: ContextShift: Sync]`)
 * Create `axle-awt`, `axle-xml`, and `axle-jogl` (leaving `axle.scene.{Shape,Color}` in `axle-core`)
+* Remove `axle-jogl` due to instability of underlying dependencies
 
-* jogl tests
-* move ast view xml (how is it able to refer to `xml.Node`?)
-* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
 * Fix mdocs
-
-* Gold and Angluin coverage
-* `federalist.txt`?
 * Release jars
-* Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
 
 ## 0.5.1
+
+* Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
+
+* Fix `ConditionalProbabilityTable` division by zero during Bernoulli bayes (line 57)
+  * Eliminate this from being tested during Bayes (When both A and B probability is zero?)
+
+* move ast view xml (how is it able to refer to `xml.Node`?)
+  * ast.view.AstNodeFormatter (xml.Utility.escape)
+  * ast.view.AstNodeFormatterXhtmlLines
+  * ast.view.AstNodeFormatterXhtml
+
+* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
+  * Will require externalizing the layout to its own.... typeclass?
+
+* Improve Gold and Angluin coverage
+* `axle-core/src/main/scala/axle/lx/*.txt`
+
+* Fix occasional MetricSpace failure
+
+## 0.5.2
 
 * MonotypeBayesanNetwork.unit (see the two nulls)
 * MonotypeBayesanNetwork.map
@@ -68,14 +82,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * ScalaCheck `Monad[ProbabilityModel]` (needs missing tailRecM mehod)
 * Monad tests for Alarm-Burglary-Earthquake as MonotypeBayesanNetwork
 
-## 0.5.2
-
 * Test: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
   * factor out each variable until
   * the Alarm-Burglary-Earthquake 5-node network is reached
   * Basically the inverse of factor multiplication
   * `bn.factorFor(B) * bn.factorFor(E)` should be defined? (It errors)
   * `MonotypeBayesanNetwork.filter` collapase into a single BNN
+
+* Laws for `Factor`
 
 * Review `InteractionGraph`, `EliminationGraph`, `JoinTree` and the functions they power
 
@@ -113,7 +127,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Measure Theory
 
 * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
-* Laws for `Factor`
 * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
 * More diversity of `Region` (vs just `RegionEq`) for probability axiom (Kolm. & Bayes) tests
 * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
@@ -129,6 +142,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## After that
 
+* Create a simple graph implementation so that `axle-core` can avoid including `axle-jung`
+
+* Create `axle-png` to help avoid “headless” exception or Xvfb requirement during tests
+
+* Re-enable `axle-jogl`
+  * May require jogamop 2.4, which is not yet released
+  * Or possibly use [jogamp archive](https://jogamp.org/deployment/archive/rc/v2.4.0-rc-20200307/jar/)
+  * See processing's approach in [this commit](https://github.com/processing/processing4/pull/85/commits/17a20bea37e7bcfa5589dbcb2f4a58c4174f7fe0)
+
 * Configure makeSite to preview: previewFixedPort := Some(9999)
 * Copy css using makeSite (not update-docs.sh)
 * Fix markdown lint warnings
@@ -141,9 +163,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Fix `axle.algebra.GeoMetricSpaceSpec`
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
 
-* Create a simple graph implementation so that `axle-core` can avoid including `axle-jung`
-* Create `axle-png` to help avoid “headless” exception or Xvfb requirement during tests
-* Fix "NSWindow drag regions should only be invalidated on the Main Thread! This will throw an exception in the future." warning during axle-jogl test
 * Use sbt-ci-release (rm sbt-release)
 * Friend of Spire
 

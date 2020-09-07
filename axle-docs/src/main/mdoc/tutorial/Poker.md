@@ -48,12 +48,13 @@ val data: IndexedSeq[(PokerHandCategory, Int)] =
 BarChartGrouped to visualize the results
 
 ```scala mdoc
-import spire.algebra.Ring
+import spire.algebra.CRing
 
 import axle.visualize.BarChartGrouped
 import axle.visualize.Color._
+import axle.syntax.talliable.talliableOps
 
-implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+implicit val ringInt: CRing[Int] = spire.implicits.IntAlgebra
 
 val colors = List(black, red, blue, yellow, green)
 
@@ -103,7 +104,7 @@ Compute the end state from the start state
 
 ```scala mdoc
 import spire.random.Generator.rng
-implicit val dist = axle.stats.rationalProbabilityDist
+implicit val dist = axle.probability.rationalProbabilityDist
 
 play(game, startState(game), false, rng)
 ```

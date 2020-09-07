@@ -9,7 +9,7 @@ Setup
 ```scala mdoc
 import cats.implicits._
 import axle.eqSymbol
-import axle.stats._
+import axle.probability._
 import axle.game.Dice._
 import axle.syntax.probabilitymodel._
 
@@ -47,7 +47,7 @@ Observe rolls of a die
 ```scala mdoc
 import spire.random.Generator.rng
 
-implicit val dist = axle.stats.rationalProbabilityDist
+implicit val dist = axle.probability.rationalProbabilityDist
 
 (1 to 10) map { i => d6utf.observe(rng) }
 ```
@@ -62,8 +62,8 @@ import cats.implicits._
 import spire.algebra._
 import spire.math.Rational
 
-import axle.enrichGenSeq
 import axle.game.Dice.die
+import axle.syntax.talliable.talliableOps
 ```
 
 Simulate 10k rolls of two dice
@@ -74,7 +74,7 @@ val gen = spire.random.Random.generatorFromSeed(seed)
 val d6 = die(6)
 val rolls = (0 until 1000) map { i => d6.observe(gen) + d6.observe(gen) }
 
-implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
+implicit val ringInt: CRing[Int] = spire.implicits.IntAlgebra
 
 val histogram = rolls.tally
 ```
@@ -116,7 +116,7 @@ Imports (Note: documentation resets interpreter here)
 import spire.math._
 
 import axle.syntax.probabilitymodel._
-import axle.stats._
+import axle.probability._
 import axle.game.Dice.die
 ```
 

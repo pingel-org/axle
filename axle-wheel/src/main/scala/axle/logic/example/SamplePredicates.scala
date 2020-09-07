@@ -1,6 +1,6 @@
-package axle.logic
+package axle.logic.example
 
-import FirstOrderPredicateLogic.Predicate
+import axle.logic.FirstOrderPredicateLogic.Predicate
 
 object SamplePredicates {
 
