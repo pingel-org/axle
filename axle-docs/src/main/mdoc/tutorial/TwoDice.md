@@ -37,9 +37,9 @@ import axle.algebra._ // for Region*
 
 type TWOROLLS = (Symbol, Symbol)
 
-bothDieModel.P(RegionIf[TWOROLLS](_._1 == '⚃) and RegionIf[TWOROLLS](_._2 == '⚃))
+bothDieModel.P(RegionIf[TWOROLLS](_._1 == Symbol("⚃")) and RegionIf[TWOROLLS](_._2 == Symbol("⚃")))
 
-bothDieModel.P(RegionNegate(RegionIf[TWOROLLS](_._1 == '⚃)))
+bothDieModel.P(RegionNegate(RegionIf[TWOROLLS](_._1 == Symbol("⚃"))))
 ```
 
 Observe rolls of a die

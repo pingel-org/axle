@@ -13,11 +13,14 @@ They are foundational and will continue to be the basis for further exploration.
 This is its implementation:
 
 ```scala
+val head = Symbol("HEAD")
+val tail = SYMBOL("TAIL")
+
 def flipModel(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable[Symbol, Rational] =
   ConditionalProbabilityTable[Symbol, Rational](
     Map(
-      'HEAD -> pHead,
-      'TAIL -> (1 - pHead)))
+      head -> pHead,
+      tail -> (1 - pHead)))
 ```
 
 A `ProbabilityModel` witness is available for the resulting `ConditionalProbabilityTable[Symbol, Rational]`
@@ -102,12 +105,13 @@ The method signature for `P` is defined in terms of a `Region`.
 def probabilityOf(predicate: Region[A])(implicit fieldV: Field[V]): V
 ```
 
-Compute the odds of a `'HEAD` for a single toss of a fair coin
+Compute the odds of a `head` for a single toss of a fair coin
 
 ```scala mdoc
 import axle.algebra._
+import Coin.head
 
-fairCoin.P(RegionEq('HEAD))
+fairCoin.P(RegionEq(head))
 ```
 
 # Kolmogorov's Axioms
@@ -161,9 +165,9 @@ It can be queried with `P` using `RegionIf` to check fields within the `Tuple2`.
 ```scala mdoc
 type TWOFLIPS = (Symbol, Symbol)
 
-bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == 'HEAD) and RegionIf[TWOFLIPS](_._2 == 'HEAD))
+bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) and RegionIf[TWOFLIPS](_._2 == head))
 
-bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == 'HEAD) or RegionIf[TWOFLIPS](_._2 == 'HEAD))
+bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) or RegionIf[TWOFLIPS](_._2 == head))
 ```
 
 # Conditioning and Bayes Theorem
