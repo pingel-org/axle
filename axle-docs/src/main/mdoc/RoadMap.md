@@ -8,8 +8,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.3 (October 2020)
 
-* Logistic Map is latest?
-
 * Fix `ConditionalProbabilityTable` division by zero during Bernoulli bayes (line 57)
   * Eliminate this from being tested during Bayes (When both A and B probability is zero?)
 * Region.isSatisfiable to avoid circular definition of non-zero probabilities
@@ -36,6 +34,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Monad tests for Alarm-Burglary-Earthquake as MonotypeBayesanNetwork
 
 * Site
+  * Revamp Tutorials.md
+  * Logistic Map is latest?
   * Chicklet borders / colors
   * meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
 
