@@ -37,8 +37,6 @@ case class PlotView[S, X, Y, D](
     maxPoint.y  // maxY
   )
 
-  println("+++" + scaledArea)
-
   val vLine = VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
   val xTics = XTics(scaledArea, xts.tics(minX, maxX), fontName, fontSize.toDouble, bold = true, drawLines = true, Some(0d *: angleDouble.degree), black)
