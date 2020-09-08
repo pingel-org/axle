@@ -8,9 +8,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.3 (October 2020)
 
-* Logistic Map is latest?
-* Spokes.md
 * Installation.md
+* Architecture should mention axle-laws
+
+* Logistic Map is latest?
 
 * Fix `ConditionalProbabilityTable` division by zero during Bernoulli bayes (line 57)
   * Eliminate this from being tested during Bayes (When both A and B probability is zero?)
