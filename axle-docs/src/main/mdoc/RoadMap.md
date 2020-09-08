@@ -11,7 +11,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Logistic Map is latest?
 * Spokes.md
 * Installation.md
-* TwoDice.md (more exposition)
 
 * Fix `ConditionalProbabilityTable` division by zero during Bernoulli bayes (line 57)
   * Eliminate this from being tested during Bayes (When both A and B probability is zero?)
