@@ -1,10 +1,9 @@
-#!/bin/bash +x
+#!/bin/bash -x
 
-#BUILDDIR=axle-docs/target/foo
-#BUILDDIR=../axle-site-build
-BUILDDIR=../axle-bar
+set -e
+
+BUILDDIR=axle-site-build
 STAGEDIR=~/s3/axle-lang.org/
-
 
 sbt -J-Xmx6G "project axle-docs" mdoc
 sbt -J-Xmx6G "project axle-docs" makeSite
