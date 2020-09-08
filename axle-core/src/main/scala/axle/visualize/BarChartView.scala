@@ -22,7 +22,7 @@ case class BarChartView[C, Y, D, H](
   val maxX = 1d
   val yAxis = minX
 
-  val slices = dataView.keys(data)
+  val slices = dataView.keys(data).toVector.sorted
 
   val padding = 0.05 // on each side
   val widthPerSlice = (1d - (2 * padding)) / slices.size
