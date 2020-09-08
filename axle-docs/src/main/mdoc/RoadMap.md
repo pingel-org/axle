@@ -1,5 +1,5 @@
 ---
-layout: page
+layout: default
 title: Road Map
 permalink: /road_map/
 ---
@@ -8,17 +8,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.3 (October 2020)
 
-* MonotypeBayesanNetwork.unit (see the two nulls)
-* MonotypeBayesanNetwork.map
-* MonotypeBayesanNetwork.flatMap
-* Reconcile combine1 and combine2 (maybe add to typeclass or trait)
-* ScalaCheck `Monad[ProbabilityModel]` (needs missing tailRecM mehod)
-* Monad tests for Alarm-Burglary-Earthquake as MonotypeBayesanNetwork
-
-* Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3
+* Logistic Map is latest?
+* Spokes.md
+* Installation.md
+* TwoDice.md (more exposition)
 
 * Fix `ConditionalProbabilityTable` division by zero during Bernoulli bayes (line 57)
   * Eliminate this from being tested during Bayes (When both A and B probability is zero?)
+* Region.isSatisfiable to avoid circular definition of non-zero probabilities
 
 * move ast view xml (how is it able to refer to `xml.Node`?)
   * ast.view.AstNodeFormatter (xml.Utility.escape)
@@ -27,13 +24,27 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
   * Will require externalizing the layout to its own.... typeclass?
+  * Layout of bayesian network is quite bad -- check ABE SVG
 
 * Improve Gold and Angluin coverage
 * `axle-core/src/main/scala/axle/lx/*.txt`
 
 * Fix occasional MetricSpace failure
 
+* MonotypeBayesanNetwork.unit (see the two nulls)
+* MonotypeBayesanNetwork.map
+* MonotypeBayesanNetwork.flatMap
+* Reconcile combine1 and combine2 (maybe add to typeclass or trait)
+* ScalaCheck `Monad[ProbabilityModel]` (needs missing tailRecM mehod)
+* Monad tests for Alarm-Burglary-Earthquake as MonotypeBayesanNetwork
+
+* Site
+  * Chicklet borders / colors
+  * meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
+
 ## 0.5.4 (December 2020)
+
+* Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3?
 
 * Test: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
   * factor out each variable until
