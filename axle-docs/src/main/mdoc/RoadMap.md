@@ -8,8 +8,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.3 (October 2020)
 
-* Architecture should mention axle-laws
-
 * Logistic Map is latest?
 
 * Fix `ConditionalProbabilityTable` division by zero during Bernoulli bayes (line 57)

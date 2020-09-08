@@ -18,6 +18,8 @@ The typeclass patterns are drawn from two traditions:
 The algorithms are increasingly defined only in terms of these typeclasses.
 Concrete runtime implementations will require witnesses that map non-Axle data structures
 onto the typeclass methods and laws.
+Laws are organized into a separate `axle-laws` jar for use in tests by code that builds
+upon these typeclasses.
 Many such witnesses are provided by Axle for native Scala collections.
 
 Witnesses are also defined for other common jars from the Java and Scala ecosystems.
