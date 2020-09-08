@@ -8,7 +8,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.3 (October 2020)
 
-* Installation.md
 * Architecture should mention axle-laws
 
 * Logistic Map is latest?
