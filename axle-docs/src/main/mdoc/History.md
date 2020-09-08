@@ -46,7 +46,7 @@ The inimitable [Artificial Intelligence: A Modern Approach](http://www.amazon.co
 ### Statistics, Information Theory, Bayesian Networks, &amp; Causality
 
 The Information Theory code is based on [Thomas Cover](https://en.wikipedia.org/wiki/Thomas_M._Cover)'s
-[Elements of Information Theory](http://www.amazon.com/Elements-Information-Theory-Telecommunications-Processing/dp/0471241954/ref=sr_1_1?ie=UTF8),)
+[Elements of Information Theory](http://www.amazon.com/Elements-Information-Theory-Telecommunications-Processing/dp/0471241954/ref=sr_1_1?ie=UTF8)
 and his EE 376A course.
 
 I implemented some Bayesian Networks code in Java around 2006 while
