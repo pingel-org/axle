@@ -66,7 +66,7 @@ class CoinEntropyPlotSpec extends AnyFunSuite with Matchers {
       yAxisLabel = Some("H"),
       title = Some("Entropy")).zeroAxes
 
-    SVG[Plot[String, Rational, UnittedQuantity[Information, Double], D]]
+    // SVG[Plot[String, Rational, UnittedQuantity[Information, Double], D]]
 
     val svgName = "coinentropyplot.svg"
     plot.svg[IO](svgName).unsafeRunSync()
