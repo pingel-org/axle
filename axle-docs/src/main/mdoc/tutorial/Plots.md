@@ -72,7 +72,7 @@ Define the visualization
 val plot = Plot[String, DateTime, Double, TreeMap[DateTime, Double]](
   () => waves,
   connect = true,
-  colorOf = _ => Color.black,
+  colorOf = s => colors(s.hash.abs % colors.length),
   title = Some("Random Waves"),
   xAxisLabel = Some("time (t)"),
   yAxis = Some(now),
