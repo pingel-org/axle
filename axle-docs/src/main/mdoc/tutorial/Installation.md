@@ -34,7 +34,7 @@ version := "0.1-SNAPSHOT"
 
 organization := "org.acme"
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.13.3"
 
 // resolvers += "sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
 
@@ -42,11 +42,15 @@ resolvers += "sonatype releases" at "https://oss.sonatype.org/content/repositori
 
 libraryDependencies ++= Seq(
   "org.axle-lang" %% "axle-core"  % "@RELEASE_VERSION@",
+  "org.axle-lang" %% "axle-xml"   % "@RELEASE_VERSION@",
   "org.axle-lang" %% "axle-wheel" % "@RELEASE_VERSION@",
+  "org.axle-lang" %% "axle-jung"  % "@RELEASE_VERSION@",
   "org.axle-lang" %% "axle-jblas" % "@RELEASE_VERSION@",
   "org.axle-lang" %% "axle-joda"  % "@RELEASE_VERSION@"
 )
 ```
+
+(Less commonly used `axle-laws`, `axle-awt`, and `axle-parallel` are not shown.)
 
 The Axle jars are compiled with several additional dependencies in `provided` scope,
 meaning that they are compiled and packaged with the expectation that the user of the Axle
@@ -55,15 +59,13 @@ jars will explicitly provide those dependencies.
 See the project's current (build.sbt)[https://github.com/axlelang/axle/blob/master/build.sbt]
 file for up to date version information.
 
-As of version 0.4.0 the full list of dependencies is below.
+As of version 0.5.2 the full list of dependencies is below.
 Add this section to your `build.sbt` file to pull them all in to the `demo` project:
 
 ```sbt
 libraryDependencies ++= Seq(
 
-  // needed by axle-core
-  "org.jogamp.gluegen"     % "gluegen-rt-main"    % "2.3.2",
-  "org.jogamp.jogl"        % "jogl-all-main"      % "2.3.2",
+  // needed by axle-jung (and for unit conversions)
   "net.sf.jung"            % "jung-visualization" % "2.1",
   "net.sf.jung"            % "jung-algorithms"    % "2.1",
   "net.sf.jung"            % "jung-api"           % "2.1",
@@ -79,7 +81,10 @@ libraryDependencies ++= Seq(
 
   // needed by axle-joda
   "joda-time"              % "joda-time"          % "2.9.4",
-  "org.joda"               % "joda-convert"       % "1.8.1"
+  "org.joda"               % "joda-convert"       % "1.8.1",
+
+  // needed by axle-xml
+  "org.scala-lang.modules" %% "scala-xml"         % "1.3.0",
 )
 ```
 

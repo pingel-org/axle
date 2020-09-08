@@ -6,14 +6,17 @@ import axle.probability.ConditionalProbabilityTable
 
 object Coin {
 
-  def sides = Vector(Symbol("HEAD"), Symbol("TAIL"))
+  val head = Symbol("HEAD")
+  val tail = Symbol("TAIL")
+
+  def sides = Vector(head, tail)
 
   def flipModel(
     pHead: Rational = Rational(1, 2)
   ): ConditionalProbabilityTable[Symbol, Rational] =
     ConditionalProbabilityTable[Symbol, Rational](
       Map(
-        Symbol("HEAD") -> pHead,
-        Symbol("TAIL") -> (1 - pHead)))
+        head -> pHead,
+        tail -> (1 - pHead)))
 
 }

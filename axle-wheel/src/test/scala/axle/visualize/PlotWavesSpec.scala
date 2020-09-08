@@ -26,6 +26,9 @@ class PlotWavesSpec extends AnyFunSuite with Matchers {
 
   test("wave plot") {
 
+    import axle.visualize.Color._
+    val colors = Vector(red, blue, green, yellow, orange)
+
     val now = new DateTime()
 
     def randomTimeSeries(i: Int, gen: Generator) = {
@@ -49,7 +52,7 @@ class PlotWavesSpec extends AnyFunSuite with Matchers {
     val plot = Plot[String, DateTime, Double, TreeMap[DateTime, Double]](
       () => waves,
       connect = true,
-      colorOf = _ => Color.black,
+      colorOf = s => colors(s.hash.abs % colors.length),
       title = Some("Random Waves"),
       xAxisLabel = Some("time (t)"),
       yAxis = Some(now),

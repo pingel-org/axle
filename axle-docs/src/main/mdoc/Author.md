@@ -24,6 +24,7 @@ During his time there, IODA was acquired by Sony Music and then The Orchard.
 In April 2012 he co-founded Eddgy.
 In May 2013 he joined VigLink as Staff Software Engineer and later managed a team there.
 In September 2015 he became VP of Engineering at Ravel Law.
+In June 2017 Ravel Law was acquired by LexisNexis, where Adam is now the CTO of Global Platforms
 
 For more background, see his accounts on:
 

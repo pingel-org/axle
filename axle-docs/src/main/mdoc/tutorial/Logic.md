@@ -17,9 +17,11 @@ import FirstOrderPredicateLogic._
 Example CNF conversion
 
 ```scala mdoc
-import SamplePredicates._
+import axle.logic.example.SamplePredicates._
 
-val s = ∃('z ∈ Z, (A('z) ∧ G('z)) ⇔ (B('z) ∨ H('z)))
+val z = Symbol("z")
+
+val s = ∃(z ∈ Z, (A(z) ∧ G(z)) ⇔ (B(z) ∨ H(z)))
 
 val (cnf, skolemMap) = conjunctiveNormalForm(s)
 ```

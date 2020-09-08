@@ -4,6 +4,9 @@ title: Two Dice
 permalink: /tutorial/two_dice/
 ---
 
+Combining probability models representing rolls of 6-sided dice demonstrate
+some behavior of `ProbabilityModel`.
+
 Setup
 
 ```scala mdoc
@@ -16,13 +19,16 @@ import axle.syntax.probabilitymodel._
 implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 ```
 
-## Monadic `map` to operate on the event space
+## Monadic map to operate on the event space
+
+Map the model on the integers `1 to 6` to a model of UTF
+symbols representing the faces of the dice.
 
 ```scala mdoc
 val d6utf = die(6).map(numberToUtfFace)
 ```
 
-Chain two rolls together
+Monadic `flatMap` constructs a model of the sequence of two rolls
 
 ```scala mdoc
 val bothDieModel = d6utf.flatMap({ flip1 =>
@@ -30,16 +36,16 @@ val bothDieModel = d6utf.flatMap({ flip1 =>
 })
 ```
 
-Then query the resulting probability model's distribution of 2-roll events.
+Query the resulting probability model's distribution of 2-roll events.
 
 ```scala mdoc
 import axle.algebra._ // for Region*
 
 type TWOROLLS = (Symbol, Symbol)
 
-bothDieModel.P(RegionIf[TWOROLLS](_._1 == '⚃) and RegionIf[TWOROLLS](_._2 == '⚃))
+bothDieModel.P(RegionIf[TWOROLLS](_._1 == Symbol("⚃")) and RegionIf[TWOROLLS](_._2 == Symbol("⚃")))
 
-bothDieModel.P(RegionNegate(RegionIf[TWOROLLS](_._1 == '⚃)))
+bothDieModel.P(RegionNegate(RegionIf[TWOROLLS](_._1 == Symbol("⚃"))))
 ```
 
 Observe rolls of a die
@@ -54,7 +60,9 @@ implicit val dist = axle.probability.rationalProbabilityDist
 
 ## Simulate the sum of two dice
 
-Imports
+Compare two methods of computing distributions -- simulation and full, precise construction using monads.
+
+The following code shows the simulation of 1,000 2-dice sums.
 
 ```scala mdoc:silent
 import cats.implicits._
@@ -106,9 +114,11 @@ chart.svg[IO]("d6plusd6.svg").unsafeRunSync()
 
 ![Observed d6 + d6](/tutorial/images/d6plusd6.svg)
 
-## Direct computation of the sum of two dice
+## Direct computation of the sum of two dice using monads
 
-The distribution of two rolls combined can be computed directly
+The full distribution of two rolls combined can be computed directly and precisely
+using monads.  Of course this does become infeasable as the models are combined -- 
+axle will have more on that tradeoff in future versions.
 
 Imports (Note: documentation resets interpreter here)
 
@@ -120,7 +130,7 @@ import axle.probability._
 import axle.game.Dice.die
 ```
 
-## Monadic `flatMap`
+## Monadic flatMap
 
 Create probability distribution of the addition of two 6-sided die:
 

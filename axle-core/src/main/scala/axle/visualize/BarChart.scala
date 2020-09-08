@@ -39,6 +39,7 @@ case class BarChart[C, Y, D, H](
   val showC:           Show[C],
   val showH:           Show[H],
   val additiveMonoidY: AdditiveMonoid[Y],
+  val orderC:          Order[C],
   val orderY:          Order[Y],
   val ticsY:           Tics[Y],
   val eqY:             Eq[Y],

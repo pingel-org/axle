@@ -42,7 +42,7 @@ class CoinEntropyPlotSpec extends AnyFunSuite with Matchers {
     val hm: D =
       new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
         (0 to 100).map({ i =>
-          val r = Rational(i / 100d)
+          val r = Rational(i.toLong, 100L)
           r -> H[Symbol, Rational](Coin.flipModel(r))
         }).toMap
 
@@ -66,7 +66,7 @@ class CoinEntropyPlotSpec extends AnyFunSuite with Matchers {
       yAxisLabel = Some("H"),
       title = Some("Entropy")).zeroAxes
 
-    SVG[Plot[String, Rational, UnittedQuantity[Information, Double], D]]
+    // SVG[Plot[String, Rational, UnittedQuantity[Information, Double], D]]
 
     val svgName = "coinentropyplot.svg"
     plot.svg[IO](svgName).unsafeRunSync()

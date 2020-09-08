@@ -39,6 +39,7 @@ object BayesTheoremAxiom {
         val model: M[E, V] = modelFn(t)
         implicit val arbRegion = arbRegionFn(t)
         forAll { (a: Region[E], b: Region[E]) =>
+          (model.P(a) === v0 && model.P(b) === v0) ||
           (model.P(a) === v0 && model.filter(b).P(a) === v0) ||
           (model.P(b) === v0 && model.filter(a).P(b) === v0) ||
           (model.filter(b).P(a) * model.P(b)) === ( model.filter(a).P(b) * model.P(a) )
