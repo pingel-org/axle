@@ -16,7 +16,7 @@ import axle.syntax.probabilitymodel._
 implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 ```
 
-## Monadic `map` to operate on the event space
+## Monadic map to operate on the event space
 
 ```scala mdoc
 val d6utf = die(6).map(numberToUtfFace)
@@ -120,7 +120,7 @@ import axle.probability._
 import axle.game.Dice.die
 ```
 
-## Monadic `flatMap`
+## Monadic flatMap
 
 Create probability distribution of the addition of two 6-sided die:
 
