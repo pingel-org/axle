@@ -27,10 +27,17 @@ case class PlotView[S, X, Y, D](
   val maxPoint = Point2D(maxX, maxY)
 
   val scaledArea = ScaledArea2D(
-    border.toDouble, (if (drawKey) width - (keyWidth + keyLeftPadding) else width) - border.toDouble,
-    border.toDouble, height - border.toDouble,
-    minPoint.x, maxPoint.x,
-    minPoint.y, maxPoint.y)
+    border.toDouble, // left
+    (if (drawKey) width - (keyWidth + keyLeftPadding) else width) - border.toDouble, // right
+    border.toDouble, // top -- Note top/bottom is counter-intuitively in reverse order from minY/maxY
+    height - border.toDouble, // bottom
+    minPoint.x, // minX
+    maxPoint.x, // maxX
+    minPoint.y, // minY
+    maxPoint.y  // maxY
+  )
+
+  println("+++" + scaledArea)
 
   val vLine = VerticalLine(scaledArea, yAxis.getOrElse(minX), black)
   val hLine = HorizontalLine(scaledArea, xAxis.getOrElse(minY), black)
