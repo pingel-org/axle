@@ -8,9 +8,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.3 (October 2020)
 
-* Fix `ConditionalProbabilityTable` division by zero during Bernoulli bayes (line 57)
-  * Eliminate this from being tested during Bayes (When both A and B probability is zero?)
 * Region.isSatisfiable to avoid circular definition of non-zero probabilities
+  * See both Bayes and Kolmogorov
 
 * move ast view xml (how is it able to refer to `xml.Node`?)
   * ast.view.AstNodeFormatter (xml.Utility.escape)
