@@ -8,10 +8,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.3 (October 2020)
 
-* Logistic Map is latest?
 * Spokes.md
 * Installation.md
 * TwoDice.md (more exposition)
+* Logistic Map is latest?
 
 * Fix `ConditionalProbabilityTable` division by zero during Bernoulli bayes (line 57)
   * Eliminate this from being tested during Bayes (When both A and B probability is zero?)
@@ -44,8 +44,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.4 (December 2020)
 
-* Publish site using [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html) and sbt-s3?
-
 * Test: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
   * factor out each variable until
   * the Alarm-Burglary-Earthquake 5-node network is reached
@@ -59,6 +57,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Consider a "case" to be a `Map` vs a `Vector`
 * Consider usefulness of `Factor` in terms of `Region`
+
+* Remove jekyll from publishing pipeline
+  * [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html)
+  * sbt-s3
 
 ## 0.5.5 (2021)
 
