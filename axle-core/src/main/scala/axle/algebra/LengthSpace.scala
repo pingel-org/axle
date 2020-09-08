@@ -59,7 +59,7 @@ object LengthSpace {
         UnittedQuantity(vrpls.onPath(left.magnitude, (right in left.unit).magnitude, p), left.unit)
 
       def portion(left: UnittedQuantity[Q, V], v: UnittedQuantity[Q, V], right: UnittedQuantity[Q, V]): P =
-        vrpls.portion(left.magnitude, (v in left.unit).magnitude, (right in right.unit).magnitude)
+        vrpls.portion(left.magnitude, (v in left.unit).magnitude, (right in left.unit).magnitude)
 
       def distance(v: UnittedQuantity[Q, V], w: UnittedQuantity[Q, V]): R =
         vrpls.distance(v.magnitude, (w in v.unit).magnitude)
