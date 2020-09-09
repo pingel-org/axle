@@ -48,7 +48,7 @@ object ConditionalProbabilityTable {
       }
   }
 
-  implicit val preceiveWitness: Perceivable[ConditionalProbabilityTable] =
+  implicit val perceiveWitness: Perceivable[ConditionalProbabilityTable] =
     new Perceivable[ConditionalProbabilityTable]{
 
       def perceive[A, V](model: ConditionalProbabilityTable[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
