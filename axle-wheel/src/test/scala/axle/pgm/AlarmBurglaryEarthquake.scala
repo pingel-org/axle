@@ -34,7 +34,7 @@ class AlarmBurglaryEarthQuakeBayesianNetworkIsKolmogorov
     { case seed => Arbitrary(TestSupport.genRegion(AlarmBurglaryEarthquakeBayesianNetwork.domain)) },
     { case seed => Region.eqRegionIterable(AlarmBurglaryEarthquakeBayesianNetwork.domain) }
   )(
-    axle.pgm.MonotypeBayesanNetwork.probabilityModelForMonotypeBayesanNetwork[Boolean, DirectedSparseGraph](),
+    axle.pgm.MonotypeBayesanNetwork.kolmogorovWitness[Boolean, DirectedSparseGraph],
     cats.kernel.Eq[(Boolean, Boolean, Boolean, Boolean, Boolean)],
     spire.algebra.Field[Rational],
     cats.kernel.Order[Rational]
@@ -52,7 +52,8 @@ class AlarmBurglaryEarthquakeBayesianNetworkIsBayes
     { case seed => Arbitrary(TestSupport.genRegion(AlarmBurglaryEarthquakeBayesianNetwork.domain)) },
     { case seed => Region.eqRegionIterable(AlarmBurglaryEarthquakeBayesianNetwork.domain) }
 )(
-    axle.pgm.MonotypeBayesanNetwork.probabilityModelForMonotypeBayesanNetwork[Boolean, DirectedSparseGraph](),
+    axle.pgm.MonotypeBayesanNetwork.bayesWitness[Boolean, DirectedSparseGraph],
+    axle.pgm.MonotypeBayesanNetwork.kolmogorovWitness[Boolean, DirectedSparseGraph],
     cats.kernel.Eq[(Boolean, Boolean, Boolean, Boolean, Boolean)],
     spire.algebra.Field[Rational],
     cats.kernel.Order[Rational]

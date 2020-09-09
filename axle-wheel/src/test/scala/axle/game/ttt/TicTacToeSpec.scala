@@ -7,8 +7,8 @@ import spire.random.Generator.rng
 import spire.math.Rational
 import spire.algebra._
 
-import axle.syntax.probabilitymodel._
-import axle.probability.ConditionalProbabilityTable
+import axle.syntax.perceivable._
+import axle.probability._
 import axle.game._
 import axle.game.Strategies._
 
@@ -112,7 +112,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
     val mover = randomMove
     val moveCpt = mover(game, startState(game))
-    val m = moveCpt.observe(rng)
+    val m = moveCpt.perceive(rng)
 
     m.position should be > 0
   }
@@ -133,7 +133,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
     val secondState = applyMove(game, startState(game), firstMove)
     val cpt = ai4(game, secondState)
-    val move = cpt.observe(rng)
+    val move = cpt.perceive(rng)
 
     move.position should be > 0
   }

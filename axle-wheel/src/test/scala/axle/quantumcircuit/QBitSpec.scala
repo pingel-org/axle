@@ -3,7 +3,7 @@ package axle.quantumcircuit
 import cats.implicits._
 import spire.math._
 
-import axle.syntax.probabilitymodel._
+import axle.syntax.kolmogorov._
 import axle.algebra.RegionEq
 
 import org.scalatest.funsuite._
@@ -17,7 +17,7 @@ class QBitSpec extends AnyFunSuite with Matchers {
 
     val qEven = QBit[Real](sqrtHalf, sqrtHalf)
 
-    val distribution = qEven.probabilityModel
+    val distribution = qEven.cpt
 
     distribution.P(RegionEq(CBit0)) should be(Real(1 / 2d))
     distribution.P(RegionEq(CBit1)) should be(Real(1 / 2d))

@@ -20,7 +20,7 @@ import axle.probability._
 import axle.stats._
 import axle.game._
 import axle.quanta._
-import axle.syntax.probabilitymodel._
+import axle.syntax.kolmogorov._
 
 class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
 
@@ -68,16 +68,16 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
       }
     ) getOrElse None
 
-  val prob = ProbabilityModel[ConditionalProbabilityTable]
+  val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
 
   def probabilityAllCorrect(game: GuessRiffle, fromState: GuessRiffleState, seed: Int): Rational =
     stateStrategyMoveStream(game, fromState, Random.generatorFromSeed(Seed(seed)).sync)
     .filter(args => mover(game, args._1).map( _ === game.player).getOrElse(false))
     .map({ case (stateIn, strategy, _, _) =>
-      strategy.map(isCorrectMoveForState(game, stateIn))
+      mcpt.map(strategy)(isCorrectMoveForState(game, stateIn))
     })
     .reduce({ (incoming, current) =>
-      incoming.flatMap( a => current.map( b => a && b ))
+      mcpt.flatMap(incoming)( a => mcpt.map(current)( b => a && b ))
     })
     .P(RegionEq(true))
 

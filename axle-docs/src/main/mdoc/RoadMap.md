@@ -17,10 +17,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `BarChart` was missing `Order[C]`
 
 * TODO
-  * Monad syntax in TwoD6Histogram, and look for calls to monadWitness or mcpt
-  * `Perceivable[ConditionalProbabilityTable]` cache bars
-  * `ConditionalProbabilityTable.tailRecM` (and TallyDistribution)
-  * ScalaCheck `Monad[ProbabilityModel]`
+
+* ProbabilitySpec is failing
+* Monad syntax in TwoD6Histogram, and look for calls to monadWitness or mcpt
+* `Perceivable[ConditionalProbabilityTable]` cache bars
+* `{CPT,TD}.tailRecM` (and TallyDistribution) then ScalaCheck `Monad[ProbabilityModel]`
+* Region.isSatisfiable to avoid circular definition of non-zero probabilities
+  * See both Bayes and Kolmogorov
 
 ## 0.5.4 (November 2020)
 
@@ -60,9 +63,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `bn.factorFor(B) * bn.factorFor(E)` should be defined? (It errors)
   * `MonotypeBayesanNetwork.filter` collapase into a single BNN
 
-* Region.isSatisfiable to avoid circular definition of non-zero probabilities
-  * See both Bayes and Kolmogorov
-
 * Laws for `Factor`
 
 * Review `InteractionGraph`, `EliminationGraph`, `JoinTree` and the functions they power
@@ -94,9 +94,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * MonotypeBayesanNetwork.filter -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself
   * Is there a way of seeing this as flatMap, though?
-* `observe` could return a lower-entropy probability model
+
+* `perceive` could return a lower-entropy probability model
   * Perhaps in exchange for a given amount of energy
   * Or ask for a 0-entropy model and be told how expensive that was
+  * Axiom for perceive: val a = perceive(gen) => ProbabilityOf(RegionEq(a)) > 0?
 
 * Measure Theory
 
@@ -105,13 +107,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * More diversity of `Region` (vs just `RegionEq`) for probability axiom (Kolm. & Bayes) tests
 * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
 
-* Axiom for observe: val a = observe(gen) => ProbabilityOf(RegionEq(a)) > 0
 * Axiom? pm.filter(X=x).P(X=x) == 1
 * Fix third Kolmogorov law
 * Optimize `KolmogorovProbabilityAxioms.combination`
 
 * rename `ConditionalProbabilityTable`?
-* Get rid of `implicit val prob = ProbabilityModel[ConditionalProbabilityTable]`
 * "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
 
 ## After that
