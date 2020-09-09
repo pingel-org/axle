@@ -35,7 +35,7 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
 
     bothCoinsModel.P(RegionEq((head, head))) should be(Rational(1, 4))
 
-    bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head)) should be(Rational(1, 2))
+    bothCoinsModel.P(RegionIf(_._1 == head)) should be(Rational(1, 2))
 
     bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) or RegionIf[TWOFLIPS](_._2 == head)) should be(Rational(3, 4))
 
