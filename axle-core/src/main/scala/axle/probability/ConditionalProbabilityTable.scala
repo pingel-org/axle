@@ -70,7 +70,7 @@ object ConditionalProbabilityTable {
           case RegionAll() =>
             fieldV.one
           case _ => 
-            Σ(model.values.map { a =>
+            Σ(model.values.toVector.map { a =>
               if (predicate(a)) { model.p(a) } else { fieldV.zero }
             })
         }
