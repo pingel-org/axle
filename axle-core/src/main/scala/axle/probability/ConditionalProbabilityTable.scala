@@ -17,7 +17,7 @@ import axle.algebra._
 
 case class ConditionalProbabilityTable[A, V](p: Map[A, V]) {
 
-  def values: Iterable[A] = p.keys
+  def values: Iterable[A] = p.keys.toVector
 
 }
 
