@@ -90,7 +90,7 @@ object MonotypeBayesanNetwork {
       }
     }
 
-  implicit def preceiveWitness[I: Eq, DG[_, _]]: Perceivable[({ type L[C, W] = MonotypeBayesanNetwork[C, I, W, DG] })#L] =
+  implicit def perceiveWitness[I: Eq, DG[_, _]]: Perceivable[({ type L[C, W] = MonotypeBayesanNetwork[C, I, W, DG] })#L] =
     new Perceivable[({ type L[C, W] = MonotypeBayesanNetwork[C, I, W, DG] })#L]{
 
       def observeNodeAndAncestors[A, V: Dist: Ring: Order](

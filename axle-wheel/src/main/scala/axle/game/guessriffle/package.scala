@@ -118,7 +118,7 @@ package object guessriffle {
           Some(GuessRiffleOutcome(state.numCorrect))
         }
  
-      implicit def perceivablePM = ConditionalProbabilityTable.preceiveWitness
+      implicit def perceivablePM = ConditionalProbabilityTable.perceiveWitness
 
     }
 

@@ -97,7 +97,7 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
       def outcome(game: TestGame, state: TestGameState): Option[TestGameOutcome] =
         None
 
-      implicit def perceivablePM = ConditionalProbabilityTable.preceiveWitness
+      implicit def perceivablePM = ConditionalProbabilityTable.perceiveWitness
 
     }
 

@@ -266,7 +266,7 @@ package object poker {
 
       def outcome(game: Poker, state: PokerState): Option[PokerOutcome] = state._outcome
 
-      implicit def perceivablePM = ConditionalProbabilityTable.preceiveWitness
+      implicit def perceivablePM = ConditionalProbabilityTable.perceiveWitness
 
     }
 
