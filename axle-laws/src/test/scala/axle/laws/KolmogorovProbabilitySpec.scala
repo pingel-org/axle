@@ -35,12 +35,14 @@ class TwoPlatonicSolidDieAddedKolmogorov
         an <- Gen.oneOf(List(4,6,8,12,20))
         bn <- Gen.oneOf(List(4,6,8,12,20))
     } yield  (an, bn)),
-    { case (an, bn) =>
-       ProbabilityModel[ConditionalProbabilityTable].flatMap(die(an)){ a =>
-         ProbabilityModel[ConditionalProbabilityTable].map(die(bn)){ b =>
+    { case (an, bn) => {
+       implicit val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
+       mcpt.flatMap(die(an)){ a =>
+         mcpt.map(die(bn)){ b =>
            a + b
          }
        }
+      }
     },
     { case (an, bn) => Arbitrary(genRegion(1 to an + bn)) },
     { case (an, bn) => Region.eqRegionIterable(1 to an + bn) }

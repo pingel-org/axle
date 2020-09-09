@@ -14,7 +14,7 @@ import axle.algebra.Region
 import axle.algebra.RegionAll
 import axle.algebra.RegionEmpty
 import axle.probability._
-import axle.syntax.probabilitymodel._
+import axle.syntax.kolmogorov._
 
 object KolmogorovProbabilityAxioms {
 
@@ -24,7 +24,7 @@ object KolmogorovProbabilityAxioms {
   // implicit val arbEvent = Arbitrary(Gen.oneOf(model.values))
   // implicit val arbitraryExpression: Arbitrary[E => Boolean] = Arbitrary(Gen.oneOf(ProbabilityModel[M].values(model)).map( e => (v: E) => v === e) )
 
-  def basicMeasure[T, M[_, _]: ProbabilityModel, E, V: Field: Order](
+  def basicMeasure[T, M[_, _]: Kolmogorov, E, V: Field: Order](
     arbT: Arbitrary[T],
     modelFn: T => M[E, V],
     arbRegionFn: T => Arbitrary[Region[E]]): Prop = {
@@ -42,7 +42,7 @@ object KolmogorovProbabilityAxioms {
     }
   }
 
-  def unitMeasure[T, M[_, _]: ProbabilityModel, E, V: Field: Order](
+  def unitMeasure[T, M[_, _]: Kolmogorov, E, V: Field: Order](
     arbT: Arbitrary[T],
     modelFn: T => M[E, V]): Prop = {
 
@@ -54,7 +54,7 @@ object KolmogorovProbabilityAxioms {
     }
   }
 
-  def combination[T, M[_, _]: ProbabilityModel, E: Eq, V: Field: Order](
+  def combination[T, M[_, _]: Kolmogorov, E: Eq, V: Field: Order](
     arbT: Arbitrary[T],
     modelFn: T => M[E, V],
     arbRegionFn: T => Arbitrary[Region[E]],

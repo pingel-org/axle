@@ -9,8 +9,9 @@ import spire.math.Rational
 import axle.probability._
 import axle.algebra.RegionEq
 import axle.game.Dice.die
-import axle.syntax.probabilitymodel.probabilityModelOps
+import axle.syntax.perceivable.perceivableOps
 import axle.syntax.talliable.talliableOps
+import axle.syntax.kolmogorov.kolmogorovOps
 
 class TwoD6Histogram extends AnyFunSuite with Matchers {
 
@@ -25,7 +26,7 @@ class TwoD6Histogram extends AnyFunSuite with Matchers {
     val gen = spire.random.Random.generatorFromSeed(seed)
     val d6a = die(6)
     val d6b = die(6)
-    val rolls = (0 until 1000) map { i => d6a.observe(gen) + d6b.observe(gen) }
+    val rolls = (0 until 1000) map { i => d6a.perceive(gen) + d6b.perceive(gen) }
 
     val hist = rolls.tally
     hist.size should be(11)
@@ -33,13 +34,11 @@ class TwoD6Histogram extends AnyFunSuite with Matchers {
 
   test("distribution monad: combine 2 D6 correctly") {
 
-    // import cats.syntax.all._
-    // type F[T] = ConditionalProbabilityTable[T, Rational]
+    type F[A] = ConditionalProbabilityTable[A, Rational]
+    implicit val mf = cats.Monad[F]
 
-    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
-
-    val twoDiceSummed = prob.flatMap(die(6)) { a =>
-      prob.map(die(6)) { b =>
+    val twoDiceSummed = mf.flatMap(die(6)) { a =>
+      mf.map(die(6)) { b =>
         a + b
       }
     }

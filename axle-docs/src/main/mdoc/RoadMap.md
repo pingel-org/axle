@@ -8,37 +8,50 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.3 (October 2020)
 
-* Region.isSatisfiable to avoid circular definition of non-zero probabilities
-  * See both Bayes and Kolmogorov
+* Split `ProbabilityModel` into three new typeclasses -- `Bayes`, `Kolmogorov`, `Perceivable` --
+  as well as `cats.Monad`.  Include syntax.
+
+* Bugs fixed
+  * Bayes axiom should avoid P(A) == P(B) == 0
+  * `UnittedQuantity` `LengthSpace` unit mismatch
+  * `BarChart` was missing `Order[C]`
+
+* TODO
+  * Monad syntax in TwoD6Histogram, and look for calls to monadWitness or mcpt
+  * `Perceivable[ConditionalProbabilityTable]` cache bars
+  * `ConditionalProbabilityTable.tailRecM` (and TallyDistribution)
+  * ScalaCheck `Monad[ProbabilityModel]`
+
+## 0.5.4 (November 2020)
+
+* Reconcile `combine1` and `combine2` (& `select` should form a typeclass?)
+* MonotypeBayesanNetwork.{pure, map, flatMap, tailRecR}
+* Monad tests for MonotypeBayesanNetwork[Alarm-Burglary-Earthquake]
+
+* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
+  * Will require externalizing the layout to its own.... typeclass?
+  * Layout of bayesian network is quite bad -- check ABE SVG
 
 * move ast view xml (how is it able to refer to `xml.Node`?)
   * ast.view.AstNodeFormatter (xml.Utility.escape)
   * ast.view.AstNodeFormatterXhtmlLines
   * ast.view.AstNodeFormatterXhtml
 
-* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
-  * Will require externalizing the layout to its own.... typeclass?
-  * Layout of bayesian network is quite bad -- check ABE SVG
-
 * Improve Gold and Angluin coverage
 * `axle-core/src/main/scala/axle/lx/*.txt`
 
 * Fix occasional MetricSpace failure
-
-* MonotypeBayesanNetwork.unit (see the two nulls)
-* MonotypeBayesanNetwork.map
-* MonotypeBayesanNetwork.flatMap
-* Reconcile combine1 and combine2 (maybe add to typeclass or trait)
-* ScalaCheck `Monad[ProbabilityModel]` (needs missing tailRecM mehod)
-* Monad tests for Alarm-Burglary-Earthquake as MonotypeBayesanNetwork
 
 * Site
   * Revamp Tutorials.md
   * Logistic Map is latest?
   * Chicklet borders / colors
   * meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
+  * Remove jekyll from publishing pipeline
+    * [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html)
+    * sbt-s3
 
-## 0.5.4 (December 2020)
+## 0.5.5 (December 2020)
 
 * Test: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
   * factor out each variable until
@@ -47,6 +60,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `bn.factorFor(B) * bn.factorFor(E)` should be defined? (It errors)
   * `MonotypeBayesanNetwork.filter` collapase into a single BNN
 
+* Region.isSatisfiable to avoid circular definition of non-zero probabilities
+  * See both Bayes and Kolmogorov
+
 * Laws for `Factor`
 
 * Review `InteractionGraph`, `EliminationGraph`, `JoinTree` and the functions they power
@@ -54,17 +70,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Consider a "case" to be a `Map` vs a `Vector`
 * Consider usefulness of `Factor` in terms of `Region`
 
-* Remove jekyll from publishing pipeline
-  * [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html)
-  * sbt-s3
-
-## 0.5.5 (2021)
+## 0.5.6 (2021)
 
 * Replace `axle.game.moveFromRandomState.mapToProb`
 * Wrap `axle.IO.getLine` in `F[_]`
 * Wrap `axle.IO.prefixedDisplay` in `F[_]`
 
-## 0.5.6 (2021)
+## 0.5.7 (2021)
 
 * Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
   * "Chance" should be its own player
@@ -77,7 +89,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Plot entropy by turn # for each strategy
   * Plot simulated score distribution for each strategy
 
-## 0.5.7+ (2021)
+## 0.5.8+ (2021)
 
 * MonotypeBayesanNetwork.filter -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself

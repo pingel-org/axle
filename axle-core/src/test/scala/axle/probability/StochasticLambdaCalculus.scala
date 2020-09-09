@@ -10,26 +10,24 @@ import axle.probability._
 import axle.algebra.RegionEq
 import axle.game.Dice.die
 import axle.math.Σ
-import axle.syntax.probabilitymodel._
+import axle.syntax.kolmogorov.kolmogorovOps
 
 class StochasticLambdaCalculus extends AnyFunSuite with Matchers {
 
-  type F[T] = ConditionalProbabilityTable[T, Rational]
-
   implicit val eqInt: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra
-  implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+  val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
 
   test("stochastic if maps fair boolean to d6 + (d6+d6)") {
 
-    val ab = prob.flatMap(die(6)) { a =>
-      prob.map(die(6)) { b =>
+    val ab = mcpt.flatMap(die(6)) { a =>
+      mcpt.map(die(6)) { b =>
         a + b
       }
     }
 
     // "iffy" construction
     val distribution =
-      binaryDecision(Rational(1, 3)).flatMap { cond =>
+      mcpt.flatMap(binaryDecision(Rational(1, 3))) { cond =>
         if( cond ) {
           die(6)
         } else {
@@ -57,11 +55,10 @@ class StochasticLambdaCalculus extends AnyFunSuite with Matchers {
 
     implicit val eqInt = cats.kernel.Eq.fromUniversalEquals[Int]
     
-    val xDist: F[Int] = uniformDistribution(0 to n)
-    val yDist: F[Int] = uniformDistribution(0 to n)
+    val ints = uniformDistribution(0 to n)
 
-    val piDist = prob.flatMap(xDist) { x =>
-      prob.map(yDist) { y =>
+    val piDist = mcpt.flatMap(ints) { x =>
+      mcpt.map(ints) { y =>
         (if (sqrt((x * x + y * y).toDouble) <= n) 1 else 0)
       }
     }

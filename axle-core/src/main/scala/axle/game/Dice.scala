@@ -8,11 +8,9 @@ import axle.probability.ConditionalProbabilityTable
 
 object Dice {
 
-  def die(n: Int): ConditionalProbabilityTable[Int, Rational] = {
-    import cats.implicits._
+  def die(n: Int): ConditionalProbabilityTable[Int, Rational] =
     ConditionalProbabilityTable(
       (1 to n).map(i => (i, Rational(1, n.toLong))).toMap)
-  }
 
   val sixth = Rational(1, 6)
 

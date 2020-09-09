@@ -10,16 +10,11 @@ import spire.math.Rational
 import spire.algebra._
 
 import axle.game.Dice.die
-import axle.probability.ProbabilityModel
-import axle.probability.ConditionalProbabilityTable
+import axle.probability._
 import axle.visualize.Color.blue
 import axle.web._
 
 class BarChartSpec extends AnyFunSuite with Matchers {
-
-  type F[T] = ConditionalProbabilityTable[T, Rational]
-
-  implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
 
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
@@ -80,8 +75,10 @@ class BarChartSpec extends AnyFunSuite with Matchers {
 
   test("BarChart render a SVG of d6 + d6 probability distribution") {
 
-    val distribution = prob.flatMap(die(6)) { a =>
-      prob.map(die(6)) { b =>
+    val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
+
+    val distribution = mcpt.flatMap(die(6)) { a =>
+      mcpt.map(die(6)) { b =>
         a + b
       }
     }

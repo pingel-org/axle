@@ -6,26 +6,27 @@ import spire.math.Rational
 
 import axle.algebra.RegionEq
 import axle.probability._
-import axle.syntax.probabilitymodel._
+import axle.syntax.kolmogorov._
 
 object OldMontyHall {
 
+  import cats.syntax.all._
+  implicit val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
+
   val numDoors = 3
 
-  type F[T] = ConditionalProbabilityTable[T, Rational]
+  val prizeDoorModel = uniformDistribution(1 to numDoors)
 
-  val prizeDoorModel: F[Int] = uniformDistribution(1 to numDoors)
+  val chosenDoorModel = uniformDistribution(1 to numDoors)
 
-  val chosenDoorModel: F[Int] = uniformDistribution(1 to numDoors)
-
-  def reveal(prizeDoor: Int, chosenDoor: Int): F[Int] =
+  def reveal(prizeDoor: Int, chosenDoor: Int) =
     uniformDistribution((1 to numDoors).filterNot(d => d === prizeDoor || d === chosenDoor))
 
-  def switch(probabilityOfSwitching: Rational, chosenDoor: Int, revealedDoor: Int): F[Int] = {
+  def switch(probabilityOfSwitching: Rational, chosenDoor: Int, revealedDoor: Int) = {
 
     val availableDoors = (1 to numDoors).filterNot(d => d === revealedDoor || d === chosenDoor)
 
-    binaryDecision(probabilityOfSwitching).flatMap { cond =>
+    mcpt.flatMap(binaryDecision(probabilityOfSwitching)) { cond =>
       if( cond ) {
         uniformDistribution(availableDoors) // switch
       } else {
@@ -34,16 +35,12 @@ object OldMontyHall {
     }
   }
 
-  import cats.syntax.all._
-
-  val prob = ProbabilityModel[ConditionalProbabilityTable]
-
   // TODO: The relationship between probabilityOfSwitching and outcome can be performed more efficiently and directly.
   val outcome = (probabilityOfSwitching: Rational) => 
-    prob.flatMap(prizeDoorModel) { prizeDoor =>
-      prob.flatMap(chosenDoorModel) { chosenDoor =>
-        prob.flatMap(reveal(prizeDoor, chosenDoor)) { revealedDoor =>
-          prob.map(switch(probabilityOfSwitching, chosenDoor, revealedDoor)) { finalChosenDoor =>
+    mcpt.flatMap(prizeDoorModel) { prizeDoor =>
+      mcpt.flatMap(chosenDoorModel) { chosenDoor =>
+        mcpt.flatMap(reveal(prizeDoor, chosenDoor)) { revealedDoor =>
+          mcpt.map(switch(probabilityOfSwitching, chosenDoor, revealedDoor)) { finalChosenDoor =>
             finalChosenDoor === prizeDoor
           }
         }

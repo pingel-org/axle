@@ -21,8 +21,7 @@ import axle.algebra.Aggregatable
 import axle.quanta.Information
 import axle.quanta.InformationConverter
 import axle.quanta.UnittedQuantity
-import axle.probability.ProbabilityModel
-import axle.probability.ConditionalProbabilityTable
+import axle.probability._
 
 package object stats {
 
@@ -45,7 +44,7 @@ package object stats {
 
   def expectation[A: Eq: Field: ConvertableTo, N: Field: ConvertableFrom](model: ConditionalProbabilityTable[A, N]): A = {
 
-    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+    implicit val prob = Kolmogorov[ConditionalProbabilityTable]
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
@@ -62,7 +61,7 @@ package object stats {
   def standardDeviation[A: Eq: NRoot: Field: ConvertableTo, N: Field: ConvertableFrom](
     model: ConditionalProbabilityTable[A, N]): A = {
 
-    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+    implicit val prob = Kolmogorov[ConditionalProbabilityTable]
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
@@ -86,7 +85,7 @@ package object stats {
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
-    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+    implicit val prob = Kolmogorov[ConditionalProbabilityTable]
 
     val convertN = ConvertableFrom[N]
     val H = Σ[Double, Iterable](model.values map { a: A =>

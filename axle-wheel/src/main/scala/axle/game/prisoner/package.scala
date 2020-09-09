@@ -4,9 +4,9 @@ import cats.implicits._
 import spire.math.Rational
 import spire.random.Dist
 
-import axle.probability.ProbabilityModel
-import axle.probability.ConditionalProbabilityTable
-import axle.probability.rationalProbabilityDist
+import axle.probability._
+// import axle.probability.ConditionalProbabilityTable
+// import axle.probability.rationalProbabilityDist
 
 /**
  * Prisoner's Dilemma
@@ -118,8 +118,7 @@ package object prisoner {
         }
       }
 
-      implicit def probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] =
-        ConditionalProbabilityTable.probabilityWitness
+      implicit def perceivablePM = ConditionalProbabilityTable.preceiveWitness
 
     }
 

@@ -23,7 +23,7 @@ import axle.probability._
 
 abstract class KolmogorovProbabilityProperties[
   T,
-  M[_, _]: ProbabilityModel,
+  M[_, _]: Kolmogorov,
   E: Eq,
   V: Field: Order](
     name: String,
