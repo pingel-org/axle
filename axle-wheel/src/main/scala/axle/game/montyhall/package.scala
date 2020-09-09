@@ -10,9 +10,7 @@ import cats.implicits._
 import spire.math.Rational
 import spire.random.Dist
 
-import axle.probability.ProbabilityModel
-import axle.probability.ConditionalProbabilityTable
-import axle.probability.rationalProbabilityDist
+import axle.probability._
 
 package object montyhall {
 
@@ -128,8 +126,7 @@ package object montyhall {
         }
       }
 
-      implicit def probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] =
-        ConditionalProbabilityTable.probabilityWitness
+      implicit def perceivablePM = ConditionalProbabilityTable.perceiveWitness
 
     }
 

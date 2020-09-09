@@ -3,19 +3,19 @@ package axle.probability
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
-import cats.implicits._
 import spire.math._
 import axle.game.Dice._
 import axle.probability._
-import axle.syntax.probabilitymodel._
 import axle.algebra._
+import axle.syntax.kolmogorov.kolmogorovOps
+import axle.syntax.bayes.bayesOps
 
 class ProbabilitySpec extends AnyFunSuite with Matchers {
 
   val head = Symbol("HEAD")
   val tail = Symbol("TAIL")
 
-  implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+  val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
   // implicit val rat = new spire.math.RationalAlgebra()
 
   test("two independent coins") {
@@ -27,7 +27,7 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
 
     import cats.implicits._
 
-    val bothCoinsModel = fairCoin.flatMap( c1 => fairCoin.map( c2 => (c1, c2) ))
+    val bothCoinsModel = mcpt.flatMap(fairCoin)( c1 => mcpt.map(fairCoin)( c2 => (c1, c2) ))
 
     type TWOFLIPS = (Symbol, Symbol)
 
@@ -35,11 +35,11 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
 
     bothCoinsModel.P(RegionEq((head, head))) should be(Rational(1, 4))
 
-    bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head)) should be(Rational(1, 2))
+    bothCoinsModel.P(RegionIf(_._1 == head)) should be(Rational(1, 2))
 
     bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) or RegionIf[TWOFLIPS](_._2 == head)) should be(Rational(3, 4))
 
-    val coin2Conditioned = bothCoinsModel.filter(RegionIf[TWOFLIPS](_._2 == tail)).map(_._1)
+    val coin2Conditioned = mcpt.map(bothCoinsModel.filter(RegionIf[TWOFLIPS](_._2 == tail)))(_._1)
 
     coin2Conditioned.P(RegionEq(head)) should be(Rational(1, 2))
   
@@ -48,7 +48,7 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
   test("two independent d6") {
 
     val d6 = die(6)
-    val bothDieModel = d6.flatMap( r1 => d6.map( r2 => (r1, r2)) )
+    val bothDieModel = mcpt.flatMap(d6)( r1 => mcpt.map(d6)( r2 => (r1, r2)) )
 
     bothDieModel.P(RegionIf(_._1 == 1)) should be(Rational(1, 6))
 

@@ -5,9 +5,9 @@ import spire.math.Rational
 import spire.random.Dist
 
 import axle.game.cards._
-import axle.probability.ProbabilityModel
-import axle.probability.ConditionalProbabilityTable
-import axle.probability.rationalProbabilityDist
+import axle.probability._
+// import axle.probability.ConditionalProbabilityTable
+// import axle.probability.rationalProbabilityDist
 
 package object poker {
 
@@ -266,8 +266,7 @@ package object poker {
 
       def outcome(game: Poker, state: PokerState): Option[PokerOutcome] = state._outcome
 
-      implicit def probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] =
-        ConditionalProbabilityTable.probabilityWitness
+      implicit def perceivablePM = ConditionalProbabilityTable.perceiveWitness
 
     }
 

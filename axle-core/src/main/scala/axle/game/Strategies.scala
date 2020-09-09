@@ -1,6 +1,6 @@
 package axle.game
 
-import cats.kernel.Eq
+import cats.Monad
 import cats.kernel.Order
 import cats.implicits._
 
@@ -23,19 +23,18 @@ object Strategies {
 
   def aiMover[G, S, O, M, MS, MM, V: Order: Field, N: Order, PM[_, _]](lookahead: Int, heuristic: S => Map[Player, N])(
     implicit
-    evGame: Game[G, S, O, M, MS, MM, V, PM],
-    evEqM: Eq[M]): (G, S) => PM[M, V] =
+    monad:  Monad[({ type λ[A] = PM[A, V] })#λ],
+    evGame: Game[G, S, O, M, MS, MM, V, PM]): (G, S) => PM[M, V] =
     (ttt: G, state: S) => {
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
-      evGame.probabilityModelPM.unit[M, V](move)
+      monad.pure[M](move)
     }
 
   def hardCodedStringStrategy[G, S, O, M, MS, MM, V: Order: Field, PM[_, _]](
     input: (G, MS) => String)(
     implicit
     evGame:   Game[G, S, O, M, MS, MM, V, PM],
-    evGameIO: GameIO[G, O, M, MS, MM],
-    evEqM: Eq[M]): (G, MS) => ConditionalProbabilityTable[M, V] =
+    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable[M, V] =
     (game: G, state: MS) => {
       val parsed = evGameIO.parseMove(game, input(game, state)).toOption.get
       val validated = evGame.isValid(game, state, parsed)
@@ -53,8 +52,7 @@ object Strategies {
   def interactiveMove[G, S, O, M, MS, MM, V: Order: Field, PM[_, _]](
     implicit
     evGame:   Game[G, S, O, M, MS, MM, V, PM],
-    evGameIO: GameIO[G, O, M, MS, MM],
-    evEqM: Eq[M]): (G, MS) => ConditionalProbabilityTable[M, V] =
+    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable[M, V] =
     (game: G, state: MS) => {
 
       val mover = evGame.moverM(game, state).get // TODO .get
@@ -78,8 +76,7 @@ object Strategies {
 
   def randomMove[G, S, O, M, MS, MM, V: Order: Field: ConvertableTo, PM[_, _]](
     implicit
-    evGame: Game[G, S, O, M, MS, MM, V, PM],
-    evEqM: Eq[M]): (G, MS) => ConditionalProbabilityTable[M, V] =
+    evGame: Game[G, S, O, M, MS, MM, V, PM]): (G, MS) => ConditionalProbabilityTable[M, V] =
     (game: G, state: MS) => {
       val opens = evGame.moves(game, state).toVector
       val p = Field[V].reciprocal(ConvertableTo[V].fromInt(opens.length))

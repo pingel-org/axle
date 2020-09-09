@@ -11,7 +11,11 @@ import spire.algebra.Field
 import axle.algebra.Region
 import axle.probability._
 
-abstract class BayesTheoremProperty[T, M[_, _]: ProbabilityModel, E: Eq, V: Field: Order](
+abstract class BayesTheoremProperty[
+  T,
+  M[_, _]: Bayes: Kolmogorov,
+  E: Eq,
+  V: Field: Order](
     name: String,
     arbT: Arbitrary[T],
     modelFn: T => M[E, V],

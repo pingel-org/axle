@@ -10,7 +10,8 @@ import spire.algebra.Field
 
 import axle.probability._
 import axle.algebra.Region
-import axle.syntax.probabilitymodel._
+import axle.syntax.bayes._
+import axle.syntax.kolmogorov._
 
 object BayesTheoremAxiom {
 
@@ -24,7 +25,7 @@ object BayesTheoremAxiom {
    * 
    */
 
-  def axiom[T, M[_, _]: ProbabilityModel, E: Eq, V: Field: Eq](
+  def axiom[T, M[_, _]: Bayes: Kolmogorov, E: Eq, V: Field: Eq](
     arbT: Arbitrary[T],
     modelFn: T => M[E, V],
     arbRegionFn: T => Arbitrary[Region[E]],

@@ -21,8 +21,8 @@ import axle.algebra.Aggregatable
 import axle.quanta.Information
 import axle.quanta.InformationConverter
 import axle.quanta.UnittedQuantity
-import axle.probability.ProbabilityModel
-import axle.probability.ConditionalProbabilityTable
+import axle.probability._
+import axle.syntax.kolmogorov.kolmogorovOps
 
 package object stats {
 
@@ -45,12 +45,10 @@ package object stats {
 
   def expectation[A: Eq: Field: ConvertableTo, N: Field: ConvertableFrom](model: ConditionalProbabilityTable[A, N]): A = {
 
-    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
-
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
     Σ[A, IndexedSeq](model.values.toVector.map { x =>
-      n2a(prob.probabilityOf(model)(RegionEq(x))) * x
+      n2a(model.P(RegionEq(x))) * x
     })
   }
 
@@ -62,13 +60,11 @@ package object stats {
   def standardDeviation[A: Eq: NRoot: Field: ConvertableTo, N: Field: ConvertableFrom](
     model: ConditionalProbabilityTable[A, N]): A = {
 
-    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
-
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    val μ: A = Σ[A, IndexedSeq](model.values.toVector.map({ x => n2a(prob.probabilityOf(model)(RegionEq(x))) * x }))
+    val μ: A = Σ[A, IndexedSeq](model.values.toVector.map({ x => n2a(model.P(RegionEq(x))) * x }))
 
-    val sum: A = Σ[A, IndexedSeq](model.values.toVector map { x => n2a(prob.probabilityOf(model)(RegionEq(x))) * square(x - μ) })
+    val sum: A = Σ[A, IndexedSeq](model.values.toVector map { x => n2a(model.P(RegionEq(x))) * square(x - μ) })
 
     NRoot[A].sqrt(sum)
   }
@@ -86,11 +82,9 @@ package object stats {
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
-    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
-
     val convertN = ConvertableFrom[N]
     val H = Σ[Double, Iterable](model.values map { a: A =>
-      val px: N = prob.probabilityOf(model)(RegionEq(a))
+      val px: N = model.P(RegionEq(a))
       import cats.syntax.all._
       if (px === Field[N].zero) {
         0d

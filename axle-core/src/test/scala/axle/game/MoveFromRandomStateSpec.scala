@@ -2,7 +2,6 @@ package axle.game
 
 import cats.kernel.Eq
 
-import spire.algebra.Ring
 import spire.math._
 import spire.random.Dist
 import spire.random.Generator.rng
@@ -98,15 +97,15 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
       def outcome(game: TestGame, state: TestGameState): Option[TestGameOutcome] =
         None
 
-      implicit def probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] =
-        ConditionalProbabilityTable.probabilityWitness
+      implicit def perceivablePM = ConditionalProbabilityTable.perceiveWitness
+
     }
 
   import evGame._
 
   implicit val distV = probabilityDist
 
-  val pm = ConditionalProbabilityTable.probabilityWitness
+  // val pm = ConditionalProbabilityTable.probabilityWitness
 
   val currentStateModelMap = Map(Sa -> Rational(1, 3), Sb -> Rational(2, 3))
   val currentStateModel = ConditionalProbabilityTable(currentStateModelMap)
@@ -137,7 +136,7 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
       moveFromRandomState(
         game,
         currentStateModel,
-        (m: Map[TestGameState, Rational]) => ConditionalProbabilityTable.apply(m)(Ring[Rational], Eq[TestGameState]),
+        (m: Map[TestGameState, Rational]) => ConditionalProbabilityTable(m),
         rng)
     }) toSet
 

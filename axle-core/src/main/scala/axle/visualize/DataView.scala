@@ -11,7 +11,7 @@ import spire.algebra.Field
 import axle.algebra.RegionEq
 import axle.algebra.Plottable
 import axle.probability.ConditionalProbabilityTable
-import axle.probability.ProbabilityModel
+import axle.probability.Kolmogorov
 
 /**
  * implicits for Plot and BarChart
@@ -55,7 +55,7 @@ object DataView {
   implicit def cptDataView[X: Order, Y: Plottable: Field: Order]: DataView[X, Y, ConditionalProbabilityTable[X, Y]] =
     new DataView[X, Y, ConditionalProbabilityTable[X, Y]] {
 
-      val prob = ProbabilityModel[ConditionalProbabilityTable]
+      val prob = Kolmogorov[ConditionalProbabilityTable]
 
       val yPlottable = Plottable[Y]
       val fieldY = Field[Y]

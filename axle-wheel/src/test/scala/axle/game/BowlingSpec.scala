@@ -4,10 +4,9 @@ import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 import cats.implicits._
 import spire.math.Rational
-import axle.probability.ProbabilityModel
-import axle.probability.ConditionalProbabilityTable
+import axle.probability._
 import axle.algebra.RegionEq
-import axle.syntax.probabilitymodel._
+import axle.syntax.kolmogorov._
 
 class BowlingSpec extends AnyFunSuite with Matchers {
 
@@ -16,11 +15,11 @@ class BowlingSpec extends AnyFunSuite with Matchers {
     import Bowling._
     import Bowlers._
 
-    implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+    val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
 
     val stateD = stateDistribution(goodBowler, 4)
 
-    val scoreD = prob.map(stateD)(_.tallied)
+    val scoreD = mcpt.map(stateD)(_.tallied)
 
     // TODO: make same assertion about P(300) when last frame is handled correctly
     scoreD.P(RegionEq(0)) should be > Rational(0)

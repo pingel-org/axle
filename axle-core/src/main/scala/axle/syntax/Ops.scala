@@ -25,7 +25,9 @@ import axle.algebra.SetFrom
 import axle.algebra.Talliable
 import axle.algebra.UndirectedGraph
 import axle.algebra.Zipper
-import axle.probability.ProbabilityModel
+import axle.probability.Kolmogorov
+import axle.probability.Bayes
+import axle.probability.Perceivable
 
 final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(
   implicit
@@ -223,28 +225,30 @@ final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(
 
 }
 
-final class ProbabilityModelOps[M[_, _], A, V](val model: M[A, V])(
-  implicit
-  ev: ProbabilityModel[M]) {
+final class KolmogorovOps[M[_, _], A, V](val model: M[A, V])(implicit ev: Kolmogorov[M]) {
 
-  def unit(a: A)(implicit eqA: cats.kernel.Eq[A], ringV: Ring[V]): M[A, V] =
-    ev.unit(a)
-
-  def map[B](f: A => B)(implicit eqB: cats.kernel.Eq[B]): M[B, V] =
-    ev.map(model)(f)
-
-  def flatMap[B](f: A => M[B, V])(implicit eqB: cats.kernel.Eq[B]): M[B, V] =
-    ev.flatMap(model)(f)
-
-  def P(predicate: Region[A])(implicit fieldV: Field[V]): V = ev.probabilityOf(model)(predicate)
-
-  def filter(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V] = ev.filter(model)(predicate)
-  
-  def |(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V] = ev.filter(model)(predicate)
-  
-  def observe(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = ev.observe(model)(gen)
+  def P(predicate: Region[A])(implicit fieldV: Field[V]): V =
+    ev.probabilityOf(model)(predicate)
 
 }
+
+final class BayesOps[M[_, _], A, V](val model: M[A, V])(implicit ev: Bayes[M]) {
+
+  def filter(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V] =
+    ev.filter(model)(predicate)
+  
+  def |(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V] =
+    ev.filter(model)(predicate)
+
+}
+
+
+final class PerceivableOps[M[_, _], A, V](val model: M[A, V])(implicit ev: Perceivable[M]) {
+
+  def perceive(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A =
+    ev.perceive(model)(gen)
+}
+
 final class DirectedGraphOps[DG, V, E](val dg: DG)(
   implicit
   ev: DirectedGraph[DG, V, E]) {

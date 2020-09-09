@@ -15,8 +15,15 @@ import axle.math._
 import axle.probability._
 import axle.stats.TallyDistribution
 import axle.syntax.aggregatable._
+import axle.syntax.kolmogorov._
+import axle.syntax.bayes._
 
-case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N: Field: Order](
+case class NaiveBayesClassifier[
+  DATA,
+  FEATURE: Order,
+  CLASS: Order: Eq,
+  F[_],
+  N: Field: Order](
   data:                      F[DATA],
   featureVariablesAndValues: List[(Variable[FEATURE], IndexedSeq[FEATURE])],
   classVariableAndValues:    (Variable[CLASS], IndexedSeq[CLASS]),
@@ -53,7 +60,8 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
 
   val C = TallyDistribution(classTally)
 
-  val probTally0 = implicitly[ProbabilityModel[TallyDistribution]]
+  implicit val kolmTally = Kolmogorov[TallyDistribution]
+  implicit val bayesTally = Bayes[TallyDistribution]
 
   def tallyFor(featureVariable: Variable[FEATURE]): Map[(FEATURE, CLASS), N] =
     featureTally.filter {
@@ -77,13 +85,11 @@ case class NaiveBayesClassifier[DATA, FEATURE: Order, CLASS: Order: Eq, F[_], N:
     def f(c: CLASS): N =
       Π(featureVariables.zip(fs).zip(Fs).map({
         case ((featureVariable, featureValue), featureGivenModel) => {
-          probTally0.probabilityOf(
-            probTally0.filter(featureGivenModel)(RegionIf(_._2 === c))
-          )(RegionIf(_._1 === featureValue))
+          featureGivenModel.filter(RegionIf(_._2 === c)).P(RegionIf(_._1 === featureValue))
         }
       }))
 
-    def g(c: CLASS): N = probTally0.probabilityOf(C)(RegionEq(c)) * f(c)
+    def g(c: CLASS): N = C.P(RegionEq(c)) * f(c)
 
     argmax(C.values, g).get // TODO: will be None if C.values is empty
   }

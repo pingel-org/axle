@@ -1,6 +1,5 @@
 package axle.data
 
-import cats.implicits._
 import spire.math.Rational
 import axle.probability.ConditionalProbabilityTable
 

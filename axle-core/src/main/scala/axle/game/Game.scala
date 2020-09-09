@@ -10,7 +10,7 @@ package axle.game
  */
 
 import spire.random.Dist
-import axle.probability.ProbabilityModel
+import axle.probability._
 
 trait Game[G, S, O, M, MS, MM, V, PM[_, _]] {
 
@@ -41,5 +41,5 @@ trait Game[G, S, O, M, MS, MM, V, PM[_, _]] {
 
   def outcome(game: G, state: S): Option[O]
 
-  implicit def probabilityModelPM: ProbabilityModel[PM]
+  implicit def perceivablePM: Perceivable[PM]
 }

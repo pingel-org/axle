@@ -2,7 +2,11 @@ package axle
 
 package object syntax {
 
-  object probabilitymodel extends ProbabilityModelSyntax
+  object kolmogorov extends KolmogorovSyntax
+
+  object bayes extends BayesSyntax
+
+  object perceivable extends PerceivableSyntax
 
   object directedgraph extends DirectedGraphSyntax
 

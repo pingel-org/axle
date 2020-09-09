@@ -9,9 +9,9 @@ import spire.math.Rational
 import spire.random.Dist
 import spire.random.Generator.rng
 
-import axle.probability.ProbabilityModel
-import axle.probability.ConditionalProbabilityTable
-import axle.probability.rationalProbabilityDist
+import axle.probability._
+// import axle.probability.ConditionalProbabilityTable
+// import axle.probability.rationalProbabilityDist
 
 import axle.game.cards._
 
@@ -118,8 +118,7 @@ package object guessriffle {
           Some(GuessRiffleOutcome(state.numCorrect))
         }
  
-      implicit def probabilityModelPM: ProbabilityModel[ConditionalProbabilityTable] =
-        ConditionalProbabilityTable.probabilityWitness
+      implicit def perceivablePM = ConditionalProbabilityTable.perceiveWitness
 
     }
 

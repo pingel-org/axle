@@ -14,18 +14,14 @@ package object probability {
     Dist(x)(y)
   }
 
-  def bernoulliDistribution(pOne: Rational): ConditionalProbabilityTable[Int, Rational] = {
-    import cats.implicits._
+  def bernoulliDistribution(pOne: Rational): ConditionalProbabilityTable[Int, Rational] =
     ConditionalProbabilityTable[Int, Rational](
       Map(
         1 -> pOne,
         0 -> (1 - pOne)))
-  }
 
-  def binaryDecision(yes: Rational): ConditionalProbabilityTable[Boolean, Rational] = {
-    import cats.implicits._
+  def binaryDecision(yes: Rational): ConditionalProbabilityTable[Boolean, Rational] =
     ConditionalProbabilityTable(Map(true -> yes, false -> (1 - yes)))
-  }
 
   def uniformDistribution[T: Eq](values: Seq[T]): ConditionalProbabilityTable[T, Rational] = {
 

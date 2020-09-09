@@ -19,7 +19,7 @@ case class QBit[T: Field](a: Complex[T], b: Complex[T]) {
   // |0> with probability a^2
   // |1> with probability b^2
 
-  def probabilityModel: ConditionalProbabilityTable[CBit, T] = {
+  def cpt: ConditionalProbabilityTable[CBit, T] = {
     val m = Map[CBit, T](
       CBit0 -> (a * a).real,
       CBit1 -> (b * b).real

@@ -15,7 +15,9 @@ import axle.algebra.MapReducible
 import axle.algebra.LinearAlgebra
 import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
-import axle.probability.ProbabilityModel
+import axle.probability.Kolmogorov
+import axle.probability.Bayes
+import axle.probability.Perceivable
 
 trait LinearAlgebraSyntax {
 
@@ -51,13 +53,30 @@ trait LinearAlgebraSyntax {
     new LinearAlgebraOps(m)
 }
 
-trait ProbabilityModelSyntax {
+trait KolmogorovSyntax {
 
-  implicit def probabilityModelOps[M[_, _], A, V](model: M[A, V])(
+  implicit def kolmogorovOps[M[_, _], A, V](model: M[A, V])(
     implicit
-    ev: ProbabilityModel[M]) =
-    new ProbabilityModelOps(model)
+    ev: Kolmogorov[M]) =
+    new KolmogorovOps(model)
 }
+
+trait BayesSyntax {
+
+  implicit def bayesOps[M[_, _], A, V](model: M[A, V])(
+    implicit
+    ev: Bayes[M]) =
+    new BayesOps(model)
+}
+
+trait PerceivableSyntax {
+
+  implicit def perceivableOps[M[_, _], A, V](model: M[A, V])(
+    implicit
+    ev: Perceivable[M]) =
+    new PerceivableOps(model)
+}
+
 
 trait DirectedGraphSyntax {
 
