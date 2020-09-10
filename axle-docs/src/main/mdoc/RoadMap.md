@@ -6,30 +6,30 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.3 (October 2020)
+## 0.5.3 (September 2020)
 
-* Split `ProbabilityModel` into three new typeclasses -- `Bayes`, `Kolmogorov`, `Perceivable` --
-  as well as `cats.Monad`.  Include syntax.
+* Split `ProbabilityModel` into three new typeclasses
+  -- `Bayes`, `Kolmogorov`, `Perceivable` --
+  as well as `cats.Monad`.
+  The three new axle typeclasses include syntax.
 
 * Bugs fixed
   * Bayes axiom should avoid P(A) == P(B) == 0
   * `UnittedQuantity` `LengthSpace` unit mismatch
   * `BarChart` was missing `Order[C]`
 
-* TODO
+* Site
+  * Revamp Tutorials.md
+  * Update docs, especially ProbabilityModel
+  * Logistic Map is latest?
+  * Chicklet borders / colors
+  * Experiment with pandoc
 
-* ProbabilitySpec is failing
-* Monad syntax in TwoD6Histogram, and look for calls to monadWitness or mcpt
+* Get rid of `axle.probability.CPTR`
+* Region.isSatisfiable vs `P(x) > 0` for Bayes and Kolmogorov
 * `Perceivable[ConditionalProbabilityTable]` cache bars
-* `{CPT,TD}.tailRecM` (and TallyDistribution) then ScalaCheck `Monad[ProbabilityModel]`
-* Region.isSatisfiable to avoid circular definition of non-zero probabilities
-  * See both Bayes and Kolmogorov
 
-## 0.5.4 (November 2020)
-
-* Reconcile `combine1` and `combine2` (& `select` should form a typeclass?)
-* MonotypeBayesanNetwork.{pure, map, flatMap, tailRecR}
-* Monad tests for MonotypeBayesanNetwork[Alarm-Burglary-Earthquake]
+## 0.5.4 (October 2020)
 
 * `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
   * Will require externalizing the layout to its own.... typeclass?
@@ -46,15 +46,17 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Fix occasional MetricSpace failure
 
 * Site
-  * Revamp Tutorials.md
-  * Logistic Map is latest?
-  * Chicklet borders / colors
   * meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
   * Remove jekyll from publishing pipeline
     * [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html)
     * sbt-s3
 
 ## 0.5.5 (December 2020)
+
+* `{CPT,TD}.tailRecM` then ScalaCheck `Monad[ProbabilityModel]`
+* `MonotypeBayesanNetwork`.{`pure`, `map`, `flatMap`, `tailRecR`}
+* Reconcile `MBN` `combine1` & `combine2`
+* Monad tests for MonotypeBayesanNetwork[Alarm-Burglary-Earthquake]
 
 * Test: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
   * factor out each variable until
