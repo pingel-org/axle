@@ -36,30 +36,28 @@ val fairCoin = Coin.flipModel()
 val biasedCoin = Coin.flipModel(Rational(9, 10))
 ```
 
-In the method signatures below a `ProbalityModel[M]` (`M[A, V]`) typeclass witness, `prob`, is defined for these `ConditionalProbabilityTable`s.
+## Perceivable.perceive
 
-## Observe
+The `percieve` method's signature looks like:
 
-The `observe` method's signature looks like:
 ```scala
-
-def observe(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A
+def perceive(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A
 ```
 
-The `observe` method selects a specific value within the model's domain type.
+The `perceive` method selects a specific value within the model's domain type.
 
 ```scala mdoc
 import spire.random.Generator.rng
-import axle.syntax.probabilitymodel._
+import axle.syntax.perceivable._
 
 implicit val dist = axle.probability.rationalProbabilityDist
 
-(1 to 10) map { i => fairCoin.observe(rng) }
+(1 to 10) map { i => fairCoin.perceive(rng) }
 
-(1 to 10) map { i => biasedCoin.observe(rng) }
+(1 to 10) map { i => biasedCoin.perceive(rng) }
 ```
 
-# Querying Probability Models
+# Kolmogorov -- for Querying Probability Models
 
 ## `Region`
 
@@ -170,10 +168,10 @@ bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) and RegionIf[TWOFLIPS](_._2 ==
 bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) or RegionIf[TWOFLIPS](_._2 == head))
 ```
 
-# Conditioning and Bayes Theorem
+# Bayes Theorem, Conditioning, and Filtering
 
-Conditioning a probability model is accomplished with the `filter` method.
-`|` is a synonym.
+The `Bayes` typeclass implements the conditioning of a probability model
+via the `filter` (`|` is also an alias).
 
 ```scala
 def filter(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V]
@@ -191,8 +189,8 @@ The theorem is more recognizable as `P(A|B) = P(B|A) * P(A) / P(B)`
 
 # Probability Model as Monads
 
-The `unit`, `map`, and `flatMap` methods of `ProbabilityModel` allow us to think of them as `Monad`s.
-(They are not (yet) literaly defined as `cats` `Monad`s, but may be at some point.)
+The `pure`, `map`, and `flatMap` methods of `cats.Monad` are defined
+for `ConditionalProbabilityTable`, `TallyDistribution`.
 
 For some historical reading on the origins of probability monads, see the literature on the
 Giry Monad.
