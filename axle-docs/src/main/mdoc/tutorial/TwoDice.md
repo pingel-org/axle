@@ -14,9 +14,9 @@ import cats.implicits._
 import axle.eqSymbol
 import axle.probability._
 import axle.game.Dice._
-import axle.syntax.probabilitymodel._
-
-implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
+import axle.syntax.kolmogorov._
+import axle.syntax.bayes._
+import axle.syntax.perceivable._
 ```
 
 ## Monadic map to operate on the event space
@@ -25,7 +25,7 @@ Map the model on the integers `1 to 6` to a model of UTF
 symbols representing the faces of the dice.
 
 ```scala mdoc
-val d6utf = die(6).map(numberToUtfFace)
+val d6utf = (die(6): CPTR[Int]).map(numberToUtfFace)
 ```
 
 Monadic `flatMap` constructs a model of the sequence of two rolls
@@ -52,10 +52,9 @@ Observe rolls of a die
 
 ```scala mdoc
 import spire.random.Generator.rng
-
 implicit val dist = axle.probability.rationalProbabilityDist
 
-(1 to 10) map { i => d6utf.observe(rng) }
+(1 to 10) map { i => d6utf.perceive(rng) }
 ```
 
 ## Simulate the sum of two dice
@@ -72,6 +71,7 @@ import spire.math.Rational
 
 import axle.game.Dice.die
 import axle.syntax.talliable.talliableOps
+
 ```
 
 Simulate 10k rolls of two dice
@@ -79,8 +79,9 @@ Simulate 10k rolls of two dice
 ```scala mdoc
 val seed = spire.random.Seed(42)
 val gen = spire.random.Random.generatorFromSeed(seed)
-val d6 = die(6)
-val rolls = (0 until 1000) map { i => d6.observe(gen) + d6.observe(gen) }
+val d6: CPTR[Int] = die(6)
+
+val rolls = (0 until 1000) map { i => d6.perceive(gen) + d6.perceive(gen) }
 
 implicit val ringInt: CRing[Int] = spire.implicits.IntAlgebra
 
@@ -123,9 +124,8 @@ axle will have more on that tradeoff in future versions.
 Imports (Note: documentation resets interpreter here)
 
 ```scala mdoc:silent:reset
+import cats.implicits._
 import spire.math._
-
-import axle.syntax.probabilitymodel._
 import axle.probability._
 import axle.game.Dice.die
 ```
@@ -135,12 +135,10 @@ import axle.game.Dice.die
 Create probability distribution of the addition of two 6-sided die:
 
 ```scala mdoc
-implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
-
 implicit val intEq: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra
 
-val twoDiceSummed = die(6).flatMap { a =>
-  die(6).map { b => a + b }
+val twoDiceSummed = (die(6): CPTR[Int]).flatMap { a =>
+  (die(6): CPTR[Int] ).map { b => a + b }
 }
 ```
 

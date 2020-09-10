@@ -107,6 +107,7 @@ Compute the odds of a `head` for a single toss of a fair coin
 
 ```scala mdoc
 import axle.algebra._
+import axle.syntax.kolmogorov._
 import Coin.head
 
 fairCoin.P(RegionEq(head))
@@ -149,10 +150,8 @@ is equal to the sum of their independent probabilities.
 Chain two events' models
 
 ```scala mdoc
-implicit val prob = ProbabilityModel[ConditionalProbabilityTable]
-
-val bothCoinsModel = fairCoin.flatMap({ flip1 =>
-  fairCoin.map({ flip2 => (flip1, flip2)})
+val bothCoinsModel = (fairCoin: CPTR[Symbol]).flatMap({ flip1 =>
+  (fairCoin: CPTR[Symbol]).map({ flip2 => (flip1, flip2)})
 })
 ```
 

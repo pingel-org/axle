@@ -30,8 +30,6 @@ import axle.game.Dice.die
 implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
 implicit val informationConverter = Information.converterGraphK2[Double, DirectedSparseGraph]
-
-implicit val prob = implicitly[ProbabilityModel[ConditionalProbabilityTable]]
 ```
 
 Usage
