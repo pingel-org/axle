@@ -3,6 +3,8 @@ package axle.probability
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
+import cats.implicits._
+
 import spire.math.Rational
 import spire.math.sqrt
 
@@ -15,19 +17,18 @@ import axle.syntax.kolmogorov.kolmogorovOps
 class StochasticLambdaCalculus extends AnyFunSuite with Matchers {
 
   implicit val eqInt: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra
-  val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
 
   test("stochastic if maps fair boolean to d6 + (d6+d6)") {
 
-    val ab = mcpt.flatMap(die(6)) { a =>
-      mcpt.map(die(6)) { b =>
+    val ab = (die(6): CPTR[Int]).flatMap { a =>
+      (die(6): CPTR[Int]).map { b =>
         a + b
       }
     }
 
     // "iffy" construction
     val distribution =
-      mcpt.flatMap(binaryDecision(Rational(1, 3))) { cond =>
+      (binaryDecision(Rational(1, 3)): CPTR[Boolean]).flatMap { cond =>
         if( cond ) {
           die(6)
         } else {
@@ -52,13 +53,11 @@ class StochasticLambdaCalculus extends AnyFunSuite with Matchers {
     // for all but the smallest subsets of n.
     // However, there should be a way to utilize the "if" statement to
     // reduce the complexity.
-
-    implicit val eqInt = cats.kernel.Eq.fromUniversalEquals[Int]
     
-    val ints = uniformDistribution(0 to n)
+    val ints: CPTR[Int] = uniformDistribution(0 to n)
 
-    val piDist = mcpt.flatMap(ints) { x =>
-      mcpt.map(ints) { y =>
+    val piDist = ints.flatMap { x =>
+      ints.map { y =>
         (if (sqrt((x * x + y * y).toDouble) <= n) 1 else 0)
       }
     }

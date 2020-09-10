@@ -75,10 +75,8 @@ class BarChartSpec extends AnyFunSuite with Matchers {
 
   test("BarChart render a SVG of d6 + d6 probability distribution") {
 
-    val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
-
-    val distribution = mcpt.flatMap(die(6)) { a =>
-      mcpt.map(die(6)) { b =>
+    val distribution = (die(6): CPTR[Int]).flatMap { a =>
+      (die(6): CPTR[Int]).map { b =>
         a + b
       }
     }

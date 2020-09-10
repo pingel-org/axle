@@ -87,14 +87,13 @@ object ConditionalProbabilityTable {
 
       override def map[A, B](
         model: ConditionalProbabilityTable[A, V])(
-        f: A => B): ConditionalProbabilityTable[B, V] = {
+        f: A => B): ConditionalProbabilityTable[B, V] =
         ConditionalProbabilityTable[B, V](
           model.p.iterator.map({ case (a, v) =>
              f(a) -> v
           }).toVector.groupBy(_._1).map({ case (b, bvs) =>
              b -> bvs.map(_._2).reduce(Ring[V].plus)
           }).toMap) // TODO use eqA to unique
-      }
 
       def flatMap[A, B](model: ConditionalProbabilityTable[A, V])(f: A => ConditionalProbabilityTable[B, V]): ConditionalProbabilityTable[B, V] = {
         val p = model.values.toVector.flatMap { a =>

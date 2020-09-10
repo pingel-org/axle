@@ -36,11 +36,9 @@ class Stats101 extends AnyFunSuite with Matchers {
 
   test("bernoulliDistribution expectation (mean)") {
 
-    val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
+    val dist: CPTR[Int] = bernoulliDistribution(Rational(1, 4))
 
-    val dist = bernoulliDistribution(Rational(1, 4))
-
-    expectation[Rational, Rational](mcpt.map(dist){Rational.apply}) should be(Rational(1, 4))
+    expectation[Rational, Rational](dist.map{Rational.apply}) should be(Rational(1, 4))
   }
 
 }

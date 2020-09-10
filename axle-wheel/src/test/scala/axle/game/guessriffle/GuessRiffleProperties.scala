@@ -68,16 +68,14 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
       }
     ) getOrElse None
 
-  val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
-
   def probabilityAllCorrect(game: GuessRiffle, fromState: GuessRiffleState, seed: Int): Rational =
     stateStrategyMoveStream(game, fromState, Random.generatorFromSeed(Seed(seed)).sync)
     .filter(args => mover(game, args._1).map( _ === game.player).getOrElse(false))
     .map({ case (stateIn, strategy, _, _) =>
-      mcpt.map(strategy)(isCorrectMoveForState(game, stateIn))
+      (strategy: CPTR[GuessRiffleMove]).map(isCorrectMoveForState(game, stateIn))
     })
     .reduce({ (incoming, current) =>
-      mcpt.flatMap(incoming)( a => mcpt.map(current)( b => a && b ))
+      (incoming: CPTR[Boolean]).flatMap( a => (current: CPTR[Boolean]).map( b => a && b ))
     })
     .P(RegionEq(true))
 

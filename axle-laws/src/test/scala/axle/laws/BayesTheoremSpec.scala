@@ -3,8 +3,8 @@ package axle.laws
 import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 
+import cats.implicits._
 import axle.algebra.Region
-
 import axle.probability._
 import axle.laws.TestSupport._
 
@@ -17,7 +17,6 @@ class BernoulliIsBayes
     bias => Arbitrary(genRegion(Vector(0, 1))),
     bias => Region.eqRegionIterable(Vector(0, 1)))
 
-import spire.implicits.IntAlgebra
 import axle.game.Dice._
 
 class D6IsBayes
@@ -36,9 +35,8 @@ class TwoPlatonicSolidDieAddedBayes
         bn <- Gen.oneOf(List(4,6,8,12,20))
     } yield  (an, bn)),
     { case (an, bn) =>
-       val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
-       mcpt.flatMap(die(an)){ a =>
-         mcpt.map(die(bn)){ b =>
+       (die(an): CPTR[Int]).flatMap { a =>
+         (die(bn): CPTR[Int]).map { b =>
            a + b
        }}
     },
