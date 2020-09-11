@@ -25,8 +25,14 @@ Fundamental data structures and functions
 * [Linear Algebra](/tutorial/linear_algebra/) including Principal Component Analysis (PCA)
 * [Graph](/tutorial/graph/)
 * [Logic](/tutorial/logic/) First-Order Predicate Logic
+
+Units of measurement
+
 * [Quanta](/tutorial/quanta/) Units (second, mile, gram, etc) for various quanta (Speed, Distance, Mass, etc) and conversions between them
 * [Unitted Trigonometry](/tutorial/unitted_trigonometry/)
+
+Commonly Used Mathematical Functions
+
 * [Pythagorean Means](/tutorial/pythagorean_means/) Arithmetic, Harmonic, Geometric, and Generalized means
 * [MAP@K](/tutorial/map_at_k) Mean Average Precision at K (ranking metric)
 * Historically important functions
@@ -72,11 +78,6 @@ Domain-specific functions
 * Chaos Theory
   * [Logistic Map](/tutorial/logistic_map/)
   * [Mandelbrot Set](/tutorial/mandelbrot/)
-* Data sets from `axle.data`
-  * Astronomy
-  * Evolution
-  * Federalist Papers
-  * Irises
 
 Visualization
 
@@ -93,6 +94,16 @@ Wheel
 ```sbt
 "org.axle-lang" %% "axle-wheel" % "@RELEASE_VERSION@"
 ```
+
+Data
+
+* Data sets from `axle.data`
+  * Astronomy
+  * Evolution
+  * Federalist Papers
+  * Irises
+
+Games
 
 * [Tic Tac Toe](/tutorial/tic_tac_toe/)
 * [Poker](/tutorial/poker/)
