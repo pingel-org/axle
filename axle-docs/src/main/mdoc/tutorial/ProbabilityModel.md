@@ -124,7 +124,7 @@ fairCoin.P(RegionEq(head))
 
 ### Kolmogorov's Axioms
 
-The single `probabilityOf` method is enough to define Kolmogorov's Axioms of Probablity.
+The single `probabilityOf` method is enough to define Kolmogorov's Axioms of Probability.
 The axioms are implemented in `axle.laws.KolmogorovProbabilityAxioms` and
 checked during testing with ScalaCheck.
 
