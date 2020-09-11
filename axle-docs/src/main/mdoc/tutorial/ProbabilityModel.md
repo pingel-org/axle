@@ -162,7 +162,8 @@ via the `filter` (`|` is also an alias).
 def filter(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V]
 ```
 
-`filter` allows Bayes Theorem to be expressed and checked with ScalaCheck.
+`filter` -- along with `P` from `Kolomogorov` -- allows Bayes' Theorem
+to be expressed and checked with ScalaCheck.
 
 ```scala
 model.filter(b).P(a) * model.P(b) === model.filter(a).P(b) * model.P(a)
