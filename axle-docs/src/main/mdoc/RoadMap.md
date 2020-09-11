@@ -18,16 +18,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `UnittedQuantity` `LengthSpace` unit mismatch
   * `BarChart` was missing `Order[C]`
 
-* Site
-  * Revamp Tutorials.md
-  * Update docs, especially ProbabilityModel
-  * Logistic Map is latest?
-  * Chicklet borders / colors
-  * Experiment with pandoc
-
+* Revamp Tutorials.md
+* Logistic Map is latest?
+* Chicklet borders / colors
+* Experiment with pandoc
 * Get rid of `axle.probability.CPTR`
-* Region.isSatisfiable vs `P(x) > 0` for Bayes and Kolmogorov
-* `Perceivable[ConditionalProbabilityTable]` cache bars
+* `Perceivable[ConditionalProbabilityTable]` cache `bars`
 
 ## 0.5.4 (October 2020)
 
@@ -44,6 +40,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle-core/src/main/scala/axle/lx/*.txt`
 
 * Fix occasional MetricSpace failure
+
+* Sigma Algebra
+  * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
+  * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
+  * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
+  * Region.isSatisfiable vs `P(x) > 0` for Bayes and Kolmogorov
+  * Update `ProbabilityModel.md`
 
 * Site
   * meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
@@ -103,11 +106,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Axiom for perceive: val a = perceive(gen) => ProbabilityOf(RegionEq(a)) > 0?
 
 * Measure Theory
-
-* Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
-* `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
-* More diversity of `Region` (vs just `RegionEq`) for probability axiom (Kolm. & Bayes) tests
-* Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
 
 * Axiom? pm.filter(X=x).P(X=x) == 1
 * Fix third Kolmogorov law

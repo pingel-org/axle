@@ -4,12 +4,20 @@ title: Probability Model
 permalink: /tutorial/probability_model/
 ---
 
-Probability Models are one of the core elements of Axle.
-They are foundational and will continue to be the basis for further exploration.
+Modeling probability and uncertainly is one of the primary objectives of Axle.
 
-# Creating Probability Models
+The capabilies are available via four typeclasses and a trait
+
+* Percievable
+* Region (modeling Sigma Algebra)
+* Kolmogorov
+* Bayes
+* Monad (`cats.Monad`)
+
+## Creating Probability Models
 
 `axle.data.Coin.flipModel` demonstrates a very simple probability model for type `Symbol`.
+
 This is its implementation:
 
 ```scala
@@ -23,10 +31,10 @@ def flipModel(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable[Sym
       tail -> (1 - pHead)))
 ```
 
-A `ProbabilityModel` witness is available for the resulting `ConditionalProbabilityTable[Symbol, Rational]`
+For example, it cal be called with or without a "bias" for the "head" side.
+Otherwise it is assumed to be a fair coin.
 
 ```scala mdoc
-import cats.implicits._
 import axle.probability._
 import spire.math._
 import axle.data.Coin
@@ -57,9 +65,7 @@ implicit val dist = axle.probability.rationalProbabilityDist
 (1 to 10) map { i => biasedCoin.perceive(rng) }
 ```
 
-# Kolmogorov -- for Querying Probability Models
-
-## `Region`
+## Sigma Algebra Regions
 
 The sealed `Region[A]` trait is extended by the following case classes
 that form a way to describe expressions on the event-space of a probability model.
@@ -93,7 +99,9 @@ that adhere to the laws of probability.
 
 The eventual formalization of `Region` should connect it with a ∑ Algebra from Meaasure Theory.
 
-## `probabilityOf` (or `P`)
+## Kolmogorov -- for Querying Probability Models
+
+### probabilityOf (aka "P")
 
 The method signature for `P` is defined in terms of a `Region`.
 
@@ -106,6 +114,7 @@ def probabilityOf(predicate: Region[A])(implicit fieldV: Field[V]): V
 Compute the odds of a `head` for a single toss of a fair coin
 
 ```scala mdoc
+import cats.implicits._
 import axle.algebra._
 import axle.syntax.kolmogorov._
 import Coin.head
@@ -113,14 +122,14 @@ import Coin.head
 fairCoin.P(RegionEq(head))
 ```
 
-# Kolmogorov's Axioms
+### Kolmogorov's Axioms
 
 The methods above are enough to define Kolmogorov's Axioms of Probablity.
 These are literally implemented in `axle.laws.KolmogorovProbabilityAxioms` and
 checked during testng with ScalaCheck.
 The ability to show adherance to theories such as this is a tenet of Axle's design.
 
-## Basic Measure
+#### Basic Measure
 
 Probabilities are non-negative
 
@@ -128,7 +137,7 @@ Probabilities are non-negative
 model.P(region) >= Field[V].zero
 ```
 
-## Unit Measure
+#### Unit Measure
 
 The sum the probabilities of all possible events is `one`
 
@@ -136,7 +145,7 @@ The sum the probabilities of all possible events is `one`
 model.P(RegionAll()) === Field[V].one
 ```
 
-## Combination
+#### Combination
 
 For disjoint event regions, `e1` and `e2`, the probability of their disjunction `e1 or e2`
 is equal to the sum of their independent probabilities.
@@ -145,29 +154,7 @@ is equal to the sum of their independent probabilities.
 (!((e1 and e2) === RegionEmpty() )) || (model.P(e1 or e2) === model.P(e1) + model.P(e2))
 ```
 
-## Chaining models
-
-Chain two events' models
-
-```scala mdoc
-val bothCoinsModel = (fairCoin: CPTR[Symbol]).flatMap({ flip1 =>
-  (fairCoin: CPTR[Symbol]).map({ flip2 => (flip1, flip2)})
-})
-```
-
-This creates a model on events of type `(Symbol, Symbol)`
-
-It can be queried with `P` using `RegionIf` to check fields within the `Tuple2`.
-
-```scala mdoc
-type TWOFLIPS = (Symbol, Symbol)
-
-bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) and RegionIf[TWOFLIPS](_._2 == head))
-
-bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) or RegionIf[TWOFLIPS](_._2 == head))
-```
-
-# Bayes Theorem, Conditioning, and Filtering
+## Bayes Theorem, Conditioning, and Filtering
 
 The `Bayes` typeclass implements the conditioning of a probability model
 via the `filter` (`|` is also an alias).
@@ -186,7 +173,7 @@ For non-zero `model.P(a)` and `model.P(b)`
 
 The theorem is more recognizable as `P(A|B) = P(B|A) * P(A) / P(B)`
 
-# Probability Model as Monads
+## Probability Model as Monads
 
 The `pure`, `map`, and `flatMap` methods of `cats.Monad` are defined
 for `ConditionalProbabilityTable`, `TallyDistribution`.
@@ -209,17 +196,40 @@ input.flatMap { i =>
 }
 ```
 
-# Future work
+### Uses of probability models as monads
 
-## Measure Theory
+#### Chaining models
+
+Chain two events' models
+
+```scala mdoc
+val bothCoinsModel = (fairCoin: CPTR[Symbol]).flatMap({ flip1 =>
+  (fairCoin: CPTR[Symbol]).map({ flip2 => (flip1, flip2)})
+})
+```
+
+This creates a model on events of type `(Symbol, Symbol)`
+
+It can be queried with `P` using `RegionIf` to check fields within the `Tuple2`.
+
+```scala mdoc
+type TWOFLIPS = (Symbol, Symbol)
+
+bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) and RegionIf[TWOFLIPS](_._2 == head))
+
+bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) or RegionIf[TWOFLIPS](_._2 == head))
+```
+
+## Future work
+
+### Measure Theory
 
 Further refining and extending Axle to incorporate Measure Theory is a likely follow-on step.
 
-## Markov Categories
+### Markov Categories
 
 As an alternative to Measure Theory, see Tobias Fritz's work on Markov Categories
 
-## Probabilistic and Differentiable Programming
+### Probabilistic and Differentiable Programming
 
-In general, the explosion of work on probabilistic and differentible programming is fertile ground
-for Axle's lawful approach.
+In general, the explosion of work on probabilistic and differentible programming is fertile ground for Axle's lawful approach.
