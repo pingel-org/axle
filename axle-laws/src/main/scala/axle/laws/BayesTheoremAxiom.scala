@@ -21,7 +21,7 @@ object BayesTheoremAxiom {
    *
    * P(A|B) * P(B) = P(B|A) * P(A)
    * 
-   * aka P(A|B) = P(B|A) * P(A) / P(B), but without risk of division by zero
+   * aka $P(A|B) = P(B|A) * P(A) / P(B)$, but without risk of division by zero
    * 
    */
 
