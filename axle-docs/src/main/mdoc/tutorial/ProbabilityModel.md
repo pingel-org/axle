@@ -8,7 +8,7 @@ Modeling probability and uncertainly is one of the primary objectives of Axle.
 
 The capabilies are available via four typeclasses and a trait
 
-* Percievable
+* Perceivable
 * Region (modeling Sigma Algebra)
 * Kolmogorov
 * Bayes
@@ -124,14 +124,13 @@ fairCoin.P(RegionEq(head))
 
 ### Kolmogorov's Axioms
 
-The methods above are enough to define Kolmogorov's Axioms of Probablity.
-These are literally implemented in `axle.laws.KolmogorovProbabilityAxioms` and
-checked during testng with ScalaCheck.
-The ability to show adherance to theories such as this is a tenet of Axle's design.
+The single `probabilityOf` method is enough to define Kolmogorov's Axioms of Probablity.
+The axioms are implemented in `axle.laws.KolmogorovProbabilityAxioms` and
+checked during testing with ScalaCheck.
 
 #### Basic Measure
 
-Probabilities are non-negative
+Probabilities are non-negative (for all satisfiable `Region`)
 
 ```scala
 model.P(region) >= Field[V].zero
