@@ -118,7 +118,7 @@ package object prisoner {
         }
       }
 
-      implicit def perceivablePM = ConditionalProbabilityTable.perceiveWitness
+      implicit def sampler = ConditionalProbabilityTable.samplerWitness
 
     }
 

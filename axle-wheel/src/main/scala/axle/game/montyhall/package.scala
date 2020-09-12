@@ -126,7 +126,7 @@ package object montyhall {
         }
       }
 
-      implicit def perceivablePM = ConditionalProbabilityTable.perceiveWitness
+      implicit def sampler = ConditionalProbabilityTable.samplerWitness
 
     }
 

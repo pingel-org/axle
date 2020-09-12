@@ -20,11 +20,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `UnittedQuantity` `LengthSpace` unit mismatch
   * `BarChart` was missing `Order[C]`
 
-* Get rid of `axle.probability.CPTR`
-* Functor
 * Perceivable -> Sampler
+
+* Get rid of `axle.probability.CPTR`
+* Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
 * incorporate TwoDice into ProbModel
 * More about `Monad` for probability models
+* Functor for CPT?
 
 ## 0.5.4 (October 2020)
 
@@ -49,7 +51,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Sigma Algebra
   * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
   * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
-  * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
 
 ## 0.5.5 (December 2020)
 

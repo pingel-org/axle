@@ -73,7 +73,7 @@ package object ttt {
         }
       }
 
-      implicit def perceivablePM = ConditionalProbabilityTable.perceiveWitness
+      implicit def sampler = ConditionalProbabilityTable.samplerWitness
 
     }
 

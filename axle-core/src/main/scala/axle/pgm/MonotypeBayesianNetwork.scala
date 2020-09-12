@@ -90,8 +90,8 @@ object MonotypeBayesanNetwork {
       }
     }
 
-  implicit def perceiveWitness[I: Eq, DG[_, _]]: Perceivable[({ type L[C, W] = MonotypeBayesanNetwork[C, I, W, DG] })#L] =
-    new Perceivable[({ type L[C, W] = MonotypeBayesanNetwork[C, I, W, DG] })#L]{
+  implicit def samplerWitness[I: Eq, DG[_, _]]: Sampler[({ type L[C, W] = MonotypeBayesanNetwork[C, I, W, DG] })#L] =
+    new Sampler[({ type L[C, W] = MonotypeBayesanNetwork[C, I, W, DG] })#L]{
 
       def observeNodeAndAncestors[A, V: Dist: Ring: Order](
         model: MonotypeBayesanNetwork[A, I, V, DG],
@@ -124,7 +124,7 @@ object MonotypeBayesanNetwork {
           ancestorMap + (variable -> i)
         }
 
-      def perceive[A, V: Dist: Ring: Order](model: MonotypeBayesanNetwork[A, I, V, DG])(gen: Generator): A = {
+      def sample[A, V: Dist: Ring: Order](model: MonotypeBayesanNetwork[A, I, V, DG])(gen: Generator): A = {
         import model.bayesianNetwork.dg
         val parents: List[Variable[I]] = model.bayesianNetwork.graph.vertices.toList.map(_.variable)
         val acc = Map.empty[Variable[I], I]

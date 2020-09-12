@@ -40,7 +40,7 @@ class StochasticLambdaCalculus extends AnyFunSuite with Matchers {
 
     distribution.P(RegionEq(12)) should be(Rational(1, 54))
 
-    Σ[Rational, IndexedSeq](distribution.values.toVector map { v => distribution.P(RegionEq(v)) }) should be(Rational(1))
+    Σ[Rational, IndexedSeq](distribution.domain.toVector map { v => distribution.P(RegionEq(v)) }) should be(Rational(1))
   }
 
   test("π estimation by testing a uniform subset of the unit square gets in the ballpark of π") {

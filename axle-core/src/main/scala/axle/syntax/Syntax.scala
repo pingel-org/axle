@@ -17,7 +17,7 @@ import axle.algebra.SetFrom
 import axle.algebra.UndirectedGraph
 import axle.probability.Kolmogorov
 import axle.probability.Bayes
-import axle.probability.Perceivable
+import axle.probability.Sampler
 
 trait LinearAlgebraSyntax {
 
@@ -69,12 +69,12 @@ trait BayesSyntax {
     new BayesOps(model)
 }
 
-trait PerceivableSyntax {
+trait SamplerSyntax {
 
-  implicit def perceivableOps[M[_, _], A, V](model: M[A, V])(
+  implicit def samplerOps[M[_, _], A, V](model: M[A, V])(
     implicit
-    ev: Perceivable[M]) =
-    new PerceivableOps(model)
+    ev: Sampler[M]) =
+    new SamplerOps(model)
 }
 
 

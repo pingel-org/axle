@@ -34,9 +34,9 @@ object TallyDistribution {
           Σ(model.values.filter(predicate).map(model.tally)) / model.totalCount
       }
 
-    implicit val perceivableWitness: Perceivable[TallyDistribution] = 
-      new Perceivable[TallyDistribution] {
-        def perceive[A, V](model: TallyDistribution[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
+    implicit val samplerWitness: Sampler[TallyDistribution] = 
+      new Sampler[TallyDistribution] {
+        def sample[A, V](model: TallyDistribution[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
           val r: V = model.totalCount * gen.next[V]
           model.bars.find({ case (_, v) => orderV.gteqv(v, r) }).get._1 // or distribution is malformed
         }

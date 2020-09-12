@@ -27,7 +27,7 @@ import axle.algebra.UndirectedGraph
 import axle.algebra.Zipper
 import axle.probability.Kolmogorov
 import axle.probability.Bayes
-import axle.probability.Perceivable
+import axle.probability.Sampler
 
 final class LinearAlgebraOps[M, RowT, ColT, T](val lhs: M)(
   implicit
@@ -243,10 +243,10 @@ final class BayesOps[M[_, _], A, V](val model: M[A, V])(implicit ev: Bayes[M]) {
 }
 
 
-final class PerceivableOps[M[_, _], A, V](val model: M[A, V])(implicit ev: Perceivable[M]) {
+final class SamplerOps[M[_, _], A, V](val model: M[A, V])(implicit ev: Sampler[M]) {
 
-  def perceive(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A =
-    ev.perceive(model)(gen)
+  def sample(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A =
+    ev.sample(model)(gen)
 }
 
 final class DirectedGraphOps[DG, V, E](val dg: DG)(

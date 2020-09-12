@@ -41,5 +41,5 @@ trait Game[G, S, O, M, MS, MM, V, PM[_, _]] {
 
   def outcome(game: G, state: S): Option[O]
 
-  implicit def perceivablePM: Perceivable[PM]
+  implicit def sampler: Sampler[PM]
 }

@@ -48,10 +48,10 @@ object ConditionalProbabilityTable {
       }
   }
 
-  implicit val perceiveWitness: Perceivable[ConditionalProbabilityTable] =
-    new Perceivable[ConditionalProbabilityTable]{
+  implicit val samplerWitness: Sampler[ConditionalProbabilityTable] =
+    new Sampler[ConditionalProbabilityTable]{
 
-      def perceive[A, V](model: ConditionalProbabilityTable[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
+      def sample[A, V](model: ConditionalProbabilityTable[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
         // implicit val ringV: Ring[V], val eqA: cats.kernel.Eq[A]
         // TODO cache the bars?
         val bars = model.p.toVector.scanLeft((dummy[A], ringV.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
@@ -76,11 +76,12 @@ object ConditionalProbabilityTable {
         }
     }
 
-    
   import cats.Monad
 
   implicit def monadWitness[V: Ring]: Monad[({ type λ[A] = ConditionalProbabilityTable[A, V] })#λ] =
     new Monad[({ type λ[A] = ConditionalProbabilityTable[A, V] })#λ] {
+
+//    new Monad[({ type λ[A] = ConditionalProbabilityTable[A, V] })#λ] {
 
       def pure[A](a: A): ConditionalProbabilityTable[A, V] =
         ConditionalProbabilityTable(Map(a -> Ring[V].one))
