@@ -5,20 +5,17 @@ in_header: true
 permalink: /tutorial/
 ---
 
-By jar
-
-Core
-====
-
-(With "Spokes" for Joda and JBLAS in some cases.)
+## Core
 
 ```sbt
 "org.axle-lang" %% "axle-core"  % "@RELEASE_VERSION@"
+"org.axle-lang" %% "axle-laws"  % "@RELEASE_VERSION@"
+"org.axle-lang" %% "axle-xml"   % "@RELEASE_VERSION@"
 "org.axle-lang" %% "axle-jung"  % "@RELEASE_VERSION@"
 "org.axle-lang" %% "axle-jblas" % "@RELEASE_VERSION@"
 ```
 
-Fundamental data structures and functions
+### Fundamental data structures and functions
 
 * [Package Object](/tutorial/axle_package_object/) Extensions to core Scala data types. Indexed Power Set, Indexed Cross Product, Combinations, Permutations, and UTF aliases
 * [Algebra](/tutorial/algebra/) Typeclasses Functor, Indexed, Finite, LengthSpace
@@ -26,12 +23,12 @@ Fundamental data structures and functions
 * [Graph](/tutorial/graph/)
 * [Logic](/tutorial/logic/) First-Order Predicate Logic
 
-Units of measurement
+### Units of measurement
 
 * [Quanta](/tutorial/quanta/) Units (second, mile, gram, etc) for various quanta (Speed, Distance, Mass, etc) and conversions between them
 * [Unitted Trigonometry](/tutorial/unitted_trigonometry/)
 
-Commonly Used Mathematical Functions
+### Commonly Used Mathematical Functions
 
 * [Pythagorean Means](/tutorial/pythagorean_means/) Arithmetic, Harmonic, Geometric, and Generalized means
 * [MAP@K](/tutorial/map_at_k) Mean Average Precision at K (ranking metric)
@@ -40,7 +37,7 @@ Commonly Used Mathematical Functions
   * [Fibonacci](/tutorial/fibonacci/)
   * [Ackermann](/tutorial/ackermann/)
 
-Randomness
+### Randomness and Uncertainty
 
 * [Probability Models](/tutorial/probability_model) axiomatic probability models
   * [Two Dice](/tutorial/two_dice/) simulation vs flat mapping distribution monads
@@ -53,7 +50,7 @@ Randomness
   * [Bayesian Networks](/tutorial/bayesian_networks/)
 * [Game Theory](/tutorial/game_theory/) Framework for the game playing jar.
 
-Machine Learning
+### Machine Learning
 
 * [Linear Regression](/tutorial/linear_regression/)
 * [Naive Bayes Clustering](/tutorial/naive_bayes/) Tennis example
@@ -62,7 +59,7 @@ Machine Learning
   * [Cluster Federalist Papers](/tutorial/cluster_federalist_papers_k_means/)
 * [Genetic Algorithms](/tutorial/genetic_algorithms/)
 
-Domain-specific functions
+### Domain-specific functions
 
 * [Geo Coordinates](/tutorial/geo_coordinates/)
 * [Natural Langage Processing (NLP)](/tutorial/natural_language_processing/)
@@ -79,7 +76,7 @@ Domain-specific functions
   * [Logistic Map](/tutorial/logistic_map/)
   * [Mandelbrot Set](/tutorial/mandelbrot/)
 
-Visualization
+### Visualization
 
 * [Visualize](/tutorial/visualize/)
   * [Plots](/tutorial/plots/)
@@ -88,14 +85,13 @@ Visualization
   * [Grouped Bar Charts](/tutorial/grouped_bar_charts/)
   * [Pixelated Colored Area](/tutorial/pixelated_colored_area/)
 
-Wheel
-=====
+## Wheel
 
 ```sbt
 "org.axle-lang" %% "axle-wheel" % "@RELEASE_VERSION@"
 ```
 
-Data
+### Data
 
 * Data sets from `axle.data`
   * Astronomy
@@ -103,7 +99,7 @@ Data
   * Federalist Papers
   * Irises
 
-Games
+### Games
 
 * [Tic Tac Toe](/tutorial/tic_tac_toe/)
 * [Poker](/tutorial/poker/)
