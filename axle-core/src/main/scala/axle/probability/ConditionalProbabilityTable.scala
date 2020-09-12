@@ -17,7 +17,7 @@ import axle.algebra._
 
 case class ConditionalProbabilityTable[A, V](p: Map[A, V]) {
 
-  def values: Iterable[A] = p.keys.toVector
+  def domain: Iterable[A] = p.keys.toVector
 
 }
 
@@ -30,8 +30,8 @@ object ConditionalProbabilityTable {
     kolm: Kolmogorov[ConditionalProbabilityTable],
     showRA: Show[Region[A]]
   ): Show[ConditionalProbabilityTable[A, V]] = cpt => {
-      val charWidth: Int = (cpt.values.map(ra => showRA.show(RegionEq(ra)).length).toList).reduce(math.max)
-      cpt.values.toVector.sorted.map { a => {
+      val charWidth: Int = (cpt.domain.map(ra => showRA.show(RegionEq(ra)).length).toList).reduce(math.max)
+      cpt.domain.toVector.sorted.map { a => {
         val ra = RegionEq(a)
         val aString = showRA.show(ra)
         (aString + (1 to (charWidth - aString.length)).map(i => " ").mkString("") + " " + Show[V].show(kolm.probabilityOf(cpt)(ra)))
@@ -70,7 +70,7 @@ object ConditionalProbabilityTable {
           case RegionAll() =>
             fieldV.one
           case _ => 
-            Σ(model.values.toVector.map { a =>
+            Σ(model.domain.toVector.map { a =>
               if (predicate(a)) { model.p(a) } else { fieldV.zero }
             })
         }
@@ -96,10 +96,10 @@ object ConditionalProbabilityTable {
           }).toMap) // TODO use eqA to unique
 
       def flatMap[A, B](model: ConditionalProbabilityTable[A, V])(f: A => ConditionalProbabilityTable[B, V]): ConditionalProbabilityTable[B, V] = {
-        val p = model.values.toVector.flatMap { a =>
+        val p = model.domain.toVector.flatMap { a =>
           val pA = model.p.apply(a)
           val inner = f(a)
-          inner.values.toVector.map { b =>
+          inner.domain.toVector.map { b =>
             b -> Ring[V].times(pA, inner.p.apply(b))
           }
         }.groupBy(_._1).map({ case (b, bvs) => b -> bvs.map(_._2).reduce(Ring[V].plus)})

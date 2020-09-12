@@ -60,7 +60,7 @@ object DataView {
       val yPlottable = Plottable[Y]
       val fieldY = Field[Y]
 
-      def keys(d: ConditionalProbabilityTable[X, Y]): Iterable[X] = d.values
+      def keys(d: ConditionalProbabilityTable[X, Y]): Iterable[X] = d.domain
 
       def valueOf(d: ConditionalProbabilityTable[X, Y], x: X): Y = prob.probabilityOf(d)(RegionEq(x))
 

@@ -47,7 +47,7 @@ package object stats {
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    Σ[A, IndexedSeq](model.values.toVector.map { x =>
+    Σ[A, IndexedSeq](model.domain.toVector.map { x =>
       n2a(model.P(RegionEq(x))) * x
     })
   }
@@ -62,9 +62,9 @@ package object stats {
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    val μ: A = Σ[A, IndexedSeq](model.values.toVector.map({ x => n2a(model.P(RegionEq(x))) * x }))
+    val μ: A = Σ[A, IndexedSeq](model.domain.toVector.map({ x => n2a(model.P(RegionEq(x))) * x }))
 
-    val sum: A = Σ[A, IndexedSeq](model.values.toVector map { x => n2a(model.P(RegionEq(x))) * square(x - μ) })
+    val sum: A = Σ[A, IndexedSeq](model.domain.toVector map { x => n2a(model.P(RegionEq(x))) * square(x - μ) })
 
     NRoot[A].sqrt(sum)
   }
@@ -83,7 +83,7 @@ package object stats {
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
     val convertN = ConvertableFrom[N]
-    val H = Σ[Double, Iterable](model.values map { a: A =>
+    val H = Σ[Double, Iterable](model.domain map { a: A =>
       val px: N = model.P(RegionEq(a))
       import cats.syntax.all._
       if (px === Field[N].zero) {

@@ -143,7 +143,7 @@ object PlotDataView {
   implicit def cptDataView[S, X: Order: AdditiveMonoid: Plottable, Y: Order: Field: Plottable]: PlotDataView[S, X, Y, ConditionalProbabilityTable[X, Y]] =
     new PlotDataView[S, X, Y, ConditionalProbabilityTable[X, Y]] {
 
-      def xsOf(cpt: ConditionalProbabilityTable[X, Y]): Iterable[X] = cpt.values
+      def xsOf(cpt: ConditionalProbabilityTable[X, Y]): Iterable[X] = cpt.domain
 
       def valueOf(cpt: ConditionalProbabilityTable[X, Y], x: X): Y =
         cpt.p.get(x).getOrElse(Field[Y].zero)

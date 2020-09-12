@@ -13,12 +13,17 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   as well as `cats.Monad`.
   The three new axle typeclasses include syntax.
 
+* Rename `ConditionalProbabilityTable.values` to `domain`
+
 * Bugs fixed
   * Bayes axiom should avoid P(A) == P(B) == 0
   * `UnittedQuantity` `LengthSpace` unit mismatch
   * `BarChart` was missing `Order[C]`
 
 * Get rid of `axle.probability.CPTR`
+* Functor
+* Perceivable -> Sampler
+* incorporate TwoDice into ProbModel
 
 ## 0.5.4 (October 2020)
 
@@ -45,18 +50,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
   * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
 
-* Site
-  * meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
-  * Remove jekyll from publishing pipeline
-    * [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html)
-    * sbt-s3
-
 ## 0.5.5 (December 2020)
-
-* `{CPT,TD}.tailRecM` then ScalaCheck `Monad[ProbabilityModel]`
-* `MonotypeBayesanNetwork`.{`pure`, `map`, `flatMap`, `tailRecR`}
-* Reconcile `MBN` `combine1` & `combine2`
-* Monad tests for MonotypeBayesanNetwork[Alarm-Burglary-Earthquake]
 
 * Test: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
   * factor out each variable until
@@ -93,6 +87,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.8+ (2021)
 
+* `{CPT,TD}.tailRecM` then ScalaCheck `Monad[ProbabilityModel]`
+* `MonotypeBayesanNetwork`.{`pure`, `map`, `flatMap`, `tailRecR`}
+* Reconcile `MBN` `combine1` & `combine2`
+* Monad tests for MonotypeBayesanNetwork[Alarm-Burglary-Earthquake]
+
 * MonotypeBayesanNetwork.filter -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself
   * Is there a way of seeing this as flatMap, though?
@@ -109,13 +108,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Optimize `KolmogorovProbabilityAxioms.combination`
 
 * rename `ConditionalProbabilityTable`?
-* "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
-
-## After that
 
 * Create a simple graph implementation so that `axle-core` can avoid including `axle-jung`
 
-* Create `axle-png` to help avoid “headless” exception or Xvfb requirement during tests
+* Create `axle-png` to avoid Xvfb requirement during tests
+
+## After that
 
 * Re-enable `axle-jogl`
   * May require jogamop 2.4, which is not yet released
@@ -126,6 +124,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Copy css using makeSite (not update-docs.sh)
 * Fix markdown lint warnings
 * Figure out better way to reference images in docs
+
+* Site
+  * meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
+  * Remove jekyll from publishing pipeline
+    * [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html)
+    * sbt-s3
 
 * Move more stuff out of `axle.math`
 * `axle-ast-python`
