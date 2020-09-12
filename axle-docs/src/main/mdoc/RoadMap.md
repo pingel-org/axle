@@ -24,6 +24,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Functor
 * Perceivable -> Sampler
 * incorporate TwoDice into ProbModel
+* More about `Monad` for probability models
 
 ## 0.5.4 (October 2020)
 
