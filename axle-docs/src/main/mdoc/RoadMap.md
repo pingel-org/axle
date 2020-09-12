@@ -18,14 +18,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `UnittedQuantity` `LengthSpace` unit mismatch
   * `BarChart` was missing `Order[C]`
 
-* Revamp Tutorials.md
-* Logistic Map is latest?
-* Chicklet borders / colors
-* Experiment with pandoc
 * Get rid of `axle.probability.CPTR`
-* `Perceivable[ConditionalProbabilityTable]` cache `bars`
 
 ## 0.5.4 (October 2020)
+
+* Chicklet borders / colors
+* Experiment with pandoc
+* `Perceivable[ConditionalProbabilityTable]` cache `bars`
 
 * `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
   * Will require externalizing the layout to its own.... typeclass?
@@ -45,8 +44,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
   * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
   * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
-  * Region.isSatisfiable vs `P(x) > 0` for Bayes and Kolmogorov
-  * Update `ProbabilityModel.md`
 
 * Site
   * meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel

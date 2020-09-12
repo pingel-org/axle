@@ -4,17 +4,20 @@ title: Probability Model
 permalink: /tutorial/probability_model/
 ---
 
-Modeling probability and uncertainly is one of the primary objectives of Axle.
+Modeling probability, randomness, and uncertainly is one of the primary objectives of Axle.
 
-The capabilies are available via four typeclasses and a trait
+The capabilies are available via four typeclasses and one trait
 
 * Perceivable
-* Region (modeling Sigma Algebra)
+* Region (trait modeling Sigma Algebra)
 * Kolmogorov
 * Bayes
 * Monad (`cats.Monad`)
 
 ## Creating Probability Models
+
+There are a few type of probability models in Axle.
+The simplest is the `ConditionalProbabilityTable`, which is used throughout this document.
 
 `axle.data.Coin.flipModel` demonstrates a very simple probability model for type `Symbol`.
 
@@ -31,8 +34,8 @@ def flipModel(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable[Sym
       tail -> (1 - pHead)))
 ```
 
-For example, it cal be called with or without a "bias" for the "head" side.
-Otherwise it is assumed to be a fair coin.
+Its argument is the bias for the `HEAD` side.
+Without a provided bias, it is assumed to be a fair coin.
 
 ```scala mdoc
 import axle.probability._
@@ -46,13 +49,23 @@ val biasedCoin = Coin.flipModel(Rational(9, 10))
 
 ## Perceivable.perceive
 
-The `percieve` method's signature looks like:
+The `Perceivable` typeclass provides the ability to "execute" the model and product
+a random sample via the `perceive` method.
+
+It's type signature is:
 
 ```scala
 def perceive(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A
 ```
 
-The `perceive` method selects a specific value within the model's domain type.
+The name "perceive" was chosen for two reasons:
+
+1. "observe" is already taken by many other libraries
+2. "perceive" may in the future more carefully track the information or entropy consumed in order to resolve a random sample, and the word "perceive" connotes this process more accurately.
+
+Note that it must be provided with a Spire `Generator`.
+It also requires context bounds on the value type `V` that give the method
+the ability to produces values with a distribution conforming to the probability model.
 
 ```scala mdoc
 import spire.random.Generator.rng
@@ -69,7 +82,9 @@ implicit val dist = axle.probability.rationalProbabilityDist
 
 The sealed `Region[A]` trait is extended by the following case classes
 that form a way to describe expressions on the event-space of a probability model.
-In order of arity, they are:
+In Measure Theory, these expressions are said to form a "sigma-algebra" ("σ-algebra")
+
+In order of arity, they case classes extending this trait are:
 
 ### Arity 0
 
@@ -99,17 +114,17 @@ that adhere to the laws of probability.
 
 The eventual formalization of `Region` should connect it with a ∑ Algebra from Meaasure Theory.
 
-## Kolmogorov -- for Querying Probability Models
+## Kolmogorov for querying Probability Models
 
 ### probabilityOf (aka "P")
 
-The method signature for `P` is defined in terms of a `Region`.
-
-`P` is a synonym for `probabilityOf`.
+The method `probabilityOf` is defined in terms of a `Region`.
 
 ```scala
 def probabilityOf(predicate: Region[A])(implicit fieldV: Field[V]): V
 ```
+
+Note that `probabilityOf` is aliased to `P` in `axle.syntax.kolmogorov._`
 
 Compute the odds of a `head` for a single toss of a fair coin
 
@@ -162,7 +177,7 @@ via the `filter` (`|` is also an alias).
 def filter(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V]
 ```
 
-`filter` -- along with `P` from `Kolomogorov` -- allows Bayes' Theorem
+`filter` -- along with `probabilityOf` from `Kolomogorov` -- allows Bayes' Theorem
 to be expressed and checked with ScalaCheck.
 
 ```scala
@@ -178,27 +193,30 @@ The theorem is more recognizable as `P(A|B) = P(B|A) * P(A) / P(B)`
 The `pure`, `map`, and `flatMap` methods of `cats.Monad` are defined
 for `ConditionalProbabilityTable`, `TallyDistribution`.
 
-For some historical reading on the origins of probability monads, see the literature on the
-Giry Monad.
+For some historical reading on the origins of probability monads,
+see the literature on the Giry Monad.
 
-To see these in action in Axle, see the [Two Dice](/tutorial/two_dice/) examples.
+### Iffy
 
 A stochastic version of `if` (aka `iffy`) can be implemented in terms of `flatMap`
-using this pattern:
+using this pattern for any probability model type `M[A]` such that a `Monad` is defined.
 
 ```scala
-input.flatMap { i =>
-  if( predicate(i) ) {
-    trueClause
-  } else {
-    falseClause
+def iffy[A, B, M[_]: Monad](
+  input      : M[A],
+  predicate  : A => Boolean,
+  trueClause : M[B],
+  falseClause: M[B]): M[B] =
+  input.flatMap { i =>
+    if( predicate(i) ) {
+      trueClause
+    } else {
+      falseClause
+    }
   }
-}
 ```
 
-### Uses of probability models as monads
-
-#### Chaining models
+### Chaining models
 
 Chain two events' models
 
@@ -219,6 +237,10 @@ bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) and RegionIf[TWOFLIPS](_._2 ==
 
 bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) or RegionIf[TWOFLIPS](_._2 == head))
 ```
+
+### Two Dice
+
+For more examples of combining rolls of six-sided dice, see [Two Dice](/tutorial/two_dice/).
 
 ## Future work
 
