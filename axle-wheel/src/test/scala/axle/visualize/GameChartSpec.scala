@@ -16,9 +16,9 @@ class GameChartSpec extends AnyFunSuite with Matchers {
 
   test("BarChart of bowling probability distribution") {
 
-    val stateD: CPTR[State] = stateDistribution(goodBowler, 4)
+    val stateD = stateDistribution(goodBowler, 4)
 
-    val scoreD = stateD.map(_.tallied)
+    val scoreD = stateD.events.map(_.tallied)
 
     // implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
 

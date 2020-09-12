@@ -12,7 +12,7 @@ import axle.probability._
 import axle.algebra.RegionEq
 import axle.game.Dice.die
 import axle.math.Σ
-import axle.syntax.kolmogorov.kolmogorovOps
+import axle.syntax.kolmogorov._
 
 class StochasticLambdaCalculus extends AnyFunSuite with Matchers {
 
@@ -20,15 +20,15 @@ class StochasticLambdaCalculus extends AnyFunSuite with Matchers {
 
   test("stochastic if maps fair boolean to d6 + (d6+d6)") {
 
-    val ab = (die(6): CPTR[Int]).flatMap { a =>
-      (die(6): CPTR[Int]).map { b =>
+    val ab = die(6).events.flatMap { a =>
+      die(6).events.map { b =>
         a + b
       }
     }
 
     // "iffy" construction
     val distribution =
-      (binaryDecision(Rational(1, 3)): CPTR[Boolean]).flatMap { cond =>
+      binaryDecision(Rational(1, 3)).events.flatMap { cond =>
         if( cond ) {
           die(6)
         } else {
@@ -54,10 +54,10 @@ class StochasticLambdaCalculus extends AnyFunSuite with Matchers {
     // However, there should be a way to utilize the "if" statement to
     // reduce the complexity.
     
-    val ints: CPTR[Int] = uniformDistribution(0 to n)
+    val ints = uniformDistribution(0 to n)
 
-    val piDist = ints.flatMap { x =>
-      ints.map { y =>
+    val piDist = ints.events.flatMap { x =>
+      ints.events.map { y =>
         (if (sqrt((x * x + y * y).toDouble) <= n) 1 else 0)
       }
     }

@@ -7,7 +7,7 @@ import spire.random.Dist
 
 package object probability {
 
-  type CPTR[A] = ConditionalProbabilityTable[A, Rational]
+  // type CPTR[A] = ConditionalProbabilityTable[A, Rational]
 
   val rationalProbabilityDist: Dist[Rational] = {
     val denominator = Integer.MAX_VALUE - 1 // 1000000

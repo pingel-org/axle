@@ -15,10 +15,13 @@ import axle.dummy
 import axle.math.Σ
 import axle.algebra._
 
-case class ConditionalProbabilityTable[A, V](p: Map[A, V]) {
+case class ConditionalProbabilityTable[E, V](p: Map[E, V]) {
 
-  def domain: Iterable[A] = p.keys.toVector
+  type CPTE[B] = ConditionalProbabilityTable[B, V] 
 
+  def domain: Iterable[E] = p.keys.toVector
+
+  def events: CPTE[E] = this
 }
 
 object ConditionalProbabilityTable {

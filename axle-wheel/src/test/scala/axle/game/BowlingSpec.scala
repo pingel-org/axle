@@ -15,9 +15,9 @@ class BowlingSpec extends AnyFunSuite with Matchers {
     import Bowling._
     import Bowlers._
 
-    val stateD: CPTR[Bowling.State] = stateDistribution(goodBowler, 4)
+    val stateD = stateDistribution(goodBowler, 4)
 
-    val scoreD = stateD.map(_.tallied)
+    val scoreD = stateD.events.map(_.tallied)
 
     // TODO: make same assertion about P(300) when last frame is handled correctly
     scoreD.P(RegionEq(0)) should be > Rational(0)

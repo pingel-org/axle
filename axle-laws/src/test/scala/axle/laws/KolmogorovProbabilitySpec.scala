@@ -37,8 +37,8 @@ class TwoPlatonicSolidDieAddedKolmogorov
         bn <- Gen.oneOf(List(4,6,8,12,20))
     } yield  (an, bn)),
     { case (an, bn) => {
-       (die(an): CPTR[Int]).flatMap { a =>
-         (die(bn): CPTR[Int]).map { b =>
+       die(an).events.flatMap { a =>
+         die(bn).events.map { b =>
            a + b
          }
        }

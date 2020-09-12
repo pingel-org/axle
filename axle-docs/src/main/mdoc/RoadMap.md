@@ -20,23 +20,29 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `UnittedQuantity` `LengthSpace` unit mismatch
   * `BarChart` was missing `Order[C]`
 
-* Perceivable -> Sampler
-
 * Get rid of `axle.probability.CPTR`
-* Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
 * incorporate TwoDice into ProbModel
+* latex in mdoc?
+
+* Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
+  * `SigmaAlgebra` for the CPT?
+  * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
+  * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
+
+* `Sampler[ConditionalProbabilityTable]` cache `bars`
+* Sampler axiom
+* Measure Theory
+* Axiom? pm.filter(X=x).P(X=x) == 1
+* Fix third Kolmogorov law
 * More about `Monad` for probability models
+* Optimize `KolmogorovProbabilityAxioms.combination`
 * Functor for CPT?
+* rename `ConditionalProbabilityTable`?
+* `{CPT,TD}.tailRecM` then ScalaCheck `Monad[CPT]`
 
 ## 0.5.4 (October 2020)
 
 * Chicklet borders / colors
-* Experiment with pandoc
-* `Perceivable[ConditionalProbabilityTable]` cache `bars`
-
-* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
-  * Will require externalizing the layout to its own.... typeclass?
-  * Layout of bayesian network is quite bad -- check ABE SVG
 
 * move ast view xml (how is it able to refer to `xml.Node`?)
   * ast.view.AstNodeFormatter (xml.Utility.escape)
@@ -46,11 +52,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve Gold and Angluin coverage
 * `axle-core/src/main/scala/axle/lx/*.txt`
 
-* Fix occasional MetricSpace failure
+* Create a simple graph implementation so that `axle-core` can avoid including `axle-jung`
 
-* Sigma Algebra
-  * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
-  * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
+* Create `axle-png` to avoid Xvfb requirement during tests
+
+* Fix occasional MetricSpace failure
 
 ## 0.5.5 (December 2020)
 
@@ -68,13 +74,18 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Consider a "case" to be a `Map` vs a `Vector`
 * Consider usefulness of `Factor` in terms of `Region`
 
+* `MonotypeBayesanNetwork`.{`pure`, `map`, `flatMap`, `tailRecR`}
+* Reconcile `MBN` `combine1` & `combine2`
+* Monad tests for MonotypeBayesanNetwork[Alarm-Burglary-Earthquake]
+
+* `Bayes[MonotypeBayesanNetwork]` -- could be viewed as "belief updating" (vs "conditioning")
+  * If it took a ProbabilityModel itself
+
 ## 0.5.6 (2021)
 
 * Replace `axle.game.moveFromRandomState.mapToProb`
 * Wrap `axle.IO.getLine` in `F[_]`
 * Wrap `axle.IO.prefixedDisplay` in `F[_]`
-
-## 0.5.7 (2021)
 
 * Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
   * "Chance" should be its own player
@@ -87,35 +98,18 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Plot entropy by turn # for each strategy
   * Plot simulated score distribution for each strategy
 
-## 0.5.8+ (2021)
-
-* `{CPT,TD}.tailRecM` then ScalaCheck `Monad[ProbabilityModel]`
-* `MonotypeBayesanNetwork`.{`pure`, `map`, `flatMap`, `tailRecR`}
-* Reconcile `MBN` `combine1` & `combine2`
-* Monad tests for MonotypeBayesanNetwork[Alarm-Burglary-Earthquake]
-
-* MonotypeBayesanNetwork.filter -- could be viewed as "belief updating" (vs "conditioning")
-  * If it took a ProbabilityModel itself
-  * Is there a way of seeing this as flatMap, though?
-
 * `perceive` could return a lower-entropy probability model
   * Perhaps in exchange for a given amount of energy
   * Or ask for a 0-entropy model and be told how expensive that was
   * Axiom for perceive: val a = perceive(gen) => ProbabilityOf(RegionEq(a)) > 0?
 
-* Measure Theory
-
-* Axiom? pm.filter(X=x).P(X=x) == 1
-* Fix third Kolmogorov law
-* Optimize `KolmogorovProbabilityAxioms.combination`
-
-* rename `ConditionalProbabilityTable`?
-
-* Create a simple graph implementation so that `axle-core` can avoid including `axle-jung`
-
-* Create `axle-png` to avoid Xvfb requirement during tests
-
 ## After that
+
+* Experiment with pandoc
+
+* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
+  * Will require externalizing the layout to its own.... typeclass?
+  * Layout of bayesian network is quite bad -- check ABE SVG
 
 * Re-enable `axle-jogl`
   * May require jogamop 2.4, which is not yet released
@@ -144,8 +138,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Friend of Spire
 
 * Redo Logic using Abstract Algebra
-
-* axioms of partial differentiation
 
 * Tests for `axle.ast`
 * Tics should take an argument
@@ -193,6 +185,7 @@ Future backlog ideas:
 * Improve `axle.stats.rationalProbabilityDist` as probabilities become smaller
 * SimpsonsParadox.md
 * "You split, I choose" as game
+* Axioms of partial differentiation
 * Gerrymandering sensitivity
 * Game theory axioms (Nash?)
 * `axle.game`: `Observable[T]`

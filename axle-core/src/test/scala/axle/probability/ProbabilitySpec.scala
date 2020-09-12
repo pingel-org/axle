@@ -18,12 +18,12 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
 
   test("two independent coins") {
 
-    val fairCoin: CPTR[Symbol] = ConditionalProbabilityTable[Symbol, Rational](
+    val fairCoin = ConditionalProbabilityTable[Symbol, Rational](
       Map(
         head -> Rational(1, 2),
         tail -> Rational(1, 2)))
 
-    val bothCoinsModel = fairCoin.flatMap( c1 => fairCoin.map( c2 => (c1, c2) ))
+    val bothCoinsModel = fairCoin.events.flatMap( c1 => fairCoin.events.map( c2 => (c1, c2) ))
 
     type TWOFLIPS = (Symbol, Symbol)
 
@@ -35,7 +35,7 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
 
     bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) or RegionIf[TWOFLIPS](_._2 == head)) should be(Rational(3, 4))
 
-    val coin2Conditioned = (bothCoinsModel.filter(RegionIf[TWOFLIPS](_._2 == tail)): CPTR[TWOFLIPS] ).map(_._1)
+    val coin2Conditioned = bothCoinsModel.filter(RegionIf[TWOFLIPS](_._2 == tail)).events.map(_._1)
 
     coin2Conditioned.P(RegionEq(head)) should be(Rational(1, 2))
   
@@ -43,8 +43,8 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
 
   test("two independent d6") {
 
-    val d6: CPTR[Int] = die(6)
-    val bothDieModel = d6.flatMap( r1 => d6.map( r2 => (r1, r2)) )
+    val d6 = die(6)
+    val bothDieModel = d6.events.flatMap( r1 => d6.events.map( r2 => (r1, r2)) )
 
     bothDieModel.P(RegionIf(_._1 == 1)) should be(Rational(1, 6))
 
@@ -52,4 +52,5 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
 
     bothDieModel.P(RegionAnd(RegionIf(_._1 == 1), RegionIf(_._2 == 2))) should be(Rational(1, 36))
   }
+
 }

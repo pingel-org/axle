@@ -12,13 +12,13 @@ class DistributionSpec extends AnyFunSuite with Matchers {
 
   test("Distribution map") {
 
-    val listDist: CPTR[List[Int]] =
+    val listDist =
       ConditionalProbabilityTable[List[Int], Rational](Map(
         List(1, 2, 3) -> Rational(1, 3),
         List(1, 2, 8) -> Rational(1, 2),
         List(8, 9) -> Rational(1, 6)))
 
-    val modelSize = listDist.map(_.size)
+    val modelSize = listDist.events.map(_.size)
 
     modelSize.P(RegionEq(3)) should be(Rational(5, 6))
   }
