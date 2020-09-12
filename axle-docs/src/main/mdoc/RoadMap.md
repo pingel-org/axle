@@ -19,6 +19,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `BarChart` was missing `Order[C]`
 
 * Get rid of `axle.probability.CPTR`
+* More about `Monad` for probability models
 
 ## 0.5.4 (October 2020)
 
