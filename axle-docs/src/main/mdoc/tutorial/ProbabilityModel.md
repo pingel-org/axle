@@ -94,7 +94,7 @@ In order of arity, they case classes extending this trait are:
 ### Arity 1 (not including typeclass witnesses)
 
 * `RegionEq` matches when an event is equal to the supplied object, with respect to the supplied `cats.kernel.Eq[A]` witness.
-* `RegionLambda` matches when the supplied condition function returns `true`
+* `RegionIf` matches when the supplied condition function returns `true`
 * `RegionSet` matches when an event is contained within the supplied `Set[A]`.
 * `RegionNegate` negates the supplied region.
 * `RegionGTE` is true when an event is greater than or equal to the supplied object, with respect to the supplied `cats.kernel.Order[A]`
