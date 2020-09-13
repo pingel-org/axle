@@ -20,9 +20,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `UnittedQuantity` `LengthSpace` unit mismatch
   * `BarChart` was missing `Order[C]`
 
-* Get rid of `axle.probability.CPTR`
+* Use kind projector wherever possible (See `Monad[ConditionalProbabilityTable[?, V]]`)
+
 * incorporate TwoDice into ProbModel
 * latex in mdoc?
+* More about `Monad` for probability models
 
 * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
   * `SigmaAlgebra` for the CPT?
@@ -30,11 +32,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
 
 * `Sampler[ConditionalProbabilityTable]` cache `bars`
-* Sampler axiom
+* Sampler axiom(s)
 * Measure Theory
 * Axiom? pm.filter(X=x).P(X=x) == 1
 * Fix third Kolmogorov law
-* More about `Monad` for probability models
 * Optimize `KolmogorovProbabilityAxioms.combination`
 * Functor for CPT?
 * rename `ConditionalProbabilityTable`?

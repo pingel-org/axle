@@ -6,6 +6,8 @@ import axle.probability._
 
 object Bowling {
 
+  val monad = ConditionalProbabilityTable.monadWitness[Rational]
+
   case class Bowler(
     firstRoll: ConditionalProbabilityTable[Int, Rational],
     spare: ConditionalProbabilityTable[Boolean, Rational])
@@ -99,9 +101,9 @@ object Bowling {
 
     (1 to numFrames).foldLeft(startState)({
       case (currentState, frameNumber) =>
-        currentState.events.flatMap { c =>
-          firstRoll.events.flatMap { f =>
-            spare.events.map { s =>
+        monad.flatMap(currentState) { c =>
+          monad.flatMap(firstRoll) { f =>
+            monad.map(spare) { s =>
               next(c, frameNumber === numFrames, f, s)
             }
           }

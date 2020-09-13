@@ -13,6 +13,8 @@ import axle.syntax.bayes.bayesOps
 
 class ProbabilitySpec extends AnyFunSuite with Matchers {
 
+  val monad = ConditionalProbabilityTable.monadWitness[Rational]
+
   val head = Symbol("HEAD")
   val tail = Symbol("TAIL")
 
@@ -23,7 +25,7 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
         head -> Rational(1, 2),
         tail -> Rational(1, 2)))
 
-    val bothCoinsModel = fairCoin.events.flatMap( c1 => fairCoin.events.map( c2 => (c1, c2) ))
+    val bothCoinsModel = monad.flatMap(fairCoin)( c1 => monad.map(fairCoin)( c2 => (c1, c2) ))
 
     type TWOFLIPS = (Symbol, Symbol)
 
@@ -35,7 +37,7 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
 
     bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) or RegionIf[TWOFLIPS](_._2 == head)) should be(Rational(3, 4))
 
-    val coin2Conditioned = bothCoinsModel.filter(RegionIf[TWOFLIPS](_._2 == tail)).events.map(_._1)
+    val coin2Conditioned = monad.map(bothCoinsModel.filter(RegionIf[TWOFLIPS](_._2 == tail)))(_._1)
 
     coin2Conditioned.P(RegionEq(head)) should be(Rational(1, 2))
   
@@ -44,7 +46,7 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
   test("two independent d6") {
 
     val d6 = die(6)
-    val bothDieModel = d6.events.flatMap( r1 => d6.events.map( r2 => (r1, r2)) )
+    val bothDieModel = monad.flatMap(d6)( r1 => monad.map(d6)( r2 => (r1, r2)) )
 
     bothDieModel.P(RegionIf(_._1 == 1)) should be(Rational(1, 6))
 

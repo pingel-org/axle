@@ -18,17 +18,19 @@ class StochasticLambdaCalculus extends AnyFunSuite with Matchers {
 
   implicit val eqInt: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra
 
+  val monad = ConditionalProbabilityTable.monadWitness[Rational]
+
   test("stochastic if maps fair boolean to d6 + (d6+d6)") {
 
-    val ab = die(6).events.flatMap { a =>
-      die(6).events.map { b =>
+    val ab = monad.flatMap(die(6)) { a =>
+      monad.map(die(6)) { b =>
         a + b
       }
     }
 
     // "iffy" construction
     val distribution =
-      binaryDecision(Rational(1, 3)).events.flatMap { cond =>
+      monad.flatMap(binaryDecision(Rational(1, 3))) { cond =>
         if( cond ) {
           die(6)
         } else {
@@ -56,8 +58,8 @@ class StochasticLambdaCalculus extends AnyFunSuite with Matchers {
     
     val ints = uniformDistribution(0 to n)
 
-    val piDist = ints.events.flatMap { x =>
-      ints.events.map { y =>
+    val piDist = monad.flatMap(ints) { x =>
+      monad.map(ints) { y =>
         (if (sqrt((x * x + y * y).toDouble) <= n) 1 else 0)
       }
     }

@@ -42,8 +42,8 @@ object TallyDistribution {
         }
       }
 
-    implicit def monadWitness[V: Ring]: Monad[({ type λ[A] = TallyDistribution[A, V] })#λ] =
-      new Monad[({ type λ[A] = TallyDistribution[A, V] })#λ] {
+    implicit def monadWitness[V: Ring]: Monad[TallyDistribution[?, V]] =
+      new Monad[TallyDistribution[?, V]] {
   
         def pure[A](a: A): TallyDistribution[A, V] =
           TallyDistribution(Map(a -> Ring[V].one))

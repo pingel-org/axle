@@ -15,14 +15,15 @@ import axle.dummy
 import axle.math.Σ
 import axle.algebra._
 
-case class ConditionalProbabilityTable[E, V](p: Map[E, V]) {
+case class ConditionalProbabilityTable[E, V: Ring](p: Map[E, V]) {
 
-  type CPTE[B] = ConditionalProbabilityTable[B, V] 
+  // type CPTE[B] = ConditionalProbabilityTable[B, V]
 
   def domain: Iterable[E] = p.keys.toVector
 
-  def events: CPTE[E] = this
+  // def events: CPTE[E] = this
 }
+
 
 object ConditionalProbabilityTable {
 
@@ -81,10 +82,8 @@ object ConditionalProbabilityTable {
 
   import cats.Monad
 
-  implicit def monadWitness[V: Ring]: Monad[({ type λ[A] = ConditionalProbabilityTable[A, V] })#λ] =
-    new Monad[({ type λ[A] = ConditionalProbabilityTable[A, V] })#λ] {
-
-//    new Monad[({ type λ[A] = ConditionalProbabilityTable[A, V] })#λ] {
+  implicit def monadWitness[V: Ring]: Monad[ConditionalProbabilityTable[?, V]] =
+    new Monad[ConditionalProbabilityTable[?, V]] {
 
       def pure[A](a: A): ConditionalProbabilityTable[A, V] =
         ConditionalProbabilityTable(Map(a -> Ring[V].one))

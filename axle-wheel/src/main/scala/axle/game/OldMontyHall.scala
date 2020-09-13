@@ -12,6 +12,8 @@ object OldMontyHall {
 
   // import cats.syntax.all._
 
+  val monad = ConditionalProbabilityTable.monadWitness[Rational]
+
   val numDoors = 3
 
   val prizeDoorModel = uniformDistribution(1 to numDoors)
@@ -25,22 +27,22 @@ object OldMontyHall {
  
     val availableDoors = (1 to numDoors).filterNot(d => d === revealedDoor || d === chosenDoor)
 
-    binaryDecision(probabilityOfSwitching).events.flatMap({ cond =>
+    monad.flatMap(binaryDecision(probabilityOfSwitching)) { cond =>
       if( cond ) {
         uniformDistribution(availableDoors) // switch
       } else {
         uniformDistribution(Seq(chosenDoor)) // stay
       }
-    })
+    }
   }
 
   // TODO: The relationship between probabilityOfSwitching and outcome can be performed more efficiently and directly.
   val outcome: Rational => ConditionalProbabilityTable[Boolean, Rational] =
     (probabilityOfSwitching: Rational) => 
-      prizeDoorModel.events.flatMap { prizeDoor =>
-        chosenDoorModel.events.flatMap { chosenDoor =>
-          reveal(prizeDoor, chosenDoor).events.flatMap { revealedDoor =>
-            switch(probabilityOfSwitching, chosenDoor, revealedDoor).events.map { finalChosenDoor =>
+      monad.flatMap(prizeDoorModel) { prizeDoor =>
+        monad.flatMap(chosenDoorModel) { chosenDoor =>
+          monad.flatMap(reveal(prizeDoor, chosenDoor)) { revealedDoor =>
+            monad.map(switch(probabilityOfSwitching, chosenDoor, revealedDoor)) { finalChosenDoor =>
               finalChosenDoor === prizeDoor
             }
           }

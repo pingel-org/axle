@@ -23,7 +23,7 @@ object Strategies {
 
   def aiMover[G, S, O, M, MS, MM, V: Order: Field, N: Order, PM[_, _]](lookahead: Int, heuristic: S => Map[Player, N])(
     implicit
-    monad:  Monad[({ type λ[A] = PM[A, V] })#λ],
+    monad:  Monad[PM[?, V]],
     evGame: Game[G, S, O, M, MS, MM, V, PM]): (G, S) => PM[M, V] =
     (ttt: G, state: S) => {
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)

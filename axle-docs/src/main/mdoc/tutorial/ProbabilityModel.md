@@ -47,21 +47,16 @@ val fairCoin = Coin.flipModel()
 val biasedCoin = Coin.flipModel(Rational(9, 10))
 ```
 
-## Perceivable.perceive
+## Sampler
 
-The `Perceivable` typeclass provides the ability to "execute" the model and product
-a random sample via the `perceive` method.
+The `Sampler` typeclass provides the ability to "execute" the model and product
+a random sample via the `sample` method.
 
 It's type signature is:
 
 ```scala
-def perceive(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A
+def sample(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A
 ```
-
-The name "perceive" was chosen for two reasons:
-
-1. "observe" is already taken by many other libraries
-2. "perceive" may in the future more carefully track the information or entropy consumed in order to resolve a random sample, and the word "perceive" connotes this process more accurately.
 
 Note that it must be provided with a Spire `Generator`.
 It also requires context bounds on the value type `V` that give the method
@@ -69,13 +64,13 @@ the ability to produces values with a distribution conforming to the probability
 
 ```scala mdoc
 import spire.random.Generator.rng
-import axle.syntax.perceivable._
+import axle.syntax.sampler._
 
 implicit val dist = axle.probability.rationalProbabilityDist
 
-(1 to 10) map { i => fairCoin.perceive(rng) }
+(1 to 10) map { i => fairCoin.sample(rng) }
 
-(1 to 10) map { i => biasedCoin.perceive(rng) }
+(1 to 10) map { i => biasedCoin.sample(rng) }
 ```
 
 ## Sigma Algebra Regions

@@ -45,7 +45,7 @@ package object game {
     prob:   Sampler[PM],
     kolm:   Kolmogorov[PM],
     bayes:  Bayes[PM],
-    monad:  Monad[({ type λ[A] = PM[A, V] })#λ],
+    monad:  Monad[PM[?, V]],
     eqS:    cats.kernel.Eq[S],
     eqM:    cats.kernel.Eq[M],
     distV:  Dist[V],
