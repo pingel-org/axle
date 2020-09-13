@@ -314,9 +314,9 @@ val monad = ConditionalProbabilityTable.monadWitness[Rational]
 monad.map(d6)(_ % 3)
 ```
 
-Another strategy if you do want to use `map` and `flatMap` directly on
-the model is to create a type that can be seen as `M[_]` and then
-provide the type annotation for Scala:
+Another strategy to use `map` and `flatMap` directly on
+the model is a type that can be seen as `M[_]` along with
+a type annotation:
 
 ```scala mdoc
 type CPTR[E] = ConditionalProbabilityTable[E, Rational]
