@@ -10,8 +10,9 @@ import axle.syntax.kolmogorov._
 
 object OldMontyHall {
 
-  import cats.syntax.all._
-  implicit val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
+  // import cats.syntax.all._
+
+  val monad = ConditionalProbabilityTable.monadWitness[Rational]
 
   val numDoors = 3
 
@@ -19,14 +20,14 @@ object OldMontyHall {
 
   val chosenDoorModel = uniformDistribution(1 to numDoors)
 
-  def reveal(prizeDoor: Int, chosenDoor: Int) =
+  def reveal(prizeDoor: Int, chosenDoor: Int): ConditionalProbabilityTable[Int, Rational] =
     uniformDistribution((1 to numDoors).filterNot(d => d === prizeDoor || d === chosenDoor))
 
-  def switch(probabilityOfSwitching: Rational, chosenDoor: Int, revealedDoor: Int) = {
-
+  def switch(probabilityOfSwitching: Rational, chosenDoor: Int, revealedDoor: Int): ConditionalProbabilityTable[Int, Rational] = {
+ 
     val availableDoors = (1 to numDoors).filterNot(d => d === revealedDoor || d === chosenDoor)
 
-    mcpt.flatMap(binaryDecision(probabilityOfSwitching)) { cond =>
+    monad.flatMap(binaryDecision(probabilityOfSwitching)) { cond =>
       if( cond ) {
         uniformDistribution(availableDoors) // switch
       } else {
@@ -36,18 +37,19 @@ object OldMontyHall {
   }
 
   // TODO: The relationship between probabilityOfSwitching and outcome can be performed more efficiently and directly.
-  val outcome = (probabilityOfSwitching: Rational) => 
-    mcpt.flatMap(prizeDoorModel) { prizeDoor =>
-      mcpt.flatMap(chosenDoorModel) { chosenDoor =>
-        mcpt.flatMap(reveal(prizeDoor, chosenDoor)) { revealedDoor =>
-          mcpt.map(switch(probabilityOfSwitching, chosenDoor, revealedDoor)) { finalChosenDoor =>
-            finalChosenDoor === prizeDoor
+  val outcome: Rational => ConditionalProbabilityTable[Boolean, Rational] =
+    (probabilityOfSwitching: Rational) => 
+      monad.flatMap(prizeDoorModel) { prizeDoor =>
+        monad.flatMap(chosenDoorModel) { chosenDoor =>
+          monad.flatMap(reveal(prizeDoor, chosenDoor)) { revealedDoor =>
+            monad.map(switch(probabilityOfSwitching, chosenDoor, revealedDoor)) { finalChosenDoor =>
+              finalChosenDoor === prizeDoor
+            }
           }
         }
       }
-    }
  
-  val chanceOfWinning =
+  val chanceOfWinning: Rational => Rational =
     (probabilityOfSwitching: Rational) => outcome(probabilityOfSwitching).P(RegionEq(true))
 
 }

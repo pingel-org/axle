@@ -52,6 +52,7 @@ lazy val axleCore = Project("axle-core", file("axle-core"))
   .settings(
     name := "axle-core",
     moduleName := "axle-core",
+    addCompilerPlugin("org.typelevel" %% "kind-projector" % "0.11.0" cross CrossVersion.full),
     libraryDependencies ++= Seq(
       "org.typelevel"          %% "spire"                    % spireVersion,
       "org.typelevel"          %% "spire-laws"               % spireVersion,
@@ -113,7 +114,6 @@ lazy val commonSettings = Seq(
   ),
   parallelExecution in Test := false
   //autoCompilerPlugins := true,
-  //addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.9")
 //  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 )
 
@@ -248,7 +248,7 @@ lazy val commonScalacOptions = Seq(
 //  "-language:experimental.macros",
   "-language:postfixOps",
   "-unchecked",
-  "-Xfatal-warnings",
+//  "-Xfatal-warnings",
   "-Xlint",
 //  "-Yliteral-types",
 //  "-Yinline-warnings",

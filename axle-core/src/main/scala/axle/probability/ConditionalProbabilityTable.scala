@@ -15,11 +15,15 @@ import axle.dummy
 import axle.math.Σ
 import axle.algebra._
 
-case class ConditionalProbabilityTable[A, V](p: Map[A, V]) {
+case class ConditionalProbabilityTable[E, V: Ring](p: Map[E, V]) {
 
-  def values: Iterable[A] = p.keys.toVector
+  // type CPTE[B] = ConditionalProbabilityTable[B, V]
 
+  def domain: Iterable[E] = p.keys.toVector
+
+  // def events: CPTE[E] = this
 }
+
 
 object ConditionalProbabilityTable {
 
@@ -30,8 +34,8 @@ object ConditionalProbabilityTable {
     kolm: Kolmogorov[ConditionalProbabilityTable],
     showRA: Show[Region[A]]
   ): Show[ConditionalProbabilityTable[A, V]] = cpt => {
-      val charWidth: Int = (cpt.values.map(ra => showRA.show(RegionEq(ra)).length).toList).reduce(math.max)
-      cpt.values.toVector.sorted.map { a => {
+      val charWidth: Int = (cpt.domain.map(ra => showRA.show(RegionEq(ra)).length).toList).reduce(math.max)
+      cpt.domain.toVector.sorted.map { a => {
         val ra = RegionEq(a)
         val aString = showRA.show(ra)
         (aString + (1 to (charWidth - aString.length)).map(i => " ").mkString("") + " " + Show[V].show(kolm.probabilityOf(cpt)(ra)))
@@ -48,10 +52,10 @@ object ConditionalProbabilityTable {
       }
   }
 
-  implicit val perceiveWitness: Perceivable[ConditionalProbabilityTable] =
-    new Perceivable[ConditionalProbabilityTable]{
+  implicit val samplerWitness: Sampler[ConditionalProbabilityTable] =
+    new Sampler[ConditionalProbabilityTable]{
 
-      def perceive[A, V](model: ConditionalProbabilityTable[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
+      def sample[A, V](model: ConditionalProbabilityTable[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
         // implicit val ringV: Ring[V], val eqA: cats.kernel.Eq[A]
         // TODO cache the bars?
         val bars = model.p.toVector.scanLeft((dummy[A], ringV.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
@@ -70,37 +74,35 @@ object ConditionalProbabilityTable {
           case RegionAll() =>
             fieldV.one
           case _ => 
-            Σ(model.values.toVector.map { a =>
+            Σ(model.domain.toVector.map { a =>
               if (predicate(a)) { model.p(a) } else { fieldV.zero }
             })
         }
     }
 
-    
   import cats.Monad
 
-  implicit def monadWitness[V: Ring]: Monad[({ type λ[A] = ConditionalProbabilityTable[A, V] })#λ] =
-    new Monad[({ type λ[A] = ConditionalProbabilityTable[A, V] })#λ] {
+  implicit def monadWitness[V: Ring]: Monad[ConditionalProbabilityTable[?, V]] =
+    new Monad[ConditionalProbabilityTable[?, V]] {
 
       def pure[A](a: A): ConditionalProbabilityTable[A, V] =
         ConditionalProbabilityTable(Map(a -> Ring[V].one))
 
       override def map[A, B](
         model: ConditionalProbabilityTable[A, V])(
-        f: A => B): ConditionalProbabilityTable[B, V] = {
+        f: A => B): ConditionalProbabilityTable[B, V] =
         ConditionalProbabilityTable[B, V](
           model.p.iterator.map({ case (a, v) =>
              f(a) -> v
           }).toVector.groupBy(_._1).map({ case (b, bvs) =>
              b -> bvs.map(_._2).reduce(Ring[V].plus)
           }).toMap) // TODO use eqA to unique
-      }
 
       def flatMap[A, B](model: ConditionalProbabilityTable[A, V])(f: A => ConditionalProbabilityTable[B, V]): ConditionalProbabilityTable[B, V] = {
-        val p = model.values.toVector.flatMap { a =>
+        val p = model.domain.toVector.flatMap { a =>
           val pA = model.p.apply(a)
           val inner = f(a)
-          inner.values.toVector.map { b =>
+          inner.domain.toVector.map { b =>
             b -> Ring[V].times(pA, inner.p.apply(b))
           }
         }.groupBy(_._1).map({ case (b, bvs) => b -> bvs.map(_._2).reduce(Ring[V].plus)})

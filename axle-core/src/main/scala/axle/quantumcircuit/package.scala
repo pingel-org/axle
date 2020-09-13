@@ -10,7 +10,7 @@ import spire.random.Generator.rng
 
 import axle.algebra._
 import axle.probability._
-import axle.syntax.perceivable._
+import axle.syntax.sampler._
 
 package object quantumcircuit {
 
@@ -59,8 +59,6 @@ package object quantumcircuit {
   def wrapDeutsched[T: Field: NRoot](f: QBit2[T] => QBit2[T])(implicit ev: MultiplicativeSemigroup[Complex[T]]): QBit[T] => QBit[T] =
     (x: QBit[T]) => f(QBit2(x.unindex ⊗ QBit.constant0[T].unindex)).factor.get._1
 
-  // private[this] implicit val cptPM = Perceivable[ConditionalProbabilityTable]
-
   /**
    * for `f`
    * the `input` qbit is the most significant (left hand side or first) bit
@@ -79,8 +77,8 @@ package object quantumcircuit {
     // |11> => f is constant
     // |01> => f is variable
 
-    val mostSignificantBit = QBit.H(preH0).cpt.perceive(rng)
-    val leastSignificantBit = QBit.H(preH1).cpt.perceive(rng)
+    val mostSignificantBit = QBit.H(preH0).cpt.sample(rng)
+    val leastSignificantBit = QBit.H(preH1).cpt.sample(rng)
 
     import cats.implicits._
     assert(leastSignificantBit === CBit1)

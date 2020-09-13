@@ -6,34 +6,41 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.3 (October 2020)
+## 0.5.3 (September 2020)
 
-* Split `ProbabilityModel` into three new typeclasses -- `Bayes`, `Kolmogorov`, `Perceivable` --
-  as well as `cats.Monad`.  Include syntax.
+* Split `ProbabilityModel` into three new typeclasses
+  -- `Bayes`, `Kolmogorov`, `Sampler` --
+  as well as `cats.Monad`.
+  The three new axle typeclasses include syntax.
+
+* Rename `ConditionalProbabilityTable.values` to `domain`
 
 * Bugs fixed
   * Bayes axiom should avoid P(A) == P(B) == 0
   * `UnittedQuantity` `LengthSpace` unit mismatch
   * `BarChart` was missing `Order[C]`
 
-* TODO
+* incorporate TwoDice into ProbModel
+* More about `Monad` for probability models
+  * Pull from TwoDice
 
-* ProbabilitySpec is failing
-* Monad syntax in TwoD6Histogram, and look for calls to monadWitness or mcpt
-* `Perceivable[ConditionalProbabilityTable]` cache bars
-* `{CPT,TD}.tailRecM` (and TallyDistribution) then ScalaCheck `Monad[ProbabilityModel]`
-* Region.isSatisfiable to avoid circular definition of non-zero probabilities
-  * See both Bayes and Kolmogorov
+* Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
+  * `SigmaAlgebra` for the CPT?
+  * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
+  * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
+* `Sampler[ConditionalProbabilityTable]` cache `bars`
+* Sampler axiom(s)
+* Measure Theory
+* Axiom? pm.filter(X=x).P(X=x) == 1
+* Fix third Kolmogorov law
+* Optimize `KolmogorovProbabilityAxioms.combination`
+* Functor for CPT?
+* rename `ConditionalProbabilityTable`?
+* `{CPT,TD}.tailRecM` then ScalaCheck `Monad[CPT]`
 
-## 0.5.4 (November 2020)
+## 0.5.4 (October 2020)
 
-* Reconcile `combine1` and `combine2` (& `select` should form a typeclass?)
-* MonotypeBayesanNetwork.{pure, map, flatMap, tailRecR}
-* Monad tests for MonotypeBayesanNetwork[Alarm-Burglary-Earthquake]
-
-* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
-  * Will require externalizing the layout to its own.... typeclass?
-  * Layout of bayesian network is quite bad -- check ABE SVG
+* Chicklet borders / colors
 
 * move ast view xml (how is it able to refer to `xml.Node`?)
   * ast.view.AstNodeFormatter (xml.Utility.escape)
@@ -43,16 +50,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve Gold and Angluin coverage
 * `axle-core/src/main/scala/axle/lx/*.txt`
 
-* Fix occasional MetricSpace failure
+* Create a simple graph implementation so that `axle-core` can avoid including `axle-jung`
 
-* Site
-  * Revamp Tutorials.md
-  * Logistic Map is latest?
-  * Chicklet borders / colors
-  * meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
-  * Remove jekyll from publishing pipeline
-    * [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html)
-    * sbt-s3
+* Create `axle-png` to avoid Xvfb requirement during tests
+
+* Fix occasional MetricSpace failure
 
 ## 0.5.5 (December 2020)
 
@@ -70,13 +72,18 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Consider a "case" to be a `Map` vs a `Vector`
 * Consider usefulness of `Factor` in terms of `Region`
 
+* `MonotypeBayesanNetwork`.{`pure`, `map`, `flatMap`, `tailRecR`}
+* Reconcile `MBN` `combine1` & `combine2`
+* Monad tests for MonotypeBayesanNetwork[Alarm-Burglary-Earthquake]
+
+* `Bayes[MonotypeBayesanNetwork]` -- could be viewed as "belief updating" (vs "conditioning")
+  * If it took a ProbabilityModel itself
+
 ## 0.5.6 (2021)
 
 * Replace `axle.game.moveFromRandomState.mapToProb`
 * Wrap `axle.IO.getLine` in `F[_]`
 * Wrap `axle.IO.prefixedDisplay` in `F[_]`
-
-## 0.5.7 (2021)
 
 * Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
   * "Chance" should be its own player
@@ -89,36 +96,18 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Plot entropy by turn # for each strategy
   * Plot simulated score distribution for each strategy
 
-## 0.5.8+ (2021)
-
-* MonotypeBayesanNetwork.filter -- could be viewed as "belief updating" (vs "conditioning")
-  * If it took a ProbabilityModel itself
-  * Is there a way of seeing this as flatMap, though?
-
 * `perceive` could return a lower-entropy probability model
   * Perhaps in exchange for a given amount of energy
   * Or ask for a 0-entropy model and be told how expensive that was
   * Axiom for perceive: val a = perceive(gen) => ProbabilityOf(RegionEq(a)) > 0?
 
-* Measure Theory
-
-* Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
-* `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
-* More diversity of `Region` (vs just `RegionEq`) for probability axiom (Kolm. & Bayes) tests
-* Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
-
-* Axiom? pm.filter(X=x).P(X=x) == 1
-* Fix third Kolmogorov law
-* Optimize `KolmogorovProbabilityAxioms.combination`
-
-* rename `ConditionalProbabilityTable`?
-* "marginalize out" as "sumOut" in `ProbabilityModel` typeclass?
-
 ## After that
 
-* Create a simple graph implementation so that `axle-core` can avoid including `axle-jung`
+* Experiment with pandoc
 
-* Create `axle-png` to help avoid “headless” exception or Xvfb requirement during tests
+* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
+  * Will require externalizing the layout to its own.... typeclass?
+  * Layout of bayesian network is quite bad -- check ABE SVG
 
 * Re-enable `axle-jogl`
   * May require jogamop 2.4, which is not yet released
@@ -129,6 +118,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Copy css using makeSite (not update-docs.sh)
 * Fix markdown lint warnings
 * Figure out better way to reference images in docs
+
+* Site
+  * meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
+  * Remove jekyll from publishing pipeline
+    * [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html)
+    * sbt-s3
 
 * Move more stuff out of `axle.math`
 * `axle-ast-python`
@@ -141,8 +136,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Friend of Spire
 
 * Redo Logic using Abstract Algebra
-
-* axioms of partial differentiation
 
 * Tests for `axle.ast`
 * Tics should take an argument
@@ -190,6 +183,7 @@ Future backlog ideas:
 * Improve `axle.stats.rationalProbabilityDist` as probabilities become smaller
 * SimpsonsParadox.md
 * "You split, I choose" as game
+* Axioms of partial differentiation
 * Gerrymandering sensitivity
 * Game theory axioms (Nash?)
 * `axle.game`: `Observable[T]`

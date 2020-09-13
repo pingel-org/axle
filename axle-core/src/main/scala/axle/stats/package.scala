@@ -6,11 +6,9 @@ import cats.kernel.Eq
 import spire.algebra.Field
 import spire.algebra.NRoot
 import spire.implicits.additiveGroupOps
-//import spire.implicits.literalIntAdditiveGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
 import spire.math.ConvertableTo
-//import spire.math.Rational
 import spire.random.Generator
 
 import axle.math.Σ
@@ -47,7 +45,7 @@ package object stats {
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    Σ[A, IndexedSeq](model.values.toVector.map { x =>
+    Σ[A, IndexedSeq](model.domain.toVector.map { x =>
       n2a(model.P(RegionEq(x))) * x
     })
   }
@@ -62,9 +60,9 @@ package object stats {
 
     def n2a(n: N): A = ConvertableFrom[N].toType[A](n)(ConvertableTo[A])
 
-    val μ: A = Σ[A, IndexedSeq](model.values.toVector.map({ x => n2a(model.P(RegionEq(x))) * x }))
+    val μ: A = Σ[A, IndexedSeq](model.domain.toVector.map({ x => n2a(model.P(RegionEq(x))) * x }))
 
-    val sum: A = Σ[A, IndexedSeq](model.values.toVector map { x => n2a(model.P(RegionEq(x))) * square(x - μ) })
+    val sum: A = Σ[A, IndexedSeq](model.domain.toVector map { x => n2a(model.P(RegionEq(x))) * square(x - μ) })
 
     NRoot[A].sqrt(sum)
   }
@@ -83,7 +81,7 @@ package object stats {
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
     val convertN = ConvertableFrom[N]
-    val H = Σ[Double, Iterable](model.values map { a: A =>
+    val H = Σ[Double, Iterable](model.domain map { a: A =>
       val px: N = model.P(RegionEq(a))
       import cats.syntax.all._
       if (px === Field[N].zero) {
@@ -120,49 +118,5 @@ package object stats {
 
   def reservoirSampleK[N](k: Int, xs: LazyList[N], gen: Generator) =
     _reservoirSampleK(k, 0, Nil, xs, gen)
-
-
-  // implicit def monadForProbabilityModel[M[_, _], V](
-  //   implicit
-  //    fieldV: Field[V],
-  //    prob: ProbabilityModel[M]): Monad[({ type λ[T] = M[T, V] })#λ] =
-  //   new Monad[({ type λ[T] = M[T, V] })#λ] {
-
-  //     def pure[A](a: A): M[A, V] =
-  //       prob.construct(Variable[A]("a"), Vector(a), (a: A) => fieldV.one)
-
-  //     def tailRecM[A, B](a: A)(f: A => M[Either[A, B], V]): M[B, V] =
-  //       ???
-
-  //     override def map[A, B](model: M[A, V])(f: A => B): M[B, V] = {
-
-  //       val b2n = prob
-  //         .values(model)
-  //         .map({ v => f(v) -> prob.probabilityOfExpression(model)(v) })
-  //         .groupBy(_._1)
-  //         .mapValues(_.map(_._2).reduce(fieldV.plus))
-
-  //         prob.construct(Variable[B]("b"), b2n.keys, b2n)
-  //     }
-
-  //     override def flatMap[A, B](model: M[A, V])(f: A => M[B, V]): M[B, V] = {
-
-  //       val foo = prob.values(model)
-  //         .flatMap(a => {
-  //           val p = prob.probabilityOfExpression(model)(a)
-  //           val subDistribution = f(a)
-  //           prob.values(subDistribution).map(b => {
-  //             b -> (fieldV.times(p, prob.probabilityOf(subDistribution)(b)))
-  //           })
-  //         })
-
-  //       val b2n =
-  //         foo
-  //           .groupBy(_._1)
-  //           .mapValues(_.map(_._2).reduce(fieldV.plus))
-
-  //           prob.construct(Variable[B]("b"), b2n.keys, b2n)
-  //     }
-  //   }
 
 }

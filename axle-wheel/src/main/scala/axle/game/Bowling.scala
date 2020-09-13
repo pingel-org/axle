@@ -6,9 +6,11 @@ import axle.probability._
 
 object Bowling {
 
-  type F[T] = ConditionalProbabilityTable[T, Rational]
+  val monad = ConditionalProbabilityTable.monadWitness[Rational]
 
-  case class Bowler(firstRoll: F[Int], spare: F[Boolean])
+  case class Bowler(
+    firstRoll: ConditionalProbabilityTable[Int, Rational],
+    spare: ConditionalProbabilityTable[Boolean, Rational])
 
   case class State(tallied: Int, twoAgoStrike: Boolean, oneAgoSpare: Boolean, oneAgoStrike: Boolean)
 
@@ -94,16 +96,14 @@ object Bowling {
 
     // implicit val eqBS = cats.kernel.Eq.fromUniversalEquals[Bowling.State]
 
-    implicit val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
-
-    val startState: F[State] = ConditionalProbabilityTable(
+    val startState = ConditionalProbabilityTable(
       Map(State(0, false, false, false) -> Rational(1)))
 
     (1 to numFrames).foldLeft(startState)({
       case (currentState, frameNumber) =>
-        mcpt.flatMap(currentState) { c =>
-          mcpt.flatMap(firstRoll) { f =>
-            mcpt.map(spare) { s =>
+        monad.flatMap(currentState) { c =>
+          monad.flatMap(firstRoll) { f =>
+            monad.map(spare) { s =>
               next(c, frameNumber === numFrames, f, s)
             }
           }

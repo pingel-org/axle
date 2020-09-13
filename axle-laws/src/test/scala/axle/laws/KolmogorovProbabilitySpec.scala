@@ -3,6 +3,8 @@ package axle.laws
 import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
 
+import cats.implicits._
+
 import spire.math.Rational
 
 import axle.algebra.Region
@@ -17,7 +19,6 @@ class BernoulliIsKolmogorov
     bias => Arbitrary(genRegion(Vector(0, 1))),
     bias => Region.eqRegionIterable(Vector(0, 1)))
 
-import spire.implicits.IntAlgebra
 import axle.game.Dice._
 
 class D6IsKolmogorov
@@ -36,9 +37,9 @@ class TwoPlatonicSolidDieAddedKolmogorov
         bn <- Gen.oneOf(List(4,6,8,12,20))
     } yield  (an, bn)),
     { case (an, bn) => {
-       implicit val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
-       mcpt.flatMap(die(an)){ a =>
-         mcpt.map(die(bn)){ b =>
+       val monad = ConditionalProbabilityTable.monadWitness[Rational]
+       monad.flatMap(die(an)) { a =>
+         monad.map(die(bn)) { b =>
            a + b
          }
        }

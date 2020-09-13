@@ -9,7 +9,7 @@ import spire.math.Rational
 import axle.probability._
 import axle.algebra.RegionEq
 import axle.game.Dice.die
-import axle.syntax.perceivable.perceivableOps
+import axle.syntax.sampler._
 import axle.syntax.talliable.talliableOps
 import axle.syntax.kolmogorov.kolmogorovOps
 
@@ -26,7 +26,7 @@ class TwoD6Histogram extends AnyFunSuite with Matchers {
     val gen = spire.random.Random.generatorFromSeed(seed)
     val d6a = die(6)
     val d6b = die(6)
-    val rolls = (0 until 1000) map { i => d6a.perceive(gen) + d6b.perceive(gen) }
+    val rolls = (0 until 1000) map { i => d6a.sample(gen) + d6b.sample(gen) }
 
     val hist = rolls.tally
     hist.size should be(11)

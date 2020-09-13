@@ -6,7 +6,7 @@ package object syntax {
 
   object bayes extends BayesSyntax
 
-  object perceivable extends PerceivableSyntax
+  object sampler extends SamplerSyntax
 
   object directedgraph extends DirectedGraphSyntax
 

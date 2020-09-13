@@ -9,17 +9,17 @@ import axle.algebra.RegionEq
 import axle.syntax.kolmogorov._
 
 class BowlingSpec extends AnyFunSuite with Matchers {
-
+  
   test("bowling") {
 
     import Bowling._
     import Bowlers._
 
-    val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
+    val monad = ConditionalProbabilityTable.monadWitness[Rational]
 
     val stateD = stateDistribution(goodBowler, 4)
 
-    val scoreD = mcpt.map(stateD)(_.tallied)
+    val scoreD = monad.map(stateD)(_.tallied)
 
     // TODO: make same assertion about P(300) when last frame is handled correctly
     scoreD.P(RegionEq(0)) should be > Rational(0)

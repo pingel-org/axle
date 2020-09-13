@@ -23,8 +23,8 @@ object UnittedQuantity {
     (x, y) =>
       Order[N].compare((x.in(y.unit)).magnitude, y.magnitude)
 
-  implicit def functorUQ[Q]: Functor[({ type λ[α] = UnittedQuantity[Q, α] })#λ] =
-    new Functor[({ type λ[α] = UnittedQuantity[Q, α] })#λ] {
+  implicit def functorUQ[Q]: Functor[UnittedQuantity[Q, ?]] =
+    new Functor[UnittedQuantity[Q, ?]] {
       def map[A, B](uq: UnittedQuantity[Q, A])(f: A => B): UnittedQuantity[Q, B] =
         UnittedQuantity(f(uq.magnitude), uq.unit)
     }

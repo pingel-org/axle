@@ -12,6 +12,8 @@ class Stats101 extends AnyFunSuite with Matchers {
   implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
   implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 
+  val monad = ConditionalProbabilityTable.monadWitness[Rational]
+
   test("standard deviation on a list of doubles") {
 
     val model = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d))
@@ -36,11 +38,9 @@ class Stats101 extends AnyFunSuite with Matchers {
 
   test("bernoulliDistribution expectation (mean)") {
 
-    val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
-
     val dist = bernoulliDistribution(Rational(1, 4))
 
-    expectation[Rational, Rational](mcpt.map(dist){Rational.apply}) should be(Rational(1, 4))
+    expectation[Rational, Rational](monad.map(dist) { Rational.apply } ) should be(Rational(1, 4))
   }
 
 }

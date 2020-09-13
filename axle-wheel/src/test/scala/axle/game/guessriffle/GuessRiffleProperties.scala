@@ -25,6 +25,7 @@ import axle.syntax.kolmogorov._
 class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
 
   implicit val dist = axle.probability.rationalProbabilityDist
+  val monad = ConditionalProbabilityTable.monadWitness[Rational]
 
   def containsCorrectGuess(game: GuessRiffle, fromState: GuessRiffleState, moveDist: ConditionalProbabilityTable[GuessRiffleMove, Rational]): Boolean =
     mover(game, fromState).map( mover =>
@@ -68,16 +69,14 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
       }
     ) getOrElse None
 
-  val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
-
   def probabilityAllCorrect(game: GuessRiffle, fromState: GuessRiffleState, seed: Int): Rational =
     stateStrategyMoveStream(game, fromState, Random.generatorFromSeed(Seed(seed)).sync)
     .filter(args => mover(game, args._1).map( _ === game.player).getOrElse(false))
     .map({ case (stateIn, strategy, _, _) =>
-      mcpt.map(strategy)(isCorrectMoveForState(game, stateIn))
+      monad.map(strategy)(isCorrectMoveForState(game, stateIn))
     })
     .reduce({ (incoming, current) =>
-      mcpt.flatMap(incoming)( a => mcpt.map(current)( b => a && b ))
+      monad.flatMap(incoming)( a => monad.map(current)( b => a && b ))
     })
     .P(RegionEq(true))
 

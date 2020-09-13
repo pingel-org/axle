@@ -10,17 +10,17 @@ import spire.math.Rational
 
 import axle.game.Bowling.Bowlers.goodBowler
 import axle.game.Bowling._
-import axle.probability.ConditionalProbabilityTable
+import axle.probability._
 
 class GameChartSpec extends AnyFunSuite with Matchers {
-
-  val mcpt = ConditionalProbabilityTable.monadWitness[Rational]
 
   test("BarChart of bowling probability distribution") {
 
     val stateD = stateDistribution(goodBowler, 4)
 
-    val scoreD = mcpt.map(stateD)(_.tallied)
+    val monad = ConditionalProbabilityTable.monadWitness[Rational]
+
+    val scoreD = monad.map(stateD)(_.tallied)
 
     // implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
