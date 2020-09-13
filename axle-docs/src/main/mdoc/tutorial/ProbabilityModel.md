@@ -430,6 +430,40 @@ def iffy[A, B, M[_]: Monad](
   }
 ```
 
+An example of that pattern: "if heads, d6+d6, otherwise d10+10"
+
+```scala mdoc
+import cats.Eq
+
+val headsD6D6taildD10D10 = monad.flatMap(fairCoin) { side =>
+  if( Eq[Symbol].eqv(side, head) ) {
+    monad.flatMap(d6) { a => monad.map(d6) { b => a + b } }
+  } else {
+    monad.flatMap(d10) { a => monad.map(d10) { b => a + b } }
+  }
+}
+```
+
+Create visualization
+
+```scala mdoc:silent
+val iffyChart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], String](
+  () => headsD6D6taildD10D10,
+  colorOf = _ => Color.blue,
+  xAxis = Some(Rational(0)),
+  title = Some("if heads, d6+d6, else d10+d10"),
+  labelAngle = Some(0d *: angleDouble.degree),
+  drawKey = false)
+```
+
+Create SVG
+
+```scala mdoc:silent
+iffyChart.svg[IO]("iffy.svg").unsafeRunSync()
+```
+
+![heads => d6+d6, else d10+d10](/tutorial/images/iffy.svg)
+
 ### Further Reading
 
 Motiviating the Monad typeclass is out of scope of this document.
