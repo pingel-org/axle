@@ -8,7 +8,7 @@ Modeling probability, randomness, and uncertainly is one of the primary objectiv
 
 The capabilies are available via four typeclasses and one trait
 
-* Perceivable
+* Sampler
 * Region (trait modeling Sigma Algebra)
 * Kolmogorov
 * Bayes
@@ -137,9 +137,13 @@ implicit val dist = axle.probability.rationalProbabilityDist
 
 Simulate 1k rolls of one d6
 
-```scala mdoc
+```scala mdoc:silent
 val rolls = (0 until 1000) map { _ => d6.sample(rng) }
+```
 
+Then tally them
+
+```scala mdoc
 implicit val ringInt: CRing[Int] = spire.implicits.IntAlgebra
 
 import axle.syntax.talliable._
@@ -147,13 +151,14 @@ import axle.syntax.talliable._
 val oneKd6Histogram = rolls.tally
 ```
 
+Create a visualization
 
-```scala mdoc
+```scala mdoc:silent
 val d6oneKvis = BarChart[Int, Int, Map[Int, Int], String](
   () => oneKd6Histogram,
   colorOf = _ => Color.blue,
   xAxis = Some(0),
-  title = Some("1k d6 samples"),
+  title = Some("1,000 d6 samples"),
   labelAngle = Some(0d *: angleDouble.degree),
   drawKey = false)
 ```

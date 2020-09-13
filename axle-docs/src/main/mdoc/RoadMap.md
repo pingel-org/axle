@@ -9,7 +9,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## 0.5.3 (September 2020)
 
 * Split `ProbabilityModel` into three new typeclasses
-  -- `Bayes`, `Kolmogorov`, `Perceivable` --
+  -- `Bayes`, `Kolmogorov`, `Sampler` --
   as well as `cats.Monad`.
   The three new axle typeclasses include syntax.
 
@@ -28,7 +28,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `SigmaAlgebra` for the CPT?
   * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
   * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
-
 * `Sampler[ConditionalProbabilityTable]` cache `bars`
 * Sampler axiom(s)
 * Measure Theory
