@@ -229,6 +229,24 @@ The probability of a `head` for a single toss of a fair coin is `1/2`
 fairCoin.P(RegionEq(head))
 ```
 
+The probability that a toss is not `head` is also `1/2`.
+
+```scala mdoc
+fairCoin.P(RegionNegate(RegionEq(head)))
+```
+
+The probability that a toss is both `head` and `tail` is zero.
+
+```scala mdoc
+fairCoin.P(RegionEq(head) and RegionEq(tail))
+```
+
+The probability that a toss is either `head` or `tail` is one.
+
+```scala mdoc
+fairCoin.P(RegionEq(head) or RegionEq(tail))
+```
+
 ### Kolmogorov's Axioms
 
 The single `probabilityOf` method together with the `Region` trait

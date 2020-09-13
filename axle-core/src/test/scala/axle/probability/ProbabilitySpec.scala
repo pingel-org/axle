@@ -18,12 +18,20 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
   val head = Symbol("HEAD")
   val tail = Symbol("TAIL")
 
-  test("two independent coins") {
+  val fairCoin = ConditionalProbabilityTable[Symbol, Rational](
+    Map(
+      head -> Rational(1, 2),
+      tail -> Rational(1, 2)))
 
-    val fairCoin = ConditionalProbabilityTable[Symbol, Rational](
-      Map(
-        head -> Rational(1, 2),
-        tail -> Rational(1, 2)))
+  test("one fair coin") {
+
+    fairCoin.P(RegionEq(head)) should be(Rational(1, 2))
+    fairCoin.P(RegionNegate(RegionEq(head))) should be(Rational(1, 2))
+    fairCoin.P(RegionEq(head) and RegionEq(tail)) should be(Rational(0))
+    fairCoin.P(RegionEq(head) or RegionEq(tail)) should be(Rational(1))
+  }
+
+  test("two independent coins") {
 
     val bothCoinsModel = monad.flatMap(fairCoin)( c1 => monad.map(fairCoin)( c2 => (c1, c2) ))
 
