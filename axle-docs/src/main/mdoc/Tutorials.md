@@ -40,7 +40,7 @@ permalink: /tutorial/
 ### Randomness and Uncertainty
 
 * [Probability Models](/tutorial/probability_model) axiomatic probability models
-  * [Two Dice](/tutorial/two_dice/) simulation vs flat mapping distribution monads
+  * Sampler, Region, Kolmogorov, Bayes, and Monad
 * [Statistics](/tutorial/statistics/) Random Variables, Probability, Distributions, Standard Deviation
   * [Root-mean-square deviation](/tutorial/rmsd/) (aka RMSE)
   * [Reservoir Sampling](/tutorial/reservoir_sampling/)

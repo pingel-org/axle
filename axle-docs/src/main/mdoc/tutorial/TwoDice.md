@@ -11,9 +11,12 @@ Setup
 
 ```scala mdoc
 import cats.implicits._
+
+import spire.math._
+
 import axle.eqSymbol
 import axle.probability._
-import axle.game.Dice._
+
 import axle.syntax.kolmogorov._
 import axle.syntax.bayes._
 import axle.syntax.sampler._
@@ -25,15 +28,21 @@ Map the model on the integers `1 to 6` to a model of UTF
 symbols representing the faces of the dice.
 
 ```scala mdoc
-val d6utf = (die(6): CPTR[Int]).map(numberToUtfFace)
+import axle.game.Dice._
+
+val monad = ConditionalProbabilityTable.monadWitness[Rational]
+
+val d6utf = monad.map(die(6))(numberToUtfFace)
 ```
 
 Monadic `flatMap` constructs a model of the sequence of two rolls
 
 ```scala mdoc
-val bothDieModel = d6utf.flatMap({ flip1 =>
-  d6utf.map({ flip2 => (flip1, flip2) })
-})
+val bothDieModel = monad.flatMap(d6utf) { flip1 =>
+  monad.flatMap(d6utf) { flip2 =>
+    (flip1, flip2)
+  }
+}
 ```
 
 Query the resulting probability model's distribution of 2-roll events.
@@ -78,7 +87,7 @@ Simulate 1k rolls of two dice
 ```scala mdoc
 val seed = spire.random.Seed(42)
 val gen = spire.random.Random.generatorFromSeed(seed)
-val d6: CPTR[Int] = die(6)
+val d6 = die(6)
 
 val rolls = (0 until 1000) map { i => d6.sample(gen) + d6.sample(gen) }
 
@@ -120,15 +129,6 @@ The full distribution of two rolls combined can be computed directly and precise
 using monads.  Of course this does become infeasable as the models are combined -- 
 axle will have more on that tradeoff in future versions.
 
-Imports (Note: documentation resets interpreter here)
-
-```scala mdoc:silent:reset
-import cats.implicits._
-import spire.math._
-import axle.probability._
-import axle.game.Dice.die
-```
-
 ## Monadic flatMap
 
 Create probability distribution of the addition of two 6-sided die:
@@ -136,8 +136,10 @@ Create probability distribution of the addition of two 6-sided die:
 ```scala mdoc
 implicit val intEq: cats.kernel.Eq[Int] = spire.implicits.IntAlgebra
 
-val twoDiceSummed = (die(6): CPTR[Int]).flatMap { a =>
-  (die(6): CPTR[Int] ).map { b => a + b }
+val twoDiceSummed = monad.flatMap(die(6)) { a =>
+  monad.map(die(6)) { b =>
+    a + b
+  }
 }
 ```
 
@@ -150,7 +152,7 @@ import axle.visualize._
 ```scala mdoc
 import cats.implicits._
 
-val chart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], String](
+val monadicChart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], String](
   () => twoDiceSummed,
   colorOf = _ => Color.blue,
   xAxis = Some(Rational(0)),
@@ -165,7 +167,7 @@ Create SVG
 import cats.effect._
 import axle.web._
 
-chart.svg[IO]("distributionMonad.svg").unsafeRunSync()
+monadicChart.svg[IO]("distributionMonad.svg").unsafeRunSync()
 ```
 
 ![Monadic d6 + d6](/tutorial/images/distributionMonad.svg)

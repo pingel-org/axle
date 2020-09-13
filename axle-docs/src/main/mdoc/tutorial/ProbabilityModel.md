@@ -21,7 +21,10 @@ Preamble to pull in the commonly-used functions in this document:
 ```scala mdoc:silent
 import cats.implicits._
 import cats.effect._
+
 import spire.math._
+import spire.algebra._
+
 import axle.probability._
 import axle.algebra._
 import axle.visualize._
@@ -39,7 +42,7 @@ This is its implementation:
 
 ```scala mdoc:silent
 val head = Symbol("HEAD")
-val tail = SYMBOL("TAIL")
+val tail = Symbol("TAIL")
 
 def flipModel(pHead: Rational = Rational(1, 2)): ConditionalProbabilityTable[Symbol, Rational] =
   ConditionalProbabilityTable[Symbol, Rational](
@@ -75,7 +78,7 @@ val d10 = rollModel(10)
 
 Define a visualization of the distribution of events in the `d6` model:
 
-``` scala mdoc:silent
+```scala mdoc:silent
 val d6vis = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], String](
   () => d6,
   colorOf = _ => Color.blue,
@@ -88,7 +91,7 @@ val d6vis = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], 
 Create an SVG
 
 ```scala mdoc:silent
-d6vis.svg[IO]("distributionMonad.svg").unsafeRunSync()
+d6vis.svg[IO]("d6.svg").unsafeRunSync()
 ```
 
 ![d6](/tutorial/images/d6.svg)
@@ -123,6 +126,8 @@ It also requires context bounds on the value type `V` that give the method
 the ability to produces values with a distribution conforming to the probability model.
 
 ```scala mdoc
+implicit val dist = axle.probability.rationalProbabilityDist
+
 (1 to 10) map { _ => fairCoin.sample(rng) }
 
 (1 to 10) map { _ => biasedCoin.sample(rng) }
@@ -276,6 +281,10 @@ The theorem is more recognizable as `P(A|B) = P(B|A) * P(A) / P(B)`
 The `pure`, `map`, and `flatMap` methods of `cats.Monad` are defined
 for `ConditionalProbabilityTable`, `TallyDistribution`.
 
+```scala mdoc:silent
+val monad = ConditionalProbabilityTable.monadWitness[Rational]
+```
+
 For some historical reading on the origins of probability monads,
 see the literature on the Giry Monad.
 
@@ -304,9 +313,11 @@ def iffy[A, B, M[_]: Monad](
 Chain two events' models
 
 ```scala mdoc
-val bothCoinsModel = (fairCoin: CPTR[Symbol]).flatMap({ flip1 =>
-  (fairCoin: CPTR[Symbol]).map({ flip2 => (flip1, flip2)})
-})
+val bothCoinsModel = monad.flatMap(fairCoin) { flip1 =>
+  monad.map(fairCoin) { flip2 =>
+    (flip1, flip2)
+  }
+}
 ```
 
 This creates a model on events of type `(Symbol, Symbol)`
@@ -320,10 +331,6 @@ bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) and RegionIf[TWOFLIPS](_._2 ==
 
 bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) or RegionIf[TWOFLIPS](_._2 == head))
 ```
-
-### Two Dice
-
-For more examples of combining rolls of six-sided dice, see [Two Dice](/tutorial/two_dice/).
 
 ## Future work
 
