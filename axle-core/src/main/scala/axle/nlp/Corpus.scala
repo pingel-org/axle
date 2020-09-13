@@ -21,8 +21,6 @@ case class Corpus[
   implicit val cRingN: CRing[N]
   ) {
 
-  // implicit val ringLong: CRing[N] = spire.implicits.LongAlgebra
-
   lazy val wordCountMap: Map[String, N] =
     documents.flatMap(doc => language.tokenize(doc.toLowerCase)).tally
 
