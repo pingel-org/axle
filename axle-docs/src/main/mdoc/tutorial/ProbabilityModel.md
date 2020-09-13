@@ -229,6 +229,24 @@ The probability of a `head` for a single toss of a fair coin is `1/2`
 fairCoin.P(RegionEq(head))
 ```
 
+The probability that a toss is not `head` is also `1/2`.
+
+```scala mdoc
+fairCoin.P(RegionNegate(RegionEq(head)))
+```
+
+The probability that a toss is both `head` and `tail` is zero.
+
+```scala mdoc
+fairCoin.P(RegionEq(head) and RegionEq(tail))
+```
+
+The probability that a toss is either `head` or `tail` is one.
+
+```scala mdoc
+fairCoin.P(RegionEq(head) or RegionEq(tail))
+```
+
 ### Kolmogorov's Axioms
 
 The single `probabilityOf` method together with the `Region` trait
@@ -270,6 +288,12 @@ via the `filter` (`|` is also an alias).
 def filter(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V]
 ```
 
+Syntax is available via this import
+
+```scala mdoc:silent
+import axle.syntax.bayes._
+```
+
 `filter` -- along with `probabilityOf` from `Kolomogorov` -- allows Bayes' Theorem
 to be expressed and checked with ScalaCheck.
 
@@ -281,36 +305,61 @@ For non-zero `model.P(a)` and `model.P(b)`
 
 The theorem is more recognizable as `P(A|B) = P(B|A) * P(A) / P(B)`
 
+Filter is easier to motivate with composite types, but two examples
+with a d6 show the expected semantics:
+
+Filtering the d6 roll model to 1 and 5:
+
+```scala mdoc
+d6.filter(RegionIf(_ % 4 == 1))
+```
+
+Filter the d6 roll model to 1, 2, and 3:
+
+```scala mdoc
+d6.filter(RegionLTE(3))
+```
+
 ## Probability Model as Monads
 
 The `pure`, `map`, and `flatMap` methods of `cats.Monad` are defined
 for `ConditionalProbabilityTable`, `TallyDistribution`.
 
+### Monad Laws
+
+The short version is that the three methods are constrained by a few laws that
+make them very useful for composing programs.
+Those laws are:
+
+* Left identity: `pure(x).flatMap(f) === f(x)`
+* Right identity: `model.flatMap(pure) === model`
+* Associativity: `model.flatMap(f).flatMap(g) === model.flatMap(f.flatMap(g))`
+
+### Monad Syntax
+
+There is syntax support in `cats.implicits._` for all three methods.
+
+However, due to limitations of Scala's type inference, it cannot see
+`ConditionalProbabilityTable[E, V]` as the `M[_]` expected by `Monad`.
+
+The most straigtfoward workaround is just to conjure the monad witness
+directly and use it, passing the model in as the sole argument to the
+first parameter group.
+
 ```scala mdoc:silent
 val monad = ConditionalProbabilityTable.monadWitness[Rational]
+
+monad.map(d6)(_ % 3)
 ```
 
-For some historical reading on the origins of probability monads,
-see the literature on the Giry Monad.
+Another strategy to use `map` and `flatMap` directly on
+the model is a type that can be seen as `M[_]` along with
+a type annotation:
 
-### Iffy
+```scala mdoc
+type CPTR[E] = ConditionalProbabilityTable[E, Rational]
 
-A stochastic version of `if` (aka `iffy`) can be implemented in terms of `flatMap`
-using this pattern for any probability model type `M[A]` such that a `Monad` is defined.
-
-```scala
-def iffy[A, B, M[_]: Monad](
-  input      : M[A],
-  predicate  : A => Boolean,
-  trueClause : M[B],
-  falseClause: M[B]): M[B] =
-  input.flatMap { i =>
-    if( predicate(i) ) {
-      trueClause
-    } else {
-      falseClause
-    }
-  }
+(d6: CPTR[Int]).map(_ % 3)
 ```
 
 ### Chaining models
@@ -366,6 +415,70 @@ monadicChart.svg[IO]("distributionMonad.svg").unsafeRunSync()
 ```
 
 ![Monadic d6 + d6](/tutorial/images/distributionMonad.svg)
+
+### Iffy
+
+A stochastic version of `if` (aka `iffy`) can be implemented in terms of `flatMap`
+using this pattern for any probability model type `M[A]` such that a `Monad` is defined.
+
+```scala
+def iffy[A, B, M[_]: Monad](
+  input      : M[A],
+  predicate  : A => Boolean,
+  trueClause : M[B],
+  falseClause: M[B]): M[B] =
+  input.flatMap { i =>
+    if( predicate(i) ) {
+      trueClause
+    } else {
+      falseClause
+    }
+  }
+```
+
+An example of that pattern: "if heads, d6+d6, otherwise d10+10"
+
+```scala mdoc
+import cats.Eq
+
+val headsD6D6taildD10D10 = monad.flatMap(fairCoin) { side =>
+  if( Eq[Symbol].eqv(side, head) ) {
+    monad.flatMap(d6) { a => monad.map(d6) { b => a + b } }
+  } else {
+    monad.flatMap(d10) { a => monad.map(d10) { b => a + b } }
+  }
+}
+```
+
+Create visualization
+
+```scala mdoc:silent
+val iffyChart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], String](
+  () => headsD6D6taildD10D10,
+  colorOf = _ => Color.blue,
+  xAxis = Some(Rational(0)),
+  title = Some("if heads, d6+d6, else d10+d10"),
+  labelAngle = Some(0d *: angleDouble.degree),
+  drawKey = false)
+```
+
+Create SVG
+
+```scala mdoc:silent
+iffyChart.svg[IO]("iffy.svg").unsafeRunSync()
+```
+
+![heads => d6+d6, else d10+d10](/tutorial/images/iffy.svg)
+
+### Further Reading
+
+Motiviating the Monad typeclass is out of scope of this document.
+Please see the functional programming literature for more about monads
+and their relationship to functors, applicative functors, monoids, categories,
+and other structures.
+
+For some historical reading on the origins of probability monads,
+see the literature on the Giry Monad.
 
 ## Future work
 

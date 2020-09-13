@@ -34,11 +34,10 @@ class TwoD6Histogram extends AnyFunSuite with Matchers {
 
   test("distribution monad: combine 2 D6 correctly") {
 
-    type F[A] = ConditionalProbabilityTable[A, Rational]
-    implicit val mf = cats.Monad[F]
+    val monad = ConditionalProbabilityTable.monadWitness[Rational]
 
-    val twoDiceSummed = mf.flatMap(die(6)) { a =>
-      mf.map(die(6)) { b =>
+    val twoDiceSummed = monad.flatMap(die(6)) { a =>
+      monad.map(die(6)) { b =>
         a + b
       }
     }

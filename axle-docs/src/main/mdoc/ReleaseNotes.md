@@ -6,6 +6,22 @@ permalink: /release_notes/
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
+## 0.5.3 (September 13, 2020)
+
+* Split `ProbabilityModel` into three new typeclasses
+  -- `Bayes`, `Kolmogorov`, `Sampler` --
+  as well as `cats.Monad`.
+  The three axle typeclasses include syntax.
+
+* Rename `ConditionalProbabilityTable.values` to `domain`
+
+* Bugs fixed
+  * Bayes axiom should avoid P(A) == P(B) == 0
+  * `UnittedQuantity` `LengthSpace` unit mismatch
+  * `BarChart` was missing `Order[C]`
+
+* Expanded documentation
+
 ## 0.5.2 (September 7, 2020)
 
 * Move to Scala 2.12 and 2.13
