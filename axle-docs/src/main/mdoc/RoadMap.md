@@ -20,17 +20,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `UnittedQuantity` `LengthSpace` unit mismatch
   * `BarChart` was missing `Order[C]`
 
-* incorporate TwoDice into ProbModel
-* More about `Monad` for probability models
-  * Pull from TwoDice
-
+* More `P` queries for `Bayes` and `Monad` doc
 * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
   * `SigmaAlgebra` for the CPT?
   * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
   * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
+
 * `Sampler[ConditionalProbabilityTable]` cache `bars`
 * Sampler axiom(s)
-* Measure Theory
 * Axiom? pm.filter(X=x).P(X=x) == 1
 * Fix third Kolmogorov law
 * Optimize `KolmogorovProbabilityAxioms.combination`
@@ -132,10 +129,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Fix `axle.algebra.GeoMetricSpaceSpec`
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
 
+* Measure Theory
+* Redo Logic using Abstract Algebra
+
 * Use sbt-ci-release (rm sbt-release)
 * Friend of Spire
-
-* Redo Logic using Abstract Algebra
 
 * Tests for `axle.ast`
 * Tics should take an argument

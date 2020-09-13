@@ -286,8 +286,42 @@ The theorem is more recognizable as `P(A|B) = P(B|A) * P(A) / P(B)`
 The `pure`, `map`, and `flatMap` methods of `cats.Monad` are defined
 for `ConditionalProbabilityTable`, `TallyDistribution`.
 
+Motiviating the Monad typeclass is out of scope of this document.
+Please see the functional programming literature for more about monads
+and their relationship to functors, applicative functors, monoids, categories,
+and other structures.
+
+The short version is that the three methods are constrained by a few laws that
+make them very useful for composing programs.
+Those laws are:
+
+* Left identity: `pure(x).flatMap(f) === f(x)`
+* Right identity: `model.flatMap(pure) === model`
+* Associativity: `model.flatMap(f).flatMap(g) === model.flatMap(f.flatMap(g))`
+
+There is syntax support in `cats.implicits._` for all three methods.
+
+However, due to limitations of Scala's type inference, it cannot see
+`ConditionalProbabilityTable[E, V]` as the `M[_]` expected by `Monad`.
+
+The most straigtfoward workaround is just to conjure the monad witness
+directly and use it, passing the model in as the sole argument to the
+first parameter group.
+
 ```scala mdoc:silent
 val monad = ConditionalProbabilityTable.monadWitness[Rational]
+
+monad.map(d6)(_ % 3)
+```
+
+Another strategy if you do want to use `map` and `flatMap` directly on
+the model is to create a type that can be seen as `M[_]` and then
+provide the type annotation for Scala:
+
+```scala mdoc
+type CPTR[E] = ConditionalProbabilityTable[E, Rational]
+
+(d6: CPTR[Int]).map(_ % 3)
 ```
 
 For some historical reading on the origins of probability monads,
