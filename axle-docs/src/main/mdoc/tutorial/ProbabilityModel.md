@@ -286,10 +286,7 @@ The theorem is more recognizable as `P(A|B) = P(B|A) * P(A) / P(B)`
 The `pure`, `map`, and `flatMap` methods of `cats.Monad` are defined
 for `ConditionalProbabilityTable`, `TallyDistribution`.
 
-Motiviating the Monad typeclass is out of scope of this document.
-Please see the functional programming literature for more about monads
-and their relationship to functors, applicative functors, monoids, categories,
-and other structures.
+### Monad Laws
 
 The short version is that the three methods are constrained by a few laws that
 make them very useful for composing programs.
@@ -298,6 +295,8 @@ Those laws are:
 * Left identity: `pure(x).flatMap(f) === f(x)`
 * Right identity: `model.flatMap(pure) === model`
 * Associativity: `model.flatMap(f).flatMap(g) === model.flatMap(f.flatMap(g))`
+
+### Monad Syntax
 
 There is syntax support in `cats.implicits._` for all three methods.
 
@@ -322,29 +321,6 @@ a type annotation:
 type CPTR[E] = ConditionalProbabilityTable[E, Rational]
 
 (d6: CPTR[Int]).map(_ % 3)
-```
-
-For some historical reading on the origins of probability monads,
-see the literature on the Giry Monad.
-
-### Iffy
-
-A stochastic version of `if` (aka `iffy`) can be implemented in terms of `flatMap`
-using this pattern for any probability model type `M[A]` such that a `Monad` is defined.
-
-```scala
-def iffy[A, B, M[_]: Monad](
-  input      : M[A],
-  predicate  : A => Boolean,
-  trueClause : M[B],
-  falseClause: M[B]): M[B] =
-  input.flatMap { i =>
-    if( predicate(i) ) {
-      trueClause
-    } else {
-      falseClause
-    }
-  }
 ```
 
 ### Chaining models
@@ -400,6 +376,36 @@ monadicChart.svg[IO]("distributionMonad.svg").unsafeRunSync()
 ```
 
 ![Monadic d6 + d6](/tutorial/images/distributionMonad.svg)
+
+### Iffy
+
+A stochastic version of `if` (aka `iffy`) can be implemented in terms of `flatMap`
+using this pattern for any probability model type `M[A]` such that a `Monad` is defined.
+
+```scala
+def iffy[A, B, M[_]: Monad](
+  input      : M[A],
+  predicate  : A => Boolean,
+  trueClause : M[B],
+  falseClause: M[B]): M[B] =
+  input.flatMap { i =>
+    if( predicate(i) ) {
+      trueClause
+    } else {
+      falseClause
+    }
+  }
+```
+
+### Further Reading
+
+Motiviating the Monad typeclass is out of scope of this document.
+Please see the functional programming literature for more about monads
+and their relationship to functors, applicative functors, monoids, categories,
+and other structures.
+
+For some historical reading on the origins of probability monads,
+see the literature on the Giry Monad.
 
 ## Future work
 
