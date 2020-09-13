@@ -11,7 +11,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Split `ProbabilityModel` into three new typeclasses
   -- `Bayes`, `Kolmogorov`, `Sampler` --
   as well as `cats.Monad`.
-  The three new axle typeclasses include syntax.
+  The three axle typeclasses include syntax.
 
 * Rename `ConditionalProbabilityTable.values` to `domain`
 
@@ -20,22 +20,31 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `UnittedQuantity` `LengthSpace` unit mismatch
   * `BarChart` was missing `Order[C]`
 
-* More `P` queries for `Bayes` and `Monad` doc
-* Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
-  * `SigmaAlgebra` for the CPT?
+* Expanded documentation
+
+## 0.5.4 A bit more theory (Fall 2020)
+
+* Sampler
+  * `Sampler[ConditionalProbabilityTable]` cache `bars`
+  * Axioms
+    1. ProbabilityOf(RegionEq(sample(gen))) > 0?
+    2. In the limit, sampled distribution converges to model's
+
+* `SigmaAlgebra` for the CPT
+  * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
   * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
   * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
 
-* `Sampler[ConditionalProbabilityTable]` cache `bars`
-* Sampler axiom(s)
-* Axiom? pm.filter(X=x).P(X=x) == 1
 * Fix third Kolmogorov law
 * Optimize `KolmogorovProbabilityAxioms.combination`
-* Functor for CPT?
+
+* Axiom? `pm.filter(X=x).P(X=x) === 1`
 * rename `ConditionalProbabilityTable`?
+
+* Functor for CPT?
 * `{CPT,TD}.tailRecM` then ScalaCheck `Monad[CPT]`
 
-## 0.5.4 (October 2020)
+## 0.5.5 Adoption blockers (Late 2020)
 
 * Chicklet borders / colors
 
@@ -53,7 +62,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Fix occasional MetricSpace failure
 
-## 0.5.5 (December 2020)
+## 0.6.x Factoring and Bayesian Networks (2021)
 
 * Test: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
   * factor out each variable until
@@ -76,7 +85,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `Bayes[MonotypeBayesanNetwork]` -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself
 
-## 0.5.6 (2021)
+## 0.7.x Compositional Game Theory (2021)
 
 * Replace `axle.game.moveFromRandomState.mapToProb`
 * Wrap `axle.IO.getLine` in `F[_]`
@@ -96,20 +105,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `perceive` could return a lower-entropy probability model
   * Perhaps in exchange for a given amount of energy
   * Or ask for a 0-entropy model and be told how expensive that was
-  * Axiom for perceive: val a = perceive(gen) => ProbabilityOf(RegionEq(a)) > 0?
 
 ## After that
-
-* Experiment with pandoc
 
 * `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
   * Will require externalizing the layout to its own.... typeclass?
   * Layout of bayesian network is quite bad -- check ABE SVG
 
-* Re-enable `axle-jogl`
-  * May require jogamop 2.4, which is not yet released
-  * Or possibly use [jogamp archive](https://jogamp.org/deployment/archive/rc/v2.4.0-rc-20200307/jar/)
-  * See processing's approach in [this commit](https://github.com/processing/processing4/pull/85/commits/17a20bea37e7bcfa5589dbcb2f4a58c4174f7fe0)
+* Experiment with pandoc
 
 * Configure makeSite to preview: previewFixedPort := Some(9999)
 * Copy css using makeSite (not update-docs.sh)
@@ -141,7 +144,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
 * Demo Mandelbrot with Rational
 
-* `axle.nlp.Corpus` should support `Aggregatable`
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 * Replace Finite with Shapeless's version
@@ -150,18 +152,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
 * Sort out MapFrom, FromStream, FromSet
 * Test `axle.algebra.tuple2Field`
-* Kind projector instead of `type F[T] = ConditionalProbabilityTable[T, Rational]` and `CPTR[T]` ?
-* Kind projector instead of type lambdas
 * `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
-* Kind projector for projections of jung graphs for Finite
-* Functors for jung should use projections (study cats disjunction, scala Either)
+* Projections of jung graphs for Finite
 * kittens or magnolia
   * pattern match in FirstOrderPredicateLogic
   * subtyping for Suit and Rank
 * Machinist?
 * replace some refs to {CPT0,TallyDist0} with ProbabilityModel
-* Update Spire (to match cats version)
-* Most MapRedicible witnesses are inefficient (eg calling toVector, toSeq, etc)
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
 * Make the `Int` abstract in `KMeans{,Visualization}`, `LinearAlgebra`, etc
 
@@ -183,7 +180,7 @@ Future backlog ideas:
 * "You split, I choose" as game
 * Axioms of partial differentiation
 * Gerrymandering sensitivity
-* Game theory axioms (Nash?)
+* Game theory axioms (Nash, etc)
 * `axle.game`: `Observable[T]`
 * move state dist stream
 * Redo original monty hall spec
@@ -239,16 +236,14 @@ Future backlog ideas:
 * Abadi Plotkin pathology
 * JVP: Jacobian
 
-## Platform
+## Compute Engines
 
 * Bring back Spark spoke -- Solve the Spark ClassTag issue (see Frameless?)
-* Spark syntax
-* WebGL
-* SVG Animation
 * Performance benchmarking
 * netlib-java Matrix
 * GPU/CUDA support
 * Algebird/Scalding for distributed matrices, HyperLogLog, etc
+* Most MapRedicible witnesses are inefficient (eg calling toVector, toSeq, etc)
 
 ## Deeper exploration
 
@@ -282,6 +277,8 @@ Future backlog ideas:
 
 ## Visualization
 
+* WebGL
+* SVG Animation
 * Box Plot
 * Candlestick Chart
 * Honor graph vis params in awt graph visualizations
@@ -296,3 +293,7 @@ Future backlog ideas:
 * Fix multi-color cube rendering
 * Bloom filter surface
 * Factor similarity between SVG and Draw?
+* Re-enable `axle-jogl`
+  * May require jogamop 2.4, which is not yet released
+  * Or possibly use [jogamp archive](https://jogamp.org/deployment/archive/rc/v2.4.0-rc-20200307/jar/)
+  * See processing's approach in [this commit](https://github.com/processing/processing4/pull/85/commits/17a20bea37e7bcfa5589dbcb2f4a58c4174f7fe0)
