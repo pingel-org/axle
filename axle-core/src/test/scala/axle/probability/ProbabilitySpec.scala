@@ -16,6 +16,7 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
   val monad = ConditionalProbabilityTable.monadWitness[Rational]
 
   val d6 = die(6)
+  val d10 = die(10)
 
   val head = Symbol("HEAD")
   val tail = Symbol("TAIL")
@@ -68,5 +69,20 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
 
     bothDieModel.P(RegionAnd(RegionIf(_._1 == 1), RegionIf(_._2 == 2))) should be(Rational(1, 36))
   }
+
+  test("iffy: if( heads) {d6+d6} else {d10+d10}") {
+
+    import cats.Eq
+    val headsD6D6taildD10D10 = monad.flatMap(fairCoin) { side =>
+      if( Eq[Symbol].eqv(side, head) ) {
+        monad.flatMap(d6) { a => monad.map(d6) { b => a + b } } 
+      } else {
+        monad.flatMap(d10) { a => monad.map(d10) { b => a + b } } 
+      }
+    }
+
+    headsD6D6taildD10D10.P(RegionAll()) should be(Rational(1))
+  }
+
 
 }
