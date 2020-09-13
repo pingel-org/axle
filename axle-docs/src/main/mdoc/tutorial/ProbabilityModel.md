@@ -288,6 +288,12 @@ via the `filter` (`|` is also an alias).
 def filter(predicate: Region[A])(implicit fieldV: Field[V]): M[A, V]
 ```
 
+Syntax is available via this import
+
+```scala mdoc:silent
+import axle.syntax.bayes._
+```
+
 `filter` -- along with `probabilityOf` from `Kolomogorov` -- allows Bayes' Theorem
 to be expressed and checked with ScalaCheck.
 
