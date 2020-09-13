@@ -34,11 +34,13 @@ class TwoPlatonicSolidDieAddedBayes
         an <- Gen.oneOf(List(4,6,8,12,20))
         bn <- Gen.oneOf(List(4,6,8,12,20))
     } yield  (an, bn)),
-    { case (an, bn) =>
-       die(an).events.flatMap { a =>
-         die(bn).events.map { b =>
+    { case (an, bn) => {
+      val monad = ConditionalProbabilityTable.monadWitness[Rational]
+      monad.flatMap(die(an)) { a =>
+         monad.map(die(bn)) { b =>
            a + b
-       }}
+        }}
+      }
     },
     { case (an, bn) => Arbitrary(genRegion(1 to an + bn)) },
     { case (an, bn) => Region.eqRegionIterable(1 to an + bn) }

@@ -20,8 +20,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `UnittedQuantity` `LengthSpace` unit mismatch
   * `BarChart` was missing `Order[C]`
 
-* Use kind projector wherever possible (See `Monad[ConditionalProbabilityTable[?, V]]`)
-
 * incorporate TwoDice into ProbModel
 * latex in mdoc?
 * More about `Monad` for probability models

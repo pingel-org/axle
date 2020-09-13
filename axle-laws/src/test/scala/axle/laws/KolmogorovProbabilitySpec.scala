@@ -37,8 +37,9 @@ class TwoPlatonicSolidDieAddedKolmogorov
         bn <- Gen.oneOf(List(4,6,8,12,20))
     } yield  (an, bn)),
     { case (an, bn) => {
-       die(an).events.flatMap { a =>
-         die(bn).events.map { b =>
+       val monad = ConditionalProbabilityTable.monadWitness[Rational]
+       monad.flatMap(die(an)) { a =>
+         monad.map(die(bn)) { b =>
            a + b
          }
        }

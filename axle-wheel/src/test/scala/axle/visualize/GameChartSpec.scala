@@ -18,7 +18,9 @@ class GameChartSpec extends AnyFunSuite with Matchers {
 
     val stateD = stateDistribution(goodBowler, 4)
 
-    val scoreD = stateD.events.map(_.tallied)
+    val monad = ConditionalProbabilityTable.monadWitness[Rational]
+
+    val scoreD = monad.map(stateD)(_.tallied)
 
     // implicit val ac = Angle.converterGraphK2[Double, DirectedSparseGraph]
 
