@@ -14,6 +14,20 @@ The capabilies are available via four typeclasses and one trait
 * Bayes
 * Monad (`cats.Monad`)
 
+## Imports
+
+Preamble to pull in the commonly-used functions in this document:
+
+```scala mdoc:silent
+import cats.implicits._
+import cats.effect._
+import spire.math._
+import axle.probability._
+import axle.algebra._
+import axle.visualize._
+import axle.web._
+```
+
 ## Creating Probability Models
 
 There are a few type of probability models in Axle.
@@ -23,7 +37,7 @@ The simplest is the `ConditionalProbabilityTable`, which is used throughout this
 
 This is its implementation:
 
-```scala
+```scala mdoc:silent
 val head = Symbol("HEAD")
 val tail = SYMBOL("TAIL")
 
@@ -38,14 +52,46 @@ Its argument is the bias for the `HEAD` side.
 Without a provided bias, it is assumed to be a fair coin.
 
 ```scala mdoc
-import axle.probability._
-import spire.math._
-import axle.data.Coin
+val fairCoin = flipModel()
 
-val fairCoin = Coin.flipModel()
-
-val biasedCoin = Coin.flipModel(Rational(9, 10))
+val biasedCoin = flipModel(Rational(9, 10))
 ```
+
+Rolls of dice are another common example.
+
+```scala mdoc:silent
+def rollModel(n: Int): ConditionalProbabilityTable[Int, Rational] =
+  ConditionalProbabilityTable(
+    (1 to n).map(i => (i, Rational(1, n.toLong))).toMap)
+```
+
+The values `d6` and `d10` model rolls of 6 and 10-sided dice.
+
+```scala mdoc
+val d6 = rollModel(6)
+
+val d10 = rollModel(10)
+```
+
+Define a visualization of the distribution of events in the `d6` model:
+
+``` scala mdoc:silent
+val d6vis = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], String](
+  () => d6,
+  colorOf = _ => Color.blue,
+  xAxis = Some(Rational(0)),
+  title = Some("d6"),
+  labelAngle = Some(0d *: angleDouble.degree),
+  drawKey = false)
+```
+
+Create an SVG
+
+```scala mdoc:silent
+d6vis.svg[IO]("distributionMonad.svg").unsafeRunSync()
+```
+
+![d6](/tutorial/images/d6.svg)
 
 ## Sampler
 
@@ -58,20 +104,62 @@ It's type signature is:
 def sample(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A
 ```
 
+These imports make available a `Generator` as source of entropy
+
+```scala mdoc
+import spire.random._
+
+val rng = Random.generatorFromSeed(Seed(42))
+```
+
+And then the `.sample` syntax:
+
+```scala mdoc:silent
+import axle.syntax.sampler._
+```
+
 Note that it must be provided with a Spire `Generator`.
 It also requires context bounds on the value type `V` that give the method
 the ability to produces values with a distribution conforming to the probability model.
 
 ```scala mdoc
-import spire.random.Generator.rng
-import axle.syntax.sampler._
+(1 to 10) map { _ => fairCoin.sample(rng) }
 
-implicit val dist = axle.probability.rationalProbabilityDist
+(1 to 10) map { _ => biasedCoin.sample(rng) }
 
-(1 to 10) map { i => fairCoin.sample(rng) }
-
-(1 to 10) map { i => biasedCoin.sample(rng) }
+(1 to 10) map { _ => d6.sample(rng) }
 ```
+
+Simulate 1k rolls of one d6
+
+```scala mdoc
+val rolls = (0 until 1000) map { _ => d6.sample(rng) }
+
+implicit val ringInt: CRing[Int] = spire.implicits.IntAlgebra
+
+import axle.syntax.talliable._
+
+val oneKd6Histogram = rolls.tally
+```
+
+
+```scala mdoc
+val d6oneKvis = BarChart[Int, Int, Map[Int, Int], String](
+  () => oneKd6Histogram,
+  colorOf = _ => Color.blue,
+  xAxis = Some(0),
+  title = Some("1k d6 samples"),
+  labelAngle = Some(0d *: angleDouble.degree),
+  drawKey = false)
+```
+
+Create SVG
+
+```scala mdoc
+d6oneKvis.svg[IO]("d6-1Ksamples.svg").unsafeRunSync()
+```
+
+![1k d6 samples](/tutorial/images/d6-1Ksamples.svg)
 
 ## Sigma Algebra Regions
 
@@ -121,20 +209,20 @@ def probabilityOf(predicate: Region[A])(implicit fieldV: Field[V]): V
 
 Note that `probabilityOf` is aliased to `P` in `axle.syntax.kolmogorov._`
 
-Compute the odds of a `head` for a single toss of a fair coin
+```scala mdoc:silent
+import axle.syntax.kolmogorov._
+```
+
+The probability of a `head` for a single toss of a fair coin is `1/2`
 
 ```scala mdoc
-import cats.implicits._
-import axle.algebra._
-import axle.syntax.kolmogorov._
-import Coin.head
-
 fairCoin.P(RegionEq(head))
 ```
 
 ### Kolmogorov's Axioms
 
-The single `probabilityOf` method is enough to define Kolmogorov's Axioms of Probability.
+The single `probabilityOf` method together with the `Region` trait
+is enough to define Kolmogorov's Axioms of Probability.
 The axioms are implemented in `axle.laws.KolmogorovProbabilityAxioms` and
 checked during testing with ScalaCheck.
 

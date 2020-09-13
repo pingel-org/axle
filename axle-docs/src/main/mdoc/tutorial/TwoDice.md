@@ -16,7 +16,7 @@ import axle.probability._
 import axle.game.Dice._
 import axle.syntax.kolmogorov._
 import axle.syntax.bayes._
-import axle.syntax.perceivable._
+import axle.syntax.sampler._
 ```
 
 ## Monadic map to operate on the event space
@@ -54,7 +54,7 @@ Observe rolls of a die
 import spire.random.Generator.rng
 implicit val dist = axle.probability.rationalProbabilityDist
 
-(1 to 10) map { i => d6utf.perceive(rng) }
+(1 to 10) map { i => d6utf.sample(rng) }
 ```
 
 ## Simulate the sum of two dice
@@ -71,17 +71,16 @@ import spire.math.Rational
 
 import axle.game.Dice.die
 import axle.syntax.talliable.talliableOps
-
 ```
 
-Simulate 10k rolls of two dice
+Simulate 1k rolls of two dice
 
 ```scala mdoc
 val seed = spire.random.Seed(42)
 val gen = spire.random.Random.generatorFromSeed(seed)
 val d6: CPTR[Int] = die(6)
 
-val rolls = (0 until 1000) map { i => d6.perceive(gen) + d6.perceive(gen) }
+val rolls = (0 until 1000) map { i => d6.sample(gen) + d6.sample(gen) }
 
 implicit val ringInt: CRing[Int] = spire.implicits.IntAlgebra
 
