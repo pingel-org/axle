@@ -21,8 +21,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * `BarChart` was missing `Order[C]`
 
 * incorporate TwoDice into ProbModel
-* latex in mdoc?
 * More about `Monad` for probability models
+  * Pull from TwoDice
 
 * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
   * `SigmaAlgebra` for the CPT?
