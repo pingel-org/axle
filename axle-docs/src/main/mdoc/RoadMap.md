@@ -6,22 +6,6 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.3 (September 2020)
-
-* Split `ProbabilityModel` into three new typeclasses
-  -- `Bayes`, `Kolmogorov`, `Sampler` --
-  as well as `cats.Monad`.
-  The three axle typeclasses include syntax.
-
-* Rename `ConditionalProbabilityTable.values` to `domain`
-
-* Bugs fixed
-  * Bayes axiom should avoid P(A) == P(B) == 0
-  * `UnittedQuantity` `LengthSpace` unit mismatch
-  * `BarChart` was missing `Order[C]`
-
-* Expanded documentation
-
 ## 0.5.4 A bit more theory (Fall 2020)
 
 * Sampler
