@@ -75,9 +75,9 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
     import cats.Eq
     val headsD6D6taildD10D10 = monad.flatMap(fairCoin) { side =>
       if( Eq[Symbol].eqv(side, head) ) {
-        monad.flatMap(d6) { a => monad.map(d6) { b => a + b } } 
+        monad.flatMap(d6) { a => monad.map(d6) { b => a + b } }
       } else {
-        monad.flatMap(d10) { a => monad.map(d10) { b => a + b } } 
+        monad.flatMap(d10) { a => monad.map(d10) { b => a + b } }
       }
     }
 
