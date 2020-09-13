@@ -299,6 +299,21 @@ For non-zero `model.P(a)` and `model.P(b)`
 
 The theorem is more recognizable as `P(A|B) = P(B|A) * P(A) / P(B)`
 
+Filter is easier to motivate with composite types, but two examples
+with a d6 show the expected semantics:
+
+Filtering the d6 roll model to 1 and 5:
+
+```scala mdoc
+d6.filter(RegionIf(_ % 4 == 1))
+```
+
+Filter the d6 roll model to 1, 2, and 3:
+
+```scala mdoc
+d6.filter(RegionLTE(3))
+```
+
 ## Probability Model as Monads
 
 The `pure`, `map`, and `flatMap` methods of `cats.Monad` are defined

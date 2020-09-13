@@ -15,6 +15,8 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
 
   val monad = ConditionalProbabilityTable.monadWitness[Rational]
 
+  val d6 = die(6)
+
   val head = Symbol("HEAD")
   val tail = Symbol("TAIL")
 
@@ -23,12 +25,17 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
       head -> Rational(1, 2),
       tail -> Rational(1, 2)))
 
-  test("one fair coin") {
+  test("one fair coin flip") {
 
     fairCoin.P(RegionEq(head)) should be(Rational(1, 2))
     fairCoin.P(RegionNegate(RegionEq(head))) should be(Rational(1, 2))
     fairCoin.P(RegionEq(head) and RegionEq(tail)) should be(Rational(0))
     fairCoin.P(RegionEq(head) or RegionEq(tail)) should be(Rational(1))
+  }
+
+  test("one d6 roll") {
+    d6.filter(RegionIf(_ % 4 == 1)).P(RegionEq(1)) should be(Rational(1, 2))
+    d6.filter(RegionLTE(3)).P(RegionEq(1)) should be(Rational(1, 3))
   }
 
   test("two independent coins") {
@@ -53,7 +60,6 @@ class ProbabilitySpec extends AnyFunSuite with Matchers {
 
   test("two independent d6") {
 
-    val d6 = die(6)
     val bothDieModel = monad.flatMap(d6)( r1 => monad.map(d6)( r2 => (r1, r2)) )
 
     bothDieModel.P(RegionIf(_._1 == 1)) should be(Rational(1, 6))
