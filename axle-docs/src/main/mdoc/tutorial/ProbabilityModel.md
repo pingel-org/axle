@@ -349,7 +349,7 @@ val twoDiceSummed = monad.flatMap(d6) { a =>
 
 Create a visualization
 
-```scala mdoc
+```scala mdoc:silent
 val monadicChart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], String](
   () => twoDiceSummed,
   colorOf = _ => Color.blue,
