@@ -337,6 +337,36 @@ bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) and RegionIf[TWOFLIPS](_._2 ==
 bothCoinsModel.P(RegionIf[TWOFLIPS](_._1 == head) or RegionIf[TWOFLIPS](_._2 == head))
 ```
 
+## Summing two dice rolls
+
+```scala mdoc
+val twoDiceSummed = monad.flatMap(d6) { a =>
+  monad.map(d6) { b =>
+    a + b
+  }
+}
+```
+
+Create a visualization
+
+```scala mdoc
+val monadicChart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], String](
+  () => twoDiceSummed,
+  colorOf = _ => Color.blue,
+  xAxis = Some(Rational(0)),
+  title = Some("d6 + d6"),
+  labelAngle = Some(0d *: angleDouble.degree),
+  drawKey = false)
+```
+
+Create SVG
+
+```scala mdoc:silent
+monadicChart.svg[IO]("distributionMonad.svg").unsafeRunSync()
+```
+
+![Monadic d6 + d6](/tutorial/images/distributionMonad.svg)
+
 ## Future work
 
 ### Measure Theory
