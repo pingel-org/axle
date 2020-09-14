@@ -362,6 +362,15 @@ type CPTR[E] = ConditionalProbabilityTable[E, Rational]
 (d6: CPTR[Int]).map(_ % 3)
 ```
 
+Or similar to use a for comprehension:
+
+```scala mdoc
+for {
+  a <- d6: CPTR[Rational]
+  b <- d6: CPTR[Rational]
+} yield a + b
+```
+
 ### Chaining models
 
 Chain two events' models
