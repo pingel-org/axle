@@ -205,7 +205,7 @@ but the probability models themselves are not concerned with the notion of a
 They are simply models over regions of events on their single, opaque type
 that adhere to the laws of probability.
 
-The eventual formalization of `Region` should connect it with a ∑ Algebra from Meaasure Theory.
+The eventual formalization of `Region` should connect it with a σ-algebra from Meaasure Theory.
 
 ## Kolmogorov for querying Probability Models
 
@@ -256,7 +256,7 @@ checked during testing with ScalaCheck.
 
 #### Basic Measure
 
-Probabilities are non-negative (for all satisfiable `Region`)
+Probabilities are non-negative.
 
 ```scala
 model.P(region) >= Field[V].zero
@@ -346,7 +346,7 @@ The most straigtfoward workaround is just to conjure the monad witness
 directly and use it, passing the model in as the sole argument to the
 first parameter group.
 
-```scala mdoc:silent
+```scala mdoc
 val monad = ConditionalProbabilityTable.monadWitness[Rational]
 
 monad.map(d6)(_ % 3)
@@ -436,7 +436,7 @@ def iffy[A, B, M[_]: Monad](
   }
 ```
 
-An example of that pattern: "if heads, d6+d6, otherwise d10+10"
+An example of that pattern: "if heads, d6+d6, otherwise d10+d10"
 
 ```scala mdoc
 import cats.Eq
