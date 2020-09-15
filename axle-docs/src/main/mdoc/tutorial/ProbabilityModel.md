@@ -346,28 +346,28 @@ The most straigtfoward workaround is just to conjure the monad witness
 directly and use it, passing the model in as the sole argument to the
 first parameter group.
 
-```scala mdoc
+```scala mdoc:silent
 val monad = ConditionalProbabilityTable.monadWitness[Rational]
 
-monad.map(d6)(_ % 3)
+monad.flatMap(d6) { a => monad.map(d6) { b => a + b } }
 ```
 
 Another strategy to use `map` and `flatMap` directly on
 the model is a type that can be seen as `M[_]` along with
 a type annotation:
 
-```scala mdoc
+```scala mdoc:silent
 type CPTR[E] = ConditionalProbabilityTable[E, Rational]
 
-(d6: CPTR[Int]).map(_ % 3)
+(d6: CPTR[Int]).flatMap { a => (d6: CPTR[Int]).map { b => a + b } }
 ```
 
 Or similar to use a for comprehension:
 
-```scala mdoc
+```scala mdoc:silent
 for {
-  a <- d6: CPTR[Rational]
-  b <- d6: CPTR[Rational]
+  a <- d6: CPTR[Int]
+  b <- d6: CPTR[Int]
 } yield a + b
 ```
 
