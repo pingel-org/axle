@@ -14,7 +14,7 @@ The capabilies are available via four typeclasses and one trait
 * Bayes
 * Monad (`cats.Monad`)
 
-Concrete number type are avoided in favor of typeclasses from `spire.algebra` --
+Concrete number type are avoided in favor of types with context bounds from `spire.algebra` --
 primarily `Ring` and `Field`.
 
 The examples in this document use the `spire.math.Rational` number type, but work as well
