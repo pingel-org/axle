@@ -9,10 +9,17 @@ Modeling probability, randomness, and uncertainly is one of the primary objectiv
 The capabilies are available via four typeclasses and one trait
 
 * Sampler
-* Region (trait modeling Sigma Algebra)
+* Region (trait modeling σ-algebra)
 * Kolmogorov
 * Bayes
 * Monad (`cats.Monad`)
+
+Concrete number type are avoided in favor of typeclasses from `spire.algebra` --
+primarily `Ring` and `Field`.
+
+The examples in this document use the `spire.math.Rational` number type, but work as well
+for `Double`, `Float`, etc.
+The precise number type `Rational` is used in tests because their precision allows the assertions to be expressed without any error tolerance.
 
 ## Imports
 
