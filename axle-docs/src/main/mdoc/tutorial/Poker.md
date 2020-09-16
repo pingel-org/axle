@@ -84,7 +84,6 @@ chart.svg[IO]("pokerhands.svg").unsafeRunSync()
 As a game of "imperfect information", poker introduces the concept of Information Set.
 
 ```scala mdoc
-import axle._
 import axle.IO.prefixedDisplay
 import axle.game._
 import axle.game.poker._
@@ -103,6 +102,7 @@ val game = Poker(Vector(
 Compute the end state from the start state
 
 ```scala mdoc
+import axle.probability._
 import spire.random.Generator.rng
 
 play(game, startState(game), false, rng)

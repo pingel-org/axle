@@ -9,7 +9,6 @@ See the Wikipedia page on the [Prisoner's Dilemma](https://en.wikipedia.org/wiki
 The `axl.game.prisoner._` package uses `axle.game` typeclasses to model the game:
 
 ```scala mdoc
-import axle._
 import axle.IO.prefixedDisplay
 import axle.game._
 import axle.game.prisoner._
@@ -26,6 +25,7 @@ val game = PrisonersDilemma(
 ```
 
 ```scala mdoc
+import axle.probability._
 import spire.random.Generator.rng
 
 play(game, startState(game), false, rng)

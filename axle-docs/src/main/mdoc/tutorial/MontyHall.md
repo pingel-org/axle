@@ -32,7 +32,6 @@ chanceOfWinning(Rational(0))
 The newer `axl.game.montyhall._` package uses `axle.game` typeclasses to model the game:
 
 ```scala mdoc
-import axle._
 import axle.IO.prefixedDisplay
 import axle.game._
 import axle.game.montyhall._
