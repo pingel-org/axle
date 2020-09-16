@@ -8,6 +8,7 @@ import org.scalatest.matchers.should.Matchers
 
 import spire.random.Generator.rng
 
+import axle.probability._
 import axle.game._
 import axle.game.Strategies._
 
@@ -15,8 +16,6 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
 
   import axle.game.guessriffle.evGame._
   import axle.game.guessriffle.evGameIO._
-
-  implicit val dist = axle.probability.rationalProbabilityDist
 
   val player = Player("P", "Player")
 

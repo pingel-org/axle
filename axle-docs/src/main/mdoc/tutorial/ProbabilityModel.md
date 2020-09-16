@@ -9,10 +9,17 @@ Modeling probability, randomness, and uncertainly is one of the primary objectiv
 The capabilies are available via four typeclasses and one trait
 
 * Sampler
-* Region (trait modeling Sigma Algebra)
+* Region (trait modeling σ-algebra)
 * Kolmogorov
 * Bayes
 * Monad (`cats.Monad`)
+
+Concrete number type are avoided in favor of types with context bounds from `spire.algebra` --
+primarily `Ring` and `Field`.
+
+The examples in this document use the `spire.math.Rational` number type, but work as well
+for `Double`, `Float`, etc.
+The precise number type `Rational` is used in tests because their precision allows the assertions to be expressed without any error tolerance.
 
 ## Imports
 
@@ -126,8 +133,6 @@ It also requires context bounds on the value type `V` that give the method
 the ability to produces values with a distribution conforming to the probability model.
 
 ```scala mdoc
-implicit val dist = axle.probability.rationalProbabilityDist
-
 (1 to 10) map { _ => fairCoin.sample(rng) }
 
 (1 to 10) map { _ => biasedCoin.sample(rng) }
@@ -205,7 +210,7 @@ but the probability models themselves are not concerned with the notion of a
 They are simply models over regions of events on their single, opaque type
 that adhere to the laws of probability.
 
-The eventual formalization of `Region` should connect it with a ∑ Algebra from Meaasure Theory.
+The eventual formalization of `Region` should connect it with a σ-algebra from Meaasure Theory.
 
 ## Kolmogorov for querying Probability Models
 
@@ -256,7 +261,7 @@ checked during testing with ScalaCheck.
 
 #### Basic Measure
 
-Probabilities are non-negative (for all satisfiable `Region`)
+Probabilities are non-negative.
 
 ```scala
 model.P(region) >= Field[V].zero
@@ -349,17 +354,26 @@ first parameter group.
 ```scala mdoc:silent
 val monad = ConditionalProbabilityTable.monadWitness[Rational]
 
-monad.map(d6)(_ % 3)
+monad.flatMap(d6) { a => monad.map(d6) { b => a + b } }
 ```
 
 Another strategy to use `map` and `flatMap` directly on
 the model is a type that can be seen as `M[_]` along with
 a type annotation:
 
-```scala mdoc
+```scala mdoc:silent
 type CPTR[E] = ConditionalProbabilityTable[E, Rational]
 
-(d6: CPTR[Int]).map(_ % 3)
+(d6: CPTR[Int]).flatMap { a => (d6: CPTR[Int]).map { b => a + b } }
+```
+
+Or similar to use a for comprehension:
+
+```scala mdoc:silent
+for {
+  a <- d6: CPTR[Int]
+  b <- d6: CPTR[Int]
+} yield a + b
 ```
 
 ### Chaining models
@@ -436,7 +450,7 @@ def iffy[A, B, M[_]: Monad](
   }
 ```
 
-An example of that pattern: "if heads, d6+d6, otherwise d10+10"
+An example of that pattern: "if heads, d6+d6, otherwise d10+d10"
 
 ```scala mdoc
 import cats.Eq

@@ -9,6 +9,7 @@ See the Wikipedia page on the [Monty Hall problem](https://en.wikipedia.org/wiki
 The `axle.game.OldMontyHall` object contains a model of the rules of the game.
 
 ```scala mdoc:silent
+import axle.probability._
 import spire.math.Rational
 import axle.game.OldMontyHall._
 ```
@@ -31,7 +32,6 @@ chanceOfWinning(Rational(0))
 The newer `axl.game.montyhall._` package uses `axle.game` typeclasses to model the game:
 
 ```scala mdoc
-import axle._
 import axle.IO.prefixedDisplay
 import axle.game._
 import axle.game.montyhall._
@@ -51,7 +51,6 @@ Compute the end state from the start state
 
 ```scala mdoc
 import spire.random.Generator.rng
-implicit val dist = axle.probability.rationalProbabilityDist
 
 play(game, startState(game), false, rng)
 ```

@@ -103,8 +103,6 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
 
   import evGame._
 
-  implicit val distV = probabilityDist
-
   // val pm = ConditionalProbabilityTable.probabilityWitness
 
   val currentStateModelMap = Map(Sa -> Rational(1, 3), Sb -> Rational(2, 3))

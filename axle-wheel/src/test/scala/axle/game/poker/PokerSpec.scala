@@ -4,6 +4,8 @@ import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
 import spire.random.Generator.rng
+
+import axle.probability._
 import axle.game._
 import axle.game.Strategies._
 
@@ -11,8 +13,6 @@ class PokerSpec extends AnyFunSuite with Matchers {
 
   import axle.game.poker.evGame._
   import axle.game.poker.evGameIO._
-
-  implicit val dist = axle.probability.rationalProbabilityDist
 
   val p1 = Player("P1", "Player 1")
   val p2 = Player("P2", "Player 2")

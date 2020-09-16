@@ -2,7 +2,7 @@
 
 set -e
 
-BUILDDIR=axle-site-build
+BUILDDIR=target/axle-site-build
 STAGEDIR=~/s3/axle-lang.org/
 
 sbt -J-Xmx6G "project axle-docs" mdoc

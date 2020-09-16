@@ -7,9 +7,12 @@ Release:
 
 (May also need to edit version.sbt and run `sbt publishSigned`)
 
+sbt publishSigned
+  If "Inappriopriate ioctl" error, see https://d.sb/2016/11/gpg-inappropriate-ioctl-for-device-errors
+
 Then:
  https://oss.sonatype.org/
- login credentials found in ~/.sbt/global.sbt
+ login credentials found in ~/.sbt/1.0/sonatype.sbt
  Staging Repositories
  find org.axle-lang repository
  close

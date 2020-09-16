@@ -8,11 +8,16 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.4 A bit more theory (Fall 2020)
 
+* rationalProbabilityDist is now implicitly available
+
 * Sampler
-  * `Sampler[ConditionalProbabilityTable]` cache `bars`
   * Axioms
     1. ProbabilityOf(RegionEq(sample(gen))) > 0?
-    2. In the limit, sampled distribution converges to model's
+
+* TODO
+
+* `Sampler[ConditionalProbabilityTable]` cache `bars`
+* 2. In the limit, sampled distribution converges to model's
 
 * `SigmaAlgebra` for the CPT
   * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`

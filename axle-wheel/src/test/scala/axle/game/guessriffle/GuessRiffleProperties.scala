@@ -24,7 +24,6 @@ import axle.syntax.kolmogorov._
 
 class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
 
-  implicit val dist = axle.probability.rationalProbabilityDist
   val monad = ConditionalProbabilityTable.monadWitness[Rational]
 
   def containsCorrectGuess(game: GuessRiffle, fromState: GuessRiffleState, moveDist: ConditionalProbabilityTable[GuessRiffleMove, Rational]): Boolean =
