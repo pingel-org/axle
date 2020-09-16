@@ -9,7 +9,7 @@ package object probability {
 
   // type CPTR[A] = ConditionalProbabilityTable[A, Rational]
 
-  val rationalProbabilityDist: Dist[Rational] = {
+  implicit val rationalProbabilityDist: Dist[Rational] = {
     val denominator = Integer.MAX_VALUE - 1 // 1000000
     val x = (i: Int) => Rational(i.toLong, denominator.toLong)
     val y = Dist.intrange(0, denominator)
