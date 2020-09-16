@@ -4,6 +4,8 @@ import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
 import spire.random.Generator.rng
+
+import axle.probability._
 import axle.game._
 import axle.game.Strategies._
 
@@ -12,7 +14,6 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
   import axle.game.montyhall.evGame._
   import axle.game.montyhall.evGameIO._
 
-  implicit val dist = axle.probability.rationalProbabilityDist
   implicit val rat = new spire.math.RationalAlgebra()
 
   val contestant = Player("C", "Contestant")

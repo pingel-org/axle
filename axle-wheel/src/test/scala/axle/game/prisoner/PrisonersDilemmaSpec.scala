@@ -4,6 +4,8 @@ import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
 import spire.random.Generator.rng
+
+import axle.probability._
 import axle.game._
 import axle.game.Strategies._
 
@@ -12,7 +14,6 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
   import axle.game.prisoner.evGame._
   import axle.game.prisoner.evGameIO._
 
-  implicit val dist = axle.probability.rationalProbabilityDist
   implicit val rat = new spire.math.RationalAlgebra()
 
   val p1 = Player("P1", "Prisoner 1")

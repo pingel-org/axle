@@ -6,8 +6,6 @@ import spire.random.Dist
 
 import axle.game.cards._
 import axle.probability._
-// import axle.probability.ConditionalProbabilityTable
-// import axle.probability.rationalProbabilityDist
 
 package object poker {
 
