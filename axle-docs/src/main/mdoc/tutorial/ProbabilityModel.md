@@ -133,8 +133,6 @@ It also requires context bounds on the value type `V` that give the method
 the ability to produces values with a distribution conforming to the probability model.
 
 ```scala mdoc
-implicit val dist = axle.probability.rationalProbabilityDist
-
 (1 to 10) map { _ => fairCoin.sample(rng) }
 
 (1 to 10) map { _ => biasedCoin.sample(rng) }
