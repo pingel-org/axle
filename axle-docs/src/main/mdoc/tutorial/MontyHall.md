@@ -9,6 +9,7 @@ See the Wikipedia page on the [Monty Hall problem](https://en.wikipedia.org/wiki
 The `axle.game.OldMontyHall` object contains a model of the rules of the game.
 
 ```scala mdoc:silent
+import axle.probability._
 import spire.math.Rational
 import axle.game.OldMontyHall._
 ```
