@@ -35,8 +35,6 @@ package object axle {
 
   // missing Eq witnesses
 
-  implicit val eqSymbol = Eq.fromUniversalEquals[Symbol]
-
   implicit def eqSeq[T](implicit eqT: Eq[T]): Eq[Seq[T]] =
     (x, y) =>
       x.length === y.length && x.zip(y).forall({ case (p, q) => eqT.eqv(p, q) })
