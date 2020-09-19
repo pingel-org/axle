@@ -9,7 +9,7 @@ object Suit {
   implicit val orderSuit: Order[Suit] =
     (a, b) => Order[Char].compare(a.serialize, b.serialize)
 
-  implicit def show[S <: Suit]: Show[S] = s => axle.showChar.show(s.serialize)
+  implicit def show[S <: Suit]: Show[S] = s => Show[Char].show(s.serialize)
 
   def apply(c: Char): Suit = c match {
     case '♠' => Spades
