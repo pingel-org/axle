@@ -1,8 +1,11 @@
 package axle
 
+import cats.Show
 package object xml {
 
   import scala.xml._
+
+  implicit val showNode: Show[scala.xml.Node] = Show.fromToString[scala.xml.Node]
 
   def elem(label: String, attributes: List[(String, String)], children: Node*): Elem = {
     val baseElem = Elem(null, label, Null, TopScope, true, children: _*)
