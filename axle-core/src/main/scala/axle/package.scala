@@ -28,16 +28,6 @@ package object axle {
 
   val ∃ = thereexists
 
-  // missing Show witnesses
-
-  // implicit def showSymbol: Show[Symbol] = Show.fromToString[Symbol]
-
-  // implicit val showChar: Show[Char] = Show.fromToString[Char]
-
-  // implicit val showNode: Show[scala.xml.Node] = Show.fromToString[scala.xml.Node]
-
-  // implicit val showRational: Show[Rational] = Show.fromToString[Rational]
-
   def showDoubleWithPrecision(p: Int = 6): Show[Double] = d => {
     val fmt = s"""%.${p}f"""
     fmt.format(d)
