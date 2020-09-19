@@ -16,8 +16,6 @@ import spire.implicits.SeqNormedVectorSpace
 import spire.math.Real
 import spire.laws._
 
-import axle._
-
 trait ScalarDoubleSpace extends MetricSpace[Double, Double] {
 
   def distance(v: Double, w: Double): Double = spire.math.abs(v - w)
@@ -34,10 +32,10 @@ trait RealTuple2Space extends MetricSpace[(Real, Real), Real] {
     ((v._1 - w._1) ** 2 + (v._2 - w._2) ** 2).sqrt()
 }
 
-trait SeqRealSpace extends MetricSpace[Seq[Real], Real] {
+trait IterableRealSpace extends MetricSpace[Iterable[Real], Real] {
 
-  def distance(v: Seq[Real], w: Seq[Real]): Real = {
-    assert(v.length == w.length)
+  def distance(v: Iterable[Real], w: Iterable[Real]): Real = {
+    assert(v.size == w.size)
     val parts = v.zip(w).map({ case (x, y) => (x - y) * (x - y) })
     val s = parts.reduce(implicitly[AdditiveMonoid[Real]].plus _)
     s.sqrt()
@@ -56,13 +54,13 @@ object ArbitrarySpaceStuff {
 
   implicit val arbReal2: Arbitrary[(Real, Real)] = Arbitrary(genTuple2[Real, Real])
 
-  def genRealSeqLengthN(n: Int): Gen[Seq[Real]] = {
+  def genRealIterableLengthN(n: Int): Gen[Iterable[Real]] = {
     val rs: Vector[Gen[Real]] = (1 to n).toVector.map(i => gen.real)
     Gen.sequence(rs).map(_.iterator().asScala.toList)
   }
 
-  def arbitraryRealSeqLengthN(n: Int): Arbitrary[Seq[Real]] =
-    Arbitrary(genRealSeqLengthN(n))
+  def arbitraryRealIterableLengthN(n: Int): Arbitrary[Iterable[Real]] =
+    Arbitrary(genRealIterableLengthN(n))
 }
 
 class MetricSpaceSpec() extends AnyFunSuite with Matchers with Discipline {
@@ -85,10 +83,14 @@ class MetricSpaceSpec() extends AnyFunSuite with Matchers with Discipline {
     "MetricSpace[Real, Real]",
     VectorSpaceLaws[Real, Real].metricSpace)
 
-  implicit val r4 = arbitraryRealSeqLengthN(4)
+  implicit val r4 = arbitraryRealIterableLengthN(4)
+
+  import axle.eqIterable
+
+  implicit val asdf = new IterableRealSpace {}
 
   checkAll(
-    "MetricSpace[Seq[Real], Real]",
-    VectorSpaceLaws[Seq[Real], Real].metricSpace)
+    "MetricSpace[Iterable[Real], Real]",
+    VectorSpaceLaws[Iterable[Real], Real].metricSpace)
 
 }
