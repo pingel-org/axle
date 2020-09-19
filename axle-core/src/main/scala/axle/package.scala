@@ -8,7 +8,6 @@ import cats.Show
 import cats.implicits._
 
 import spire.algebra._
-import spire.math.Rational
 import spire.random.Generator
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.additiveGroupOps
@@ -31,13 +30,13 @@ package object axle {
 
   // missing Show witnesses
 
-  implicit def showSymbol: Show[Symbol] = Show.fromToString[Symbol]
+  // implicit def showSymbol: Show[Symbol] = Show.fromToString[Symbol]
 
-  implicit val showChar: Show[Char] = Show.fromToString[Char]
+  // implicit val showChar: Show[Char] = Show.fromToString[Char]
 
-  implicit val showNode: Show[scala.xml.Node] = Show.fromToString[scala.xml.Node]
+  // implicit val showNode: Show[scala.xml.Node] = Show.fromToString[scala.xml.Node]
 
-  implicit val showRational: Show[Rational] = Show.fromToString[Rational]
+  // implicit val showRational: Show[Rational] = Show.fromToString[Rational]
 
   def showDoubleWithPrecision(p: Int = 6): Show[Double] = d => {
     val fmt = s"""%.${p}f"""
