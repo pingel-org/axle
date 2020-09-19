@@ -35,10 +35,6 @@ package object axle {
 
   // missing Eq witnesses
 
-  implicit def eqSeq[T](implicit eqT: Eq[T]): Eq[Seq[T]] =
-    (x, y) =>
-      x.length === y.length && x.zip(y).forall({ case (p, q) => eqT.eqv(p, q) })
-
   implicit def eqIterable[T](implicit eqT: Eq[T]): Eq[Iterable[T]] =
     (x, y) =>
       x.size === y.size && x.zip(y).forall({ case (p, q) => eqT.eqv(p, q) })
