@@ -16,7 +16,7 @@ import cats.implicits._
 import spire.algebra._
 import spire.random.Generator.rng
 
-import axle.shuffle
+import axle.probability.shuffle
 
 class KMeansSpecification
   extends AnyFunSuite with Matchers {

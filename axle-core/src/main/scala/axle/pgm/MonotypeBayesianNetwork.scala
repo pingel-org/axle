@@ -12,15 +12,10 @@ import spire.implicits.additiveSemigroupOps
 import spire.random.Dist
 import spire.random.Generator
 
-import axle.dummy
-// import axle.algebra.DirectedGraph
+import axle.algebra.dummy
 import axle.algebra.RegionEq
 import axle.algebra.Region
-//import axle.algebra.RegionEmpty
-//import axle.algebra.RegionAll
 import axle.probability._
-//import axle.math.Π
-//import axle.math.Σ
 import axle.syntax.directedgraph._
 
 /**

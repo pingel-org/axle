@@ -13,6 +13,7 @@ import spire.random.Seed
 import spire.math.Rational
 
 import axle.algebra.RegionEq
+import axle.algebra.ignore
 import axle.math.Σ
 import axle.game.Strategies._
 import axle.game.guessriffle.evGame._
@@ -39,7 +40,7 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
   property(s"perfectOptionsPlayerStrategy always has non-zero chance of guessing correctly") = {
 
     val player = Player("P", "Player")
-    val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, axle.ignore, axle.ignore)
+    val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, ignore, ignore)
 
     forAllNoShrink { (seed: Int) =>
       stateStreamMap(pGame, startState(pGame), containsCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ) forall { _._2 }
@@ -89,8 +90,8 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
   property("perfectOptionsPlayerStrategy's P(all correct) >> that of random mover (except when unshuffled), and its entropy is higher") = {
 
     val player = Player("P", "Player")
-    val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, axle.ignore, axle.ignore)
-    val rGame = GuessRiffle(player, randomMove, axle.ignore, axle.ignore)
+    val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, ignore, ignore)
+    val rGame = GuessRiffle(player, randomMove, ignore, ignore)
 
     // leverages the fact that s0 will be the same for both games. Not generally true
     val s0 = startState(rGame)

@@ -4,10 +4,12 @@ import cats.kernel.Eq
 
 import spire.math.Rational
 import spire.random.Dist
+import spire.random.Generator
 
 package object probability {
 
-  // type CPTR[A] = ConditionalProbabilityTable[A, Rational]
+  def shuffle[T](xs: List[T])(gen: Generator): List[T] =
+    xs.map(x => (x, gen.nextInt())).sortBy(_._2).map(_._1)
 
   implicit val rationalProbabilityDist: Dist[Rational] = {
     val denominator = Integer.MAX_VALUE - 1 // 1000000

@@ -1,5 +1,6 @@
 package axle
 
+import cats.Show
 import cats.Functor
 import cats.kernel.Eq
 import cats.kernel.Order
@@ -32,6 +33,21 @@ import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps
 
 package object math {
+
+  def showDoubleWithPrecision(p: Int = 6): Show[Double] = d => {
+    val fmt = s"""%.${p}f"""
+    fmt.format(d)
+  }
+
+  def orbit[N](f: N => N, x0: N, close: N => N => Boolean): List[N] =
+    trace(f, x0)
+      .takeWhile({
+        case (x, points) =>
+          // TODO inefficient. query points for the closest (or bounding) elements to x
+          !points.exists(close(x))
+      })
+      .lastOption.toList
+      .flatMap(_._2.toList)
 
   /**
    * Englishman John Wallis (1616 - 1703) approximation of π in 1655
@@ -316,6 +332,8 @@ package object math {
 
   def product[A, F[_]](fa: F[A])(implicit ev: MultiplicativeMonoid[A], agg: Aggregatable[F]): A =
     agg.aggregate(fa)(ev.one)(ev.times, ev.times)
+
+    
 
   /**
    * arithmetic, geometric, and harmonic means are "Pythagorean"

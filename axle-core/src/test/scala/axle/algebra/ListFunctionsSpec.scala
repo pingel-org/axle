@@ -1,11 +1,11 @@
-package axle
+package axle.algebra
 
 import cats.implicits._
 import spire.algebra._
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
-class PackageSpec extends AnyFunSuite with Matchers {
+class ListFunctionsSpec extends AnyFunSuite with Matchers {
 
   implicit val ringInt: Ring[Int] = spire.implicits.IntAlgebra
 

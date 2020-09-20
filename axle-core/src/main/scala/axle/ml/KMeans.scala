@@ -10,7 +10,7 @@ import cats.implicits._
 import spire.algebra.MetricSpace
 import spire.random.Generator
 
-import axle.shuffle
+import axle.probability.shuffle
 import axle.algebra.LinearAlgebra
 import axle.algebra.Finite
 import axle.algebra.Indexed

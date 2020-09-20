@@ -11,17 +11,14 @@ import spire.implicits.multiplicativeGroupOps
 import spire.random.Dist
 import spire.random.Generator
 
-import axle.dummy
+import axle.algebra.dummy
 import axle.math.Σ
 import axle.algebra._
 
 case class ConditionalProbabilityTable[E, V: Ring](p: Map[E, V]) {
 
-  // type CPTE[B] = ConditionalProbabilityTable[B, V]
-
   def domain: Iterable[E] = p.keys.toVector
 
-  // def events: CPTE[E] = this
 }
 
 

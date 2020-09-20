@@ -22,8 +22,8 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
   val randomGame = GuessRiffle(
     player,
     randomMove,
-    axle.ignore,
-    axle.ignore)
+    axle.algebra.ignore,
+    axle.algebra.ignore)
 
   test("hard coded game") {
     import axle.game.cards._
@@ -51,7 +51,7 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
 
   test("optimal player strategy gets better score") {
 
-    val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, axle.ignore, axle.ignore)
+    val pGame = GuessRiffle(player, GuessRiffle.perfectOptionsPlayerStrategy, axle.algebra.ignore, axle.algebra.ignore)
     val endState = play(pGame, startState(pGame), false, rng)
 
     // Note non-zero (but astronomically small) chance of this failing despite correct implementation

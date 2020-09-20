@@ -6,6 +6,18 @@ import spire.algebra.Bool
 import axle.algebra.Aggregatable
 import axle.syntax.aggregatable._
 
+object ∀ extends {
+
+  def apply[A, B, F[_]](
+      as: F[A])(
+      predicate: A => B)(
+      implicit
+      bool:    Bool[B],
+      functor: Functor[F],
+      agg:     Aggregatable[F]): B = forall.apply(as)(predicate)
+
+}
+
 object forall {
 
   def apply[A, B, F[_]](

@@ -2,8 +2,9 @@ package axle.visualize
 
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
-import spire.algebra._
+
 import cats.implicits._
+import spire.algebra._
 
 class PixelatedColoredAreaSpec extends AnyFunSuite with Matchers {
 
@@ -33,7 +34,8 @@ class PixelatedColoredAreaSpec extends AnyFunSuite with Matchers {
   test("PixelatedColoredArea renders a Logistic Map") {
 
     import math.abs
-    import axle.{ orbit, applyK }
+    import axle.algebra.applyK
+    import axle.math.orbit
     import axle.math.logisticMap
 
     def doubleClose(z: Double)(y: Double) = abs(z - y) < 1e-6
