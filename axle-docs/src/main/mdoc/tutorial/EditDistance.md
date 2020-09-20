@@ -41,7 +41,7 @@ Usage with spire's `distance` operator
 Imports
 
 ```scala mdoc:silent
-import axle.algebra.wrappedStringSpace
+import axle.algebra.metricspaces.wrappedStringSpace
 import spire.syntax.metricSpace.metricSpaceOps
 ```
 

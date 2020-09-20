@@ -105,7 +105,7 @@ bnVis.svg[IO]("alarmbayes.svg").unsafeRunSync()
 The network can be used to compute the joint probability table:
 
 ```scala mdoc
-import axle.showRational
+import axle.math.showRational
 
 val jpt = bn.jointProbabilityTable
 
