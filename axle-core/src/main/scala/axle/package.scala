@@ -8,7 +8,6 @@ import cats.Show
 import cats.implicits._
 
 import spire.algebra._
-import spire.random.Generator
 import spire.implicits.additiveSemigroupOps
 import spire.implicits.additiveGroupOps
 
