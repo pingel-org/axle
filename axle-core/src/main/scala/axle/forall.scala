@@ -6,6 +6,8 @@ import spire.algebra.Bool
 import axle.algebra.Aggregatable
 import axle.syntax.aggregatable._
 
+object ∀ extends forall
+
 object forall {
 
   def apply[A, B, F[_]](

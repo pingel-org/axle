@@ -18,16 +18,6 @@ import spire.implicits.additiveGroupOps
 
 package object axle {
 
-  // unicode aliases
-
-  //  val Sigma = Σ _
-  //
-  //  val Pi = Π _
-
-  val ∀ = forall
-
-  val ∃ = thereexists
-
   def showDoubleWithPrecision(p: Int = 6): Show[Double] = d => {
     val fmt = s"""%.${p}f"""
     fmt.format(d)
