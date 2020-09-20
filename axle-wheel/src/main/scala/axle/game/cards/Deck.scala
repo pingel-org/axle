@@ -6,7 +6,7 @@ import cats.implicits._
 import spire.random.Generator
 import spire.random.Generator.rng
 
-case class Deck(cards: List[Card] = axle.shuffle(Deck.cards)(rng))
+case class Deck(cards: List[Card] = axle.probability.shuffle(Deck.cards)(rng))
 
 object Deck {
 

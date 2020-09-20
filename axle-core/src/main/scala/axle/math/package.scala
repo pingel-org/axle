@@ -38,6 +38,16 @@ package object math {
     fmt.format(d)
   }
 
+  def orbit[N](f: N => N, x0: N, close: N => N => Boolean): List[N] =
+    trace(f, x0)
+      .takeWhile({
+        case (x, points) =>
+          // TODO inefficient. query points for the closest (or bounding) elements to x
+          !points.exists(close(x))
+      })
+      .lastOption.toList
+      .flatMap(_._2.toList)
+
   /**
    * Englishman John Wallis (1616 - 1703) approximation of π in 1655
    *

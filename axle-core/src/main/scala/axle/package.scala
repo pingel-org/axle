@@ -88,14 +88,6 @@ package object axle {
     runs(xs, breaks)
   }
 
-  /**
-   *
-   * shuffle
-   */
-
-  def shuffle[T](xs: List[T])(gen: Generator): List[T] =
-    xs.map(x => (x, gen.nextInt())).sortBy(_._2).map(_._1)
-
   // List methods
 
   def replicate[T](n: Int)(v: T): List[T] = (0 until n).map(i => v).toList
@@ -140,16 +132,6 @@ package object axle {
         case ((x, points), _) =>
           (f(x), points + x)
       })
-
-  def orbit[N](f: N => N, x0: N, close: N => N => Boolean): List[N] =
-    trace(f, x0)
-      .takeWhile({
-        case (x, points) =>
-          // TODO inefficient. query points for the closest (or bounding) elements to x
-          !points.exists(close(x))
-      })
-      .lastOption.toList
-      .flatMap(_._2.toList)
 
   /**
    * mergeStreams takes streams that are ordered w.r.t. Order[T]
