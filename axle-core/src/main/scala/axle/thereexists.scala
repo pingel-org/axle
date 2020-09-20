@@ -6,7 +6,10 @@ import spire.algebra.Bool
 import axle.algebra.Aggregatable
 import axle.syntax.aggregatable._
 
-object ∃ extends thereexists
+object ∃ {
+
+  def apply = thereexists.apply _
+}
 
 object thereexists {
 

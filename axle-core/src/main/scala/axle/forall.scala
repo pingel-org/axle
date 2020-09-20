@@ -6,7 +6,10 @@ import spire.algebra.Bool
 import axle.algebra.Aggregatable
 import axle.syntax.aggregatable._
 
-object ∀ extends forall
+object ∀ extends {
+
+  def apply = forall.apply _
+}
 
 object forall {
 
