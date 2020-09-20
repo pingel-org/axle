@@ -4,6 +4,7 @@ import java.lang.Double.{ isInfinite, isNaN }
 import scala.annotation.implicitNotFound
 import cats.implicits._
 import spire.math._
+import axle.math.showRational
 
 @implicitNotFound("Witness not found for Tics[${T}]")
 trait Tics[T] {
@@ -78,10 +79,6 @@ object Tics {
   implicit def rationalTics: Tics[Rational] = new Tics[Rational] {
 
     import spire.implicits.literalLongOps
-    import cats.Show
-    //import spire.implicits._
-
-    implicit val showRational: Show[Rational] = Show.fromToString[Rational]
 
     def step(from: Rational, to: Rational): Rational = {
       val power = ceil(log10((to - from).abs.toDouble)).toLong - 1L
