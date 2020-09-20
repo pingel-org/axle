@@ -186,8 +186,4 @@ package object axle {
   def lazyListsFrom[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): LazyList[N] =
     LazyList.cons(n, lazyListsFrom(ringN.plus(n, ringN.one)))
 
-  // Typeclass-based method invocations
-
-  def print[T: Show](t: T): Unit = println(t.show)
-
 }
