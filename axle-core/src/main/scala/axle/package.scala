@@ -18,16 +18,6 @@ import spire.implicits.additiveGroupOps
 
 package object axle {
 
-  // missing Eq witnesses
-
-  implicit def eqIterable[T](implicit eqT: Eq[T]): Eq[Iterable[T]] =
-    (x, y) =>
-      x.size === y.size && x.zip(y).forall({ case (p, q) => eqT.eqv(p, q) })
-
-  implicit def eqTreeMap[K, V](implicit eqK: Eq[K], eqV: Eq[V]): Eq[TreeMap[K, V]] =
-    (x, y) =>
-      x.keys === y.keys && x.keySet.forall(k => x.get(k) === y.get(k))
-
   // basic functions
 
   /**
