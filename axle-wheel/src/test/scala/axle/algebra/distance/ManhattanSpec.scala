@@ -12,7 +12,7 @@ import cats.implicits._
 import spire.algebra._
 import spire.laws.VectorSpaceLaws
 
-import axle.algebra.metricSpaceFromAdditiveGroupSigned
+import axle.algebra.metricspaces.metricSpaceFromAdditiveGroupSigned
 import axle.algebra.LinearAlgebra
 import axle.jblas.linearAlgebraDoubleMatrix
 import axle.jblas.eqDoubleMatrix
