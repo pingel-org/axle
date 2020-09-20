@@ -1,7 +1,6 @@
 import scala.collection.mutable.Buffer
 
 import scala.reflect.ClassTag
-import scala.collection.immutable.TreeMap
 import scala.language.implicitConversions
 
 /**

@@ -1,14 +1,17 @@
 package axle
 
 import scala.language.implicitConversions
+import scala.collection.immutable.TreeMap
 
 import cats.Functor
+import cats.Order.catsKernelOrderingForOrder
 
 import spire.algebra._
 import spire.math.Rational
 import spire.math.Real
 import spire.math.Real.apply
 import spire.implicits.additiveGroupOps
+import spire.implicits.additiveSemigroupOps
 
 package object algebra {
 
@@ -76,13 +79,15 @@ package object algebra {
     (x, y) =>
       x.size === y.size && x.zip(y).forall({ case (p, q) => eqT.eqv(p, q) })
 
-  implicit def eqTreeMap[K, V](implicit eqK: Eq[K], eqV: Eq[V]): Eq[TreeMap[K, V]] =
+  implicit def eqTreeMap[K, V](implicit eqK: Eq[K], eqV: Eq[V]): Eq[TreeMap[K, V]] = {
+    val eqOptV = Eq[Option[V]]
     (x, y) =>
-      x.keys === y.keys && x.keySet.forall(k => x.get(k) === y.get(k))
+      Eq[Iterable[K]].eqv(x.keys, y.keys) && x.keySet.forall(k => eqOptV.eqv(x.get(k), y.get(k)))
+  }
 
   implicit def eqIndexedSeq[T](implicit eqT: Eq[T]): Eq[IndexedSeq[T]] =
     (l: IndexedSeq[T], r: IndexedSeq[T]) =>
-      l.size == r.size && (0 until l.size).forall( i => eqT.eqv(l(i), r(i)))
+      l.size === r.size && (0 until l.size).forall( i => eqT.eqv(l(i), r(i)))
 
   implicit val functorIndexedSeq: Functor[IndexedSeq] =
     new Functor[IndexedSeq] {
