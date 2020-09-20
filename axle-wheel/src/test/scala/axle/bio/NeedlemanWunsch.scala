@@ -12,7 +12,7 @@ import cats.implicits._
 
 import spire.algebra._
 
-import axle.algebra.functorIndexedSeq
+import axle.algebra.functors.functorIndexedSeq
 
 object SharedNeedlemanWunsch {
 

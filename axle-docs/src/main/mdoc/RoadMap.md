@@ -14,24 +14,25 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Axioms
     1. ProbabilityOf(RegionEq(sample(gen))) > 0?
 
+* Reduce size of `axle._` package object
+* Organize `axle.algebra._` package object
+
 * TODO
 
-* `Sampler[ConditionalProbabilityTable]` cache `bars`
+* Axiom? `pm.filter(X=x).P(X=x) === 1`
 * 2. In the limit, sampled distribution converges to model's
+* `Sampler[ConditionalProbabilityTable]` cache `bars`
 
 * `SigmaAlgebra` for the CPT
   * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
   * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
   * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
 
-* Fix third Kolmogorov law
-* Optimize `KolmogorovProbabilityAxioms.combination`
-
-* Axiom? `pm.filter(X=x).P(X=x) === 1`
 * rename `ConditionalProbabilityTable`?
-
 * Functor for CPT?
 * `{CPT,TD}.tailRecM` then ScalaCheck `Monad[CPT]`
+
+* Footnotes (Giry, etc)
 
 ## 0.5.5 Adoption blockers (Late 2020)
 
@@ -41,6 +42,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * ast.view.AstNodeFormatter (xml.Utility.escape)
   * ast.view.AstNodeFormatterXhtmlLines
   * ast.view.AstNodeFormatterXhtml
+
+* Scrutinize `axle.Enriched*`
 
 * Improve Gold and Angluin coverage
 * `axle-core/src/main/scala/axle/lx/*.txt`

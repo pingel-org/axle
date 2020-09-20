@@ -11,6 +11,7 @@ import spire.implicits.additiveSemigroupOps
 import spire.implicits.multiplicativeSemigroupOps
 
 import axle.algebra._
+import axle.algebra.functors._
 import axle.math._
 import axle.probability._
 import axle.stats.TallyDistribution
