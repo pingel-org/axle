@@ -3,6 +3,7 @@ package axle
 import scala.language.implicitConversions
 import scala.collection.immutable.TreeMap
 
+import cats.implicits._
 import cats.Functor
 import cats.Order.catsKernelOrderingForOrder
 

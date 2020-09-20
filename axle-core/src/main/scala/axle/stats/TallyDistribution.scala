@@ -14,7 +14,7 @@ import spire.random.Dist
 import spire.random.Generator
 
 import axle.math.Σ
-import axle.dummy
+import axle.algebra.dummy
 import axle.algebra.Region
 import axle.algebra.RegionEq
 import axle.probability._

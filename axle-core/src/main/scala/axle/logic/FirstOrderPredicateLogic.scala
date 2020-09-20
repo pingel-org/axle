@@ -6,7 +6,7 @@ import cats.kernel.Eq
 import cats.implicits._
 import cats.implicits.showInterpolator
 import cats.Show
-import axle.dummy
+import axle.algebra.dummy
 
 object FirstOrderPredicateLogic {
 
