@@ -33,6 +33,11 @@ import axle.syntax.indexed.indexedOps
 
 package object math {
 
+  def showDoubleWithPrecision(p: Int = 6): Show[Double] = d => {
+    val fmt = s"""%.${p}f"""
+    fmt.format(d)
+  }
+
   /**
    * Englishman John Wallis (1616 - 1703) approximation of π in 1655
    *

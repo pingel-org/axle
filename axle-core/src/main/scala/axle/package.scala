@@ -18,11 +18,6 @@ import spire.implicits.additiveGroupOps
 
 package object axle {
 
-  def showDoubleWithPrecision(p: Int = 6): Show[Double] = d => {
-    val fmt = s"""%.${p}f"""
-    fmt.format(d)
-  }
-
   // missing Eq witnesses
 
   implicit def eqIterable[T](implicit eqT: Eq[T]): Eq[Iterable[T]] =
