@@ -68,7 +68,7 @@ package object jblas {
         x.mmul(y)
     }
 
-  val sd6 = axle.showDoubleWithPrecision(6)
+  val sd6 = axle.math.showDoubleWithPrecision(6)
   implicit def showDoubleMatrix: Show[DoubleMatrix] = m =>
     (0 until m.getRows) map { i =>
       (0 until m.getColumns) map { j =>
