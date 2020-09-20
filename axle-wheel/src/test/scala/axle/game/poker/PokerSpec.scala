@@ -97,9 +97,9 @@ class PokerSpec extends AnyFunSuite with Matchers {
 
     val game = Poker(
       Vector(
-      (p1, hardCodedStringStrategy(p1Move), axle.ignore),
-      (p2, hardCodedStringStrategy(p2Move), axle.ignore)),
-      axle.ignore)
+      (p1, hardCodedStringStrategy(p1Move), axle.algebra.ignore),
+      (p2, hardCodedStringStrategy(p2Move), axle.algebra.ignore)),
+      axle.algebra.ignore)
 
     val start = startState(game)
     val history = moveStateStream(game, start, rng).toVector

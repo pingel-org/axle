@@ -24,8 +24,8 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
   val game = TicTacToe(
     3,
-    x, interactiveMove, axle.ignore,
-    o, interactiveMove, axle.ignore)
+    x, interactiveMove, axle.algebra.ignore,
+    o, interactiveMove, axle.algebra.ignore)
 
   test("game define intro message, have 9 positions") {
 
@@ -35,8 +35,8 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
   val rGame = TicTacToe(
     3,
-    x, randomMove, axle.ignore,
-    o, randomMove, axle.ignore)
+    x, randomMove, axle.algebra.ignore,
+    o, randomMove, axle.algebra.ignore)
 
   test("random game produce moveStateStream") {
     moveStateStream(rGame, startState(rGame), rng).take(3).length should be(3)
@@ -85,8 +85,8 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
   test("starting moves are defined for 4x4 game") {
     val bigGame = TicTacToe(
       4,
-      x, randomMove, axle.ignore,
-      o, randomMove, axle.ignore)
+      x, randomMove, axle.algebra.ignore,
+      o, randomMove, axle.algebra.ignore)
     val startingMoves = moves(bigGame, startState(bigGame))
     startingMoves.map(_.description).mkString(",") should include("16")
   }
@@ -154,8 +154,8 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
     val game = TicTacToe(
       3,
-      x, hardCodedStringStrategy(xMove), axle.ignore,
-      o, hardCodedStringStrategy(oMove), axle.ignore)
+      x, hardCodedStringStrategy(xMove), axle.algebra.ignore,
+      o, hardCodedStringStrategy(oMove), axle.algebra.ignore)
 
     val start = startState(game)
     val lastState = moveStateStream(game, start, rng).last._3
@@ -184,8 +184,8 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
     val game = TicTacToe(
       3,
-      x, hardCodedStringStrategy(xMove), axle.ignore,
-      o, hardCodedStringStrategy(oMove), axle.ignore)
+      x, hardCodedStringStrategy(xMove), axle.algebra.ignore,
+      o, hardCodedStringStrategy(oMove), axle.algebra.ignore)
 
     val start = startState(game)
     val lastState = moveStateStream(game, start, rng).last._3
@@ -214,8 +214,8 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
     val game = TicTacToe(
       3,
-      x, hardCodedStringStrategy(xMove), axle.ignore,
-      o, hardCodedStringStrategy(oMove), axle.ignore)
+      x, hardCodedStringStrategy(xMove), axle.algebra.ignore,
+      o, hardCodedStringStrategy(oMove), axle.algebra.ignore)
 
     val start = startState(game)
     val lastState = moveStateStream(game, start, rng).last._3

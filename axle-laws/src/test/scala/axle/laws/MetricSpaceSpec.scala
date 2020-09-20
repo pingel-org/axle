@@ -39,9 +39,9 @@ class MetricSpaceSpec() extends AnyFunSuite with Matchers with Discipline {
 
   implicit val r4 = arbitraryRealIterableLengthN(4)
 
-  import axle.eqIterable
+  import axle.algebra.eqIterable
 
-  implicit val asdf = new IterableRealSpace {}
+  implicit val itRealSpace = new IterableRealSpace {}
 
   checkAll(
     "MetricSpace[Iterable[Real], Real]",

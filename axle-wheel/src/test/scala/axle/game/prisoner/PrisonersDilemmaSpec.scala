@@ -20,8 +20,8 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
   val p2 = Player("P2", "Prisoner 2")
 
   val game = PrisonersDilemma(
-    p1, interactiveMove, axle.ignore,
-    p2, interactiveMove, axle.ignore)
+    p1, interactiveMove, axle.algebra.ignore,
+    p2, interactiveMove, axle.algebra.ignore)
 
   def silence(game: PrisonersDilemma, state: PrisonersDilemmaState): String =
     "silence"
@@ -32,8 +32,8 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
   val start = startState(game)
 
   val rGame = PrisonersDilemma(
-    p1, randomMove, axle.ignore,
-    p2, randomMove, axle.ignore)
+    p1, randomMove, axle.algebra.ignore,
+    p2, randomMove, axle.algebra.ignore)
 
   test("random game has an intro message") {
     introMessage(game) should include("Prisoner")
@@ -111,12 +111,12 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
   test("dual silence > dual betrayal for both") {
 
     val silenceGame = PrisonersDilemma(
-      p1, hardCodedStringStrategy(silence), axle.ignore,
-      p2, hardCodedStringStrategy(silence), axle.ignore)
+      p1, hardCodedStringStrategy(silence), axle.algebra.ignore,
+      p2, hardCodedStringStrategy(silence), axle.algebra.ignore)
 
     val betrayalGame = PrisonersDilemma(
-      p1, hardCodedStringStrategy(betrayal), axle.ignore,
-      p2, hardCodedStringStrategy(betrayal), axle.ignore)
+      p1, hardCodedStringStrategy(betrayal), axle.algebra.ignore,
+      p2, hardCodedStringStrategy(betrayal), axle.algebra.ignore)
 
     val silentOutcome = outcome(silenceGame, moveStateStream(silenceGame, start, rng).last._3).get
     val betrayalOutcome = outcome(betrayalGame, moveStateStream(betrayalGame, start, rng).last._3).get
@@ -128,12 +128,12 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
   test("silence/betrayal inverse asymmetry") {
 
     val p1silent = PrisonersDilemma(
-      p1, hardCodedStringStrategy(silence), axle.ignore,
-      p2, hardCodedStringStrategy(betrayal), axle.ignore)
+      p1, hardCodedStringStrategy(silence), axle.algebra.ignore,
+      p2, hardCodedStringStrategy(betrayal), axle.algebra.ignore)
 
     val p2silent = PrisonersDilemma(
-      p1, hardCodedStringStrategy(betrayal), axle.ignore,
-      p2, hardCodedStringStrategy(silence), axle.ignore)
+      p1, hardCodedStringStrategy(betrayal), axle.algebra.ignore,
+      p2, hardCodedStringStrategy(silence), axle.algebra.ignore)
 
     val lastStateP1Silent = moveStateStream(p1silent, start, rng).last._3
     val p1silentOutcome = outcome(p1silent, lastStateP1Silent).get

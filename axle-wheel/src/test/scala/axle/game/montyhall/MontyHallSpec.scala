@@ -20,12 +20,12 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
   val monty = Player("M", "Monty Hall")
 
   val game = MontyHall(
-    contestant, interactiveMove, axle.ignore,
-    monty, interactiveMove, axle.ignore)
+    contestant, interactiveMove, axle.algebra.ignore,
+    monty, interactiveMove, axle.algebra.ignore)
 
   val rGame = MontyHall(
-    contestant, randomMove, axle.ignore,
-    monty, randomMove, axle.ignore)
+    contestant, randomMove, axle.algebra.ignore,
+    monty, randomMove, axle.algebra.ignore)
 
   test("random game has an intro message") {
     introMessage(rGame) should include("Monty")
