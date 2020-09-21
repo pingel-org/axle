@@ -10,16 +10,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * rationalProbabilityDist is now implicitly available
 
-* Sampler
-  * Axioms
-    1. ProbabilityOf(RegionEq(sample(gen))) > 0?
+* Sampler Axioms
+  1. ProbabilityOf(RegionEq(sample(gen))) > 0?
+  2. Sampled distribution converges to model's
 
 * Reduce size of `axle._` package object
 * Organize `axle.algebra._` package object
 
 * TODO
-
-* 2. In the limit, sampled distribution converges to model's
 
 * `Sampler[ConditionalProbabilityTable]` cache `bars`
 

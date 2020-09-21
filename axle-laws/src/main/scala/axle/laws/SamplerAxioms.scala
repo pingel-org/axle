@@ -58,6 +58,15 @@ object SamplerAxioms {
       .foldLeft(Field[V].zero)(Field[V].plus _)
     )
 
+
+  /**
+    * convergence
+    * 
+    * This is a weak version and should be revisited.
+    * 
+    * It requires careful selection of "few" and "many"
+    */
+
   def convergence[
     T,
     M[_, _]: Kolmogorov: Sampler,
