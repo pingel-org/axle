@@ -19,11 +19,12 @@ import spire.math.Rational
 import spire.math.ConvertableTo
 import spire.math.ConvertableFrom
 
+import axle.algebra._
+
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.quanta.AngleConverter
 import axle.quanta.Distance
-import axle.algebra._
 
 import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps

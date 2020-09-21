@@ -6,7 +6,7 @@ import org.scalacheck.Properties
 import cats.Order
 import cats.kernel.Eq
 
-import spire.algebra.Field
+import spire.algebra._
 import spire.random.Dist
 
 import axle.algebra.Region
@@ -26,15 +26,21 @@ abstract class SamplerProperties[
   T,
   M[_, _]: Kolmogorov: Sampler,
   E: Eq,
-  V: Field: Order: Dist](
+  V: Field: Order: Dist: NRoot](
     name: String,
     arbT: Arbitrary[T],
     modelFn: T => M[E, V],
+    domain: Iterable[E],
+    few: Int,
+    many: Int,
     arbRegionFn: T => Arbitrary[Region[E]],
     eqREFn: T => Eq[Region[E]])
     extends Properties("Sampler Axioms") {
   
       property(s"$name Sampled values have non-zero probability") =
         SamplerAxioms.nonZero(arbT, modelFn, arbRegionFn, eqREFn)
+
+      property(s"$name Sampled distribution converges to the underlying model") =
+        SamplerAxioms.convergence(arbT, modelFn, domain, few, many, arbRegionFn, eqREFn)
 
 }

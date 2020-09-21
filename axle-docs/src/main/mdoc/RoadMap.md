@@ -19,8 +19,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * TODO
 
-* Axiom? `pm.filter(X=x).P(X=x) === 1`
 * 2. In the limit, sampled distribution converges to model's
+
 * `Sampler[ConditionalProbabilityTable]` cache `bars`
 
 * `SigmaAlgebra` for the CPT
@@ -28,7 +28,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
   * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
 
-* rename `ConditionalProbabilityTable`?
+* Rename `ConditionalProbabilityTable`?
 * Functor for CPT?
 * `{CPT,TD}.tailRecM` then ScalaCheck `Monad[CPT]`
 
