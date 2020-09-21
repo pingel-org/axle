@@ -30,9 +30,9 @@ abstract class SamplerProperties[
     name: String,
     arbT: Arbitrary[T],
     modelFn: T => M[E, V],
-    domain: Iterable[E],
-    few: Int,
-    many: Int,
+    domain: T => Iterable[E],
+    few: T => Int,
+    many: T => Int,
     arbRegionFn: T => Arbitrary[Region[E]],
     eqREFn: T => Eq[Region[E]])
     extends Properties("Sampler Axioms") {

@@ -65,9 +65,9 @@ object SamplerAxioms {
     V: Field: Dist: Order: Eq: NRoot](
     arbT: Arbitrary[T],
     modelFn: T => M[E, V],
-    domain: Iterable[E],
-    few: Int,
-    many: Int,
+    domain: T => Iterable[E],
+    few: T => Int,
+    many: T => Int,
     arbRegionFn: T => Arbitrary[Region[E]],
     eqREFn: T => Eq[Region[E]]): Prop = {
 
@@ -79,11 +79,11 @@ object SamplerAxioms {
         forAll { seed: Int =>
           val rng = Random.generatorFromSeed(Seed(seed))
 
-          val fewTally = TallyDistribution((1 to few).map { _ => model.sample(rng) } tally )
+          val fewTally = TallyDistribution((1 to few(t)).map { _ => model.sample(rng) } tally )
 
-          val manyTally = TallyDistribution((1 to many).map { _ => model.sample(rng) } tally )
+          val manyTally = TallyDistribution((1 to many(t)).map { _ => model.sample(rng) } tally )
 
-          distance[TallyDistribution, M, E, V](domain, fewTally, model) > distance[TallyDistribution, M, E, V](domain, manyTally, model)
+          distance[TallyDistribution, M, E, V](domain(t), fewTally, model) >= distance[TallyDistribution, M, E, V](domain(t), manyTally, model)
         }
       }
     }
