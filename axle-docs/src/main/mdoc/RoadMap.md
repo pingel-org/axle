@@ -16,10 +16,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Reduce size of `axle._` package object
 * Organize `axle.algebra._` package object
+* Pre-compute `ConditionalProbabilityTable.bars` for `Sampler` witness
 
 * TODO
-
-* `Sampler[ConditionalProbabilityTable]` cache `bars`
 
 * `SigmaAlgebra` for the CPT
   * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`

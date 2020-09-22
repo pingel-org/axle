@@ -19,6 +19,12 @@ case class ConditionalProbabilityTable[E, V: Ring](p: Map[E, V]) {
 
   def domain: Iterable[E] = p.keys.toVector
 
+  lazy val bars =
+    p
+    .toVector
+    .scanLeft((dummy[E], Ring[V].zero)) { (x, y) => (y._1, x._2 + y._2) }
+    .drop(1)
+
 }
 
 
@@ -53,11 +59,8 @@ object ConditionalProbabilityTable {
     new Sampler[ConditionalProbabilityTable]{
 
       def sample[A, V](model: ConditionalProbabilityTable[A, V])(gen: Generator)(implicit spireDist: Dist[V], ringV: Ring[V], orderV: Order[V]): A = {
-        // implicit val ringV: Ring[V], val eqA: cats.kernel.Eq[A]
-        // TODO cache the bars?
-        val bars = model.p.toVector.scanLeft((dummy[A], ringV.zero))((x, y) => (y._1, x._2 + y._2)).drop(1)
         val r: V = gen.next[V]
-        bars.find({ case (_, v) => orderV.gteqv(v, r) }).get._1 // otherwise malformed distribution
+        model.bars.find({ case (_, v) => orderV.gteqv(v, r) }).get._1 // otherwise malformed distribution
       }
   }
 
