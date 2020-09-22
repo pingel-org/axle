@@ -22,7 +22,7 @@ def lhsContainsMark(minX: Double, maxX: Double, maxY: Double, minY: Double): Boo
   val f = axle.math.logisticMap(λ)
   val set = memo.get(λ).getOrElse {
     val set = new TreeSet[Double]()
-    axle.applyForever(f, initial).drop(10000).take(200) foreach { set.add }
+    axle.algebra.applyForever(f, initial).drop(10000).take(200) foreach { set.add }
     memo += minX -> set
     set
   }

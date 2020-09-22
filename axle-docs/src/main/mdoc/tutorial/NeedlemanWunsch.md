@@ -21,6 +21,7 @@ import spire.algebra.NRoot
 import spire.algebra.Field
 
 import axle.algebra._
+import axle.algebra.functors._
 import axle.bio._
 import NeedlemanWunsch.optimalAlignment
 import NeedlemanWunschDefaults._

@@ -10,25 +10,22 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * rationalProbabilityDist is now implicitly available
 
-* Sampler
-  * Axioms
-    1. ProbabilityOf(RegionEq(sample(gen))) > 0?
+* Sampler Axioms
+  1. ProbabilityOf(RegionEq(sample(gen))) > 0?
+  2. Sampled distribution converges to model's
 
 * Reduce size of `axle._` package object
 * Organize `axle.algebra._` package object
+* Pre-compute `ConditionalProbabilityTable.bars` for `Sampler` witness
 
 * TODO
-
-* Axiom? `pm.filter(X=x).P(X=x) === 1`
-* 2. In the limit, sampled distribution converges to model's
-* `Sampler[ConditionalProbabilityTable]` cache `bars`
 
 * `SigmaAlgebra` for the CPT
   * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
   * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
   * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
 
-* rename `ConditionalProbabilityTable`?
+* Rename `ConditionalProbabilityTable`?
 * Functor for CPT?
 * `{CPT,TD}.tailRecM` then ScalaCheck `Monad[CPT]`
 

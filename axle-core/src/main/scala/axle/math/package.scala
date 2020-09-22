@@ -6,12 +6,8 @@ import cats.kernel.Eq
 import cats.kernel.Order
 import cats.implicits._
 
-//import spire.implicits.additiveGroupOps
 import spire.implicits.multiplicativeGroupOps
-//import spire.implicits.multiplicativeSemigroupOps
 import spire.math.log
-//import spire.math.Rational
-//import spire.math.Rational.apply
 import spire.math.Real.apply
 import spire.algebra._
 import spire.implicits.nrootOps
@@ -23,16 +19,19 @@ import spire.math.Rational
 import spire.math.ConvertableTo
 import spire.math.ConvertableFrom
 
+import axle.algebra._
+
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
 import axle.quanta.AngleConverter
 import axle.quanta.Distance
-import axle.algebra._
 
 import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps
 
 package object math {
+
+  implicit val showRational: Show[Rational] = Show.fromToString[Rational]
 
   def showDoubleWithPrecision(p: Int = 6): Show[Double] = d => {
     val fmt = s"""%.${p}f"""
