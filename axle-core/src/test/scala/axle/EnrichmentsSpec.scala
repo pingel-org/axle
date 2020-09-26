@@ -49,7 +49,7 @@ class EnrichmentsSpec extends AnyFunSuite with Matchers {
 
   test("EnrichedIndexdSeq ℘ also creates powerset") {
     val xs = (1 to 3).toVector
-    assertResult(xs.℘())(xs.powerset)
+    assertResult(xs.℘)(xs.powerset)
   }
 
   test("EnrichedIndexdSeq permutations(n) creates permutations") {

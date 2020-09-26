@@ -24,9 +24,9 @@ case class EnrichedIndexedSeq[T](is: scala.collection.immutable.IndexedSeq[T]) {
 
   def random(gen: Generator): T = is(gen.nextInt(is.size))
 
-  def powerset: IndexedPowerSet[T] = IndexedPowerSet(is)
+  lazy val powerset: IndexedPowerSet[T] = IndexedPowerSet(is)
 
-  def ℘(): IndexedPowerSet[T] = IndexedPowerSet(is)
+  lazy val ℘ = powerset
 
   def permutations(r: Int): PermutationsFast[T] = PermutationsFast(is, r)
 
