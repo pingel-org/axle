@@ -10,7 +10,7 @@ import spire.math.Numeric.RationalIsNumeric
 
 import axle.algebra.Region
 import axle.probability._
-import axle.laws.TestSupport._
+import axle.laws.generator._
 
 class BernoulliSampler
   extends SamplerProperties[Rational, ConditionalProbabilityTable, Int, Rational](

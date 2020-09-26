@@ -9,7 +9,7 @@ import spire.math.Rational
 
 import axle.algebra.Region
 import axle.probability._
-import axle.laws.TestSupport._
+import axle.laws.generator._
 
 class BernoulliIsKolmogorov
   extends KolmogorovProbabilityProperties[Rational, ConditionalProbabilityTable, Int, Rational](

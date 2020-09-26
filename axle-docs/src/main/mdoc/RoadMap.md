@@ -13,25 +13,22 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Sampler Axioms
   1. ProbabilityOf(RegionEq(sample(gen))) > 0?
   2. Sampled distribution converges to model's
+* Pre-compute `ConditionalProbabilityTable.bars` for `Sampler` witness
 
 * Reduce size of `axle._` package object
 * Organize `axle.algebra._` package object
-* Pre-compute `ConditionalProbabilityTable.bars` for `Sampler` witness
-
-* TODO
-
 * `axle.laws.generator`
 
 * Scrutinize `axle.Enriched*`
-
-* Improve Gold and Angluin coverage
-* `axle-core/src/main/scala/axle/lx/*.txt`
 
 ## 0.5.5 Bugs and refactorings
 
 * Reorder mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
 * Footnotes (Giry, etc)
 * Chicklet borders / colors
+
+* Improve Gold and Angluin coverage
+* `axle-core/src/main/scala/axle/lx/*.txt`
 
 * Fix occasional MetricSpace failure
 * Fix `axle.algebra.GeoMetricSpaceSpec`

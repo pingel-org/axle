@@ -7,6 +7,7 @@ import spire.math._
 
 import axle.probability._
 import axle.laws._
+import axle.laws.generator._
 import axle.algebra.Region
 import axle.example.AlarmBurglaryEarthquakeBayesianNetwork
 import axle.pgm.MonotypeBayesanNetwork
@@ -31,7 +32,7 @@ class AlarmBurglaryEarthQuakeBayesianNetworkIsKolmogorov
     } yield Rational(numerator.toLong, denominator.toLong)),
     // T => M[E, V]
     { case seed => new AlarmBurglaryEarthquakeBayesianNetwork(pEarthquake = seed).monotype },
-    { case seed => Arbitrary(TestSupport.genRegion(AlarmBurglaryEarthquakeBayesianNetwork.domain)) },
+    { case seed => Arbitrary(genRegion(AlarmBurglaryEarthquakeBayesianNetwork.domain)) },
     { case seed => Region.eqRegionIterable(AlarmBurglaryEarthquakeBayesianNetwork.domain) }
   )(
     axle.pgm.MonotypeBayesanNetwork.kolmogorovWitness[Boolean, DirectedSparseGraph],
@@ -47,9 +48,9 @@ class AlarmBurglaryEarthquakeBayesianNetworkIsBayes
     (Boolean, Boolean, Boolean, Boolean, Boolean),
     Rational](
     "Alarm-Burglary-Earthquake Bayesian Network",
-    Arbitrary(TestSupport.genPortion),
+    Arbitrary(genPortion),
     { case seed => new AlarmBurglaryEarthquakeBayesianNetwork(pEarthquake = seed).monotype },
-    { case seed => Arbitrary(TestSupport.genRegion(AlarmBurglaryEarthquakeBayesianNetwork.domain)) },
+    { case seed => Arbitrary(genRegion(AlarmBurglaryEarthquakeBayesianNetwork.domain)) },
     { case seed => Region.eqRegionIterable(AlarmBurglaryEarthquakeBayesianNetwork.domain) }
 )(
     axle.pgm.MonotypeBayesanNetwork.bayesWitness[Boolean, DirectedSparseGraph],
