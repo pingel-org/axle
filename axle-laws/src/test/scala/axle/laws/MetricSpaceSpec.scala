@@ -12,9 +12,9 @@ import spire.implicits.SeqNormedVectorSpace
 import spire.math.Real
 import spire.laws._
 
-class MetricSpaceSpec() extends AnyFunSuite with Matchers with Discipline {
+import axle.laws.generator._
 
-  import axle.laws.TestSupport._
+class MetricSpaceSpec() extends AnyFunSuite with Matchers with Discipline {
 
   implicit val arbReal2: Arbitrary[(Real, Real)] = Arbitrary(genTuple2[Real, Real](gr, gr))
 

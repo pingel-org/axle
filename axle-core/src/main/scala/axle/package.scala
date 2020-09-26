@@ -22,6 +22,4 @@ package object axle {
 
   implicit def enrichArray[T: ClassTag](arr: Array[T]): EnrichedArray[T] = EnrichedArray(arr)
 
-  implicit def enrichInt(n: Int): EnrichedInt = EnrichedInt(n)
-
 }

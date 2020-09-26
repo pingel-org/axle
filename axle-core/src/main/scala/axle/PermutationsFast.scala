@@ -3,13 +3,17 @@ package axle
 import scala.collection.mutable.ListBuffer
 
 import cats.implicits._
+import spire.algebra._
+import axle.math.factorial
 
 case class PermutationsFast[E](pool: IndexedSeq[E], r: Int)
   extends Iterable[IndexedSeq[E]] {
 
   val n = pool.length
 
-  override def size: Int = if (r >= 0 && r <= n) { n.factorial / (n - r).factorial } else { 0 }
+  implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
+
+  override def size: Int = if (r >= 0 && r <= n) { factorial(n) / factorial(n - r) } else { 0 }
 
   val yeeld = new ListBuffer[IndexedSeq[E]]() // TODO substitute for "yield" for now
 

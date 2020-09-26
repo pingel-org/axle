@@ -9,10 +9,8 @@ import cats.kernel.Eq
 import spire.math._
 
 import axle.algebra._
-// import spire.syntax.fractional
 
-object TestSupport {
-
+package object generator {
 
   def genPortion(
     minDenominatorSteps: Int,
