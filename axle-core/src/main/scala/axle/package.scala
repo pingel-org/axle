@@ -14,8 +14,6 @@ package object axle {
 
   implicit def enrichIterator[T](it: Iterator[T]) = new EnrichedIterator(it)
 
-  implicit def enrichByteArray(barr: Array[Byte]): EnrichedByteArray = EnrichedByteArray(barr)
-
   implicit def enrichMutableBuffer[T](buffer: Buffer[T]): EnrichedMutableBuffer[T] = EnrichedMutableBuffer(buffer)
 
   implicit def enrichArray[T: ClassTag](arr: Array[T]): EnrichedArray[T] = EnrichedArray(arr)
