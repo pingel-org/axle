@@ -15,7 +15,7 @@ import axle.laws.TestSupport._
 class BernoulliSampler
   extends SamplerProperties[Rational, ConditionalProbabilityTable, Int, Rational](
     "Bernoulli",
-    Arbitrary(genPortion),
+    Arbitrary(genPortion(50, 500, _ => 1, _ - 1)),
     p => bernoulliDistribution(p),
     n => Vector(0, 1),
     n => 1,

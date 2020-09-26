@@ -9,8 +9,21 @@ import cats.kernel.Eq
 import spire.math._
 
 import axle.algebra._
+// import spire.syntax.fractional
 
 object TestSupport {
+
+
+  def genPortion(
+    minDenominatorSteps: Int,
+    maxDenominatorSteps: Int,
+    minNumerator: Int => Int,
+    maxNumerator: Int => Int): Gen[Rational] =
+    for {
+      denominator <- Gen.oneOf(minDenominatorSteps to maxDenominatorSteps)
+      numerator <- Gen.oneOf(minNumerator(denominator) to maxNumerator(denominator))
+    } yield Rational(numerator.toLong, denominator.toLong)
+
 
   val genPortion: Gen[Rational] =
     for {
