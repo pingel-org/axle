@@ -8,8 +8,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.5.4 Sampler Axioms + package reorg (Fall 2020)
 
-* rationalProbabilityDist is now implicitly available
-
 * Sampler Axioms
   1. ProbabilityOf(RegionEq(sample(gen))) > 0?
   2. Sampled distribution converges to model's
@@ -19,7 +17,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Organize `axle.algebra._` package object
 * `axle.laws.generator`
 
-* Scrutinize `axle.Enriched*`
+* `rationalProbabilityDist` is now implicitly available
+
+* Move `factorial` from `EnrichedInt` to `axle.math`
 
 ## 0.5.5 Bugs and refactorings
 
