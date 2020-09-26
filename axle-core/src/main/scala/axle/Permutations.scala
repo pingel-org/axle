@@ -3,6 +3,8 @@ package axle
 import scala.reflect.ClassTag
 
 import cats.implicits._
+import spire.algebra._
+import axle.math.factorial
 
 /**
  * Based on Python's itertools.permutations function
@@ -21,7 +23,9 @@ case class Permutations[E: ClassTag](pool: IndexedSeq[E], r: Int)
   val untilN = (0 until n).toArray
   val untilR = (0 until r).toArray
 
-  override def size: Int = if (r >= 0 && r <= n) (n.factorial / (n - r).factorial) else 0
+  implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
+
+  override def size: Int = if (r >= 0 && r <= n) ( factorial(n) / factorial(n - r) ) else 0
 
   private[this] def loop2branchTrue(
     indices0: Array[Int],

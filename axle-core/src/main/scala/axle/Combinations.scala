@@ -4,6 +4,8 @@ import scala.reflect.ClassTag
 import scala.annotation.tailrec
 
 import cats.implicits._
+import spire.algebra._
+import axle.math.factorial
 
 case class Combinations[E: ClassTag](pool: IndexedSeq[E], r: Int) extends Iterable[IndexedSeq[E]] {
 
@@ -13,7 +15,9 @@ case class Combinations[E: ClassTag](pool: IndexedSeq[E], r: Int) extends Iterab
     throw new IndexOutOfBoundsException()
   }
 
-  lazy val _size = if (0 <= r && r <= n) (n.factorial / r.factorial / (n - r).factorial) else 0
+  implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
+
+  lazy val _size = if (0 <= r && r <= n) (factorial(n) / factorial(r) / factorial(n - r)) else 0
 
   override def size: Int = _size
 

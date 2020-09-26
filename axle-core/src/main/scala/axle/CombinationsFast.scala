@@ -2,6 +2,9 @@ package axle
 
 import scala.collection.mutable.ListBuffer
 
+import spire.algebra._
+import axle.math.factorial
+
 case class CombinationsFast[E](pool: IndexedSeq[E], r: Int)
   extends Iterable[IndexedSeq[E]] {
 
@@ -11,7 +14,9 @@ case class CombinationsFast[E](pool: IndexedSeq[E], r: Int)
     throw new IndexOutOfBoundsException()
   }
 
-  lazy val syze = if (0 <= r && r <= n) { n.factorial / r.factorial / (n - r).factorial } else { 0 }
+  implicit val intRing: Ring[Int] = spire.implicits.IntAlgebra
+
+  lazy val syze = if (0 <= r && r <= n) { factorial(n) / factorial(r) / factorial(n - r) } else { 0 }
 
   override def size: Int = syze
 

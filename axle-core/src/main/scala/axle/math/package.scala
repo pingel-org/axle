@@ -6,14 +6,14 @@ import cats.kernel.Eq
 import cats.kernel.Order
 import cats.implicits._
 
-import spire.implicits.multiplicativeGroupOps
 import spire.math.log
 import spire.math.Real.apply
 import spire.algebra._
 import spire.implicits.nrootOps
 import spire.implicits.semiringOps
-import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.additiveGroupOps
+import spire.implicits.multiplicativeGroupOps
+import spire.implicits.multiplicativeSemigroupOps
 import spire.implicits.rightModuleOps
 import spire.math.Rational
 import spire.math.ConvertableTo
@@ -30,6 +30,9 @@ import axle.syntax.finite.finiteOps
 import axle.syntax.indexed.indexedOps
 
 package object math {
+
+  def factorial[N: Ring: Order](n: N): N =
+    Ring[N].one.etc.takeWhile(_ <= n).foldLeft(Ring[N].one)(Ring[N].times(_, _))
 
   implicit val showRational: Show[Rational] = Show.fromToString[Rational]
 
