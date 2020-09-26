@@ -32,7 +32,7 @@ import axle.syntax.indexed.indexedOps
 package object math {
 
   def factorial[N: Ring: Order](n: N): N =
-    Ring[N].one.etc.takeWhile(_ <= n).foldLeft(Ring[N].one)(Ring[N].times(_, _))
+    etc(Ring[N].one).takeWhile(_ <= n).foldLeft(Ring[N].one)(Ring[N].times(_, _))
 
   implicit val showRational: Show[Rational] = Show.fromToString[Rational]
 

@@ -33,26 +33,21 @@ package object algebra {
 
   def id[A](x: A): A = x
 
-  implicit class EnrichedRinged[N](x: N)(implicit ringN: Ring[N]) {
+  // a.k.a. `…`
+  def etc[N](n: N)(implicit ringN: Ring[N]): Iterable[N] = new Iterable[N] {
 
-    // a.k.a. `…`
+    def iterator: Iterator[N] = new Iterator[N] {
 
-    def etc: Iterable[N] =
-      new Iterable[N] {
-        def iterator: Iterator[N] = new Iterator[N] {
+      var current = n
 
-          var current = x
-
-          def next(): N = {
-            val rc = current
-            current = ringN.plus(current, ringN.one)
-            rc
-          }
-
-          def hasNext: Boolean = true
-        }
+      def next(): N = {
+        val rc = current
+        current = ringN.plus(current, ringN.one)
+        rc
       }
 
+      def hasNext: Boolean = true
+    }
   }
 
   def tensorProduct[T](xs: Vector[T], ys: Vector[T])(implicit multT: MultiplicativeSemigroup[T]): Vector[T] = 
