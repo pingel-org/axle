@@ -6,7 +6,7 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.4 A bit more theory (Fall 2020)
+## 0.5.4 Sampler Axioms + package reorg (Fall 2020)
 
 * rationalProbabilityDist is now implicitly available
 
@@ -20,45 +20,74 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * TODO
 
-* `SigmaAlgebra` for the CPT
-  * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
-  * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
-  * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
-
-* Rename `ConditionalProbabilityTable`?
-* Functor for CPT?
-* `{CPT,TD}.tailRecM` then ScalaCheck `Monad[CPT]`
-
-* Footnotes (Giry, etc)
-
-## 0.5.5 Adoption blockers (Late 2020)
-
-* Chicklet borders / colors
-
-* move ast view xml (how is it able to refer to `xml.Node`?)
-  * ast.view.AstNodeFormatter (xml.Utility.escape)
-  * ast.view.AstNodeFormatterXhtmlLines
-  * ast.view.AstNodeFormatterXhtml
+* `axle.laws.generator`
 
 * Scrutinize `axle.Enriched*`
 
 * Improve Gold and Angluin coverage
 * `axle-core/src/main/scala/axle/lx/*.txt`
 
-* Create a simple graph implementation so that `axle-core` can avoid including `axle-jung`
+## 0.5.5 Bugs and refactorings
 
-* Create `axle-png` to avoid Xvfb requirement during tests
+* Reorder mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
+* Footnotes (Giry, etc)
+* Chicklet borders / colors
 
 * Fix occasional MetricSpace failure
+* Fix `axle.algebra.GeoMetricSpaceSpec`
+* Fix `LogisticRegression` and move `LogisticRegression.md` back
+* Fix `GeneticAlgorithmSpec`
+* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 
-## 0.6.x Factoring and Bayesian Networks (2021)
+* Tics should take an argument
+* Factor tics and tics-{joda,algebra,spire} into separate libs?
+* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
+
+## 0.5.6 Logic
+
+* Redo Logic using Abstract Algebra
+
+## 0.5.7
+
+* Simple graph implementation so that `axle-core` can avoid including `axle-jung`
+
+* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
+  * Will require externalizing the layout to its own.... typeclass?
+  * Layout of bayesian network is quite bad -- check ABE SVG
+
+## 0.5.8
+
+* `axle-png` to avoid Xvfb requirement during tests
+
+## 0.5.9
+
+* move ast view xml (how is it able to refer to `xml.Node`?)
+  * ast.view.AstNodeFormatter (xml.Utility.escape)
+  * ast.view.AstNodeFormatterXhtmlLines
+  * ast.view.AstNodeFormatterXhtml
+* Tests for `axle.ast`
+* `axle-ast-python`
+* `cats.effect` for `axle.ast.python2`
+
+## 0.6.x Factoring and Bayesian Networks
+
+* `{CPT,TD}.tailRecM` then ScalaCheck `Monad[CPT,TD]`
+* Functor for CPT, TD
+
+* `SigmaAlgebra` for the CPT
+  * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
+  * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
+  * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
+
+* Measure Theory
 
 * Test: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
-  * factor out each variable until
-  * the Alarm-Burglary-Earthquake 5-node network is reached
+  * Factor out each variable until original 5-note network is reached
   * Basically the inverse of factor multiplication
   * `bn.factorFor(B) * bn.factorFor(E)` should be defined? (It errors)
   * `MonotypeBayesanNetwork.filter` collapase into a single BNN
+
+* Rename `ConditionalProbabilityTable`?
 
 * Laws for `Factor`
 
@@ -74,7 +103,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `Bayes[MonotypeBayesanNetwork]` -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself
 
-## 0.7.x Compositional Game Theory (2021)
+* Review complex analysis
+
+## 0.7.x Compositional Game Theory
 
 * Replace `axle.game.moveFromRandomState.mapToProb`
 * Wrap `axle.IO.getLine` in `F[_]`
@@ -97,61 +128,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## After that
 
-* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
-  * Will require externalizing the layout to its own.... typeclass?
-  * Layout of bayesian network is quite bad -- check ABE SVG
+It's likely that a 1.0 release will be made at this time.
 
-* Experiment with pandoc
-
-* Configure makeSite to preview: previewFixedPort := Some(9999)
-* Copy css using makeSite (not update-docs.sh)
-* Fix markdown lint warnings
-* Figure out better way to reference images in docs
-
-* Site
-  * meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
-  * Remove jekyll from publishing pipeline
-    * [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html)
-    * sbt-s3
-
-* Move more stuff out of `axle.math`
-* `axle-ast-python`
-* `cats.effect` for `axle.ast.python2`
-
-* Fix `axle.algebra.GeoMetricSpaceSpec`
-* Fix `LogisticRegression` and move `LogisticRegression.md` back
-
-* Measure Theory
-* Redo Logic using Abstract Algebra
-
-* Use sbt-ci-release (rm sbt-release)
-* Friend of Spire
-
-* Tests for `axle.ast`
-* Tics should take an argument
-* Factor tics and tics-{joda,algebra,spire} into separate libs?
-* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
-* Demo Mandelbrot with Rational
-
-* Fix `GeneticAlgorithmSpec`
-* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
-* Replace Finite with Shapeless's version
-* Delete Finite conversions for jung (replace with NaturalTransformation?)
-* Replace with Cats: FoldLeft, Bijection, FunctionPair, Endofunctor
-* Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
-* Sort out MapFrom, FromStream, FromSet
-* Test `axle.algebra.tuple2Field`
-* `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
-* Projections of jung graphs for Finite
-* kittens or magnolia
-  * pattern match in FirstOrderPredicateLogic
-  * subtyping for Suit and Rank
-* Machinist?
-* replace some refs to {CPT0,TallyDist0} with ProbabilityModel
-* Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
-* Make the `Int` abstract in `KMeans{,Visualization}`, `LinearAlgebra`, etc
-
-Future backlog ideas:
+Future backlog organized by theme are below.
+At this point Axle will have enough building blocks to do the research
+that has been its goal since inception.
 
 ## Game Theory and Examples
 
@@ -286,3 +267,45 @@ Future backlog ideas:
   * May require jogamop 2.4, which is not yet released
   * Or possibly use [jogamp archive](https://jogamp.org/deployment/archive/rc/v2.4.0-rc-20200307/jar/)
   * See processing's approach in [this commit](https://github.com/processing/processing4/pull/85/commits/17a20bea37e7bcfa5589dbcb2f4a58c4174f7fe0)
+
+## Mathematics
+
+* Collatz Conjecture [vis](https://en.wikipedia.org/wiki/Collatz_conjecture#/media/File:Collatz-stopping-time.svg)
+* Demo Mandelbrot with Rational
+* Scrutinize `axle.math` and move out less reusable functions
+
+## Types and Axioms
+
+* Replace Finite with Shapeless's version
+* Delete Finite conversions for jung (replace with NaturalTransformation?)
+* Replace with Cats: FoldLeft, Bijection, FunctionPair, Endofunctor
+* Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
+* Sort out MapFrom, FromStream, FromSet
+* Test `axle.algebra.tuple2Field`
+* `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
+* Projections of jung graphs for Finite
+* kittens or magnolia
+  * pattern match in FirstOrderPredicateLogic
+  * subtyping for Suit and Rank
+* Machinist?
+* Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
+* Make the `Int` abstract in `KMeans{,Visualization}`, `LinearAlgebra`, etc
+
+## Docs, Site, CI/CD
+
+* Friend of Spire
+
+* Experiment with pandoc
+
+* Use sbt-ci-release (rm sbt-release)
+
+* Configure makeSite to preview: previewFixedPort := Some(9999)
+* Copy css using makeSite (not update-docs.sh)
+* Fix markdown lint warnings
+* Figure out better way to reference images in docs
+
+* Site
+  * meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
+  * Remove jekyll from publishing pipeline
+    * [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html)
+    * sbt-s3
