@@ -50,6 +50,17 @@ package object algebra {
     }
   }
 
+  def doubles[T](xs: Iterable[T]): Seq[(T, T)] =
+    xs.toIndexedSeq.permutations(2).map(d => (d(0), d(1))).toSeq
+
+  def triples[T](xs: Iterable[T]): Seq[(T, T, T)] =
+    xs.toIndexedSeq.permutations(3).map(t => (t(0), t(1), t(2))).toSeq
+
+  def ⨯[S](left: Iterable[S])(right: Iterable[S]) = for {
+    x <- left
+    y <- right
+  } yield (x, y)
+
   def tensorProduct[T](xs: Vector[T], ys: Vector[T])(implicit multT: MultiplicativeSemigroup[T]): Vector[T] = 
     for {
       x <- xs

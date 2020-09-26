@@ -4,14 +4,15 @@ import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 import spire.algebra._
 import cats.implicits._
+import axle.algebra._
 
 class EnrichmentsSpec extends AnyFunSuite with Matchers {
 
   implicit val boolBoolean: Bool[Boolean] = spire.implicits.BooleanStructure
 
-  test("x in EnrichedGenTraversable") {
+  test("axle.algebra.⨯") {
 
-    val cp = List(1, 2, 3) ⨯ List(4, 5, 6)
+    val cp = ⨯(List(1, 2, 3))(List(4, 5, 6))
     val cpl = cp.toList
 
     assertResult(cpl.length)(9)

@@ -10,8 +10,6 @@ import scala.language.implicitConversions
 
 package object axle {
 
-  implicit def enrichIterable[T](ita: Iterable[T]): EnrichedIterable[T] = EnrichedIterable(ita)
-
   implicit def enrichIndexedSeq[T](is: IndexedSeq[T]): EnrichedIndexedSeq[T] = EnrichedIndexedSeq(is)
 
   implicit def enrichIterator[T](it: Iterator[T]) = new EnrichedIterator(it)
