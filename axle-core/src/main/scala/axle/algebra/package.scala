@@ -61,6 +61,12 @@ package object algebra {
     y <- right
   } yield (x, y)
 
+  def bytewise(left: Array[Byte])(right: Array[Byte])(op: (Byte, Byte) => Byte): Array[Byte] =
+    left.zip(right).map(lr => (op(lr._1, lr._2))).toArray
+
+  def ⊕(left: Array[Byte])(right: Array[Byte]): Array[Byte] =
+    bytewise(left)(right)({ case (l, r) => (l ^ r).toByte })
+
   def tensorProduct[T](xs: Vector[T], ys: Vector[T])(implicit multT: MultiplicativeSemigroup[T]): Vector[T] = 
     for {
       x <- xs
