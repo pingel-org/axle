@@ -63,10 +63,16 @@ class EnrichmentsSpec extends AnyFunSuite with Matchers {
     assertResult(xs.combinations(2).size)(10)
   }
 
-  test("forall in axle._") {
-    import axle.forall
+  test("axle.logic.forall") {
+    import axle.logic.forall
     val p: Int => Boolean = (x: Int) => x % 2 == 0
     assertResult(forall(List(2, 4, 6))(p))(true)
+  }
+
+  test("axle.logic.thereexists") {
+    import axle.logic.thereexists
+    val p: Int => Boolean = (x: Int) => x % 2 == 0
+    assertResult(thereexists(List(2, 5, 7))(p))(true)
   }
 
   test("enriched iterator supports lastOption") {
