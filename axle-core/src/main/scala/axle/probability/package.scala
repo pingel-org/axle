@@ -1,5 +1,6 @@
 package axle
 
+import scala.collection.IndexedSeq
 import cats.kernel.Eq
 
 import spire.math.Rational
@@ -7,6 +8,9 @@ import spire.random.Dist
 import spire.random.Generator
 
 package object probability {
+
+  def randomElement[T](xs: IndexedSeq[T])(gen: Generator): T =
+    xs(gen.nextInt(xs.size))
 
   def shuffle[T](xs: List[T])(gen: Generator): List[T] =
     xs.map(x => (x, gen.nextInt())).sortBy(_._2).map(_._1)

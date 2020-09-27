@@ -3,7 +3,6 @@ package axle
 import scala.collection.IndexedSeq
 
 import cats.implicits._
-import spire.random.Generator
 
 case class EnrichedIndexedSeq[T](is: scala.collection.immutable.IndexedSeq[T]) {
 
@@ -21,8 +20,6 @@ case class EnrichedIndexedSeq[T](is: scala.collection.immutable.IndexedSeq[T]) {
       case (v, i) =>
         if (i === i0) is(i1) else (if (i === i1) is(i0) else v)
     })
-
-  def random(gen: Generator): T = is(gen.nextInt(is.size))
 
   lazy val powerset: IndexedPowerSet[T] = IndexedPowerSet(is)
 

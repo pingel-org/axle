@@ -38,7 +38,7 @@ class EnrichmentsSpec extends AnyFunSuite with Matchers {
   test("EnrichedIndexdSeq random selects random element") {
     val xs = (1 to 10).toVector
     import spire.random.Generator.rng
-    val r = xs.random(rng)
+    val r = axle.probability.randomElement(xs)(rng)
     r should be > 0
     r should be < 11
   }
