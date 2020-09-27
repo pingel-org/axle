@@ -89,6 +89,22 @@ package object algebra {
           (f(x), points + x)
       })
 
+  def terminatesWithin[T](it: Iterator[T])(k: Int): Boolean = {
+    lastOption(it.zipWithIndex.take(k)).map({ case (_, i) => i + 1 < k }).getOrElse(false)
+  }
+
+  def lastOption[T](it: Iterator[T]): Option[T] = {
+    if (it.hasNext) {
+      var last = it.next()
+      while (it.hasNext) {
+        last = it.next()
+      }
+      Option(last)
+    } else {
+      None
+    }
+  }
+
   /**
    * mergeStreams takes streams that are ordered w.r.t. Order[T]
    *

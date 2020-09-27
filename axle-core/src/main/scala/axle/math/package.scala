@@ -65,13 +65,13 @@ package object math {
   }
 
   def orbit[N](f: N => N, x0: N, close: N => N => Boolean): List[N] =
-    trace(f, x0)
+    lastOption(trace(f, x0)
       .takeWhile({
         case (x, points) =>
           // TODO inefficient. query points for the closest (or bounding) elements to x
           !points.exists(close(x))
-      })
-      .lastOption.toList
+      }))
+      .toList
       .flatMap(_._2.toList)
 
   /**
@@ -256,19 +256,19 @@ package object math {
     implicit
     rng: Rng[N],
     o:   Order[N]): Boolean =
-    applyForever(mandelbrotNext(R, I), (rng.zero, rng.zero))
+    terminatesWithin(
+      applyForever(mandelbrotNext(R, I), (rng.zero, rng.zero))
       .takeWhile(mandelbrotContinue(radius) _)
-      .terminatesWithin(maxIt)
+    )(maxIt)
 
   def inMandelbrotSetAt[N](radius: N, R: N, I: N, maxIt: Int)(
     implicit
     rng: Rng[N],
     o:   Order[N]): Option[Int] =
-    applyForever(mandelbrotNext(R, I), (rng.zero, rng.zero))
+    lastOption(applyForever(mandelbrotNext(R, I), (rng.zero, rng.zero))
       .takeWhile(mandelbrotContinue(radius) _)
       .take(maxIt)
-      .zipWithIndex
-      .lastOption
+      .zipWithIndex)
       .flatMap({ l => if (l._2 + 1 < maxIt) Some(l._2) else None })
 
   /**
