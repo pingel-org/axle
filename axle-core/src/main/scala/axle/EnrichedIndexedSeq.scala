@@ -21,11 +21,4 @@ case class EnrichedIndexedSeq[T](is: scala.collection.immutable.IndexedSeq[T]) {
         if (i === i0) is(i1) else (if (i === i1) is(i0) else v)
     })
 
-  lazy val powerset: IndexedPowerSet[T] = IndexedPowerSet(is)
-
-  lazy val ℘ = powerset
-
-  def permutations(r: Int): PermutationsFast[T] = PermutationsFast(is, r)
-
-  def combinations(r: Int): CombinationsFast[T] = CombinationsFast(is, r)
 }

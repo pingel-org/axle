@@ -50,17 +50,6 @@ package object algebra {
     }
   }
 
-  def doubles[T](xs: Iterable[T]): Seq[(T, T)] =
-    xs.toIndexedSeq.permutations(2).map(d => (d(0), d(1))).toSeq
-
-  def triples[T](xs: Iterable[T]): Seq[(T, T, T)] =
-    xs.toIndexedSeq.permutations(3).map(t => (t(0), t(1), t(2))).toSeq
-
-  def ⨯[S](left: Iterable[S])(right: Iterable[S]) = for {
-    x <- left
-    y <- right
-  } yield (x, y)
-
   def bytewise(left: Array[Byte])(right: Array[Byte])(op: (Byte, Byte) => Byte): Array[Byte] =
     left.zip(right).map(lr => (op(lr._1, lr._2))).toArray
 

@@ -1,4 +1,4 @@
-package axle
+package axle.math
 
 import cats.implicits._
 

@@ -4,7 +4,7 @@ import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 import spire.algebra._
 import cats.implicits._
-import axle.algebra._
+import axle.math._
 
 class EnrichmentsSpec extends AnyFunSuite with Matchers {
 
@@ -45,17 +45,17 @@ class EnrichmentsSpec extends AnyFunSuite with Matchers {
 
   test("EnrichedIndexdSeq powerset creates powerset") {
     val xs = (1 to 3).toVector
-    assertResult(xs.powerset.size)(8)
+    assertResult(powerset(xs).size)(8)
   }
 
   test("EnrichedIndexdSeq ℘ also creates powerset") {
     val xs = (1 to 3).toVector
-    assertResult(xs.℘)(xs.powerset)
+    assertResult(℘(xs))(powerset(xs))
   }
 
   test("EnrichedIndexdSeq permutations(n) creates permutations") {
     val xs = (1 to 5).toVector
-    assertResult(xs.permutations(2).size)(20)
+    assertResult(permutations(xs)(2).size)(20)
   }
 
   test("EnrichedIndexdSeq combinations(n) creates combinations") {

@@ -1,10 +1,11 @@
-package axle
+package axle.math
 
 import scala.reflect.ClassTag
 
 import cats.implicits._
 import spire.algebra._
 import axle.math.factorial
+import axle.enrichArray
 
 /**
  * Based on Python's itertools.permutations function

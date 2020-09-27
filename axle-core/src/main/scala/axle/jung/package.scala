@@ -1,22 +1,16 @@
 package axle
 
-//import java.awt.Dimension
-//import edu.uci.ics.jung.algorithms.layout.FRLayout
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import edu.uci.ics.jung.graph.UndirectedSparseGraph
 import scala.jdk.CollectionConverters._
-//import scala.xml.Node
-//import scala.xml.NodeSeq
-//import scala.xml.Text
 
-//import cats.Eq
 import cats.Functor
-//import cats.Show
 import cats.implicits._
 
 import axle.algebra.DirectedGraph
 import axle.algebra.Finite
 import axle.algebra.UndirectedGraph
+import axle.math.permutations
 
 class DirectedSparseGraphVertices[V](val dsg: DirectedSparseGraph[V, _])
 
@@ -110,7 +104,6 @@ package object jung {
   implicit def directedGraphJung[V, E]: DirectedGraph[DirectedSparseGraph[V, E], V, E] =
     new DirectedGraph[DirectedSparseGraph[V, E], V, E] {
 
-      import axle.enrichIndexedSeq
       import edu.uci.ics.jung.algorithms.shortestpath.DijkstraShortestPath
       import edu.uci.ics.jung.graph.DirectedSparseGraph
       import cats.kernel.Eq
@@ -167,7 +160,7 @@ package object jung {
         among:  Set[V],
         edgeFn: (V, V) => E)(implicit eqV: Eq[V]): DirectedSparseGraph[V, E] = {
 
-        val newEdges: Iterable[(V, V, E)] = among.toVector.permutations(2)
+        val newEdges: Iterable[(V, V, E)] = permutations(among.toVector)(2)
           .map({ a =>
             val from = a(0)
             val to = a(1)

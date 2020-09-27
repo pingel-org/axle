@@ -31,6 +31,29 @@ import axle.syntax.indexed.indexedOps
 
 package object math {
 
+  def powerset[T](xs: IndexedSeq[T]): IndexedPowerSet[T] =
+    IndexedPowerSet[T](xs)
+
+  def ℘[T](xs: IndexedSeq[T]): IndexedPowerSet[T] =
+    IndexedPowerSet[T](xs)
+
+  def permutations[T](xs: IndexedSeq[T])(r: Int): PermutationsFast[T] =
+    PermutationsFast(xs, r)
+
+  def combinations[T](xs: IndexedSeq[T])(r: Int): CombinationsFast[T] =
+    CombinationsFast(xs, r)
+
+  def doubles[T](xs: Iterable[T]): Seq[(T, T)] =
+    permutations(xs.toIndexedSeq)(2).map(d => (d(0), d(1))).toSeq
+
+  def triples[T](xs: Iterable[T]): Seq[(T, T, T)] =
+    permutations(xs.toIndexedSeq)(3).map(t => (t(0), t(1), t(2))).toSeq
+
+  def ⨯[S](left: Iterable[S])(right: Iterable[S]) = for {
+    x <- left
+    y <- right
+  } yield (x, y)
+
   def factorial[N: Ring: Order](n: N): N =
     etc(Ring[N].one).takeWhile(_ <= n).foldLeft(Ring[N].one)(Ring[N].times(_, _))
 

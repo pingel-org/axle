@@ -1,4 +1,4 @@
-package axle
+package axle.math
 
 import scala.reflect.ClassTag
 import scala.annotation.tailrec

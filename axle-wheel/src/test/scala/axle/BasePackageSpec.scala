@@ -6,6 +6,8 @@ import org.scalatest.matchers.should.Matchers
 import spire.algebra._
 import cats.implicits._
 
+import axle.logic._
+
 class BasePackageSpec extends AnyFunSuite with Matchers {
 
   implicit val boolBoolean: Bool[Boolean] = spire.implicits.BooleanStructure

@@ -1,10 +1,11 @@
-package axle
+package axle.math
 
 import scala.collection.mutable.ListBuffer
 
 import cats.implicits._
 import spire.algebra._
 import axle.math.factorial
+import axle.enrichMutableBuffer
 
 case class PermutationsFast[E](pool: IndexedSeq[E], r: Int)
   extends Iterable[IndexedSeq[E]] {

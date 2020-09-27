@@ -1,4 +1,4 @@
-package axle
+package axle.math
 
 import spire.algebra.Bool
 import axle.algebra.functors._
