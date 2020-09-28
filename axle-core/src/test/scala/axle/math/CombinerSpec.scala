@@ -1,6 +1,4 @@
-package axle.iterator
-
-import axle._
+package axle.math
 
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers

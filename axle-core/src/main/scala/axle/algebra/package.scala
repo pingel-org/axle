@@ -1,6 +1,7 @@
 package axle
 
 import scala.language.implicitConversions
+import scala.collection.mutable.Buffer
 
 import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
@@ -10,6 +11,8 @@ import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 
 package object algebra {
+
+  implicit def enrichMutableBuffer[T](buffer: Buffer[T]): EnrichedMutableBuffer[T] = EnrichedMutableBuffer(buffer)
 
   /**
    * dummy is not to be used widely, but is used for for scanLeft, where
@@ -33,27 +36,28 @@ package object algebra {
 
   def id[A](x: A): A = x
 
-  implicit class EnrichedRinged[N](x: N)(implicit ringN: Ring[N]) {
+  // a.k.a. `…`
+  def etc[N](n: N)(implicit ringN: Ring[N]): Iterable[N] = new Iterable[N] {
 
-    // a.k.a. `…`
+    def iterator: Iterator[N] = new Iterator[N] {
 
-    def etc: Iterable[N] =
-      new Iterable[N] {
-        def iterator: Iterator[N] = new Iterator[N] {
+      var current = n
 
-          var current = x
-
-          def next(): N = {
-            val rc = current
-            current = ringN.plus(current, ringN.one)
-            rc
-          }
-
-          def hasNext: Boolean = true
-        }
+      def next(): N = {
+        val rc = current
+        current = ringN.plus(current, ringN.one)
+        rc
       }
 
+      def hasNext: Boolean = true
+    }
   }
+
+  def bytewise(left: Array[Byte])(right: Array[Byte])(op: (Byte, Byte) => Byte): Array[Byte] =
+    left.zip(right).map(lr => (op(lr._1, lr._2))).toArray
+
+  def ⊕(left: Array[Byte])(right: Array[Byte]): Array[Byte] =
+    bytewise(left)(right)({ case (l, r) => (l ^ r).toByte })
 
   def tensorProduct[T](xs: Vector[T], ys: Vector[T])(implicit multT: MultiplicativeSemigroup[T]): Vector[T] = 
     for {
@@ -87,6 +91,22 @@ package object algebra {
         case ((x, points), _) =>
           (f(x), points + x)
       })
+
+  def terminatesWithin[T](it: Iterator[T])(k: Int): Boolean = {
+    lastOption(it.zipWithIndex.take(k)).map({ case (_, i) => i + 1 < k }).getOrElse(false)
+  }
+
+  def lastOption[T](it: Iterator[T]): Option[T] = {
+    if (it.hasNext) {
+      var last = it.next()
+      while (it.hasNext) {
+        last = it.next()
+      }
+      Option(last)
+    } else {
+      None
+    }
+  }
 
   /**
    * mergeStreams takes streams that are ordered w.r.t. Order[T]

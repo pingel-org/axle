@@ -1,4 +1,4 @@
-package axle
+package axle.logic
 
 import cats.Functor
 import cats.implicits._

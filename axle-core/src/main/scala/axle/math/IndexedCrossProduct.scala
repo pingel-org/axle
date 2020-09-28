@@ -1,4 +1,4 @@
-package axle
+package axle.math
 
 import spire.algebra.Bool
 import axle.algebra.functors._
@@ -16,7 +16,7 @@ case class IndexedCrossProduct[E](lists: Seq[IndexedSeq[E]])
 
   def indexOf(objects: Seq[E]): Int = {
     val mults = lists.zip(objects).map(lo => lo._1.indexOf(lo._2)).zip(modulos).map(im => im._1 * im._2)
-    if (axle.forall(mults)({ i: Int => i >= 0 })) {
+    if (axle.logic.forall(mults)({ i: Int => i >= 0 })) {
       mults.sum
     } else {
       -1

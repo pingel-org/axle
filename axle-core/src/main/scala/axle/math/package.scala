@@ -31,8 +31,31 @@ import axle.syntax.indexed.indexedOps
 
 package object math {
 
+  def powerset[T](xs: IndexedSeq[T]): IndexedPowerSet[T] =
+    IndexedPowerSet[T](xs)
+
+  def ℘[T](xs: IndexedSeq[T]): IndexedPowerSet[T] =
+    IndexedPowerSet[T](xs)
+
+  def permutations[T](xs: IndexedSeq[T])(r: Int): PermutationsFast[T] =
+    PermutationsFast(xs, r)
+
+  def combinations[T](xs: IndexedSeq[T])(r: Int): CombinationsFast[T] =
+    CombinationsFast(xs, r)
+
+  def doubles[T](xs: Iterable[T]): Seq[(T, T)] =
+    permutations(xs.toIndexedSeq)(2).map(d => (d(0), d(1))).toSeq
+
+  def triples[T](xs: Iterable[T]): Seq[(T, T, T)] =
+    permutations(xs.toIndexedSeq)(3).map(t => (t(0), t(1), t(2))).toSeq
+
+  def ⨯[S](left: Iterable[S])(right: Iterable[S]) = for {
+    x <- left
+    y <- right
+  } yield (x, y)
+
   def factorial[N: Ring: Order](n: N): N =
-    Ring[N].one.etc.takeWhile(_ <= n).foldLeft(Ring[N].one)(Ring[N].times(_, _))
+    etc(Ring[N].one).takeWhile(_ <= n).foldLeft(Ring[N].one)(Ring[N].times(_, _))
 
   implicit val showRational: Show[Rational] = Show.fromToString[Rational]
 
@@ -42,13 +65,13 @@ package object math {
   }
 
   def orbit[N](f: N => N, x0: N, close: N => N => Boolean): List[N] =
-    trace(f, x0)
+    lastOption(trace(f, x0)
       .takeWhile({
         case (x, points) =>
           // TODO inefficient. query points for the closest (or bounding) elements to x
           !points.exists(close(x))
-      })
-      .lastOption.toList
+      }))
+      .toList
       .flatMap(_._2.toList)
 
   /**
@@ -233,19 +256,19 @@ package object math {
     implicit
     rng: Rng[N],
     o:   Order[N]): Boolean =
-    applyForever(mandelbrotNext(R, I), (rng.zero, rng.zero))
+    terminatesWithin(
+      applyForever(mandelbrotNext(R, I), (rng.zero, rng.zero))
       .takeWhile(mandelbrotContinue(radius) _)
-      .terminatesWithin(maxIt)
+    )(maxIt)
 
   def inMandelbrotSetAt[N](radius: N, R: N, I: N, maxIt: Int)(
     implicit
     rng: Rng[N],
     o:   Order[N]): Option[Int] =
-    applyForever(mandelbrotNext(R, I), (rng.zero, rng.zero))
+    lastOption(applyForever(mandelbrotNext(R, I), (rng.zero, rng.zero))
       .takeWhile(mandelbrotContinue(radius) _)
       .take(maxIt)
-      .zipWithIndex
-      .lastOption
+      .zipWithIndex)
       .flatMap({ l => if (l._2 + 1 < maxIt) Some(l._2) else None })
 
   /**

@@ -1,4 +1,4 @@
-package axle
+package axle.logic
 
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers

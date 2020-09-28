@@ -2,6 +2,8 @@ package axle
 
 import scala.collection.parallel.immutable.ParSeq
 
+import cats.implicits._
+
 import spire.algebra._
 
 import axle.algebra.Aggregatable
@@ -28,6 +30,21 @@ package object parallel {
     new Indexed[ParSeq, Int] {
 
       def at[A](ps: ParSeq[A])(i: Int): A = ps(i)
+
+      def slyce[A](xs: ParSeq[A])(range: Range): ParSeq[A] = {
+        assert(range.step === 1)
+        if (range.isEmpty) {
+          ParSeq.empty[A]
+        } else {
+          xs.slice(range.start, range.last + 1)
+        }
+      }
+
+      def swap[A](xs: ParSeq[A])(i: Int, j: Int): ParSeq[A] =
+        xs.zipWithIndex.map({ (vk: (A, Int)) =>
+            val (v, k) = vk
+            if (k === i) xs(j) else (if (k === j) xs(i) else v)
+        })
 
       def take[A](xs: ParSeq[A])(i: Int): ParSeq[A] = xs.take(i)
 

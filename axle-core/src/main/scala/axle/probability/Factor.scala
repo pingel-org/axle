@@ -15,7 +15,7 @@ import spire.implicits.multiplicativeGroupOps
 import spire.implicits.multiplicativeSemigroupOps
 import spire.math.ConvertableFrom
 
-import axle.IndexedCrossProduct
+import axle.math.IndexedCrossProduct
 import axle.algebra.LinearAlgebra
 import axle.algebra.RegionEq
 
