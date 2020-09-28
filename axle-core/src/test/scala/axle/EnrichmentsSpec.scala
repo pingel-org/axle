@@ -2,9 +2,13 @@ package axle
 
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
+
 import spire.algebra._
+
 import cats.implicits._
+
 import axle.math._
+import axle.algebra._
 
 class EnrichmentsSpec extends AnyFunSuite with Matchers {
 
@@ -76,11 +80,11 @@ class EnrichmentsSpec extends AnyFunSuite with Matchers {
   }
 
   test("enriched iterator supports lastOption") {
-    assertResult((1 to 10).iterator.lastOption)(Some(10))
+    assertResult(lastOption((1 to 10).iterator))(Some(10))
   }
 
   test("enriched iterator supports terminatesWithin") {
-    assertResult((1 to 10).iterator.terminatesWithin(20))(true)
-    assertResult((1 to 10).iterator.terminatesWithin(5))(false)
+    assertResult(terminatesWithin((1 to 10).iterator)(20))(true)
+    assertResult(terminatesWithin((1 to 10).iterator)(5))(false)
   }
 }
