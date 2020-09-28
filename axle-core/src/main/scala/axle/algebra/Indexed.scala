@@ -1,6 +1,7 @@
 package axle.algebra
 
 import scala.annotation.implicitNotFound
+import cats.implicits._
 
 @implicitNotFound("Witness not found for Indexed[${C}, ${I}]")
 trait Indexed[C[_], I] {
@@ -8,6 +9,8 @@ trait Indexed[C[_], I] {
   def at[A](xs: C[A])(i: I): A
 
   def slyce[A](xs: C[A])(range: Range): C[A]
+
+  def swap[A](xs: C[A])(i: I, j: I): C[A]
 
   def take[A](xs: C[A])(i: I): C[A]
 
@@ -33,6 +36,12 @@ object Indexed {
         }
       }
 
+      def swap[A](xs: Seq[A])(i: Int, j: Int): Seq[A] =
+        xs.zipWithIndex.map({
+          case (v, k) =>
+            if (k === i) xs(j) else (if (k === j) xs(i) else v)
+        })
+
       def take[A](xs: Seq[A])(i: Int): Seq[A] = xs.take(i)
 
       def drop[A](xs: Seq[A])(i: Int): Seq[A] = xs.drop(i)
@@ -53,29 +62,11 @@ object Indexed {
         }
       }
 
+      def swap[A](xs: IndexedSeq[A])(i: Int, j: Int): IndexedSeq[A] = ???
+
       def take[A](xs: IndexedSeq[A])(i: Int): IndexedSeq[A] = xs.take(i)
 
       def drop[A](xs: IndexedSeq[A])(i: Int): IndexedSeq[A] = xs.drop(i)
-    }
-
-  implicit val indexedArray: Indexed[Array, Int] =
-    new Indexed[Array, Int] {
-
-      def at[A](seq: Array[A])(i: Int): A = seq(i)
-
-      def slyce[A](xs: Array[A])(range: Range): Array[A] = {
-        import cats.implicits._
-        assert(range.step === 1)
-        if (range.isEmpty) {
-          ??? // Array.empty[A]
-        } else {
-          xs.slice(range.start, range.last + 1)
-        }
-      }
-
-      def take[A](xs: Array[A])(i: Int): Array[A] = xs.take(i)
-
-      def drop[A](xs: Array[A])(i: Int): Array[A] = xs.drop(i)
     }
 
   implicit val indexedList: Indexed[List, Int] =
@@ -93,12 +84,14 @@ object Indexed {
         }
       }
 
+      def swap[A](xs: List[A])(i: Int, j: Int): List[A] = ???
+
       def take[A](xs: List[A])(i: Int): List[A] = xs.take(i)
 
       def drop[A](xs: List[A])(i: Int): List[A] = xs.drop(i)
     }
 
-  implicit val vectorIndexed: Indexed[Vector, Int] =
+  implicit val indexedVector: Indexed[Vector, Int] =
     new Indexed[Vector, Int] {
 
       def at[A](vector: Vector[A])(i: Int): A = vector(i)
@@ -112,6 +105,12 @@ object Indexed {
           xs.slice(range.start, range.last + 1)
         }
       }
+
+      def swap[A](xs: Vector[A])(i: Int, j: Int): Vector[A] =
+        xs.zipWithIndex.map({
+          case (v, k) =>
+            if (k === i) xs(j) else (if (k === j) xs(i) else v)
+        })
 
       def take[A](xs: Vector[A])(i: Int): Vector[A] = xs.take(i)
 
@@ -134,6 +133,8 @@ object Indexed {
           xs.slice(range.start, range.last + 1)
         }
       }
+
+      def swap[A](xs: Buffer[A])(i: Int, j: Int): Buffer[A] = ???
 
       def take[A](xs: Buffer[A])(i: Int): Buffer[A] = xs.take(i)
 

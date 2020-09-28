@@ -393,6 +393,8 @@ final class IndexedOps[F[_], I, A](val as: F[A])(
 
   def slyce(r: Range) = index.slyce(as)(r)
 
+  def swap(i: I, j: I) = index.swap(as)(i, j)
+
   def take(i: I) = index.take(as)(i)
 
   def drop(i: I) = index.drop(as)(i)
