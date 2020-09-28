@@ -3,9 +3,13 @@ package axle.math
 import scala.reflect.ClassTag
 
 import cats.implicits._
+
 import spire.algebra._
+
 import axle.math.factorial
 import axle.enrichArray
+import axle.syntax.indexed._
+import axle.algebra.Indexed._
 
 /**
  * Based on Python's itertools.permutations function
@@ -32,7 +36,7 @@ case class Permutations[E: ClassTag](pool: IndexedSeq[E], r: Int)
     indices0: Array[Int],
     cycles0:  Array[Int],
     i0:       Int): (Array[Int], Array[Int]) = {
-    (indices0(0 until i0) ++ indices0(i0 + 1 until n) ++ indices0(i0 until i0 + 1),
+    (indices0.slyce(0 until i0) ++ indices0.slyce(i0 + 1 until n) ++ indices0.slyce(i0 until i0 + 1),
       cycles0.updated(i0, n - i0))
   }
 

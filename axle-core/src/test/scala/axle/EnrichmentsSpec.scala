@@ -9,6 +9,7 @@ import cats.implicits._
 
 import axle.math._
 import axle.algebra._
+import axle.syntax.indexed._
 
 class EnrichmentsSpec extends AnyFunSuite with Matchers {
 
@@ -24,17 +25,17 @@ class EnrichmentsSpec extends AnyFunSuite with Matchers {
     assertResult(cpl(8))((3, 6))
   }
 
-  test("EnrichedIndexdSeq apply(Range) returns sub-sequence") {
+  test("EnrichedIndexedSeq apply(Range) returns sub-sequence") {
     val xs = (1 to 10).toVector
-    assertResult(xs(3 to 7).size)(5)
+    assertResult(xs.slyce(3 to 7).size)(5)
   }
 
-  test("EnrichedIndexdSeq apply(empty range) returns empty IndexedSequence") {
+  test("EnrichedIndexedSeq apply(empty range) returns empty IndexedSequence") {
     val xs = (1 to 10).toVector
-    assertResult(xs(3 until 3).size)(0)
+    assertResult(xs.slyce(3 until 3).size)(0)
   }
 
-  test("EnrichedIndexdSeq swap(i, j) swaps values") {
+  test("EnrichedIndexedSeq swap(i, j) swaps values") {
     val xs = (1 to 3).toVector
     assertResult(xs.swap(0, 1))(Vector(2, 1, 3))
   }
