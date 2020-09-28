@@ -6,6 +6,7 @@ import spire.random.Dist
 
 import axle.game.cards._
 import axle.probability._
+import axle.syntax.indexed._
 
 package object poker {
 
@@ -83,10 +84,10 @@ package object poker {
             // TODO clean up these range calculations
             val cards = Vector() ++ deck.cards
             val hands = game.players.zipWithIndex.map({ case (player, i) =>
-              (player, cards(i * 2 to i * 2 + 1).toVector)
+              (player, cards.slyce(i * 2 to i * 2 + 1))
             }).toMap
-            val shared = cards(game.players.size * 2 to game.players.size * 2 + 4).toVector
-            val unused = cards((game.players.size * 2 + 5) until cards.length).toList
+            val shared = cards.slyce(game.players.size * 2 to game.players.size * 2 + 4)
+            val unused = cards.slyce((game.players.size * 2 + 5) until cards.length)
 
             // TODO: should blinds be a part of the "deal" or are they minimums during first round of betting?
             val orderedStillIn = game.players.filter(stillIn.contains)
@@ -100,7 +101,7 @@ package object poker {
 
             PokerState(
               s => Some(nextBetter),
-              Deck(unused),
+              Deck(unused.toList),
               shared,
               numShown,
               hands.toMap,
