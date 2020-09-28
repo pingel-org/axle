@@ -13,19 +13,19 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   2. Sampled distribution converges to model's
 * Pre-compute `ConditionalProbabilityTable.bars` for `Sampler` witness
 
-* Reduce size of `axle._` package object
+* Move everything from `axle._` into sub-packages (`algebra`, `math`, `logic`)
 * Organize `axle.algebra._` package object
 * `axle.laws.generator`
 
 * `rationalProbabilityDist` is now implicitly available
-
-* Move `factorial` from `EnrichedInt` to `axle.math`
 
 ## 0.5.5 Bugs and refactorings
 
 * Reorder mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
 * Footnotes (Giry, etc)
 * Chicklet borders / colors
+
+* Define `Indexed.slyce` for non-1-step Ranges
 
 * Improve Gold and Angluin coverage
 * `axle-core/src/main/scala/axle/lx/*.txt`
