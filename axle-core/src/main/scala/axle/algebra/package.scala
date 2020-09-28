@@ -1,6 +1,7 @@
 package axle
 
 import scala.language.implicitConversions
+import scala.collection.mutable.Buffer
 
 import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
@@ -10,6 +11,8 @@ import spire.implicits.additiveGroupOps
 import spire.implicits.additiveSemigroupOps
 
 package object algebra {
+
+  implicit def enrichMutableBuffer[T](buffer: Buffer[T]): EnrichedMutableBuffer[T] = EnrichedMutableBuffer(buffer)
 
   /**
    * dummy is not to be used widely, but is used for for scanLeft, where
