@@ -10,8 +10,7 @@ Imports
 
 ```scala mdoc:silent
 import cats.implicits._
-import axle.logic._
-import FirstOrderPredicateLogic._
+import axle.logic.FirstOrderPredicateLogic._
 ```
 
 Example CNF conversion

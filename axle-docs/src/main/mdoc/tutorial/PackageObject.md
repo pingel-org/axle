@@ -1,36 +1,38 @@
 ---
 layout: page
-title: axle._ Package Object
+title: axle.math and axle.logic Package Objects
 permalink: /tutorial/axle_package_object/
 ---
 
-This page describes the axle package object.
-
-## Enriched GenTraversable
+This page describes functions in `axle.logic` and `axle.math` package objects.
 
 Imports
 
 ```scala mdoc:silent
 import cats.implicits._
-import spire.optional.unicode._
-import spire.algebra.Rng
-import spire.algebra.Ring
-import spire.algebra.Bool
 
-import axle._
+import spire.algebra._
+
+import axle.logic._
+import axle.math._
 
 implicit val rngInt: Rng[Int] = spire.implicits.IntAlgebra
 implicit val ringLong: Ring[Long] = spire.implicits.LongAlgebra
 implicit val boolBoolean: Bool[Boolean] = spire.implicits.BooleanStructure
 ```
 
-Common aggregators ∃, ∀, Σ, Π:
+Logic aggregators `∃` and `∀`:
 
 ```scala mdoc
 ∃(List(1, 2, 3)) { i: Int => i % 2 == 0 }
 
 ∀(List(1, 2, 3)) { i: Int => i % 2 == 0 }
+```
 
+Sum and multiply aggregators `Σ` and `Π`.
+Note that `Σ` and `Π` are also available in `spire.optional.unicode._`.
+
+```scala mdoc
 Σ((1 to 10) map { _ * 2 })
 
 Π((1L to 10L) map { _ * 2 })
@@ -39,23 +41,19 @@ Common aggregators ∃, ∀, Σ, Π:
 Doubles, triples, and cross-products
 
 ```scala mdoc
-Set(1, 2, 3).doubles
+doubles(Set(1, 2, 3))
 
-Set(1, 2, 3).triples
+triples(Set(1, 2, 3))
 
-(List(1, 2, 3) ⨯ List(4, 5, 6)).toList
+⨯(List(1, 2, 3))(List(4, 5, 6)).toList
 ```
 
-## Enriched Boolean
-
-TODO: document `and`, `∧`, `or`, `∨`, `implies`
-
-## Indexed Power Set
+Powerset
 
 ```scala mdoc
-(0 until 4).℘()
+℘(0 until 4)
 
-val ps = Vector("a", "b", "c").℘()
+val ps = ℘(Vector("a", "b", "c"))
 
 ps.size
 
@@ -65,13 +63,13 @@ ps(7)
 ## Permutations
 
 ```scala mdoc
-(0 until 4).permutations(2).toList
+permutations(0 until 4)(2).toList
 ```
 
 ## Combinations
 
 ```scala mdoc
-(0 until 4).combinations(2).toList
+combinations(0 until 4)(2).toList
 ```
 
 ## Indexed Cross Product
