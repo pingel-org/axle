@@ -6,6 +6,19 @@ permalink: /release_notes/
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
+## 0.5.4 Sampler Axioms + package reorg (September 28, 2020)
+
+* Sampler Axioms
+  1. ProbabilityOf(RegionEq(sample(gen))) > 0?
+  2. Sampled distribution converges to model's
+* Pre-compute `ConditionalProbabilityTable.bars` for `Sampler` witness
+
+* Move everything from `axle._` into sub-packages (`algebra`, `math`, `logic`)
+* Organize `axle.algebra._` package object
+* `axle.laws.generator`
+
+* `rationalProbabilityDist` is now implicitly available
+
 ## 0.5.3 (September 13, 2020)
 
 * Split `ProbabilityModel` into three new typeclasses

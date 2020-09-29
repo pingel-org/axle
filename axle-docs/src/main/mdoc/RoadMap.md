@@ -6,19 +6,6 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.4 Sampler Axioms + package reorg (Fall 2020)
-
-* Sampler Axioms
-  1. ProbabilityOf(RegionEq(sample(gen))) > 0?
-  2. Sampled distribution converges to model's
-* Pre-compute `ConditionalProbabilityTable.bars` for `Sampler` witness
-
-* Move everything from `axle._` into sub-packages (`algebra`, `math`, `logic`)
-* Organize `axle.algebra._` package object
-* `axle.laws.generator`
-
-* `rationalProbabilityDist` is now implicitly available
-
 ## 0.5.5 Bugs and refactorings
 
 * Reorder mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
