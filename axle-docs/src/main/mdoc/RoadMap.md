@@ -6,32 +6,39 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.5 Bugs and refactorings
+## 0.5.5 Docs, Tests, Bugs
+
+* Define `Indexed.slyce` for non-1-step Ranges
 
 * Reorder mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
 * Footnotes (Giry, etc)
 * Chicklet borders / colors
-
-* Define `Indexed.slyce` for non-1-step Ranges
 
 * Improve Gold and Angluin coverage
 * `axle-core/src/main/scala/axle/lx/*.txt`
 
 * Fix occasional MetricSpace failure
 * Fix `axle.algebra.GeoMetricSpaceSpec`
+
+## 0.5.6 ML Bugs
+
+* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
+
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
+
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 
+## 0.5.7 Small refactorings
+
 * Tics should take an argument
 * Factor tics and tics-{joda,algebra,spire} into separate libs?
-* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
 
-## 0.5.6 Logic
+## 0.5.8 Logic
 
 * Redo Logic using Abstract Algebra
 
-## 0.5.7
+## 0.5.9
 
 * Simple graph implementation so that `axle-core` can avoid including `axle-jung`
 
@@ -39,11 +46,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Will require externalizing the layout to its own.... typeclass?
   * Layout of bayesian network is quite bad -- check ABE SVG
 
-## 0.5.8
+## 0.5.10
 
 * `axle-png` to avoid Xvfb requirement during tests
 
-## 0.5.9
+## 0.5.11
 
 * move ast view xml (how is it able to refer to `xml.Node`?)
   * ast.view.AstNodeFormatter (xml.Utility.escape)

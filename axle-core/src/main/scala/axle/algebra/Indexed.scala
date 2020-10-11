@@ -26,15 +26,8 @@ object Indexed {
 
       def at[A](seq: Seq[A])(i: Int): A = seq(i)
 
-      def slyce[A](xs: Seq[A])(range: Range): Seq[A] = {
-        import cats.implicits._
-        assert(range.step === 1)
-        if (range.isEmpty) {
-          Seq.empty[A]
-        } else {
-          xs.slice(range.start, range.last + 1)
-        }
-      }
+      def slyce[A](xs: Seq[A])(range: Range): Seq[A] =
+        range.filter(_ < xs.size).map(xs)
 
       def swap[A](xs: Seq[A])(i: Int, j: Int): Seq[A] =
         xs.zipWithIndex.map({
@@ -52,15 +45,8 @@ object Indexed {
 
       def at[A](is: IndexedSeq[A])(i: Int): A = is(i)
 
-      def slyce[A](xs: IndexedSeq[A])(range: Range): IndexedSeq[A] = {
-        import cats.implicits._
-        assert(range.step === 1)
-        if (range.isEmpty) {
-          IndexedSeq.empty[A]
-        } else {
-          xs.slice(range.start, range.last + 1)
-        }
-      }
+      def slyce[A](xs: IndexedSeq[A])(range: Range): IndexedSeq[A] =
+        range.filter(_ < xs.size).map(xs)
 
       def swap[A](xs: IndexedSeq[A])(i: Int, j: Int): IndexedSeq[A] = ???
 
@@ -74,15 +60,8 @@ object Indexed {
 
       def at[A](list: List[A])(i: Int): A = list(i)
 
-      def slyce[A](xs: List[A])(range: Range): List[A] = {
-        import cats.implicits._
-        assert(range.step === 1)
-        if (range.isEmpty) {
-          List.empty[A]
-        } else {
-          xs.slice(range.start, range.last + 1)
-        }
-      }
+      def slyce[A](xs: List[A])(range: Range): List[A] =
+        range.filter(_ < xs.size).map(xs).toList
 
       def swap[A](xs: List[A])(i: Int, j: Int): List[A] = ???
 
@@ -96,15 +75,8 @@ object Indexed {
 
       def at[A](vector: Vector[A])(i: Int): A = vector(i)
 
-      def slyce[A](xs: Vector[A])(range: Range): Vector[A] = {
-        import cats.implicits._
-        assert(range.step === 1)
-        if (range.isEmpty) {
-          Vector.empty[A]
-        } else {
-          xs.slice(range.start, range.last + 1)
-        }
-      }
+      def slyce[A](xs: Vector[A])(range: Range): Vector[A] =
+        range.filter(_ < xs.size).map(xs).toVector
 
       def swap[A](xs: Vector[A])(i: Int, j: Int): Vector[A] =
         xs.zipWithIndex.map({
@@ -124,15 +96,8 @@ object Indexed {
 
       def at[A](buffer: Buffer[A])(i: Int): A = buffer(i)
 
-      def slyce[A](xs: Buffer[A])(range: Range): Buffer[A] = {
-        import cats.implicits._
-        assert(range.step === 1)
-        if (range.isEmpty) {
-          ListBuffer.empty[A]
-        } else {
-          xs.slice(range.start, range.last + 1)
-        }
-      }
+      def slyce[A](xs: Buffer[A])(range: Range): Buffer[A] =
+        ListBuffer.concat(range.filter(_ < xs.size).map(xs))
 
       def swap[A](xs: Buffer[A])(i: Int, j: Int): Buffer[A] = ???
 
