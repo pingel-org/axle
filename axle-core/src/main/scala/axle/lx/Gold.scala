@@ -1,7 +1,6 @@
 
 package axle.lx
 
-import scala.language.implicitConversions
 import cats.Show
 import cats.kernel.Eq
 import cats.kernel.Order
@@ -42,8 +41,6 @@ object GoldParadigm {
   }
 
   case class HardCodedGrammar(ℒ: Language) extends Grammar
-
-  implicit def enLanguage(sequences: Set[Expression]): Language = Language(sequences)
 
   case class Language(sequences: Set[Expression])
 
@@ -92,8 +89,6 @@ object GoldParadigm {
     implicit def showText: Show[Text] =
       t => "<" + t.expressions.mkString(", ") + ">"
   }
-
-  implicit def enVocabulary(morphemes: Set[Morpheme]): Vocabulary = Vocabulary(morphemes)
 
   case class Vocabulary(morphemes: Set[Morpheme]) {
 
