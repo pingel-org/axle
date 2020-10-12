@@ -5,8 +5,38 @@ import cats.Show
 import cats.kernel.Eq
 import cats.kernel.Order
 import cats.implicits._
+
 import axle.algebra.DirectedGraph
 import axle.syntax.directedgraph._
+
+/**
+ * 
+ * TODO
+ * 
+ * Still needs something that evaluates an Acceptor,
+ * and returns an enumeration the defines the language.
+ *
+ * Language
+ * 
+ * EnumerableLanguage
+ *
+ * FiniteLanguage
+ *
+ * perhaps I should change Language to ExpressionSet, and redefine
+ * a Language to be either finite, in which case it is defined by an ExpressionSet
+ * or infinite, in which case it is defined by of of these AcceptorEnumeration
+ * thingies.
+ * 
+ *
+ * Be sure that symbols 'a' and 'a' are counted as the same, even if different
+ * objects. (define SymbolComparator?)
+ *
+ * Also need ExpressionComparator?
+ * 
+ * Transitions should be defined on expressions, not symbols, in order to
+ * be maximally general
+ * 
+ */
 
 object Angluin {
 
@@ -75,15 +105,9 @@ object Angluin {
     def ℒ: Language
   }
 
-  case class HardCodedGrammar(_ℒ: Language) extends Grammar {
-    // Note: This was orginally a getter called simply ℒ()
-    // figure out how to write the extractor (or whatever)
-    // to grab this
+  case class HardCodedGrammar(ℒ: Language) extends Grammar
 
-    def ℒ = _ℒ
-  }
-
-  case class Language(sequences: Iterable[Iterable[Symbol]] = Nil) {
+  case class Language(sequences: Set[Iterable[Symbol]] = Set.empty) {
 
     def prefixes: Language = ???
 
@@ -97,17 +121,15 @@ object Angluin {
     implicit def showLanguage: Show[Language] = l => "{" + l.sequences.mkString(", ") + "}"
   }
 
-  trait Learner[S] {
+  val noGuess = Option.empty[Grammar]
 
-    def initialState: S
-
-    def processExpression(state: S, expression: Iterable[Symbol]): (S, Option[Grammar])
-
-    val noGuess = Option.empty[Grammar]
+  class Learner[S](
+    initialState: S,
+    learnFrom: (S, Iterable[Symbol]) => (S, Option[Grammar])) {
 
     def guesses(T: Text): Iterator[Grammar] =
       T.expressions.iterator
-        .scanLeft((initialState, noGuess))((sg, e) => processExpression(sg._1, e))
+        .scanLeft((initialState, noGuess))((sg, e) => learnFrom(sg._1, e))
         .flatMap(_._2)
   }
 
@@ -115,35 +137,28 @@ object Angluin {
    * The SilentLearner never makes a guess
    */
 
-  case class SilentLearner(T: Text) extends Learner[Unit] {
-
-    def initialState: Unit = {}
-
-    def processExpression(state: Unit, expression: Iterable[Symbol]) =
-      (initialState, None)
-  }
+  def silentLearner(T: Text): Learner[Unit] =
+    new Learner[Unit](
+      (),
+      (state, expression) => ((), None)
+    )
 
   /**
    * The HardCodedLearner always guesses the same thing
    */
 
-  case class HardCodedLearner(G: Grammar) extends Learner[Unit] {
-
-    def initialState: Unit = {}
-
-    def processExpression(state: Unit, expression: Iterable[Symbol]): (Unit, Option[Grammar]) =
-      (initialState, Some(G))
-  }
+  def hardCodedLearner(G: Grammar) = new Learner[Unit](
+    (),
+    (state, expression) => ((), Some(G))
+  )
 
   /**
    * The MemorizingLearner accrues expressions
    */
 
-  case class MemorizingLearner() extends Learner[Language] {
-
-    def initialState: Language = Language(Nil)
-
-    def processExpression(state: Language, expression: Iterable[Symbol]): (Language, Option[Grammar]) =
+  val memorizingLearner = new Learner[Language] (
+    Language(Set.empty),
+    (state, expression) =>
       expression match {
         case ♯ => (state, Some(HardCodedGrammar(state)))
         case _ => {
@@ -151,8 +166,7 @@ object Angluin {
           (newState, Some(HardCodedGrammar(newState)))
         }
       }
-
-  }
+  )
 
   case class Partition() {
     def restrictTo(subset: Set[Any]): Partition = ???
@@ -168,21 +182,15 @@ object Angluin {
     def evaluate: AngluinAcceptor[DG] = ???
   }
 
-  // implicit def enAlphabet(symbols: Set[Symbol]): Alphabet = Alphabet(symbols)
-
   case class Alphabet(symbols: Set[Symbol])
-
-  // implicit def enText(expressions: Iterable[Iterable[Symbol]]): Text = Text(expressions)
 
   case class Text(expressions: Iterable[Iterable[Symbol]]) {
 
-    // def addExpression(s: List[Symbol]): Unit = expressions = expressions ::: List(s)
-
-    def length: Int = expressions.size
+    val length: Int = expressions.size
 
     def isFor(ℒ: Language) = content === ℒ
 
-    def content: Language = Language(expressions.filter(_ != ♯))
+    val content: Language = Language(expressions.filter(_ != ♯).toSet)
   }
 
   object Text {

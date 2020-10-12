@@ -9,16 +9,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## 0.5.5 Docs, Tests, Bugs
 
 * Define `Indexed.slyce` for non-1-step Ranges
-
-* Reorder mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
-* Footnotes (Giry, etc)
-* Chicklet borders / colors
-
 * Improve Gold and Angluin coverage
-* `axle-core/src/main/scala/axle/lx/*.txt`
 
 * Fix occasional MetricSpace failure
 * Fix `axle.algebra.GeoMetricSpaceSpec`
+* Chicklet borders / colors
 
 ## 0.5.6 ML Bugs
 
@@ -61,6 +56,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `cats.effect` for `axle.ast.python2`
 
 ## 0.6.x Factoring and Bayesian Networks
+
+* Reorder Probability mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
+  * Footnotes (Giry, etc)
 
 * `{CPT,TD}.tailRecM` then ScalaCheck `Monad[CPT,TD]`
 * Functor for CPT, TD
@@ -212,6 +210,7 @@ that has been its goal since inception.
 * Rainbow Tables
 * Blockchain
 * Nerod Partition
+* Finish Angluin Learner
 * Motivation for Gold Paradigm, Angluin Learner
 * Stochastic Lambda Calculus
 * Game Theory: information sets, equilibria
