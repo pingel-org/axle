@@ -33,6 +33,24 @@ class AngluinSpecification extends AnyFunSuite with Matchers {
     T.isFor(ℒ) should be(true)
   }
 
+  test("silent learner never guesses") {
+
+    val ɸ = silentLearner
+
+    val outcome = lastOption(ɸ.guesses(T))
+
+    outcome should be(None)
+  }
+
+  test("hard-coded learner hard-codes") {
+
+    val ɸ = hardCodedLearner(HardCodedGrammar(ℒ))
+
+    val outcome = lastOption(ɸ.guesses(T))
+
+    outcome.get.ℒ should be(ℒ)
+  }
+
   test("memorizing learner memorizes") {
 
     val ɸ = memorizingLearner

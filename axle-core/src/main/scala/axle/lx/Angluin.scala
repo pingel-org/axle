@@ -137,7 +137,7 @@ object Angluin {
    * The SilentLearner never makes a guess
    */
 
-  def silentLearner(T: Text): Learner[Unit] =
+  val silentLearner: Learner[Unit] =
     new Learner[Unit](
       (),
       (state, expression) => ((), None)
