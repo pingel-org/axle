@@ -11,6 +11,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Define `Indexed.slyce` for non-1-step Ranges
 * Improve Gold and Angluin coverage
 
+* Tics should take an argument
+* Factor tics and tics-{joda,algebra,spire} into separate libs?
+
 * Fix occasional MetricSpace failure
 * Fix `axle.algebra.GeoMetricSpaceSpec`
 * Chicklet borders / colors
@@ -21,19 +24,20 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
 
+## 0.5.7 Genetic Algorithm
+
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 
-## 0.5.7 Small refactorings
+## 0.5.8 Computational Linguistics
 
-* Tics should take an argument
-* Factor tics and tics-{joda,algebra,spire} into separate libs?
+* Finish Angluin
 
-## 0.5.8 Logic
+## 0.5.9 Logic
 
 * Redo Logic using Abstract Algebra
 
-## 0.5.9
+## 0.5.10
 
 * Simple graph implementation so that `axle-core` can avoid including `axle-jung`
 
@@ -41,11 +45,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Will require externalizing the layout to its own.... typeclass?
   * Layout of bayesian network is quite bad -- check ABE SVG
 
-## 0.5.10
+## 0.5.11
 
 * `axle-png` to avoid Xvfb requirement during tests
 
-## 0.5.11
+## 0.5.12
 
 * move ast view xml (how is it able to refer to `xml.Node`?)
   * ast.view.AstNodeFormatter (xml.Utility.escape)

@@ -80,7 +80,7 @@ object GoldParadigm {
 
     val length: Int = expressions.size
 
-    def isFor(ℒ: Language) = content.equals(ℒ) // TODO equals
+    def isFor(ℒ: Language): Boolean = content === ℒ
 
     val content: Language = Language(expressions.filter(_ != ♯).toSet)
   }
@@ -90,7 +90,7 @@ object GoldParadigm {
       t => "<" + t.expressions.mkString(", ") + ">"
   }
 
-  case class Vocabulary(morphemes: Set[Morpheme]) {
+  case class Vocabulary(morphemes: Set[Morpheme]) extends Iterable[Morpheme] {
 
     def iterator: Iterator[Morpheme] = morphemes.iterator
   }
