@@ -17,12 +17,20 @@ class GoldSpecification extends AnyFunSuite with Matchers {
 
   val Σ = Vocabulary(Set(mHi, mIm, mYour, mMother, mShut, mUp))
 
-  val s1 = mHi :: mIm :: mYour :: mMother :: Nil
-  val s2 = mShut :: mUp :: Nil
+  val s1 = Expression(mHi :: mIm :: mYour :: mMother :: Nil)
+  val s2 = Expression(mShut :: mUp :: Nil)
 
   val ℒ = Language(Set(s1, s2))
 
   val T = Text(s1 :: ♯ :: ♯ :: s2 :: ♯ :: s2 :: s2 :: Nil)
+
+  test("Expression order and show") {
+
+    import cats.implicits._
+    import cats.Order.catsKernelOrderingForOrder
+
+    T.expressions.sorted.show.length should be(157)
+  }
 
   test("Vocabulary") {
     Σ.morphemes.size should be(6)

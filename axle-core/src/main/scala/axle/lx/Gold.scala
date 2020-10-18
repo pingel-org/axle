@@ -22,19 +22,19 @@ object GoldParadigm {
 
   val noGuess = Option.empty[Grammar]
 
-  type Expression = Iterable[Morpheme]
+  case class Expression(morphemes: Iterable[Morpheme])
 
   object Expression {
 
     implicit val showExpression: Show[Expression] =
-      _.mkString(" ")
+      _.morphemes.mkString(" ")
 
     implicit val orderExpression: Order[Expression] =
       (x, y) => x.show.compareTo(y.show)
 
   }
 
-  val ♯ = List.empty[Morpheme]
+  val ♯ = Expression(List.empty[Morpheme])
 
   trait Grammar {
     def ℒ: Language
@@ -62,7 +62,7 @@ object GoldParadigm {
     Language(Set.empty),
     (state: Language, expression: Expression) => {
       val newState = 
-        if( expression.size > 0 ) {
+        if( expression.morphemes.size > 0 ) {
           Language(state.sequences ++ List(expression))
         } else {
           state
