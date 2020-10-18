@@ -40,18 +40,12 @@ import axle.syntax.directedgraph._
 
 object Angluin {
 
-  case class Symbol(s: String)
+  // implicit val symbolEq = Eq.fromUniversalEquals[Symbol]
 
-  object Symbol {
+  implicit val orderSymbol: Order[Symbol] =
+    (x, y) => Show[Symbol].show(x).compareTo(Show[Symbol].show(y))
 
-    implicit val symbolEq = Eq.fromUniversalEquals[Symbol]
-
-    implicit def showSymbol: Show[Symbol] = _.s
-
-    implicit val orderSymbol: Order[Symbol] =
-      (x, y) => Show[Symbol].show(x).compareTo(Show[Symbol].show(y))
-
-  }
+  // implicit def showSymbol: Show[Symbol] = _.name
 
   case class AngluinAcceptor[DG](vps: Seq[String], I: Set[String], F: Set[String])(
     implicit
@@ -69,7 +63,7 @@ object Angluin {
     //    }
 
     def δSymbol(state: String, symbol: Symbol): Set[String] =
-      graph.edges.collect({ case e if (graph.source(e) === state && Symbol.symbolEq.eqv(e, symbol)) => graph.destination(e) }).toSet
+      graph.edges.collect({ case e if ( (graph.source(e) === state) && (e === symbol) ) => graph.destination(e) }).toSet
 
     def δ(state: String, exp: List[Symbol]): Set[String] = exp match {
       case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)
