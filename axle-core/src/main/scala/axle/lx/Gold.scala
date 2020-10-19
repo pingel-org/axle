@@ -87,7 +87,7 @@ object GoldParadigm {
   object Text {
 
     implicit def showText: Show[Text] =
-      t => "<" + t.expressions.mkString(", ") + ">"
+      t => "<" + t.expressions.map(_.show).mkString(", ") + ">"
   }
 
   case class Vocabulary(morphemes: Set[Morpheme]) extends Iterable[Morpheme] {
