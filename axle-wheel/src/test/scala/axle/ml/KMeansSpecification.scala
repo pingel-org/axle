@@ -133,13 +133,14 @@ class KMeansSpecification
         irisFeaturizer,
         normalizer,
         K = 3,
-        iterations = 20)(rng)(
-          Iris.irisEq,
-          space,
-          cats.Functor[List],
-          la,
-          axle.algebra.Indexed[List, Int],
-          axle.algebra.Finite[List, Int])
+        iterations = 20)(rng)
+        // (
+        //   Iris.irisEq,
+        //   space,
+        //   cats.Functor[List],
+        //   la,
+        //   axle.algebra.Indexed[List, Int],
+        //   axle.algebra.Finite[List, Int])
 
     val confusion = ConfusionMatrix[Iris, Int, String, Vector, DoubleMatrix](
       classifier,

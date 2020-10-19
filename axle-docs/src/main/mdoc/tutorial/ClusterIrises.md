@@ -86,13 +86,7 @@ val classifier: KMeans[Iris, List, DoubleMatrix] =
     irisFeaturizer,
     normalizer,
     K = 3,
-    iterations = 20)(rng)(
-     Iris.irisEq,
-     space,
-     cats.Functor[List],
-     la,
-     axle.algebra.Indexed[List, Int],
-     axle.algebra.Finite[List, Int])
+    iterations = 20)(rng)
 ```
 
 Produce a "confusion matrix"

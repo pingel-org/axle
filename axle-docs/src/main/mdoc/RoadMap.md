@@ -10,7 +10,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Define `Indexed.slyce` for non-1-step Ranges
 * Improve `axle.lx.{Gold, Angluin}` coverage
-
 * Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
 
 ## 0.5.6 Metric Space bugs
@@ -113,6 +112,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `perceive` could return a lower-entropy probability model
   * Perhaps in exchange for a given amount of energy
   * Or ask for a 0-entropy model and be told how expensive that was
+
+* Identify all uses of `spire.random.Generator`
 
 ## After that
 
