@@ -1,7 +1,6 @@
 
 package axle.lx
 
-import scala.language.implicitConversions
 import cats.Show
 import cats.kernel.Eq
 import cats.kernel.Order
@@ -23,27 +22,25 @@ object GoldParadigm {
 
   val noGuess = Option.empty[Grammar]
 
-  type Expression = Iterable[Morpheme]
+  case class Expression(morphemes: Iterable[Morpheme])
 
   object Expression {
 
     implicit val showExpression: Show[Expression] =
-      _.mkString(" ")
+      _.morphemes.mkString(" ")
 
     implicit val orderExpression: Order[Expression] =
       (x, y) => x.show.compareTo(y.show)
 
   }
 
-  val ♯ = List.empty[Morpheme]
+  val ♯ = Expression(List.empty[Morpheme])
 
   trait Grammar {
     def ℒ: Language
   }
 
   case class HardCodedGrammar(ℒ: Language) extends Grammar
-
-  implicit def enLanguage(sequences: Set[Expression]): Language = Language(sequences)
 
   case class Language(sequences: Set[Expression])
 
@@ -65,7 +62,7 @@ object GoldParadigm {
     Language(Set.empty),
     (state: Language, expression: Expression) => {
       val newState = 
-        if( expression.size > 0 ) {
+        if( expression.morphemes.size > 0 ) {
           Language(state.sequences ++ List(expression))
         } else {
           state
@@ -83,19 +80,17 @@ object GoldParadigm {
 
     val length: Int = expressions.size
 
-    def isFor(ℒ: Language) = content.equals(ℒ) // TODO equals
+    def isFor(ℒ: Language): Boolean = content === ℒ
 
     val content: Language = Language(expressions.filter(_ != ♯).toSet)
   }
   object Text {
 
     implicit def showText: Show[Text] =
-      t => "<" + t.expressions.mkString(", ") + ">"
+      t => "<" + t.expressions.map(_.show).mkString(", ") + ">"
   }
 
-  implicit def enVocabulary(morphemes: Set[Morpheme]): Vocabulary = Vocabulary(morphemes)
-
-  case class Vocabulary(morphemes: Set[Morpheme]) {
+  case class Vocabulary(morphemes: Set[Morpheme]) extends Iterable[Morpheme] {
 
     def iterator: Iterator[Morpheme] = morphemes.iterator
   }

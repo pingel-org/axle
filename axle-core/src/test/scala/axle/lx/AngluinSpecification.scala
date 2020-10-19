@@ -3,6 +3,8 @@ package axle.lx
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
+import cats.implicits._
+
 import axle.algebra._
 import axle.lx.Angluin._
 
@@ -17,8 +19,8 @@ class AngluinSpecification extends AnyFunSuite with Matchers {
 
   val Σ = Alphabet(Set(mHi, mIm, mYour, mMother, mShut, mUp))
 
-  val s1 = mHi :: mIm :: mYour :: mMother :: Nil
-  val s2 = mShut :: mUp :: Nil
+  val s1 = Expression(mHi :: mIm :: mYour :: mMother :: Nil)
+  val s2 = Expression(mShut :: mUp :: Nil)
 
   val ℒ = Language(Set(s1, s2))
 
@@ -26,6 +28,10 @@ class AngluinSpecification extends AnyFunSuite with Matchers {
 
   test("Alphabet") {
     Σ.symbols.size should be(6)
+  }
+
+  test("Show[Text]") {
+    T.show.length should be(139)
   }
 
   test("Text.isFor(Language)") {

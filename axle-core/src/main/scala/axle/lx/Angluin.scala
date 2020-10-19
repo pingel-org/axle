@@ -24,8 +24,7 @@ import axle.syntax.directedgraph._
  *
  * perhaps I should change Language to ExpressionSet, and redefine
  * a Language to be either finite, in which case it is defined by an ExpressionSet
- * or infinite, in which case it is defined by of of these AcceptorEnumeration
- * thingies.
+ * or infinite, in which case it is defined by an AcceptorEnumeration
  * 
  *
  * Be sure that symbols 'a' and 'a' are counted as the same, even if different
@@ -40,18 +39,8 @@ import axle.syntax.directedgraph._
 
 object Angluin {
 
-  case class Symbol(s: String)
-
-  object Symbol {
-
-    implicit val symbolEq = Eq.fromUniversalEquals[Symbol]
-
-    implicit def showSymbol: Show[Symbol] = _.s
-
-    implicit val orderSymbol: Order[Symbol] =
-      (x, y) => Show[Symbol].show(x).compareTo(Show[Symbol].show(y))
-
-  }
+  implicit val orderSymbol: Order[Symbol] =
+    (x, y) => Show[Symbol].show(x).compareTo(Show[Symbol].show(y))
 
   case class AngluinAcceptor[DG](vps: Seq[String], I: Set[String], F: Set[String])(
     implicit
@@ -69,10 +58,10 @@ object Angluin {
     //    }
 
     def δSymbol(state: String, symbol: Symbol): Set[String] =
-      graph.edges.collect({ case e if (graph.source(e) === state && Symbol.symbolEq.eqv(e, symbol)) => graph.destination(e) }).toSet
+      graph.edges.collect({ case e if ( (graph.source(e) === state) && (e === symbol) ) => graph.destination(e) }).toSet
 
-    def δ(state: String, exp: List[Symbol]): Set[String] = exp match {
-      case head :: tail => δSymbol(state, head).map(δ(_, tail)).reduce(_ ++ _)
+    def δ(state: String, exp: Expression): Set[String] = exp.symbols match {
+      case head :: tail => δSymbol(state, head).map(δ(_, Expression(tail))).reduce(_ ++ _)
       case Nil          => Set(state)
     }
 
@@ -89,9 +78,16 @@ object Angluin {
 
   }
 
-  // type Expression = List[Symbol]
+  case class Expression(symbols: List[Symbol])
 
-  val ♯ = List.empty[Symbol]
+  object Expression {
+
+    implicit val showExpression: Show[Expression] = 
+      _.symbols.map(_.show).mkString(", ")
+  }
+
+
+  val ♯ = Expression(List.empty)
 
   // val g = graph[String, Symbol]()
 
@@ -107,7 +103,7 @@ object Angluin {
 
   case class HardCodedGrammar(ℒ: Language) extends Grammar
 
-  case class Language(sequences: Set[Iterable[Symbol]] = Set.empty) {
+  case class Language(sequences: Set[Expression] = Set.empty) {
 
     def prefixes: Language = ???
 
@@ -121,15 +117,13 @@ object Angluin {
     implicit def showLanguage: Show[Language] = l => "{" + l.sequences.mkString(", ") + "}"
   }
 
-  val noGuess = Option.empty[Grammar]
-
   class Learner[S](
     initialState: S,
-    learnFrom: (S, Iterable[Symbol]) => (S, Option[Grammar])) {
+    learnFrom: (S, Expression) => (S, Option[Grammar])) {
 
     def guesses(T: Text): Iterator[Grammar] =
       T.expressions.iterator
-        .scanLeft((initialState, noGuess))((sg, e) => learnFrom(sg._1, e))
+        .scanLeft((initialState, Option.empty[Grammar]))((sg, e) => learnFrom(sg._1, e))
         .flatMap(_._2)
   }
 
@@ -184,9 +178,9 @@ object Angluin {
 
   case class Alphabet(symbols: Set[Symbol])
 
-  case class Text(expressions: Iterable[Iterable[Symbol]]) {
+  case class Text(expressions: Iterable[Expression]) extends Iterable[Expression] {
 
-    val length: Int = expressions.size
+    def iterator: Iterator[Expression] = expressions.iterator
 
     def isFor(ℒ: Language) = content === ℒ
 
@@ -194,7 +188,7 @@ object Angluin {
   }
 
   object Text {
-    implicit def showText: Show[Text] = t => "<" + t.expressions.mkString(", ") + ">"
+    implicit def showText: Show[Text] = t => "<" + t.expressions.map(_.show).mkString(", ") + ">"
   }
 
 }
