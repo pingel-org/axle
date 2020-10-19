@@ -9,29 +9,24 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## 0.5.5 Docs, Tests, Bugs
 
 * Define `Indexed.slyce` for non-1-step Ranges
-* Improve Gold and Angluin coverage
+* Improve `axle.lx.{Gold, Angluin}` coverage
 
-* Tics should take an argument
-* Factor tics and tics-{joda,algebra,spire} into separate libs?
+* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
+
+## 0.5.6 Metric Space bugs
 
 * Fix occasional MetricSpace failure
 * Fix `axle.algebra.GeoMetricSpaceSpec`
 * Chicklet borders / colors
 
-## 0.5.6 ML Bugs
-
-* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
+## 0.5.7 Logistic Regression
 
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
 
-## 0.5.7 Genetic Algorithm
+## 0.5.8 Genetic Algorithm
 
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
-
-## 0.5.8 Computational Linguistics
-
-* Finish Angluin
 
 ## 0.5.9 Logic
 
@@ -45,11 +40,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Will require externalizing the layout to its own.... typeclass?
   * Layout of bayesian network is quite bad -- check ABE SVG
 
-## 0.5.11
+## 0.5.11 PNG
 
 * `axle-png` to avoid Xvfb requirement during tests
 
-## 0.5.12
+## 0.5.12 AST
 
 * move ast view xml (how is it able to refer to `xml.Node`?)
   * ast.view.AstNodeFormatter (xml.Utility.escape)
@@ -227,6 +222,7 @@ that has been its goal since inception.
 
 ## Hygiene
 
+* Factor tics and tics-{joda,algebra,spire} into separate libs?
 * remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
 * Fix "unreachable" default pattern match cases
 * Review remaining usage of: `asInstanceOf`, `ClassTag`, and `Manifest`
