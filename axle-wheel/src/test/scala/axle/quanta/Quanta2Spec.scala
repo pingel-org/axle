@@ -16,6 +16,7 @@ import axle.algebra._
 import axle.algebra.modules.doubleRationalModule
 import axle.algebra.modules.rationalRationalModule
 import axle.jung.directedGraphJung
+import axle.laws.generator._
 
 import org.scalacheck.Gen
 import org.scalacheck.Arbitrary
@@ -25,20 +26,8 @@ import org.typelevel.discipline.scalatest.Discipline
 
 object ArbitraryUnittedQuantityStuff {
 
-  implicit def genUnit[Q, N](implicit uq: UnitConverter[Q, N]): Gen[UnitOfMeasurement[Q]] =
-    Gen.oneOf(uq.units)
-
   implicit def arbUnit[Q, N](implicit uq: UnitConverter[Q, N]): Arbitrary[UnitOfMeasurement[Q]] =
     Arbitrary(genUnit)
-
-  def genUQ[Q, N](
-    implicit
-    genN:    Gen[N],
-    genUnit: Gen[UnitOfMeasurement[Q]]): Gen[UnittedQuantity[Q, N]] =
-    for {
-      n <- genN
-      unit <- genUnit
-    } yield UnittedQuantity.apply(n, unit)
 
   def arbitraryUQ[Q, N](
     implicit
@@ -65,7 +54,7 @@ class QuantaSpec extends AnyFunSuite with Matchers with Discipline {
 
     val uqDistanceModuleLaws = VectorSpaceLaws[UnittedQuantity[Distance, Real], Real](
       equq,
-      arbitraryUQ[Distance, Real](genUQ[Distance, Real]),
+      arbitraryUQ[Distance, Real](genUnittedQuantity[Distance, Real]),
       implicitly[Eq[Real]],
       arb.real,
       new org.typelevel.discipline.Predicate[Real] { def apply(a: Real) = true }).cModule(mudr)
@@ -79,7 +68,7 @@ class QuantaSpec extends AnyFunSuite with Matchers with Discipline {
     val uqDistanceAdditiveGroupLaws =
       GroupLaws[UnittedQuantity[Distance, Real]](
         equq,
-        arbitraryUQ[Distance, Real](genUQ[Distance, Real])).monoid(agudr)
+        arbitraryUQ[Distance, Real](genUnittedQuantity[Distance, Real])).monoid(agudr)
 
     checkAll("Module Laws for Module[UnittedQuantity[Distance, Real]]", uqDistanceModuleLaws)
 
