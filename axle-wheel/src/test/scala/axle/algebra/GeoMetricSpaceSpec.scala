@@ -3,18 +3,19 @@ package axle.algebra
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 import org.scalacheck.Arbitrary
-import org.scalacheck.Gen
 import org.typelevel.discipline.Predicate
 import org.typelevel.discipline.scalatest.Discipline
 
 import edu.uci.ics.jung.graph.DirectedSparseGraph
+
 import spire.math.Real
 import spire.laws.VectorSpaceLaws
-//import axle.algebra.GeoCoordinates.geoCoordinatesMetricSpace
+
 import axle.jung.directedGraphJung
 import axle.quanta._
 import axle.quanta.Angle
 import axle.quanta.UnittedQuantity
+import axle.laws.generator._
 
 class GeoMetricSpaceSpec
   extends AnyFunSuite
@@ -25,23 +26,11 @@ class GeoMetricSpaceSpec
     import axle.algebra.modules.realRationalModule
     Angle.converterGraphK2[Real, DirectedSparseGraph]
   }
-  import angleConverter.°
 
   //  implicit val space = {
   //    import axle.spireToCatsEq
   //    geoCoordinatesMetricSpace[Real]
   //  }
-
-  implicit val genAngleMagnitudeDouble: Gen[Double] = Gen.choose[Double](-180d, 180d)
-
-  def genAngle: Gen[UnittedQuantity[Angle, Real]] = for {
-    magnitude <- genAngleMagnitudeDouble
-  } yield Real(magnitude) *: °
-
-  def genCoords: Gen[GeoCoordinates[Real]] = for {
-    lat <- genAngle
-    long <- genAngle
-  } yield GeoCoordinates(lat, long)
 
   val ag = axle.quanta.quantumAdditiveGroup[Angle, Real]
 

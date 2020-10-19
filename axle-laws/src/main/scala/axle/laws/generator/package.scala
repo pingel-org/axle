@@ -9,8 +9,22 @@ import cats.kernel.Eq
 import spire.math._
 
 import axle.algebra._
+import axle.quanta.UnittedQuantity
+import axle.quanta.Angle
+import axle.quanta.AngleConverter
 
 package object generator {
+
+  val genAngleMagnitudeDouble: Gen[Double] = Gen.choose[Double](-180d, 180d)
+
+  def genAngle(implicit angleConverter: AngleConverter[Real]): Gen[UnittedQuantity[Angle, Real]] = for {
+    magnitude <- genAngleMagnitudeDouble
+  } yield Real(magnitude) *: angleConverter.°
+
+  def genCoords(implicit angleConverter: AngleConverter[Real]): Gen[GeoCoordinates[Real]] = for {
+    lat <- genAngle
+    long <- genAngle
+  } yield GeoCoordinates(lat, long)
 
   def genPortion(
     minDenominatorSteps: Int,
