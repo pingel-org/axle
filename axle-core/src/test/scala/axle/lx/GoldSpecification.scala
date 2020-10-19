@@ -43,8 +43,8 @@ class GoldSpecification extends AnyFunSuite with Matchers {
     ℒ.show.length should be(129)
   }
 
-  test("Vocabulary") {
-    Σ.morphemes.size should be(6)
+  test("Vocabulary.size (via iterator)") {
+    Σ.size should be(6)
   }
 
   test("Text.isFor(Language)") {
