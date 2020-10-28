@@ -22,10 +22,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
   val x = Player("X", "Player X")
   val o = Player("O", "Player O")
 
-  val game = TicTacToe(
-    3,
-    x, interactiveMove, axle.algebra.ignore,
-    o, interactiveMove, axle.algebra.ignore)
+  val game = TicTacToe(3, x, o)
 
   test("game define intro message, have 9 positions") {
 
@@ -33,22 +30,29 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
     game.numPositions should be(9)
   }
 
-  val rGame = TicTacToe(
-    3,
-    x, randomMove, axle.algebra.ignore,
-    o, randomMove, axle.algebra.ignore)
-
   test("random game produce moveStateStream") {
-    moveStateStream(rGame, startState(rGame), rng).take(3).length should be(3)
+    moveStateStream(game, startState(game), _ => randomMove, rng).take(3).length should be(3)
   }
 
   test("random game plays") {
-    val endState = play(rGame, startState(rGame), false, rng)
-    moves(rGame, endState).length should be(0)
+    val endState = play(
+      game,
+      _ => randomMove,
+      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      startState(game),
+      false,
+      rng)
+    moves(game, endState).length should be(0)
   }
 
   test("random game produce game stream") {
-    val games = gameStream(rGame, startState(rGame), false, rng).take(2)
+    val games = gameStream(
+      game,
+      _ => randomMove,
+      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      startState(game),
+      false,
+      rng).take(2)
     games.length should be(2)
   }
 
@@ -83,10 +87,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
   }
 
   test("starting moves are defined for 4x4 game") {
-    val bigGame = TicTacToe(
-      4,
-      x, randomMove, axle.algebra.ignore,
-      o, randomMove, axle.algebra.ignore)
+    val bigGame = TicTacToe(4, x, o)
     val startingMoves = moves(bigGame, startState(bigGame))
     startingMoves.map(_.description).mkString(",") should include("16")
   }
@@ -152,13 +153,21 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
         case 4 => "6"
       }
 
-    val game = TicTacToe(
-      3,
-      x, hardCodedStringStrategy(xMove), axle.algebra.ignore,
-      o, hardCodedStringStrategy(oMove), axle.algebra.ignore)
+    val game = TicTacToe(3, x, o)
 
     val start = startState(game)
-    val lastState = moveStateStream(game, start, rng).last._3
+    val lastState = moveStateStream(
+      game,
+      start,
+      player =>
+        if ( player === x ) {
+          hardCodedStringStrategy(xMove)
+        } else if ( player === o ) {
+          hardCodedStringStrategy(oMove)
+        } else {
+          ???
+        },
+      rng).last._3
     val out = outcome(game, lastState).get
     displayOutcomeTo(game, out, x) should include("You beat")
     displayOutcomeTo(game, out, o) should include("beat You")
@@ -182,13 +191,15 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
         case 4 => "7"
       }
 
-    val game = TicTacToe(
-      3,
-      x, hardCodedStringStrategy(xMove), axle.algebra.ignore,
-      o, hardCodedStringStrategy(oMove), axle.algebra.ignore)
-
     val start = startState(game)
-    val lastState = moveStateStream(game, start, rng).last._3
+    val lastState = moveStateStream(
+      game,
+      start,
+      _ match {
+        case x => hardCodedStringStrategy(xMove)
+        case o => hardCodedStringStrategy(oMove)
+      },
+      rng).last._3
     val winnerOpt = outcome(game, lastState).flatMap(_.winner)
     winnerOpt should be(Some(o))
   }
@@ -212,13 +223,19 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
         case 2 => "9"
       }
 
-    val game = TicTacToe(
-      3,
-      x, hardCodedStringStrategy(xMove), axle.algebra.ignore,
-      o, hardCodedStringStrategy(oMove), axle.algebra.ignore)
-
     val start = startState(game)
-    val lastState = moveStateStream(game, start, rng).last._3
+    val lastState = moveStateStream(
+      game,
+      start,
+      player =>
+        if ( player === x ) {
+          hardCodedStringStrategy(xMove)
+        } else if ( player === o ) {
+          hardCodedStringStrategy(oMove)
+        } else {
+          ???
+        },
+      rng).last._3
 
     val winnerOpt = outcome(game, lastState).flatMap(_.winner)
     winnerOpt should be(None)

@@ -3,6 +3,7 @@ package axle.game.poker
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
+import spire.math.Rational
 import spire.random.Generator.rng
 
 import axle.probability._
@@ -17,13 +18,9 @@ class PokerSpec extends AnyFunSuite with Matchers {
   val p1 = Player("P1", "Player 1")
   val p2 = Player("P2", "Player 2")
 
-  test("start state displays something") {
+  val game = Poker(Vector(p1, p2))
 
-    val game = Poker(
-      Vector(
-      (p1, interactiveMove, println),
-      (p2, interactiveMove, println)),
-      println)
+  test("start state displays something") {
 
     val state = startState(game)
     val ms = evGame.maskState(game, state, p1)
@@ -32,12 +29,6 @@ class PokerSpec extends AnyFunSuite with Matchers {
   }
 
   test("masked-sate mover is the same as raw state mover") {
-
-    val game = Poker(
-      Vector(
-      (p1, interactiveMove, println),
-      (p2, interactiveMove, println)),
-      println)
 
     val state = startState(game)
     val msp1 = maskState(game, state, p1)
@@ -50,12 +41,6 @@ class PokerSpec extends AnyFunSuite with Matchers {
   }
 
   test("only 1 player 'still in', not allow another game to begin") {
-
-    val game = Poker(
-      Vector(
-      (p1, interactiveMove, println),
-      (p2, interactiveMove, println)),
-      println)
 
     val state = PokerState(
       _ => Some(p1),
@@ -95,16 +80,26 @@ class PokerSpec extends AnyFunSuite with Matchers {
         case (_, _) => "call" // TODO unreachable
       }
 
-    val game = Poker(
-      Vector(
-      (p1, hardCodedStringStrategy(p1Move), axle.algebra.ignore),
-      (p2, hardCodedStringStrategy(p2Move), axle.algebra.ignore)),
-      axle.algebra.ignore)
+    val game = Poker(Vector(p1, p2))
+
+    val strategies: Player => (Poker, PokerStateMasked) => ConditionalProbabilityTable[PokerMove,Rational] =
+      player => 
+        if ( player === p1 ) {
+          hardCodedStringStrategy(p1Move)
+        } else if ( player === p2 ){
+          hardCodedStringStrategy(p2Move)
+        } else {
+          ???
+        }
 
     val start = startState(game)
-    val history = moveStateStream(game, start, rng).toVector
+    val history = moveStateStream(game, start, strategies, rng).toVector
     val lastState = history.last._3
-    val _ = play(game, rng) // TODO make use of this "lastStateByPlay"
+    val _ = play(
+      game,
+      strategies,
+      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      rng) // TODO make use of this "lastStateByPlay"
 
     val o = outcome(game, lastState).get
     val newGameState = startFrom(game, lastState).get

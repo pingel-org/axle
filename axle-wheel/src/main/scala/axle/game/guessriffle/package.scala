@@ -5,22 +5,14 @@ import scala.util.Try
 
 import cats.implicits._
 
-import spire.math.Rational
-import spire.random.Dist
 import spire.random.Generator.rng
-
-import axle.probability._
-// import axle.probability.ConditionalProbabilityTable
-// import axle.probability.rationalProbabilityDist
 
 import axle.game.cards._
 
 package object guessriffle {
 
-    implicit val evGame: Game[GuessRiffle, GuessRiffleState, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove], Rational, ConditionalProbabilityTable] =
-    new Game[GuessRiffle, GuessRiffleState, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove], Rational, ConditionalProbabilityTable] {
-
-      def probabilityDist: Dist[Rational] = rationalProbabilityDist
+  implicit val evGame: Game[GuessRiffle, GuessRiffleState, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove]] =
+    new Game[GuessRiffle, GuessRiffleState, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove]] {
 
       def startState(game: GuessRiffle): GuessRiffleState =
         GuessRiffleState(Deck(), None, None, List.empty, List.empty, 0, None)
@@ -30,15 +22,6 @@ package object guessriffle {
 
       def players(game: GuessRiffle): IndexedSeq[Player] =
         Vector(GuessRiffle.dealer, game.player)
-
-      def strategyFor(
-        game:   GuessRiffle,
-        player: Player): (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
-        player match {
-          case game.player => game.strategy
-          case GuessRiffle.dealer => GuessRiffle.dealerStrategy
-          case _           => game.strategy // TODO unreachable
-        }
 
       def isValid(
         g:     GuessRiffle,
@@ -117,20 +100,10 @@ package object guessriffle {
         } else {
           Some(GuessRiffleOutcome(state.numCorrect))
         }
- 
-      implicit def sampler = ConditionalProbabilityTable.samplerWitness
-
     }
 
     implicit val evGameIO: GameIO[GuessRiffle, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove]] =
     new GameIO[GuessRiffle, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove]] {
-
-      def displayerFor(g: GuessRiffle, player: Player): String => Unit =
-        player match {
-          case g.player => g.displayer
-          case GuessRiffle.dealer => g.dealerDisplayer
-          case _        => g.displayer
-        }
 
       def parseMove(g: GuessRiffle, input: String): Either[String, GuessRiffleMove] =
         if(input == "riffle") {

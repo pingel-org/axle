@@ -3,9 +3,10 @@ package axle.game
 import cats.kernel.Eq
 
 import spire.math._
-import spire.random.Dist
 import spire.random.Generator.rng
+
 import axle.probability._
+import axle.game.Strategies.randomMove
 
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
@@ -54,11 +55,8 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
       (Mcc, (Sc, Rational(1))))
   )
 
-  implicit val evGame: Game[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove,Rational,ConditionalProbabilityTable] =
-    new Game[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove,Rational,ConditionalProbabilityTable] {
-
-      def probabilityDist: Dist[Rational] =
-        rationalProbabilityDist
+  implicit val evGame: Game[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove] =
+    new Game[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove] {
 
       def startState(game: TestGame): TestGameState =
         Sa
@@ -84,10 +82,6 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
       def maskMove(game: TestGame, move: TestGameMove, mover: Player, observer: Player): TestGameMove =
         move
 
-      def strategyFor(game: TestGame, player: Player): (TestGame, TestGameState) => ConditionalProbabilityTable[TestGameMove, Rational] =
-        (game: TestGame, state: TestGameState) =>
-          ConditionalProbabilityTable(movesMap(state).view.mapValues(_._2).toMap)
-
       def isValid(game: TestGame, state: TestGameState, move: TestGameMove): Either[String, TestGameMove] =
         Right(move)
 
@@ -97,11 +91,7 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
       def outcome(game: TestGame, state: TestGameState): Option[TestGameOutcome] =
         None
 
-      implicit def sampler = ConditionalProbabilityTable.samplerWitness
-
     }
-
-  import evGame._
 
   // val pm = ConditionalProbabilityTable.probabilityWitness
 
@@ -134,6 +124,7 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
       moveFromRandomState(
         game,
         currentStateModel,
+        _ => randomMove[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove,Rational,ConditionalProbabilityTable],
         (m: Map[TestGameState, Rational]) => ConditionalProbabilityTable(m),
         rng)
     }) toSet

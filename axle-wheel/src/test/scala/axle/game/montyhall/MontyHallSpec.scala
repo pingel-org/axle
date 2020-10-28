@@ -16,32 +16,39 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
 
   implicit val rat = new spire.math.RationalAlgebra()
 
-  val contestant = Player("C", "Contestant")
-  val monty = Player("M", "Monty Hall")
+  val game = MontyHall()
 
-  val game = MontyHall(
-    contestant, interactiveMove, axle.algebra.ignore,
-    monty, interactiveMove, axle.algebra.ignore)
-
-  val rGame = MontyHall(
-    contestant, randomMove, axle.algebra.ignore,
-    monty, randomMove, axle.algebra.ignore)
-
-  test("random game has an intro message") {
-    introMessage(rGame) should include("Monty")
+  test("game has an intro message") {
+    introMessage(game) should include("Monty")
   }
 
   test("random game produces moveStateStream") {
-    moveStateStream(rGame, startState(rGame), rng).take(2) should have length 2
+    moveStateStream(
+      game,
+      startState(game),
+      _ => randomMove,
+      rng).take(2) should have length 2
   }
 
   test("random game plays") {
-    val endState = play(rGame, startState(rGame), false, rng)
-    moves(rGame, endState) should have length 0
+    val endState = play(
+      game,
+      _ => randomMove,
+      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      startState(game),
+      false,
+      rng)
+    moves(game, endState) should have length 0
   }
 
   test("random game produces game stream") {
-    val games = gameStream(rGame, startState(rGame), false, rng).take(2)
+    val games = gameStream(
+      game,
+      _ => randomMove,
+      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      startState(game),
+      false,
+      rng).take(2)
     games should have length 2
   }
 
@@ -65,9 +72,9 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
   test("starting moves are three-fold, display to monty with 'something'") {
 
     val startingMoves = moves(game, startState(game))
-    val mm = evGame.maskMove(game, startingMoves.head, contestant, monty)
+    val mm = evGame.maskMove(game, startingMoves.head, game.contestant, game.monty)
 
-    displayMoveTo(game, mm, contestant, monty) should include("placed")
+    displayMoveTo(game, mm, game.contestant, game.monty) should include("placed")
     startingMoves should have length 3
   }
 

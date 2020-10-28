@@ -6,12 +6,8 @@ import axle.probability._
 import axle.game._
 import axle.game.cards._
 
-case class GuessRiffle(
-  player: Player,
-  strategy: (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational],
-  displayer: String => Unit,
-  dealerDisplayer: String => Unit)
-  
+case class GuessRiffle(player: Player)
+
 object GuessRiffle {
 
   val dealer = Player("D", "Dealer")

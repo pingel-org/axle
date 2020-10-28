@@ -1,21 +1,13 @@
 package axle.game
 
 import cats.implicits._
-import spire.math.Rational
-import spire.random.Dist
-
-import axle.probability._
-// import axle.probability.ConditionalProbabilityTable
-// import axle.probability.rationalProbabilityDist
 
 package object ttt {
 
   implicit val eqMove = cats.kernel.Eq.fromUniversalEquals[TicTacToeMove]
 
-  implicit val evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable] =
-    new Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable] {
-
-      def probabilityDist: Dist[Rational] = rationalProbabilityDist
+  implicit val evGame: Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove] =
+    new Game[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove] {
 
       def startState(ttt: TicTacToe): TicTacToeState =
         TicTacToeState(s => Some(ttt.x), ttt.startBoard, ttt.boardSize)
@@ -25,9 +17,6 @@ package object ttt {
 
       def players(g: TicTacToe): IndexedSeq[Player] =
         g.players
-
-      def strategyFor(g: TicTacToe, player: Player): (TicTacToe, TicTacToeState) => ConditionalProbabilityTable[TicTacToeMove, Rational] =
-        g.playerToStrategy(player)
 
       def isValid(g: TicTacToe, state: TicTacToeState, move: TicTacToeMove): Either[String, TicTacToeMove] =
         if (state.playerAt(move.position).isEmpty) {
@@ -73,15 +62,10 @@ package object ttt {
         }
       }
 
-      implicit def sampler = ConditionalProbabilityTable.samplerWitness
-
     }
 
   implicit val evGameIO: GameIO[TicTacToe, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove] =
     new GameIO[TicTacToe, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove] {
-
-      def displayerFor(g: TicTacToe, player: Player): String => Unit =
-        g.playerToDisplayer(player)
 
       def parseMove(g: TicTacToe, input: String): Either[String, TicTacToeMove] = {
         val eitherI: Either[String, Int] = try {

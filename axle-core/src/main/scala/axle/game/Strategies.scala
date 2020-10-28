@@ -1,6 +1,8 @@
 package axle.game
 
 import cats.Monad
+//import cats.effect.IO
+import cats.effect.Sync
 import cats.kernel.Order
 import cats.implicits._
 
@@ -15,7 +17,7 @@ object Strategies {
 
   def outcomeRingHeuristic[G, S, O, M, MS, MM, V, N: Ring, PM[_, _]](game: G, f: (O, Player) => N)(
     implicit
-    evGame: Game[G, S, O, M, MS, MM, V, PM]): S => Map[Player, N] =
+    evGame: Game[G, S, O, M, MS, MM]): S => Map[Player, N] =
     (state: S) => evGame.players(game).map(p => {
       val score = evGame.outcome(game, state).map(o => f(o, p)).getOrElse(Ring[N].zero)
       (p, score)
@@ -24,16 +26,20 @@ object Strategies {
   def aiMover[G, S, O, M, MS, MM, V: Order: Field, N: Order, PM[_, _]](lookahead: Int, heuristic: S => Map[Player, N])(
     implicit
     monad:  Monad[PM[?, V]],
-    evGame: Game[G, S, O, M, MS, MM, V, PM]): (G, S) => PM[M, V] =
+    evGame: Game[G, S, O, M, MS, MM]): (G, S) => PM[M, V] =
     (ttt: G, state: S) => {
       val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
       monad.pure[M](move)
     }
 
-  def hardCodedStringStrategy[G, S, O, M, MS, MM, V: Order: Field, PM[_, _]](
+  def hardCodedStringStrategy[
+    G, S, O, M, MS, MM,
+    V: Order: Field,
+    PM[_, _],
+    F[_]](
     input: (G, MS) => String)(
     implicit
-    evGame:   Game[G, S, O, M, MS, MM, V, PM],
+    evGame:   Game[G, S, O, M, MS, MM],
     evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable[M, V] =
     (game: G, state: MS) => {
       val parsed = evGameIO.parseMove(game, input(game, state)).toOption.get
@@ -42,41 +48,63 @@ object Strategies {
       ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
     }
 
-  def userInputStream(display: String => Unit, read: () => String): LazyList[String] = {
-    display("Enter move: ")
-    val command = read()
-    display(command)
-    LazyList.cons(command, userInputStream(display, read))
+  def userInputStream[F[_]: Sync](
+    reader: () => F[String], writer: String => F[Unit]
+  ): LazyList[F[String]] = {
+
+    val commandF = for {
+      _ <- writer("Enter move: ")
+      command <- reader()
+      _ <- writer(command)
+    } yield command
+    
+    LazyList.cons(commandF, userInputStream(reader, writer))
   }
 
-  def interactiveMove[G, S, O, M, MS, MM, V: Order: Field, PM[_, _]](
+  def interactiveMove[
+    G, S, O, M, MS, MM,
+    V: Order: Field,
+    PM[_, _],
+    F[_]: Sync: Monad](
+      playerToReader: Player => () => F[String],
+      playerToWriter: Player => String => F[Unit],
+    )(
     implicit
-    evGame:   Game[G, S, O, M, MS, MM, V, PM],
-    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable[M, V] =
+    evGame:   Game[G, S, O, M, MS, MM],
+    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => F[ConditionalProbabilityTable[M, V]] =
     (game: G, state: MS) => {
 
       val mover = evGame.moverM(game, state).get // TODO .get
 
-      val display = evGameIO.displayerFor(game, mover)
+      val reader = playerToReader(mover)
+      val writer = playerToWriter(mover)
 
-      val stream = userInputStream(display, () => axle.IO.getLine()).
-        map(input => {
-          val parsed = evGameIO.parseMove(game, input)
-          parsed.left.foreach(display)
-          parsed.flatMap(move => {
-            val validated = evGame.isValid(game, state, move)
-            validated.left.foreach(display)
-            validated
-          })
-        })
+      val streamF: LazyList[F[Either[String,M]]] =
+        userInputStream(reader, writer).
+          map { inputF => {
+            inputF.map { input =>
+              val parsed = evGameIO.parseMove(game, input)
+              parsed.left.foreach(writer)
+              parsed.flatMap { move => {
+                val validated = evGame.isValid(game, state, move)
+                validated.left.foreach(writer)
+                validated
+              }}
+            }
+          }
+        }
 
-      val move = stream.find(esm => esm.isRight).get.toOption.get
-      ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
+      val fStream: F[LazyList[Either[String,M]]] = Monad[F].pure(LazyList.empty) // streamF.transpose
+
+      fStream.map { stream =>
+        val move = stream.find(esm => esm.isRight).get.toOption.get
+        ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
+      }
     }
 
   def randomMove[G, S, O, M, MS, MM, V: Order: Field: ConvertableTo, PM[_, _]](
     implicit
-    evGame: Game[G, S, O, M, MS, MM, V, PM]): (G, MS) => ConditionalProbabilityTable[M, V] =
+    evGame: Game[G, S, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable[M, V] =
     (game: G, state: MS) => {
       val opens = evGame.moves(game, state).toVector
       val p = Field[V].reciprocal(ConvertableTo[V].fromInt(opens.length))
@@ -98,7 +126,7 @@ object Strategies {
     depth:     Int,
     heuristic: S => Map[Player, N])(
     implicit
-    evGame: Game[G, S, O, M, MS, MM, V, PM]): (M, S, Map[Player, N]) = {
+    evGame: Game[G, S, O, M, MS, MM]): (M, S, Map[Player, N]) = {
 
     // TODO capture as type constraint
     assert(evGame.outcome(game, state).isEmpty)
@@ -131,7 +159,7 @@ object Strategies {
     depth:     Int,
     heuristic: S => Map[Player, N])(
     implicit
-    evGame: Game[G, S, O, M, MS, MM, V, PM]): (M, Map[Player, N]) =
+    evGame: Game[G, S, O, M, MS, MM]): (M, Map[Player, N]) =
     _alphabeta(game, state, depth, Map.empty, heuristic)
 
   def _alphabeta[G, S, O, M, MS, MM, V, N: Order, PM[_, _]](
@@ -141,7 +169,7 @@ object Strategies {
     cutoff:    Map[Player, N],
     heuristic: S => Map[Player, N])(
     implicit
-    evGame: Game[G, S, O, M, MS, MM, V, PM]): (M, Map[Player, N]) = {
+    evGame: Game[G, S, O, M, MS, MM]): (M, Map[Player, N]) = {
 
     assert(evGame.outcome(game, state).isEmpty && depth > 0) // TODO capture as type constraint
 

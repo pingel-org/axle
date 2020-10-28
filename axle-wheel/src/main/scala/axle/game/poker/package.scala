@@ -1,11 +1,8 @@
 package axle.game
 
 import cats.implicits._
-import spire.math.Rational
-import spire.random.Dist
 
 import axle.game.cards._
-import axle.probability._
 import axle.syntax.indexed._
 
 package object poker {
@@ -17,10 +14,8 @@ package object poker {
   // TODO: is there a limit to the number of raises that can occur?
   // TODO: how to handle player exhausting pile during game?
 
-  implicit val evGame: Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable] =
-    new Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable] {
-
-      def probabilityDist: Dist[Rational] = rationalProbabilityDist
+  implicit val evGame: Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove] =
+    new Game[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove] {
 
       def startState(g: Poker): PokerState =
         PokerState(
@@ -58,9 +53,6 @@ package object poker {
 
       def players(g: Poker): IndexedSeq[Player] =
         g.players
-
-      def strategyFor(g: Poker, player: Player): (Poker, PokerStateMasked) => ConditionalProbabilityTable[PokerMove, Rational] =
-        g.playerToStrategy(player)
 
       // TODO: this implementation works, but ideally there is more information in the error
       // string about why the move is invalid (eg player raised more than he had)
@@ -265,15 +257,10 @@ package object poker {
 
       def outcome(game: Poker, state: PokerState): Option[PokerOutcome] = state._outcome
 
-      implicit def sampler = ConditionalProbabilityTable.samplerWitness
-
     }
 
   implicit val evGameIO: GameIO[Poker, PokerOutcome, PokerMove, PokerStateMasked, PokerMove] =
     new GameIO[Poker, PokerOutcome, PokerMove, PokerStateMasked, PokerMove] {
-
-      def displayerFor(g: Poker, player: Player): String => Unit =
-        g.playerToDisplayer(player)
 
       def parseMove(g: Poker, input: String): Either[String, PokerMove] =
         moveParser.parse(input)

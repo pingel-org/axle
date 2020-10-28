@@ -1,12 +1,6 @@
 package axle.game
 
 import cats.implicits._
-import spire.math.Rational
-import spire.random.Dist
-
-import axle.probability._
-// import axle.probability.ConditionalProbabilityTable
-// import axle.probability.rationalProbabilityDist
 
 /**
  * Prisoner's Dilemma
@@ -18,10 +12,8 @@ package object prisoner {
 
   implicit val eqMove = cats.kernel.Eq.fromUniversalEquals[PrisonersDilemmaMove]
 
-  implicit val evGame: Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable] =
-    new Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable] {
-
-      def probabilityDist: Dist[Rational] = rationalProbabilityDist
+  implicit val evGame: Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove]] =
+    new Game[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove]] {
 
       def startState(game: PrisonersDilemma): PrisonersDilemmaState =
         PrisonersDilemmaState(None, false, None)
@@ -32,15 +24,6 @@ package object prisoner {
 
       def players(game: PrisonersDilemma): IndexedSeq[Player] =
         Vector(game.p1, game.p2)
-
-      def strategyFor(
-        game:   PrisonersDilemma,
-        player: Player): (PrisonersDilemma, PrisonersDilemmaState) => ConditionalProbabilityTable[PrisonersDilemmaMove, Rational] =
-        player match {
-          case game.p1 => game.p1Strategy
-          case game.p2 => game.p2Strategy
-          case _       => game.p1Strategy // TODO unreachable
-        }
 
       def isValid(
         g:     PrisonersDilemma,
@@ -118,19 +101,10 @@ package object prisoner {
         }
       }
 
-      implicit def sampler = ConditionalProbabilityTable.samplerWitness
-
     }
 
   implicit val evGameIO: GameIO[PrisonersDilemma, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove]] =
     new GameIO[PrisonersDilemma, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove]] {
-
-      def displayerFor(g: PrisonersDilemma, player: Player): String => Unit =
-        player match {
-          case g.p1 => g.p1Displayer
-          case g.p2 => g.p2Displayer
-          case _    => g.p1Displayer // TODO unreachable
-        }
 
       def parseMove(g: PrisonersDilemma, input: String): Either[String, PrisonersDilemmaMove] =
         input match {

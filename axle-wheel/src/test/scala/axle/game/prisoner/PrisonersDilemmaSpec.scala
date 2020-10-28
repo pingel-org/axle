@@ -19,9 +19,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
   val p1 = Player("P1", "Prisoner 1")
   val p2 = Player("P2", "Prisoner 2")
 
-  val game = PrisonersDilemma(
-    p1, interactiveMove, axle.algebra.ignore,
-    p2, interactiveMove, axle.algebra.ignore)
+  val game = PrisonersDilemma(p1, p2)
 
   def silence(game: PrisonersDilemma, state: PrisonersDilemmaState): String =
     "silence"
@@ -31,25 +29,33 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
   val start = startState(game)
 
-  val rGame = PrisonersDilemma(
-    p1, randomMove, axle.algebra.ignore,
-    p2, randomMove, axle.algebra.ignore)
-
   test("random game has an intro message") {
     introMessage(game) should include("Prisoner")
   }
 
   test("random game produces moveStateStream") {
-    moveStateStream(rGame, startState(rGame), rng).take(2) should have length 2
+    moveStateStream(game, startState(game), _ => randomMove, rng).take(2) should have length 2
   }
 
   test("random game plays") {
-    val endState = play(rGame, startState(rGame), false, rng)
-    moves(rGame, endState) should have length 0
+    val endState = play(
+      game,
+      _ => randomMove,
+      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      startState(game),
+      false,
+      rng)
+    moves(game, endState) should have length 0
   }
 
   test("random game produces game stream") {
-    val games = gameStream(rGame, startState(rGame), false, rng).take(2)
+    val games = gameStream(
+      game,
+      _ => randomMove,
+      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      startState(game),
+      false,
+      rng).take(2)
     games should have length 2
   }
 
@@ -110,16 +116,9 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
   test("dual silence > dual betrayal for both") {
 
-    val silenceGame = PrisonersDilemma(
-      p1, hardCodedStringStrategy(silence), axle.algebra.ignore,
-      p2, hardCodedStringStrategy(silence), axle.algebra.ignore)
+    val silentOutcome = outcome(game, moveStateStream(game, start, _ => hardCodedStringStrategy(silence), rng).last._3).get
 
-    val betrayalGame = PrisonersDilemma(
-      p1, hardCodedStringStrategy(betrayal), axle.algebra.ignore,
-      p2, hardCodedStringStrategy(betrayal), axle.algebra.ignore)
-
-    val silentOutcome = outcome(silenceGame, moveStateStream(silenceGame, start, rng).last._3).get
-    val betrayalOutcome = outcome(betrayalGame, moveStateStream(betrayalGame, start, rng).last._3).get
+    val betrayalOutcome = outcome(game, moveStateStream(game, start, _ => hardCodedStringStrategy(betrayal), rng).last._3).get
 
     silentOutcome.p1YearsInPrison should be < betrayalOutcome.p1YearsInPrison
     silentOutcome.p2YearsInPrison should be < betrayalOutcome.p2YearsInPrison
@@ -127,17 +126,33 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
   test("silence/betrayal inverse asymmetry") {
 
-    val p1silent = PrisonersDilemma(
-      p1, hardCodedStringStrategy(silence), axle.algebra.ignore,
-      p2, hardCodedStringStrategy(betrayal), axle.algebra.ignore)
+    val lastStateP1Silent = moveStateStream(
+      game,
+      start,
+      player =>
+        if ( player === p1 ) {
+          hardCodedStringStrategy(silence)
+        } else if ( player === p2 ) {
+          hardCodedStringStrategy(betrayal)
+        } else {
+          ???
+        },
+      rng).last._3
 
-    val p2silent = PrisonersDilemma(
-      p1, hardCodedStringStrategy(betrayal), axle.algebra.ignore,
-      p2, hardCodedStringStrategy(silence), axle.algebra.ignore)
+    val p1silentOutcome = outcome(game, lastStateP1Silent).get
 
-    val lastStateP1Silent = moveStateStream(p1silent, start, rng).last._3
-    val p1silentOutcome = outcome(p1silent, lastStateP1Silent).get
-    val p2silentOutcome = outcome(p2silent, moveStateStream(p2silent, start, rng).last._3).get
+    val p2silentOutcome = outcome(game, moveStateStream(
+      game,
+      start,
+      player =>
+        if ( player === p1 ) {
+          hardCodedStringStrategy(betrayal)
+        } else if ( player === p2 ) {
+          hardCodedStringStrategy(silence)
+        } else {
+          ???
+        },
+      rng).last._3).get
 
     p1silentOutcome.p1YearsInPrison should be(p2silentOutcome.p2YearsInPrison)
     p1silentOutcome.p2YearsInPrison should be(p2silentOutcome.p1YearsInPrison)
