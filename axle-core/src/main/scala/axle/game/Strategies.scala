@@ -49,7 +49,8 @@ object Strategies {
     }
 
   def userInputStream[F[_]: Sync](
-    reader: () => F[String], writer: String => F[Unit]
+    reader: () => F[String],
+    writer: String => F[Unit]
   ): LazyList[F[String]] = {
 
     val commandF = for {
@@ -67,7 +68,7 @@ object Strategies {
     PM[_, _],
     F[_]: Sync: Monad](
       playerToReader: Player => () => F[String],
-      playerToWriter: Player => String => F[Unit],
+      playerToWriter: Player => String => F[Unit]
     )(
     implicit
     evGame:   Game[G, S, O, M, MS, MM],
@@ -79,28 +80,26 @@ object Strategies {
       val reader = playerToReader(mover)
       val writer = playerToWriter(mover)
 
-      val streamF: LazyList[F[Either[String,M]]] =
-        userInputStream(reader, writer).
-          map { inputF => {
-            inputF.map { input =>
-              val parsed = evGameIO.parseMove(game, input)
-              parsed.left.foreach(writer)
-              parsed.flatMap { move => {
-                val validated = evGame.isValid(game, state, move)
-                validated.left.foreach(writer)
-                validated
-              }}
-            }
+      val llFEitherMoves: LazyList[F[Either[String, M]]] =
+        userInputStream(reader, writer).map { inputF => {
+          inputF.map { input =>
+            evGameIO.parseMove(game, input).flatMap { parsedMove => {
+              evGame.isValid(game, state, parsedMove)
+            }}
+          }
+        }}
+
+      val llFOptCPT: LazyList[F[Option[ConditionalProbabilityTable[M, V]]]] =
+        llFEitherMoves.map { fEitherMove =>
+          fEitherMove.map { eitherMove =>
+            eitherMove.map { move =>
+              ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
+            }.toOption
           }
         }
 
-      val fStream: F[LazyList[Either[String,M]]] = Monad[F].pure(LazyList.empty) // streamF.transpose
-
-      fStream.map { stream =>
-        val move = stream.find(esm => esm.isRight).get.toOption.get
-        ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
-      }
-    }
+      llFOptCPT
+  }
 
   def randomMove[G, S, O, M, MS, MM, V: Order: Field: ConvertableTo, PM[_, _]](
     implicit
