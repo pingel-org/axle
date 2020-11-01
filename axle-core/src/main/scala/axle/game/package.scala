@@ -26,13 +26,13 @@ package object game {
     distV:  Dist[V],
     ringV:  Ring[V],
     orderV: Order[V]): LazyList[(S, M, S)] =
-    evGame.mover(game, fromState).map(mover => {
+    evGame.mover(game, fromState).map { mover => {
       val strategyFn: (G, MS) => PM[M, V] = strategies(mover)
       val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
       val move = strategy.sample(gen)
       val toState = evGame.applyMove(game, fromState, move)
       LazyList.cons((fromState, move, toState), moveStateStream(game, toState, strategies, gen))
-    }) getOrElse {
+    }} getOrElse {
       LazyList.empty
     }
 
@@ -59,7 +59,7 @@ package object game {
     val fromState: S = prob.sample(openStateModel)(gen)
     // val probabilityOfFromState: V = prob.probabilityOf(stateModel)(RegionEq(fromState))
 
-    evGame.mover(game, fromState).map(mover => {
+    evGame.mover(game, fromState).map { mover => {
       val strategyFn = strategies(mover)
       val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
       val move = strategy.sample(gen)
@@ -79,7 +79,7 @@ package object game {
           })
         (Some((fromState, move)), redistributed)
       }
-    }) getOrElse {
+    }} getOrElse {
       (None, stateModel)
     }
   }
@@ -96,13 +96,13 @@ package object game {
     distV:  Dist[V],
     ringV:  Ring[V],
     orderV: Order[V]): LazyList[(S, T, S)] =
-    evGame.mover(game, fromState).map(mover => {
+    evGame.mover(game, fromState).map { mover => {
       val strategyFn = strategies(mover)
       val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
       val move = strategy.sample(gen)
       val toState = evGame.applyMove(game, fromState, move)
       LazyList.cons((fromState, strategyToT(game, fromState, strategy), toState), stateStreamMap(game, toState, strategies, strategyToT, gen))
-    }) getOrElse {
+    }} getOrElse {
       LazyList.empty
     }
 
@@ -117,13 +117,13 @@ package object game {
     distV:  Dist[V],
     ringV:  Ring[V],
     orderV: Order[V]): LazyList[(S, PM[M, V], M, S)] =
-    evGame.mover(game, fromState).map(mover => {
+    evGame.mover(game, fromState).map { mover => {
       val strategyFn = strategies(mover)
       val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
       val move = strategy.sample(gen)
       val toState = evGame.applyMove(game, fromState, move)
       LazyList.cons((fromState, strategy, move, toState), stateStrategyMoveStream(game, toState, strategies, gen))
-    }) getOrElse {
+    }} getOrElse {
       LazyList.empty
     }
     
