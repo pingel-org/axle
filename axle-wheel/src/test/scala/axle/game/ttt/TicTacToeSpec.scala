@@ -195,10 +195,14 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
     val lastState = moveStateStream(
       game,
       start,
-      _ match {
-        case x => hardCodedStringStrategy(xMove)
-        case o => hardCodedStringStrategy(oMove)
-      },
+      player =>
+        if ( player === x) {
+          hardCodedStringStrategy(xMove)
+        } else if ( player === o) {
+          hardCodedStringStrategy(oMove)
+        } else {
+          ???
+        },
       rng).last._3
     val winnerOpt = outcome(game, lastState).flatMap(_.winner)
     winnerOpt should be(Some(o))
