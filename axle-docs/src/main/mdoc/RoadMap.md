@@ -15,12 +15,16 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
+* Change Game.mover to return (Player, Option[Strategy]) for dealer strategy
+  * Or create a separate method
+
 * dealer strategy for poker, guessriffle (+ properties), montyhall, spec
   * search for 'player ==='
   * search for '_ => randomMove'
   * search for '_ => interactive'
-  * search for '_ => GuessRiffle'
+  * search for '_ => GuessRiffle' (should reference dealerStrategy)
 
+* Audit all playerToDisplayer and foreach in `axle.game` package
 * Fix warning in interactiveMove
 * Game.players should be a part of GameState?
 * GameIO -> GameSerDe (or maybe move methods to Game trait)
@@ -243,6 +247,7 @@ that has been its goal since inception.
 * Topoi
 * do-calculus (Causality)
 * Eigenvector
+* Σ ⊣ Δ ⊣ Π means "sums are left adjoint to diagonals, which are left adjoint to products."
 
 ## Hygiene
 
