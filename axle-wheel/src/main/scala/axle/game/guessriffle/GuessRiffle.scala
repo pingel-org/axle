@@ -12,10 +12,6 @@ object GuessRiffle {
 
   val dealer = Player("D", "Dealer")
 
-  val playerMoveVariable = Variable[GuessRiffleMove]("dealer move")
-
-  val dealerMoveVariable = Variable[GuessRiffleMove]("dealer move")
-
   val dealerStrategy: (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
     (game: GuessRiffle, state: GuessRiffleState) => {
       if ( state.remaining.isEmpty ) {
