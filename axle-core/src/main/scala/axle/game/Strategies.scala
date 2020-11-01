@@ -48,19 +48,29 @@ object Strategies {
       ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
     }
 
-  def userInputStream[F[_]: Sync](
+  def userInput[G, S, O, M, MS, MM, V: Field, F[_]: Sync](
+    game: G,
+    state: MS,
     reader: () => F[String],
     writer: String => F[Unit]
-  ): LazyList[F[String]] = {
-
-    val commandF = for {
+  )(
+    implicit
+    evGame:   Game[G, S, O, M, MS, MM],
+    evGameIO: GameIO[G, O, M, MS, MM]    
+  ): F[Either[String, ConditionalProbabilityTable[M, V]]] =
+    for {
       _ <- writer("Enter move: ")
-      command <- reader()
-      _ <- writer(command)
-    } yield command
-    
-    LazyList.cons(commandF, userInputStream(reader, writer))
-  }
+      input <- reader()
+      _ <- writer(input)
+    } yield {
+      evGameIO.parseMove(game, input).flatMap {
+        parsedMove => {
+          evGame.isValid(game, state, parsedMove).map { move =>
+            ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
+          }
+        }
+      }
+    }
 
   def interactiveMove[
     G, S, O, M, MS, MM,
@@ -80,25 +90,10 @@ object Strategies {
       val reader = playerToReader(mover)
       val writer = playerToWriter(mover)
 
-      val llFEitherMoves: LazyList[F[Either[String, M]]] =
-        userInputStream(reader, writer).map { inputF => {
-          inputF.map { input =>
-            evGameIO.parseMove(game, input).flatMap { parsedMove => {
-              evGame.isValid(game, state, parsedMove)
-            }}
-          }
-        }}
+      val fEitherCPT: F[Either[String, ConditionalProbabilityTable[M, V]]] =
+        userInput[G, S, O, M, MS, MM, V, F](game, state, reader, writer)
 
-      val llFOptCPT: LazyList[F[Option[ConditionalProbabilityTable[M, V]]]] =
-        llFEitherMoves.map { fEitherMove =>
-          fEitherMove.map { eitherMove =>
-            eitherMove.map { move =>
-              ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
-            }.toOption
-          }
-        }
-
-      llFOptCPT
+      fEitherCPT
   }
 
   def randomMove[G, S, O, M, MS, MM, V: Order: Field: ConvertableTo, PM[_, _]](
