@@ -6,7 +6,7 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.5 cats.effect for axle.game (+ Docs, Tests, Bugs)
+## 0.5.5 or 0.6.0 cats.effect for axle.game and control entropy side effects
 
 * Wrap `axle.IO.getLine` in `F[_]`
 * Remove from `Game`: method `probabilityDist`, `sampler`, and type params `V` and `PM[_, _]`
@@ -17,18 +17,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Change Game.mover to return (Player, Option[Strategy]) for dealer strategy
   * Or create a separate method
-
-* dealer strategy for poker, guessriffle (+ properties), montyhall, spec
+* Dealer strategy for poker, guessriffle (+ properties), montyhall, spec
   * search for 'player ==='
   * search for '_ => randomMove'
   * search for '_ => interactive'
   * search for '_ => GuessRiffle' (should reference dealerStrategy)
 
-* Audit all playerToDisplayer and foreach in `axle.game` package
-* Fix warning in interactiveMove
-* Game.players should be a part of GameState?
-* GameIO -> GameSerDe (or maybe move methods to Game trait)
-  * or maybe only use w/ interactiveMove
+* Audit all `playerToDisplayer` and `foreach` in `axle.game` package
 * Figure out how to deal with interactiveMove's `F[_]`
   * possibly an 'effectful' version of `play`, etc, that takes `strategies` that return results wrapped in `F[_]`
 * Use interactiveMove for demo
@@ -40,9 +35,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
     ),
 ```
 
-* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
+* GameIO -> GameSerDe (or maybe move methods to Game trait)
+  * or maybe only use w/ interactiveMove
 
-## 0.5.6 Control Entropy
+* Game.players should be a part of GameState?
+* How to record history `Seq[(M, S)]` in State?
+* Display to player the elapsed moves /and/ the state diff
+* Remove hard-coded ConditionalProbabilityTable in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
 
 * Identify all uses of `spire.random.Generator` (and other random value generation)
 
@@ -53,20 +52,22 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Replace `axle.game.moveFromRandomState.mapToProb`
 
-## 0.5.7 Logistic Regression
+* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
+
+## 0.6.1 Logistic Regression
 
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
 
-## 0.5.8 Genetic Algorithm
+## 0.6.2 Genetic Algorithm
 
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 
-## 0.5.9 Logic
+## 0.6.3 Logic
 
 * Redo Logic using Abstract Algebra
 
-## 0.5.10
+## 0.6.4
 
 * Simple graph implementation so that `axle-core` can avoid including `axle-jung`
 
@@ -74,12 +75,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Will require externalizing the layout to its own.... typeclass?
   * Layout of bayesian network is quite bad -- check ABE SVG
 
-## 0.5.11 PNG
+## 0.6.5 PNG
 
 * `axle-png` to avoid Xvfb requirement during tests
 * Chicklet borders / colors on site
 
-## 0.5.12 AST
+## 0.6.6 AST
 
 * move ast view xml (how is it able to refer to `xml.Node`?)
   * ast.view.AstNodeFormatter (xml.Utility.escape)
@@ -89,7 +90,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle-ast-python`
 * `cats.effect` for `axle.ast.python2`
 
-## 0.6.x Factoring and Bayesian Networks
+## 0.7.x Factoring and Bayesian Networks
 
 * Reorder Probability mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
   * Footnotes (Giry, etc)
