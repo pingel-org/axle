@@ -57,20 +57,25 @@ object Strategies {
     implicit
     evGame:   Game[G, S, O, M, MS, MM],
     evGameIO: GameIO[G, O, M, MS, MM]    
-  ): F[Either[String, ConditionalProbabilityTable[M, V]]] =
-    for {
+  ): F[ConditionalProbabilityTable[M, V]] = {
+
+    val fInput = for {
       _ <- writer("Enter move: ")
       input <- reader()
       _ <- writer(input)
-    } yield {
-      evGameIO.parseMove(game, input).flatMap {
-        parsedMove => {
+    } yield input
+
+    val fEitherCPT: F[Either[String, ConditionalProbabilityTable[M, V]]] =
+      fInput.map { input => 
+        evGameIO.parseMove(game, input).flatMap { parsedMove => {
           evGame.isValid(game, state, parsedMove).map { move =>
             ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
           }
-        }
+        }}
       }
-    }
+
+    fEitherCPT.flatMap(_.map(Monad[F].pure).getOrElse(userInput(game, state, reader, writer)))
+  }
 
   def interactiveMove[
     G, S, O, M, MS, MM,
@@ -86,14 +91,10 @@ object Strategies {
     (game: G, state: MS) => {
 
       val mover = evGame.moverM(game, state).get // TODO .get
-
       val reader = playerToReader(mover)
       val writer = playerToWriter(mover)
 
-      val fEitherCPT: F[Either[String, ConditionalProbabilityTable[M, V]]] =
-        userInput[G, S, O, M, MS, MM, V, F](game, state, reader, writer)
-
-      fEitherCPT
+      userInput[G, S, O, M, MS, MM, V, F](game, state, reader, writer)
   }
 
   def randomMove[G, S, O, M, MS, MM, V: Order: Field: ConvertableTo, PM[_, _]](
