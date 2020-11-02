@@ -1,7 +1,6 @@
 package axle.game
 
 import cats.Monad
-//import cats.effect.IO
 import cats.effect.Sync
 import cats.kernel.Order
 import cats.implicits._
@@ -9,9 +8,6 @@ import cats.implicits._
 import spire.algebra.Field
 import spire.algebra.Ring
 import spire.math.ConvertableTo
-
-//import axle.algebra.RegionEq
-import axle.probability.ConditionalProbabilityTable
 
 object Strategies {
 
@@ -40,15 +36,19 @@ object Strategies {
     input: (G, MS) => String)(
     implicit
     evGame:   Game[G, S, O, M, MS, MM],
-    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable[M, V] =
+    evGameIO: GameIO[G, O, M, MS, MM],
+    monadPM: Monad[PM[?, V]]): (G, MS) => PM[M, V] =
     (game: G, state: MS) => {
       val parsed = evGameIO.parseMove(game, input(game, state)).toOption.get
       val validated = evGame.isValid(game, state, parsed)
       val move = validated.toOption.get
-      ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
+      monadPM.pure(move)
     }
 
-  def userInput[G, S, O, M, MS, MM, V: Field, F[_]: Sync](
+  def userInput[G, S, O, M, MS, MM,
+    V: Field,
+    PM[_, _],
+    F[_]: Sync](
     game: G,
     state: MS,
     reader: () => F[String],
@@ -56,8 +56,9 @@ object Strategies {
   )(
     implicit
     evGame:   Game[G, S, O, M, MS, MM],
-    evGameIO: GameIO[G, O, M, MS, MM]    
-  ): F[ConditionalProbabilityTable[M, V]] = {
+    evGameIO: GameIO[G, O, M, MS, MM],
+    monadPM: Monad[PM[?, V]]
+  ): F[PM[M, V]] = {
 
     val fInput = for {
       _ <- writer("Enter move: ")
@@ -65,11 +66,11 @@ object Strategies {
       _ <- writer(input)
     } yield input
 
-    val fEitherCPT: F[Either[String, ConditionalProbabilityTable[M, V]]] =
+    val fEitherCPT: F[Either[String, PM[M, V]]] =
       fInput.map { input => 
         evGameIO.parseMove(game, input).flatMap { parsedMove => {
           evGame.isValid(game, state, parsedMove).map { move =>
-            ConditionalProbabilityTable[M, V](Map(move -> Field[V].one))
+            monadPM.pure(move)
           }
         }}
       }
@@ -87,16 +88,19 @@ object Strategies {
     )(
     implicit
     evGame:   Game[G, S, O, M, MS, MM],
-    evGameIO: GameIO[G, O, M, MS, MM]): (G, MS) => F[ConditionalProbabilityTable[M, V]] =
+    evGameIO: GameIO[G, O, M, MS, MM],
+    monadPM: Monad[PM[?, V]]
+    ): (G, MS) => F[PM[M, V]] =
     (game: G, state: MS) => {
 
       val mover = evGame.moverM(game, state).get // TODO .get
       val reader = playerToReader(mover)
       val writer = playerToWriter(mover)
 
-      userInput[G, S, O, M, MS, MM, V, F](game, state, reader, writer)
+      userInput[G, S, O, M, MS, MM, V, PM, F](game, state, reader, writer)
   }
 
+  import axle.probability.ConditionalProbabilityTable
   def randomMove[G, S, O, M, MS, MM, V: Order: Field: ConvertableTo, PM[_, _]](
     implicit
     evGame: Game[G, S, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable[M, V] =
