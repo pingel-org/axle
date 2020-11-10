@@ -3,6 +3,7 @@ package axle.game.montyhall
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
+import spire.math.Rational
 import spire.random.Generator.rng
 
 import axle.probability._
@@ -18,53 +19,65 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
 
   val game = MontyHall()
 
+  val rm = randomMove[
+    MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove,
+    MontyHallState, Option[MontyHallMove],
+    Rational, ConditionalProbabilityTable](game).andThen(Option.apply _)
+
   test("game has an intro message") {
     introMessage(game) should include("Monty")
   }
 
   test("random game produces moveStateStream") {
-    moveStateStream(
+
+    val mss = moveStateStream(
       game,
       startState(game),
-      _ => randomMove,
-      rng).take(2) should have length 2
+      _ => rm,
+      rng).get
+      
+    mss.take(2) should have length 2
   }
 
   test("random game plays") {
+
     val endState = play(
       game,
-      _ => randomMove,
-      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      _ => rm,
       startState(game),
-      false,
-      rng)
+      rng).get
+
     moves(game, endState) should have length 0
   }
 
   test("random game produces game stream") {
+
     val games = gameStream(
       game,
-      _ => randomMove,
-      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      _ => rm,
       startState(game),
-      false,
-      rng).take(2)
-    games should have length 2
+      rng).get
+
+    games.take(2) should have length 2
   }
 
   test("startFrom returns the start state") {
+
     val state = startState(game)
     val move = moves(game, state).head
     val nextState = applyMove(game, state, move)
     val newStart = startFrom(game, nextState).get
+
     moves(game, newStart) should have length 3
     outcome(game, state) should be(None)
   }
 
   test("masked-sate mover is the same as raw state move") {
+
     val state = startState(game)
     val move = moves(game, state).head
     val nextState = applyMove(game, state, move)
+
     moverM(game, state) should be(mover(game, state))
     moverM(game, nextState) should be(mover(game, nextState))
   }

@@ -41,7 +41,12 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
     val pGame = GuessRiffle(player)
 
     forAllNoShrink { (seed: Int) =>
-      stateStreamMap(pGame, startState(pGame), _ => GuessRiffle.perfectOptionsPlayerStrategy, containsCorrectGuess _, Random.generatorFromSeed(Seed(seed)).sync ) forall { _._2 }
+      stateStreamMap(
+        pGame,
+        startState(pGame),
+        ((p: Player) => GuessRiffle.perfectOptionsPlayerStrategy.andThen(Option.apply(_))),
+        containsCorrectGuess _,
+        Random.generatorFromSeed(Seed(seed)).sync ).get forall { _._2 }
     }
   }
 
@@ -70,11 +75,16 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
   def probabilityAllCorrect(
     game: GuessRiffle,
     fromState: GuessRiffleState,
-    strategies: Player => (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational],
+    strategies: Player => GuessRiffleState => ConditionalProbabilityTable[GuessRiffleMove, Rational],
     seed: Int): Rational =
-    stateStrategyMoveStream(game, fromState, strategies, Random.generatorFromSeed(Seed(seed)).sync)
+    stateStrategyMoveStream(
+      game,
+      fromState,
+      (p: Player) => (s: GuessRiffleState) => Option(strategies(p)(s)),
+      Random.generatorFromSeed(Seed(seed)).sync)
+    .get
     .filter(args => mover(game, args._1).map( _ === game.player).getOrElse(false))
-    .map({ case (stateIn, strategy, _, _) =>
+    .map({ case (stateIn, (strategy, _), _) =>
       monad.map(strategy)(isCorrectMoveForState(game, stateIn))
     })
     .reduce({ (incoming, current) =>
@@ -101,33 +111,34 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
 
       val s1 = applyMove(game, s0, Riffle())
 
-      val perfectStrategies: Player => (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational] = 
-        _ => GuessRiffle.perfectOptionsPlayerStrategy
+      // val perfectStrategies: Player => GuessRiffleState => ConditionalProbabilityTable[GuessRiffleMove, Rational] = 
+      //   _ => GuessRiffle.perfectOptionsPlayerStrategy
 
-      val probabilityPerfectChoicesAllCorrect = probabilityAllCorrect(game, s1, perfectStrategies, seed)
+      val probabilityPerfectChoicesAllCorrect = probabilityAllCorrect(game, s1, _ => GuessRiffle.perfectOptionsPlayerStrategy, seed)
 
       val entropiesP = stateStreamMap(
         game,
         s1,
-        perfectStrategies,
+        _ => GuessRiffle.perfectOptionsPlayerStrategy.andThen(Option.apply _),
         entropyOfGuess _,
         Random.generatorFromSeed(Seed(seed)).sync 
-      ).flatMap(_._2).toList
+      ).get.flatMap(_._2).toList
+
       val ep = Σ(entropiesP)
 
-      val randomStrategies: Player => (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational] = 
-        _ => GuessRiffle.perfectOptionsPlayerStrategy
+      // val randomStrategies: Player => GuessRiffleState => ConditionalProbabilityTable[GuessRiffleMove, Rational] = 
+      //   _ => GuessRiffle.perfectOptionsPlayerStrategy
 
-      val probabilityRandomChoicesAllCorrect = probabilityAllCorrect(game, s1, randomStrategies, seed)
+      val probabilityRandomChoicesAllCorrect = probabilityAllCorrect(game, s1, _ => GuessRiffle.perfectOptionsPlayerStrategy, seed)
 
       // randomMove
       val entropiesR = stateStreamMap(
         game,
         s1,
-        randomStrategies,
+        _ => GuessRiffle.perfectOptionsPlayerStrategy.andThen(Option.apply _),
         entropyOfGuess _,
         Random.generatorFromSeed(Seed(seed)).sync 
-      ).flatMap(_._2).toList
+      ).get.flatMap(_._2).toList
 
       val er = Σ(entropiesR)
 

@@ -3,6 +3,7 @@ package axle.game.prisoner
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
+import spire.math.Rational
 import spire.random.Generator.rng
 
 import axle.probability._
@@ -21,6 +22,8 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
   val game = PrisonersDilemma(p1, p2)
 
+  val rm = randomMove(game).andThen(Option.apply _)
+
   def silence(game: PrisonersDilemma, state: PrisonersDilemmaState): String =
     "silence"
 
@@ -34,45 +37,51 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
   }
 
   test("random game produces moveStateStream") {
-    moveStateStream(game, startState(game), _ => randomMove, rng).take(2) should have length 2
+    val mss = moveStateStream(game, startState(game), _ => rm, rng).get
+    
+    mss.take(2) should have length 2
   }
 
   test("random game plays") {
+
     val endState = play(
       game,
-      _ => randomMove,
-      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      _ => rm,
       startState(game),
-      false,
-      rng)
+      rng).get
+
     moves(game, endState) should have length 0
   }
 
   test("random game produces game stream") {
+
     val games = gameStream(
       game,
-      _ => randomMove,
-      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      _ => rm,
       startState(game),
-      false,
-      rng).take(2)
-    games should have length 2
+      rng).get
+
+    games.take(2) should have length 2
   }
 
   test("startFrom return the start state") {
+
     val state = startState(game)
     val move = moves(game, state).head
     val nextState = applyMove(game, state, move)
     val _ = moves(game, state).head // dropping "nextMove"
     val newStart = startFrom(game, nextState).get
+
     moves(game, newStart) should have length 2
     outcome(game, state) should be(None)
   }
 
   test("masked-sate mover are the same as raw state mover") {
+
     val state = startState(game)
     val move = moves(game, state).head
     val nextState = applyMove(game, state, move)
+
     moverM(game, state) should be(mover(game, state))
     moverM(game, nextState) should be(mover(game, nextState))
   }
@@ -116,9 +125,23 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
   test("dual silence > dual betrayal for both") {
 
-    val silentOutcome = outcome(game, moveStateStream(game, start, _ => hardCodedStringStrategy(silence), rng).last._3).get
+    val silentOutcome = outcome(
+      game,
+      moveStateStream(
+        game,
+        start,
+        _ => hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(silence).andThen(Option.apply),
+        rng
+      ).get.last._3).get
 
-    val betrayalOutcome = outcome(game, moveStateStream(game, start, _ => hardCodedStringStrategy(betrayal), rng).last._3).get
+    val betrayalOutcome = outcome(
+      game,
+      moveStateStream(
+        game,
+        start,
+        _ => hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(betrayal).andThen(Option.apply),
+        rng
+      ).get.last._3).get
 
     silentOutcome.p1YearsInPrison should be < betrayalOutcome.p1YearsInPrison
     silentOutcome.p2YearsInPrison should be < betrayalOutcome.p2YearsInPrison
@@ -126,33 +149,37 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
   test("silence/betrayal inverse asymmetry") {
 
+    def hardCoding1(player: Player): PrisonersDilemmaState => ConditionalProbabilityTable[PrisonersDilemmaMove, Rational] =
+      if ( player === p1 ) {
+        hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(silence _)
+      } else if ( player === p2 ) {
+        hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(betrayal _)
+      } else {
+        ???
+      }
+
     val lastStateP1Silent = moveStateStream(
       game,
       start,
-      player =>
-        if ( player === p1 ) {
-          hardCodedStringStrategy(silence)
-        } else if ( player === p2 ) {
-          hardCodedStringStrategy(betrayal)
-        } else {
-          ???
-        },
-      rng).last._3
+      p => hardCoding1(p).andThen(Option.apply _),
+      rng).get.last._3
 
     val p1silentOutcome = outcome(game, lastStateP1Silent).get
+
+    def hardCoding2(player: Player): PrisonersDilemmaState => ConditionalProbabilityTable[PrisonersDilemmaMove, Rational] =
+      if ( player === p1 ) {
+        hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(betrayal _)
+      } else if ( player === p2 ) {
+        hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(silence _)
+      } else {
+        ???
+      }
 
     val p2silentOutcome = outcome(game, moveStateStream(
       game,
       start,
-      player =>
-        if ( player === p1 ) {
-          hardCodedStringStrategy(betrayal)
-        } else if ( player === p2 ) {
-          hardCodedStringStrategy(silence)
-        } else {
-          ???
-        },
-      rng).last._3).get
+      p => hardCoding2(p).andThen(Option.apply _),
+      rng).get.last._3).get
 
     p1silentOutcome.p1YearsInPrison should be(p2silentOutcome.p2YearsInPrison)
     p1silentOutcome.p2YearsInPrison should be(p2silentOutcome.p1YearsInPrison)

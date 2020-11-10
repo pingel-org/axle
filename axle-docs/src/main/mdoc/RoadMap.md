@@ -15,6 +15,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
+* Errors relating to needing `F[_]` around `strategies` rhs (`.andThen(Option.apply _)`)
+
+* Record history `Seq[(M, S)]` in State
+* Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
+* Finish `axle.game.lazyChain`
+
 * Change Game.mover to return (Player, Option[Strategy]) for dealer strategy
   * Or create a separate method
 * Dealer strategy for poker, guessriffle (+ properties), montyhall, spec
@@ -23,10 +29,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * search for '_ => interactive'
   * search for '_ => GuessRiffle' (should reference dealerStrategy)
 
-* Audit all `playerToDisplayer` and `foreach` in `axle.game` package
-* Figure out how to deal with interactiveMove's `F[_]`
-  * possibly an 'effectful' version of `play`, etc, that takes `strategies` that return results wrapped in `F[_]`
 * Use interactiveMove for demo
+* GameIO -> GameSerDe (or maybe move methods to Game trait)
+  * or maybe only use w/ interactiveMove
 
 ```scala
     interactiveMove[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational, ConditionalProbabilityTable, cats.effect.IO](
@@ -35,13 +40,17 @@ See [Release Notes](/release_notes/) for the record of previously released featu
     ),
 ```
 
-* GameIO -> GameSerDe (or maybe move methods to Game trait)
-  * or maybe only use w/ interactiveMove
+```scala
+    // These should be part of State displaying
+    evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)
+    evGame.outcome(game, lastState) foreach { outcome =>
+      evGameIO.displayOutcomeTo(game, outcome, observer)
+    }
+```
 
 * Game.players should be a part of GameState?
-* How to record history `Seq[(M, S)]` in State?
 * Display to player the elapsed moves /and/ the state diff
-* Remove hard-coded ConditionalProbabilityTable in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
+* AI mover takes S, not MS. How can I adapt this?
 
 * Identify all uses of `spire.random.Generator` (and other random value generation)
 
@@ -170,6 +179,8 @@ that has been its goal since inception.
 * Improve `axle.stats.rationalProbabilityDist` as probabilities become smaller
 * SimpsonsParadox.md
 * Axioms of partial differentiation
+  * https://math.ucr.edu/home/baez/mathematical/ACTUCR/Plotkin_Partial_Differentiation.pdf
+* Conal Elliott: Efficient automatic differentiation made easy via category theory
 * Redo original monty hall spec
 * Max bet for Poker
 * syntax for `Game` typeclass

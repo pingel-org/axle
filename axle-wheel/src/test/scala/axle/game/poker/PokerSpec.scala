@@ -82,23 +82,21 @@ class PokerSpec extends AnyFunSuite with Matchers {
 
     val game = Poker(Vector(p1, p2))
 
-    val strategies: Player => (Poker, PokerStateMasked) => ConditionalProbabilityTable[PokerMove,Rational] =
-      player => 
-        if ( player === p1 ) {
-          hardCodedStringStrategy(p1Move)
-        } else if ( player === p2 ){
-          hardCodedStringStrategy(p2Move)
-        } else {
-          ???
-        }
+    def strategies(player: Player): PokerStateMasked => ConditionalProbabilityTable[PokerMove,Rational] =
+      if ( player === p1 ) {
+        hardCodedStringStrategy[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable](game)(p1Move)
+      } else if ( player === p2 ){
+        hardCodedStringStrategy[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable](game)(p2Move)
+      } else {
+        ???
+      }
 
     val start = startState(game)
-    val history = moveStateStream(game, start, strategies, rng).toVector
+    val history = moveStateStream(game, start, p => strategies(p).andThen(Option.apply _), rng).get.toVector
     val lastState = history.last._3
     val _ = play(
       game,
-      strategies,
-      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      p => strategies(p).andThen(Option.apply _),
       rng) // TODO make use of this "lastStateByPlay"
 
     val o = outcome(game, lastState).get
@@ -113,6 +111,7 @@ class PokerSpec extends AnyFunSuite with Matchers {
     }).mkString(", ") should include("call")
     // TODO these messages should include amounts
     moves(game, ms) should contain(Fold())
+
     displayOutcomeTo(game, o, p1) should include("Winner: Player 1") // TODO show P1 his own hand
     displayOutcomeTo(game, o, p2) should include("Winner: Player 1")
     introMessage(game) should include("Texas")

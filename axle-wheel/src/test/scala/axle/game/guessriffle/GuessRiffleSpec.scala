@@ -3,8 +3,7 @@ package axle.game.guessriffle
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
-//import org.scalacheck.Gen
-//import org.scalacheck.Arbitrary
+import cats.implicits._
 
 import spire.math._
 import spire.random.Generator.rng
@@ -22,6 +21,8 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
   val player = Player("P", "Player")
 
   val game = GuessRiffle(player)
+
+  val rm = randomMove[GuessRiffle, GuessRiffleState, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove], Rational, ConditionalProbabilityTable](game).andThen(Option.apply _)
 
   test("hard coded game") {
     import axle.game.cards._
@@ -42,63 +43,66 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
     moveStateStream(
       game,
       startState(game),
-      _ => randomMove[GuessRiffle, GuessRiffleState, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove], Rational, ConditionalProbabilityTable],
-      rng).take(3).length should be(3)
+      _ => rm,
+      rng).get.take(3).length should be(3)
   }
 
   test("random game plays") {
+
     val endState = play(
       game,
-      _ => randomMove[GuessRiffle, GuessRiffleState, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove], Rational, ConditionalProbabilityTable],
-      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      _ => rm,
       startState(game),
-      false,
-      rng)
-    moves(game, endState).length should be(0)
+      rng).get
+
+      moves(game, endState).length should be(0)
   }
 
   test("optimal player strategy gets better score") {
 
     val endState = play(
       game,
-      _ => GuessRiffle.perfectOptionsPlayerStrategy,
-      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      _ => GuessRiffle.perfectOptionsPlayerStrategy.andThen(Option.apply _),
       startState(game),
-      false,
-      rng)
+      rng).get
 
     // Note non-zero (but astronomically small) chance of this failing despite correct implementation
     outcome(game, endState).get.numCorrect should be >(10)
   }
 
   test("random game produce game stream") {
+
     val games = gameStream(
       game,
-      _ => randomMove[GuessRiffle, GuessRiffleState, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove], Rational, ConditionalProbabilityTable],
-      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      _ => rm,
       startState(game),
-      false,
-      rng).take(2)
+      rng).get.take(2)
+
     games.length should be(2)
   }
 
   test("post-riffle state display") {
+
     displayStateTo(game, applyMove(game, startState(game), Riffle()), player) should include("with 52 cards remaining")
   }
 
   test("startFrom return the start state") {
+
     val state = startState(game)
     val move = moves(game, state).head
     val nextState = applyMove(game, state, move)
     val newStart = startFrom(game, nextState).get
+
     moves(game, newStart).length should be(1)
     outcome(game, state) should be(None)
   }
 
   test("masked-sate mover be the same as raw state mover") {
+
     val state = startState(game)
     val move = moves(game, state).head
     val nextState = applyMove(game, state, move)
+
     moverM(game, state) should be(mover(game, state))
     moverM(game, nextState) should be(mover(game, nextState))
   }

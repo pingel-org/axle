@@ -1,7 +1,9 @@
 package axle.game.guessriffle
 
 import cats.syntax.all._
+
 import spire.math._
+
 import axle.probability._
 import axle.game._
 import axle.game.cards._
@@ -22,8 +24,8 @@ object GuessRiffle {
       }
     }
 
-    val perfectOptionsPlayerStrategy: (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
-    (game: GuessRiffle, state: GuessRiffleState) => {
+    val perfectOptionsPlayerStrategy: GuessRiffleState => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
+    (state: GuessRiffleState) => {
       // If the Game API allowed for customizing the State, we could avoid re-computing the
       // "pointers" each time
       val (topPointer, bottomPointerOpt) =
@@ -41,11 +43,11 @@ object GuessRiffle {
             }
           }
         })
-      if(bottomPointerOpt.isEmpty) {
-        uniformDistribution[GuessRiffleMove](topPointer.map(GuessCard))
-      } else {
-        uniformDistribution[GuessRiffleMove]((List(topPointer.headOption, bottomPointerOpt.get.headOption).flatten).map(GuessCard))
-      }
+        if(bottomPointerOpt.isEmpty) {
+          uniformDistribution[GuessRiffleMove](topPointer.map(GuessCard))
+        } else {
+          uniformDistribution[GuessRiffleMove]((List(topPointer.headOption, bottomPointerOpt.get.headOption).flatten).map(GuessCard))
+        }
     }
 
 }

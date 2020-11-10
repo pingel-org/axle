@@ -93,6 +93,10 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
 
     }
 
+
+  val rm = randomMove[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove,Rational,ConditionalProbabilityTable](game).andThen(Option.apply _)
+
+
   // val pm = ConditionalProbabilityTable.probabilityWitness
 
   val currentStateModelMap = Map(Sa -> Rational(1, 3), Sb -> Rational(2, 3))
@@ -124,9 +128,9 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
       moveFromRandomState(
         game,
         currentStateModel,
-        _ => randomMove[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove,Rational,ConditionalProbabilityTable],
+        _ => rm,
         (m: Map[TestGameState, Rational]) => ConditionalProbabilityTable(m),
-        rng)
+        rng).get
     }) toSet
 
     val expectedResult = Set(

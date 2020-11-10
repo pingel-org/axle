@@ -19,26 +19,30 @@ object Strategies {
       (p, score)
     }).toMap
 
-  def aiMover[G, S, O, M, MS, MM, V: Order: Field, N: Order, PM[_, _]](lookahead: Int, heuristic: S => Map[Player, N])(
+  def aiMover[G, S, O, M, MS, MM, V: Order: Field, N: Order, PM[_, _]](
+    game: G,
+    lookahead: Int,
+    heuristic: S => Map[Player, N])(
     implicit
     monad:  Monad[PM[?, V]],
-    evGame: Game[G, S, O, M, MS, MM]): (G, S) => PM[M, V] =
-    (ttt: G, state: S) => {
-      val (move, newState, values) = minimax(ttt, state, lookahead, heuristic)
+    evGame: Game[G, S, O, M, MS, MM]): S => PM[M, V] =
+    (state: S) => {
+      val (move, newState, values) = minimax(game, state, lookahead, heuristic)
       monad.pure[M](move)
     }
 
   def hardCodedStringStrategy[
     G, S, O, M, MS, MM,
     V: Order: Field,
-    PM[_, _],
-    F[_]](
+    PM[_, _]](
+      game: G
+    )(
     input: (G, MS) => String)(
     implicit
     evGame:   Game[G, S, O, M, MS, MM],
     evGameIO: GameIO[G, O, M, MS, MM],
-    monadPM: Monad[PM[?, V]]): (G, MS) => PM[M, V] =
-    (game: G, state: MS) => {
+    monadPM: Monad[PM[?, V]]): MS => PM[M, V] =
+    (state: MS) => {
       val parsed = evGameIO.parseMove(game, input(game, state)).toOption.get
       val validated = evGame.isValid(game, state, parsed)
       val move = validated.toOption.get
@@ -97,14 +101,21 @@ object Strategies {
       val reader = playerToReader(mover)
       val writer = playerToWriter(mover)
 
-      userInput[G, S, O, M, MS, MM, V, PM, F](game, state, reader, writer)
+      for {
+        _ <- writer(evGameIO.introMessage(game))
+        _ <- writer(evGameIO.displayStateTo(game, state, mover))
+        ui <- userInput[G, S, O, M, MS, MM, V, PM, F](game, state, reader, writer)
+      } yield ui
   }
 
   import axle.probability.ConditionalProbabilityTable
-  def randomMove[G, S, O, M, MS, MM, V: Order: Field: ConvertableTo, PM[_, _]](
+  def randomMove[
+    G, S, O, M, MS, MM,
+    V: Order: Field: ConvertableTo,
+    PM[_, _]](game: G)(
     implicit
-    evGame: Game[G, S, O, M, MS, MM]): (G, MS) => ConditionalProbabilityTable[M, V] =
-    (game: G, state: MS) => {
+    evGame: Game[G, S, O, M, MS, MM]): MS => ConditionalProbabilityTable[M, V] =
+    (state: MS) => {
       val opens = evGame.moves(game, state).toVector
       val p = Field[V].reciprocal(ConvertableTo[V].fromInt(opens.length))
       ConditionalProbabilityTable[M, V](opens.map(open => open -> p).toMap)

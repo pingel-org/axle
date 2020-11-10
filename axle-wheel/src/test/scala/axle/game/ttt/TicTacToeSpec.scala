@@ -3,9 +3,11 @@ package axle.game.ttt
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
+import cats.implicits._
+
 import spire.random.Generator.rng
 import spire.math.Rational
-import spire.algebra._
+//import spire.algebra._
 
 import axle.syntax.sampler._
 import axle.probability._
@@ -24,6 +26,9 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
   val game = TicTacToe(3, x, o)
 
+  val rm: TicTacToeState => Option[ConditionalProbabilityTable[TicTacToeMove,Rational]] =
+    randomMove[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game).andThen(Option.apply _)
+
   test("game define intro message, have 9 positions") {
 
     introMessage(game) should include("Moves are")
@@ -31,48 +36,65 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
   }
 
   test("random game produce moveStateStream") {
-    moveStateStream(game, startState(game), _ => randomMove, rng).take(3).length should be(3)
+
+   val fMSS = moveStateStream[
+      TicTacToe,
+      TicTacToeState,
+      TicTacToeOutcome,
+      TicTacToeMove,
+      TicTacToeState,
+      TicTacToeMove,
+      Rational,
+      ConditionalProbabilityTable,
+      Option](game, startState(game), _ => rm, rng)
+      
+     fMSS.get.take(3).length should be(3)
   }
 
   test("random game plays") {
-    val endState = play(
+
+    val fEndState = play(
       game,
-      _ => randomMove,
-      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      _ => rm,
       startState(game),
-      false,
       rng)
-    moves(game, endState).length should be(0)
+
+    moves(game, fEndState.get).length should be(0)
   }
 
   test("random game produce game stream") {
+
     val games = gameStream(
       game,
-      _ => randomMove,
-      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s),
+      _ => rm,
       startState(game),
-      false,
-      rng).take(2)
-    games.length should be(2)
+      rng).get
+
+    games.take(2).length should be(2)
   }
 
   test("start state display movement key to player x, and have 9 moves available to x") {
+
     displayStateTo(game, startState(game), x) should include("Movement Key")
   }
 
   test("startFrom return the start state") {
+
     val state = startState(game)
     val move = moves(game, state).head
     val nextState = applyMove(game, state, move)
     val newStart = startFrom(game, nextState).get
+
     moves(game, newStart).length should be(9)
     outcome(game, state) should be(None)
   }
 
   test("masked-sate mover be the same as raw state mover") {
+
     val state = startState(game)
     val move = moves(game, state).head
     val nextState = applyMove(game, state, move)
+
     moverM(game, state) should be(mover(game, state))
     moverM(game, nextState) should be(mover(game, nextState))
   }
@@ -109,9 +131,9 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
     implicit val rat = new spire.math.RationalAlgebra()
 
-    val mover = randomMove
-    val moveCpt = mover(game, startState(game))
-    val m = moveCpt.sample(rng)
+    val mover = rm
+    val moveCpt = mover(startState(game))
+    val m = moveCpt.get.sample(rng)
 
     m.position should be > 0
   }
@@ -120,6 +142,8 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
     import cats.implicits._ // for Order[Double]
 
+    import spire.algebra.Field
+
     val firstMove = TicTacToeMove(2, game.boardSize)
 
     val h = (outcome: TicTacToeOutcome, p: Player) =>
@@ -127,10 +151,12 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, Double, ConditionalProbabilityTable](
-      4, outcomeRingHeuristic(game, h))
+      game,
+      4,
+      outcomeRingHeuristic(game, h))
 
     val secondState = applyMove(game, startState(game), firstMove)
-    val cpt = ai4(game, secondState)
+    val cpt = ai4(secondState)
     val move = cpt.sample(rng)
 
     move.position should be > 0
@@ -153,22 +179,25 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
         case 4 => "6"
       }
 
-    val game = TicTacToe(3, x, o)
+    def strategyFor(player: Player): TicTacToeState => ConditionalProbabilityTable[TicTacToeMove, Rational] =
+      if ( player == x ) {
+        hardCodedStringStrategy[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game)(xMove)
+      } else if ( player == o ) {
+        hardCodedStringStrategy[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game)(oMove)
+      } else {
+        ???
+      }
 
     val start = startState(game)
-    val lastState = moveStateStream(
+
+    val mss = moveStateStream(
       game,
       start,
-      player =>
-        if ( player === x ) {
-          hardCodedStringStrategy(xMove)
-        } else if ( player === o ) {
-          hardCodedStringStrategy(oMove)
-        } else {
-          ???
-        },
-      rng).last._3
-    val out = outcome(game, lastState).get
+      player => strategyFor(player).andThen(Option.apply _),
+      rng).get
+
+    val out = outcome(game, mss.last._3).get
+
     displayOutcomeTo(game, out, x) should include("You beat")
     displayOutcomeTo(game, out, o) should include("beat You")
     out.winner.get should be(x)
@@ -191,19 +220,23 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
         case 4 => "7"
       }
 
+    def strategyFor(player: Player): TicTacToeState => ConditionalProbabilityTable[TicTacToeMove, Rational] =
+      if ( player == x) {
+        hardCodedStringStrategy[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game)(xMove)
+      } else if ( player == o) {
+        hardCodedStringStrategy[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game)(oMove)
+      } else {
+        ???
+      }
+
     val start = startState(game)
+
     val lastState = moveStateStream(
       game,
       start,
-      player =>
-        if ( player === x) {
-          hardCodedStringStrategy(xMove)
-        } else if ( player === o) {
-          hardCodedStringStrategy(oMove)
-        } else {
-          ???
-        },
-      rng).last._3
+      p => strategyFor(p).andThen(Option.apply _),
+      rng).get.last._3
+
     val winnerOpt = outcome(game, lastState).flatMap(_.winner)
     winnerOpt should be(Some(o))
   }
@@ -227,21 +260,24 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
         case 2 => "9"
       }
 
+    def strategyFor(player: Player): TicTacToeState => ConditionalProbabilityTable[TicTacToeMove, Rational] =
+      if ( player == x ) {
+        hardCodedStringStrategy[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game)(xMove)
+      } else if ( player == o ) {
+        hardCodedStringStrategy[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game)(oMove)
+      } else {
+        ???
+      }
+
     val start = startState(game)
-    val lastState = moveStateStream(
+
+    val mss = moveStateStream(
       game,
       start,
-      player =>
-        if ( player === x ) {
-          hardCodedStringStrategy(xMove)
-        } else if ( player === o ) {
-          hardCodedStringStrategy(oMove)
-        } else {
-          ???
-        },
-      rng).last._3
+      p => strategyFor(p).andThen(Option.apply _),
+      rng).get
 
-    val winnerOpt = outcome(game, lastState).flatMap(_.winner)
+    val winnerOpt = outcome(game, mss.last._3).flatMap(_.winner)
     winnerOpt should be(None)
   }
 
