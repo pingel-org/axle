@@ -15,10 +15,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* Errors relating to needing `F[_]` around `strategies` rhs (`.andThen(Option.apply _)`)
-
-* Record history `Seq[(M, S)]` in State
-* Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
 * Finish `axle.game.lazyChain`
 
 * Change Game.mover to return (Player, Option[Strategy]) for dealer strategy
@@ -29,7 +25,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * search for '_ => interactive'
   * search for '_ => GuessRiffle' (should reference dealerStrategy)
 
-* Use interactiveMove for demo
+* Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
+* Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)* Use interactiveMove for demo
 * GameIO -> GameSerDe (or maybe move methods to Game trait)
   * or maybe only use w/ interactiveMove
 
