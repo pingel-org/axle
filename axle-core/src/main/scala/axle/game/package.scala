@@ -16,19 +16,18 @@ import axle.syntax.sampler._
 
 package object game {
 
-  def lazyChain[A, B, F[_]: Monad](
-    x: A,
-    next: A => Option[F[B]],
-    select: B => A
-  ): F[LazyList[F[B]]] =
-    next(x).map { fb =>
-      fb flatMap { b =>
-        // Note: here is where it isn't lazy like it should be:
-        lazyChain[A, B, F](select(b), next, select) map { tail =>
-          tail.prepended(Monad[F].pure(b))
+  def lazyChain[A, B, M[_]: Monad](
+    a: A,
+    f: A => Option[M[B]],
+    g: B => A
+  ): M[LazyList[M[B]]] =
+    f(a).map { mb =>
+      mb.flatMap { b =>
+        lazyChain(g(b), f, g).map { 
+          _.prepended(Monad[M].pure(b))
         }
       }
-    } getOrElse(Monad[F].pure(LazyList.empty[F[B]]))
+    } getOrElse(Monad[M].pure(LazyList.empty[M[B]]))
 
   def nextMoveState[
     G, S, O, M, MS, MM, V,
