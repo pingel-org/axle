@@ -16,19 +16,6 @@ import axle.syntax.sampler._
 
 package object game {
 
-  def lazyChain[A, B, M[_]: Monad](
-    a: A,
-    f: A => Option[M[B]],
-    g: B => A
-  ): M[LazyList[M[B]]] =
-    f(a).map { mb =>
-      mb.flatMap { b =>
-        lazyChain(g(b), f, g).map { 
-          _.prepended(Monad[M].pure(b))
-        }
-      }
-    } getOrElse(Monad[M].pure(LazyList.empty[M[B]]))
-
   def nextMoveState[
     G, S, O, M, MS, MM, V,
     PM[_, _],

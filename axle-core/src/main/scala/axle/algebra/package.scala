@@ -5,6 +5,7 @@ import scala.collection.mutable.Buffer
 
 import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
+import cats.Monad
 
 import spire.algebra._
 import spire.implicits.additiveGroupOps
@@ -107,6 +108,19 @@ package object algebra {
       None
     }
   }
+
+  def lazyChain[A, B, M[_]: Monad](
+    a: A,
+    f: A => Option[M[B]],
+    g: B => A
+  ): M[LazyList[M[B]]] =
+    f(a).map { mb =>
+      mb.flatMap { b =>
+        lazyChain(g(b), f, g).map { 
+          _.prepended(Monad[M].pure(b))
+        }
+      }
+    } getOrElse(Monad[M].pure(LazyList.empty[M[B]]))
 
   /**
    * mergeStreams takes streams that are ordered w.r.t. Order[T]

@@ -16,6 +16,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
 * Finish `axle.game.lazyChain`
+  * Generalize sequence type
 
 * Change Game.mover to return (Player, Option[Strategy]) for dealer strategy
   * Or create a separate method
