@@ -46,7 +46,7 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
         startState(pGame),
         ((p: Player) => GuessRiffle.perfectOptionsPlayerStrategy.andThen(Option.apply(_))),
         containsCorrectGuess _,
-        Random.generatorFromSeed(Seed(seed)).sync ).get forall { _._2 }
+        Random.generatorFromSeed(Seed(seed)).sync ).get forall { _.get._2 }
     }
   }
 
@@ -83,9 +83,11 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
       (p: Player) => (s: GuessRiffleState) => Option(strategies(p)(s)),
       Random.generatorFromSeed(Seed(seed)).sync)
     .get
-    .filter(args => mover(game, args._1).map( _ === game.player).getOrElse(false))
-    .map({ case (stateIn, (strategy, _), _) =>
-      monad.map(strategy)(isCorrectMoveForState(game, stateIn))
+    .filter(args => mover(game, args.get._1).map( _ === game.player).getOrElse(false))
+    .map({
+      case Some((stateIn, (strategy, _), _)) =>
+        monad.map(strategy)(isCorrectMoveForState(game, stateIn))
+      case _ => ???
     })
     .reduce({ (incoming, current) =>
       monad.flatMap(incoming)( a => monad.map(current)( b => a && b ))
@@ -122,7 +124,7 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
         _ => GuessRiffle.perfectOptionsPlayerStrategy.andThen(Option.apply _),
         entropyOfGuess _,
         Random.generatorFromSeed(Seed(seed)).sync 
-      ).get.flatMap(_._2).toList
+      ).get.flatMap(_.get._2).toList
 
       val ep = Σ(entropiesP)
 
@@ -138,7 +140,7 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
         _ => GuessRiffle.perfectOptionsPlayerStrategy.andThen(Option.apply _),
         entropyOfGuess _,
         Random.generatorFromSeed(Seed(seed)).sync 
-      ).get.flatMap(_._2).toList
+      ).get.flatMap(_.get._2).toList
 
       val er = Σ(entropiesR)
 

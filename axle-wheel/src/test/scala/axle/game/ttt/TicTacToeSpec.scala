@@ -196,7 +196,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
       player => strategyFor(player).andThen(Option.apply _),
       rng).get
 
-    val out = outcome(game, mss.last._3).get
+    val out = outcome(game, mss.last.get._3).get
 
     displayOutcomeTo(game, out, x) should include("You beat")
     displayOutcomeTo(game, out, o) should include("beat You")
@@ -235,7 +235,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
       game,
       start,
       p => strategyFor(p).andThen(Option.apply _),
-      rng).get.last._3
+      rng).get.last.get._3
 
     val winnerOpt = outcome(game, lastState).flatMap(_.winner)
     winnerOpt should be(Some(o))
@@ -277,7 +277,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
       p => strategyFor(p).andThen(Option.apply _),
       rng).get
 
-    val winnerOpt = outcome(game, mss.last._3).flatMap(_.winner)
+    val winnerOpt = outcome(game, mss.last.get._3).flatMap(_.winner)
     winnerOpt should be(None)
   }
 
