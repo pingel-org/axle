@@ -15,9 +15,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* Finish `axle.game.lazyChain`
-  * Generalize sequence type
-
 * Change Game.mover to return (Player, Option[Strategy]) for dealer strategy
   * Or create a separate method
 * Dealer strategy for poker, guessriffle (+ properties), montyhall, spec
@@ -60,6 +57,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Replace `axle.game.moveFromRandomState.mapToProb`
 
 * Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
+
+* Factor `axle.algebra.chainMonad` in terms of well-known combinators
+* Some callers to `axle.game.lazyChain` don't need history (scan vs fold?)
 
 ## 0.6.1 Logistic Regression
 

@@ -16,6 +16,17 @@ import axle.syntax.sampler._
 
 package object game {
 
+  def lazyChain[A, B, M[_]: Monad](
+    a: A,
+    f: A => Option[M[B]],
+    g: B => A
+  ): M[LazyList[M[B]]] =
+    chainMonad[A, B, M, LazyList](
+      a, f, g,
+      LazyList.empty[M[B]],
+      (mb: M[B]) => (ll: LazyList[M[B]]) => ll.prepended(mb)
+    )
+
   def nextMoveState[
     G, S, O, M, MS, MM, V,
     PM[_, _],
@@ -245,7 +256,7 @@ package object game {
             (end, (), evGame.startFrom(game, end).get)
           })},
       _._3
-    ).map { _.map(_.map(_._1)) } // Or should this be _3?
+    ).map { _.map { _.map { _._1 } } } // Or should this be _3?
 
   def playContinuously[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
     game:  G,

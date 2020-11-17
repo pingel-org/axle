@@ -109,6 +109,13 @@ package object algebra {
     }
   }
 
+
+  /**
+   * TODO chainMonad likely something well-known
+   * ... or can be phrased in terms of well-known constituents
+   * 
+   */
+
   def chainMonad[A, B, M[_]: Monad, C[_]](
     a: A,
     f: A => Option[M[B]],
@@ -123,17 +130,6 @@ package object algebra {
         }
       }
     } getOrElse(Monad[M].pure(empty))
-
-  def lazyChain[A, B, M[_]: Monad](
-    a: A,
-    f: A => Option[M[B]],
-    g: B => A
-  ): M[LazyList[M[B]]] =
-    chainMonad[A, B, M, LazyList](
-      a, f, g,
-      LazyList.empty[M[B]],
-      (mb: M[B]) => (ll: LazyList[M[B]]) => ll.prepended(mb)
-    )
 
   /**
    * mergeStreams takes streams that are ordered w.r.t. Order[T]
