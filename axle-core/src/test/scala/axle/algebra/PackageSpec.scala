@@ -26,4 +26,20 @@ class PackageSpec extends AnyFunSuite with Matchers {
     result should be(expected)
   }
 
+  test("chain infinite") {
+
+    val a = 0
+    val f = (x: Int) => Option(Option(x + 1))
+    val g = (x: Int) => x
+    val empty = LazyList.empty[Option[Int]]
+    val combine = (mb: Option[Int]) => (ll: LazyList[Option[Int]]) => ll.prepended(mb)
+
+    val result = chain[Int, Int, Option, LazyList](a, f, g, empty, combine).map(_.take(3))
+
+    val expected = Option(LazyList(Option(1), Option(2), Option(3)))
+
+    result should be(expected)
+  }
+
+
 }
