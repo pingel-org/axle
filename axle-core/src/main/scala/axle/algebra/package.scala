@@ -111,12 +111,12 @@ package object algebra {
 
 
   /**
-   * TODO chainMonad likely something well-known
+   * TODO chain likely something well-known
    * ... or can be phrased in terms of well-known constituents
    * 
    */
 
-  def chainMonad[A, B, M[_]: Monad, C[_]](
+  def chain[A, B, M[_]: Monad, C[_]](
     a: A,
     f: A => Option[M[B]],
     g: B => A,
@@ -125,7 +125,7 @@ package object algebra {
   ): M[C[M[B]]] =
     f(a).map { mb =>
       mb.flatMap { b =>
-        chainMonad(g(b), f, g, empty, combine).map { cmb =>
+        chain(g(b), f, g, empty, combine).map { cmb =>
           combine(Monad[M].pure(b))(cmb)
         }
       }

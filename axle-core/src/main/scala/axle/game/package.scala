@@ -21,7 +21,7 @@ package object game {
     f: A => Option[M[B]],
     g: B => A
   ): M[LazyList[M[B]]] =
-    chainMonad[A, B, M, LazyList](
+    chain[A, B, M, LazyList](
       a, f, g,
       LazyList.empty[M[B]],
       (mb: M[B]) => (ll: LazyList[M[B]]) => ll.prepended(mb)
