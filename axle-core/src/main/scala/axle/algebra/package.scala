@@ -131,6 +131,19 @@ package object algebra {
       }
     } getOrElse(Monad[M].pure(empty))
 
+  def chain2[A, B, M[_]: Monad, C[_]](
+    a: A,
+    f: A => M[Option[B]],
+    g: B => A,
+    empty: C[B],
+    combine: B => C[B] => C[B]
+  ): M[C[B]] =
+    f(a).flatMap { optB =>
+      optB.map { b =>
+        chain2(g(b), f, g, empty, combine).map { cmb => combine(b)(cmb) }
+      } getOrElse(Monad[M].pure(empty))
+    }
+
   /**
    * mergeStreams takes streams that are ordered w.r.t. Order[T]
    *

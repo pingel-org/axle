@@ -27,6 +27,17 @@ package object game {
       (mb: M[B]) => (ll: LazyList[M[B]]) => ll.prepended(mb)
     )
 
+  def lazyChain2[A, B, M[_]: Monad](
+    a: A,
+    f: A => M[Option[B]],
+    g: B => A
+  ): M[LazyList[B]] =
+    chain2[A, B, M, LazyList](
+      a, f, g,
+      LazyList.empty[B],
+      (b: B) => (ll: LazyList[B]) => ll.prepended(b)
+    )
+
   def nextMoveState[
     G, S, O, M, MS, MM, V,
     PM[_, _],

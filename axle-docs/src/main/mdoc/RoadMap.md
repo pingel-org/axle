@@ -15,18 +15,21 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* Change Game.mover to return (Player, Option[Strategy]) for dealer strategy
+* Remove all need for axle.game.lazyChain
+  * gameStream should be deleted
+  * moveStateStream is always(?) fed to `.last`, so intermediate `LazyList` can be cut out
+    * However, other analysis may want history (use `chain2`?)
+  * stateStreamMap only used in GuessRiffleProperties (which may contain unrelated bug -- perfect is used twice)
+  * stateStrategyMoveStream only used in GuessRiffleProperties
+* Rename `chain2` to `chain` and delete original `chain`?
+
+* Change `Game.mover` to return `Option[(Player, Strategy)]` for dealer strategy
   * Or create a separate method
 * Dealer strategy for poker, guessriffle (+ properties), montyhall, spec
   * search for 'player ==='
   * search for '_ => randomMove'
   * search for '_ => interactive'
   * search for '_ => GuessRiffle' (should reference dealerStrategy)
-
-* Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
-* Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)* Use interactiveMove for demo
-* GameIO -> GameSerDe (or maybe move methods to Game trait)
-  * or maybe only use w/ interactiveMove
 
 ```scala
     interactiveMove[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational, ConditionalProbabilityTable, cats.effect.IO](
@@ -42,6 +45,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
       evGameIO.displayOutcomeTo(game, outcome, observer)
     }
 ```
+
+* Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
+* Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)* Use interactiveMove for demo
+* GameIO -> GameSerDe (or maybe move methods to Game trait)
+  * or maybe only use w/ interactiveMove
 
 * Game.players should be a part of GameState?
 * Display to player the elapsed moves /and/ the state diff
