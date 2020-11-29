@@ -118,21 +118,6 @@ package object algebra {
 
   def chain[A, B, M[_]: Monad, C[_]](
     a: A,
-    f: A => Option[M[B]],
-    g: B => A,
-    empty: C[M[B]],
-    combine: M[B] => C[M[B]] => C[M[B]]
-  ): M[C[M[B]]] =
-    f(a).map { mb =>
-      mb.flatMap { b =>
-        chain(g(b), f, g, empty, combine).map { cmb =>
-          combine(Monad[M].pure(b))(cmb)
-        }
-      }
-    } getOrElse(Monad[M].pure(empty))
-
-  def chain2[A, B, M[_]: Monad, C[_]](
-    a: A,
     f: A => M[Option[B]],
     g: B => A,
     empty: C[B],
@@ -140,7 +125,7 @@ package object algebra {
   ): M[C[B]] =
     f(a).flatMap { optB =>
       optB.map { b =>
-        chain2(g(b), f, g, empty, combine).map { cmb => combine(b)(cmb) }
+        chain(g(b), f, g, empty, combine).map { cmb => combine(b)(cmb) }
       } getOrElse(Monad[M].pure(empty))
     }
 

@@ -132,7 +132,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
         start,
         _ => hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(silence).andThen(Option.apply),
         rng
-      ).get.last.get._3).get
+      ).get.last._3).get
 
     val betrayalOutcome = outcome(
       game,
@@ -141,7 +141,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
         start,
         _ => hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(betrayal).andThen(Option.apply),
         rng
-      ).get.last.get._3).get
+      ).get.last._3).get
 
     silentOutcome.p1YearsInPrison should be < betrayalOutcome.p1YearsInPrison
     silentOutcome.p2YearsInPrison should be < betrayalOutcome.p2YearsInPrison
@@ -162,7 +162,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
       game,
       start,
       p => hardCoding1(p).andThen(Option.apply _),
-      rng).get.last.get._3
+      rng).get.last._3
 
     val p1silentOutcome = outcome(game, lastStateP1Silent).get
 
@@ -179,7 +179,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
       game,
       start,
       p => hardCoding2(p).andThen(Option.apply _),
-      rng).get.last.get._3).get
+      rng).get.last._3).get
 
     p1silentOutcome.p1YearsInPrison should be(p2silentOutcome.p2YearsInPrison)
     p1silentOutcome.p2YearsInPrison should be(p2silentOutcome.p1YearsInPrison)

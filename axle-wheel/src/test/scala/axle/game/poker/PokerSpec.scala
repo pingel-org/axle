@@ -93,7 +93,7 @@ class PokerSpec extends AnyFunSuite with Matchers {
 
     val start = startState(game)
     val history = moveStateStream(game, start, p => strategies(p).andThen(Option.apply _), rng).get.toVector
-    val lastState = history.last.get._3
+    val lastState = history.last._3
     val _ = play(
       game,
       p => strategies(p).andThen(Option.apply _),
@@ -101,11 +101,11 @@ class PokerSpec extends AnyFunSuite with Matchers {
 
     val o = outcome(game, lastState).get
     val newGameState = startFrom(game, lastState).get
-    val ms = maskState(game, history.drop(1).head.get._1, p1)
+    val ms = maskState(game, history.drop(1).head._1, p1)
 
     // TODO lastState should be equalTo lastStateByPlay
     history.map({
-      case Some((from, move, to)) => {
+      case (from, move, to) => {
         displayMoveTo(game, move, mover(game, from).get, p1)
       }
       case _ => ???

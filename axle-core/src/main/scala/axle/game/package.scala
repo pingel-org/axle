@@ -18,21 +18,10 @@ package object game {
 
   def lazyChain[A, B, M[_]: Monad](
     a: A,
-    f: A => Option[M[B]],
-    g: B => A
-  ): M[LazyList[M[B]]] =
-    chain[A, B, M, LazyList](
-      a, f, g,
-      LazyList.empty[M[B]],
-      (mb: M[B]) => (ll: LazyList[M[B]]) => ll.prepended(mb)
-    )
-
-  def lazyChain2[A, B, M[_]: Monad](
-    a: A,
     f: A => M[Option[B]],
     g: B => A
   ): M[LazyList[B]] =
-    chain2[A, B, M, LazyList](
+    chain[A, B, M, LazyList](
       a, f, g,
       LazyList.empty[B],
       (b: B) => (ll: LazyList[B]) => ll.prepended(b)
@@ -51,16 +40,16 @@ package object game {
     prob:   Sampler[PM],
     distV:  Dist[V],
     ringV:  Ring[V],
-    orderV: Order[V]): Option[F[(S, M, S)]] =
+    orderV: Order[V]): F[Option[(S, M, S)]] =
     evGame.mover(game, fromState) map { mover => {
       val strategyFn: MS => F[PM[M, V]] = strategies(mover)
       val fStrategy: F[PM[M, V]] = strategyFn(evGame.maskState(game, fromState, mover))
       fStrategy map { strategy =>
         val move: M = strategy.sample(gen)
         val toState: S = evGame.applyMove(game, fromState, move)
-        (fromState, move, toState)
+        Option((fromState, move, toState))
       }
-    }}
+    }} getOrElse(Monad[F].pure(Option.empty[(S, M, S)]))
 
   def moveStateStream[
     G, S, O, M, MS, MM, V,
@@ -75,7 +64,7 @@ package object game {
     prob:   Sampler[PM],
     distV:  Dist[V],
     ringV:  Ring[V],
-    orderV: Order[V]): F[LazyList[F[(S, M, S)]]] =
+    orderV: Order[V]): F[LazyList[(S, M, S)]] =
     lazyChain[S, (S, M, S), F](
       fromState,
       (s: S) => nextMoveState(game, s, strategies, gen),
@@ -149,16 +138,16 @@ package object game {
     prob:   Sampler[PM],
     distV: Dist[V],
     ringV:  Ring[V],
-    orderV: Order[V]): Option[F[(S, T, S)]] =
+    orderV: Order[V]): F[Option[(S, T, S)]] =
     evGame.mover(game, fromState).map { mover => {
       val strategyFn = strategies(mover)
       val fStrategy: F[PM[M, V]] = strategyFn(evGame.maskState(game, fromState, mover))
       fStrategy map { strategy =>
         val move = strategy.sample(gen)
         val toState = evGame.applyMove(game, fromState, move)
-        (fromState, strategyToT(game, fromState, strategy), toState)
+        Option((fromState, strategyToT(game, fromState, strategy), toState))
       }
-  }}
+  }} getOrElse(Monad[F].pure(Option.empty[(S, T, S)]))
 
   def stateStreamMap[
     G, S, O, M, MS, MM, V,
@@ -174,7 +163,7 @@ package object game {
     prob:   Sampler[PM],
     distV: Dist[V],
     ringV:  Ring[V],
-    orderV: Order[V]): F[LazyList[F[(S, T, S)]]] =
+    orderV: Order[V]): F[LazyList[(S, T, S)]] =
     lazyChain(
       fromState,
       (s: S) => mapNextState(game, s, strategies, strategyToT, gen),
@@ -193,16 +182,16 @@ package object game {
     prob:   Sampler[PM],
     distV:  Dist[V],
     ringV:  Ring[V],
-    orderV: Order[V]): Option[F[(S, (PM[M, V], M), S)]] =
+    orderV: Order[V]): F[Option[(S, (PM[M, V], M), S)]] =
     evGame.mover(game, fromState).map { mover => {
       val strategyFn = strategies(mover)
       val fStrategy: F[PM[M, V]] = strategyFn(evGame.maskState(game, fromState, mover))
       fStrategy map { strategy =>
         val move = strategy.sample(gen)
         val toState = evGame.applyMove(game, fromState, move)
-        (fromState, (strategy, move), toState)
+        Option((fromState, (strategy, move), toState))
       }
-  }}
+  }} getOrElse(Monad[F].pure(Option.empty))
 
   def stateStrategyMoveStream[
     G, S, O, M, MS, MM, V,
@@ -217,7 +206,7 @@ package object game {
     prob:   Sampler[PM],
     distV:  Dist[V],
     ringV:  Ring[V],
-    orderV: Order[V]): F[LazyList[F[(S, (PM[M, V], M), S)]]] =
+    orderV: Order[V]): F[LazyList[(S, (PM[M, V], M), S)]] =
     lazyChain(
       fromState,
       (s: S) => nextStateStrategyMoveState(game, s, strategies, gen),
@@ -246,7 +235,7 @@ package object game {
     distV: Dist[V],
     ringV: Ring[V],
     orderV: Order[V]): F[S] =
-    moveStateStream(game, start, strategies, gen) flatMap { _.last.map { _._3 } }
+    moveStateStream(game, start, strategies, gen) map { _.last._3 }
 
   def gameStream[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
     game:  G,
@@ -258,16 +247,15 @@ package object game {
     prob:     Sampler[PM],
     distV:    Dist[V],
     ringV:    Ring[V],
-    orderV:   Order[V]): F[LazyList[F[S]]] =
+    orderV:   Order[V]): F[LazyList[S]] =
     lazyChain[S, (S, Unit, S), F](
       start,
       (s: S) => {
-        Option(
-          play(game, strategies, s, gen) map { end =>
-            (end, (), evGame.startFrom(game, end).get)
-          })},
+        play(game, strategies, s, gen) map { end =>
+          Option((end, (), evGame.startFrom(game, end).get))
+        }},
       _._3
-    ).map { _.map { _.map { _._1 } } } // Or should this be _3?
+    ).map { _.map { _._1 } } // Or should this be _3?
 
   def playContinuously[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
     game:  G,
@@ -280,6 +268,6 @@ package object game {
     distV:    Dist[V],
     ringV:    Ring[V],
     orderV:   Order[V]): F[S] =
-    gameStream(game, strategies, start, gen).flatMap(_.last)
+    gameStream(game, strategies, start, gen).map(_.last)
 
 }

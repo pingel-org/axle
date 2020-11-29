@@ -15,13 +15,18 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* Remove all need for axle.game.lazyChain
-  * gameStream should be deleted
+* Remove all need for `axle.game.lazyChain`
+  * gameStream should be deleted?
+    * Alternative: add termination criteria
+      * May already exist as unchecked `None` from `startFrom`
   * moveStateStream is always(?) fed to `.last`, so intermediate `LazyList` can be cut out
     * However, other analysis may want history (use `chain2`?)
+    * So perhaps
+      * Keep `moveStateStream` and rename to `moveStatePath`
+      * Create another version that just gives final state
+      * Rephrase both in terms of `scan` and `foldLeft` (and delete `chain`)
   * stateStreamMap only used in GuessRiffleProperties (which may contain unrelated bug -- perfect is used twice)
   * stateStrategyMoveStream only used in GuessRiffleProperties
-* Rename `chain2` to `chain` and delete original `chain`?
 
 * Change `Game.mover` to return `Option[(Player, Strategy)]` for dealer strategy
   * Or create a separate method
