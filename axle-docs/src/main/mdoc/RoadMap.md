@@ -15,13 +15,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
+* Use `lastState` for all current uses of `moveStateStream`, which always call `.last`
+
 * gameStream: add termination criteria
   * May already exist as unchecked `None` from `startFrom`
-* finalState -- a version of moveStateStream that just gives final state (as a `fold`?)
-  * Use this for all current uses of `moveStateStream`, which always call `.last`
 * moveStateStream
-  * rename to `moveStatePath` (unless we give this job to `State`...)
-  * Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
+  * rename to `moveStatePath` or `traceGame`
+  * unless we give this job to `State`...
+    * Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
 * stateStreamMap only used in GuessRiffleProperties
   * stop using chain?
 * stateStrategyMoveStream only used in GuessRiffleProperties

@@ -126,6 +126,8 @@ package object algebra {
    * 
    * This is likely better decomposed into more well-known constituents.
    * 
+   * Not stack safe.
+   * 
    */
 
   def chain[A, B, M[_]: Monad, C[_]](
@@ -139,6 +141,27 @@ package object algebra {
       optB.map { b =>
         chain(g(b), f, g, empty, combine).map { cmb => combine(b)(cmb) }
       } getOrElse(Monad[M].pure(empty))
+    }
+
+  /**
+   * foled is the forgetful version of chain
+   *
+   */
+
+  def foled[A, B, M[_]: Monad](
+    a: A,
+    f: A => M[Option[B]],
+    g: B => A): M[Option[B]] =
+    f(a).flatMap { optB =>
+      optB.map { b =>
+        foled(g(b), f, g) map { subOptB =>
+          if( subOptB.isDefined ) {
+            subOptB
+          } else {
+            optB
+          }
+        }
+      } getOrElse(Monad[M].pure(Option.empty))
     }
 
   /**

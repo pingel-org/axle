@@ -40,6 +40,26 @@ package object game {
       }
     }} getOrElse(Monad[F].pure(Option.empty[(S, M, S)]))
 
+
+  def lastState[
+    G, S, O, M, MS, MM, V,
+    PM[_, _],
+    F[_]: Monad](
+    game:      G,
+    fromState: S,
+    strategies: Player => MS => F[PM[M, V]],
+    gen:       Generator)(
+    implicit
+    evGame: Game[G, S, O, M, MS, MM],
+    prob:   Sampler[PM],
+    distV:  Dist[V],
+    ringV:  Ring[V],
+    orderV: Order[V]): F[Option[(S, M, S)]] =
+    foled[S, (S, M, S), F](
+      fromState,
+      (s: S) => nextMoveState(game, s, strategies, gen),
+      _._3)
+
   def moveStateStream[
     G, S, O, M, MS, MM, V,
     PM[_, _],
