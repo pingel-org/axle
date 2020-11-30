@@ -16,17 +16,6 @@ import axle.syntax.sampler._
 
 package object game {
 
-  def lazyChain[A, B, M[_]: Monad](
-    a: A,
-    f: A => M[Option[B]],
-    g: B => A
-  ): M[LazyList[B]] =
-    chain[A, B, M, LazyList](
-      a, f, g,
-      LazyList.empty[B],
-      (b: B) => (ll: LazyList[B]) => ll.prepended(b)
-    )
-
   def nextMoveState[
     G, S, O, M, MS, MM, V,
     PM[_, _],
@@ -65,10 +54,13 @@ package object game {
     distV:  Dist[V],
     ringV:  Ring[V],
     orderV: Order[V]): F[LazyList[(S, M, S)]] =
-    lazyChain[S, (S, M, S), F](
+    chain[S, (S, M, S), F, LazyList](
       fromState,
       (s: S) => nextMoveState(game, s, strategies, gen),
-      _._3)
+      _._3,
+      LazyList.empty,
+      b => ll => ll.prepended(b)
+    )
 
   def moveFromRandomState[
     G, S, O, M, MS, MM, V,
@@ -164,10 +156,13 @@ package object game {
     distV: Dist[V],
     ringV:  Ring[V],
     orderV: Order[V]): F[LazyList[(S, T, S)]] =
-    lazyChain(
+    chain[S, (S, T, S), F, LazyList](
       fromState,
       (s: S) => mapNextState(game, s, strategies, strategyToT, gen),
-      _._3)
+      _._3,
+      LazyList.empty,
+      b => ll => ll.prepended(b)
+    )
 
   def nextStateStrategyMoveState[
     G, S, O, M, MS, MM, V,
@@ -207,10 +202,13 @@ package object game {
     distV:  Dist[V],
     ringV:  Ring[V],
     orderV: Order[V]): F[LazyList[(S, (PM[M, V], M), S)]] =
-    lazyChain(
+    chain[S, (S, (PM[M, V], M), S), F, LazyList](
       fromState,
       (s: S) => nextStateStrategyMoveState(game, s, strategies, gen),
-      _._3)
+      _._3,
+      LazyList.empty,
+      b => ll => ll.prepended(b)
+    )
 
   def play[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
     game: G,
@@ -248,13 +246,15 @@ package object game {
     distV:    Dist[V],
     ringV:    Ring[V],
     orderV:   Order[V]): F[LazyList[S]] =
-    lazyChain[S, (S, Unit, S), F](
+    chain[S, (S, Unit, S), F, LazyList](
       start,
       (s: S) => {
         play(game, strategies, s, gen) map { end =>
           Option((end, (), evGame.startFrom(game, end).get))
         }},
-      _._3
+      _._3,
+     LazyList.empty,
+     b => ll => ll.prepended(b)
     ).map { _.map { _._1 } } // Or should this be _3?
 
   def playContinuously[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](

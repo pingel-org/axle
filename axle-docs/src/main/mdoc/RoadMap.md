@@ -15,7 +15,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* inline all calls to lazyChain
 * gameStream: add termination criteria
   * May already exist as unchecked `None` from `startFrom`
 * finalState -- a version of moveStateStream that just gives final state (as a `fold`?)
