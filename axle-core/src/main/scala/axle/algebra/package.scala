@@ -111,8 +111,20 @@ package object algebra {
 
 
   /**
-   * TODO chain likely something well-known
-   * ... or can be phrased in terms of well-known constituents
+   * chain is an anamorphism
+   * 
+   * Compare to Scala's unfold, which has this signature
+   * 
+   *   def unfold[A, S](init: S)(f: (S) => Option[(A, S)]): Iterator[A]
+   * 
+   * The differences by type parameter:
+   * 
+   * 1. `M` Monad around the result of `f`
+   * 2. `B` in rhs of `f` instead of `(A, S)` in `unfold`
+   *    Note that the role of `g` is to map a `B` back into `A` for the next iteration
+   * 3. `C` Generic container type instead of `Iterator`
+   * 
+   * This is likely better decomposed into more well-known constituents.
    * 
    */
 

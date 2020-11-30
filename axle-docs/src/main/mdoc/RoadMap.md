@@ -15,18 +15,18 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* Remove all need for `axle.game.lazyChain`
-  * gameStream should be deleted?
-    * Alternative: add termination criteria
-      * May already exist as unchecked `None` from `startFrom`
-  * moveStateStream is always(?) fed to `.last`, so intermediate `LazyList` can be cut out
-    * However, other analysis may want history (use `chain2`?)
-    * So perhaps
-      * Keep `moveStateStream` and rename to `moveStatePath`
-      * Create another version that just gives final state
-      * Rephrase both in terms of `scan` and `foldLeft` (and delete `chain`)
-  * stateStreamMap only used in GuessRiffleProperties (which may contain unrelated bug -- perfect is used twice)
-  * stateStrategyMoveStream only used in GuessRiffleProperties
+* inline all calls to lazyChain
+* gameStream: add termination criteria
+  * May already exist as unchecked `None` from `startFrom`
+* finalState -- a version of moveStateStream that just gives final state (as a `fold`?)
+  * Use this for all current uses of `moveStateStream`, which always call `.last`
+* moveStateStream
+  * rename to `moveStatePath` (unless we give this job to `State`...)
+  * Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
+* stateStreamMap only used in GuessRiffleProperties
+  * stop using chain?
+* stateStrategyMoveStream only used in GuessRiffleProperties
+  * stop using chain?
 
 * Change `Game.mover` to return `Option[(Player, Strategy)]` for dealer strategy
   * Or create a separate method
@@ -51,7 +51,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
     }
 ```
 
-* Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
+* GuessRiffleProperties -- perfect is used twice. bug?
+
 * Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)* Use interactiveMove for demo
 * GameIO -> GameSerDe (or maybe move methods to Game trait)
   * or maybe only use w/ interactiveMove
