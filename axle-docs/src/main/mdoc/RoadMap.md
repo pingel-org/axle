@@ -15,10 +15,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* Use `lastState` for all current uses of `moveStateStream`, which always call `.last`
-
 * gameStream: add termination criteria
   * May already exist as unchecked `None` from `startFrom`
+  * gameStream may not be worth it
+
 * moveStateStream
   * rename to `moveStatePath` or `traceGame`
   * unless we give this job to `State`...

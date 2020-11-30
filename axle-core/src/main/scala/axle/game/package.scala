@@ -253,7 +253,7 @@ package object game {
     distV: Dist[V],
     ringV: Ring[V],
     orderV: Order[V]): F[S] =
-    moveStateStream(game, start, strategies, gen) map { _.last._3 }
+    lastState(game, start, strategies, gen) map { _.get._3 } // NOTE Option.get
 
   def gameStream[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
     game:  G,
