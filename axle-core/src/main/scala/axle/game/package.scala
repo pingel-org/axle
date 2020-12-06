@@ -259,6 +259,7 @@ package object game {
     game:  G,
     strategies: Player => MS => F[PM[M, V]],
     start: S,
+    continue: Int => Boolean,
     gen:   Generator)(
     implicit
     evGame:   Game[G, S, O, M, MS, MM],
@@ -266,16 +267,20 @@ package object game {
     distV:    Dist[V],
     ringV:    Ring[V],
     orderV:   Order[V]): F[LazyList[S]] =
-    chain[S, (S, Unit, S), F, LazyList](
-      start,
-      (s: S) => {
-        play(game, strategies, s, gen) map { end =>
-          Option((end, (), evGame.startFrom(game, end).get))
+    chain[(S, Int), (S, Int), F, LazyList](
+      (start, 0),
+      (si: (S, Int)) => {
+        play(game, strategies, si._1, gen) map { end =>
+          if(continue(si._2)) {
+            evGame.startFrom(game, end).map { s => (s, si._2 + 1) }
+          } else {
+            Option.empty
+          }
         }},
-      _._3,
+      s => s,
      LazyList.empty,
      b => ll => ll.prepended(b)
-    ).map { _.map { _._1 } } // Or should this be _3?
+    ) map { _.map { _._1 } }
 
   def playContinuously[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
     game:  G,
@@ -288,6 +293,6 @@ package object game {
     distV:    Dist[V],
     ringV:    Ring[V],
     orderV:   Order[V]): F[S] =
-    gameStream(game, strategies, start, gen).map(_.last)
+    gameStream(game, strategies, start, _ => true, gen).map(_.last)
 
 }

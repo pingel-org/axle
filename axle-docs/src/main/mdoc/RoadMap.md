@@ -19,15 +19,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * May already exist as unchecked `None` from `startFrom`
   * gameStream may not be worth it
 
-* moveStateStream
-  * rename to `moveStatePath` or `traceGame`
-  * unless we give this job to `State`...
-    * Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
-* stateStreamMap only used in GuessRiffleProperties
-  * stop using chain?
-* stateStrategyMoveStream only used in GuessRiffleProperties
-  * stop using chain?
-
 * Change `Game.mover` to return `Option[(Player, Strategy)]` for dealer strategy
   * Or create a separate method
 * Dealer strategy for poker, guessriffle (+ properties), montyhall, spec
@@ -57,6 +48,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * GameIO -> GameSerDe (or maybe move methods to Game trait)
   * or maybe only use w/ interactiveMove
 
+* moveStateStream
+  * rename to `moveStatePath` or `traceGame`
+  * unless we give this job to `State`...
+    * Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
+* stateStreamMap only used in GuessRiffleProperties
+  * stop using chain?
+* stateStrategyMoveStream only used in GuessRiffleProperties
+  * stop using chain?
+
 * Game.players should be a part of GameState?
 * Display to player the elapsed moves /and/ the state diff
 * AI mover takes S, not MS. How can I adapt this?
@@ -72,8 +72,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
 
-* Factor `axle.algebra.chainMonad` in terms of well-known combinators
-* Some callers to `axle.game.lazyChain` don't need history (scan vs fold?)
+* Factor `axle.algebra.chain` in terms of well-known combinators
 
 ## 0.6.1 Logistic Regression
 
@@ -319,7 +318,7 @@ that has been its goal since inception.
 
 ## Types and Axioms
 
-* Replace Finite with Shapeless's version
+* Replace Finite with Shapeless's version (eg Sized[Vector[_], nat.2])
 * Delete Finite conversions for jung (replace with NaturalTransformation?)
 * Replace with Cats: FoldLeft, Bijection, FunctionPair, Endofunctor
 * Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?

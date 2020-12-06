@@ -56,9 +56,10 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
       game,
       _ => rm,
       startState(game),
+      i => i < 10,
       rng).get
 
-    games.take(2) should have length 2
+    games should have length 10
   }
 
   test("startFrom returns the start state") {

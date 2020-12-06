@@ -76,9 +76,10 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
       game,
       _ => rm,
       startState(game),
-      rng).get.take(2)
+      i => i < 10,
+      rng).get
 
-    games.length should be(2)
+    games.length should be(10)
   }
 
   test("post-riffle state display") {

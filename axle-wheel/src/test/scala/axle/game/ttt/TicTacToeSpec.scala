@@ -68,9 +68,10 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
       game,
       _ => rm,
       startState(game),
+      i => i < 10,
       rng).get
 
-    games.take(2).length should be(2)
+    games should have length 10
   }
 
   test("start state display movement key to player x, and have 9 moves available to x") {

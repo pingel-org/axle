@@ -137,8 +137,8 @@ class PokerSpec extends AnyFunSuite with Matchers {
   //    }
   //
   //    test("produce game stream") {
-  //      val stream = gameStream(rGame, startState(rGame), false)
-  //      stream.take(2).length should be equalTo 2
+  //      val games = gameStream(rGame, startState(rGame), i => i < 10, false).get
+  //      games should have length 10
   //    }
 
 }
