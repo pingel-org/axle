@@ -15,17 +15,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* gameStream: add termination criteria
-  * May already exist as unchecked `None` from `startFrom`
-  * gameStream may not be worth it
-
-* Change `Game.mover` to return `Option[(Player, Strategy)]` for dealer strategy
-  * Or create a separate method
-* Dealer strategy for poker, guessriffle (+ properties), montyhall, spec
-  * search for 'player ==='
-  * search for '_ => randomMove'
-  * search for '_ => interactive'
+* Fix GuessRiffleSpec
   * search for '_ => GuessRiffle' (should reference dealerStrategy)
+
+* GuessRiffleProperties -- perfect is used twice. bug?
+* stateStreamMap only used in GuessRiffleProperties
+  * stop using chain?
+* stateStrategyMoveStream only used in GuessRiffleProperties
+
+* Fix MoveFromRandomStateSpec "moveFromRandomState on hard-coded graph"
 
 ```scala
     interactiveMove[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational, ConditionalProbabilityTable, cats.effect.IO](
@@ -42,9 +40,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
     }
 ```
 
-* GuessRiffleProperties -- perfect is used twice. bug?
-
-* Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)* Use interactiveMove for demo
+* Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
+* Use interactiveMove for demo
 * GameIO -> GameSerDe (or maybe move methods to Game trait)
   * or maybe only use w/ interactiveMove
 
@@ -52,14 +49,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * rename to `moveStatePath` or `traceGame`
   * unless we give this job to `State`...
     * Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
-* stateStreamMap only used in GuessRiffleProperties
-  * stop using chain?
-* stateStrategyMoveStream only used in GuessRiffleProperties
   * stop using chain?
 
 * Game.players should be a part of GameState?
 * Display to player the elapsed moves /and/ the state diff
 * AI mover takes S, not MS. How can I adapt this?
+
+## 0.6.1 Control Entropy Consumption
 
 * Identify all uses of `spire.random.Generator` (and other random value generation)
 
@@ -70,24 +66,20 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Replace `axle.game.moveFromRandomState.mapToProb`
 
-* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
-
-* Factor `axle.algebra.chain` in terms of well-known combinators
-
-## 0.6.1 Logistic Regression
+## 0.6.2 Logistic Regression
 
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
 
-## 0.6.2 Genetic Algorithm
+## 0.6.3 Genetic Algorithm
 
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 
-## 0.6.3 Logic
+## 0.6.4 Logic
 
 * Redo Logic using Abstract Algebra
 
-## 0.6.4
+## 0.6.5
 
 * Simple graph implementation so that `axle-core` can avoid including `axle-jung`
 
@@ -95,12 +87,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Will require externalizing the layout to its own.... typeclass?
   * Layout of bayesian network is quite bad -- check ABE SVG
 
-## 0.6.5 PNG
+## 0.6.6 PNG
 
 * `axle-png` to avoid Xvfb requirement during tests
 * Chicklet borders / colors on site
 
-## 0.6.6 AST
+## 0.6.7 AST
 
 * move ast view xml (how is it able to refer to `xml.Node`?)
   * ast.view.AstNodeFormatter (xml.Utility.escape)
@@ -157,6 +149,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Plot distribution of sum(entropy) for both strategies
   * Plot entropy by turn # for each strategy
   * Plot simulated score distribution for each strategy
+
+* Factor `axle.algebra.chain` in terms of well-known combinators
 
 * Gerrymandering sensitivity
 * Game theory axioms (Nash, etc)
@@ -274,6 +268,7 @@ that has been its goal since inception.
 
 ## Hygiene
 
+* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
 * Factor tics and tics-{joda,algebra,spire} into separate libs?
 * remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
 * Fix "unreachable" default pattern match cases
