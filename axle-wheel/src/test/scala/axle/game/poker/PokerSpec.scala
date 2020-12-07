@@ -3,6 +3,8 @@ package axle.game.poker
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
+// import cats.implicits._
+
 import spire.math.Rational
 import spire.random.Generator.rng
 
@@ -82,11 +84,15 @@ class PokerSpec extends AnyFunSuite with Matchers {
 
     val game = Poker(Vector(p1, p2))
 
+    val randomPokerMove = randomMove[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable](game)
+
     def strategies(player: Player): PokerStateMasked => ConditionalProbabilityTable[PokerMove,Rational] =
       if ( player === p1 ) {
         hardCodedStringStrategy[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable](game)(p1Move)
       } else if ( player === p2 ){
         hardCodedStringStrategy[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable](game)(p2Move)
+      } else if( player === game.dealer ) {
+        randomPokerMove
       } else {
         ???
       }
