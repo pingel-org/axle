@@ -14,17 +14,16 @@ object GuessRiffle {
 
   val dealer = Player("D", "Dealer")
 
-  val dealerStrategy: (GuessRiffle, GuessRiffleState) => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
-    (game: GuessRiffle, state: GuessRiffleState) => {
+  val dealerStrategy: GuessRiffleState => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
+    (state: GuessRiffleState) =>
       if ( state.remaining.isEmpty ) {
         ConditionalProbabilityTable[GuessRiffleMove, Rational](Map(Riffle() -> Rational(1)))
       } else {
         assert(! state.guess.isEmpty)
         ConditionalProbabilityTable[GuessRiffleMove, Rational](Map(RevealAndScore() -> Rational(1)))
       }
-    }
 
-    val perfectOptionsPlayerStrategy: GuessRiffleState => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
+  val perfectOptionsPlayerStrategy: GuessRiffleState => ConditionalProbabilityTable[GuessRiffleMove, Rational] =
     (state: GuessRiffleState) => {
       // If the Game API allowed for customizing the State, we could avoid re-computing the
       // "pointers" each time

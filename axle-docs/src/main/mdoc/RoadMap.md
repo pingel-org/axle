@@ -15,15 +15,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* Fix GuessRiffleSpec
-  * search for '_ => GuessRiffle' (should reference dealerStrategy)
+* Fix MoveFromRandomStateSpec "moveFromRandomState on hard-coded graph"
 
 * GuessRiffleProperties -- perfect is used twice. bug?
-* stateStreamMap only used in GuessRiffleProperties
-  * stop using chain?
+* stateStreamMap only used in GuessRiffleProperties -- stop using chain?
 * stateStrategyMoveStream only used in GuessRiffleProperties
-
-* Fix MoveFromRandomStateSpec "moveFromRandomState on hard-coded graph"
 
 ```scala
     interactiveMove[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational, ConditionalProbabilityTable, cats.effect.IO](

@@ -62,7 +62,12 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
 
     val endState = play(
       game,
-      _ => GuessRiffle.perfectOptionsPlayerStrategy.andThen(Option.apply _),
+      player =>
+        (if( player == GuessRiffle.dealer ) {
+          GuessRiffle.dealerStrategy
+        } else {
+          GuessRiffle.perfectOptionsPlayerStrategy
+        }).andThen(Option.apply _),
       startState(game),
       rng).get
 
