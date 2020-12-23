@@ -3,10 +3,10 @@ package axle.game
 import cats.kernel.Eq
 
 import spire.math._
+import spire.math.Rational.RationalAlgebra
 import spire.random.Generator.rng
 
 import axle.probability._
-import axle.game.Strategies.randomMove
 
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
@@ -94,9 +94,6 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
     }
 
 
-  val rm = randomMove[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove,Rational,ConditionalProbabilityTable](game).andThen(Option.apply _)
-
-
   // val pm = ConditionalProbabilityTable.probabilityWitness
 
   val currentStateModelMap = Map(Sa -> Rational(1, 3), Sb -> Rational(2, 3))
@@ -124,12 +121,32 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
     //  Sb: (2/3,  0  ) => 2/3 + (1/3 .  0  ) = 2/3
     //  Sc: (0  ,  1/4) => 0   + (1/3 .  1/4) = 1/12
 
+    // val rm = randomMove[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove,Rational,ConditionalProbabilityTable](game).andThen(Option.apply _)
+
+
+// found   :
+//   Map[MoveFromRandomStateSpec.this.TestGameMove,spire.math.Rational] => axle.probability.ConditionalProbabilityTable[MoveFromRandomStateSpec.this.TestGameMove,spire.math.Rational]
+//
+// required:
+//   Map[MoveFromRandomStateSpec.this.TestGameMove,(MoveFromRandomStateSpec.this.TestGameState, spire.math.Rational)] => axle.probability.ConditionalProbabilityTable[MoveFromRandomStateSpec.this.TestGameMove,spire.math.Rational]
+//
+
+    val rm: TestGameState => Option[ConditionalProbabilityTable[TestGameMove,Rational]] =
+      (s: TestGameState) =>
+        movesMap.get(s).map(m =>
+          ConditionalProbabilityTable.apply[TestGameMove, Rational](
+            m.map( kv => kv._1 -> kv._2._2 )
+          )
+        )
+
+    // movesMap: Map[TestGameState, Map[TestGameMove, (TestGameState, Rational)]]
+
     val actualResult = ((1 to 1000) map { i =>
       moveFromRandomState(
         game,
         currentStateModel,
         _ => rm,
-        (m: Map[TestGameState, Rational]) => ConditionalProbabilityTable(m),
+        ConditionalProbabilityTable.apply[TestGameState, Rational],
         rng).get
     }) toSet
 

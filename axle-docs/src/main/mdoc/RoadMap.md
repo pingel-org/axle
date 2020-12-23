@@ -15,11 +15,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* Fix MoveFromRandomStateSpec "moveFromRandomState on hard-coded graph"
-
 * GuessRiffleProperties -- perfect is used twice. bug?
-* stateStreamMap only used in GuessRiffleProperties -- stop using chain?
-* stateStrategyMoveStream only used in GuessRiffleProperties
+* GuessRiffle Properties.perfectOptionsPlayerStrategy always has non-zero chance of guessing correctly: Exception raised on property evaluation.
+
+* AI mover takes S, not MS. How can I adapt this?
+* Use interactiveMove for demo
 
 ```scala
     interactiveMove[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational, ConditionalProbabilityTable, cats.effect.IO](
@@ -37,19 +37,17 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ```
 
 * Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
-* Use interactiveMove for demo
+* stateStreamMap only used in GuessRiffleProperties -- stop using chain?
+* stateStrategyMoveStream only used in GuessRiffleProperties
 * GameIO -> GameSerDe (or maybe move methods to Game trait)
   * or maybe only use w/ interactiveMove
-
 * moveStateStream
   * rename to `moveStatePath` or `traceGame`
   * unless we give this job to `State`...
     * Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
   * stop using chain?
-
 * Game.players should be a part of GameState?
 * Display to player the elapsed moves /and/ the state diff
-* AI mover takes S, not MS. How can I adapt this?
 
 ## 0.6.1 Control Entropy Consumption
 
