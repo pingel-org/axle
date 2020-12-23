@@ -7,19 +7,20 @@ import edu.uci.ics.jung.graph.DirectedSparseGraph
 
 import cats.implicits._
 import cats.Eq
-//import cats.Order
+import cats.Order
 
 import spire.random.Random
 import spire.random.Seed
 import spire.math.Rational
 
 import axle.algebra.RegionEq
-//import axle.math.Σ
+import axle.math.Σ
+import axle.game._
+import axle.game.Strategies.randomMove
 import axle.game.cards._
 import axle.game.guessriffle.evGame._
 import axle.probability._
 import axle.stats._
-import axle.game._
 import axle.quanta._
 import axle.syntax.kolmogorov._
 
@@ -87,12 +88,12 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
   def probabilityAllCorrect(
     game: GuessRiffle,
     fromState: GuessRiffleState,
-    strategies: Player => GuessRiffleState => ConditionalProbabilityTable[GuessRiffleMove, Rational],
+    strategies: Player => GuessRiffleState => Option[ConditionalProbabilityTable[GuessRiffleMove, Rational]],
     seed: Int): Rational =
     stateStrategyMoveStream(
       game,
       fromState,
-      (p: Player) => (s: GuessRiffleState) => Option(strategies(p)(s)),
+      (p: Player) => (s: GuessRiffleState) => strategies(p)(s),
       Random.generatorFromSeed(Seed(seed)).sync)
     .get
     .filter(args => mover(game, args._1).map( p => eqPlayer.eqv(p, game.player)).getOrElse(false))
@@ -112,51 +113,71 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
     import axle.jung._
     Information.converterGraphK2[Double, DirectedSparseGraph]
   }
-/*
+  
   property("perfectOptionsPlayerStrategy's P(all correct) >> that of random mover (except when unshuffled), and its entropy is higher") = {
 
     val player = Player("P", "Player")
     val game = GuessRiffle(player)
+    val rm = randomMove[GuessRiffle, GuessRiffleState, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove], Rational, ConditionalProbabilityTable](game).andThen(Option.apply _)
 
     // leverages the fact that s0 will be the same for both games. Not generally true
     val s0 = startState(game)
+    val orderInfoDouble: Order[UnittedQuantity[Information, Double]] = UnittedQuantity.orderUQ[Information, Double]
 
     forAllNoShrink { (seed: Int) =>
 
       val s1 = applyMove(game, s0, Riffle())
 
-      val orderInfoDouble: Order[UnittedQuantity[Information, Double]] = UnittedQuantity.orderUQ[Information, Double]
+      val probabilityPerfectChoicesAllCorrect =
+        probabilityAllCorrect(
+          game,
+          s1,
+          ((p: Player) => (
+            if (eqPlayer.eqv(p, GuessRiffle.dealer))
+              GuessRiffle.dealerStrategy.andThen(Option.apply)
+            else
+              GuessRiffle.perfectOptionsPlayerStrategy.andThen(Option.apply)
+            )),
+          seed)
 
-      // val perfectStrategies: Player => GuessRiffleState => ConditionalProbabilityTable[GuessRiffleMove, Rational] = 
-      //   _ => GuessRiffle.perfectOptionsPlayerStrategy
-
-      val probabilityPerfectChoicesAllCorrect = probabilityAllCorrect(game, s1, _ => GuessRiffle.perfectOptionsPlayerStrategy, seed)
-
-      val entropiesP = stateStreamMap(
-        game,
-        s1,
-        ((p: Player) => (
-          if (eqPlayer.eqv(p, GuessRiffle.dealer))
-            GuessRiffle.dealerStrategy
-          else
-            GuessRiffle.perfectOptionsPlayerStrategy
-          ).andThen(Option.apply(_))),
-        entropyOfGuess _,
-        Random.generatorFromSeed(Seed(seed)).sync 
-      ).get.flatMap(_._2).toList
+      val entropiesP =
+        stateStreamMap(
+          game,
+          s1,
+          ((p: Player) => (
+            if (eqPlayer.eqv(p, GuessRiffle.dealer))
+              GuessRiffle.dealerStrategy
+            else
+              GuessRiffle.perfectOptionsPlayerStrategy
+            ).andThen(Option.apply(_))),
+          entropyOfGuess _,
+          Random.generatorFromSeed(Seed(seed)).sync 
+        ).get.flatMap(_._2).toList
 
       val ep = Σ(entropiesP)
 
-      // val randomStrategies: Player => GuessRiffleState => ConditionalProbabilityTable[GuessRiffleMove, Rational] = 
-      //   _ => GuessRiffle.perfectOptionsPlayerStrategy
-
-      val probabilityRandomChoicesAllCorrect = probabilityAllCorrect(game, s1, _ => GuessRiffle.perfectOptionsPlayerStrategy, seed)
+      val probabilityRandomChoicesAllCorrect =
+        probabilityAllCorrect(
+          game,
+          s1,
+          ((p: Player) => (
+            if (eqPlayer.eqv(p, GuessRiffle.dealer))
+              GuessRiffle.dealerStrategy.andThen(Option.apply)
+            else
+              rm
+            )),
+          seed)
 
       // randomMove
       val entropiesR = stateStreamMap(
         game,
         s1,
-        _ => GuessRiffle.perfectOptionsPlayerStrategy.andThen(Option.apply _),
+        ((p: Player) => (
+          if (eqPlayer.eqv(p, GuessRiffle.dealer))
+            GuessRiffle.dealerStrategy.andThen(Option.apply(_))
+          else
+            rm
+          )),
         entropyOfGuess _,
         Random.generatorFromSeed(Seed(seed)).sync 
       ).get.flatMap(_._2).toList
@@ -170,5 +191,5 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
       }
     }
   }
-*/
+
 }
