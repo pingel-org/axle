@@ -15,8 +15,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* GuessRiffleProperties -- perfect is used twice. bug?
-* GuessRiffle Properties.perfectOptionsPlayerStrategy always has non-zero chance of guessing correctly: Exception raised on property evaluation.
+* GuessRiffleProperties
+  * Properties.perfectOptionsPlayerStrategy
+  * Remember that GuessRiffle generated an infinite gameStream
+  * perfect is used twice. bug?
 
 * AI mover takes S, not MS. How can I adapt this?
 * Use interactiveMove for demo
@@ -49,9 +51,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Game.players should be a part of GameState?
 * Display to player the elapsed moves /and/ the state diff
 
+* The references to `movesMap` in `MoveFromRandomStateSpec.scala` illustrate a need for a cleaner way to create a hard-coded strategy -- which could just be in the form of a couple utility functions from `movesMap` to the data needed by `evGame.{moves,applyMove}` and `rm` strategy
+
 ## 0.6.1 Control Entropy Consumption
 
 * Identify all uses of `spire.random.Generator` (and other random value generation)
+
+* See uses of `seed` in `GuessRiffleProperties`
 
 * Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
   * `Chance` should be its own player
