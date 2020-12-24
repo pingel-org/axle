@@ -11,10 +11,9 @@ Models the Gold Paradigm.
 Imports
 
 ```scala mdoc:silent
-import cats.implicits._
 import axle._
 import axle.lx._
-import Gold._
+import GoldParadigm._
 ```
 
 Setup
@@ -29,23 +28,22 @@ val mUp = Morpheme("up")
 
 val Σ = Vocabulary(Set(mHi, mIm, mYour, mMother, mShut, mUp))
 
-val s1 = mHi :: mIm :: mYour :: mMother :: Nil
-val s2 = mShut :: mUp :: Nil
+val s1 = Expression(mHi :: mIm :: mYour :: mMother :: Nil)
+val s2 = Expression(mShut :: mUp :: Nil)
 
 val ℒ = Language(Set(s1, s2))
 
 val T = Text(s1 :: ♯ :: ♯ :: s2 :: ♯ :: s2 :: s2 :: Nil)
 
-val ɸ = MemorizingLearner()
+val ɸ = memorizingLearner
 ```
 
 Usage
 
 ```scala mdoc
-ɸ.guesses(T).
- find(_.ℒ === ℒ).
- map(finalGuess => "well done, ɸ").
- getOrElse("ɸ never made a correct guess")
+import axle.algebra.lastOption
+
+lastOption(ɸ.guesses(T)).get
 
 ℒ
 
