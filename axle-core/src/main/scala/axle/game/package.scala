@@ -2,6 +2,7 @@ package axle
 
 import cats.Monad
 import cats.kernel.Order
+import cats.implicits._
 
 import spire.algebra.Field
 import spire.algebra.Ring
@@ -15,33 +16,83 @@ import axle.syntax.sampler._
 
 package object game {
 
-  def moveStateStream[G, S, O, M, MS, MM, V, PM[_, _]](
+  def nextMoveState[
+    G, S, O, M, MS, MM, V,
+    PM[_, _],
+    F[_]: Monad](
     game:      G,
     fromState: S,
+    strategies: Player => MS => F[PM[M, V]],
     gen:       Generator)(
     implicit
-    evGame: Game[G, S, O, M, MS, MM, V, PM],
+    evGame: Game[G, S, O, M, MS, MM],
     prob:   Sampler[PM],
     distV:  Dist[V],
     ringV:  Ring[V],
-    orderV: Order[V]): LazyList[(S, M, S)] =
-    evGame.mover(game, fromState).map(mover => {
-      val strategyFn = evGame.strategyFor(game, mover)
-      val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
-      val move = strategy.sample(gen)
-      val toState = evGame.applyMove(game, fromState, move)
-      LazyList.cons((fromState, move, toState), moveStateStream(game, toState, gen))
-    }) getOrElse {
-      LazyList.empty
-    }
+    orderV: Order[V]): F[Option[(S, M, S)]] =
+    evGame.mover(game, fromState) map { mover => {
+      val strategyFn: MS => F[PM[M, V]] = strategies(mover)
+      val fStrategy: F[PM[M, V]] = strategyFn(evGame.maskState(game, fromState, mover))
+      fStrategy map { strategy =>
+        val move: M = strategy.sample(gen)
+        val toState: S = evGame.applyMove(game, fromState, move)
+        Option((fromState, move, toState))
+      }
+    }} getOrElse(Monad[F].pure(Option.empty[(S, M, S)]))
 
-  def moveFromRandomState[G, S, O, M, MS, MM, V, PM[_, _]](
+
+  def lastState[
+    G, S, O, M, MS, MM, V,
+    PM[_, _],
+    F[_]: Monad](
+    game:      G,
+    fromState: S,
+    strategies: Player => MS => F[PM[M, V]],
+    gen:       Generator)(
+    implicit
+    evGame: Game[G, S, O, M, MS, MM],
+    prob:   Sampler[PM],
+    distV:  Dist[V],
+    ringV:  Ring[V],
+    orderV: Order[V]): F[Option[(S, M, S)]] =
+    foled[S, (S, M, S), F](
+      fromState,
+      (s: S) => nextMoveState(game, s, strategies, gen),
+      _._3)
+
+  def moveStateStream[
+    G, S, O, M, MS, MM, V,
+    PM[_, _],
+    F[_]: Monad](
+    game:      G,
+    fromState: S,
+    strategies: Player => MS => F[PM[M, V]],
+    gen:       Generator)(
+    implicit
+    evGame: Game[G, S, O, M, MS, MM],
+    prob:   Sampler[PM],
+    distV:  Dist[V],
+    ringV:  Ring[V],
+    orderV: Order[V]): F[LazyList[(S, M, S)]] =
+    chain[S, (S, M, S), F, LazyList](
+      fromState,
+      (s: S) => nextMoveState(game, s, strategies, gen),
+      _._3,
+      LazyList.empty,
+      b => ll => ll.prepended(b)
+    )
+
+  def moveFromRandomState[
+    G, S, O, M, MS, MM, V,
+    PM[_, _],
+    F[_]: Monad](
     game:      G,
     stateModel: PM[S, V],
+    strategies: Player => MS => F[PM[M, V]],
     mapToProb: Map[S, V] => PM[S, V], // TODO replace this
     gen:       Generator)(
     implicit
-    evGame: Game[G, S, O, M, MS, MM, V, PM],
+    evGame: Game[G, S, O, M, MS, MM],
     prob:   Sampler[PM],
     kolm:   Kolmogorov[PM],
     bayes:  Bayes[PM],
@@ -50,165 +101,198 @@ package object game {
     eqM:    cats.kernel.Eq[M],
     distV:  Dist[V],
     fieldV: Field[V],
-    orderV: Order[V]): (Option[(S, M)], PM[S, V]) = {
+    orderV: Order[V]): F[(Option[(S, M)], PM[S, V])] = {
 
     val openStateModel: PM[S, V] = bayes.filter(stateModel)(RegionIf(evGame.mover(game, _).isDefined))
 
     val fromState: S = prob.sample(openStateModel)(gen)
     // val probabilityOfFromState: V = prob.probabilityOf(stateModel)(RegionEq(fromState))
 
-    evGame.mover(game, fromState).map(mover => {
-      val strategyFn = evGame.strategyFor(game, mover)
-      val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
-      val move = strategy.sample(gen)
-      val toState = evGame.applyMove(game, fromState, move)
+    evGame.mover(game, fromState).map { mover => {
+      val strategyFn = strategies(mover)
+      val fStrategy: F[PM[M, V]] = strategyFn(evGame.maskState(game, fromState, mover))
+      fStrategy map { strategy =>
 
-      import cats.syntax.all._
-      if( fromState === toState ) {
-        (Some((fromState, move)), stateModel)
-      } else {
-        val probabilityOfMove: V = kolm.probabilityOf(strategy)(RegionEq(move))
-        // val mass = probabilityOfFromState * probabilityOfMove // TODO scale mass down
-        val redistributed = monad.flatMap(stateModel)( s =>
-          if( s === fromState) {
-            mapToProb(Map(fromState -> (Field[V].one - probabilityOfMove), toState -> probabilityOfMove))
-          } else {
-            monad.pure(s)
-          })
-        (Some((fromState, move)), redistributed)
+        val move = strategy.sample(gen)
+        val toState = evGame.applyMove(game, fromState, move)
+
+        import cats.syntax.all._
+        if( fromState === toState ) {
+          (Some((fromState, move)), stateModel)
+        } else {
+          val probabilityOfMove: V = kolm.probabilityOf(strategy)(RegionEq(move))
+          // val mass = probabilityOfFromState * probabilityOfMove // TODO scale mass down
+          val redistributed = monad.flatMap(stateModel)( s =>
+            if( s === fromState) {
+              mapToProb(Map(fromState -> (Field[V].one - probabilityOfMove), toState -> probabilityOfMove))
+            } else {
+              monad.pure(s)
+            })
+          (Option((fromState, move)), redistributed)
+        }
       }
-    }) getOrElse {
-      (None, stateModel)
+    }} getOrElse {
+      Monad[F].pure[(Option[(S, M)], PM[S, V])]((None, stateModel))
     }
   }
   
-  def stateStreamMap[G, S, O, M, MS, MM, V, PM[_, _], T](
+  def mapNextState[
+    G, S, O, M, MS, MM, V,
+    PM[_, _], T,
+    F[_]: Monad](
     game:        G,
     fromState:   S,
+    strategies: Player => MS => F[PM[M, V]],
     strategyToT: (G, S, PM[M, V]) => T,
     gen:         Generator)(
     implicit
-    evGame: Game[G, S, O, M, MS, MM, V, PM],
+    evGame: Game[G, S, O, M, MS, MM],
     prob:   Sampler[PM],
-    distV:  Dist[V],
+    distV: Dist[V],
     ringV:  Ring[V],
-    orderV: Order[V]): LazyList[(S, T, S)] =
-    evGame.mover(game, fromState).map(mover => {
-      val strategyFn = evGame.strategyFor(game, mover)
-      val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
-      val move = strategy.sample(gen)
-      val toState = evGame.applyMove(game, fromState, move)
-      LazyList.cons((fromState, strategyToT(game, fromState, strategy), toState), stateStreamMap(game, toState, strategyToT, gen))
-    }) getOrElse {
-      LazyList.empty
-    }
+    orderV: Order[V]): F[Option[(S, T, S)]] =
+    evGame.mover(game, fromState).map { mover => {
+      val strategyFn = strategies(mover)
+      val fStrategy: F[PM[M, V]] = strategyFn(evGame.maskState(game, fromState, mover))
+      fStrategy map { strategy =>
+        val move = strategy.sample(gen)
+        val toState = evGame.applyMove(game, fromState, move)
+        Option((fromState, strategyToT(game, fromState, strategy), toState))
+      }
+  }} getOrElse(Monad[F].pure(Option.empty[(S, T, S)]))
 
-  def stateStrategyMoveStream[G, S, O, M, MS, MM, V, PM[_, _]](
+  def stateStreamMap[
+    G, S, O, M, MS, MM, V,
+    PM[_, _], T,
+    F[_]: Monad](
     game:        G,
     fromState:   S,
+    strategies: Player => MS => F[PM[M, V]],
+    strategyToT: (G, S, PM[M, V]) => T,
     gen:         Generator)(
     implicit
-    evGame: Game[G, S, O, M, MS, MM, V, PM],
+    evGame: Game[G, S, O, M, MS, MM],
+    prob:   Sampler[PM],
+    distV: Dist[V],
+    ringV:  Ring[V],
+    orderV: Order[V]): F[LazyList[(S, T, S)]] =
+    chain[S, (S, T, S), F, LazyList](
+      fromState,
+      (s: S) => mapNextState(game, s, strategies, strategyToT, gen),
+      _._3,
+      LazyList.empty,
+      b => ll => ll.prepended(b)
+    )
+
+  def nextStateStrategyMoveState[
+    G, S, O, M, MS, MM, V,
+    PM[_, _],
+    F[_]: Monad](
+    game:        G,
+    fromState:   S,
+    strategies: Player => MS => F[PM[M, V]],
+    gen:         Generator)(
+    implicit
+    evGame: Game[G, S, O, M, MS, MM],
     prob:   Sampler[PM],
     distV:  Dist[V],
     ringV:  Ring[V],
-    orderV: Order[V]): LazyList[(S, PM[M, V], M, S)] =
-    evGame.mover(game, fromState).map(mover => {
-      val strategyFn = evGame.strategyFor(game, mover)
-      val strategy = strategyFn(game, evGame.maskState(game, fromState, mover))
-      val move = strategy.sample(gen)
-      val toState = evGame.applyMove(game, fromState, move)
-      LazyList.cons((fromState, strategy, move, toState), stateStrategyMoveStream(game, toState, gen))
-    }) getOrElse {
-      LazyList.empty
-    }
-    
-  def play[G, S, O, M, MS, MM, V, PM[_, _]](game: G, gen: Generator)(
+    orderV: Order[V]): F[Option[(S, (PM[M, V], M), S)]] =
+    evGame.mover(game, fromState).map { mover => {
+      val strategyFn = strategies(mover)
+      val fStrategy: F[PM[M, V]] = strategyFn(evGame.maskState(game, fromState, mover))
+      fStrategy map { strategy =>
+        val move = strategy.sample(gen)
+        val toState = evGame.applyMove(game, fromState, move)
+        Option((fromState, (strategy, move), toState))
+      }
+  }} getOrElse(Monad[F].pure(Option.empty))
+
+  def stateStrategyMoveStream[
+    G, S, O, M, MS, MM, V,
+    PM[_, _],
+    F[_]: Monad](
+    game:        G,
+    fromState:   S,
+    strategies: Player => MS => F[PM[M, V]],
+    gen:         Generator)(
     implicit
-    evGame:   Game[G, S, O, M, MS, MM, V, PM],
+    evGame: Game[G, S, O, M, MS, MM],
+    prob:   Sampler[PM],
+    distV:  Dist[V],
+    ringV:  Ring[V],
+    orderV: Order[V]): F[LazyList[(S, (PM[M, V], M), S)]] =
+    chain[S, (S, (PM[M, V], M), S), F, LazyList](
+      fromState,
+      (s: S) => nextStateStrategyMoveState(game, s, strategies, gen),
+      _._3,
+      LazyList.empty,
+      b => ll => ll.prepended(b)
+    )
+
+  def play[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
+    game: G,
+    strategies: Player => MS => F[PM[M, V]],
+    gen: Generator)(
+    implicit
+    evGame:   Game[G, S, O, M, MS, MM],
     prob:     Sampler[PM],
-    evGameIO: GameIO[G, O, M, MS, MM],
     distV:    Dist[V],
     ringV:    Ring[V],
-    orderV:   Order[V]): S =
-    play(game, evGame.startState(game), true, gen)
+    orderV:   Order[V]): F[S] =
+    play(game, strategies, evGame.startState(game), gen)
 
-  def play[G, S, O, M, MS, MM, V, PM[_, _]](
+  def play[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
     game:  G,
+    strategies: Player => MS => F[PM[M, V]],
     start: S,
-    intro: Boolean   = true,
     gen:   Generator)(
     implicit
-    evGame:   Game[G, S, O, M, MS, MM, V, PM],
+    evGame:   Game[G, S, O, M, MS, MM],
     prob:     Sampler[PM],
-    evGameIO: GameIO[G, O, M, MS, MM],
     distV: Dist[V],
     ringV: Ring[V],
-    orderV: Order[V]): S = {
+    orderV: Order[V]): F[S] =
+    lastState(game, start, strategies, gen) map { _.get._3 } // NOTE Option.get
 
-    evGame.players(game) foreach { observer =>
-      val display = evGameIO.displayerFor(game, observer)
-      if (intro) {
-        display(evGameIO.introMessage(game))
-      }
-      display(evGameIO.displayStateTo(game, evGame.maskState(game, start, observer), observer))
-    }
-
-    val mss: LazyList[(S, M, S)] = moveStateStream(game, start, gen)
-
-    val lastState = mss map {
-      case (fromState, move, toState) => {
-        val mover = evGame.mover(game, fromState)
-        mover foreach { mover =>
-          evGame.players(game) foreach { observer =>
-            val display = evGameIO.displayerFor(game, observer)
-            display(evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer))
-            display(evGameIO.displayStateTo(game, evGame.maskState(game, toState, observer), observer))
+  def gameStream[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
+    game:  G,
+    strategies: Player => MS => F[PM[M, V]],
+    start: S,
+    continue: Int => Boolean,
+    gen:   Generator)(
+    implicit
+    evGame:   Game[G, S, O, M, MS, MM],
+    prob:     Sampler[PM],
+    distV:    Dist[V],
+    ringV:    Ring[V],
+    orderV:   Order[V]): F[LazyList[S]] =
+    chain[(S, Int), (S, Int), F, LazyList](
+      (start, 0),
+      (si: (S, Int)) => {
+        play(game, strategies, si._1, gen) map { end =>
+          if(continue(si._2)) {
+            evGame.startFrom(game, end).map { s => (s, si._2 + 1) }
+          } else {
+            Option.empty
           }
-        }
-        toState
-      }
-    } last
+        }},
+      s => s,
+     LazyList.empty,
+     b => ll => ll.prepended(b)
+    ) map { _.map { _._1 } }
 
-    evGame.players(game) foreach { observer =>
-      val display = evGameIO.displayerFor(game, observer)
-      display("")
-      display(evGameIO.displayStateTo(game, evGame.maskState(game, lastState, observer), observer))
-      evGame.outcome(game, lastState) foreach { outcome =>
-        display(evGameIO.displayOutcomeTo(game, outcome, observer))
-      }
-    }
-
-    lastState
-  }
-
-  def gameStream[G, S, O, M, MS, MM, V, PM[_, _]](
+  def playContinuously[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
     game:  G,
-    start: S,
-    intro: Boolean   = true,
-    gen:   Generator)(
-    implicit
-    evGame:   Game[G, S, O, M, MS, MM, V, PM],
-    prob:     Sampler[PM],
-    evGameIO: GameIO[G, O, M, MS, MM],
-    distV:    Dist[V],
-    ringV:    Ring[V],
-    orderV:   Order[V]): LazyList[S] = {
-    val end = play(game, start, intro, gen)
-    LazyList.cons(end, gameStream(game, evGame.startFrom(game, end).get, false, gen))
-  }
-
-  def playContinuously[G, S, O, M, MS, MM, V, PM[_, _]](
-    game:  G,
+    strategies: Player => MS => F[PM[M, V]],
     start: S,
     gen:   Generator)(
     implicit
-    evGame:   Game[G, S, O, M, MS, MM, V, PM],
+    evGame:   Game[G, S, O, M, MS, MM],
     prob:     Sampler[PM],
-    evGameIO: GameIO[G, O, M, MS, MM],
     distV:    Dist[V],
     ringV:    Ring[V],
-    orderV:   Order[V]): S =
-    gameStream(game, start, true, gen).last
+    orderV:   Order[V]): F[S] =
+    gameStream(game, strategies, start, _ => true, gen).map(_.last)
 
 }

@@ -9,12 +9,7 @@ package axle.game
  * for all observers, moves(game, maksState(game, state,observer)) should ...
  */
 
-import spire.random.Dist
-import axle.probability._
-
-trait Game[G, S, O, M, MS, MM, V, PM[_, _]] {
-
-  def probabilityDist: Dist[V]
+trait Game[G, S, O, M, MS, MM] {
 
   def startState(game: G): S
 
@@ -33,13 +28,9 @@ trait Game[G, S, O, M, MS, MM, V, PM[_, _]] {
 
   def maskMove(game: G, move: M, mover: Player, observer: Player): MM
 
-  def strategyFor(game: G, player: Player): (G, MS) => PM[M, V]
-
   def isValid(game: G, state: MS, move: M): Either[String, M]
 
   def applyMove(game: G, state: S, move: M): S
 
   def outcome(game: G, state: S): Option[O]
-
-  implicit def sampler: Sampler[PM]
 }

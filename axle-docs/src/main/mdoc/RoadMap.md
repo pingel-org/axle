@@ -6,29 +6,77 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.5 Docs, Tests, Bugs
+## 0.5.5 or 0.6.0 cats.effect for axle.game and control entropy side effects
 
+* Wrap `axle.IO.getLine` in `F[_]`
+* Remove from `Game`: method `probabilityDist`, `sampler`, and type params `V` and `PM[_, _]`
+* Move `strategyFor` from `Game` to `strategies` argument in `axle.game` package methods
 * Define `Indexed.slyce` for non-1-step Ranges
 * Improve `axle.lx.{Gold, Angluin}` coverage
-* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
-* Support for GeoCoordinates spec to `axle.laws.generator`
-* Support for UnittedQuantities and Units to `axle.laws.generator`
+* `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-## 0.5.6 Logistic Regression
+* Use interactiveMove for demo
+
+```scala
+    interactiveMove[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational, ConditionalProbabilityTable, cats.effect.IO](
+      _ => () => axle.IO.getLine[cats.effect.IO](),
+      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s)
+    ),
+```
+
+```scala
+    // These should be part of State displaying
+    evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)
+    evGame.outcome(game, lastState) foreach { outcome =>
+      evGameIO.displayOutcomeTo(game, outcome, observer)
+    }
+```
+
+* Demo AI mover in docs.  AI mover takes S, not MS. How can I adapt this?
+* `Game.players` is only used by `outcomeRingHeuristic`
+* `Game.moverM` is only used in `axle.game.Strategies.interactiveMove`
+* Simplify `GuessRiffleProperties` (especially second property)
+* Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
+* stateStreamMap only used in GuessRiffleProperties -- stop using chain?
+* stateStrategyMoveStream only used in GuessRiffleProperties
+* GameIO -> GameSerDe (or maybe move methods to Game trait)
+  * or maybe only use w/ interactiveMove
+* moveStateStream
+  * rename to `moveStatePath` or `traceGame`
+  * unless we give this job to `State`...
+    * Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
+  * stop using chain?
+* Game.players should be a part of GameState?
+* Display to player the elapsed moves /and/ the state diff
+* The references to `movesMap` in `MoveFromRandomStateSpec.scala` illustrate a need for a cleaner way to create a hard-coded strategy -- which could just be in the form of a couple utility functions from `movesMap` to the data needed by `evGame.{moves,applyMove}` and `rm` strategy
+
+## 0.6.1 Control Entropy Consumption
+
+* Identify all uses of `spire.random.Generator` (and other random value generation)
+
+* See uses of `seed` in `GuessRiffleProperties`
+
+* Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
+  * `Chance` should be its own player
+  * Each N bits consumed during `Riffle()` is its own move
+  * Chance moves consume `UnittedQuantity[Information, N]`
+
+* Replace `axle.game.moveFromRandomState.mapToProb`
+
+## 0.6.2 Logistic Regression
 
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
-* Fix occasional MetricSpace failure
 
-## 0.5.7 Genetic Algorithm
+## 0.6.3 Genetic Algorithm
 
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 
-## 0.5.8 Logic
+## 0.6.4 Logic
 
 * Redo Logic using Abstract Algebra
 
-## 0.5.9
+## 0.6.5
 
 * Simple graph implementation so that `axle-core` can avoid including `axle-jung`
 
@@ -36,12 +84,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Will require externalizing the layout to its own.... typeclass?
   * Layout of bayesian network is quite bad -- check ABE SVG
 
-## 0.5.10 PNG
+## 0.6.6 PNG
 
 * `axle-png` to avoid Xvfb requirement during tests
 * Chicklet borders / colors on site
 
-## 0.5.11 AST
+## 0.6.7 AST
 
 * move ast view xml (how is it able to refer to `xml.Node`?)
   * ast.view.AstNodeFormatter (xml.Utility.escape)
@@ -51,7 +99,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle-ast-python`
 * `cats.effect` for `axle.ast.python2`
 
-## 0.6.x Factoring and Bayesian Networks
+## 0.7.x Factoring and Bayesian Networks
 
 * Reorder Probability mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
   * Footnotes (Giry, etc)
@@ -92,14 +140,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.7.x Compositional Game Theory
 
-* Replace `axle.game.moveFromRandomState.mapToProb`
-* Wrap `axle.IO.getLine` in `F[_]`
-* Wrap `axle.IO.prefixedDisplay` in `F[_]`
-
-* Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
-  * "Chance" should be its own player
-  * Each N bits consumed during `Riffle()` is its own move
-  * Chance moves consume `UnittedQuantity[Information, N]`
 * GuessRiffleSpec: use `moveFromRandomState`
 * GuessRiffle.md
   * Walk through game
@@ -107,11 +147,17 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Plot entropy by turn # for each strategy
   * Plot simulated score distribution for each strategy
 
+* Factor `axle.algebra.chain` in terms of well-known combinators
+
+* Gerrymandering sensitivity
+* Game theory axioms (Nash, etc)
+* `axle.game`: `Observable[T]`
+* move state dist stream
+* "You split, I choose" as game
+
 * `perceive` could return a lower-entropy probability model
   * Perhaps in exchange for a given amount of energy
   * Or ask for a 0-entropy model and be told how expensive that was
-
-* Identify all uses of `spire.random.Generator`
 
 ## After that
 
@@ -134,12 +180,9 @@ that has been its goal since inception.
 * Think about Information Theory's "Omega" vis-a-vis Sequential Monte Carlo
 * Improve `axle.stats.rationalProbabilityDist` as probabilities become smaller
 * SimpsonsParadox.md
-* "You split, I choose" as game
 * Axioms of partial differentiation
-* Gerrymandering sensitivity
-* Game theory axioms (Nash, etc)
-* `axle.game`: `Observable[T]`
-* move state dist stream
+  * https://math.ucr.edu/home/baez/mathematical/ACTUCR/Plotkin_Partial_Differentiation.pdf
+* Conal Elliott: Efficient automatic differentiation made easy via category theory
 * Redo original monty hall spec
 * Max bet for Poker
 * syntax for `Game` typeclass
@@ -218,9 +261,11 @@ that has been its goal since inception.
 * Topoi
 * do-calculus (Causality)
 * Eigenvector
+* Σ ⊣ Δ ⊣ Π means "sums are left adjoint to diagonals, which are left adjoint to products."
 
 ## Hygiene
 
+* Get rid of implicit arg passing to KMeans in `ClusterIrises.md` (and KMeansSpecification)
 * Factor tics and tics-{joda,algebra,spire} into separate libs?
 * remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
 * Fix "unreachable" default pattern match cases
@@ -265,7 +310,7 @@ that has been its goal since inception.
 
 ## Types and Axioms
 
-* Replace Finite with Shapeless's version
+* Replace Finite with Shapeless's version (eg Sized[Vector[_], nat.2])
 * Delete Finite conversions for jung (replace with NaturalTransformation?)
 * Replace with Cats: FoldLeft, Bijection, FunctionPair, Endofunctor
 * Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?

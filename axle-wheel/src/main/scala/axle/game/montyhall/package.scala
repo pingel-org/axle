@@ -7,19 +7,13 @@ package axle.game
  */
 
 import cats.implicits._
-import spire.math.Rational
-import spire.random.Dist
-
-import axle.probability._
 
 package object montyhall {
 
   implicit val eqMove = cats.kernel.Eq.fromUniversalEquals[MontyHallMove]
 
-  implicit val evGame: Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational, ConditionalProbabilityTable] =
-    new Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational, ConditionalProbabilityTable] {
-
-      def probabilityDist: Dist[Rational] = rationalProbabilityDist
+  implicit val evGame: Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove]] =
+    new Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove]] {
 
       def startState(game: MontyHall): MontyHallState =
         MontyHallState(None, false, None, None, None)
@@ -29,15 +23,6 @@ package object montyhall {
 
       def players(game: MontyHall): IndexedSeq[Player] =
         Vector(game.contestant, game.monty)
-
-      def strategyFor(
-        game:   MontyHall,
-        player: Player): (MontyHall, MontyHallState) => ConditionalProbabilityTable[MontyHallMove, Rational] =
-        player match {
-          case game.contestant => game.contestantStrategy
-          case game.monty      => game.montyStrategy
-          case _               => game.contestantStrategy // TODO unreachable
-        }
 
       def isValid(
         g:     MontyHall,
@@ -126,19 +111,10 @@ package object montyhall {
         }
       }
 
-      implicit def sampler = ConditionalProbabilityTable.samplerWitness
-
     }
 
   implicit val evGameIO: GameIO[MontyHall, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove]] =
     new GameIO[MontyHall, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove]] {
-
-      def displayerFor(g: MontyHall, player: Player): String => Unit =
-        player match {
-          case g.contestant => g.contestantDisplayer
-          case g.monty      => g.montyDisplayer
-          case _            => g.contestantDisplayer
-        }
 
       def parseMove(g: MontyHall, input: String): Either[String, MontyHallMove] =
         input match {

@@ -3,6 +3,9 @@ package axle.game.poker
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
+// import cats.implicits._
+
+import spire.math.Rational
 import spire.random.Generator.rng
 
 import axle.probability._
@@ -17,13 +20,9 @@ class PokerSpec extends AnyFunSuite with Matchers {
   val p1 = Player("P1", "Player 1")
   val p2 = Player("P2", "Player 2")
 
-  test("start state displays something") {
+  val game = Poker(Vector(p1, p2))
 
-    val game = Poker(
-      Vector(
-      (p1, interactiveMove, println),
-      (p2, interactiveMove, println)),
-      println)
+  test("start state displays something") {
 
     val state = startState(game)
     val ms = evGame.maskState(game, state, p1)
@@ -32,12 +31,6 @@ class PokerSpec extends AnyFunSuite with Matchers {
   }
 
   test("masked-sate mover is the same as raw state mover") {
-
-    val game = Poker(
-      Vector(
-      (p1, interactiveMove, println),
-      (p2, interactiveMove, println)),
-      println)
 
     val state = startState(game)
     val msp1 = maskState(game, state, p1)
@@ -50,12 +43,6 @@ class PokerSpec extends AnyFunSuite with Matchers {
   }
 
   test("only 1 player 'still in', not allow another game to begin") {
-
-    val game = Poker(
-      Vector(
-      (p1, interactiveMove, println),
-      (p2, interactiveMove, println)),
-      println)
 
     val state = PokerState(
       _ => Some(p1),
@@ -95,16 +82,28 @@ class PokerSpec extends AnyFunSuite with Matchers {
         case (_, _) => "call" // TODO unreachable
       }
 
-    val game = Poker(
-      Vector(
-      (p1, hardCodedStringStrategy(p1Move), axle.algebra.ignore),
-      (p2, hardCodedStringStrategy(p2Move), axle.algebra.ignore)),
-      axle.algebra.ignore)
+    val game = Poker(Vector(p1, p2))
+
+    val randomPokerMove = randomMove[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable](game)
+
+    def strategies(player: Player): PokerStateMasked => ConditionalProbabilityTable[PokerMove,Rational] =
+      if ( player === p1 ) {
+        hardCodedStringStrategy[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable](game)(p1Move)
+      } else if ( player === p2 ){
+        hardCodedStringStrategy[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable](game)(p2Move)
+      } else if( player === game.dealer ) {
+        randomPokerMove
+      } else {
+        ???
+      }
 
     val start = startState(game)
-    val history = moveStateStream(game, start, rng).toVector
+    val history = moveStateStream(game, start, p => strategies(p).andThen(Option.apply _), rng).get.toVector
     val lastState = history.last._3
-    val _ = play(game, rng) // TODO make use of this "lastStateByPlay"
+    val _ = play(
+      game,
+      p => strategies(p).andThen(Option.apply _),
+      rng) // TODO make use of this "lastStateByPlay"
 
     val o = outcome(game, lastState).get
     val newGameState = startFrom(game, lastState).get
@@ -115,9 +114,11 @@ class PokerSpec extends AnyFunSuite with Matchers {
       case (from, move, to) => {
         displayMoveTo(game, move, mover(game, from).get, p1)
       }
+      case _ => ???
     }).mkString(", ") should include("call")
     // TODO these messages should include amounts
     moves(game, ms) should contain(Fold())
+
     displayOutcomeTo(game, o, p1) should include("Winner: Player 1") // TODO show P1 his own hand
     displayOutcomeTo(game, o, p2) should include("Winner: Player 1")
     introMessage(game) should include("Texas")
@@ -142,8 +143,8 @@ class PokerSpec extends AnyFunSuite with Matchers {
   //    }
   //
   //    test("produce game stream") {
-  //      val stream = gameStream(rGame, startState(rGame), false)
-  //      stream.take(2).length should be equalTo 2
+  //      val games = gameStream(rGame, startState(rGame), i => i < 10, false).get
+  //      games should have length 10
   //    }
 
 }

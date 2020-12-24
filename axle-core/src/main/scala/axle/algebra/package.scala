@@ -5,6 +5,7 @@ import scala.collection.mutable.Buffer
 
 import cats.implicits._
 import cats.Order.catsKernelOrderingForOrder
+import cats.Monad
 
 import spire.algebra._
 import spire.implicits.additiveGroupOps
@@ -107,6 +108,61 @@ package object algebra {
       None
     }
   }
+
+
+  /**
+   * chain is an anamorphism
+   * 
+   * Compare to Scala's unfold, which has this signature
+   * 
+   *   def unfold[A, S](init: S)(f: (S) => Option[(A, S)]): Iterator[A]
+   * 
+   * The differences by type parameter:
+   * 
+   * 1. `M` Monad around the result of `f`
+   * 2. `B` in rhs of `f` instead of `(A, S)` in `unfold`
+   *    Note that the role of `g` is to map a `B` back into `A` for the next iteration
+   * 3. `C` Generic container type instead of `Iterator`
+   * 
+   * This is likely better decomposed into more well-known constituents.
+   * 
+   * Not stack safe.
+   * 
+   */
+
+  def chain[A, B, M[_]: Monad, C[_]](
+    a: A,
+    f: A => M[Option[B]],
+    g: B => A,
+    empty: C[B],
+    combine: B => C[B] => C[B]
+  ): M[C[B]] =
+    f(a).flatMap { optB =>
+      optB.map { b =>
+        chain(g(b), f, g, empty, combine).map { cmb => combine(b)(cmb) }
+      } getOrElse(Monad[M].pure(empty))
+    }
+
+  /**
+   * foled is the forgetful version of chain
+   *
+   */
+
+  def foled[A, B, M[_]: Monad](
+    a: A,
+    f: A => M[Option[B]],
+    g: B => A): M[Option[B]] =
+    f(a).flatMap { optB =>
+      optB.map { b =>
+        foled(g(b), f, g) map { subOptB =>
+          if( subOptB.isDefined ) {
+            subOptB
+          } else {
+            optB
+          }
+        }
+      } getOrElse(Monad[M].pure(Option.empty))
+    }
 
   /**
    * mergeStreams takes streams that are ordered w.r.t. Order[T]

@@ -4,8 +4,6 @@ trait GameIO[G, O, M, MS, MM] {
 
   def parseMove(game: G, input: String): Either[String, M]
 
-  def displayerFor(game: G, player: Player): String => Unit
-
   def introMessage(game: G): String
 
   def displayMoveTo(game: G, move: MM, mover: Player, observer: Player): String

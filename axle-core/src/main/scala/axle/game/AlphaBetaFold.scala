@@ -9,7 +9,7 @@ case class AlphaBetaFold[G, S, O, M, MS, MM, V, N: Order, PM[_, _]](
   cutoff: Map[Player, N],
   done:   Boolean)(
   implicit
-  evGame: Game[G, S, O, M, MS, MM, V, PM]) {
+  evGame: Game[G, S, O, M, MS, MM]) {
 
   def process(
     move:      M,

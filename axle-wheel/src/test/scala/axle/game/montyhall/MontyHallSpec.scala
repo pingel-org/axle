@@ -3,6 +3,7 @@ package axle.game.montyhall
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
+import spire.math.Rational
 import spire.random.Generator.rng
 
 import axle.probability._
@@ -16,48 +17,68 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
 
   implicit val rat = new spire.math.RationalAlgebra()
 
-  val contestant = Player("C", "Contestant")
-  val monty = Player("M", "Monty Hall")
+  val game = MontyHall()
 
-  val game = MontyHall(
-    contestant, interactiveMove, axle.algebra.ignore,
-    monty, interactiveMove, axle.algebra.ignore)
+  val rm = randomMove[
+    MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove,
+    MontyHallState, Option[MontyHallMove],
+    Rational, ConditionalProbabilityTable](game).andThen(Option.apply _)
 
-  val rGame = MontyHall(
-    contestant, randomMove, axle.algebra.ignore,
-    monty, randomMove, axle.algebra.ignore)
-
-  test("random game has an intro message") {
-    introMessage(rGame) should include("Monty")
+  test("game has an intro message") {
+    introMessage(game) should include("Monty")
   }
 
   test("random game produces moveStateStream") {
-    moveStateStream(rGame, startState(rGame), rng).take(2) should have length 2
+
+    val mss = moveStateStream(
+      game,
+      startState(game),
+      _ => rm,
+      rng).get
+      
+    mss.take(2) should have length 2
   }
 
   test("random game plays") {
-    val endState = play(rGame, startState(rGame), false, rng)
-    moves(rGame, endState) should have length 0
+
+    val endState = play(
+      game,
+      _ => rm,
+      startState(game),
+      rng).get
+
+    moves(game, endState) should have length 0
   }
 
   test("random game produces game stream") {
-    val games = gameStream(rGame, startState(rGame), false, rng).take(2)
-    games should have length 2
+
+    val games = gameStream(
+      game,
+      _ => rm,
+      startState(game),
+      i => i < 10,
+      rng).get
+
+    games should have length 10
   }
 
   test("startFrom returns the start state") {
+
     val state = startState(game)
     val move = moves(game, state).head
     val nextState = applyMove(game, state, move)
     val newStart = startFrom(game, nextState).get
+
     moves(game, newStart) should have length 3
     outcome(game, state) should be(None)
   }
 
   test("masked-sate mover is the same as raw state move") {
+
     val state = startState(game)
     val move = moves(game, state).head
     val nextState = applyMove(game, state, move)
+
     moverM(game, state) should be(mover(game, state))
     moverM(game, nextState) should be(mover(game, nextState))
   }
@@ -65,9 +86,9 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
   test("starting moves are three-fold, display to monty with 'something'") {
 
     val startingMoves = moves(game, startState(game))
-    val mm = evGame.maskMove(game, startingMoves.head, contestant, monty)
+    val mm = evGame.maskMove(game, startingMoves.head, game.contestant, game.monty)
 
-    displayMoveTo(game, mm, contestant, monty) should include("placed")
+    displayMoveTo(game, mm, game.contestant, game.monty) should include("placed")
     startingMoves should have length 3
   }
 

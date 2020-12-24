@@ -3,8 +3,9 @@ package axle.game
 import cats.kernel.Eq
 
 import spire.math._
-import spire.random.Dist
+import spire.math.Rational.RationalAlgebra
 import spire.random.Generator.rng
+
 import axle.probability._
 
 import org.scalatest.funsuite._
@@ -54,11 +55,8 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
       (Mcc, (Sc, Rational(1))))
   )
 
-  implicit val evGame: Game[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove,Rational,ConditionalProbabilityTable] =
-    new Game[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove,Rational,ConditionalProbabilityTable] {
-
-      def probabilityDist: Dist[Rational] =
-        rationalProbabilityDist
+  implicit val evGame: Game[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove] =
+    new Game[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove] {
 
       def startState(game: TestGame): TestGameState =
         Sa
@@ -84,10 +82,6 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
       def maskMove(game: TestGame, move: TestGameMove, mover: Player, observer: Player): TestGameMove =
         move
 
-      def strategyFor(game: TestGame, player: Player): (TestGame, TestGameState) => ConditionalProbabilityTable[TestGameMove, Rational] =
-        (game: TestGame, state: TestGameState) =>
-          ConditionalProbabilityTable(movesMap(state).view.mapValues(_._2).toMap)
-
       def isValid(game: TestGame, state: TestGameState, move: TestGameMove): Either[String, TestGameMove] =
         Right(move)
 
@@ -97,11 +91,8 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
       def outcome(game: TestGame, state: TestGameState): Option[TestGameOutcome] =
         None
 
-      implicit def sampler = ConditionalProbabilityTable.samplerWitness
-
     }
 
-  import evGame._
 
   // val pm = ConditionalProbabilityTable.probabilityWitness
 
@@ -130,12 +121,33 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
     //  Sb: (2/3,  0  ) => 2/3 + (1/3 .  0  ) = 2/3
     //  Sc: (0  ,  1/4) => 0   + (1/3 .  1/4) = 1/12
 
+    // val rm = randomMove[TestGame,TestGameState,TestGameOutcome,TestGameMove,TestGameState,TestGameMove,Rational,ConditionalProbabilityTable](game).andThen(Option.apply _)
+
+
+// found   :
+//   Map[MoveFromRandomStateSpec.this.TestGameMove,spire.math.Rational] => axle.probability.ConditionalProbabilityTable[MoveFromRandomStateSpec.this.TestGameMove,spire.math.Rational]
+//
+// required:
+//   Map[MoveFromRandomStateSpec.this.TestGameMove,(MoveFromRandomStateSpec.this.TestGameState, spire.math.Rational)] => axle.probability.ConditionalProbabilityTable[MoveFromRandomStateSpec.this.TestGameMove,spire.math.Rational]
+//
+
+    val rm: TestGameState => Option[ConditionalProbabilityTable[TestGameMove,Rational]] =
+      (s: TestGameState) =>
+        movesMap.get(s).map(m =>
+          ConditionalProbabilityTable.apply[TestGameMove, Rational](
+            m.map( kv => kv._1 -> kv._2._2 )
+          )
+        )
+
+    // movesMap: Map[TestGameState, Map[TestGameMove, (TestGameState, Rational)]]
+
     val actualResult = ((1 to 1000) map { i =>
       moveFromRandomState(
         game,
         currentStateModel,
-        (m: Map[TestGameState, Rational]) => ConditionalProbabilityTable(m),
-        rng)
+        _ => rm,
+        ConditionalProbabilityTable.apply[TestGameState, Rational],
+        rng).get
     }) toSet
 
     val expectedResult = Set(
