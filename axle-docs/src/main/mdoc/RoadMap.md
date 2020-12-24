@@ -15,12 +15,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* GuessRiffleProperties
-  * Properties.perfectOptionsPlayerStrategy
-  * Remember that GuessRiffle generated an infinite gameStream
-  * perfect is used twice. bug?
-
-* AI mover takes S, not MS. How can I adapt this?
 * Use interactiveMove for demo
 
 ```scala
@@ -38,6 +32,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
     }
 ```
 
+* Demo AI mover in docs.  AI mover takes S, not MS. How can I adapt this?
+* `Game.players` is only used by `outcomeRingHeuristic`
+* `Game.moverM` is only used in `axle.game.Strategies.interactiveMove`
+* Simplify `GuessRiffleProperties` (especially second property)
 * Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
 * stateStreamMap only used in GuessRiffleProperties -- stop using chain?
 * stateStrategyMoveStream only used in GuessRiffleProperties
@@ -50,7 +48,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * stop using chain?
 * Game.players should be a part of GameState?
 * Display to player the elapsed moves /and/ the state diff
-
 * The references to `movesMap` in `MoveFromRandomStateSpec.scala` illustrate a need for a cleaner way to create a hard-coded strategy -- which could just be in the form of a couple utility functions from `movesMap` to the data needed by `evGame.{moves,applyMove}` and `rm` strategy
 
 ## 0.6.1 Control Entropy Consumption
