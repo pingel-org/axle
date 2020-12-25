@@ -61,24 +61,19 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
         MontyHallState, Option[MontyHallMove],
         Rational, ConditionalProbabilityTable](game)
 
-    val rmIO: MontyHallState => cats.effect.IO[ConditionalProbabilityTable[MontyHallMove, Rational]] =
+    val rmIO: MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] =
       rm.andThen( m => IO { m })
 
-    val strategies: Player => MontyHallState => cats.effect.IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = 
-      (p: Player) => 
-        if( p == game.monty ) {
-          observeStrategy(
-            game.monty,
-            game,
-            printMultiLinePrefixed[cats.effect.IO]("Monty Hall")
-          )(rmIO)
-        } else {
-          observeStrategy(
-            game.contestant,
-            game,
-            printMultiLinePrefixed[cats.effect.IO]("Contestant")
-          )(rmIO)
-        }
+    // val strategies: Player => MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = 
+    //   (p: Player) => 
+    //     if( p == game.monty ) {
+    //       observeStrategy(game.monty, game, printMultiLinePrefixed[IO]("Monty Hall"))(rmIO)
+    //     } else {
+    //       observeStrategy(game.contestant, game, printMultiLinePrefixed[IO]("Contestant"))(rmIO)
+    //     }
+
+    val strategies: Player => MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = 
+      (p: Player) => observeStrategy(p, game, printMultiLinePrefixed[IO](p.id))(rmIO)
 
     val endState = play(
       game,
