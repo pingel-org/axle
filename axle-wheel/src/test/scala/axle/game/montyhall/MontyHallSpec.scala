@@ -50,6 +50,45 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
     moves(game, endState) should have length 0
   }
 
+  test("observed random game plays") {
+
+    import cats.effect._
+    import axle.IO.printMultiLinePrefixed
+
+    val rm: MontyHallState => ConditionalProbabilityTable[MontyHallMove, Rational] =
+      randomMove[
+        MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove,
+        MontyHallState, Option[MontyHallMove],
+        Rational, ConditionalProbabilityTable](game)
+
+    val rmIO: MontyHallState => cats.effect.IO[ConditionalProbabilityTable[MontyHallMove, Rational]] =
+      rm.andThen( m => IO { m })
+
+    val strategies: Player => MontyHallState => cats.effect.IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = 
+      (p: Player) => 
+        if( p == game.monty ) {
+          observeStrategy(
+            game.monty,
+            game,
+            printMultiLinePrefixed[cats.effect.IO]("Monty Hall")
+          )(rmIO)
+        } else {
+          observeStrategy(
+            game.contestant,
+            game,
+            printMultiLinePrefixed[cats.effect.IO]("Contestant")
+          )(rmIO)
+        }
+
+    val endState = play(
+      game,
+      strategies,
+      startState(game),
+      rng).unsafeRunSync()
+
+    moves(game, endState) should have length 0
+  }
+
   test("random game produces game stream") {
 
     val games = gameStream(
