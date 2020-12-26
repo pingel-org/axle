@@ -52,7 +52,7 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
 
   test("observed random game plays") {
 
-    import cats.effect._
+    import cats.effect.IO
     import axle.IO.printMultiLinePrefixed
 
     val rm: MontyHallState => ConditionalProbabilityTable[MontyHallMove, Rational] =
@@ -64,6 +64,8 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
     val rmIO: MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] =
       rm.andThen( m => IO { m })
 
+    // For a per-player observation, use a pattern like this:
+    //
     // val strategies: Player => MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = 
     //   (p: Player) => 
     //     if( p == game.monty ) {
@@ -75,11 +77,21 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
     val strategies: Player => MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = 
       (p: Player) => observeStrategy(p, game, printMultiLinePrefixed[IO](p.id))(rmIO)
 
-    val endState = play(
-      game,
-      strategies,
-      startState(game),
-      rng).unsafeRunSync()
+    // For interactive play, use a pattern like this:
+
+    // val strategiesInteractive = (p: Player) => {
+
+    //   val reader = axle.IO.getLine[IO] _
+    //   val writer = axle.IO.printMultiLinePrefixed[IO](p.id) _
+
+    //   val is = interactiveStrategy[
+    //     MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove,
+    //     MontyHallState, Option[MontyHallMove],
+    //     IO, Rational, ConditionalProbabilityTable](game, p, reader, writer)
+    //   observeStrategy(p, game, writer)(is)
+    // }
+
+    val endState = play(game, strategies, startState(game), rng).unsafeRunSync()
 
     moves(game, endState) should have length 0
   }

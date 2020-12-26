@@ -16,6 +16,34 @@ import axle.syntax.sampler._
 
 package object game {
 
+  def userInput[G, S, O, M, MS, MM,
+    F[_]: cats.effect.Sync](
+    game: G,
+    state: MS,
+    reader: () => F[String],
+    writer: String => F[Unit]
+  )(
+    implicit
+    evGame:   Game[G, S, O, M, MS, MM],
+    evGameIO: GameIO[G, O, M, MS, MM]
+  ): F[M] = {
+
+    val fInput = for {
+      _ <- writer("Enter move: ")
+      input <- reader()
+      _ <- writer(input)
+    } yield input
+
+    val fEitherCPT: F[Either[String, M]] =
+      fInput.map { input => 
+        evGameIO.parseMove(game, input).flatMap { parsedMove => {
+          evGame.isValid(game, state, parsedMove)
+        }}
+      }
+
+    fEitherCPT.flatMap(_.map(Monad[F].pure).getOrElse(userInput(game, state, reader, writer)))
+  }
+
   def nextMoveState[
     G, S, O, M, MS, MM, V,
     PM[_, _],

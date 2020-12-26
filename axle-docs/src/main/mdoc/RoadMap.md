@@ -15,30 +15,18 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* Use interactiveMove for demo
-
-```scala
-    interactiveMove[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational, ConditionalProbabilityTable, cats.effect.IO](
-      _ => () => axle.IO.getLine[cats.effect.IO](),
-      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s)
-    ),
-```
-
-```scala
-    // These should be part of State displaying
-    evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)
-    evGame.outcome(game, lastState) foreach { outcome =>
-      evGameIO.displayOutcomeTo(game, outcome, observer)
-    }
-```
-
+* Document `interactive` from `MontyHallSpec`
+* Test `axle.game.Strategies.userInput`
 * Demo AI mover in docs.  AI mover takes S, not MS. How can I adapt this?
-* `Game.players` is only used by `outcomeRingHeuristic`
-* `Game.moverM` is only used in `axle.game.Strategies.interactiveMove`
-* Simplify `GuessRiffleProperties` (especially second property)
-* Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
-* stateStreamMap only used in GuessRiffleProperties -- stop using chain?
-* stateStrategyMoveStream only used in GuessRiffleProperties
+
+```scala
+// These should be part of State displaying
+evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)
+evGame.outcome(game, lastState) foreach { outcome =>
+  evGameIO.displayOutcomeTo(game, outcome, observer)
+}
+```
+
 * GameIO -> GameSerDe (or maybe move methods to Game trait)
   * or maybe only use w/ interactiveMove
 * moveStateStream
@@ -46,8 +34,17 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * unless we give this job to `State`...
     * Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
   * stop using chain?
-* Game.players should be a part of GameState?
 * Display to player the elapsed moves /and/ the state diff
+
+* `Game.moverM` is never used
+
+* Simplify `GuessRiffleProperties` (especially second property)
+* `Game.players` is only used by `outcomeRingHeuristic`
+* Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
+* stateStreamMap only used in GuessRiffleProperties -- stop using chain?
+* stateStrategyMoveStream only used in GuessRiffleProperties
+* Game.players should be a part of GameState?
+
 * The references to `movesMap` in `MoveFromRandomStateSpec.scala` illustrate a need for a cleaner way to create a hard-coded strategy -- which could just be in the form of a couple utility functions from `movesMap` to the data needed by `evGame.{moves,applyMove}` and `rm` strategy
 
 ## 0.6.1 Control Entropy Consumption

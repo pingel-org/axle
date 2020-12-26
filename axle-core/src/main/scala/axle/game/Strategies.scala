@@ -49,64 +49,26 @@ object Strategies {
       monadPM.pure(move)
     }
 
-  def userInput[G, S, O, M, MS, MM,
+  def interactiveStrategy[
+    G, S, O, M, MS, MM,
+    F[_]: Sync,
     V: Field,
-    PM[_, _],
-    F[_]: Sync](
-    game: G,
-    state: MS,
-    reader: () => F[String],
-    writer: String => F[Unit]
-  )(
-    implicit
-    evGame:   Game[G, S, O, M, MS, MM],
-    evGameIO: GameIO[G, O, M, MS, MM],
-    monadPM: Monad[PM[?, V]]
-  ): F[PM[M, V]] = {
-
-    val fInput = for {
-      _ <- writer("Enter move: ")
-      input <- reader()
-      _ <- writer(input)
-    } yield input
-
-    val fEitherCPT: F[Either[String, PM[M, V]]] =
-      fInput.map { input => 
-        evGameIO.parseMove(game, input).flatMap { parsedMove => {
-          evGame.isValid(game, state, parsedMove).map { move =>
-            monadPM.pure(move)
-          }
-        }}
-      }
-
-    fEitherCPT.flatMap(_.map(Monad[F].pure).getOrElse(userInput(game, state, reader, writer)))
-  }
-
-  // def interactiveMove[
-  //   G, S, O, M, MS, MM,
-  //   V: Order: Field,
-  //   PM[_, _],
-  //   F[_]: Sync: Monad](
-  //     playerToReader: Player => () => F[String],
-  //     playerToWriter: Player => String => F[Unit]
-  //   )(
-  //   implicit
-  //   evGame:   Game[G, S, O, M, MS, MM],
-  //   evGameIO: GameIO[G, O, M, MS, MM],
-  //   monadPM: Monad[PM[?, V]]
-  //   ): (G, MS) => F[PM[M, V]] =
-  //   (game: G, state: MS) => {
-
-  //     val mover = evGame.moverM(game, state).get // TODO .get
-  //     val reader = playerToReader(mover)
-  //     val writer = playerToWriter(mover)
-
-  //     for {
-  //       _ <- writer(evGameIO.introMessage(game))
-  //       _ <- writer(evGameIO.displayStateTo(game, state, mover))
-  //       ui <- userInput[G, S, O, M, MS, MM, V, PM, F](game, state, reader, writer)
-  //     } yield ui
-  // }
+    PM[_, _]](
+      game: G,
+      p: Player,
+      reader: () => F[String],
+      writer: String => F[Unit]
+    )(implicit
+      evGame:   Game[G, S, O, M, MS, MM],
+      evGameIO: GameIO[G, O, M, MS, MM],
+      monadPM: Monad[PM[?, V]]
+    ): MS => F[PM[M, V]] =
+    (state: MS) =>
+      userInput[G, S, O, M, MS, MM, F](
+        game,
+        state,
+        reader,
+        writer).map(monadPM.pure)
 
   def observeStrategy[
     G, S, O, M, MS, MM,
@@ -127,23 +89,6 @@ object Strategies {
         _ <- observe(evGameIO.displayStateTo(game, state, mover))
         moveModel <- strategy(state)
       } yield moveModel
-
-  // def readStrategy[
-  //   G, S, O, M, MS, MM,
-  //   V: Order: Field,
-  //   PM[_, _],
-  //   F[_]: Sync: Monad](
-  //     mover: Player,
-  //     reader: () => F[String],
-  //     writer: String => F[Unit]
-  //   )(
-  //   implicit
-  //   evGame:   Game[G, S, O, M, MS, MM],
-  //   evGameIO: GameIO[G, O, M, MS, MM],
-  //   monadPM: Monad[PM[?, V]]
-  //   ): (G, MS) => F[PM[M, V]] =
-  //   (game: G, state: MS) =>
-  //     userInput[G, S, O, M, MS, MM, V, PM, F](game, state, reader, writer)
 
   import axle.probability.ConditionalProbabilityTable
   def randomMove[
