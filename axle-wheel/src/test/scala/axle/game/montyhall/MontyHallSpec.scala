@@ -62,7 +62,7 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
       Rational, ConditionalProbabilityTable, Option](
       game,
       startState(game),
-      player => fuzzStrategy(ai4.andThen(Option.apply)),
+      player => fuzzStrategy[MontyHallMove, MontyHallState, Rational, ConditionalProbabilityTable](ai4).andThen(Option.apply),
       rng).get
       
     mss.take(2) should have length 2

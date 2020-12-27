@@ -121,7 +121,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
       moveStateStream(
         game,
         start,
-        _ => hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(silence).andThen(Option.apply),
+        _ => fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(silence)).andThen(Option.apply),
         rng
       ).get.last._3).get
 
@@ -130,7 +130,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
       moveStateStream(
         game,
         start,
-        _ => hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(betrayal).andThen(Option.apply),
+        _ => fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(betrayal)).andThen(Option.apply),
         rng
       ).get.last._3).get
 
@@ -142,9 +142,9 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
     def hardCoding1(player: Player): PrisonersDilemmaState => ConditionalProbabilityTable[PrisonersDilemmaMove, Rational] =
       if ( player === p1 ) {
-        hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(silence _)
+        fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(silence))
       } else if ( player === p2 ) {
-        hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(betrayal _)
+        fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(betrayal))
       } else {
         ???
       }
@@ -159,9 +159,9 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
     def hardCoding2(player: Player): PrisonersDilemmaState => ConditionalProbabilityTable[PrisonersDilemmaMove, Rational] =
       if ( player === p1 ) {
-        hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(betrayal _)
+        fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(betrayal))
       } else if ( player === p2 ) {
-        hardCodedStringStrategy[PrisonersDilemma, PrisonersDilemmaState, PrisonersDilemmaOutcome, PrisonersDilemmaMove, PrisonersDilemmaState, Option[PrisonersDilemmaMove], Rational, ConditionalProbabilityTable](game)(silence _)
+        fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(silence))
       } else {
         ???
       }

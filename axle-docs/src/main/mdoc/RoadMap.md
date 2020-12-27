@@ -16,12 +16,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 * `unmask` for `aiMover` to allow it to fit `MS => PM[M, V]` pattern
 
-* Remove `PM` from `hardCodedStringStrategy` and `aiMover`
-
-* Document `strategiesInteractive` from `MontyHallSpec`
 * `mover` should return `Either[Outcome, Player]`?
 * Display Outcome (see error `MS` vs `S` in `observeState`)
 * Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
+* Document `strategiesInteractive` from `MontyHallSpec`
 * Document `aiMover` from `MontyHallSpec`
 
 * moveStateStream

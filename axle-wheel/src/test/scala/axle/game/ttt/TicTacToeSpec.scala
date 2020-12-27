@@ -172,9 +172,9 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
     def strategyFor(player: Player): TicTacToeState => ConditionalProbabilityTable[TicTacToeMove, Rational] =
       if ( player == x ) {
-        hardCodedStringStrategy[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game)(xMove)
+        fuzzStrategy[TicTacToeMove, TicTacToeState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(xMove))
       } else if ( player == o ) {
-        hardCodedStringStrategy[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game)(oMove)
+        fuzzStrategy[TicTacToeMove, TicTacToeState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(oMove))
       } else {
         ???
       }
@@ -213,9 +213,9 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
     def strategyFor(player: Player): TicTacToeState => ConditionalProbabilityTable[TicTacToeMove, Rational] =
       if ( player == x) {
-        hardCodedStringStrategy[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game)(xMove)
+        fuzzStrategy[TicTacToeMove, TicTacToeState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(xMove))
       } else if ( player == o) {
-        hardCodedStringStrategy[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game)(oMove)
+        fuzzStrategy[TicTacToeMove, TicTacToeState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(oMove))
       } else {
         ???
       }
@@ -253,9 +253,9 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
     def strategyFor(player: Player): TicTacToeState => ConditionalProbabilityTable[TicTacToeMove, Rational] =
       if ( player == x ) {
-        hardCodedStringStrategy[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game)(xMove)
+        fuzzStrategy[TicTacToeMove, TicTacToeState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(xMove))
       } else if ( player == o ) {
-        hardCodedStringStrategy[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game)(oMove)
+        fuzzStrategy[TicTacToeMove, TicTacToeState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(oMove))
       } else {
         ???
       }

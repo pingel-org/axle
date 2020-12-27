@@ -33,34 +33,29 @@ object Strategies {
       move
     }
 
-  def hardCodedStringStrategy[
-    G, S, O, M, MS, MM,
-    V: Order: Field,
-    PM[_, _]](
+  def hardCodedStringStrategy[G, S, O, M, MS, MM](
       game: G
     )(
     input: (G, MS) => String)(
     implicit
     evGame:   Game[G, S, O, M, MS, MM],
-    evGameIO: GameIO[G, O, M, MS, MM],
-    monadPM: Monad[PM[?, V]]): MS => PM[M, V] =
+    evGameIO: GameIO[G, O, M, MS, MM]
+    ): MS => M =
     (state: MS) => {
       val parsed = evGameIO.parseMove(game, input(game, state)).toOption.get
       val validated = evGame.isValid(game, state, parsed)
-      val move = validated.toOption.get
-      monadPM.pure(move)
+      validated.toOption.get
     }
 
   def fuzzStrategy[
     M, MS,
-    F[_]: Monad,
     V: Field: Order,
     PM[_, _]](
-      strategy: MS => F[M]
+      strategy: MS => M
     )(implicit
       monadPM: Monad[PM[?, V]]
-    ): MS => F[PM[M, V]] =
-      (state: MS) => strategy(state).map(monadPM.pure)
+    ): MS => PM[M, V] =
+      (state: MS) => monadPM.pure(strategy(state))
 
   import axle.probability.ConditionalProbabilityTable
   def randomMove[
