@@ -64,30 +64,26 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
     val rmIO: MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] =
       rm.andThen( m => IO { m })
 
-    // For a per-player observation, use a pattern like this:
-    //
-    // val strategiesByPlayer: Player => MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = 
-    //   (p: Player) => 
-    //     if( p == game.monty ) {
-    //       observeStrategy(game.monty, game, printMultiLinePrefixed[IO]("Monty Hall"))(rmIO)
-    //     } else {
-    //       observeStrategy(game.contestant, game, printMultiLinePrefixed[IO]("Contestant"))(rmIO)
-    //     }
-
     val strategies: Player => MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = 
-      (p: Player) => observeStrategy(p, game, printMultiLinePrefixed[IO](p.id))(rmIO)
+      (player: Player) => {
+        val writer = printMultiLinePrefixed[IO](player.id) _
+        (state: MontyHallState) =>
+          for {
+            restate <- observeState(player, game, state, writer)
+            move <- rmIO(restate)
+          } yield move
+      }
 
     // For interactive play, use this:
 
-    // val strategiesInteractive = (player: Player) =>
-    //   interactiveStrategy[
-    //     MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove,
-    //     MontyHallState, Option[MontyHallMove],
-    //     IO, Rational, ConditionalProbabilityTable](
-    //       game,
-    //       player,
-    //       axle.IO.getLine[IO] _,
-    //       axle.IO.printMultiLinePrefixed[IO](player.id) _)
+    // val strategiesInteractive =
+    //   (player: Player) =>
+    //     fuzzStrategy[MontyHallMove, MontyHallState, IO, Rational, ConditionalProbabilityTable](
+    //       interactiveMove(
+    //         game,
+    //         player,
+    //         axle.IO.getLine[IO] _,
+    //         axle.IO.printMultiLinePrefixed[IO](player.id) _))
 
     val endState = play(game, strategies, startState(game), rng).unsafeRunSync()
 

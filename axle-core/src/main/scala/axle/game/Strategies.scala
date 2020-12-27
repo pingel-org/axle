@@ -49,45 +49,16 @@ object Strategies {
       monadPM.pure(move)
     }
 
-  def interactiveStrategy[
-    G, S, O, M, MS, MM,
+  def fuzzStrategy[
+    M, MS,
     F[_]: Sync,
     V: Field: Order,
     PM[_, _]](
-      game: G,
-      p: Player,
-      reader: () => F[String],
-      writer: String => F[Unit]
+      strategy: MS => F[M]
     )(implicit
-      evGame:   Game[G, S, O, M, MS, MM],
-      evGameIO: GameIO[G, O, M, MS, MM],
       monadPM: Monad[PM[?, V]]
     ): MS => F[PM[M, V]] =
-    observeStrategy(p, game, writer)(
-      (state: MS) =>
-        userInput(game, state, reader, writer)
-        .map(monadPM.pure)
-    )
-
-  def observeStrategy[
-    G, S, O, M, MS, MM,
-    V: Order: Field,
-    PM[_, _],
-    F[_]: Sync: Monad](
-      mover: Player,
-      game: G,
-      observe: String => F[Unit]
-    )(
-      strategy: MS => F[PM[M, V]],
-    )(
-      implicit evGameIO: GameIO[G, O, M, MS, MM]
-    ): MS => F[PM[M, V]] =
-    (state: MS) =>
-      for {
-        _ <- observe(evGameIO.introMessage(game))
-        _ <- observe(evGameIO.displayStateTo(game, state, mover))
-        moveModel <- strategy(state)
-      } yield moveModel
+      (state: MS) => strategy(state).map(monadPM.pure)
 
   import axle.probability.ConditionalProbabilityTable
   def randomMove[

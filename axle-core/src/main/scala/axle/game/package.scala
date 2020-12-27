@@ -2,6 +2,7 @@ package axle
 
 import cats.Monad
 import cats.kernel.Order
+import cats.effect.Sync
 import cats.implicits._
 
 import spire.algebra.Field
@@ -43,6 +44,36 @@ package object game {
 
     fEitherCPT.flatMap(_.map(Monad[F].pure).getOrElse(userInput(game, state, reader, writer)))
   }
+
+  def observeState[
+    G, S, O, M, MS, MM,
+    F[_]: Sync: Monad](
+      mover: Player,
+      game: G,
+      state: MS,
+      observe: String => F[Unit]
+    )(
+      implicit evGameIO: GameIO[G, O, M, MS, MM]
+    ): F[MS] =
+      for {
+        _ <- observe(evGameIO.introMessage(game))
+        _ <- observe(evGameIO.displayStateTo(game, state, mover))
+      } yield state
+
+  def interactiveMove[G, S, O, M, MS, MM, F[_]: Sync](
+      game: G,
+      p: Player,
+      reader: () => F[String],
+      writer: String => F[Unit]
+    )(implicit
+      evGame:   Game[G, S, O, M, MS, MM],
+      evGameIO: GameIO[G, O, M, MS, MM]
+    ): MS => F[M] =
+      (state: MS) =>
+        for {
+          restate <- observeState(p, game, state, writer)
+          move <- userInput(game, restate, reader, writer)
+        } yield move
 
   def nextMoveState[
     G, S, O, M, MS, MM, V,

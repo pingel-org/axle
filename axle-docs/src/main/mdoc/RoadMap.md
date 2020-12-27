@@ -15,9 +15,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
+* Fix and simplify `Strategies.hardCodedStringStrategy`
+
 * `Game.moverM` is never used
 
 * Demo AI mover in docs.  AI mover takes S, not MS. How can I adapt this?
+
 * `Game.players` is only used by `outcomeRingHeuristic`
 * Game.players should be a part of GameState?
 
