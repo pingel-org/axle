@@ -90,16 +90,6 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
     outcome(game, state) should be(None)
   }
 
-  test("masked-sate mover be the same as raw state mover") {
-
-    val state = startState(game)
-    val move = moves(game, state).head
-    val nextState = applyMove(game, state, move)
-
-    moverM(game, state) should be(mover(game, state))
-    moverM(game, nextState) should be(mover(game, nextState))
-  }
-
   test("starting moves are nine-fold, display to O with 'put an', and have string descriptions that include 'upper'") {
 
     val startingMoves = moves(game, startState(game))

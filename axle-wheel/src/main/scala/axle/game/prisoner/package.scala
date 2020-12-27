@@ -52,17 +52,6 @@ package object prisoner {
           None
         }
 
-      def moverM(
-        game: PrisonersDilemma,
-        s:    PrisonersDilemmaState): Option[Player] =
-        if (!s.p1Moved) {
-          Some(game.p1)
-        } else if (s.p2Move.isEmpty) {
-          Some(game.p2)
-        } else {
-          None
-        }
-
       def moves(
         game: PrisonersDilemma,
         s:    PrisonersDilemmaState): Seq[PrisonersDilemmaMove] =

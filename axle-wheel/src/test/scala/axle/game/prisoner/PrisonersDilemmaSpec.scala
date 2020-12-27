@@ -77,16 +77,6 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
     outcome(game, state) should be(None)
   }
 
-  test("masked-sate mover are the same as raw state mover") {
-
-    val state = startState(game)
-    val move = moves(game, state).head
-    val nextState = applyMove(game, state, move)
-
-    moverM(game, state) should be(mover(game, state))
-    moverM(game, nextState) should be(mover(game, nextState))
-  }
-
   test("starting moves are two-fold, display to p2 with 'something'") {
 
     val startingMoves = moves(game, startState(game))
@@ -184,7 +174,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
     p1silentOutcome.p1YearsInPrison should be(p2silentOutcome.p2YearsInPrison)
     p1silentOutcome.p2YearsInPrison should be(p2silentOutcome.p1YearsInPrison)
-    moverM(game, lastStateP1Silent) should be(None)
+    mover(game, lastStateP1Silent) should be(None)
   }
 
 }

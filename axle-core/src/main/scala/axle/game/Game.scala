@@ -19,9 +19,6 @@ trait Game[G, S, O, M, MS, MM] {
 
   def mover(game: G, state: S): Option[Player]
 
-  // TODO rename to moverMasked?
-  def moverM(game: G, state: MS): Option[Player]
-
   def moves(game: G, state: MS): Seq[M]
 
   def maskState(game: G, state: S, observer: Player): MS

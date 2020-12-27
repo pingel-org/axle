@@ -200,8 +200,6 @@ package object poker {
 
       def mover(game: Poker, s: PokerState): Option[Player] = s._mover
 
-      def moverM(game: Poker, s: PokerStateMasked): Option[Player] = s.mover
-
       def moves(game: Poker, s: PokerStateMasked): Seq[PokerMove] = {
 
         s.mover map { mvr =>

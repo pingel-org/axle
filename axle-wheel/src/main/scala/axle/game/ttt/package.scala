@@ -38,9 +38,6 @@ package object ttt {
       def mover(game: TicTacToe, s: TicTacToeState): Option[Player] =
         s.moverOpt
 
-      def moverM(game: TicTacToe, s: TicTacToeState): Option[Player] =
-        mover(game, s)
-
       def moves(game: TicTacToe, s: TicTacToeState): Seq[TicTacToeMove] =
         mover(game, s).map { p => s.openPositions(game).map(TicTacToeMove(_, game.boardSize)) } getOrElse (List.empty)
 

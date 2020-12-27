@@ -66,11 +66,6 @@ package object guessriffle {
           Some(GuessRiffle.dealer)
         }
 
-      def moverM(
-        game: GuessRiffle,
-        s:    GuessRiffleState): Option[Player] =
-        mover(game, s)
-
       def moves(
         game: GuessRiffle,
         s:    GuessRiffleState): Seq[GuessRiffleMove] =

@@ -59,11 +59,6 @@ package object montyhall {
           None
         }
 
-      def moverM(
-        game: MontyHall,
-        s:    MontyHallState): Option[Player] =
-        mover(game, s)
-
       def moves(
         game: MontyHall,
         s:    MontyHallState): Seq[MontyHallMove] = {

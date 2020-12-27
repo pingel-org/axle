@@ -16,22 +16,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 * `unmask` for `aiMover` to allow it to fit `MS => PM[M, V]` pattern
 
-* Test `axle.game.Strategies.userInput`
-
 * Remove `PM` from `hardCodedStringStrategy` and `aiMover`
 
-```scala
-evGame.outcome(game, lastState) foreach { outcome =>
-  evGameIO.displayOutcomeTo(game, outcome, observer)
-}
-```
-
-* `Game.moverM` is never used
-* Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
-* `Game.players` is only used by `outcomeRingHeuristic`
-* `Game.players` should be a part of GameState?
-
 * Document `strategiesInteractive` from `MontyHallSpec`
+* `mover` should return `Either[Outcome, Player]`?
+* Display Outcome (see error `MS` vs `S` in `observeState`)
+* Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
 * Document `aiMover` from `MontyHallSpec`
 
 * moveStateStream
@@ -42,13 +32,20 @@ evGame.outcome(game, lastState) foreach { outcome =>
 * Should be part of State displaying `evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)`
 * Display to player the elapsed moves /and/ the state diff
 
+## 0.6.1 More scrutiny on axle.game
+
+* `Game.players` is only used by `outcomeRingHeuristic`
+* `Game.players` should be a part of GameState?
+
 * Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
+
 * Simplify `GuessRiffleProperties` (especially second property)
 * stateStreamMap only used in GuessRiffleProperties -- stop using chain?
 * stateStrategyMoveStream only used in GuessRiffleProperties
+
 * The references to `movesMap` in `MoveFromRandomStateSpec.scala` illustrate a need for a cleaner way to create a hard-coded strategy -- which could just be in the form of a couple utility functions from `movesMap` to the data needed by `evGame.{moves,applyMove}` and `rm` strategy
 
-## 0.6.1 Control Entropy Consumption
+## 0.6.2 Control Entropy Consumption
 
 * Identify all uses of `spire.random.Generator` (and other random value generation)
 
@@ -61,20 +58,20 @@ evGame.outcome(game, lastState) foreach { outcome =>
 
 * Replace `axle.game.moveFromRandomState.mapToProb`
 
-## 0.6.2 Logistic Regression
+## 0.6.3 Logistic Regression
 
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
 
-## 0.6.3 Genetic Algorithm
+## 0.6.4 Genetic Algorithm
 
 * Fix `GeneticAlgorithmSpec`
 * Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
 
-## 0.6.4 Logic
+## 0.6.5 Logic
 
 * Redo Logic using Abstract Algebra
 
-## 0.6.5
+## 0.6.6
 
 * Simple graph implementation so that `axle-core` can avoid including `axle-jung`
 
@@ -82,12 +79,12 @@ evGame.outcome(game, lastState) foreach { outcome =>
   * Will require externalizing the layout to its own.... typeclass?
   * Layout of bayesian network is quite bad -- check ABE SVG
 
-## 0.6.6 PNG
+## 0.6.7 PNG
 
 * `axle-png` to avoid Xvfb requirement during tests
 * Chicklet borders / colors on site
 
-## 0.6.7 AST
+## 0.6.8 AST
 
 * move ast view xml (how is it able to refer to `xml.Node`?)
   * ast.view.AstNodeFormatter (xml.Utility.escape)

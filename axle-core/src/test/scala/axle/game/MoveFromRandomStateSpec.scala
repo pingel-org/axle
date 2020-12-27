@@ -70,9 +70,6 @@ class MoveFromRandomStateSpec extends AnyFunSuite with Matchers {
       def mover(game: TestGame, state: TestGameState): Option[Player] =
         Some(player)
 
-      def moverM(game: TestGame, state: TestGameState): Option[Player] =
-        Some(player)
-
       def moves(game: TestGame, state: TestGameState): Seq[TestGameMove] =
         movesMap(state).keys.toVector
 

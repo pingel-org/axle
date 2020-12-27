@@ -30,18 +30,6 @@ class PokerSpec extends AnyFunSuite with Matchers {
     outcome(game, state) should be(None)
   }
 
-  test("masked-sate mover is the same as raw state mover") {
-
-    val state = startState(game)
-    val msp1 = maskState(game, state, p1)
-    val move = moves(game, msp1).head
-    val nextState = applyMove(game, state, move)
-    moverM(game, maskState(game, state, p1)) should be(mover(game, state))
-    moverM(game, maskState(game, state, p2)) should be(mover(game, state))
-    moverM(game, maskState(game, nextState, p1)) should be(mover(game, nextState))
-    moverM(game, maskState(game, nextState, p2)) should be(mover(game, nextState))
-  }
-
   test("only 1 player 'still in', not allow another game to begin") {
 
     val state = PokerState(
