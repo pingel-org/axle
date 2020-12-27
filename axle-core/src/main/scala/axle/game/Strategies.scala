@@ -1,7 +1,6 @@
 package axle.game
 
 import cats.Monad
-import cats.effect.Sync
 import cats.kernel.Order
 import cats.implicits._
 
@@ -21,17 +20,17 @@ object Strategies {
       (p, score)
     }).toMap
 
-  def aiMover[G, S, O, M, MS, MM, V: Order: Field, N: Order, PM[_, _]](
+  def aiMover[G, S, O, M, MS, MM, N: Order](
     game: G,
     unmask: MS => S,
     lookahead: Int,
     heuristic: S => Map[Player, N])(
     implicit
-    monad:  Monad[PM[?, V]],
-    evGame: Game[G, S, O, M, MS, MM]): MS => PM[M, V] =
+    evGame: Game[G, S, O, M, MS, MM]
+    ): MS => M =
     (state: MS) => {
       val (move, newState, values) = minimax(game, unmask(state), lookahead, heuristic)
-      monad.pure[M](move)
+      move
     }
 
   def hardCodedStringStrategy[
@@ -54,7 +53,7 @@ object Strategies {
 
   def fuzzStrategy[
     M, MS,
-    F[_]: Sync,
+    F[_]: Monad,
     V: Field: Order,
     PM[_, _]](
       strategy: MS => F[M]
@@ -85,7 +84,7 @@ object Strategies {
    * The third return value is a Map of Player to estimated best value from the returned state.
    */
 
-  def minimax[G, S, O, M, MS, MM, V, N: Order, PM[_, _]](
+  def minimax[G, S, O, M, MS, MM, V, N: Order](
     game:      G,
     state:     S,
     depth:     Int,

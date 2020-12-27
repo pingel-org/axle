@@ -141,15 +141,14 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
       outcome.winner.map(wp => if (wp == p) 1d else -1d).getOrElse(0d)
 
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
-    val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, Double, ConditionalProbabilityTable](
+    val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Double](
       game,
       ms => ms,
       4,
       outcomeRingHeuristic(game, h))
 
     val secondState = applyMove(game, startState(game), firstMove)
-    val cpt = ai4(secondState)
-    val move = cpt.sample(rng)
+    val move = ai4(secondState)
 
     move.position should be > 0
   }

@@ -50,7 +50,7 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
     val ai4 = aiMover[
       MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove,
       MontyHallState, Option[MontyHallMove],
-      Rational, Double, ConditionalProbabilityTable](
+      Double](
         game,
         ms => ms,
         4,
@@ -62,7 +62,7 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
       Rational, ConditionalProbabilityTable, Option](
       game,
       startState(game),
-      _ => ai4.andThen(Option.apply),
+      player => fuzzStrategy(ai4.andThen(Option.apply)),
       rng).get
       
     mss.take(2) should have length 2
