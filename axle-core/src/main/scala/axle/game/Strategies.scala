@@ -11,9 +11,11 @@ import spire.math.ConvertableTo
 
 object Strategies {
 
-  def outcomeRingHeuristic[G, S, O, M, MS, MM, V, N: Ring, PM[_, _]](game: G, f: (O, Player) => N)(
-    implicit
-    evGame: Game[G, S, O, M, MS, MM]): S => Map[Player, N] =
+  def outcomeRingHeuristic[G, S, O, M, MS, MM, V, N: Ring, PM[_, _]](
+    game: G,
+    f: (O, Player) => N
+    )(implicit
+      evGame: Game[G, S, O, M, MS, MM]): S => Map[Player, N] =
     (state: S) => evGame.players(game).map(p => {
       val score = evGame.outcome(game, state).map(o => f(o, p)).getOrElse(Ring[N].zero)
       (p, score)
@@ -21,13 +23,14 @@ object Strategies {
 
   def aiMover[G, S, O, M, MS, MM, V: Order: Field, N: Order, PM[_, _]](
     game: G,
+    unmask: MS => S,
     lookahead: Int,
     heuristic: S => Map[Player, N])(
     implicit
     monad:  Monad[PM[?, V]],
-    evGame: Game[G, S, O, M, MS, MM]): S => PM[M, V] =
-    (state: S) => {
-      val (move, newState, values) = minimax(game, state, lookahead, heuristic)
+    evGame: Game[G, S, O, M, MS, MM]): MS => PM[M, V] =
+    (state: MS) => {
+      val (move, newState, values) = minimax(game, unmask(state), lookahead, heuristic)
       monad.pure[M](move)
     }
 

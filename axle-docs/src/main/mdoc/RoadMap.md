@@ -14,31 +14,32 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Define `Indexed.slyce` for non-1-step Ranges
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
+* `unmask` for `aiMover` to allow it to fit `MS => PM[M, V]` pattern
 
-* Fix and simplify `Strategies.hardCodedStringStrategy`
+* Test `axle.game.Strategies.userInput`
 
-* `Game.moverM` is never used
-
-* Demo AI mover in docs.  AI mover takes S, not MS. How can I adapt this?
-
-* `Game.players` is only used by `outcomeRingHeuristic`
-* Game.players should be a part of GameState?
+* Remove `PM` from `hardCodedStringStrategy` and `aiMover`
 
 ```scala
-// These should be part of State displaying
-evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)
 evGame.outcome(game, lastState) foreach { outcome =>
   evGameIO.displayOutcomeTo(game, outcome, observer)
 }
 ```
 
+* `Game.moverM` is never used
+* Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
+* `Game.players` is only used by `outcomeRingHeuristic`
+* `Game.players` should be a part of GameState?
+
 * Document `strategiesInteractive` from `MontyHallSpec`
-* Test `axle.game.Strategies.userInput`
+* Document `aiMover` from `MontyHallSpec`
+
 * moveStateStream
   * rename to `moveStatePath` or `traceGame`
   * unless we give this job to `State`...
     * Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
   * stop using chain?
+* Should be part of State displaying `evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)`
 * Display to player the elapsed moves /and/ the state diff
 
 * Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)

@@ -153,6 +153,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
     implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
     val ai4 = aiMover[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, Double, ConditionalProbabilityTable](
       game,
+      ms => ms,
       4,
       outcomeRingHeuristic(game, h))
 

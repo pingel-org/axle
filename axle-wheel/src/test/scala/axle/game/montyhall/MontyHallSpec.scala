@@ -3,6 +3,7 @@ package axle.game.montyhall
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
+import spire.algebra.Field
 import spire.math.Rational
 import spire.random.Generator.rng
 
@@ -34,6 +35,34 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
       game,
       startState(game),
       _ => rm,
+      rng).get
+      
+    mss.take(2) should have length 2
+  }
+
+  test("AI vs. AI game produces moveStateStream") {
+
+    val h: (MontyHallOutcome, Player) => Double =
+      (outcome, player) => 1d // not a good heuristic
+
+    implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+
+    val ai4 = aiMover[
+      MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove,
+      MontyHallState, Option[MontyHallMove],
+      Rational, Double, ConditionalProbabilityTable](
+        game,
+        ms => ms,
+        4,
+        outcomeRingHeuristic(game, h))
+
+    val mss = moveStateStream[
+      MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove,
+      MontyHallState, Option[MontyHallMove],
+      Rational, ConditionalProbabilityTable, Option](
+      game,
+      startState(game),
+      _ => ai4.andThen(Option.apply),
       rng).get
       
     mss.take(2) should have length 2
