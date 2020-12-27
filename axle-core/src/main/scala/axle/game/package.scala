@@ -53,11 +53,18 @@ package object game {
       state: MS,
       observe: String => F[Unit]
     )(
-      implicit evGameIO: GameIO[G, O, M, MS, MM]
+      implicit
+      // evGame: Game[G, S, O, M, MS, MM],
+      evGameIO: GameIO[G, O, M, MS, MM]
     ): F[MS] =
       for {
         _ <- observe(evGameIO.introMessage(game))
         _ <- observe(evGameIO.displayStateTo(game, state, mover))
+        // _ <- observe(
+        //        evGame
+        //        .outcome(game, state)
+        //        .map( outcome => evGameIO.displayOutcomeTo(game, outcome, mover))
+        //        .getOrElse(""))
       } yield state
 
   def interactiveMove[G, S, O, M, MS, MM, F[_]: Sync](
@@ -312,7 +319,10 @@ package object game {
     distV: Dist[V],
     ringV: Ring[V],
     orderV: Order[V]): F[S] =
-    lastState(game, start, strategies, gen) map { _.get._3 } // NOTE Option.get
+    lastState(game, start, strategies, gen) map { lastTripleOpt =>
+      val lastState = lastTripleOpt.get._3 // NOTE Option.get
+      lastState
+    }
 
   def gameStream[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
     game:  G,
