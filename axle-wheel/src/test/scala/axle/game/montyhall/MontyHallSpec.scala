@@ -66,7 +66,7 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
 
     // For a per-player observation, use a pattern like this:
     //
-    // val strategies: Player => MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = 
+    // val strategiesByPlayer: Player => MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = 
     //   (p: Player) => 
     //     if( p == game.monty ) {
     //       observeStrategy(game.monty, game, printMultiLinePrefixed[IO]("Monty Hall"))(rmIO)
@@ -77,19 +77,17 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
     val strategies: Player => MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = 
       (p: Player) => observeStrategy(p, game, printMultiLinePrefixed[IO](p.id))(rmIO)
 
-    // For interactive play, use a pattern like this:
+    // For interactive play, use this:
 
-    // val strategiesInteractive = (p: Player) => {
-
-    //   val reader = axle.IO.getLine[IO] _
-    //   val writer = axle.IO.printMultiLinePrefixed[IO](p.id) _
-
-    //   val is = interactiveStrategy[
+    // val strategiesInteractive = (player: Player) =>
+    //   interactiveStrategy[
     //     MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove,
     //     MontyHallState, Option[MontyHallMove],
-    //     IO, Rational, ConditionalProbabilityTable](game, p, reader, writer)
-    //   observeStrategy(p, game, writer)(is)
-    // }
+    //     IO, Rational, ConditionalProbabilityTable](
+    //       game,
+    //       player,
+    //       axle.IO.getLine[IO] _,
+    //       axle.IO.printMultiLinePrefixed[IO](player.id) _)
 
     val endState = play(game, strategies, startState(game), rng).unsafeRunSync()
 

@@ -15,9 +15,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 
-* Document `interactive` from `MontyHallSpec`
-* Test `axle.game.Strategies.userInput`
+* `Game.moverM` is never used
+
 * Demo AI mover in docs.  AI mover takes S, not MS. How can I adapt this?
+* `Game.players` is only used by `outcomeRingHeuristic`
+* Game.players should be a part of GameState?
 
 ```scala
 // These should be part of State displaying
@@ -27,8 +29,8 @@ evGame.outcome(game, lastState) foreach { outcome =>
 }
 ```
 
-* GameIO -> GameSerDe (or maybe move methods to Game trait)
-  * or maybe only use w/ interactiveMove
+* Document `strategiesInteractive` from `MontyHallSpec`
+* Test `axle.game.Strategies.userInput`
 * moveStateStream
   * rename to `moveStatePath` or `traceGame`
   * unless we give this job to `State`...
@@ -36,15 +38,10 @@ evGame.outcome(game, lastState) foreach { outcome =>
   * stop using chain?
 * Display to player the elapsed moves /and/ the state diff
 
-* `Game.moverM` is never used
-
-* Simplify `GuessRiffleProperties` (especially second property)
-* `Game.players` is only used by `outcomeRingHeuristic`
 * Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
+* Simplify `GuessRiffleProperties` (especially second property)
 * stateStreamMap only used in GuessRiffleProperties -- stop using chain?
 * stateStrategyMoveStream only used in GuessRiffleProperties
-* Game.players should be a part of GameState?
-
 * The references to `movesMap` in `MoveFromRandomStateSpec.scala` illustrate a need for a cleaner way to create a hard-coded strategy -- which could just be in the form of a couple utility functions from `movesMap` to the data needed by `evGame.{moves,applyMove}` and `rm` strategy
 
 ## 0.6.1 Control Entropy Consumption

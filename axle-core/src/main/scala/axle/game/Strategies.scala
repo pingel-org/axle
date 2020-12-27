@@ -52,7 +52,7 @@ object Strategies {
   def interactiveStrategy[
     G, S, O, M, MS, MM,
     F[_]: Sync,
-    V: Field,
+    V: Field: Order,
     PM[_, _]](
       game: G,
       p: Player,
@@ -63,12 +63,11 @@ object Strategies {
       evGameIO: GameIO[G, O, M, MS, MM],
       monadPM: Monad[PM[?, V]]
     ): MS => F[PM[M, V]] =
-    (state: MS) =>
-      userInput[G, S, O, M, MS, MM, F](
-        game,
-        state,
-        reader,
-        writer).map(monadPM.pure)
+    observeStrategy(p, game, writer)(
+      (state: MS) =>
+        userInput(game, state, reader, writer)
+        .map(monadPM.pure)
+    )
 
   def observeStrategy[
     G, S, O, M, MS, MM,
