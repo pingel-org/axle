@@ -45,18 +45,25 @@ package object montyhall {
 
       def mover(
         game: MontyHall,
-        s:    MontyHallState): Option[Player] =
-        if (!s.carPlaced) {
-          assert(s.placement.isEmpty)
-          Some(game.monty)
-        } else if (s.firstChoice.isEmpty) {
-          Some(game.contestant)
-        } else if (s.reveal.isEmpty) {
-          Some(game.monty)
-        } else if (s.secondChoice.isEmpty) {
-          Some(game.contestant)
+        state: MontyHallState): Either[MontyHallOutcome, Player] =
+        if (!state.carPlaced) {
+          assert(state.placement.isEmpty)
+          Right(game.monty)
+        } else if (state.firstChoice.isEmpty) {
+          Right(game.contestant)
+        } else if (state.reveal.isEmpty) {
+          Right(game.monty)
+        } else if (state.secondChoice.isEmpty) {
+          Right(game.contestant)
         } else {
-          None
+          state match {
+            case MontyHallState(Some(PlaceCar(c)), _, Some(FirstChoice(f)), Some(Reveal(r)), Some(sc)) =>
+              sc match {
+                case Left(Change()) => Left(MontyHallOutcome(c != f))
+                case Right(Stay())  => Left(MontyHallOutcome(c == f))
+              }
+            case _ => ???
+          }
         }
 
       def moves(
@@ -92,19 +99,6 @@ package object montyhall {
             case _           => Some(move)
           }
         }
-
-      def outcome(
-        game:  MontyHall,
-        state: MontyHallState): Option[MontyHallOutcome] = {
-        state match {
-          case MontyHallState(Some(PlaceCar(c)), _, Some(FirstChoice(f)), Some(Reveal(r)), Some(sc)) =>
-            sc match {
-              case Left(Change()) => Some(MontyHallOutcome(c != f))
-              case Right(Stay())  => Some(MontyHallOutcome(c == f))
-            }
-          case _ => None
-        }
-      }
 
     }
 

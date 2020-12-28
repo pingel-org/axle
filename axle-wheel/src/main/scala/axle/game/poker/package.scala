@@ -198,7 +198,8 @@ package object poker {
         }
       }
 
-      def mover(game: Poker, s: PokerState): Option[Player] = s._mover
+      def mover(game: Poker, s: PokerState): Either[PokerOutcome, Player] =
+        s._outcome.map(o => Left(o)).getOrElse(Right(s._mover.get))
 
       def moves(game: Poker, s: PokerStateMasked): Seq[PokerMove] = {
 
@@ -252,8 +253,6 @@ package object poker {
 
       def maskMove(game: Poker, move: PokerMove, mover: Player, observer: Player): PokerMove =
         move
-
-      def outcome(game: Poker, state: PokerState): Option[PokerOutcome] = state._outcome
 
     }
 

@@ -26,17 +26,24 @@ package object ttt {
         }
 
       def applyMove(game: TicTacToe, state: TicTacToeState, move: TicTacToeMove): TicTacToeState = {
-        val nextMoverOptFn = (newState: TicTacToeState) =>
-          if (outcome(game, newState).isDefined) {
-            None
-          } else {
-            Some(game.playerAfter(state.moverOpt.get))
-          }
+        val nextMoverOptFn: TicTacToeState => Option[Player] = (newState: TicTacToeState) =>
+          mover(game, newState).map { player =>
+            Some(game.playerAfter(player))
+          } getOrElse { None }
         TicTacToeState(nextMoverOptFn, state.place(move.position, state.moverOpt.get), game.boardSize)
       }
 
-      def mover(game: TicTacToe, s: TicTacToeState): Option[Player] =
-        s.moverOpt
+      def mover(game: TicTacToe, state: TicTacToeState): Either[TicTacToeOutcome, Player] = {
+        import state._
+        val winner = game.players.find(hasWon)
+        if (winner.isDefined) {
+          Left(TicTacToeOutcome(winner))
+        } else if (openPositions(game).length === 0) {
+          Left(TicTacToeOutcome(None))
+        } else {
+          Right(state.moverOpt.get)
+        }
+      }
 
       def moves(game: TicTacToe, s: TicTacToeState): Seq[TicTacToeMove] =
         mover(game, s).map { p => s.openPositions(game).map(TicTacToeMove(_, game.boardSize)) } getOrElse (List.empty)
@@ -46,18 +53,6 @@ package object ttt {
 
       def maskMove(game: TicTacToe, move: TicTacToeMove, mover: Player, observer: Player): TicTacToeMove =
         move
-
-      def outcome(game: TicTacToe, state: TicTacToeState): Option[TicTacToeOutcome] = {
-        import state._
-        val winner = game.players.find(hasWon)
-        if (winner.isDefined) {
-          Some(TicTacToeOutcome(winner))
-        } else if (openPositions(game).length === 0) {
-          Some(TicTacToeOutcome(None))
-        } else {
-          None
-        }
-      }
 
     }
 

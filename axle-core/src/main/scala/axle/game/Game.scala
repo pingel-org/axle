@@ -17,7 +17,7 @@ trait Game[G, S, O, M, MS, MM] {
 
   def players(game: G): IndexedSeq[Player]
 
-  def mover(game: G, state: S): Option[Player]
+  def mover(game: G, state: S): Either[O, Player]
 
   def moves(game: G, state: MS): Seq[M]
 
@@ -28,6 +28,4 @@ trait Game[G, S, O, M, MS, MM] {
   def isValid(game: G, state: MS, move: M): Either[String, M]
 
   def applyMove(game: G, state: S, move: M): S
-
-  def outcome(game: G, state: S): Option[O]
 }

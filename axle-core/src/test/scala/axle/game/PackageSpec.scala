@@ -37,8 +37,8 @@ class PackageSpec extends AnyFunSuite with Matchers {
       def players(game: TestGame): IndexedSeq[Player] =
         Vector(player)
 
-      def mover(game: TestGame, state: TestGameState): Option[Player] =
-        Some(player)
+      def mover(game: TestGame, state: TestGameState): Either[TestGameOutcome, Player] =
+        Right(player)
 
       def moves(game: TestGame, state: TestGameState): Seq[TestGameMove] =
         Vector(m0, m1)
@@ -54,9 +54,6 @@ class PackageSpec extends AnyFunSuite with Matchers {
 
       def applyMove(game: TestGame, state: TestGameState, move: TestGameMove): TestGameState =
         if( move === m0) s0 else state
-
-      def outcome(game: TestGame, state: TestGameState): Option[TestGameOutcome] =
-        None
 
     }
 

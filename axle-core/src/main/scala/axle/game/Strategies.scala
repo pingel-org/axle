@@ -1,5 +1,7 @@
 package axle.game
 
+import scala.annotation.nowarn
+
 import cats.Monad
 import cats.kernel.Order
 import cats.implicits._
@@ -16,7 +18,7 @@ object Strategies {
     )(implicit
       evGame: Game[G, S, O, M, MS, MM]): S => Map[Player, N] =
     (state: S) => evGame.players(game).map(p => {
-      val score = evGame.outcome(game, state).map(o => f(o, p)).getOrElse(Ring[N].zero)
+      val score: N = evGame.mover(game, state).swap.map(o => { f(o, p): N }).getOrElse(Ring[N].zero)
       (p, score)
     }).toMap
 
@@ -88,16 +90,22 @@ object Strategies {
     evGame: Game[G, S, O, M, MS, MM]): (M, S, Map[Player, N]) = {
 
     // TODO capture as type constraint
-    assert(evGame.outcome(game, state).isEmpty)
+    assert(evGame.mover(game, state).isRight)
 
-    val mover = evGame.mover(game, state).get // TODO .get
+    val mover = evGame.mover(game, state).right.get : @nowarn // TODO .get
     val ms = evGame.maskState(game, state, mover) // TODO move this elsewhere
     val moveValue = evGame.moves(game, ms).map(move => {
       val newState = evGame.applyMove(game, state, move)
-      if (evGame.outcome(game, newState).isDefined || depth == 0) {
-        (move, state, heuristic(newState))
-      } else {
+      // if (evGame.outcome(game, newState).isDefined || depth == 0) {
+      //   (move, state, heuristic(newState))
+      // } else {
+      //   (move, state, minimax(game, newState, depth - 1, heuristic)._3)
+      // }
+      evGame.mover(game, newState).map { mover =>
+        // || depth == 0
         (move, state, minimax(game, newState, depth - 1, heuristic)._3)
+      } getOrElse {
+        (move, state, heuristic(newState))
       }
     })
     moveValue.maxBy(mcr => (mcr._3)(mover))
@@ -130,7 +138,7 @@ object Strategies {
     implicit
     evGame: Game[G, S, O, M, MS, MM]): (M, Map[Player, N]) = {
 
-    assert(evGame.outcome(game, state).isEmpty && depth > 0) // TODO capture as type constraint
+    assert(evGame.mover(game, state).isRight && depth > 0) // TODO capture as type constraint
 
     //      val initial = AlphaBetaFold(game, dummy[M], cutoff, false)
     //      val ms = evGame.maskState(game, state, ???) // TODO move this elsewhere

@@ -169,7 +169,7 @@ package object game {
     fieldV: Field[V],
     orderV: Order[V]): F[(Option[(S, M)], PM[S, V])] = {
 
-    val openStateModel: PM[S, V] = bayes.filter(stateModel)(RegionIf(evGame.mover(game, _).isDefined))
+    val openStateModel: PM[S, V] = bayes.filter(stateModel)(RegionIf(evGame.mover(game, _).isRight))
 
     val fromState: S = prob.sample(openStateModel)(gen)
     // val probabilityOfFromState: V = prob.probabilityOf(stateModel)(RegionEq(fromState))
