@@ -17,13 +17,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `unmask` for `aiMover` to allow it to fit `MS => PM[M, V]` pattern
 * Simpler `hardCodedStrategy` and `aiMover` signatures
 
-* Document `strategiesInteractive` from `MontyHallSpec`
-
-* Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
-* Document `aiMover` from `MontyHallSpec`
-
 * Clean up `axle.game.playWithIntroAndOutcomes`
 
+* Document `strategiesInteractive` from `MontyHallSpec`
 * moveStateStream
   * rename to `moveStatePath` or `traceGame`
   * unless we give this job to `State`...
@@ -31,6 +27,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * stop using chain?
 * Should be part of State displaying `evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)`
 * Display to player the elapsed moves /and/ the state diff
+
+* Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
+* Document `aiMover` from `MontyHallSpec`
 
 ## 0.6.1 More scrutiny on axle.game
 
@@ -72,7 +71,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Redo Logic using Abstract Algebra
 
-## 0.6.6
+## 0.6.6 Graph
 
 * Simple graph implementation so that `axle-core` can avoid including `axle-jung`
 
