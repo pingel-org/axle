@@ -102,8 +102,8 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
       (player: Player) =>
         (state: MontyHallState) =>
           for {
-            restate <- observeState(player, game, state, playerToWriter(player))
-            move <- rmIO(restate)
+            _ <- playerToWriter(player)(evGameIO.displayStateTo(game, state, player))
+            move <- rmIO(state)
           } yield move
 
     val endState = play(game, strategies, startState(game), rng).unsafeRunSync()

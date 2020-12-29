@@ -17,14 +17,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `unmask` for `aiMover` to allow it to fit `MS => PM[M, V]` pattern
 * Simpler `hardCodedStrategy` and `aiMover` signatures
 
-* `axle.game.observeState` isn't worth it. Inline and delete.
 * is `axle.game.fuzzStrategy` worth it?
-* Clean up `axle.game.playWithIntroAndOutcomes`
 
 * Document `strategiesInteractive` from `MontyHallSpec`
 
 * Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
 * Document `aiMover` from `MontyHallSpec`
+
+* Clean up `axle.game.playWithIntroAndOutcomes`
 
 * moveStateStream
   * rename to `moveStatePath` or `traceGame`

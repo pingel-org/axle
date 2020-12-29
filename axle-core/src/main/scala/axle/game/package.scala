@@ -45,24 +45,9 @@ package object game {
     fEitherCPT.flatMap(_.map(Monad[F].pure).getOrElse(userInput(game, state, reader, writer)))
   }
 
-  def observeState[
-    G, S, O, M, MS, MM,
-    F[_]: Sync: Monad](
-      player: Player,
-      game: G,
-      state: MS,
-      observe: String => F[Unit]
-    )(
-      implicit
-      evGameIO: GameIO[G, O, M, MS, MM]
-    ): F[MS] =
-      for {
-        _ <- observe(evGameIO.displayStateTo(game, state, player))
-      } yield state
-
   def interactiveMove[G, S, O, M, MS, MM, F[_]: Sync](
       game: G,
-      p: Player,
+      player: Player,
       reader: () => F[String],
       writer: String => F[Unit]
     )(implicit
@@ -71,8 +56,8 @@ package object game {
     ): MS => F[M] =
       (state: MS) =>
         for {
-          restate <- observeState(p, game, state, writer)
-          move <- userInput(game, restate, reader, writer)
+           _ <- writer(evGameIO.displayStateTo(game, state, player))
+          move <- userInput(game, state, reader, writer)
         } yield move
 
   def nextMoveState[
