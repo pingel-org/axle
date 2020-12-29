@@ -48,23 +48,16 @@ package object game {
   def observeState[
     G, S, O, M, MS, MM,
     F[_]: Sync: Monad](
-      mover: Player,
+      player: Player,
       game: G,
       state: MS,
       observe: String => F[Unit]
     )(
       implicit
-      // evGame: Game[G, S, O, M, MS, MM],
       evGameIO: GameIO[G, O, M, MS, MM]
     ): F[MS] =
       for {
-        _ <- observe(evGameIO.introMessage(game))
-        _ <- observe(evGameIO.displayStateTo(game, state, mover))
-        // _ <- observe(
-        //        evGame
-        //        .outcome(game, state)
-        //        .map( outcome => evGameIO.displayOutcomeTo(game, outcome, mover))
-        //        .getOrElse(""))
+        _ <- observe(evGameIO.displayStateTo(game, state, player))
       } yield state
 
   def interactiveMove[G, S, O, M, MS, MM, F[_]: Sync](
@@ -323,6 +316,37 @@ package object game {
       val lastState = lastTripleOpt.get._3 // NOTE Option.get
       lastState
     }
+
+  def playWithIntroAndOutcomes[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
+    game:  G,
+    strategies: Player => MS => F[PM[M, V]],
+    start: S,
+    playerToWriter: Player => String => F[()],
+    gen:   Generator)(
+    implicit
+    evGame:   Game[G, S, O, M, MS, MM],
+    evGameIO: GameIO[G, O, M, MS, MM],
+    prob:     Sampler[PM],
+    distV: Dist[V],
+    ringV: Ring[V],
+    orderV: Order[V]): F[S] =
+    for {
+      _ <- { val result: IndexedSeq[F[Unit]] = evGame.players(game).map { player =>
+               val message: String = evGameIO.introMessage(game)
+               playerToWriter(player)(message)
+             }
+             result.reduce[F[Unit]]{ case (l,r) => r } // TODO
+           }
+      endState <- play(game, strategies, start, gen)
+      _ <- {
+             val result: IndexedSeq[F[Unit]] =
+               evGame.players(game).map { player =>
+                 val message: String = evGame.mover(game, endState).swap.map(outcome => evGameIO.displayOutcomeTo(game, outcome, player)).getOrElse("")
+                 playerToWriter(player)(message)
+               }
+             result.reduce[F[Unit]]{ case (l,r) => r } // TODO
+           }
+    } yield endState
 
   def gameStream[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
     game:  G,

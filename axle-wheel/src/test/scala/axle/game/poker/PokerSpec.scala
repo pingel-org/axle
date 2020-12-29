@@ -25,7 +25,7 @@ class PokerSpec extends AnyFunSuite with Matchers {
     val state = startState(game)
     val ms = evGame.maskState(game, state, p1)
     displayStateTo(game, ms, p1) should include("Current bet: 0")
-    outcome(game, state) should be(None)
+    mover(game, state).isRight should be(true)
   }
 
   test("only 1 player 'still in', not allow another game to begin") {
@@ -91,14 +91,14 @@ class PokerSpec extends AnyFunSuite with Matchers {
       p => strategies(p).andThen(Option.apply _),
       rng) // TODO make use of this "lastStateByPlay"
 
-    val o = outcome(game, lastState).get
+    val o: PokerOutcome = mover(game, lastState).swap.toOption.get
     val newGameState = startFrom(game, lastState).get
     val ms = maskState(game, history.drop(1).head._1, p1)
 
     // TODO lastState should be equalTo lastStateByPlay
     history.map({
       case (from, move, to) => {
-        displayMoveTo(game, move, mover(game, from).get, p1)
+        displayMoveTo(game, move, mover(game, from).toOption.get, p1)
       }
       case _ => ???
     }).mkString(", ") should include("call")

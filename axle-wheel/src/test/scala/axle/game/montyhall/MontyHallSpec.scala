@@ -93,28 +93,43 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
     val rmIO: MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] =
       rm.andThen( m => IO { m })
 
+    val playerToWriter: Map[Player, String => IO[Unit]] =
+      evGame.players(game).map { player =>
+        player -> (printMultiLinePrefixed[IO](player.id) _)
+      } toMap
+
     val strategies: Player => MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = 
-      (player: Player) => {
-        val writer = printMultiLinePrefixed[IO](player.id) _
+      (player: Player) =>
         (state: MontyHallState) =>
           for {
-            restate <- observeState(player, game, state, writer)
+            restate <- observeState(player, game, state, playerToWriter(player))
             move <- rmIO(restate)
           } yield move
-      }
+
+    val endState = play(game, strategies, startState(game), rng).unsafeRunSync()
 
     // For interactive play, use this:
 
-    // val strategiesInteractive =
-    //   (player: Player) =>
-    //     fuzzStrategy[MontyHallMove, MontyHallState, IO, Rational, ConditionalProbabilityTable](
-    //       interactiveMove(
-    //         game,
-    //         player,
-    //         axle.IO.getLine[IO] _,
-    //         axle.IO.printMultiLinePrefixed[IO](player.id) _))
+    /*
+    val playerToReader: Map[Player, () => IO[String]] =
+      evGame.players(game).map { player =>
+        player -> (axle.IO.getLine[IO] _)
+      } toMap
 
-    val endState = play(game, strategies, startState(game), rng).unsafeRunSync()
+    val monadCptRat = ConditionalProbabilityTable.monadWitness[Rational]
+
+    val strategiesInteractive: Player => MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] =
+      (player: Player) =>
+          interactiveMove(game, player, playerToReader(player), playerToWriter(player)).andThen(_.map(monadCptRat.pure))
+
+    val endStateInteractive =
+      playWithIntroAndOutcomes(
+        game,
+        strategiesInteractive,
+        startState(game),
+        playerToWriter,
+        rng).unsafeRunSync()
+    */
 
     moves(game, endState) should have length 0
   }
@@ -139,7 +154,7 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
     val newStart = startFrom(game, nextState).get
 
     moves(game, newStart) should have length 3
-    outcome(game, state) should be(None)
+    mover(game, state).isRight should be(true)
   }
 
   test("starting moves are three-fold, display to monty with 'something'") {

@@ -87,7 +87,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
     val newStart = startFrom(game, nextState).get
 
     moves(game, newStart).length should be(9)
-    outcome(game, state) should be(None)
+    mover(game, state).isRight should be(true)
   }
 
   test("starting moves are nine-fold, display to O with 'put an', and have string descriptions that include 'upper'") {
@@ -187,7 +187,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
       player => strategyFor(player).andThen(Option.apply _),
       rng).get
 
-    val out = outcome(game, mss.last._3).get
+    val out = mover(game, mss.last._3).swap.toOption.get
 
     displayOutcomeTo(game, out, x) should include("You beat")
     displayOutcomeTo(game, out, o) should include("beat You")
@@ -228,7 +228,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
       p => strategyFor(p).andThen(Option.apply _),
       rng).get.last._3
 
-    val winnerOpt = outcome(game, lastState).flatMap(_.winner)
+    val winnerOpt = mover(game, lastState).swap.toOption.flatMap(_.winner)
     winnerOpt should be(Some(o))
   }
 
@@ -268,7 +268,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
       p => strategyFor(p).andThen(Option.apply _),
       rng).get
 
-    val winnerOpt = outcome(game, mss.last._3).flatMap(_.winner)
+    val winnerOpt = mover(game, mss.last._3).swap.toOption.flatMap(_.winner)
     winnerOpt should be(None)
   }
 

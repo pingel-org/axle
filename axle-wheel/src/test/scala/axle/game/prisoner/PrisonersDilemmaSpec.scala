@@ -74,7 +74,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
     val newStart = startFrom(game, nextState).get
 
     moves(game, newStart) should have length 2
-    outcome(game, state) should be(None)
+    mover(game, state).isRight should be(true)
   }
 
   test("starting moves are two-fold, display to p2 with 'something'") {
@@ -116,23 +116,23 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
   test("dual silence > dual betrayal for both") {
 
-    val silentOutcome = outcome(
+    val silentOutcome = mover(
       game,
       moveStateStream(
         game,
         start,
         _ => fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(silence)).andThen(Option.apply),
         rng
-      ).get.last._3).get
+      ).get.last._3).swap.toOption.get
 
-    val betrayalOutcome = outcome(
+    val betrayalOutcome = mover(
       game,
       moveStateStream(
         game,
         start,
         _ => fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(betrayal)).andThen(Option.apply),
         rng
-      ).get.last._3).get
+      ).get.last._3).swap.toOption.get
 
     silentOutcome.p1YearsInPrison should be < betrayalOutcome.p1YearsInPrison
     silentOutcome.p2YearsInPrison should be < betrayalOutcome.p2YearsInPrison
@@ -155,7 +155,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
       p => hardCoding1(p).andThen(Option.apply _),
       rng).get.last._3
 
-    val p1silentOutcome = outcome(game, lastStateP1Silent).get
+    val p1silentOutcome = mover(game, lastStateP1Silent).swap.toOption.get
 
     def hardCoding2(player: Player): PrisonersDilemmaState => ConditionalProbabilityTable[PrisonersDilemmaMove, Rational] =
       if ( player === p1 ) {
@@ -166,11 +166,11 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
         ???
       }
 
-    val p2silentOutcome = outcome(game, moveStateStream(
+    val p2silentOutcome = mover(game, moveStateStream(
       game,
       start,
       p => hardCoding2(p).andThen(Option.apply _),
-      rng).get.last._3).get
+      rng).get.last._3).swap.toOption.get
 
     p1silentOutcome.p1YearsInPrison should be(p2silentOutcome.p2YearsInPrison)
     p1silentOutcome.p2YearsInPrison should be(p2silentOutcome.p1YearsInPrison)

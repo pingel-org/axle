@@ -17,9 +17,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `unmask` for `aiMover` to allow it to fit `MS => PM[M, V]` pattern
 * Simpler `hardCodedStrategy` and `aiMover` signatures
 
-* Display Outcome (see error `MS` vs `S` in `observeState`)
-* Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
+* `axle.game.observeState` isn't worth it. Inline and delete.
+* is `axle.game.fuzzStrategy` worth it?
+* Clean up `axle.game.playWithIntroAndOutcomes`
+
 * Document `strategiesInteractive` from `MontyHallSpec`
+
+* Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
 * Document `aiMover` from `MontyHallSpec`
 
 * moveStateStream
@@ -51,6 +55,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
   * `Chance` should be its own player
+  * Consider whether `PM` should be a part of `Strategy` type (`MS => PM[M, V]`)
   * Each N bits consumed during `Riffle()` is its own move
   * Chance moves consume `UnittedQuantity[Information, N]`
 

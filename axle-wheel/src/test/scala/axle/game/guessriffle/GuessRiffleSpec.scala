@@ -72,7 +72,9 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
       rng).get
 
     // Note non-zero (but astronomically small) chance of this failing despite correct implementation
-    outcome(game, endState).get.numCorrect should be >(10)
+    val outcome: GuessRiffleOutcome = mover(game, endState).swap.toOption.get
+    
+    outcome.numCorrect should be >(10)
   }
 
   test("random game produce game stream") {
@@ -100,7 +102,7 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
     val newStart = startFrom(game, nextState).get
 
     moves(game, newStart).length should be(1)
-    outcome(game, state) should be(None)
+    mover(game, state).isRight should be(true)
   }
 
   test("starting moves") {
