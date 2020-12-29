@@ -2,7 +2,6 @@ package axle.game
 
 import scala.annotation.nowarn
 
-import cats.Monad
 import cats.kernel.Order
 import cats.implicits._
 
