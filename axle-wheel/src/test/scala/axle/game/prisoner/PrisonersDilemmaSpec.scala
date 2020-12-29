@@ -16,6 +16,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
   import axle.game.prisoner.evGameIO._
 
   implicit val rat = new spire.math.RationalAlgebra()
+  val monadCptRat = ConditionalProbabilityTable.monadWitness[Rational]
 
   val p1 = Player("P1", "Prisoner 1")
   val p2 = Player("P2", "Prisoner 2")
@@ -121,7 +122,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
       moveStateStream(
         game,
         start,
-        _ => fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(silence)).andThen(Option.apply),
+        _ => hardCodedStringStrategy(game)(silence).andThen(monadCptRat.pure).andThen(Option.apply),
         rng
       ).get.last._3).swap.toOption.get
 
@@ -130,7 +131,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
       moveStateStream(
         game,
         start,
-        _ => fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(betrayal)).andThen(Option.apply),
+        _ => hardCodedStringStrategy(game)(betrayal).andThen(monadCptRat.pure).andThen(Option.apply),
         rng
       ).get.last._3).swap.toOption.get
 
@@ -141,13 +142,13 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
   test("silence/betrayal inverse asymmetry") {
 
     def hardCoding1(player: Player): PrisonersDilemmaState => ConditionalProbabilityTable[PrisonersDilemmaMove, Rational] =
-      if ( player === p1 ) {
-        fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(silence))
+      (if ( player === p1 ) {
+        hardCodedStringStrategy(game)(silence)
       } else if ( player === p2 ) {
-        fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(betrayal))
+        hardCodedStringStrategy(game)(betrayal)
       } else {
         ???
-      }
+      }).andThen(monadCptRat.pure)
 
     val lastStateP1Silent = moveStateStream(
       game,
@@ -158,13 +159,13 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
     val p1silentOutcome = mover(game, lastStateP1Silent).swap.toOption.get
 
     def hardCoding2(player: Player): PrisonersDilemmaState => ConditionalProbabilityTable[PrisonersDilemmaMove, Rational] =
-      if ( player === p1 ) {
-        fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(betrayal))
+      (if ( player === p1 ) {
+        hardCodedStringStrategy(game)(betrayal)
       } else if ( player === p2 ) {
-        fuzzStrategy[PrisonersDilemmaMove, PrisonersDilemmaState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(silence))
+        hardCodedStringStrategy(game)(silence)
       } else {
         ???
-      }
+      }).andThen(monadCptRat.pure)
 
     val p2silentOutcome = mover(game, moveStateStream(
       game,

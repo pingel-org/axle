@@ -74,9 +74,9 @@ class PokerSpec extends AnyFunSuite with Matchers {
 
     def strategies(player: Player): PokerStateMasked => ConditionalProbabilityTable[PokerMove,Rational] =
       if ( player === p1 ) {
-        fuzzStrategy[PokerMove, PokerStateMasked, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(p1Move))
+        hardCodedStringStrategy(game)(p1Move).andThen(monadCptRat.pure)
       } else if ( player === p2 ){
-        fuzzStrategy[PokerMove, PokerStateMasked, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(p2Move))
+        hardCodedStringStrategy(game)(p2Move).andThen(monadCptRat.pure)
       } else if( player === game.dealer ) {
         randomPokerMove
       } else {

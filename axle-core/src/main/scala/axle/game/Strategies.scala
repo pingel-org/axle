@@ -49,16 +49,6 @@ object Strategies {
       validated.toOption.get
     }
 
-  def fuzzStrategy[
-    M, MS,
-    V: Field: Order,
-    PM[_, _]](
-      strategy: MS => M
-    )(implicit
-      monadPM: Monad[PM[?, V]]
-    ): MS => PM[M, V] =
-      (state: MS) => monadPM.pure(strategy(state))
-
   import axle.probability.ConditionalProbabilityTable
   def randomMove[
     G, S, O, M, MS, MM,

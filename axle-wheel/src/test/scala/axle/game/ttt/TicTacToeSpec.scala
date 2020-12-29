@@ -171,13 +171,13 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
       }
 
     def strategyFor(player: Player): TicTacToeState => ConditionalProbabilityTable[TicTacToeMove, Rational] =
-      if ( player == x ) {
-        fuzzStrategy[TicTacToeMove, TicTacToeState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(xMove))
+      (if ( player == x ) {
+        hardCodedStringStrategy(game)(xMove)
       } else if ( player == o ) {
-        fuzzStrategy[TicTacToeMove, TicTacToeState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(oMove))
+        hardCodedStringStrategy(game)(oMove)
       } else {
         ???
-      }
+      }).andThen(monadCptRat.pure)
 
     val start = startState(game)
 
@@ -212,13 +212,13 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
       }
 
     def strategyFor(player: Player): TicTacToeState => ConditionalProbabilityTable[TicTacToeMove, Rational] =
-      if ( player == x) {
-        fuzzStrategy[TicTacToeMove, TicTacToeState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(xMove))
-      } else if ( player == o) {
-        fuzzStrategy[TicTacToeMove, TicTacToeState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(oMove))
+      (if ( player == x ) {
+        hardCodedStringStrategy(game)(xMove)
+      } else if ( player == o ) {
+        hardCodedStringStrategy(game)(oMove)
       } else {
         ???
-      }
+      }).andThen(monadCptRat.pure)
 
     val start = startState(game)
 
@@ -252,13 +252,13 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
       }
 
     def strategyFor(player: Player): TicTacToeState => ConditionalProbabilityTable[TicTacToeMove, Rational] =
-      if ( player == x ) {
-        fuzzStrategy[TicTacToeMove, TicTacToeState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(xMove))
+      (if ( player == x ) {
+        hardCodedStringStrategy(game)(xMove)
       } else if ( player == o ) {
-        fuzzStrategy[TicTacToeMove, TicTacToeState, Rational, ConditionalProbabilityTable](hardCodedStringStrategy(game)(oMove))
+        hardCodedStringStrategy(game)(oMove)
       } else {
         ???
-      }
+      }).andThen(monadCptRat.pure)
 
     val start = startState(game)
 

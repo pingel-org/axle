@@ -18,6 +18,8 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
 
   implicit val rat = new spire.math.RationalAlgebra()
 
+  val monadCptRat = ConditionalProbabilityTable.monadWitness[Rational]
+
   val game = MontyHall()
 
   val rm = randomMove[
@@ -62,9 +64,9 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
       Rational, ConditionalProbabilityTable, Option](
       game,
       startState(game),
-      player => fuzzStrategy[MontyHallMove, MontyHallState, Rational, ConditionalProbabilityTable](ai4).andThen(Option.apply),
+      player => ai4.andThen(monadCptRat.pure).andThen(Option.apply),
       rng).get
-      
+
     mss.take(2) should have length 2
   }
 
@@ -115,8 +117,6 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
       evGame.players(game).map { player =>
         player -> (axle.IO.getLine[IO] _)
       } toMap
-
-    val monadCptRat = ConditionalProbabilityTable.monadWitness[Rational]
 
     val strategiesInteractive: Player => MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] =
       (player: Player) =>
