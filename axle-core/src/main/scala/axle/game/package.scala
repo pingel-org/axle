@@ -316,21 +316,15 @@ package object game {
     ringV: Ring[V],
     orderV: Order[V]): F[S] =
     for {
-      _ <- { val result: IndexedSeq[F[Unit]] = evGame.players(game).map { player =>
-               val message: String = evGameIO.introMessage(game)
-               playerToWriter(player)(message)
-             }
-             result.reduce[F[Unit]]{ case (l,r) => r } // TODO
-           }
+      _ <- evGame.players(game).map( player => {
+             val message: String = evGameIO.introMessage(game)
+             playerToWriter(player)(message)
+           }).last // TODO
       endState <- play(game, strategies, start, gen)
-      _ <- {
-             val result: IndexedSeq[F[Unit]] =
-               evGame.players(game).map { player =>
-                 val message: String = evGame.mover(game, endState).swap.map(outcome => evGameIO.displayOutcomeTo(game, outcome, player)).getOrElse("")
-                 playerToWriter(player)(message)
-               }
-             result.reduce[F[Unit]]{ case (l,r) => r } // TODO
-           }
+      _ <- evGame.players(game).map( player => {
+             val message: String = evGame.mover(game, endState).swap.map(outcome => evGameIO.displayOutcomeTo(game, outcome, player)).getOrElse("")
+             playerToWriter(player)(message)
+           }).last // TODO
     } yield endState
 
   def gameStream[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](

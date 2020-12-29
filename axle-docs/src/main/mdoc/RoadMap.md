@@ -17,8 +17,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `unmask` for `aiMover` to allow it to fit `MS => PM[M, V]` pattern
 * Simpler `hardCodedStrategy` and `aiMover` signatures
 
-* is `axle.game.fuzzStrategy` worth it?
-
 * Document `strategiesInteractive` from `MontyHallSpec`
 
 * Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
