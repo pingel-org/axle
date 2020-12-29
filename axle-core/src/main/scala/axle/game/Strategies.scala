@@ -5,9 +5,7 @@ import scala.annotation.nowarn
 import cats.kernel.Order
 import cats.implicits._
 
-import spire.algebra.Field
 import spire.algebra.Ring
-import spire.math.ConvertableTo
 
 object Strategies {
 
@@ -46,19 +44,6 @@ object Strategies {
       val parsed = evGameIO.parseMove(game, input(game, state)).toOption.get
       val validated = evGame.isValid(game, state, parsed)
       validated.toOption.get
-    }
-
-  import axle.probability.ConditionalProbabilityTable
-  def randomMove[
-    G, S, O, M, MS, MM,
-    V: Order: Field: ConvertableTo,
-    PM[_, _]](game: G)(
-    implicit
-    evGame: Game[G, S, O, M, MS, MM]): MS => ConditionalProbabilityTable[M, V] =
-    (state: MS) => {
-      val opens = evGame.moves(game, state).toVector
-      val p = Field[V].reciprocal(ConvertableTo[V].fromInt(opens.length))
-      ConditionalProbabilityTable[M, V](opens.map(open => open -> p).toMap)
     }
 
   /**

@@ -16,10 +16,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
 * `unmask` for `aiMover` to allow it to fit `MS => PM[M, V]` pattern
 * Simpler `hardCodedStrategy` and `aiMover` signatures
-
-* Clean up `axle.game.playWithIntroAndOutcomes`
+* Replace `randomMove` with `ConditionalProbabilityTable.uniform`
 
 * Document `strategiesInteractive` from `MontyHallSpec`
+
+* Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
+* Document `aiMover` from `MontyHallSpec`
+
 * moveStateStream
   * rename to `moveStatePath` or `traceGame`
   * unless we give this job to `State`...
@@ -28,23 +31,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Should be part of State displaying `evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)`
 * Display to player the elapsed moves /and/ the state diff
 
-* Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
-* Document `aiMover` from `MontyHallSpec`
-
-## 0.6.1 More scrutiny on axle.game
-
-* `Game.players` is only used by `outcomeRingHeuristic`
-* `Game.players` should be a part of GameState?
-
-* Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
-
-* Simplify `GuessRiffleProperties` (especially second property)
-* stateStreamMap only used in GuessRiffleProperties -- stop using chain?
-* stateStrategyMoveStream only used in GuessRiffleProperties
-
-* The references to `movesMap` in `MoveFromRandomStateSpec.scala` illustrate a need for a cleaner way to create a hard-coded strategy -- which could just be in the form of a couple utility functions from `movesMap` to the data needed by `evGame.{moves,applyMove}` and `rm` strategy
-
-## 0.6.2 Control Entropy Consumption
+## 0.6.1 Control Entropy Consumption
 
 * Identify all uses of `spire.random.Generator` (and other random value generation)
 
@@ -53,10 +40,26 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
   * `Chance` should be its own player
   * Consider whether `PM` should be a part of `Strategy` type (`MS => PM[M, V]`)
+    * More abstractly, more many intents and purposes, all we are about is that resolving PM to M consumes entropy
+    * In which cases should the `PM` be retained?
   * Each N bits consumed during `Riffle()` is its own move
   * Chance moves consume `UnittedQuantity[Information, N]`
 
+## 0.6.1 More scrutiny on axle.game
+
 * Replace `axle.game.moveFromRandomState.mapToProb`
+
+* Clean up `axle.game.playWithIntroAndOutcomes`
+
+* The references to `movesMap` in `MoveFromRandomStateSpec.scala` illustrate a need for a cleaner way to create a hard-coded strategy -- which could just be in the form of a couple utility functions from `movesMap` to the data needed by `evGame.{moves,applyMove}` and `rm` strategy
+
+* Generalize `ConditionalProbabilityTable.uniform` into typeclass
+
+* Simplify `GuessRiffleProperties` (especially second property)
+* stateStreamMap only used in GuessRiffleProperties -- stop using chain?
+* stateStrategyMoveStream only used in GuessRiffleProperties
+
+* `Game.players` should be a part of GameState (or take it as an argument)?  Will wait for pressing use case.
 
 ## 0.6.3 Logistic Regression
 

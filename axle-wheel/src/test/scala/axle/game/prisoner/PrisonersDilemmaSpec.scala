@@ -23,7 +23,9 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
   val game = PrisonersDilemma(p1, p2)
 
-  val rm = randomMove(game).andThen(Option.apply _)
+  val randomMove =
+    (state: PrisonersDilemmaState) =>
+      ConditionalProbabilityTable.uniform[PrisonersDilemmaMove, Rational](evGame.moves(game, state))
 
   def silence(game: PrisonersDilemma, state: PrisonersDilemmaState): String =
     "silence"
@@ -38,7 +40,12 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
   }
 
   test("random game produces moveStateStream") {
-    val mss = moveStateStream(game, startState(game), _ => rm, rng).get
+
+    val mss = moveStateStream(
+      game,
+      startState(game),
+      _ => randomMove.andThen(Option.apply),
+      rng).get
     
     mss.take(2) should have length 2
   }
@@ -47,7 +54,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
     val endState = play(
       game,
-      _ => rm,
+      _ => randomMove.andThen(Option.apply),
       startState(game),
       rng).get
 
@@ -58,7 +65,7 @@ class PrisonersDilemmaSpec extends AnyFunSuite with Matchers {
 
     val games = gameStream(
       game,
-      _ => rm,
+      _ => randomMove.andThen(Option.apply),
       startState(game),
       i => i < 10,
       rng).get

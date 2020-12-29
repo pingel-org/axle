@@ -22,10 +22,9 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
 
   val game = MontyHall()
 
-  val rm = randomMove[
-    MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove,
-    MontyHallState, Option[MontyHallMove],
-    Rational, ConditionalProbabilityTable](game).andThen(Option.apply _)
+  val randomMove =
+    (state: MontyHallState) =>
+      ConditionalProbabilityTable.uniform[MontyHallMove, Rational](evGame.moves(game, state))
 
   test("game has an intro message") {
     introMessage(game) should include("Monty")
@@ -36,7 +35,7 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
     val mss = moveStateStream(
       game,
       startState(game),
-      _ => rm,
+      _ => randomMove.andThen(Option.apply _),
       rng).get
       
     mss.take(2) should have length 2
@@ -74,7 +73,7 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
 
     val endState = play(
       game,
-      _ => rm,
+      _ => randomMove.andThen(Option.apply _),
       startState(game),
       rng).get
 
@@ -86,15 +85,6 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
     import cats.effect.IO
     import axle.IO.printMultiLinePrefixed
 
-    val rm: MontyHallState => ConditionalProbabilityTable[MontyHallMove, Rational] =
-      randomMove[
-        MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove,
-        MontyHallState, Option[MontyHallMove],
-        Rational, ConditionalProbabilityTable](game)
-
-    val rmIO: MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] =
-      rm.andThen( m => IO { m })
-
     val playerToWriter: Map[Player, String => IO[Unit]] =
       evGame.players(game).map { player =>
         player -> (printMultiLinePrefixed[IO](player.id) _)
@@ -105,7 +95,7 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
         (state: MontyHallState) =>
           for {
             _ <- playerToWriter(player)(evGameIO.displayStateTo(game, state, player))
-            move <- rmIO(state)
+            move <- randomMove.andThen( m => IO { m })(state)
           } yield move
 
     val endState = play(game, strategies, startState(game), rng).unsafeRunSync()
@@ -138,7 +128,7 @@ class MontyHallSpec extends AnyFunSuite with Matchers {
 
     val games = gameStream(
       game,
-      _ => rm,
+      _ => randomMove.andThen(Option.apply _),
       startState(game),
       i => i < 10,
       rng).get

@@ -7,7 +7,6 @@ import cats.implicits._
 
 import spire.random.Generator.rng
 import spire.math.Rational
-//import spire.algebra._
 
 import axle.syntax.sampler._
 import axle.probability._
@@ -20,14 +19,16 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
   import axle.game.ttt.evGameIO._
 
   implicit val rat = new spire.math.RationalAlgebra()
+  val monadCptRat = ConditionalProbabilityTable.monadWitness[Rational]
 
   val x = Player("X", "Player X")
   val o = Player("O", "Player O")
 
   val game = TicTacToe(3, x, o)
 
-  val rm: TicTacToeState => Option[ConditionalProbabilityTable[TicTacToeMove,Rational]] =
-    randomMove[TicTacToe, TicTacToeState, TicTacToeOutcome, TicTacToeMove, TicTacToeState, TicTacToeMove, Rational, ConditionalProbabilityTable](game).andThen(Option.apply _)
+  val randomMove =
+    (state: TicTacToeState) =>
+      ConditionalProbabilityTable.uniform[TicTacToeMove, Rational](evGame.moves(game, state))
 
   test("game define intro message, have 9 positions") {
 
@@ -46,7 +47,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
       TicTacToeMove,
       Rational,
       ConditionalProbabilityTable,
-      Option](game, startState(game), _ => rm, rng)
+      Option](game, startState(game), _ => randomMove.andThen(Option.apply), rng)
       
      fMSS.get.take(3).length should be(3)
   }
@@ -55,18 +56,18 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
     val fEndState = play(
       game,
-      _ => rm,
+      _ => randomMove.andThen(Option.apply),
       startState(game),
-      rng)
+      rng).get
 
-    moves(game, fEndState.get).length should be(0)
+    moves(game, fEndState).length should be(0)
   }
 
   test("random game produce game stream") {
 
     val games = gameStream(
       game,
-      _ => rm,
+      _ => randomMove.andThen(Option.apply),
       startState(game),
       i => i < 10,
       rng).get
@@ -122,7 +123,7 @@ class TicTacToeSpec extends AnyFunSuite with Matchers {
 
     implicit val rat = new spire.math.RationalAlgebra()
 
-    val mover = rm
+    val mover = randomMove.andThen(Option.apply)
     val moveCpt = mover(startState(game))
     val m = moveCpt.get.sample(rng)
 

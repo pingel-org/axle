@@ -30,6 +30,14 @@ case class ConditionalProbabilityTable[E, V: Ring](p: Map[E, V]) {
 
 object ConditionalProbabilityTable {
 
+  import spire.math.ConvertableTo
+  def uniform[T, V: Field: ConvertableTo](xs: Seq[T]): ConditionalProbabilityTable[T, V] = {
+    import spire.algebra.Field
+    val p = Field[V].reciprocal(ConvertableTo[V].fromInt(xs.length))
+    ConditionalProbabilityTable[T, V](xs.map(open => open -> p).toMap)
+  }
+
+
   implicit def showCPT[
     A: Show: Order,
     V: Show: Field](

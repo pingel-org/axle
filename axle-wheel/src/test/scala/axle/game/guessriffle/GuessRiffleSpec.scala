@@ -10,7 +10,6 @@ import spire.random.Generator.rng
 
 import axle.probability._
 import axle.game._
-import axle.game.Strategies._
 
 class GuessRiffleSpec extends AnyFunSuite with Matchers {
 
@@ -22,7 +21,10 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
 
   val game = GuessRiffle(player)
 
-  val rm = randomMove[GuessRiffle, GuessRiffleState, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove], Rational, ConditionalProbabilityTable](game).andThen(Option.apply _)
+  val rm = {
+    (state: GuessRiffleState) =>
+      ConditionalProbabilityTable.uniform[GuessRiffleMove, Rational](evGame.moves(game, state))
+  } andThen(Option.apply _)
 
   test("hard coded game") {
     import axle.game.cards._

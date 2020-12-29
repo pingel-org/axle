@@ -15,6 +15,8 @@ class PokerSpec extends AnyFunSuite with Matchers {
   import axle.game.poker.evGame._
   import axle.game.poker.evGameIO._
 
+  val monadCptRat = ConditionalProbabilityTable.monadWitness[Rational]
+
   val p1 = Player("P1", "Player 1")
   val p2 = Player("P2", "Player 2")
 
@@ -70,15 +72,17 @@ class PokerSpec extends AnyFunSuite with Matchers {
 
     val game = Poker(Vector(p1, p2))
 
-    val randomPokerMove = randomMove[Poker, PokerState, PokerOutcome, PokerMove, PokerStateMasked, PokerMove, Rational, ConditionalProbabilityTable](game)
+    val randomMove =
+      (state: PokerStateMasked) =>
+        ConditionalProbabilityTable.uniform[PokerMove, Rational](evGame.moves(game, state))
 
     def strategies(player: Player): PokerStateMasked => ConditionalProbabilityTable[PokerMove,Rational] =
       if ( player === p1 ) {
         hardCodedStringStrategy(game)(p1Move).andThen(monadCptRat.pure)
-      } else if ( player === p2 ){
+      } else if ( player === p2 ) {
         hardCodedStringStrategy(game)(p2Move).andThen(monadCptRat.pure)
       } else if( player === game.dealer ) {
-        randomPokerMove
+        randomMove
       } else {
         ???
       }
