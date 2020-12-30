@@ -18,10 +18,16 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Simpler `hardCodedStrategy` and `aiMover` signatures
 * Replace `randomMove` with `ConditionalProbabilityTable.uniform`
 
-* Poker.md -- fix `player` issue (dealer not found) and re-enable `play`
-
 * Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
+* Generalize `OldMontyHall.chanceOfWinning`
+
 * Document `aiMover` from `MontyHallSpec`
+
+* GuessRiffle.md
+  * Walk through game
+  * Plot distribution of sum(entropy) for both strategies
+  * Plot entropy by turn # for each strategy
+  * Plot simulated score distribution for each strategy
 
 * moveStateStream
   * rename to `moveStatePath` or `traceGame`
@@ -31,11 +37,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Should be part of State displaying `evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)`
 * Display to player the elapsed moves /and/ the state diff
 
-* Generalize `OldMontyHall.chanceOfWinning`
-
 ## 0.6.1 Control Entropy Consumption
-
-* Document GuessRiffle
 
 * Identify all uses of `spire.random.Generator` (and other random value generation)
 
@@ -143,11 +145,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## 0.7.x Compositional Game Theory
 
 * GuessRiffleSpec: use `moveFromRandomState`
-* GuessRiffle.md
-  * Walk through game
-  * Plot distribution of sum(entropy) for both strategies
-  * Plot entropy by turn # for each strategy
-  * Plot simulated score distribution for each strategy
 
 * Factor `axle.algebra.chain` in terms of well-known combinators
 

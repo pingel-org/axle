@@ -280,7 +280,7 @@ Example moves:
           "Pot: " + s.pot + "\n" +
           "Shared: " + s.shownShared.map(_.show).mkString(" ") + "\n" +
           "\n" +
-          game.allPlayers.map(p => {
+          game.betters.map(p => {
             p.id + ": " +
               " hand " + (
                 s.hands.get(p).map(h => h.map(_.show).mkString(" ")).getOrElse("--")) + " " +
