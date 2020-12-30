@@ -9,24 +9,54 @@ See the Wikipedia page on the [Prisoner's Dilemma](https://en.wikipedia.org/wiki
 The `axl.game.prisoner._` package uses `axle.game` typeclasses to model the game:
 
 ```scala mdoc
-import axle.IO.prefixedDisplay
 import axle.game._
 import axle.game.prisoner._
-import axle.game.prisoner.evGame._
-
-import Strategies._
 
 val p1 = Player("P1", "Player 1")
 val p2 = Player("P2", "Player 2")
 
-val game = PrisonersDilemma(
-  p1, randomMove, prefixedDisplay("1")(println),
-  p2, randomMove, prefixedDisplay("2")(println))
+val game = PrisonersDilemma(p1, p2)
 ```
+
+Create a `writer` for each player that prefixes the player id to all output.
+
+```scala mdoc
+import cats.effect.IO
+import axle.IO.printMultiLinePrefixed
+
+val playerToWriter: Map[Player, String => IO[Unit]] =
+  evGame.players(game).map { player =>
+    player -> (printMultiLinePrefixed[IO](player.id) _)
+  } toMap
+```
+
+Use a uniform distribution on moves as the demo strategy:
 
 ```scala mdoc
 import axle.probability._
+import spire.math.Rational
+
+val randomMove =
+  (state: PrisonersDilemmaState) =>
+    ConditionalProbabilityTable.uniform[PrisonersDilemmaMove, Rational](evGame.moves(game, state))
+```
+
+Wrap the strategies in the calls to `writer` that log the transitions from state to state.
+
+```scala mdoc
+val strategies: Player => PrisonersDilemmaState => IO[ConditionalProbabilityTable[PrisonersDilemmaMove, Rational]] = 
+  (player: Player) =>
+    (state: PrisonersDilemmaState) =>
+      for {
+        _ <- playerToWriter(player)(evGameIO.displayStateTo(game, state, player))
+        move <- randomMove.andThen( m => IO { m })(state)
+      } yield move
+```
+
+Play the game -- compute the end state from the start state.
+
+```scala mdoc
 import spire.random.Generator.rng
 
-play(game, startState(game), false, rng)
+play(game, strategies, evGame.startState(game), rng).unsafeRunSync()
 ```

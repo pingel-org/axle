@@ -18,7 +18,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Simpler `hardCodedStrategy` and `aiMover` signatures
 * Replace `randomMove` with `ConditionalProbabilityTable.uniform`
 
-* Document `strategiesInteractive` from `MontyHallSpec`
+* TicTacToe.md -- NPE
+* Poker.md -- fix `player` issue (dealer not found) and re-enable `play`
 
 * Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
 * Document `aiMover` from `MontyHallSpec`
@@ -31,7 +32,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Should be part of State displaying `evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)`
 * Display to player the elapsed moves /and/ the state diff
 
+* Generalize `OldMontyHall.chanceOfWinning`
+
 ## 0.6.1 Control Entropy Consumption
+
+* Document GuessRiffle
 
 * Identify all uses of `spire.random.Generator` (and other random value generation)
 

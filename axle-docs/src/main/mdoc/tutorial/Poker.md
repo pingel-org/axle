@@ -84,26 +84,54 @@ chart.svg[IO]("pokerhands.svg").unsafeRunSync()
 As a game of "imperfect information", poker introduces the concept of Information Set.
 
 ```scala mdoc
-import axle.IO.prefixedDisplay
 import axle.game._
 import axle.game.poker._
-import axle.game.poker.evGame._
-import Strategies._
 
 val p1 = Player("P1", "Player 1")
 val p2 = Player("P2", "Player 2")
 
-val game = Poker(Vector(
-  (p1, randomMove, prefixedDisplay("1")(println)),
-  (p2, randomMove, prefixedDisplay("2")(println))),
-  prefixedDisplay("D")(println))
+val game = Poker(Vector(p1, p2))
 ```
 
-Compute the end state from the start state
+Create a `writer` for each player that prefixes the player id to all output.
+
+```scala mdoc
+import cats.effect.IO
+import axle.IO.printMultiLinePrefixed
+
+val playerToWriter: Map[Player, String => IO[Unit]] =
+  evGame.players(game).map { player =>
+    player -> (printMultiLinePrefixed[IO](player.id) _)
+  } toMap
+```
+
+Use a uniform distribution on moves as the demo strategy:
 
 ```scala mdoc
 import axle.probability._
+import spire.math.Rational
+
+val randomMove =
+  (state: PokerStateMasked) =>
+    ConditionalProbabilityTable.uniform[PokerMove, Rational](evGame.moves(game, state))
+```
+
+Wrap the strategies in the calls to `writer` that log the transitions from state to state.
+
+```scala mdoc
+val strategies: Player => PokerStateMasked => IO[ConditionalProbabilityTable[PokerMove, Rational]] = 
+  (player: Player) =>
+    (state: PokerStateMasked) =>
+      for {
+        _ <- playerToWriter(player)(evGameIO.displayStateTo(game, state, player))
+        move <- randomMove.andThen( m => IO { m })(state)
+      } yield move
+```
+
+Play the game -- compute the end state from the start state.
+
+```scala mdoc
 import spire.random.Generator.rng
 
-play(game, startState(game), false, rng)
+play(game, strategies, evGame.startState(game), rng).unsafeRunSync()
 ```
