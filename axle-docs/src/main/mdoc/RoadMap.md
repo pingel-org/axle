@@ -18,7 +18,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Simpler `hardCodedStrategy` and `aiMover` signatures
 * Replace `randomMove` with `ConditionalProbabilityTable.uniform`
 
-* TicTacToe.md -- NPE
 * Poker.md -- fix `player` issue (dealer not found) and re-enable `play`
 
 * Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
@@ -33,6 +32,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Display to player the elapsed moves /and/ the state diff
 
 * Generalize `OldMontyHall.chanceOfWinning`
+
+* Game markdown docs should show Outcomes
 
 ## 0.6.1 Control Entropy Consumption
 
