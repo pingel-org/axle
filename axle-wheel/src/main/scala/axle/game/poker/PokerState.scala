@@ -32,14 +32,14 @@ case class PokerState(
 
   lazy val _mover = moverFn(this)
 
-  def firstBetter(game: Poker): Player = game.players.find(stillIn.contains).get
+  def firstBetter(game: Poker): Player = game.betters.find(stillIn.contains).get
 
   def betterAfter(before: Player, game: Poker): Option[Player] = {
     if (stillIn.forall(p => inFors.get(p).map(_ === currentBet).getOrElse(false))) {
       None
     } else {
       // 'psi' !stillIn.contains(p) after a fold
-      val psi = game.players.filter(p => stillIn.contains(p) || p === before)
+      val psi = game.betters.filter(p => stillIn.contains(p) || p === before)
       Some(psi((psi.indexOf(before) + 1) % psi.length))
     }
   }
