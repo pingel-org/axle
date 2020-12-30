@@ -58,5 +58,15 @@ Play the game -- compute the end state from the start state.
 ```scala mdoc
 import spire.random.Generator.rng
 
-play(game, strategies, evGame.startState(game), rng).unsafeRunSync()
+val endState = play(game, strategies, evGame.startState(game), rng).unsafeRunSync()
+```
+
+Display outcome to each player
+
+```scala mdoc
+val outcome = evGame.mover(game, endState).swap.toOption.get
+
+evGame.players(game).foreach { player =>
+  playerToWriter(player)(evGameIO.displayOutcomeTo(game, outcome, player)).unsafeRunSync()
+}
 ```

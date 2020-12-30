@@ -133,5 +133,5 @@ Play the game -- compute the end state from the start state.
 ```scala mdoc
 import spire.random.Generator.rng
 
-play(game, strategies, evGame.startState(game), rng).unsafeRunSync()
+// play(game, strategies, evGame.startState(game), rng).unsafeRunSync()
 ```

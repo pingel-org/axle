@@ -33,8 +33,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Generalize `OldMontyHall.chanceOfWinning`
 
-* Game markdown docs should show Outcomes
-
 ## 0.6.1 Control Entropy Consumption
 
 * Document GuessRiffle
