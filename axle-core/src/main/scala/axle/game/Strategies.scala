@@ -1,7 +1,5 @@
 package axle.game
 
-import scala.annotation.nowarn
-
 import cats.kernel.Order
 import cats.implicits._
 
@@ -28,8 +26,8 @@ object Strategies {
     evGame: Game[G, S, O, M, MS, MM]
     ): MS => M =
     (state: MS) => {
-      val (move, newState, values) = minimax(game, unmask(state), lookahead, heuristic)
-      move
+      val (moveOpt, values) = minimax(game, unmask(state), lookahead, heuristic)
+      moveOpt.get // TODO guarantee that this doesn't throw using types
     }
 
   def hardCodedStringStrategy[G, S, O, M, MS, MM](
@@ -55,35 +53,25 @@ object Strategies {
    * The third return value is a Map of Player to estimated best value from the returned state.
    */
 
-  def minimax[G, S, O, M, MS, MM, V, N: Order](
+  def minimax[G, S, O, M, MS, MM, N: Order](
     game:      G,
     state:     S,
     depth:     Int,
-    heuristic: S => Map[Player, N])(
+    heuristic: S => Player => N)(
     implicit
-    evGame: Game[G, S, O, M, MS, MM]): (M, S, Map[Player, N]) = {
-
-    // TODO capture as type constraint
-    assert(evGame.mover(game, state).isRight)
-
-    val mover = evGame.mover(game, state).right.get : @nowarn // TODO .get
-    val ms = evGame.maskState(game, state, mover) // TODO move this elsewhere
-    val moveValue = evGame.moves(game, ms).map(move => {
-      val newState = evGame.applyMove(game, state, move)
-      // if (evGame.outcome(game, newState).isDefined || depth == 0) {
-      //   (move, state, heuristic(newState))
-      // } else {
-      //   (move, state, minimax(game, newState, depth - 1, heuristic)._3)
-      // }
-      evGame.mover(game, newState).map { mover =>
-        // || depth == 0
-        (move, state, minimax(game, newState, depth - 1, heuristic)._3)
-      } getOrElse {
-        (move, state, heuristic(newState))
-      }
-    })
-    moveValue.maxBy(mcr => (mcr._3)(mover))
-  }
+    evGame: Game[G, S, O, M, MS, MM]): (Option[M], Player => N) =
+    if( depth == 0 ) {
+      (None, heuristic(state))
+    } else {
+      evGame.mover(game, state).fold(
+        outcome => (None, heuristic(state)),
+        mover =>
+          evGame.moves(game, evGame.maskState(game, state, mover)).map(move => {
+            (Option(move),
+              minimax(game, evGame.applyMove(game, state, move), depth - 1, heuristic)._2)
+          }).maxBy(mcr => (mcr._2)(mover))
+      )
+    }
 
   /**
    * α-β pruning generalized for N-player non-zero-sum games
