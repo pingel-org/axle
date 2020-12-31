@@ -6,7 +6,7 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.5.5 or 0.6.0 cats.effect for axle.game and control entropy side effects
+## 0.6.0 cats.effect for axle.game
 
 * Wrap `axle.IO.getLine` in `F[_]`
 * Remove from `Game`: method `probabilityDist`, `sampler`, and type params `V` and `PM[_, _]`
@@ -14,7 +14,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Define `Indexed.slyce` for non-1-step Ranges
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
-* `unmask` for `aiMover` to allow it to fit `MS => PM[M, V]` pattern
 * Simpler `hardCodedStrategy` and `aiMover` signatures
 * Replace `randomMove` with `ConditionalProbabilityTable.uniform`
 
@@ -173,7 +172,6 @@ that has been its goal since inception.
 * Axioms of partial differentiation
   * https://math.ucr.edu/home/baez/mathematical/ACTUCR/Plotkin_Partial_Differentiation.pdf
 * Conal Elliott: Efficient automatic differentiation made easy via category theory
-* Redo original monty hall spec
 * Max bet for Poker
 * syntax for `Game` typeclass
 
