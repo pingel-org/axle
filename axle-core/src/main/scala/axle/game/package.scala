@@ -76,9 +76,9 @@ package object game {
     orderV: Order[V]): F[Option[(S, M, S)]] =
     evGame.mover(game, fromState) map { mover => {
       val strategyFn: MS => F[PM[M, V]] = strategies(mover)
-      val fStrategy: F[PM[M, V]] = strategyFn(evGame.maskState(game, fromState, mover))
-      fStrategy map { strategy =>
-        val move: M = strategy.sample(gen)
+      val fMoveModel: F[PM[M, V]] = strategyFn(evGame.maskState(game, fromState, mover))
+      fMoveModel map { moveModel =>
+        val move: M = moveModel.sample(gen)
         val toState: S = evGame.applyMove(game, fromState, move)
         Option((fromState, move, toState))
       }
