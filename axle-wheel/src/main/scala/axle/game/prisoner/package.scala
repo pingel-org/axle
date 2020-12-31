@@ -34,41 +34,43 @@ package object prisoner {
       def applyMove(
         game:  PrisonersDilemma,
         state: PrisonersDilemmaState,
-        move:  PrisonersDilemmaMove): PrisonersDilemmaState =
-        mover(game, state).get match {
-          case game.p1 => state.copy(p1Move = Some(move), p1Moved = true)
-          case _       => state.copy(p2Move = Some(move))
+        move:  PrisonersDilemmaMove): PrisonersDilemmaState = {
+          import scala.annotation.nowarn
+          mover(game, state).map( mover =>
+            mover match {
+              case game.p1 => state.copy(p1Move = Some(move), p1Moved = true)
+              case _       => state.copy(p2Move = Some(move))
+            }
+          ).right.get : @nowarn
         }
 
       def mover(
         game: PrisonersDilemma,
-        s:    PrisonersDilemmaState): Option[Player] =
-        if (!s.p1Moved) {
-          assert(s.p1Move.isEmpty)
-          Some(game.p1)
-        } else if (s.p2Move.isEmpty) {
-          Some(game.p2)
+        state: PrisonersDilemmaState): Either[PrisonersDilemmaOutcome, Player] =
+        if (!state.p1Moved) {
+          assert(state.p1Move.isEmpty)
+          Right(game.p1)
+        } else if (state.p2Move.isEmpty) {
+          Right(game.p2)
         } else {
-          None
-        }
-
-      def moverM(
-        game: PrisonersDilemma,
-        s:    PrisonersDilemmaState): Option[Player] =
-        if (!s.p1Moved) {
-          Some(game.p1)
-        } else if (s.p2Move.isEmpty) {
-          Some(game.p2)
-        } else {
-          None
+          (state.p1Move, state.p2Move) match {
+            case (Some(m1), Some(m2)) => (m1, m2) match {
+              case (Silence(), Silence())   => Left(PrisonersDilemmaOutcome(1, 1))
+              case (Silence(), Betrayal())  => Left(PrisonersDilemmaOutcome(3, 0))
+              case (Betrayal(), Silence())  => Left(PrisonersDilemmaOutcome(0, 3))
+              case (Betrayal(), Betrayal()) => Left(PrisonersDilemmaOutcome(2, 2))
+              case (_, _)                   => ??? // TODO unreachable
+            }
+            case _ => ???
+          }
         }
 
       def moves(
         game: PrisonersDilemma,
-        s:    PrisonersDilemmaState): Seq[PrisonersDilemmaMove] =
-        (mover(game, s), s.p1Move, s.p2Move) match {
-          case (Some(game.p1), None, _) => List(Silence(), Betrayal())
-          case (Some(game.p2), _, None) => List(Silence(), Betrayal())
+        state: PrisonersDilemmaState): Seq[PrisonersDilemmaMove] =
+        (mover(game, state), state.p1Move, state.p2Move) match {
+          case (Right(game.p1), None, _) => List(Silence(), Betrayal())
+          case (Right(game.p2), _, None) => List(Silence(), Betrayal())
           case _                        => List.empty
         }
 
@@ -85,21 +87,6 @@ package object prisoner {
         } else {
           None
         }
-
-      def outcome(
-        game:  PrisonersDilemma,
-        state: PrisonersDilemmaState): Option[PrisonersDilemmaOutcome] = {
-        (state.p1Move, state.p2Move) match {
-          case (Some(m1), Some(m2)) => (m1, m2) match {
-            case (Silence(), Silence())   => Some(PrisonersDilemmaOutcome(1, 1))
-            case (Silence(), Betrayal())  => Some(PrisonersDilemmaOutcome(3, 0))
-            case (Betrayal(), Silence())  => Some(PrisonersDilemmaOutcome(0, 3))
-            case (Betrayal(), Betrayal()) => Some(PrisonersDilemmaOutcome(2, 2))
-            case (_, _)                   => None // TODO unreachable
-          }
-          case _ => None
-        }
-      }
 
     }
 

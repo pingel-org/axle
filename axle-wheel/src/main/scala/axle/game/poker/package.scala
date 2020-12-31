@@ -26,9 +26,9 @@ package object poker {
           Map[Player, Seq[Card]](),
           0, // pot
           0, // current bet
-          g.players.toSet, // stillIn
+          g.betters.toSet, // stillIn
           Map(), // inFors
-          g.players.map(player => (player, 100)).toMap, // piles
+          g.betters.map(player => (player, 100)).toMap, // piles
           None)
 
       def startFrom(g: Poker, s: PokerState): Option[PokerState] = {
@@ -52,7 +52,7 @@ package object poker {
       }
 
       def players(g: Poker): IndexedSeq[Player] =
-        g.players
+        g.allPlayers
 
       // TODO: this implementation works, but ideally there is more information in the error
       // string about why the move is invalid (eg player raised more than he had)
@@ -75,14 +75,14 @@ package object poker {
           case Deal() => {
             // TODO clean up these range calculations
             val cards = Vector() ++ deck.cards
-            val hands = game.players.zipWithIndex.map({ case (player, i) =>
+            val hands = game.betters.zipWithIndex.map({ case (player, i) =>
               (player, cards.slyce(i * 2 to i * 2 + 1))
             }).toMap
-            val shared = cards.slyce(game.players.size * 2 to game.players.size * 2 + 4)
-            val unused = cards.slyce((game.players.size * 2 + 5) until cards.length)
+            val shared = cards.slyce(game.betters.size * 2 to game.betters.size * 2 + 4)
+            val unused = cards.slyce((game.betters.size * 2 + 5) until cards.length)
 
             // TODO: should blinds be a part of the "deal" or are they minimums during first round of betting?
-            val orderedStillIn = game.players.filter(stillIn.contains)
+            val orderedStillIn = game.betters.filter(stillIn.contains)
             val smallBlindPlayer = orderedStillIn(0)
             val bigBlindPlayer = orderedStillIn(1) // list should be at least this long
 
@@ -179,7 +179,7 @@ package object poker {
 
             val newPiles = piles + (winner -> (piles(winner) + pot))
 
-            val newStillIn = game.players.filter(newPiles(_) >= bigBlind).toSet
+            val newStillIn = game.betters.filter(newPiles(_) >= bigBlind).toSet
 
             PokerState(
               s => None,
@@ -198,9 +198,8 @@ package object poker {
         }
       }
 
-      def mover(game: Poker, s: PokerState): Option[Player] = s._mover
-
-      def moverM(game: Poker, s: PokerStateMasked): Option[Player] = s.mover
+      def mover(game: Poker, s: PokerState): Either[PokerOutcome, Player] =
+        s._outcome.map(o => Left(o)).getOrElse(Right(s._mover.get))
 
       def moves(game: Poker, s: PokerStateMasked): Seq[PokerMove] = {
 
@@ -218,7 +217,7 @@ package object poker {
           } else {
             val maxPersonalRaise = s.piles(mvr) + s.inFors.get(mvr).getOrElse(0) - s.currentBet
 
-            val maxTableRaise = game.players.map(p => s.piles(p) + s.inFors.get(p).getOrElse(0)).min - s.currentBet
+            val maxTableRaise = game.betters.map(p => s.piles(p) + s.inFors.get(p).getOrElse(0)).min - s.currentBet
 
             assert(maxTableRaise <= maxPersonalRaise)
             // This policy is a workaround for not supporting multiple pots, which are required when
@@ -255,8 +254,6 @@ package object poker {
       def maskMove(game: Poker, move: PokerMove, mover: Player, observer: Player): PokerMove =
         move
 
-      def outcome(game: Poker, state: PokerState): Option[PokerOutcome] = state._outcome
-
     }
 
   implicit val evGameIO: GameIO[Poker, PokerOutcome, PokerMove, PokerStateMasked, PokerMove] =
@@ -283,7 +280,7 @@ Example moves:
           "Pot: " + s.pot + "\n" +
           "Shared: " + s.shownShared.map(_.show).mkString(" ") + "\n" +
           "\n" +
-          game.players.map(p => {
+          game.betters.map(p => {
             p.id + ": " +
               " hand " + (
                 s.hands.get(p).map(h => h.map(_.show).mkString(" ")).getOrElse("--")) + " " +

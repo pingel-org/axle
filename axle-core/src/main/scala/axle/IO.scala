@@ -21,6 +21,9 @@ object IO {
   def printLine[F[_]: Sync](s: String): F[Unit] =
     Sync[F].delay(println(s))
 
+  def printMultiLinePrefixed[F[_]: Sync](prefix: String)(s: String): F[Unit] =
+    Sync[F].delay(println(multiLinePrefix(prefix, s)))
+
   def multiLinePrefix(prefix: String, s: String): String =
     s.split("\n").map({ s => prefix + "> " + s }).mkString("\n")
 

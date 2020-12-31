@@ -1,124 +1,47 @@
 package axle.game
 
-import cats.Monad
-import cats.effect.Sync
 import cats.kernel.Order
 import cats.implicits._
 
-import spire.algebra.Field
 import spire.algebra.Ring
-import spire.math.ConvertableTo
 
 object Strategies {
 
-  def outcomeRingHeuristic[G, S, O, M, MS, MM, V, N: Ring, PM[_, _]](game: G, f: (O, Player) => N)(
-    implicit
-    evGame: Game[G, S, O, M, MS, MM]): S => Map[Player, N] =
+  def outcomeRingHeuristic[G, S, O, M, MS, MM, V, N: Ring, PM[_, _]](
+    game: G,
+    f: (O, Player) => N
+    )(implicit
+      evGame: Game[G, S, O, M, MS, MM]): S => Map[Player, N] =
     (state: S) => evGame.players(game).map(p => {
-      val score = evGame.outcome(game, state).map(o => f(o, p)).getOrElse(Ring[N].zero)
+      val score: N = evGame.mover(game, state).swap.map(o => { f(o, p): N }).getOrElse(Ring[N].zero)
       (p, score)
     }).toMap
 
-  def aiMover[G, S, O, M, MS, MM, V: Order: Field, N: Order, PM[_, _]](
+  def aiMover[G, S, O, M, MS, MM, N: Order](
     game: G,
+    unmask: MS => S,
     lookahead: Int,
     heuristic: S => Map[Player, N])(
     implicit
-    monad:  Monad[PM[?, V]],
-    evGame: Game[G, S, O, M, MS, MM]): S => PM[M, V] =
-    (state: S) => {
-      val (move, newState, values) = minimax(game, state, lookahead, heuristic)
-      monad.pure[M](move)
+    evGame: Game[G, S, O, M, MS, MM]
+    ): MS => M =
+    (state: MS) => {
+      val (moveOpt, values) = minimax(game, unmask(state), lookahead, heuristic)
+      moveOpt.get // TODO guarantee that this doesn't throw using types
     }
 
-  def hardCodedStringStrategy[
-    G, S, O, M, MS, MM,
-    V: Order: Field,
-    PM[_, _]](
+  def hardCodedStringStrategy[G, S, O, M, MS, MM](
       game: G
     )(
     input: (G, MS) => String)(
     implicit
     evGame:   Game[G, S, O, M, MS, MM],
-    evGameIO: GameIO[G, O, M, MS, MM],
-    monadPM: Monad[PM[?, V]]): MS => PM[M, V] =
+    evGameIO: GameIO[G, O, M, MS, MM]
+    ): MS => M =
     (state: MS) => {
       val parsed = evGameIO.parseMove(game, input(game, state)).toOption.get
       val validated = evGame.isValid(game, state, parsed)
-      val move = validated.toOption.get
-      monadPM.pure(move)
-    }
-
-  def userInput[G, S, O, M, MS, MM,
-    V: Field,
-    PM[_, _],
-    F[_]: Sync](
-    game: G,
-    state: MS,
-    reader: () => F[String],
-    writer: String => F[Unit]
-  )(
-    implicit
-    evGame:   Game[G, S, O, M, MS, MM],
-    evGameIO: GameIO[G, O, M, MS, MM],
-    monadPM: Monad[PM[?, V]]
-  ): F[PM[M, V]] = {
-
-    val fInput = for {
-      _ <- writer("Enter move: ")
-      input <- reader()
-      _ <- writer(input)
-    } yield input
-
-    val fEitherCPT: F[Either[String, PM[M, V]]] =
-      fInput.map { input => 
-        evGameIO.parseMove(game, input).flatMap { parsedMove => {
-          evGame.isValid(game, state, parsedMove).map { move =>
-            monadPM.pure(move)
-          }
-        }}
-      }
-
-    fEitherCPT.flatMap(_.map(Monad[F].pure).getOrElse(userInput(game, state, reader, writer)))
-  }
-
-  def interactiveMove[
-    G, S, O, M, MS, MM,
-    V: Order: Field,
-    PM[_, _],
-    F[_]: Sync: Monad](
-      playerToReader: Player => () => F[String],
-      playerToWriter: Player => String => F[Unit]
-    )(
-    implicit
-    evGame:   Game[G, S, O, M, MS, MM],
-    evGameIO: GameIO[G, O, M, MS, MM],
-    monadPM: Monad[PM[?, V]]
-    ): (G, MS) => F[PM[M, V]] =
-    (game: G, state: MS) => {
-
-      val mover = evGame.moverM(game, state).get // TODO .get
-      val reader = playerToReader(mover)
-      val writer = playerToWriter(mover)
-
-      for {
-        _ <- writer(evGameIO.introMessage(game))
-        _ <- writer(evGameIO.displayStateTo(game, state, mover))
-        ui <- userInput[G, S, O, M, MS, MM, V, PM, F](game, state, reader, writer)
-      } yield ui
-  }
-
-  import axle.probability.ConditionalProbabilityTable
-  def randomMove[
-    G, S, O, M, MS, MM,
-    V: Order: Field: ConvertableTo,
-    PM[_, _]](game: G)(
-    implicit
-    evGame: Game[G, S, O, M, MS, MM]): MS => ConditionalProbabilityTable[M, V] =
-    (state: MS) => {
-      val opens = evGame.moves(game, state).toVector
-      val p = Field[V].reciprocal(ConvertableTo[V].fromInt(opens.length))
-      ConditionalProbabilityTable[M, V](opens.map(open => open -> p).toMap)
+      validated.toOption.get
     }
 
   /**
@@ -130,29 +53,25 @@ object Strategies {
    * The third return value is a Map of Player to estimated best value from the returned state.
    */
 
-  def minimax[G, S, O, M, MS, MM, V, N: Order, PM[_, _]](
+  def minimax[G, S, O, M, MS, MM, N: Order](
     game:      G,
     state:     S,
     depth:     Int,
-    heuristic: S => Map[Player, N])(
+    heuristic: S => Player => N)(
     implicit
-    evGame: Game[G, S, O, M, MS, MM]): (M, S, Map[Player, N]) = {
-
-    // TODO capture as type constraint
-    assert(evGame.outcome(game, state).isEmpty)
-
-    val mover = evGame.mover(game, state).get // TODO .get
-    val ms = evGame.maskState(game, state, mover) // TODO move this elsewhere
-    val moveValue = evGame.moves(game, ms).map(move => {
-      val newState = evGame.applyMove(game, state, move)
-      if (evGame.outcome(game, newState).isDefined || depth == 0) {
-        (move, state, heuristic(newState))
-      } else {
-        (move, state, minimax(game, newState, depth - 1, heuristic)._3)
-      }
-    })
-    moveValue.maxBy(mcr => (mcr._3)(mover))
-  }
+    evGame: Game[G, S, O, M, MS, MM]): (Option[M], Player => N) =
+    if( depth == 0 ) {
+      (None, heuristic(state))
+    } else {
+      evGame.mover(game, state).fold(
+        outcome => (None, heuristic(state)),
+        mover =>
+          evGame.moves(game, evGame.maskState(game, state, mover)).map(move => {
+            (Option(move),
+              minimax(game, evGame.applyMove(game, state, move), depth - 1, heuristic)._2)
+          }).maxBy(mcr => (mcr._2)(mover))
+      )
+    }
 
   /**
    * α-β pruning generalized for N-player non-zero-sum games
@@ -181,7 +100,7 @@ object Strategies {
     implicit
     evGame: Game[G, S, O, M, MS, MM]): (M, Map[Player, N]) = {
 
-    assert(evGame.outcome(game, state).isEmpty && depth > 0) // TODO capture as type constraint
+    assert(evGame.mover(game, state).isRight && depth > 0) // TODO capture as type constraint
 
     //      val initial = AlphaBetaFold(game, dummy[M], cutoff, false)
     //      val ms = evGame.maskState(game, state, ???) // TODO move this elsewhere

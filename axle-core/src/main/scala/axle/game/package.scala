@@ -2,6 +2,7 @@ package axle
 
 import cats.Monad
 import cats.kernel.Order
+import cats.effect.Sync
 import cats.implicits._
 
 import spire.algebra.Field
@@ -15,6 +16,49 @@ import axle.probability._
 import axle.syntax.sampler._
 
 package object game {
+
+  def userInput[G, S, O, M, MS, MM,
+    F[_]: cats.effect.Sync](
+    game: G,
+    state: MS,
+    reader: () => F[String],
+    writer: String => F[Unit]
+  )(
+    implicit
+    evGame:   Game[G, S, O, M, MS, MM],
+    evGameIO: GameIO[G, O, M, MS, MM]
+  ): F[M] = {
+
+    val fInput = for {
+      _ <- writer("Enter move: ")
+      input <- reader()
+      _ <- writer(input)
+    } yield input
+
+    val fEitherCPT: F[Either[String, M]] =
+      fInput.map { input => 
+        evGameIO.parseMove(game, input).flatMap { parsedMove => {
+          evGame.isValid(game, state, parsedMove)
+        }}
+      }
+
+    fEitherCPT.flatMap(_.map(Monad[F].pure).getOrElse(userInput(game, state, reader, writer)))
+  }
+
+  def interactiveMove[G, S, O, M, MS, MM, F[_]: Sync](
+      game: G,
+      player: Player,
+      reader: () => F[String],
+      writer: String => F[Unit]
+    )(implicit
+      evGame:   Game[G, S, O, M, MS, MM],
+      evGameIO: GameIO[G, O, M, MS, MM]
+    ): MS => F[M] =
+      (state: MS) =>
+        for {
+           _ <- writer(evGameIO.displayStateTo(game, state, player))
+          move <- userInput(game, state, reader, writer)
+        } yield move
 
   def nextMoveState[
     G, S, O, M, MS, MM, V,
@@ -32,9 +76,9 @@ package object game {
     orderV: Order[V]): F[Option[(S, M, S)]] =
     evGame.mover(game, fromState) map { mover => {
       val strategyFn: MS => F[PM[M, V]] = strategies(mover)
-      val fStrategy: F[PM[M, V]] = strategyFn(evGame.maskState(game, fromState, mover))
-      fStrategy map { strategy =>
-        val move: M = strategy.sample(gen)
+      val fMoveModel: F[PM[M, V]] = strategyFn(evGame.maskState(game, fromState, mover))
+      fMoveModel map { moveModel =>
+        val move: M = moveModel.sample(gen)
         val toState: S = evGame.applyMove(game, fromState, move)
         Option((fromState, move, toState))
       }
@@ -103,7 +147,7 @@ package object game {
     fieldV: Field[V],
     orderV: Order[V]): F[(Option[(S, M)], PM[S, V])] = {
 
-    val openStateModel: PM[S, V] = bayes.filter(stateModel)(RegionIf(evGame.mover(game, _).isDefined))
+    val openStateModel: PM[S, V] = bayes.filter(stateModel)(RegionIf(evGame.mover(game, _).isRight))
 
     val fromState: S = prob.sample(openStateModel)(gen)
     // val probabilityOfFromState: V = prob.probabilityOf(stateModel)(RegionEq(fromState))
@@ -253,7 +297,33 @@ package object game {
     distV: Dist[V],
     ringV: Ring[V],
     orderV: Order[V]): F[S] =
-    lastState(game, start, strategies, gen) map { _.get._3 } // NOTE Option.get
+    lastState(game, start, strategies, gen) map { lastTripleOpt =>
+      val lastState = lastTripleOpt.get._3 // NOTE Option.get
+      lastState
+    }
+
+  def playWithIntroAndOutcomes[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
+    game:  G,
+    strategies: Player => MS => F[PM[M, V]],
+    start: S,
+    playerToWriter: Player => String => F[()],
+    gen:   Generator)(
+    implicit
+    evGame:   Game[G, S, O, M, MS, MM],
+    evGameIO: GameIO[G, O, M, MS, MM],
+    prob:     Sampler[PM],
+    distV: Dist[V],
+    ringV: Ring[V],
+    orderV: Order[V]): F[S] =
+    for {
+      _ <- evGame.players(game).map { player =>
+             playerToWriter(player)(evGameIO.introMessage(game))
+           }.last
+      endState <- play(game, strategies, start, gen)
+      _ <- evGame.players(game).map { player =>
+             playerToWriter(player)(evGame.mover(game, endState).swap.map(outcome => evGameIO.displayOutcomeTo(game, outcome, player)).getOrElse(""))
+           }.last
+    } yield endState
 
   def gameStream[G, S, O, M, MS, MM, V, PM[_, _], F[_]: Monad](
     game:  G,

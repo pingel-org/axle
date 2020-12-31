@@ -53,23 +53,22 @@ package object guessriffle {
 
       def mover(
         game: GuessRiffle,
-        s:    GuessRiffleState): Option[Player] =
-        if (s.riffledDeck.isEmpty) {
-          Some(GuessRiffle.dealer)
-        } else if ( s.guess.isEmpty ) {
-          if( s.remaining.size == 0) {
-            None
+        state: GuessRiffleState): Either[GuessRiffleOutcome, Player] =
+        if (state.riffledDeck.isEmpty) {
+          Right(GuessRiffle.dealer)
+        } else if ( state.guess.isEmpty ) {
+          if( state.remaining.size == 0) {
+            if( state.riffledDeck.isEmpty || state.remaining.size > 0) {
+              ???
+            } else {
+              Left(GuessRiffleOutcome(state.numCorrect))
+            }
           } else {
-            Some(game.player)
+            Right(game.player)
           }
         } else {
-          Some(GuessRiffle.dealer)
+          Right(GuessRiffle.dealer)
         }
-
-      def moverM(
-        game: GuessRiffle,
-        s:    GuessRiffleState): Option[Player] =
-        mover(game, s)
 
       def moves(
         game: GuessRiffle,
@@ -92,15 +91,7 @@ package object guessriffle {
       def maskMove(game: GuessRiffle, move: GuessRiffleMove, mover: Player, observer: Player): Option[GuessRiffleMove] =
         Some(move)
 
-      def outcome(
-        game:  GuessRiffle,
-        state: GuessRiffleState): Option[GuessRiffleOutcome] =
-        if( state.riffledDeck.isEmpty || state.remaining.size > 0) {
-          None
-        } else {
-          Some(GuessRiffleOutcome(state.numCorrect))
-        }
-    }
+      }
 
     implicit val evGameIO: GameIO[GuessRiffle, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove]] =
     new GameIO[GuessRiffle, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove]] {

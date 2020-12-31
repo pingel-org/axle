@@ -14,43 +14,52 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Define `Indexed.slyce` for non-1-step Ranges
 * Improve `axle.lx.{Gold, Angluin}` coverage
 * `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
+* `unmask` for `aiMover` to allow it to fit `MS => PM[M, V]` pattern
+* Simpler `hardCodedStrategy` and `aiMover` signatures
+* Replace `randomMove` with `ConditionalProbabilityTable.uniform`
 
-* Use interactiveMove for demo
+## 0.6.1+ Further buildout of axle.game
 
-```scala
-    interactiveMove[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove], Rational, ConditionalProbabilityTable, cats.effect.IO](
-      _ => () => axle.IO.getLine[cats.effect.IO](),
-      _ => (s: String) => axle.IO.printLine[cats.effect.IO](s)
-    ),
-```
-
-```scala
-    // These should be part of State displaying
-    evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)
-    evGame.outcome(game, lastState) foreach { outcome =>
-      evGameIO.displayOutcomeTo(game, outcome, observer)
-    }
-```
-
-* Demo AI mover in docs.  AI mover takes S, not MS. How can I adapt this?
-* `Game.players` is only used by `outcomeRingHeuristic`
-* `Game.moverM` is only used in `axle.game.Strategies.interactiveMove`
-* Simplify `GuessRiffleProperties` (especially second property)
-* Remove hard-coded `ConditionalProbabilityTable` in `axle.game.Strategies.randomMove` (may need new typeclass.. `UniformDistribution`?)
-* stateStreamMap only used in GuessRiffleProperties -- stop using chain?
-* stateStrategyMoveStream only used in GuessRiffleProperties
-* GameIO -> GameSerDe (or maybe move methods to Game trait)
-  * or maybe only use w/ interactiveMove
 * moveStateStream
   * rename to `moveStatePath` or `traceGame`
   * unless we give this job to `State`...
     * Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
   * stop using chain?
-* Game.players should be a part of GameState?
+* Should be part of State displaying `evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)`
 * Display to player the elapsed moves /and/ the state diff
+
+* Generalize `OldMontyHall.chanceOfWinning`
+
+* GuessRiffle.md
+  * Walk through game
+  * Plot distribution of sum(entropy) for both strategies
+  * Plot entropy by turn # for each strategy
+  * Plot simulated score distribution for each strategy
+
+* `aiMover.unmask` prevents `MontyHallSpec` "AI vs. AI game produces moveStateStream" from working
+  * will be an issue for all non-perfect information
+
+* GuessRiffleSpec: use `moveFromRandomState`
+
+* Gerrymandering sensitivity
+* Game theory axioms (Nash, etc)
+* `axle.game`: `Observable[T]`
+* move state dist stream
+* "You split, I choose" as game
+
+* Replace `axle.game.moveFromRandomState.mapToProb`
+
+* Clean up `axle.game.playWithIntroAndOutcomes`
+
 * The references to `movesMap` in `MoveFromRandomStateSpec.scala` illustrate a need for a cleaner way to create a hard-coded strategy -- which could just be in the form of a couple utility functions from `movesMap` to the data needed by `evGame.{moves,applyMove}` and `rm` strategy
 
-## 0.6.1 Control Entropy Consumption
+* Generalize `ConditionalProbabilityTable.uniform` into typeclass
+
+* Simplify `GuessRiffleProperties` (especially second property)
+* stateStreamMap only used in GuessRiffleProperties -- stop using chain?
+* stateStrategyMoveStream only used in GuessRiffleProperties
+
+* `Game.players` should be a part of GameState (or take it as an argument)?  Will wait for pressing use case.
 
 * Identify all uses of `spire.random.Generator` (and other random value generation)
 
@@ -58,46 +67,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
   * `Chance` should be its own player
+  * Consider whether `PM` should be a part of `Strategy` type (`MS => PM[M, V]`)
+    * More abstractly, more many intents and purposes, all we are about is that resolving PM to M consumes entropy
+    * In which cases should the `PM` be retained?
   * Each N bits consumed during `Riffle()` is its own move
   * Chance moves consume `UnittedQuantity[Information, N]`
 
-* Replace `axle.game.moveFromRandomState.mapToProb`
-
-## 0.6.2 Logistic Regression
-
-* Fix `LogisticRegression` and move `LogisticRegression.md` back
-
-## 0.6.3 Genetic Algorithm
-
-* Fix `GeneticAlgorithmSpec`
-* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
-
-## 0.6.4 Logic
-
-* Redo Logic using Abstract Algebra
-
-## 0.6.5
-
-* Simple graph implementation so that `axle-core` can avoid including `axle-jung`
-
-* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
-  * Will require externalizing the layout to its own.... typeclass?
-  * Layout of bayesian network is quite bad -- check ABE SVG
-
-## 0.6.6 PNG
-
-* `axle-png` to avoid Xvfb requirement during tests
-* Chicklet borders / colors on site
-
-## 0.6.7 AST
-
-* move ast view xml (how is it able to refer to `xml.Node`?)
-  * ast.view.AstNodeFormatter (xml.Utility.escape)
-  * ast.view.AstNodeFormatterXhtmlLines
-  * ast.view.AstNodeFormatterXhtml
-* Tests for `axle.ast`
-* `axle-ast-python`
-* `cats.effect` for `axle.ast.python2`
+* `perceive` could return a lower-entropy probability model
+  * Perhaps in exchange for a given amount of energy
+  * Or ask for a 0-entropy model and be told how expensive that was
 
 ## 0.7.x Factoring and Bayesian Networks
 
@@ -136,28 +114,40 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `Bayes[MonotypeBayesanNetwork]` -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself
 
+* QuantumCircuit.md
+* QBit2.factor
+* Fix and enable DeutschOracleSpec
+* QBit CCNot
+
 * Review complex analysis
 
-## 0.7.x Compositional Game Theory
+## 0.8.x Bugs and adoption barriers
 
-* GuessRiffleSpec: use `moveFromRandomState`
-* GuessRiffle.md
-  * Walk through game
-  * Plot distribution of sum(entropy) for both strategies
-  * Plot entropy by turn # for each strategy
-  * Plot simulated score distribution for each strategy
+* Fix `LogisticRegression` and move `LogisticRegression.md` back
+
+* Fix `GeneticAlgorithmSpec`
+* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
+
+* Redo Logic using Abstract Algebra
+
+* Simple graph implementation so that `axle-core` can avoid including `axle-jung`
+
+* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
+  * Will require externalizing the layout to its own.... typeclass?
+  * Layout of bayesian network is quite bad -- check ABE SVG
+
+* `axle-png` to avoid Xvfb requirement during tests
+* Chicklet borders / colors on site
+
+* move ast view xml (how is it able to refer to `xml.Node`?)
+  * ast.view.AstNodeFormatter (xml.Utility.escape)
+  * ast.view.AstNodeFormatterXhtmlLines
+  * ast.view.AstNodeFormatterXhtml
+* Tests for `axle.ast`
+* `axle-ast-python`
+* `cats.effect` for `axle.ast.python2`
 
 * Factor `axle.algebra.chain` in terms of well-known combinators
-
-* Gerrymandering sensitivity
-* Game theory axioms (Nash, etc)
-* `axle.game`: `Observable[T]`
-* move state dist stream
-* "You split, I choose" as game
-
-* `perceive` could return a lower-entropy probability model
-  * Perhaps in exchange for a given amount of energy
-  * Or ask for a 0-entropy model and be told how expensive that was
 
 ## After that
 
@@ -189,10 +179,6 @@ that has been its goal since inception.
 
 ## Quantum Circuits
 
-* QuantumCircuit.md
-* QBit2.factor
-* Fix and enable DeutschOracleSpec
-* QBit CCNot
 * Property test reversibility (& own inverse)
 * Typeclass for "negate" (etc), Binary, CBit
 * Typeclass for unindex

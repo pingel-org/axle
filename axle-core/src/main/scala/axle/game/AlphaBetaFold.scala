@@ -1,5 +1,7 @@
 package axle.game
 
+import scala.annotation.nowarn
+
 import cats.kernel.Order
 import cats.implicits._
 
@@ -20,7 +22,7 @@ case class AlphaBetaFold[G, S, O, M, MS, MM, V, N: Order, PM[_, _]](
     } else {
       val α = heuristic(evGame.applyMove(game, state, move))
       // TODO: forall other players ??
-      val mover = evGame.mover(game, state).get
+      val mover: Player = evGame.mover(game, state).right.get : @nowarn
       val c = cutoff.get(mover)
       if (c.isEmpty || c.get <= α(mover)) {
         AlphaBetaFold(game, move, α, false) // TODO move = m?

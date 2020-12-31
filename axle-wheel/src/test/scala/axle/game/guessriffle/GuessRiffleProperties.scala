@@ -16,7 +16,6 @@ import spire.math.Rational
 import axle.algebra.RegionEq
 import axle.math.Σ
 import axle.game._
-import axle.game.Strategies.randomMove
 import axle.game.cards._
 import axle.game.guessriffle.evGame._
 import axle.probability._
@@ -118,7 +117,11 @@ class GuessRiffleProperties extends Properties("GuessRiffle Properties") {
 
     val player = Player("P", "Player")
     val game = GuessRiffle(player)
-    val rm = randomMove[GuessRiffle, GuessRiffleState, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove], Rational, ConditionalProbabilityTable](game).andThen(Option.apply _)
+
+    val rm = {
+      (state: GuessRiffleState) =>
+        ConditionalProbabilityTable.uniform[GuessRiffleMove, Rational](evGame.moves(game, state))
+    } andThen(Option.apply _)
 
     // leverages the fact that s0 will be the same for both games. Not generally true
     val s0 = startState(game)

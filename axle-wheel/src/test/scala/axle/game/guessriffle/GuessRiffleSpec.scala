@@ -10,7 +10,6 @@ import spire.random.Generator.rng
 
 import axle.probability._
 import axle.game._
-import axle.game.Strategies._
 
 class GuessRiffleSpec extends AnyFunSuite with Matchers {
 
@@ -22,7 +21,10 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
 
   val game = GuessRiffle(player)
 
-  val rm = randomMove[GuessRiffle, GuessRiffleState, GuessRiffleOutcome, GuessRiffleMove, GuessRiffleState, Option[GuessRiffleMove], Rational, ConditionalProbabilityTable](game).andThen(Option.apply _)
+  val rm = {
+    (state: GuessRiffleState) =>
+      ConditionalProbabilityTable.uniform[GuessRiffleMove, Rational](evGame.moves(game, state))
+  } andThen(Option.apply _)
 
   test("hard coded game") {
     import axle.game.cards._
@@ -72,7 +74,9 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
       rng).get
 
     // Note non-zero (but astronomically small) chance of this failing despite correct implementation
-    outcome(game, endState).get.numCorrect should be >(10)
+    val outcome: GuessRiffleOutcome = mover(game, endState).swap.toOption.get
+    
+    outcome.numCorrect should be >(10)
   }
 
   test("random game produce game stream") {
@@ -100,17 +104,7 @@ class GuessRiffleSpec extends AnyFunSuite with Matchers {
     val newStart = startFrom(game, nextState).get
 
     moves(game, newStart).length should be(1)
-    outcome(game, state) should be(None)
-  }
-
-  test("masked-sate mover be the same as raw state mover") {
-
-    val state = startState(game)
-    val move = moves(game, state).head
-    val nextState = applyMove(game, state, move)
-
-    moverM(game, state) should be(mover(game, state))
-    moverM(game, nextState) should be(mover(game, nextState))
+    mover(game, state).isRight should be(true)
   }
 
   test("starting moves") {
