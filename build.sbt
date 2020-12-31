@@ -224,8 +224,8 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
   .enablePlugins(MdocPlugin)
   .settings(
     mdocVariables := Map(
-      "RELEASE_VERSION" -> "0.5.4",
-      "SNAPSHOT_VERSION" -> "0.5.5-SNAPSHOT"
+      "RELEASE_VERSION" -> "0.6.0",
+      "SNAPSHOT_VERSION" -> "0.6.1-SNAPSHOT"
     ),
     mdocIn := file("axle-docs/src/main/mdoc"),
     mdocOut := file("axle-docs/target/site"),
