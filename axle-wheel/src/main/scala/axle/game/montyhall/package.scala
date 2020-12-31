@@ -16,7 +16,7 @@ package object montyhall {
     new Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove]] {
 
       def startState(game: MontyHall): MontyHallState =
-        MontyHallState(None, false, None, None, None)
+        MontyHallState(None, None, None, None)
 
       def startFrom(game: MontyHall, s: MontyHallState): Option[MontyHallState] =
         Some(startState(game))
@@ -35,7 +35,7 @@ package object montyhall {
         state: MontyHallState,
         move:  MontyHallMove): MontyHallState = {
         move match {
-          case place @ PlaceCar(d) => state.copy(placement = Some(place), carPlaced = true)
+          case place @ PlaceCar(d) => state.copy(placement = Some(place))
           case fc @ FirstChoice(d) => state.copy(firstChoice = Some(fc))
           case reveal @ Reveal(d)  => state.copy(reveal = Some(reveal))
           case change @ Change()   => state.copy(secondChoice = Some(Left(change)))
@@ -46,8 +46,7 @@ package object montyhall {
       def mover(
         game: MontyHall,
         state: MontyHallState): Either[MontyHallOutcome, Player] =
-        if (!state.carPlaced) {
-          assert(state.placement.isEmpty)
+        if (state.placement.isEmpty) {
           Right(game.monty)
         } else if (state.firstChoice.isEmpty) {
           Right(game.contestant)
@@ -57,7 +56,7 @@ package object montyhall {
           Right(game.contestant)
         } else {
           state match {
-            case MontyHallState(Some(PlaceCar(c)), _, Some(FirstChoice(f)), Some(Reveal(r)), Some(sc)) =>
+            case MontyHallState(Some(PlaceCar(c)), Some(FirstChoice(f)), Some(Reveal(r)), Some(sc)) =>
               sc match {
                 case Left(Change()) => Left(MontyHallOutcome(c != f))
                 case Right(Stay())  => Left(MontyHallOutcome(c == f))
@@ -69,8 +68,7 @@ package object montyhall {
       def moves(
         game: MontyHall,
         s:    MontyHallState): Seq[MontyHallMove] = {
-        if (!s.carPlaced) {
-          assert(s.placement.isEmpty)
+        if (s.placement.isEmpty) {
           (1 to 3).map(PlaceCar.apply)
         } else if (s.firstChoice.isEmpty) {
           (1 to 3).map(FirstChoice.apply)
