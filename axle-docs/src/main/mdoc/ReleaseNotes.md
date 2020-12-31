@@ -6,6 +6,17 @@ permalink: /release_notes/
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
+## 0.6.0 cats.effect for axle.game (December 31, 2020)
+
+* Wrap `axle.IO.getLine` in `F[_]`
+* Remove from `Game`: method `probabilityDist`, `sampler`, and type params `V` and `PM[_, _]`
+* Move `strategyFor` from `Game` to `strategies` argument in `axle.game` package methods
+* Define `Indexed.slyce` for non-1-step Ranges
+* Improve `axle.lx.{Gold, Angluin}` coverage
+* `axle.laws.generator` includes generators for GeoCoordinates, UnittedQuantities, and Units
+* Simpler `hardCodedStrategy` and `aiMover` signatures
+* Replace `randomMove` with `ConditionalProbabilityTable.uniform`
+
 ## 0.5.4 Sampler Axioms + package reorg (September 28, 2020)
 
 * Sampler Axioms

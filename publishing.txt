@@ -26,6 +26,19 @@ Then:
 Latest detailed guide: http://central.sonatype.org/pages/releasing-the-deployment.html
 
 Other
+
+update version.sbt
+update build.sbt
+more portion of RoadMap.md to ReleaseNotes.md
+git tag
+git tag $v
+git push --tags
+submit PR
+
+publish site
+tweet
+
+Other
 -----
 
 Using Sonatype: http://www.scala-sbt.org/release/docs/Using-Sonatype.html
