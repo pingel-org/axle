@@ -16,7 +16,7 @@ package object montyhall {
     new Game[MontyHall, MontyHallState, MontyHallOutcome, MontyHallMove, MontyHallState, Option[MontyHallMove]] {
 
       def startState(game: MontyHall): MontyHallState =
-        MontyHallState(None, None, None, None)
+        MontyHallState(None, false, None, None, None)
 
       def startFrom(game: MontyHall, s: MontyHallState): Option[MontyHallState] =
         Some(startState(game))
@@ -33,15 +33,14 @@ package object montyhall {
       def applyMove(
         game:  MontyHall,
         state: MontyHallState,
-        move:  MontyHallMove): MontyHallState = {
+        move:  MontyHallMove): MontyHallState =
         move match {
-          case place @ PlaceCar(d) => state.copy(placement = Some(place))
+          case place @ PlaceCar(d) => state.copy(placement = Some(place), placed = true)
           case fc @ FirstChoice(d) => state.copy(firstChoice = Some(fc))
           case reveal @ Reveal(d)  => state.copy(reveal = Some(reveal))
           case change @ Change()   => state.copy(secondChoice = Some(Left(change)))
           case stay @ Stay()       => state.copy(secondChoice = Some(Right(stay)))
         }
-      }
 
       def mover(
         game: MontyHall,
@@ -56,7 +55,7 @@ package object montyhall {
           Right(game.contestant)
         } else {
           state match {
-            case MontyHallState(Some(PlaceCar(c)), Some(FirstChoice(f)), Some(Reveal(r)), Some(sc)) =>
+            case MontyHallState(Some(PlaceCar(c)), true, Some(FirstChoice(f)), Some(Reveal(r)), Some(sc)) =>
               sc match {
                 case Left(Change()) => Left(MontyHallOutcome(c != f))
                 case Right(Stay())  => Left(MontyHallOutcome(c == f))
@@ -67,19 +66,18 @@ package object montyhall {
 
       def moves(
         game: MontyHall,
-        s:    MontyHallState): Seq[MontyHallMove] = {
-        if (s.placement.isEmpty) {
+        state: MontyHallState): Seq[MontyHallMove] =
+        if (!state.placed) {
           (1 to 3).map(PlaceCar.apply)
-        } else if (s.firstChoice.isEmpty) {
+        } else if (state.firstChoice.isEmpty) {
           (1 to 3).map(FirstChoice.apply)
-        } else if (s.reveal.isEmpty) {
-          (1 to 3).filter(d => (d != s.firstChoice.get.door && d != s.placement.get.door)).map(Reveal.apply)
-        } else if (s.secondChoice.isEmpty) {
+        } else if (state.reveal.isEmpty) {
+          (1 to 3).filter(d => (d != state.firstChoice.get.door && d != state.placement.get.door)).map(Reveal.apply)
+        } else if (state.secondChoice.isEmpty) {
           List(Change(), Stay())
         } else {
           List.empty
         }
-      }
 
       def maskState(game: MontyHall, state: MontyHallState, observer: Player): MontyHallState =
         if (observer === game.monty) {

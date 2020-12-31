@@ -18,10 +18,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Simpler `hardCodedStrategy` and `aiMover` signatures
 * Replace `randomMove` with `ConditionalProbabilityTable.uniform`
 
-* Fix `MontyHallSpec` "AI vs. AI game produces moveStateStream"
 * Generalize `OldMontyHall.chanceOfWinning`
-
-* Document `aiMover` from `MontyHallSpec`
 
 * GuessRiffle.md
   * Walk through game
@@ -38,6 +35,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Display to player the elapsed moves /and/ the state diff
 
 ## 0.6.1 Control Entropy Consumption
+
+* `aiMover.unmask` prevents `MontyHallSpec` "AI vs. AI game produces moveStateStream" from working
 
 * Identify all uses of `spire.random.Generator` (and other random value generation)
 
