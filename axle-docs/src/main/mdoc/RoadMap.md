@@ -18,13 +18,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Simpler `hardCodedStrategy` and `aiMover` signatures
 * Replace `randomMove` with `ConditionalProbabilityTable.uniform`
 
-* Generalize `OldMontyHall.chanceOfWinning`
-
-* GuessRiffle.md
-  * Walk through game
-  * Plot distribution of sum(entropy) for both strategies
-  * Plot entropy by turn # for each strategy
-  * Plot simulated score distribution for each strategy
+## 0.6.1+ Further buildout of axle.game
 
 * moveStateStream
   * rename to `moveStatePath` or `traceGame`
@@ -34,23 +28,24 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Should be part of State displaying `evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)`
 * Display to player the elapsed moves /and/ the state diff
 
-## 0.6.1 Control Entropy Consumption
+* Generalize `OldMontyHall.chanceOfWinning`
+
+* GuessRiffle.md
+  * Walk through game
+  * Plot distribution of sum(entropy) for both strategies
+  * Plot entropy by turn # for each strategy
+  * Plot simulated score distribution for each strategy
 
 * `aiMover.unmask` prevents `MontyHallSpec` "AI vs. AI game produces moveStateStream" from working
+  * will be an issue for all non-perfect information
 
-* Identify all uses of `spire.random.Generator` (and other random value generation)
+* GuessRiffleSpec: use `moveFromRandomState`
 
-* See uses of `seed` in `GuessRiffleProperties`
-
-* Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
-  * `Chance` should be its own player
-  * Consider whether `PM` should be a part of `Strategy` type (`MS => PM[M, V]`)
-    * More abstractly, more many intents and purposes, all we are about is that resolving PM to M consumes entropy
-    * In which cases should the `PM` be retained?
-  * Each N bits consumed during `Riffle()` is its own move
-  * Chance moves consume `UnittedQuantity[Information, N]`
-
-## 0.6.1 More scrutiny on axle.game
+* Gerrymandering sensitivity
+* Game theory axioms (Nash, etc)
+* `axle.game`: `Observable[T]`
+* move state dist stream
+* "You split, I choose" as game
 
 * Replace `axle.game.moveFromRandomState.mapToProb`
 
@@ -66,41 +61,21 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * `Game.players` should be a part of GameState (or take it as an argument)?  Will wait for pressing use case.
 
-## 0.6.3 Logistic Regression
+* Identify all uses of `spire.random.Generator` (and other random value generation)
 
-* Fix `LogisticRegression` and move `LogisticRegression.md` back
+* See uses of `seed` in `GuessRiffleProperties`
 
-## 0.6.4 Genetic Algorithm
+* Eliminate entropy consumption of `rng` side-effect (eg `applyMove(Riffle())`)
+  * `Chance` should be its own player
+  * Consider whether `PM` should be a part of `Strategy` type (`MS => PM[M, V]`)
+    * More abstractly, more many intents and purposes, all we are about is that resolving PM to M consumes entropy
+    * In which cases should the `PM` be retained?
+  * Each N bits consumed during `Riffle()` is its own move
+  * Chance moves consume `UnittedQuantity[Information, N]`
 
-* Fix `GeneticAlgorithmSpec`
-* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
-
-## 0.6.5 Logic
-
-* Redo Logic using Abstract Algebra
-
-## 0.6.6 Graph
-
-* Simple graph implementation so that `axle-core` can avoid including `axle-jung`
-
-* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
-  * Will require externalizing the layout to its own.... typeclass?
-  * Layout of bayesian network is quite bad -- check ABE SVG
-
-## 0.6.7 PNG
-
-* `axle-png` to avoid Xvfb requirement during tests
-* Chicklet borders / colors on site
-
-## 0.6.8 AST
-
-* move ast view xml (how is it able to refer to `xml.Node`?)
-  * ast.view.AstNodeFormatter (xml.Utility.escape)
-  * ast.view.AstNodeFormatterXhtmlLines
-  * ast.view.AstNodeFormatterXhtml
-* Tests for `axle.ast`
-* `axle-ast-python`
-* `cats.effect` for `axle.ast.python2`
+* `perceive` could return a lower-entropy probability model
+  * Perhaps in exchange for a given amount of energy
+  * Or ask for a 0-entropy model and be told how expensive that was
 
 ## 0.7.x Factoring and Bayesian Networks
 
@@ -139,23 +114,40 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `Bayes[MonotypeBayesanNetwork]` -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself
 
+* QuantumCircuit.md
+* QBit2.factor
+* Fix and enable DeutschOracleSpec
+* QBit CCNot
+
 * Review complex analysis
 
-## 0.7.x Compositional Game Theory
+## 0.8.x Bugs and adoption barriers
 
-* GuessRiffleSpec: use `moveFromRandomState`
+* Fix `LogisticRegression` and move `LogisticRegression.md` back
+
+* Fix `GeneticAlgorithmSpec`
+* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
+
+* Redo Logic using Abstract Algebra
+
+* Simple graph implementation so that `axle-core` can avoid including `axle-jung`
+
+* `svgJungDirectedGraphVisualization` move to a `axle-jung-xml` jar?
+  * Will require externalizing the layout to its own.... typeclass?
+  * Layout of bayesian network is quite bad -- check ABE SVG
+
+* `axle-png` to avoid Xvfb requirement during tests
+* Chicklet borders / colors on site
+
+* move ast view xml (how is it able to refer to `xml.Node`?)
+  * ast.view.AstNodeFormatter (xml.Utility.escape)
+  * ast.view.AstNodeFormatterXhtmlLines
+  * ast.view.AstNodeFormatterXhtml
+* Tests for `axle.ast`
+* `axle-ast-python`
+* `cats.effect` for `axle.ast.python2`
 
 * Factor `axle.algebra.chain` in terms of well-known combinators
-
-* Gerrymandering sensitivity
-* Game theory axioms (Nash, etc)
-* `axle.game`: `Observable[T]`
-* move state dist stream
-* "You split, I choose" as game
-
-* `perceive` could return a lower-entropy probability model
-  * Perhaps in exchange for a given amount of energy
-  * Or ask for a 0-entropy model and be told how expensive that was
 
 ## After that
 
@@ -187,10 +179,6 @@ that has been its goal since inception.
 
 ## Quantum Circuits
 
-* QuantumCircuit.md
-* QBit2.factor
-* Fix and enable DeutschOracleSpec
-* QBit CCNot
 * Property test reversibility (& own inverse)
 * Typeclass for "negate" (etc), Binary, CBit
 * Typeclass for unindex
