@@ -10,13 +10,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ### Missing functionality
 
-* moveStateStream
-  * rename to `moveStatePath` or `traceGame`
-  * unless we give this job to `State`...
-    * Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
-  * stop using chain?
-* Should be part of State displaying `evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)`
-* Display to player the elapsed moves /and/ the state diff
+* Remove moveStateStream
+
+* For one game (probably Poker)
+  * Record witnessed and unwitnessed history `Seq[(M, S)]` in `State`
+  * Display to user in interactiveMove
+    * `val mm = evGame.maskMove(game, move, mover, observer)`
+    * `evGameIO.displayMoveTo(game, mm, mover, observer)`
+  * Then generalize and pull into framework
 
 ### Motivating Examples
 
