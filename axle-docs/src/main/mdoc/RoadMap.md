@@ -62,6 +62,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ### Hygeine
 
+* convert to scalameta munit for dotty
+
 * Replace `axle.game.moveFromRandomState.mapToProb`
 
 * Clean up `axle.game.playWithIntroAndOutcomes`
@@ -185,6 +187,7 @@ that has been its goal since inception.
 * Shor's algorithm
 * Grover's algorithm
 * Quantum cryptographic key exchange
+* Check out Qiskit
 
 ## Algorithm / Concept breadth
 
