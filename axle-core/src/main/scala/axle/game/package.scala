@@ -306,7 +306,7 @@ package object game {
     game:  G,
     strategies: Player => MS => F[PM[M, V]],
     start: S,
-    playerToWriter: Player => String => F[()],
+    playerToWriter: Player => String => F[Unit],
     gen:   Generator)(
     implicit
     evGame:   Game[G, S, O, M, MS, MM],
