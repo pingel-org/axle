@@ -300,26 +300,29 @@ package object math {
 
     (2 until n) filter { A }
   }
-  def notPrimeUpTo[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): LazyList[N] = {
+  def notPrimeUpTo[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Iterator[N] = {
 
     val two = ringN.plus(ringN.one, ringN.one)
 
     val bases = lazyListsFrom(two).takeWhile(i => ringN.times(i, i) < n)
 
-    val notPrimeStreams =
-      filterOut(bases, if (!bases.isEmpty) notPrimeUpTo(bases.last) else LazyList.empty) map { i =>
-        lazyListsFrom(ringN.zero).map(j => ringN.plus(i * i, i * j))
+    val notPrimeStreams: Seq[Iterator[N]] =
+      filterOut(
+        bases.iterator,
+        if (!bases.isEmpty) notPrimeUpTo(bases.last) else List.empty.iterator
+      ).toList map { i =>
+        lazyListsFrom(ringN.zero).map(j => ringN.plus(i * i, i * j)).iterator
       }
 
-    mergeStreams(notPrimeStreams)
+    mergeIterators(notPrimeStreams)
   }
 
-  def primeStream[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): LazyList[N] = {
+  def primeStream[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Iterator[N] = {
 
     require(n > ringN.one)
 
     val two = ringN.plus(ringN.one, ringN.one)
-    filterOut(lazyListsFrom(two).takeWhile(i => i < n), notPrimeUpTo(n))
+    filterOut(lazyListsFrom(two).takeWhile(i => i < n).iterator, notPrimeUpTo(n))
   }
 
   def log2[N: Field: ConvertableFrom](x: N): Double = log(ConvertableFrom[N].toDouble(x)) / log(2d)

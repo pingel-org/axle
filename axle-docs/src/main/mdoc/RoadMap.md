@@ -8,6 +8,10 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.6.1+ Further buildout of axle.game (2021H1)
 
+* axle.math.MathPackageSpec Aborted due to stack overflow
+* "You need to install libgfortran3."
+  * sudo apt-get install libgfortran3
+
 ### Missing functionality
 
 * Remove moveStateStream

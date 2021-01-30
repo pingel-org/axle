@@ -169,28 +169,59 @@ package object algebra {
    *
    */
 
-  def mergeStreams[T](streams: Seq[LazyList[T]])(
+  def mergeIterators[T](iterators: Seq[Iterator[T]])(
     implicit
-    orderT: Order[T]): LazyList[T] = {
+    orderT: Order[T]): Iterator[T] = {
 
-    val frontier = streams.flatMap(_.headOption)
+    val frontier = iterators.flatMap { it =>
+      if( it.hasNext ) {
+        Option(it.next())
+      } else {
+        Option.empty
+      }
+    }
 
     if (frontier.size === 0) {
-      LazyList.empty
+      List.empty.iterator
     } else {
       val head = frontier.min
-      LazyList.cons(head, mergeStreams(streams.map(_.dropWhile(_ === head))))
+      List(head).iterator ++ mergeIterators(iterators.map(_.dropWhile(_ === head)))
     }
   }
 
-  def filterOut[T](stream: LazyList[T], toRemove: LazyList[T])(implicit orderT: Order[T]): LazyList[T] =
-    if (stream.isEmpty || toRemove.isEmpty) {
-      stream
-    } else {
-      val remove = toRemove.head
-      stream.takeWhile(_ < remove) ++ filterOut(stream.dropWhile(_ <= remove), toRemove.drop(1))
+  def filterOut[T](
+    xs: Iterator[T],
+    toRemove: Iterator[T])(implicit orderT: Order[T]): Iterator[T] =
+    new Iterator[T] {
+
+      val peekXS = new PeekableIterator(xs)
+      val peekRemoves = new PeekableIterator(toRemove)
+
+      def hasNext: Boolean = peekXS.hasNext
+
+      private def advance(): Unit = {
+        while (
+          peekRemoves.peek.isDefined &&
+          peekXS.peek.isDefined &&
+          ( peekRemoves.peek.get >= peekRemoves.peek.get ) ) {
+            if ( peekRemoves.peek.get == peekRemoves.peek.get ) {
+              peekXS.advance()
+            }
+            peekRemoves.advance()
+        }
+        peekXS.advance()
+      }
+
+      advance()
+
+      def next(): T = {
+        val result = peekXS.next()
+        advance()
+        result
+      }
     }
 
+  
   def lazyListsFrom[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): LazyList[N] =
     LazyList.cons(n, lazyListsFrom(ringN.plus(n, ringN.one)))
 
