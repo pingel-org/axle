@@ -189,37 +189,46 @@ package object algebra {
     }
   }
 
+  def advance[T](
+    bufferedXs: scala.collection.BufferedIterator[T],
+    bufferedSkips: scala.collection.BufferedIterator[T])(
+    implicit orderT: Order[T]
+    ): Unit = {
+        while (
+          bufferedSkips.headOption.isDefined &&
+          bufferedXs.headOption.isDefined &&
+          ( bufferedSkips.headOption.get <= bufferedXs.headOption.get ) ) {
+            if ( bufferedSkips.headOption.get == bufferedXs.headOption.get ) {
+              bufferedXs.next()
+            }
+            bufferedSkips.next()
+        }
+        if( bufferedXs.hasNext ) {
+          bufferedXs.next()
+        }
+        ()
+  }
+
   def filterOut[T](
     xs: Iterator[T],
-    toRemove: Iterator[T])(implicit orderT: Order[T]): Iterator[T] =
-    new Iterator[T] {
+    skips: Iterator[T])(implicit orderT: Order[T]): Iterator[T] = {
 
-      val peekXS = new PeekableIterator(xs)
-      val peekRemoves = new PeekableIterator(toRemove)
+      val bufferedXs = xs.buffered
+      val bufferedSkips = skips.buffered
 
-      def hasNext: Boolean = peekXS.hasNext
+      // advance(bufferedXs, bufferedSkips)
 
-      private def advance(): Unit = {
-        while (
-          peekRemoves.peek.isDefined &&
-          peekXS.peek.isDefined &&
-          ( peekRemoves.peek.get <= peekXS.peek.get ) ) {
-            if ( peekRemoves.peek.get == peekXS.peek.get ) {
-              peekXS.advance()
-            }
-            peekRemoves.advance()
+      new Iterator[T] {
+
+        def hasNext: Boolean = bufferedXs.hasNext
+
+        def next(): T = {
+          val result = bufferedXs.next()
+          // advance(bufferedXs, bufferedSkips)
+          result
         }
-        peekXS.advance()
       }
-
-      advance()
-
-      def next(): T = {
-        val result = peekXS.next()
-        advance()
-        result
-      }
-    }
+  }
 
   
   def lazyListsFrom[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): LazyList[N] =
