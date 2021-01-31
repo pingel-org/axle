@@ -203,8 +203,8 @@ package object algebra {
         while (
           peekRemoves.peek.isDefined &&
           peekXS.peek.isDefined &&
-          ( peekRemoves.peek.get >= peekRemoves.peek.get ) ) {
-            if ( peekRemoves.peek.get == peekRemoves.peek.get ) {
+          ( peekRemoves.peek.get <= peekXS.peek.get ) ) {
+            if ( peekRemoves.peek.get == peekXS.peek.get ) {
               peekXS.advance()
             }
             peekRemoves.advance()
