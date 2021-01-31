@@ -8,25 +8,20 @@ package axle.algebra
 
 class PeekableIterator[T](it: Iterator[T]) extends Iterator[T] {
 
-  private var _buffer: Option[T] = None
-
+  private var buffer: Option[T] = None
+  
   def advance(): Unit = {
-    _buffer =
-      if( it.hasNext ) {
-        Option(it.next())
-      } else {
-        None
-      }
+    buffer = if( it.hasNext ) Option(it.next()) else None
   }
 
   advance()
 
-  def peek: Option[T] = _buffer
+  def peek: Option[T] = buffer
 
-  def hasNext: Boolean = _buffer.isDefined
+  def hasNext: Boolean = buffer.isDefined
 
   def next(): T = {
-    val result = _buffer.get
+    val result = buffer.get
     advance()
     result
   }
