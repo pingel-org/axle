@@ -300,21 +300,22 @@ package object math {
 
     (2 until n) filter { A }
   }
+
   def notPrimeUpTo[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Iterator[N] = {
 
     val two = ringN.plus(ringN.one, ringN.one)
 
     val bases = lazyListsFrom(two).takeWhile(i => ringN.times(i, i) < n)
 
-    val notPrimeStreams: Seq[Iterator[N]] =
+    val notPrimeStreams: Seq[scala.collection.BufferedIterator[N]] =
       filterOut(
         bases.iterator,
         if (!bases.isEmpty) notPrimeUpTo(bases.last) else List.empty.iterator
       ).toList map { i =>
-        lazyListsFrom(ringN.zero).map(j => ringN.plus(i * i, i * j)).iterator
+        lazyListsFrom(ringN.zero).map(j => ringN.plus(i * i, i * j)).iterator.buffered
       }
 
-    mergeIterators(notPrimeStreams)
+    mergeBufferedIterators(notPrimeStreams)
   }
 
   def primeStream[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): Iterator[N] = {

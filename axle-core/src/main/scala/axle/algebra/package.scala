@@ -169,27 +169,21 @@ package object algebra {
    *
    */
 
-  def mergeIterators[T](iterators: Seq[Iterator[T]])(
+  def mergeBufferedIterators[T](iterators: Seq[scala.collection.BufferedIterator[T]])(
     implicit
     orderT: Order[T]): Iterator[T] = {
 
-    val frontier = iterators.flatMap { it =>
-      if( it.hasNext ) {
-        Option(it.next())
-      } else {
-        Option.empty
-      }
-    }
+    val frontier = iterators.flatMap { _.headOption }
 
     if (frontier.size === 0) {
       List.empty.iterator
     } else {
       val head = frontier.min
-      List(head).iterator ++ mergeIterators(iterators.map(_.dropWhile(_ === head)))
+      List(head).iterator ++ mergeBufferedIterators(iterators map { _.dropWhile(_ === head).buffered })
     }
   }
 
-  def advance[T](
+  def skip[T](
     bufferedXs: scala.collection.BufferedIterator[T],
     bufferedSkips: scala.collection.BufferedIterator[T])(
     implicit orderT: Order[T]
@@ -200,13 +194,11 @@ package object algebra {
           ( bufferedSkips.headOption.get <= bufferedXs.headOption.get ) ) {
             if ( bufferedSkips.headOption.get == bufferedXs.headOption.get ) {
               bufferedXs.next()
+              bufferedSkips.next()
+            } else {
+              bufferedSkips.next()
             }
-            bufferedSkips.next()
         }
-        if( bufferedXs.hasNext ) {
-          bufferedXs.next()
-        }
-        ()
   }
 
   def filterOut[T](
@@ -216,7 +208,7 @@ package object algebra {
       val bufferedXs = xs.buffered
       val bufferedSkips = skips.buffered
 
-      // advance(bufferedXs, bufferedSkips)
+      skip(bufferedXs, bufferedSkips)
 
       new Iterator[T] {
 
@@ -224,7 +216,7 @@ package object algebra {
 
         def next(): T = {
           val result = bufferedXs.next()
-          // advance(bufferedXs, bufferedSkips)
+          skip(bufferedXs, bufferedSkips)
           result
         }
       }
