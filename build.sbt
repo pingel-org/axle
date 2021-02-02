@@ -43,6 +43,10 @@ ThisBuild / githubWorkflowBuildPreamble ++= Seq(
   WorkflowStep.Run(List("sudo apt-get install -y xvfb"))
 )
 
+ThisBuild / githubWorkflowEnv ++= Map(
+  "DISPLAY" -> ":0.0"
+)
+
 autoCompilerPlugins := true
 
 lazy val buildSettings = Seq(
