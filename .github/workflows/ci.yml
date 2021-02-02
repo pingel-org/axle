@@ -36,9 +36,6 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
-      - name: Install libgfortran3
-        run: sudo apt-get install libgfortran3
-
       - name: Cache sbt
         uses: actions/cache@v2
         with:
@@ -50,6 +47,8 @@ jobs:
             ~/AppData/Local/Coursier/Cache/v1
             ~/Library/Caches/Coursier/v1
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+
+      - run: sudo apt-get install libgfortran3
 
       - name: Check that workflows are up to date
         run: sbt ++${{ matrix.scala }} githubWorkflowCheck
