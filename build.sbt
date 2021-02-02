@@ -40,11 +40,12 @@ ThisBuild / crossScalaVersions := Seq("2.13.3")
 
 ThisBuild / githubWorkflowBuildPreamble ++= Seq(
   WorkflowStep.Run(List("sudo apt-get install libgfortran3")),
-  WorkflowStep.Run(List("sudo apt-get install -y xvfb"))
+  WorkflowStep.Run(List("sudo apt-get install -y xvfb")),
+  WorkflowStep.Run(List("nohup Xvfb :1 -screen 0 1152x900x8 &"))
 )
 
 ThisBuild / githubWorkflowEnv ++= Map(
-  "DISPLAY" -> ":0.0"
+  "DISPLAY" -> "localhost:1"
 )
 
 autoCompilerPlugins := true
