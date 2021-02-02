@@ -36,6 +36,9 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
 
+      - name: Install libgfortran3
+        run: sudo apt-get install libgfortran3
+
       - name: Cache sbt
         uses: actions/cache@v2
         with:
