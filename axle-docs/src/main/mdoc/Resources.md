@@ -12,4 +12,3 @@ permalink: /resources/
 * Join the chat on the gitter channel: [![gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/axlelang/axle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 * [@axledsl](https://twitter.com/axledsl) twitter handle
 * [AxleLang YouTube Channel](http://www.youtube.com/user/axlelang)
-* Waffle project management: [![Stories in Ready](https://badge.waffle.io/axlelang/axle.png?label=ready&title=Ready)](http://waffle.io/axlelang/axle)
