@@ -8,13 +8,23 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.6.1+ Further buildout of axle.game (2021H1)
 
-* moveStateStream
-  * rename to `moveStatePath` or `traceGame`
-  * unless we give this job to `State`...
-    * Record history `Seq[(M, S)]` in State (and display to user in interactiveMove)
-  * stop using chain?
-* Should be part of State displaying `evGameIO.displayMoveTo(game, evGame.maskMove(game, move, mover, observer), mover, observer)`
-* Display to player the elapsed moves /and/ the state diff
+* code coverage
+* remove .travis.yml
+* skip publish for now: `githubWorkflowPublishTargetBranches` to `Seq()`
+* publish artifacts with github actions
+
+### Missing functionality
+
+* Remove moveStateStream
+
+* For one game (probably Poker)
+  * Record witnessed and unwitnessed history `Seq[(M, S)]` in `State`
+  * Display to user in interactiveMove
+    * `val mm = evGame.maskMove(game, move, mover, observer)`
+    * `evGameIO.displayMoveTo(game, mm, mover, observer)`
+  * Then generalize and pull into framework
+
+### Motivating Examples
 
 * Generalize `OldMontyHall.chanceOfWinning`
 
@@ -24,30 +34,16 @@ See [Release Notes](/release_notes/) for the record of previously released featu
   * Plot entropy by turn # for each strategy
   * Plot simulated score distribution for each strategy
 
-* `aiMover.unmask` prevents `MontyHallSpec` "AI vs. AI game produces moveStateStream" from working
-  * will be an issue for all non-perfect information
-
 * GuessRiffleSpec: use `moveFromRandomState`
 
 * Gerrymandering sensitivity
-* Game theory axioms (Nash, etc)
-* `axle.game`: `Observable[T]`
-* move state dist stream
+
 * "You split, I choose" as game
 
-* Replace `axle.game.moveFromRandomState.mapToProb`
+### Deeper changes
 
-* Clean up `axle.game.playWithIntroAndOutcomes`
-
-* The references to `movesMap` in `MoveFromRandomStateSpec.scala` illustrate a need for a cleaner way to create a hard-coded strategy -- which could just be in the form of a couple utility functions from `movesMap` to the data needed by `evGame.{moves,applyMove}` and `rm` strategy
-
-* Generalize `ConditionalProbabilityTable.uniform` into typeclass
-
-* Simplify `GuessRiffleProperties` (especially second property)
-* stateStreamMap only used in GuessRiffleProperties -- stop using chain?
-* stateStrategyMoveStream only used in GuessRiffleProperties
-
-* `Game.players` should be a part of GameState (or take it as an argument)?  Will wait for pressing use case.
+* `aiMover.unmask` prevents `MontyHallSpec` "AI vs. AI game produces moveStateStream" from working
+  * will be an issue for all non-perfect information
 
 * Identify all uses of `spire.random.Generator` (and other random value generation)
 
@@ -64,6 +60,28 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `perceive` could return a lower-entropy probability model
   * Perhaps in exchange for a given amount of energy
   * Or ask for a 0-entropy model and be told how expensive that was
+
+* Game theory axioms (Nash, etc)
+
+* `axle.game`: `Observable[T]`
+
+### Hygeine
+
+* convert to scalameta munit for dotty
+
+* Replace `axle.game.moveFromRandomState.mapToProb`
+
+* Clean up `axle.game.playWithIntroAndOutcomes`
+
+* The references to `movesMap` in `MoveFromRandomStateSpec.scala` illustrate a need for a cleaner way to create a hard-coded strategy -- which could just be in the form of a couple utility functions from `movesMap` to the data needed by `evGame.{moves,applyMove}` and `rm` strategy
+
+* Generalize `ConditionalProbabilityTable.uniform` into typeclass
+
+* Simplify `GuessRiffleProperties` (especially second property)
+* stateStreamMap only used in GuessRiffleProperties -- stop using chain?
+* stateStrategyMoveStream only used in GuessRiffleProperties
+
+* `Game.players` should be a part of GameState (or take it as an argument)?  Will wait for pressing use case.
 
 ## 0.7.x Factoring and Bayesian Networks
 
@@ -174,6 +192,7 @@ that has been its goal since inception.
 * Shor's algorithm
 * Grover's algorithm
 * Quantum cryptographic key exchange
+* Check out Qiskit
 
 ## Algorithm / Concept breadth
 

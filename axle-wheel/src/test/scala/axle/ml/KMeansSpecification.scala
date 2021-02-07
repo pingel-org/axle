@@ -159,9 +159,9 @@ class KMeansSpecification
     val svgName = "kmeans.svg"
     vis.svg[IO](svgName).unsafeRunSync()
 
-    import axle.awt._
-    val pngName = "kmeans.png"
-    vis.png[IO](pngName).unsafeRunSync()
+    // import axle.awt._
+    // val pngName = "kmeans.png"
+    // vis.png[IO](pngName).unsafeRunSync()
 
     val plot = axle.visualize.Plot(
       () => classifier.distanceLogSeries,
@@ -178,7 +178,7 @@ class KMeansSpecification
     plot.svg[IO](plotSvgName).unsafeRunSync()
 
     new java.io.File(svgName).exists should be(true)
-    new java.io.File(pngName).exists should be(true)
+    // new java.io.File(pngName).exists should be(true)
     new java.io.File(plotSvgName).exists should be(true)
     confusion.rowSums.columnSums.get(0, 0) should be(irises.size)
     confusion.show should include("versicolor")

@@ -45,12 +45,12 @@ class GraphVisSpec extends AnyFunSuite with Matchers {
     val svgName = "ug.svg"
     vis.svg[IO](svgName).unsafeRunSync()
 
-    import axle.awt._
-    val pngName = "ug.png"
-    vis.png[IO](pngName).unsafeRunSync()
+    // import axle.awt._
+    // val pngName = "ug.png"
+    // vis.png[IO](pngName).unsafeRunSync()
 
     new java.io.File(svgName).exists should be(true)
-    new java.io.File(pngName).exists should be(true)
+    // new java.io.File(pngName).exists should be(true)
   }
 
   test("DirectedGraph visualization renders an SVG") {
@@ -88,12 +88,12 @@ class GraphVisSpec extends AnyFunSuite with Matchers {
     val svgName = "dg.svg"
     vis.svg[IO](svgName).unsafeRunSync()
 
-    import axle.awt._
-    val pngName = "dg.png"
-    vis.png[IO](pngName).unsafeRunSync()
+    // import axle.awt._
+    // val pngName = "dg.png"
+    // vis.png[IO](pngName).unsafeRunSync()
 
     new java.io.File(svgName).exists should be(true)
-    new java.io.File(pngName).exists should be(true)
+    // new java.io.File(pngName).exists should be(true)
   }
 
 }

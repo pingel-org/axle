@@ -36,12 +36,21 @@ lazy val scoverageSettings = Seq(
 
 scalaVersion := "2.13.3"
 
+ThisBuild / crossScalaVersions := Seq("2.13.3")
+
+ThisBuild / githubWorkflowBuildPreamble ++= Seq(
+  WorkflowStep.Run(List("sudo apt-get install libgfortran3"))
+)
+
+ThisBuild / githubWorkflowEnv ++= Map(
+)
+
 autoCompilerPlugins := true
 
 lazy val buildSettings = Seq(
   organization := "org.axle-lang",
   scalaVersion := "2.13.3",
-  crossScalaVersions := Seq("2.12.12", "2.13.3")
+  crossScalaVersions := Seq("2.13.3")
 )
 
 lazy val axleDoctestSettings = Seq(

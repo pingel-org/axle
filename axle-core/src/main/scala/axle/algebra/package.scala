@@ -169,28 +169,60 @@ package object algebra {
    *
    */
 
-  def mergeStreams[T](streams: Seq[LazyList[T]])(
+  def mergeBufferedIterators[T](iterators: Seq[scala.collection.BufferedIterator[T]])(
     implicit
-    orderT: Order[T]): LazyList[T] = {
+    orderT: Order[T]): Iterator[T] = {
 
-    val frontier = streams.flatMap(_.headOption)
+    val frontier = iterators.flatMap { _.headOption }
 
     if (frontier.size === 0) {
-      LazyList.empty
+      List.empty.iterator
     } else {
       val head = frontier.min
-      LazyList.cons(head, mergeStreams(streams.map(_.dropWhile(_ === head))))
+      List(head).iterator ++ mergeBufferedIterators(iterators map { _.dropWhile(_ === head).buffered })
     }
   }
 
-  def filterOut[T](stream: LazyList[T], toRemove: LazyList[T])(implicit orderT: Order[T]): LazyList[T] =
-    if (stream.isEmpty || toRemove.isEmpty) {
-      stream
-    } else {
-      val remove = toRemove.head
-      stream.takeWhile(_ < remove) ++ filterOut(stream.dropWhile(_ <= remove), toRemove.drop(1))
-    }
+  def skip[T](
+    bufferedXs: scala.collection.BufferedIterator[T],
+    bufferedSkips: scala.collection.BufferedIterator[T])(
+    implicit orderT: Order[T]
+    ): Unit = {
+        while (
+          bufferedSkips.headOption.isDefined &&
+          bufferedXs.headOption.isDefined &&
+          ( bufferedSkips.headOption.get <= bufferedXs.headOption.get ) ) {
+            if ( bufferedSkips.headOption.get == bufferedXs.headOption.get ) {
+              bufferedXs.next()
+              bufferedSkips.next()
+            } else {
+              bufferedSkips.next()
+            }
+        }
+  }
 
+  def filterOut[T](
+    xs: Iterator[T],
+    skips: Iterator[T])(implicit orderT: Order[T]): Iterator[T] = {
+
+      val bufferedXs = xs.buffered
+      val bufferedSkips = skips.buffered
+
+      skip(bufferedXs, bufferedSkips)
+
+      new Iterator[T] {
+
+        def hasNext: Boolean = bufferedXs.hasNext
+
+        def next(): T = {
+          val result = bufferedXs.next()
+          skip(bufferedXs, bufferedSkips)
+          result
+        }
+      }
+  }
+
+  
   def lazyListsFrom[N](n: N)(implicit orderN: Order[N], ringN: Ring[N]): LazyList[N] =
     LazyList.cons(n, lazyListsFrom(ringN.plus(n, ringN.one)))
 
