@@ -42,7 +42,7 @@ class GameChartSpec extends AnyFunSuite with Matchers {
       drawKey = true).zeroXAxis
 
     import axle.web._
-    import axle.awt._
+    // import axle.awt._
     import cats.effect._
 
     val svgPlotName = "bowl_plot.svg"
