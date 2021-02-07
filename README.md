@@ -1,6 +1,6 @@
 See [axle-lang.org](http://axle-lang.org/)
 
-[![Build Status](https://secure.travis-ci.org/axlelang/axle.png)](http://travis-ci.org/axlelang/axle)
+[![Build Status](https://github.com/axlelang/axle/workflows/Continuous%20Integration/badge.svg)](https://github.com/axlelang/axle/actions?query=workflow%3A%22Continuous+Integration%22)
 
 [![codecov.io](http://codecov.io/github/axlelang/axle/coverage.svg?branch=master)](http://codecov.io/github/axlelang/axle?branch=master)
 
