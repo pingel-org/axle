@@ -8,10 +8,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.6.1+ Further buildout of axle.game (2021H1)
 
+* code coverage
 * remove .travis.yml
 * skip publish for now: `githubWorkflowPublishTargetBranches` to `Seq()`
-
 * publish artifacts with github actions
+
 ### Missing functionality
 
 * Remove moveStateStream

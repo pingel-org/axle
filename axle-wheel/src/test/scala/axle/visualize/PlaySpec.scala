@@ -16,7 +16,7 @@ import axle.reactive.intervalScan
 import axle.quanta.Time
 import axle.jung.directedGraphJung
 import axle.reactive.CurrentValueSubscriber
-import axle.awt.play
+//import axle.awt.play
 
 class PlaySpec extends AnyFunSuite with Matchers {
 
@@ -55,11 +55,11 @@ class PlaySpec extends AnyFunSuite with Matchers {
       hoverOf = (c: String) => Some(c),
       linkOf = (c: String) => Some((new URL(s"http://wikipedia.org/wiki/$c"), Color.lightGray)))
 
-    val (frame, paintCancellable) = play(chart, dataUpdates)
+    // val (frame, paintCancellable) = play(chart, dataUpdates)
 
-    paintCancellable.cancel()
-    frame.setVisible(false)
-    cvCancellable.cancel()
+    // paintCancellable.cancel()
+    // frame.setVisible(false)
+    // cvCancellable.cancel()
 
     1 should be(1) // TODO
   }

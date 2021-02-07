@@ -51,27 +51,27 @@ class GameChartSpec extends AnyFunSuite with Matchers {
     val svgName = "bowl.svg"
     chart.svg[IO](svgName).unsafeRunSync()
 
-    val pngName = "bowl.png"
-    chart.png[IO](pngName).unsafeRunSync()
+    // val pngName = "bowl.png"
+    // chart.png[IO](pngName).unsafeRunSync()
 
-    val jpegName = "bowl.jpg"
-    chart.jpeg[IO](jpegName).unsafeRunSync()
+    // val jpegName = "bowl.jpg"
+    // chart.jpeg[IO](jpegName).unsafeRunSync()
 
-    val gifName = "bowl.gif"
-    chart.gif[IO](gifName).unsafeRunSync()
+    // val gifName = "bowl.gif"
+    // chart.gif[IO](gifName).unsafeRunSync()
 
-    val bmpName = "bowl.bmp"
-    chart.bmp[IO](bmpName).unsafeRunSync()
+    // val bmpName = "bowl.bmp"
+    // chart.bmp[IO](bmpName).unsafeRunSync()
 
     val htmlName = "bowl.html"
     chart.html[IO](htmlName).unsafeRunSync()
 
     new java.io.File(svgPlotName).exists should be(true)
     new java.io.File(svgName).exists should be(true)
-    new java.io.File(pngName).exists should be(true)
-    new java.io.File(jpegName).exists should be(true)
-    new java.io.File(gifName).exists should be(true)
-    new java.io.File(bmpName).exists should be(true)
+    // new java.io.File(pngName).exists should be(true)
+    // new java.io.File(jpegName).exists should be(true)
+    // new java.io.File(gifName).exists should be(true)
+    // new java.io.File(bmpName).exists should be(true)
     new java.io.File(htmlName).exists should be(true)
   }
 
