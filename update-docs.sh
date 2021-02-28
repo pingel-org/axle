@@ -19,9 +19,6 @@ cp -R axle-docs/src/site/css $BUILDDIR
 
 mkdir -p $SITESTAGEDIR
 
-apt-get install ruby-full build-essential zlib1g-dev
-gem install jekyll bundler
-
 JEKYLL_ENV=production jekyll build --source $BUILDDIR --destination $SITESTAGEDIR
 
 (cd $SITESTAGEDIR; python -m SimpleHTTPServer 8000)
