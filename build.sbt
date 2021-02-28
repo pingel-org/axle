@@ -44,7 +44,7 @@ ThisBuild / githubWorkflowBuildPreamble ++= Seq(
 
 ThisBuild / githubWorkflowBuildPostamble ++= Seq(
   WorkflowStep.Run(
-    List("update-docs.sh"),
+    List("./update-docs.sh"),
     env = Map(
       // "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}"
     )

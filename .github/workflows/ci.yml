@@ -56,7 +56,7 @@ jobs:
       - name: Build project
         run: sbt ++${{ matrix.scala }} test
 
-      - run: update-docs.sh
+      - run: ./update-docs.sh
 
       - name: Compress target directories
         run: tar cf targets.tar target axle-wheel/target axle-parallel/target axle-xml/target axle-docs/src/main/mdoc/target axle-core/target axle-jblas/target axle-laws/target axle-awt/target axle-joda/target project/target
