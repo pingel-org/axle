@@ -15,6 +15,9 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  SITEBUILDDIR: target/axle-site-build
+  SITESTAGEDIR: ~/s3/axle-lang.org/
+  SITES3URL: 's3://axle-lang.org/'
 
 jobs:
   build:
@@ -56,9 +59,11 @@ jobs:
       - name: Build project
         run: sbt ++${{ matrix.scala }} test
 
-      - run: ./update-docs-setup.sh
+      - run: ./site-setup.sh
 
-      - run: ./update-docs.sh
+      - run: ./site-build.sh
+
+      - run: ./site-publish.sh
 
       - name: Compress target directories
         run: tar cf targets.tar target axle-wheel/target axle-parallel/target axle-xml/target axle-docs/src/main/mdoc/target axle-core/target axle-jblas/target axle-laws/target axle-awt/target axle-joda/target project/target

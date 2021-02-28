@@ -43,11 +43,16 @@ ThisBuild / githubWorkflowBuildPreamble ++= Seq(
 )
 
 ThisBuild / githubWorkflowBuildPostamble ++= Seq(
-  WorkflowStep.Run(List("./update-docs-setup.sh")),
-  WorkflowStep.Run(List("./update-docs.sh"))
+  WorkflowStep.Run(List("./site-setup.sh")),
+  WorkflowStep.Run(List("./site-build.sh")),
+  WorkflowStep.Run(List("./site-publish.sh"))
 )
 
 ThisBuild / githubWorkflowEnv ++= Map(
+  "SITEBUILDDIR" -> "target/axle-site-build",
+  "SITESTAGEDIR" -> "~/s3/axle-lang.org/",
+  "SITES3URL"    -> "s3://axle-lang.org/"
+  // "PGP_PASSPHRASE" -> "${{ secrets.PGP_PASSPHRASE }}",
 )
 
 autoCompilerPlugins := true
