@@ -14,10 +14,12 @@ on:
     branches: ['*']
 
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   SITEBUILDDIR: target/axle-site-build
-  SITESTAGEDIR: ~/s3/axle-lang.org/
+  SITEAWSSECRETKEY: ${{ secrets.SITE_AWS_SECRET_KEY }}
+  SITEAWSACCESSKEY: ${{ secrets.SITE_AWS_ACCESS_KEY }}
   SITES3URL: 's3://axle-lang.org/'
+  SITESTAGEDIR: ~/s3/axle-lang.org/
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   build:
