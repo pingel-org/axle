@@ -19,6 +19,6 @@ cp -R axle-docs/src/site/css $BUILDDIR
 
 mkdir -p $SITESTAGEDIR
 
-JEKYLL_ENV=production jekyll build --source $BUILDDIR --destination $SITESTAGEDIR
+JEKYLL_ENV=production jekyll build --source $BUILDDIR --destination $SITESTAGEDIR --trace
 
 (cd $SITESTAGEDIR; python -m SimpleHTTPServer 8000)
