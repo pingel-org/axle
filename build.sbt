@@ -43,7 +43,6 @@ ThisBuild / githubWorkflowBuildPreamble ++= Seq(
 )
 
 ThisBuild / githubWorkflowBuildPostamble ++= Seq(
-  WorkflowStep.Run(List("false")),
   WorkflowStep.Run(List("./update-docs-setup.sh")),
   WorkflowStep.Run(List("./update-docs.sh"))
 )

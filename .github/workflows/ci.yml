@@ -56,8 +56,6 @@ jobs:
       - name: Build project
         run: sbt ++${{ matrix.scala }} test
 
-      - run: false
-
       - run: ./update-docs-setup.sh
 
       - run: ./update-docs.sh
