@@ -21,4 +21,4 @@ mkdir -p $SITESTAGEDIR
 
 JEKYLL_ENV=production jekyll build --source $BUILDDIR --destination $SITESTAGEDIR --trace
 
-(cd $SITESTAGEDIR; python -m SimpleHTTPServer 8000)
+# (cd $SITESTAGEDIR; python -m SimpleHTTPServer 8000)
