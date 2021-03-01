@@ -17,14 +17,6 @@ mkdir demo
 cd demo
 ```
 
-## JBLAS
-
-On apt-based operating systems:
-
-```bash
-sudo apt-get install libgfortran3
-```
-
 Create a `build.sbt` file
 
 ```sbt
