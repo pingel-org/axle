@@ -21,7 +21,7 @@ lazy val scalaXmlVersion = "1.3.0"
 lazy val scalaParserCombinatorsVersion = "1.1.2"
 lazy val scalaParallelCollectionsVersion = "0.2.0"
 lazy val jungVersion = "2.1"
-lazy val jblasVersion = "1.2.4"
+lazy val jblasVersion = "1.2.5"
 lazy val jacksonVersion = "2.11.2"
 lazy val jodaTimeVersion = "2.9.4"
 lazy val jodaConvertVersion = "1.8.1"
@@ -39,7 +39,7 @@ scalaVersion := "2.13.3"
 ThisBuild / crossScalaVersions := Seq("2.13.3")
 
 ThisBuild / githubWorkflowBuildPreamble ++= Seq(
-  WorkflowStep.Run(List("sudo apt-get install libgfortran3"))
+  WorkflowStep.Run(List("sudo apt-get update -y"))
 )
 
 ThisBuild / githubWorkflowBuildPostamble ++= Seq(
