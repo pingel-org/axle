@@ -39,7 +39,9 @@ scalaVersion := "2.13.3"
 ThisBuild / crossScalaVersions := Seq("2.13.3")
 
 ThisBuild / githubWorkflowBuildPreamble ++= Seq(
-  WorkflowStep.Run(List("sudo apt-get update -y"))
+  WorkflowStep.Run(List("sudo apt-get update -y")),
+  WorkflowStep.Run(List("python --version")),
+  WorkflowStep.Run(List("python2 --version"))
 )
 
 ThisBuild / githubWorkflowBuildPostamble ++= Seq(
