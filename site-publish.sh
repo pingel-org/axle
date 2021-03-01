@@ -1,4 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -x
+
+set -e
 
 s3cmd sync $SITESTAGEDIR $SITES3URL
 
