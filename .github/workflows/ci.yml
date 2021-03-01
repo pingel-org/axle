@@ -55,8 +55,6 @@ jobs:
 
       - run: sudo apt-get update -y
 
-      - run: sudo apt-get install libgfortran3
-
       - name: Check that workflows are up to date
         run: sbt ++${{ matrix.scala }} githubWorkflowCheck
 
