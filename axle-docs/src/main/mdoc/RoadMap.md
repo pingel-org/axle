@@ -8,8 +8,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.6.1+ Further buildout of axle.game (2021H1)
 
-* restore code coverage reports
-* publish artifacts with github actions
+* broken images from site publish
+
+* github actions
+  * separate site publish into its own action
+  * create and publish code coverage reports
+  * publish artifacts
 
 ### Missing functionality
 
