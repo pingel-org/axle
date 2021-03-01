@@ -236,7 +236,7 @@ object Python {
 
   val lang = new Language {
 
-    def name: String = "python"
+    def name: String = "python2"
 
     def rules: List[Rule] = expressions ++ simpleStatements ++ compoundStatements
 
