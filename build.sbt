@@ -51,7 +51,7 @@ ThisBuild / githubWorkflowBuildPostamble ++= Seq(
 ThisBuild / githubWorkflowEnv ++= Map(
   "SITEBUILDDIR"     -> "target/axle-site-build",
   "SITESTAGEDIR"     -> "~/s3/axle-lang.org/",
-  "SITES3URL"        -> "s3://axle-lang.org/",
+  "SITES3URL"        -> "${{ secrets.SITE_S3_URL }}",
   "SITEAWSACCESSKEY" -> "${{ secrets.SITE_AWS_ACCESS_KEY }}",
   "SITEAWSSECRETKEY" -> "${{ secrets.SITE_AWS_SECRET_KEY }}"
 )

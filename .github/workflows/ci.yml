@@ -17,7 +17,7 @@ env:
   SITEBUILDDIR: target/axle-site-build
   SITEAWSSECRETKEY: ${{ secrets.SITE_AWS_SECRET_KEY }}
   SITEAWSACCESSKEY: ${{ secrets.SITE_AWS_ACCESS_KEY }}
-  SITES3URL: 's3://axle-lang.org/'
+  SITES3URL: ${{ secrets.SITE_S3_URL }}
   SITESTAGEDIR: ~/s3/axle-lang.org/
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
