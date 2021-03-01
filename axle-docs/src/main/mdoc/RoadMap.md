@@ -8,7 +8,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.6.1+ Further buildout of axle.game (2021H1)
 
+* python test failure
 * broken images from site publish
+* factor out `axle-ast-python`
 
 * github actions
   * separate site publish into its own action
