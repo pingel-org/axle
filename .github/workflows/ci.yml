@@ -53,6 +53,8 @@ jobs:
             ~/Library/Caches/Coursier/v1
           key: ${{ runner.os }}-sbt-cache-v2-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
 
+      - run: sudo apt-get update -y
+
       - run: sudo apt-get install libgfortran3
 
       - name: Check that workflows are up to date
