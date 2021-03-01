@@ -3,10 +3,15 @@ package axle.ast.language
 
 import axle.ast._
 import axle.ast.view.ViewString
+import org.scalatest._
 import org.scalatest.funsuite._
 import org.scalatest.matchers.should.Matchers
 
-class PythonSpecification extends AnyFunSuite with Matchers {
+class PythonSpecification
+  extends AnyFunSuite
+  with Matchers
+  with Inspectors
+  with Assertions {
 
   test("conversion from JSON to AstNode turn 3 into 3") {
 
@@ -154,11 +159,11 @@ def f(a, b, x=True, y=False):
     // indentation following else (see BaseHTTPServer.py.html)
     // if's condition not showing up sometimes
 
-    parseTests forall { input =>
+    forAll (parseTests) { input =>
       val parsed = language.parseString(input)
       val actual = parsed.map(ViewString.AstNode(_, language)).getOrElse("")
-      actual == input
-    } should be(true)
+      assert(actual == input)
+    }
 
   }
 }
