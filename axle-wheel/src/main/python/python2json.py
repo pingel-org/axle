@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
-# Copyright (c) 2011 Adam Pingel
+# Copyright (c) 2011-2021 Adam Pingel
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
