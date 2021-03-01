@@ -42,7 +42,18 @@ ThisBuild / githubWorkflowBuildPreamble ++= Seq(
   WorkflowStep.Run(List("sudo apt-get install libgfortran3"))
 )
 
+ThisBuild / githubWorkflowBuildPostamble ++= Seq(
+  WorkflowStep.Run(List("./site-setup.sh")),
+  WorkflowStep.Run(List("./site-build.sh")),
+  WorkflowStep.Run(List("./site-publish.sh"))
+)
+
 ThisBuild / githubWorkflowEnv ++= Map(
+  "SITEBUILDDIR"     -> "target/axle-site-build",
+  "SITESTAGEDIR"     -> "~/s3/axle-lang.org/",
+  "SITES3URL"        -> "${{ secrets.SITE_S3_URL }}",
+  "SITEAWSACCESSKEY" -> "${{ secrets.SITE_AWS_ACCESS_KEY }}",
+  "SITEAWSSECRETKEY" -> "${{ secrets.SITE_AWS_SECRET_KEY }}"
 )
 
 autoCompilerPlugins := true

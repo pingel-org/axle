@@ -14,6 +14,11 @@ on:
     branches: ['*']
 
 env:
+  SITEBUILDDIR: target/axle-site-build
+  SITEAWSSECRETKEY: ${{ secrets.SITE_AWS_SECRET_KEY }}
+  SITEAWSACCESSKEY: ${{ secrets.SITE_AWS_ACCESS_KEY }}
+  SITES3URL: ${{ secrets.SITE_S3_URL }}
+  SITESTAGEDIR: ~/s3/axle-lang.org/
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
@@ -55,6 +60,12 @@ jobs:
 
       - name: Build project
         run: sbt ++${{ matrix.scala }} test
+
+      - run: ./site-setup.sh
+
+      - run: ./site-build.sh
+
+      - run: ./site-publish.sh
 
       - name: Compress target directories
         run: tar cf targets.tar target axle-wheel/target axle-parallel/target axle-xml/target axle-docs/src/main/mdoc/target axle-core/target axle-jblas/target axle-laws/target axle-awt/target axle-joda/target project/target

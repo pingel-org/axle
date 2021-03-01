@@ -3,7 +3,7 @@
 set -e
 
 BUILDDIR=target/axle-site-build
-STAGEDIR=~/s3/axle-lang.org/
+SITESTAGEDIR=~/s3/axle-lang.org/
 
 sbt -J-Xmx6G "project axle-docs" mdoc
 sbt -J-Xmx6G "project axle-docs" makeSite
@@ -17,6 +17,12 @@ cp -R axle-docs/target/site/* $BUILDDIR
 mv *.svg *.png $BUILDDIR/tutorial/images/
 cp -R axle-docs/src/site/css $BUILDDIR
 
-JEKYLL_ENV=production jekyll build --source $BUILDDIR --destination $STAGEDIR
+mkdir -p $SITESTAGEDIR
 
-(cd $STAGEDIR; python -m SimpleHTTPServer 8000)
+(cd $BUILDDIR; bundle install)
+
+JEKYLL_ENV=production jekyll build --source $BUILDDIR --destination $SITESTAGEDIR --trace
+
+find $BUILDDIR
+
+# (cd $SITESTAGEDIR; python -m SimpleHTTPServer 8000)
