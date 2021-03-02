@@ -16,7 +16,7 @@ cp -R axle-docs/src/site/css $SITEBUILDDIR
 
 mkdir -p $SITESTAGEDIR
 
-(cd $SITEBUILDDIR; bundle install)
+(cd $SITEBUILDDIR; sudo bundle install)
 
 JEKYLL_ENV=production jekyll build --source $SITEBUILDDIR --destination $SITESTAGEDIR --trace
 
