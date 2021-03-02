@@ -20,6 +20,10 @@ mkdir -p $SITESTAGEDIR
 
 JEKYLL_ENV=production jekyll build --source $SITEBUILDDIR --destination $SITESTAGEDIR --trace
 
+echo "BUILD DIRECTORY"
 find $SITEBUILDDIR
+
+echo "STAGE DIRECTORY"
+find $SITESTAGEDIR
 
 # (cd $SITESTAGEDIR; python -m SimpleHTTPServer 8000)
