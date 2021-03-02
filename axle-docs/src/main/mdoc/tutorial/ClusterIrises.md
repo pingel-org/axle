@@ -120,10 +120,10 @@ val vis = KMeansVisualization[Iris, List, DoubleMatrix](classifier, colors)
 import axle.web._
 import cats.effect._
 
-vis.svg[IO]("kmeans.svg").unsafeRunSync()
+vis.svg[IO]("k_means.svg").unsafeRunSync()
 ```
 
-![kmeans](/tutorial/images/kmeans.svg)
+![kmeans](/tutorial/images/k_means.svg)
 
 Average centroid/cluster vs iteration:
 

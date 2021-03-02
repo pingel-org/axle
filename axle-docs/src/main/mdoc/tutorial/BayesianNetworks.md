@@ -97,10 +97,10 @@ Render as SVG file
 import axle.web._
 import cats.effect._
 
-bnVis.svg[IO]("alarmbayes.svg").unsafeRunSync()
+bnVis.svg[IO]("alarm_bayes.svg").unsafeRunSync()
 ```
 
-![alarm bayes network](/tutorial/images/alarmbayes.svg)
+![alarm bayes network](/tutorial/images/alarm_bayes.svg)
 
 The network can be used to compute the joint probability table:
 

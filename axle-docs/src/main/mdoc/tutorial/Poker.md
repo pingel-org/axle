@@ -74,10 +74,10 @@ Render as SVG file
 import axle.web._
 import cats.effect._
 
-chart.svg[IO]("pokerhands.svg").unsafeRunSync()
+chart.svg[IO]("poker_hands.svg").unsafeRunSync()
 ```
 
-![poker hands](/tutorial/images/pokerhands.svg)
+![poker hands](/tutorial/images/poker_hands.svg)
 
 ### Texas Hold 'Em Poker
 
