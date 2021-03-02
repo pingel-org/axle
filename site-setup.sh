@@ -12,6 +12,12 @@ access_key = ${SITEAWSACCESSKEY}
 secret_key = ${SITEAWSSECRETKEY}
 EOF
 
+ls -l ~/.s3cfg
+
+wc -l ~/.s3cfg
+
+md5sum ~/.s3cfg
+
 sudo gem install jekyll bundler
 
 
