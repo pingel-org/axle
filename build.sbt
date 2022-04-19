@@ -1,11 +1,3 @@
-import com.jsuereth.sbtpgp.PgpKeys.publishSigned
-import com.typesafe.sbt.SbtSite.SiteKeys._
-import ReleaseTransformations._
-// import ScoverageSbtPlugin._
-
-// TODO site, tut, unidoc, doctestwithdependencies
-// TODO scoverage, noPublishSettings, release plugin
-// TODO minimum sbt version
 
 lazy val spireVersion = "0.17.0-M1"
 lazy val shapelessVersion = "2.4.0-M1"
@@ -37,26 +29,6 @@ lazy val scoverageSettings = Seq(
 scalaVersion := "2.13.3"
 
 ThisBuild / crossScalaVersions := Seq("2.13.3")
-
-ThisBuild / githubWorkflowBuildPreamble ++= Seq(
-  WorkflowStep.Run(List("sudo apt-get update -y")),
-  WorkflowStep.Run(List("python --version")),
-  WorkflowStep.Run(List("python2 --version"))
-)
-
-ThisBuild / githubWorkflowBuildPostamble ++= Seq(
-  WorkflowStep.Run(List("./site-setup.sh")),
-  WorkflowStep.Run(List("./site-build.sh")),
-  WorkflowStep.Run(List("./site-publish.sh"))
-)
-
-ThisBuild / githubWorkflowEnv ++= Map(
-  "SITEBUILDDIR"     -> "target/axle-site-build",
-  "SITESTAGEDIR"     -> "~/s3/axle-lang.org/",
-  "SITES3URL"        -> "${{ secrets.SITE_S3_URL }}",
-  "SITEAWSACCESSKEY" -> "${{ secrets.SITE_AWS_ACCESS_KEY }}",
-  "SITEAWSSECRETKEY" -> "${{ secrets.SITE_AWS_SECRET_KEY }}"
-)
 
 publish / skip := true
 
@@ -123,7 +95,7 @@ lazy val publishSettings = Seq(
       <url>https://github.com/adampingel</url>
     </developer>
   </developers>)
-) ++ credentialSettings ++ sharedPublishSettings ++ sharedReleaseProcess
+)
 
 lazy val commonSettings = Seq(
   scalacOptions ++= commonScalacOptions,
@@ -140,10 +112,6 @@ lazy val commonSettings = Seq(
   //autoCompilerPlugins := true,
 //  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 )
-
-lazy val tagName = Def.setting{
- s"v${if (releaseUseGlobalVersion.value) (version in ThisBuild).value else version.value}"
-}
 
 lazy val commonJvmSettings = Seq(
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaTest, "-oDF")
@@ -283,47 +251,4 @@ lazy val commonScalacOptions = Seq(
   "-Ywarn-value-discard"
 )
 
-// http://www.scala-sbt.org/using_sonatype.html
-
 sonatypeProfileName := "org.axle-lang"
-
-lazy val sharedPublishSettings = Seq(
-  releaseCrossBuild := true,
-  sonatypeProfileName := "org.axle-lang",
-  releaseTagName := tagName.value,
-  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
-  publishMavenStyle := true,
-  publishArtifact in Test := false,
-  pomIncludeRepository := Function.const(false),
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
-    if (isSnapshot.value)
-      Some("Snapshots" at nexus + "content/repositories/snapshots")
-    else
-      Some("Releases" at nexus + "service/local/staging/deploy/maven2")
-  }
-)
-
-lazy val sharedReleaseProcess = Seq(
-  releaseProcess := Seq[ReleaseStep](
-    checkSnapshotDependencies,
-    inquireVersions,
-    //runClean, // disabled to reduce memory usage during release
-    runTest,
-    setReleaseVersion,
-    commitReleaseVersion,
-    tagRelease,
-    publishArtifacts,
-    setNextVersion,
-    commitNextVersion,
-    //ReleaseStep(action = Command.process("sonatypeReleaseAll", _), enableCrossBuild = true),
-    pushChanges)
-)
-
-lazy val credentialSettings = Seq(
-  // For Travis CI - see http://www.cakesolutions.net/teamblogs/publishing-artefacts-to-oss-sonatype-nexus-using-sbt-and-travis-ci
-  credentials ++= (for {
-    username <- Option(System.getenv().get("SONATYPE_USERNAME"))
-    password <- Option(System.getenv().get("SONATYPE_PASSWORD"))
-  } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)).toSeq
-)
