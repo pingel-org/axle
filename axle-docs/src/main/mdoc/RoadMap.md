@@ -8,15 +8,17 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## CICD
 
+* latest released version badge
 * try to use gh-pages with current jekyll
 * update publishing.txt
 * CNAME
-* check that release notes have something sane for 0.6.1 release
+* ghpagesCleanSite leaving stale files
 
-* github "Releases" in sidebar should show "latest"
-* create and publish code coverage reports
+* GitHub "Releases" in sidebar should show "latest"
+* Create and publish code coverage reports
 * ProbabilityModel.md:207 (mdoc generated code) method any2stringadd in object Predef is deprecated
-* timestamp / version to site footer
+* Timestamp / version to site footer
+* Do "sonatype lift" emails following release suffice for security scan?
 
 ## 0.6.3+ Further buildout of axle.game (2021H1)
 
@@ -75,6 +77,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `axle.game`: `Observable[T]`
 
 ### Hygeine
+
+* performance benchmark
 
 * convert to scalameta munit for dotty
 

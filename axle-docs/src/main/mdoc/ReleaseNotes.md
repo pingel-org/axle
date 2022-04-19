@@ -6,6 +6,12 @@ permalink: /release_notes/
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 
+## 0.6.1-2 (April 2022)
+
+* CI/CD enhancements
+  * Automated releases via `sbt-ci-release`
+  * Move away from PRs
+
 ## 0.6.0 cats.effect for axle.game (December 31, 2020)
 
 * Wrap `axle.IO.getLine` in `F[_]`
