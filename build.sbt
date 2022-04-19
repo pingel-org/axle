@@ -58,6 +58,8 @@ ThisBuild / githubWorkflowEnv ++= Map(
   "SITEAWSSECRETKEY" -> "${{ secrets.SITE_AWS_SECRET_KEY }}"
 )
 
+publish / skip := true
+
 autoCompilerPlugins := true
 
 lazy val buildSettings = Seq(
@@ -216,6 +218,7 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
  .settings(axleSettings)
  .settings(
   name := "axle-wheel",
+  publish / skip := true,
   testOptions in Test += Tests.Argument(TestFrameworks.ScalaCheck, "-verbosity", "3"),
   libraryDependencies ++= Seq(
     "com.fasterxml.jackson.module" %% "jackson-module-scala" % jacksonVersion,
@@ -252,6 +255,7 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
     mdocIn := file("axle-docs/src/main/mdoc"),
     mdocOut := file("axle-docs/target/site"),
     autoAPIMappings := true,
+    publish / skip := true,
     git.remoteRepo := "git@github.com:axlelang/axle.git",
     includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
   )
