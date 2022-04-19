@@ -8,14 +8,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## 0.6.1+ Further buildout of axle.game (2021H1)
 
-* python test failure
-* broken images from site publish
-* factor out `axle-ast-python`
+* create and publish code coverage reports
+* publish artifacts
 
-* github actions
-  * separate site publish into its own action
-  * create and publish code coverage reports
-  * publish artifacts
+* ProbabilityModel.md:207 (mdoc generated code) method any2stringadd in object Predef is deprecated
+* timestamp / version to site footer
+* site-build.sh: remove `sudo bundle install`
+* move setup/install stuff earlier
 
 ### Missing functionality
 
@@ -27,6 +26,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
     * `val mm = evGame.maskMove(game, move, mover, observer)`
     * `evGameIO.displayMoveTo(game, mm, mover, observer)`
   * Then generalize and pull into framework
+
+* separate site publish into its own action
+* factor out `axle-ast-python`
 
 ### Motivating Examples
 
