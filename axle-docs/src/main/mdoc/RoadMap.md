@@ -6,15 +6,19 @@ permalink: /road_map/
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
-## 0.6.1+ Further buildout of axle.game (2021H1)
+## CICD
+
+* update mdoc version
+* try to use gh-pages with current jekyll
+* update publishing.txt
+* CNAME
+* check that release notes have something sane for 0.6.1 release
 
 * create and publish code coverage reports
-* publish artifacts
-
 * ProbabilityModel.md:207 (mdoc generated code) method any2stringadd in object Predef is deprecated
 * timestamp / version to site footer
-* site-build.sh: remove `sudo bundle install`
-* move setup/install stuff earlier
+
+## 0.6.3+ Further buildout of axle.game (2021H1)
 
 ### Missing functionality
 
@@ -27,7 +31,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
     * `evGameIO.displayMoveTo(game, mm, mover, observer)`
   * Then generalize and pull into framework
 
-* separate site publish into its own action
 * factor out `axle-ast-python`
 
 ### Motivating Examples
@@ -174,7 +177,7 @@ that has been its goal since inception.
 * Factor `axle.game.moveFromRandomState` in terms of a random walk on a graph.
   * See "TODO scale mass down"
   * Compare to Brownian motion, Random walk, Ito process, ...
-  * Provide some axoms
+  * Provide some axioms
     * no outgoing with path in from non-zero mass monotonically increases
     * no incoming with path out monotonically decreases
   * possibly provide a version for acyclic graphs
@@ -183,7 +186,7 @@ that has been its goal since inception.
 * Improve `axle.stats.rationalProbabilityDist` as probabilities become smaller
 * SimpsonsParadox.md
 * Axioms of partial differentiation
-  * https://math.ucr.edu/home/baez/mathematical/ACTUCR/Plotkin_Partial_Differentiation.pdf
+  * [Plotkin Partial Differentiation](https://math.ucr.edu/home/baez/mathematical/ACTUCR/Plotkin_Partial_Differentiation.pdf)
 * Conal Elliott: Efficient automatic differentiation made easy via category theory
 * Max bet for Poker
 * syntax for `Game` typeclass
