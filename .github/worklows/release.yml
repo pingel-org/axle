@@ -1,0 +1,36 @@
+name: Release
+on:
+  push:
+    branches: [master, main]
+    tags: ["*"]
+jobs:
+  publish:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+      - uses: olafurpg/setup-scala@v13
+      - run: |
+          umask 077
+          mkdir -p ~/.gnupg
+          ls -ld ~/.gnupg
+          echo
+          echo "charset utf-8" > ~/.gnupg/gpg.conf
+          echo "use-agent" >> ~/.gnupg/gpg.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          ls -l ~/.gnupg/gpg.conf
+          echo "CONTENTS OF: ~/.gnupg/gpg.conf"
+          cat ~/.gnupg/gpg.conf
+          echo
+          echo "allow-loopback-pinentry" > ~/.gnupg/gpg-agent.conf
+          ls -l ~/.gnupg/gpg-agent.conf
+          echo "CONTENTS OF: ~/.gnupg/gpg-agent.conf"
+          cat ~/.gnupg/gpg-agent.conf
+          echo
+      - run: sbt test ci-release
+        env:
+          PGP_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          PGP_SECRET: ${{ secrets.PGP_SECRET }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
