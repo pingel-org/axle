@@ -76,25 +76,16 @@ lazy val axleCore = Project("axle-core", file("axle-core"))
   .enablePlugins(MdocPlugin)
 
 lazy val publishSettings = Seq(
-  homepage := Some(url("http://axle-lang.org")),
-  licenses := Seq("Apache-2.0" -> url("http://opensource.org/licenses/Apache-2.0")),
-  scmInfo := Some(ScmInfo(url("https://github.com/axlelang/axle"), "scm:git:git@github.com:axlelang/axle.git")),
-  autoAPIMappings := true,
-  apiURL := Some(url("http://axle-lang.org/axle/api/")),
-  publishArtifact in (Compile, packageDoc) := {
-    CrossVersion.partialVersion(scalaVersion.value) match {
-      // case Some((2, 10)) => false  // don't package scaladoc when publishing for 2.10
-      case _ => true
-    }
-  },
-  pomExtra := (
-  <developers>
-    <developer>
-      <id>pingel</id>
-      <name>Adam Pingel</name>
-      <url>https://github.com/adampingel</url>
-    </developer>
-  </developers>)
+    organization := "org.axle-lang",
+    homepage := Some(url("https://axle-lang.org")),
+    licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+    developers := List(
+    Developer(
+      "adampingel",
+      "Adam Pingel",
+      "adam@axle-lang.org",
+      url("https://github.com/adampingel")
+    ))
 )
 
 lazy val commonSettings = Seq(
