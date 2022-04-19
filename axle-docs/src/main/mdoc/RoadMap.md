@@ -8,12 +8,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## CICD
 
-* update mdoc version
 * try to use gh-pages with current jekyll
 * update publishing.txt
 * CNAME
 * check that release notes have something sane for 0.6.1 release
 
+* github "Releases" in sidebar should show "latest"
 * create and publish code coverage reports
 * ProbabilityModel.md:207 (mdoc generated code) method any2stringadd in object Predef is deprecated
 * timestamp / version to site footer
