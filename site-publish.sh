@@ -3,6 +3,6 @@
 set -x
 set -e
 
-s3cmd sync $SITESTAGEDIR $SITES3URL
+s3cmd sync -v $SITESTAGEDIR $SITES3URL
 
-s3cmd setacl $SITES3URL --acl-public --recursive
+s3cmd setacl -v $SITES3URL --acl-public --recursive
