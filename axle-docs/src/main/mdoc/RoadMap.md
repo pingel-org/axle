@@ -20,7 +20,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * Timestamp / version to site footer
 * Do "sonatype lift" emails following release suffice for security scan?
 
-## 0.6.3+ Further buildout of axle.game (2021H1)
+## 0.6.3
+
+* factor out `axle-ast-python`
+* Scala 3
+
+## 0.6.4+ Further buildout of axle.game (2021H1)
 
 ### Missing functionality
 
@@ -32,8 +37,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
     * `val mm = evGame.maskMove(game, move, mover, observer)`
     * `evGameIO.displayMoveTo(game, mm, mover, observer)`
   * Then generalize and pull into framework
-
-* factor out `axle-ast-python`
 
 ### Motivating Examples
 
@@ -51,7 +54,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * "You split, I choose" as game
 
-### Deeper changes
+### Deeper changes to axle.game
 
 * `aiMover.unmask` prevents `MontyHallSpec` "AI vs. AI game produces moveStateStream" from working
   * will be an issue for all non-perfect information
