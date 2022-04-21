@@ -202,10 +202,10 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
 
 
 lazy val docs = Project("axle-docs", file("axle-docs"))
+  .enablePlugins(GhpagesPlugin, MdocPlugin)
   .in(file("axle-docs/src/main/mdoc"))
   .settings(moduleName := "axle-docs")
   .settings(axleSettings)
-  .enablePlugins(MdocPlugin)
   .settings(
     mdocVariables := Map(
       "RELEASE_VERSION" -> "0.6.0",
