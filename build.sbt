@@ -215,6 +215,8 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
     mdocOut := file("axle-docs/target/site"),
     autoAPIMappings := true,
     publish / skip := true,
+    siteSourceDirectory := file("axle-docs/target/sitebuild"),
+    ghpagesNoJekyll := false,
     git.remoteRepo := "git@github.com:axlelang/axle.git",
     includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
   )
