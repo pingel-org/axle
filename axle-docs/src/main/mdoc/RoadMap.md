@@ -9,6 +9,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## CICD
 
 * latest released version badge
+* set mdocVariables with latest released version
 * try to use gh-pages with current jekyll
 * update publishing.txt
 * CNAME
