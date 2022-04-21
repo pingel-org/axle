@@ -14,14 +14,23 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 sbt -J-Xmx6G "project axle-docs" mdoc
 sbt -J-Xmx6G "project axle-docs" makeSite
 
+export SITEBUILDDIR=axle-docs/target/sitebuild
+
 mkdir -p $SITEBUILDDIR
-cp axle-docs/src/site/Gemfile $SITEBUILDDIR
+#cp axle-docs/src/site/Gemfile $SITEBUILDDIR
 cp axle-docs/src/site/_config.yml $SITEBUILDDIR
 cp axle-docs/src/site/favicon.ico $SITEBUILDDIR
 cp -R axle-docs/src/site/tutorial $SITEBUILDDIR
 cp -R axle-docs/target/site/* $SITEBUILDDIR
 mv *.svg *.png $SITEBUILDDIR/tutorial/images/
+# Where does bowl.html belong?
 cp -R axle-docs/src/site/css $SITEBUILDDIR
+# Where is $SITEBUILDDIR/target coming from?
+# need for both axle-docs/target/site{,build}?
+```
+
+```bash
+sbt docs/ghpagesCleanSite docs/ghpagesPushSite
 ```
 
 * latest released version badge
