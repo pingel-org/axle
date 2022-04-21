@@ -30,7 +30,7 @@ cp -R axle-docs/src/site/css $SITEBUILDDIR
 ```
 
 ```bash
-sbt docs/ghpagesCleanSite docs/ghpagesPushSite
+sbt 'project axle-docs' ghpagesCleanSite ghpagesPushSite
 ```
 
 * latest released version badge
