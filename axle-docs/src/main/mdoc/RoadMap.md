@@ -8,17 +8,35 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## CICD
 
+* try to use gh-pages with current jekyll
+
+```bash
+sbt -J-Xmx6G "project axle-docs" mdoc
+sbt -J-Xmx6G "project axle-docs" makeSite
+
+mkdir -p $SITEBUILDDIR
+cp axle-docs/src/site/Gemfile $SITEBUILDDIR
+cp axle-docs/src/site/_config.yml $SITEBUILDDIR
+cp axle-docs/src/site/favicon.ico $SITEBUILDDIR
+cp -R axle-docs/src/site/tutorial $SITEBUILDDIR
+cp -R axle-docs/target/site/* $SITEBUILDDIR
+mv *.svg *.png $SITEBUILDDIR/tutorial/images/
+cp -R axle-docs/src/site/css $SITEBUILDDIR
+```
+
 * latest released version badge
 * set mdocVariables with latest released version
-* try to use gh-pages with current jekyll
-* update publishing.txt
-* CNAME
-* ghpagesCleanSite leaving stale files
+* Timestamp / version to site footer
 
+* update google analytics
+* rm site-{setup,build,publish}.sh
+* CNAME (www and root)
+* update publishing.txt
+
+* ghpagesCleanSite leaving stale files
 * GitHub "Releases" in sidebar should show "latest"
 * Create and publish code coverage reports
 * ProbabilityModel.md:207 (mdoc generated code) method any2stringadd in object Predef is deprecated
-* Timestamp / version to site footer
 * Do "sonatype lift" emails following release suffice for security scan?
 
 ## 0.6.3
