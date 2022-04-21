@@ -1,1 +1,25 @@
-theme: jekyll-theme-hacker
+
+# custom variables defined here are accessible in the templates via {{ site.myvariable }}.
+
+title: Axle DSL
+email: adam@axle-lang.org
+description: > # this means to ignore newlines until "baseurl:"
+  Axle Domain Specific Language
+baseurl: ""
+url: "http://axle-lang.org"
+twitter_username: axledsl
+github_username:  axlelang
+
+google_analytics: UA-8146066-2
+
+header_pages:
+  - Architecture.md
+  - Resources.md
+  - Spokes.md
+  - Tutorials.md
+
+# Build settings
+markdown: kramdown
+theme: minima
+kramdown:
+  input: GFM

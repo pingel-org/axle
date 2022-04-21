@@ -1,0 +1,280 @@
+---
+layout: page
+title: Quanta, Units, and Conversions
+permalink: /tutorial/quanta/
+---
+
+`UnittedQuantity` is the primary case class in `axle.quanta`
+
+The `axle.quanta` package models units of measurement.
+Via typeclasses, it implements expected operators like `+ - * over by`,
+a unit conversion operator `in`,
+and a right associative value constructor `*:`
+
+The "quanta" are
+Acceleration, Area, Angle,
+[Distance](https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Distance.scala),
+[Energy](https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Energy.scala),
+Flow, Force, Frequency, Information, Mass, Money, MoneyFlow, MoneyPerForce, Power, Speed, Temperature,
+[Time](https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Time.scala),
+and Volume.
+Axle's values are represented in such a way that a value's "quantum" is present in the type,
+meaning that nonsensical expressions like `mile + gram` can be rejected at compile time.
+
+![Distance conversions](/tutorial/images/Distance.svg)
+
+Additionally, various values within the Quantum objects are imported.
+This package uses the definition of "Quantum" as "something that can
+be quantified or measured".
+
+```scala
+import axle._
+import axle.quanta._
+import axle.jung._
+```
+
+Quanta each define a Wikipedia link where you can find out more
+about relative scale:
+
+```scala
+Distance().wikipediaUrl
+// res0: String = "http://en.wikipedia.org/wiki/Orders_of_magnitude_(length)"
+```
+
+A visualization of each Quantum (like the one for Distance shown above) is produced with:
+
+```scala
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+import cats.implicits._
+import cats.Show
+import spire.algebra.Field
+import axle.algebra.modules.doubleRationalModule
+
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+implicit val distanceConverter = Distance.converterGraphK2[Double, DirectedSparseGraph]
+
+implicit val showDDAt1 = new Show[Double => Double] {
+  def show(f: Double => Double): String = f(1d).toString
+}
+
+import axle.visualize._
+
+val dgVis = DirectedGraphVisualization[DirectedSparseGraph[UnitOfMeasurement[Distance],Double => Double], UnitOfMeasurement[Distance], Double => Double](distanceConverter.conversionGraph)
+
+import axle.web._
+import cats.effect._
+
+dgVis.svg[IO]("Distance.svg").unsafeRunSync()
+```
+
+## Units
+
+A conversion graph must be created with type parameters specifying the numeric type to
+be used in unitted quantity, as well as a directed graph type that will store the conversion
+graph.
+The conversion graphs should be placed in implicit scope.
+Within each are defined units of measurement which can be imported.
+
+```scala
+implicit val massConverter = Mass.converterGraphK2[Double, DirectedSparseGraph]
+import massConverter._
+
+implicit val powerConverter = Power.converterGraphK2[Double, DirectedSparseGraph]
+import powerConverter._
+
+//implicit val energyConverter = Energy.converterGraphK2[Double, DirectedSparseGraph]
+//import energyConverter._
+
+import axle.algebra.modules.doubleRationalModule
+
+// distanceConverter defined above
+import distanceConverter._
+
+implicit val timeConverter = Time.converterGraphK2[Double, DirectedSparseGraph]
+import timeConverter._
+```
+
+Standard Units of Measurement are defined:
+
+```scala
+gram
+// res2: UnitOfMeasurement[Mass] = UnitOfMeasurement(
+//   name = "gram",
+//   symbol = "g",
+//   wikipediaUrl = None
+// )
+
+foot
+// res3: UnitOfMeasurement[Distance] = UnitOfMeasurement(
+//   name = "foot",
+//   symbol = "ft",
+//   wikipediaUrl = None
+// )
+
+meter
+// res4: UnitOfMeasurement[Distance] = UnitOfMeasurement(
+//   name = "meter",
+//   symbol = "m",
+//   wikipediaUrl = None
+// )
+```
+
+## Construction
+
+Values with units are constructed with the right-associative `*:` method on any spire `Number` type
+as long as a spire `Field` is implicitly available.
+
+```scala
+10d *: gram
+// res5: UnittedQuantity[Mass, Double] = UnittedQuantity(
+//   magnitude = 10.0,
+//   unit = UnitOfMeasurement(name = "gram", symbol = "g", wikipediaUrl = None)
+// )
+
+3d *: lightyear
+// res6: UnittedQuantity[Distance, Double] = UnittedQuantity(
+//   magnitude = 3.0,
+//   unit = UnitOfMeasurement(
+//     name = "lightyear",
+//     symbol = "ly",
+//     wikipediaUrl = Some(value = "http://en.wikipedia.org/wiki/Light-year")
+//   )
+// )
+
+5d *: horsepower
+// res7: UnittedQuantity[Power, Double] = UnittedQuantity(
+//   magnitude = 5.0,
+//   unit = UnitOfMeasurement(
+//     name = "horsepower",
+//     symbol = "hp",
+//     wikipediaUrl = None
+//   )
+// )
+
+3.14 *: second
+// res8: UnittedQuantity[Time, Double] = UnittedQuantity(
+//   magnitude = 3.14,
+//   unit = UnitOfMeasurement(
+//     name = "second",
+//     symbol = "s",
+//     wikipediaUrl = Some(value = "http://en.wikipedia.org/wiki/Second")
+//   )
+// )
+
+200d *: watt
+// res9: UnittedQuantity[Power, Double] = UnittedQuantity(
+//   magnitude = 200.0,
+//   unit = UnitOfMeasurement(name = "watt", symbol = "W", wikipediaUrl = None)
+// )
+```
+
+## Conversion
+
+A Quantum defines a directed graph, where the UnitsOfMeasurement
+are the vertices, and the Conversions define the directed edges.
+See the [Graph](/tutorial/graph/) package for more on how graphs work.
+
+Quantities can be converted into other units of measurement.
+This is possible as long as 1) the values are in the same
+Quantum, and 2) there is a path in the Quantum between the two.
+
+```scala
+10d *: gram in kilogram
+// res10: UnittedQuantity[Mass, Double] = UnittedQuantity(
+//   magnitude = 0.010000000000000002,
+//   unit = UnitOfMeasurement(
+//     name = "kilogram",
+//     symbol = "Kg",
+//     wikipediaUrl = None
+//   )
+// )
+```
+
+Converting between quanta is not allowed, and is caught at compile time:
+
+```scala
+(1 *: gram) in mile
+// error: type mismatch;
+//  found   : axle.quanta.UnitOfMeasurement[axle.quanta.Distance]
+//  required: axle.quanta.UnitOfMeasurement[axle.quanta.Mass]
+// (1 *: gram) in mile
+//                ^^^^
+```
+
+## Show
+
+A witness for the `cats.Show` typeclass is defined, `.show` will return a `String` representation.
+
+```scala
+import cats.implicits._
+
+(10d *: gram in kilogram).show
+// res12: String = "0.010000000000000002 Kg"
+```
+
+## Math
+
+Addition and subtraction are defined on Quantity by converting the
+right Quantity to the unit of the left.
+
+```scala
+import spire.implicits.additiveGroupOps
+
+(7d *: mile) - (123d *: foot)
+// res13: UnittedQuantity[Distance, Double] = UnittedQuantity(
+//   magnitude = 36837.0,
+//   unit = UnitOfMeasurement(name = "foot", symbol = "ft", wikipediaUrl = None)
+// )
+
+{
+  import spire.implicits._
+  (1d *: kilogram) + (10d *: gram)
+}
+// res14: UnittedQuantity[Mass, Double] = UnittedQuantity(
+//   magnitude = 1010.0,
+//   unit = UnitOfMeasurement(name = "gram", symbol = "g", wikipediaUrl = None)
+// )
+```
+
+Addition and subtraction between different quanta is rejected at compile time:
+
+```scala
+(1d *: gram) + (2d *: foot)
+// error: axle.quanta.UnittedQuantity[axle.quanta.Distance,Double] does not take parameters
+// (7d *: mile) - (123d *: foot)
+//                ^
+// error: type mismatch;
+//  found   : axle.quanta.UnittedQuantity[axle.quanta.Distance,Double]
+//  required: String
+// (1d *: gram) + (2d *: foot)
+//                    ^^^^^^^
+```
+
+Multiplication comes from Spire's `CModule` typeclass:
+
+```scala
+import spire.implicits.rightModuleOps
+
+(5.4 *: second) :* 100d
+// res16: UnittedQuantity[Time, Double] = UnittedQuantity(
+//   magnitude = 540.0,
+//   unit = UnitOfMeasurement(
+//     name = "second",
+//     symbol = "s",
+//     wikipediaUrl = Some(value = "http://en.wikipedia.org/wiki/Second")
+//   )
+// )
+
+(32d *: century) :* (1d/3)
+// res17: UnittedQuantity[Time, Double] = UnittedQuantity(
+//   magnitude = 10.666666666666666,
+//   unit = UnitOfMeasurement(
+//     name = "century",
+//     symbol = "century",
+//     wikipediaUrl = Some(value = "http://en.wikipedia.org/wiki/Century")
+//   )
+// )
+```
+
+The methods `over` and `by` are used to multiply and divide other values with units.
+This behavior is not yet implemented.
