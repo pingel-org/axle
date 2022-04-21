@@ -8,3 +8,4 @@ addSbtPlugin("org.scoverage"        % "sbt-scoverage"         % "1.9.3")
 addSbtPlugin("com.github.tkawachi"  % "sbt-doctest"           % "0.10.0") // ???
 addSbtPlugin("org.lyranthe.sbt"     % "partial-unification"   % "1.1.2")
 addSbtPlugin("com.github.sbt"       % "sbt-ci-release"        % "1.5.10")
+addSbtPlugin("com.typesafe.sbt"     % "sbt-ghpages"           % "0.6.3")
