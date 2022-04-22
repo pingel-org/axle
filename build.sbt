@@ -214,8 +214,11 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
     mdocIn := file("axle-docs/src/main/mdoc"),
     mdocOut := file("axle-docs/target/mdoc"),
     siteSourceDirectory := file("axle-docs/target/site"),
-    makeSite / includeFilter := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md",
-    Laika / sourceDirectories := Seq(file("axle-docs/target/mdoc")),
+    makeSite / includeFilter := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md" | "favicon.ico",
+    Laika / sourceDirectories := Seq(
+      file("axle-docs/target/mdoc"),
+      file("axle-docs/src/site")
+    ),
     laikaSite / target := file("axle-docs/target/site"),
     laikaExtensions ++= Seq(
       laika.markdown.github.GitHubFlavor,

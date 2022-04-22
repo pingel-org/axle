@@ -4,12 +4,12 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## CICD
 
-* titles for all .md files
+* where are the svg files?
+  * use sbt-site's "mappings"?
+  * site-update.sh should be only a set of sbt commands
+
 * extend README or whatever to describe site structure
 * fix internal links
-* where are the svg files?
-* use sbt-site's "mappings" for favicon.ico, etc?
-  * site-update.sh should be only a set of sbt commands
 
 * latest released version badge
 * set mdocVariables with latest released version
@@ -18,6 +18,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * update google analytics
 * CNAME (www and root)
 * update publishing.txt
+* simplify "Installation"
 
 * ghpagesCleanSite leaving stale files
 * GitHub "Releases" in sidebar should show "latest"
