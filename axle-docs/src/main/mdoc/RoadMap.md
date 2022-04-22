@@ -1,45 +1,17 @@
----
-layout: default
-title: Road Map
-permalink: /road_map/
----
+# Road Map
 
 See [Release Notes](/release_notes/) for the record of previously released features.
 
 ## CICD
 
-* try to use gh-pages with current jekyll
+* rm site-{setup,build,publish}.sh
 
-```bash
-sbt -J-Xmx6G "project axle-docs" mdoc
-sbt -J-Xmx6G "project axle-docs" makeSite
-
-export SITEBUILDDIR=axle-docs/target/sitebuild
-
-mkdir -p $SITEBUILDDIR
-#cp axle-docs/src/site/Gemfile $SITEBUILDDIR # remove theme? # publish this?
-# See https://www.freecodecamp.org/news/create-a-free-static-site-with-github-pages-in-10-minutes/#:~:text=The%20Gemfile%20is%20a%20Ruby,needed%20to%20run%20a%20project.&text=There%20can%20be%20a%20lot,too%20modern%20for%20GitHub%20Pages.
-cp axle-docs/src/site/_config.yml $SITEBUILDDIR
-cp axle-docs/src/site/favicon.ico $SITEBUILDDIR
-cp -R axle-docs/src/site/tutorial $SITEBUILDDIR
-cp -R axle-docs/target/site/* $SITEBUILDDIR
-mv *.svg *.png $SITEBUILDDIR/tutorial/images/
-# Where does bowl.html belong?
-cp -R axle-docs/src/site/css $SITEBUILDDIR
-# Where is $SITEBUILDDIR/target coming from?
-# need for both axle-docs/target/site{,build}?
-```
-
-```bash
-sbt 'project axle-docs' ghpagesCleanSite ghpagesPushSite
-```
-
+* titles for all .md files
 * latest released version badge
 * set mdocVariables with latest released version
 * Timestamp / version to site footer
 
 * update google analytics
-* rm site-{setup,build,publish}.sh
 * CNAME (www and root)
 * update publishing.txt
 
