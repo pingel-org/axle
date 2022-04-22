@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
-    <title>Remaining Design Issues</title>
+    <title>Architecture</title>
     
     
       <meta name="description" content="axle-docs"/>
@@ -48,16 +48,16 @@
       </div>
       
       <ul class="nav-list">
-        <li class="level1 active"><a href="#">Remaining Design Issues</a></li>
-        <li class="level1"><a href="Author.html">Author.md</a></li>
-        <li class="level1"><a href="History.html">αχλε</a></li>
-        <li class="level1"><a href="Index.html">Index.md</a></li>
-        <li class="level1"><a href="ReleaseNotes.html">0.6.1-2 (April 2022)</a></li>
-        <li class="level1"><a href="Resources.html">Resources.md</a></li>
+        <li class="level1 active"><a href="#">Architecture</a></li>
+        <li class="level1"><a href="Author.html">Author</a></li>
+        <li class="level1"><a href="History.html">History</a></li>
+        <li class="level1"><a href="Index.html">Axle</a></li>
+        <li class="level1"><a href="ReleaseNotes.html">Release Notes</a></li>
+        <li class="level1"><a href="Resources.html">Resources</a></li>
         <li class="level1"><a href="RoadMap.html">Road Map</a></li>
-        <li class="level1"><a href="Spokes.html">Parallel Collections</a></li>
-        <li class="level1"><a href="Tutorials.html">Core</a></li>
-        <li class="level1"><a href="Videos.html">Videos.md</a></li>
+        <li class="level1"><a href="Spokes.html">Spokes</a></li>
+        <li class="level1"><a href="Tutorials.html">Tutorials</a></li>
+        <li class="level1"><a href="Videos.html">Videos</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="tutorial/Ackermann.html">Ackermann.md</a></li>
         <li class="level2"><a href="tutorial/Algebra.html">Algebra.md</a></li>
@@ -118,9 +118,10 @@
     <div id="container">
 
       <nav id="page-nav">
-        <p class="header"><a href="#">Remaining Design Issues</a></p>
+        <p class="header"><a href="#">Architecture</a></p>
         
         <ul class="nav-list">
+          <li class="level1"><a href="#remaining-design-issues">Remaining Design Issues</a></li>
         </ul>
         
         <p class="footer"></p>
@@ -128,12 +129,7 @@
 
       <main class="content">
 
-        <hr>
-        <p>layout: page
-        title: Architecture
-        in_header: true
-        permalink: /architecture/
-        ---</p>
+        <h1 id="architecture" class="title">Architecture</h1>
         <p>Axle generally strives to follow the patterns established
         by the <a href="http://typelevel.org/">Typelevel</a> projects.</p>
         <p>With few exceptions, the functions are side-effect free.</p>
@@ -150,7 +146,8 @@
         Many such witnesses are provided by Axle for native Scala collections.</p>
         <p>Witnesses are also defined for other common jars from the Java and Scala ecosystems.
         Read more about these <a href="/spokes/">&quot;spokes&quot;</a>.</p>
-        <h1 id="remaining-design-issues" class="title">Remaining Design Issues</h1>
+        
+        <h2 id="remaining-design-issues" class="section"><a class="anchor-link left" href="#remaining-design-issues"><i class="icofont-laika">&#xef71;</i></a>Remaining Design Issues</h2>
         <p>See the <a href="/road_map/">Road Map</a> for more details on the timing of upcoming changes.</p>
         <p>Please get in touch if you&#39;d like to discuss these or other questions.</p>
 

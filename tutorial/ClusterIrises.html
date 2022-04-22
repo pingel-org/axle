@@ -48,16 +48,16 @@
       </div>
       
       <ul class="nav-list">
-        <li class="level1"><a href="../Architecture.html">Remaining Design Issues</a></li>
-        <li class="level1"><a href="../Author.html">Author.md</a></li>
-        <li class="level1"><a href="../History.html">αχλε</a></li>
-        <li class="level1"><a href="../Index.html">Index.md</a></li>
-        <li class="level1"><a href="../ReleaseNotes.html">0.6.1-2 (April 2022)</a></li>
-        <li class="level1"><a href="../Resources.html">Resources.md</a></li>
+        <li class="level1"><a href="../Architecture.html">Architecture</a></li>
+        <li class="level1"><a href="../Author.html">Author</a></li>
+        <li class="level1"><a href="../History.html">History</a></li>
+        <li class="level1"><a href="../Index.html">Axle</a></li>
+        <li class="level1"><a href="../ReleaseNotes.html">Release Notes</a></li>
+        <li class="level1"><a href="../Resources.html">Resources</a></li>
         <li class="level1"><a href="../RoadMap.html">Road Map</a></li>
-        <li class="level1"><a href="../Spokes.html">Parallel Collections</a></li>
-        <li class="level1"><a href="../Tutorials.html">Core</a></li>
-        <li class="level1"><a href="../Videos.html">Videos.md</a></li>
+        <li class="level1"><a href="../Spokes.html">Spokes</a></li>
+        <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
+        <li class="level1"><a href="../Videos.html">Videos</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="Ackermann.html">Ackermann.md</a></li>
         <li class="level2"><a href="Algebra.html">Algebra.md</a></li>
@@ -155,14 +155,14 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Irises</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Iris</span></code></pre>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ec</span><span> = </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="identifier">global</span><span>
-</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@6e86a5b4[Running, parallelism = 6, size = 3, active = 0, running = 0, steals = 3, tasks = 0, submissions = 0]
+</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@d3c6823[Running, parallelism = 6, size = 2, active = 0, running = 0, steals = 4, tasks = 0, submissions = 0]
 </span><span class="keyword">val</span><span> </span><span class="identifier">blocker</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">Blocker</span><span>.</span><span class="identifier">liftExecutionContext</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@6e86a5b4
+</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@d3c6823
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">cs</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">contextShift</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@50945e4f
+</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@7ed8c6b0
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">irisesIO</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">Irises</span><span>[</span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>](</span><span class="identifier">blocker</span><span>)
-</span><span class="comment">// irisesIO: Irises[cats.effect.IO] = axle.data.Irises@296067a1
+</span><span class="comment">// irisesIO: Irises[cats.effect.IO] = axle.data.Irises@3a6887fd
 </span><span class="keyword">val</span><span> </span><span class="identifier">irises</span><span> = </span><span class="identifier">irisesIO</span><span>.</span><span class="identifier">irises</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
 </span><span class="comment">// irises: List[Iris] = List(
 //   Iris(
@@ -237,10 +237,10 @@
 </span><span class="comment">// irisFeaturizer: Iris =&gt; List[Double] = &lt;function1&gt;
 </span><span>
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">la</span><span> = </span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
-</span><span class="comment">// la: algebra.LinearAlgebra[DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@313fd221
+</span><span class="comment">// la: algebra.LinearAlgebra[DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@62c06df1
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">normalizer</span><span> = (</span><span class="type-name">PCAFeatureNormalizer</span><span>[</span><span class="type-name">DoubleMatrix</span><span>] </span><span class="identifier">_</span><span>).</span><span class="identifier">curried</span><span>.</span><span class="identifier">apply</span><span>(</span><span class="number-literal">0.98</span><span>)
-</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$10297/0x000000080264e3d0@65fad7f4
+</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$10029/0x0000000802644000@60ce79ea
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">classifier</span><span>: </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>] =
   </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
@@ -359,11 +359,11 @@
 // ...
 </span><span>
 </span><span class="identifier">confusion</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res0: String = &quot;&quot;&quot;  0  49   1 :  50 Iris-setosa
-//  12   2  36 :  50 Iris-versicolor
-//  31   0  19 :  50 Iris-virginica
+</span><span class="comment">// res0: String = &quot;&quot;&quot; 49   0   1 :  50 Iris-setosa
+//   2  12  36 :  50 Iris-versicolor
+//   0  30  20 :  50 Iris-virginica
 // 
-//  43  51  56
+//  51  42  57
 // &quot;&quot;&quot;</span></code></pre>
         <p>Visualize the final (two dimensional) centroid positions</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">KMeansVisualization</span><span>

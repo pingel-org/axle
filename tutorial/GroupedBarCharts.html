@@ -48,16 +48,16 @@
       </div>
       
       <ul class="nav-list">
-        <li class="level1"><a href="../Architecture.html">Remaining Design Issues</a></li>
-        <li class="level1"><a href="../Author.html">Author.md</a></li>
-        <li class="level1"><a href="../History.html">αχλε</a></li>
-        <li class="level1"><a href="../Index.html">Index.md</a></li>
-        <li class="level1"><a href="../ReleaseNotes.html">0.6.1-2 (April 2022)</a></li>
-        <li class="level1"><a href="../Resources.html">Resources.md</a></li>
+        <li class="level1"><a href="../Architecture.html">Architecture</a></li>
+        <li class="level1"><a href="../Author.html">Author</a></li>
+        <li class="level1"><a href="../History.html">History</a></li>
+        <li class="level1"><a href="../Index.html">Axle</a></li>
+        <li class="level1"><a href="../ReleaseNotes.html">Release Notes</a></li>
+        <li class="level1"><a href="../Resources.html">Resources</a></li>
         <li class="level1"><a href="../RoadMap.html">Road Map</a></li>
-        <li class="level1"><a href="../Spokes.html">Parallel Collections</a></li>
-        <li class="level1"><a href="../Tutorials.html">Core</a></li>
-        <li class="level1"><a href="../Videos.html">Videos.md</a></li>
+        <li class="level1"><a href="../Spokes.html">Spokes</a></li>
+        <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
+        <li class="level1"><a href="../Videos.html">Videos</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="Ackermann.html">Ackermann.md</a></li>
         <li class="level2"><a href="Algebra.html">Algebra.md</a></li>
@@ -201,8 +201,8 @@
 //     )
 //   ),
 //   colorOf = &lt;function2&gt;,
-//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$10700/0x00000008027312a0@2f2d5e2b,
-//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$10701/0x0000000802731848@1e8789cb
+//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$10432/0x0000000802725f30@5cae345a,
+//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$10433/0x00000008027264d8@1802762f
 // )</span></code></pre>
         <p>Create the SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
@@ -252,8 +252,8 @@
 //     )
 //   ),
 //   colorOf = &lt;function2&gt;,
-//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$10700/0x00000008027312a0@2f2d5e2b,
-//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$10701/0x0000000802731848@1e8789cb
+//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$10432/0x0000000802725f30@5cae345a,
+//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$10433/0x00000008027264d8@1802762f
 // )</span></code></pre>
         <p>Create the second SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
@@ -284,11 +284,11 @@
   </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">modules</span><span>.</span><span class="identifier">doubleRationalModule</span><span>
   </span><span class="type-name">Time</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
 }
-</span><span class="comment">// timeConverter: axle.quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[axle.quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with axle.quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@aecf85c
+</span><span class="comment">// timeConverter: axle.quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[axle.quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with axle.quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@4aac4c3b
 </span><span class="keyword">import</span><span> </span><span class="identifier">timeConverter</span><span>.</span><span class="identifier">second</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">dataUpdates</span><span>: </span><span class="type-name">Observable</span><span>[</span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>]] = </span><span class="identifier">intervalScan</span><span>(</span><span class="identifier">initial</span><span>, </span><span class="identifier">tick</span><span>, </span><span class="number-literal">1d</span><span> *: </span><span class="identifier">second</span><span>)
-</span><span class="comment">// dataUpdates: Observable[Map[String, Double]] = monix.reactive.internal.operators.ScanObservable@2f42ccad</span></code></pre>
+</span><span class="comment">// dataUpdates: Observable[Map[String, Double]] = monix.reactive.internal.operators.ScanObservable@310cd399</span></code></pre>
         <p>Create <code>CurrentValueSubscriber</code>, which will be used by the <code>BarChart</code> to get the latest value</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="type-name">CurrentValueSubscriber</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">monix</span><span>.</span><span class="identifier">execution</span><span>.</span><span class="type-name">Scheduler</span><span>.</span><span class="type-name">Implicits</span><span>.</span><span class="identifier">global</span><span>

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
-    <title>Parallel Collections</title>
+    <title>Spokes</title>
     
     
       <meta name="description" content="axle-docs"/>
@@ -48,16 +48,16 @@
       </div>
       
       <ul class="nav-list">
-        <li class="level1"><a href="Architecture.html">Remaining Design Issues</a></li>
-        <li class="level1"><a href="Author.html">Author.md</a></li>
-        <li class="level1"><a href="History.html">αχλε</a></li>
-        <li class="level1"><a href="Index.html">Index.md</a></li>
-        <li class="level1"><a href="ReleaseNotes.html">0.6.1-2 (April 2022)</a></li>
-        <li class="level1"><a href="Resources.html">Resources.md</a></li>
+        <li class="level1"><a href="Architecture.html">Architecture</a></li>
+        <li class="level1"><a href="Author.html">Author</a></li>
+        <li class="level1"><a href="History.html">History</a></li>
+        <li class="level1"><a href="Index.html">Axle</a></li>
+        <li class="level1"><a href="ReleaseNotes.html">Release Notes</a></li>
+        <li class="level1"><a href="Resources.html">Resources</a></li>
         <li class="level1"><a href="RoadMap.html">Road Map</a></li>
-        <li class="level1 active"><a href="#">Parallel Collections</a></li>
-        <li class="level1"><a href="Tutorials.html">Core</a></li>
-        <li class="level1"><a href="Videos.html">Videos.md</a></li>
+        <li class="level1 active"><a href="#">Spokes</a></li>
+        <li class="level1"><a href="Tutorials.html">Tutorials</a></li>
+        <li class="level1"><a href="Videos.html">Videos</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="tutorial/Ackermann.html">Ackermann.md</a></li>
         <li class="level2"><a href="tutorial/Algebra.html">Algebra.md</a></li>
@@ -118,9 +118,10 @@
     <div id="container">
 
       <nav id="page-nav">
-        <p class="header"><a href="#">Parallel Collections</a></p>
+        <p class="header"><a href="#">Spokes</a></p>
         
         <ul class="nav-list">
+          <li class="level1"><a href="#parallel-collections">Parallel Collections</a></li>
           <li class="level1"><a href="#xml">XML</a></li>
           <li class="level1"><a href="#jblas">JBLAS</a></li>
           <li class="level1"><a href="#joda">JODA</a></li>
@@ -133,38 +134,34 @@
 
       <main class="content">
 
-        <hr>
-        <p>layout: page
-        title: Spokes
-        in_header: true
-        permalink: /spokes/
-        ---</p>
+        <h1 id="spokes" class="title">Spokes</h1>
         <p>Witnesses for 3rd party libraries: The &quot;Spokes&quot;</p>
-        <h1 id="parallel-collections" class="title">Parallel Collections</h1>
+        
+        <h2 id="parallel-collections" class="section"><a class="anchor-link left" href="#parallel-collections"><i class="icofont-laika">&#xef71;</i></a>Parallel Collections</h2>
         <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-parallel&quot; % &quot;0.6.0&quot;</code></pre>
         <p>For use with Scala <a href="https://github.com/scala/scala-parallel-collections">Parallel Collections</a> library
         (<code>&quot;org.scala-lang.modules&quot; %% &quot;scala-parallel-collections&quot; % ...</code>)</p>
         
-        <h1 id="xml" class="section"><a class="anchor-link left" href="#xml"><i class="icofont-laika">&#xef71;</i></a>XML</h1>
+        <h2 id="xml" class="section"><a class="anchor-link left" href="#xml"><i class="icofont-laika">&#xef71;</i></a>XML</h2>
         <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-xml&quot; % &quot;0.6.0&quot;</code></pre>
         <p>For use with Scala <a href="https://github.com/scala/scala-xml">XML</a> library
         (<code>&quot;org.scala-lang.modules&quot; %% &quot;scala-xml&quot; % ...</code>)</p>
         <p>XML includes <code>axle.web</code>, where HTML and SVG visualizations reside.</p>
         
-        <h1 id="jblas" class="section"><a class="anchor-link left" href="#jblas"><i class="icofont-laika">&#xef71;</i></a>JBLAS</h1>
+        <h2 id="jblas" class="section"><a class="anchor-link left" href="#jblas"><i class="icofont-laika">&#xef71;</i></a>JBLAS</h2>
         <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-jblas&quot; % &quot;0.6.0&quot;</code></pre>
         <p><a href="/tutorial/linear_algebra/">Linear Algebra</a> and other witnesses for <a href="http://jblas.org/">JBLAS</a> which itself is a wrapper for <a href="http://www.netlib.org/lapack/">LAPACK</a>.
         Includes Principal Component Analysis (PCA).</p>
         
-        <h1 id="joda" class="section"><a class="anchor-link left" href="#joda"><i class="icofont-laika">&#xef71;</i></a>JODA</h1>
+        <h2 id="joda" class="section"><a class="anchor-link left" href="#joda"><i class="icofont-laika">&#xef71;</i></a>JODA</h2>
         <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-joda&quot; % &quot;0.6.0&quot;</code></pre>
         <p>Witnesses for the <a href="http://www.joda.org/joda-time/">Joda</a> time library.</p>
         
-        <h1 id="jung" class="section"><a class="anchor-link left" href="#jung"><i class="icofont-laika">&#xef71;</i></a>JUNG</h1>
+        <h2 id="jung" class="section"><a class="anchor-link left" href="#jung"><i class="icofont-laika">&#xef71;</i></a>JUNG</h2>
         <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-jung&quot; % &quot;0.6.0&quot;</code></pre>
         <p><a href="/tutorial/graph/">Graph</a> Directed and undirected graph witnesses for the <a href="http://jung.sourceforge.net/">JUNG</a> library.</p>
         
-        <h1 id="awt" class="section"><a class="anchor-link left" href="#awt"><i class="icofont-laika">&#xef71;</i></a>AWT</h1>
+        <h2 id="awt" class="section"><a class="anchor-link left" href="#awt"><i class="icofont-laika">&#xef71;</i></a>AWT</h2>
         <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-awt&quot; % &quot;0.6.0&quot;</code></pre>
         <p>Witnesses for <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/package-summary.html">AWT</a></p>
 

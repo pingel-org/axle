@@ -48,16 +48,16 @@
       </div>
       
       <ul class="nav-list">
-        <li class="level1"><a href="../Architecture.html">Remaining Design Issues</a></li>
-        <li class="level1"><a href="../Author.html">Author.md</a></li>
-        <li class="level1"><a href="../History.html">αχλε</a></li>
-        <li class="level1"><a href="../Index.html">Index.md</a></li>
-        <li class="level1"><a href="../ReleaseNotes.html">0.6.1-2 (April 2022)</a></li>
-        <li class="level1"><a href="../Resources.html">Resources.md</a></li>
+        <li class="level1"><a href="../Architecture.html">Architecture</a></li>
+        <li class="level1"><a href="../Author.html">Author</a></li>
+        <li class="level1"><a href="../History.html">History</a></li>
+        <li class="level1"><a href="../Index.html">Axle</a></li>
+        <li class="level1"><a href="../ReleaseNotes.html">Release Notes</a></li>
+        <li class="level1"><a href="../Resources.html">Resources</a></li>
         <li class="level1"><a href="../RoadMap.html">Road Map</a></li>
-        <li class="level1"><a href="../Spokes.html">Parallel Collections</a></li>
-        <li class="level1"><a href="../Tutorials.html">Core</a></li>
-        <li class="level1"><a href="../Videos.html">Videos.md</a></li>
+        <li class="level1"><a href="../Spokes.html">Spokes</a></li>
+        <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
+        <li class="level1"><a href="../Videos.html">Videos</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="Ackermann.html">Ackermann.md</a></li>
         <li class="level2"><a href="Algebra.html">Algebra.md</a></li>
@@ -188,40 +188,40 @@
 // X&gt;  | |           7|8|9
 // O&gt; Board:         Movement Key:
 // O&gt;  | |           1|2|3
-// O&gt;  |X|           4|5|6
+// O&gt;  | |X          4|5|6
 // O&gt;  | |           7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt;  | |           1|2|3
-// X&gt;  |X|           4|5|6
-// X&gt;  | |O          7|8|9
+// X&gt;  |O|           1|2|3
+// X&gt;  | |X          4|5|6
+// X&gt;  | |           7|8|9
 // O&gt; Board:         Movement Key:
-// O&gt;  | |X          1|2|3
-// O&gt;  |X|           4|5|6
-// O&gt;  | |O          7|8|9
+// O&gt; X|O|           1|2|3
+// O&gt;  | |X          4|5|6
+// O&gt;  | |           7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt;  | |X          1|2|3
-// X&gt;  |X|           4|5|6
-// X&gt;  |O|O          7|8|9
+// X&gt; X|O|           1|2|3
+// X&gt;  |O|X          4|5|6
+// X&gt;  | |           7|8|9
 // O&gt; Board:         Movement Key:
-// O&gt;  | |X          1|2|3
-// O&gt;  |X|X          4|5|6
-// O&gt;  |O|O          7|8|9
+// O&gt; X|O|           1|2|3
+// O&gt; X|O|X          4|5|6
+// O&gt;  | |           7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt; O| |X          1|2|3
-// X&gt;  |X|X          4|5|6
-// X&gt;  |O|O          7|8|9
+// X&gt; X|O|O          1|2|3
+// X&gt; X|O|X          4|5|6
+// X&gt;  | |           7|8|9
 // endState: TicTacToeState = TicTacToeState(
 //   moverOpt = None,
 //   board = Array(
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
-//     None,
-//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
-//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
-//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
-//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
-//     None,
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
-//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;))
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     None,
+//     None
 //   ),
 //   boardSize = 3
 // )</span></code></pre>
