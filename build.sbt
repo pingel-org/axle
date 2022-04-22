@@ -73,7 +73,6 @@ lazy val axleCore = Project("axle-core", file("axle-core"))
   ))
   .settings(axleSettings)
   .settings(commonJvmSettings)
-  .enablePlugins(MdocPlugin)
 
 lazy val publishSettings = Seq(
     organization := "org.axle-lang",
