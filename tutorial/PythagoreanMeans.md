@@ -40,7 +40,7 @@ Geometric mean
 ```scala
 geometricMean[Real, List](List(1d, 5d, 25d))
 // res1: Real = Inexact(
-//   f = spire.math.Real$$Lambda$10731/0x00000008027fec68@70a358eb
+//   f = spire.math.Real$$Lambda$10789/0x000000080281e4d0@27a23a05
 // )
 ```
 
@@ -147,9 +147,9 @@ movingGeometricMean[List, Int, Real](
     List(1d, 5d, 25d, 125d, 625d),
     3)
 // res7: List[Real] = List(
-//   Inexact(f = spire.math.Real$$Lambda$10731/0x00000008027fec68@568f6fcf),
-//   Inexact(f = spire.math.Real$$Lambda$9839/0x00000008025d5178@607a7763),
-//   Inexact(f = spire.math.Real$$Lambda$9839/0x00000008025d5178@587faa2c)
+//   Inexact(f = spire.math.Real$$Lambda$10789/0x000000080281e4d0@5a52a5d1),
+//   Inexact(f = spire.math.Real$$Lambda$9897/0x00000008025cdb10@1ea5f646),
+//   Inexact(f = spire.math.Real$$Lambda$9897/0x00000008025cdb10@3b9228ce)
 // )
 ```
 

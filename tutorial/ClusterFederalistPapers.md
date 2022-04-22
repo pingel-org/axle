@@ -15,19 +15,19 @@ Download (and cache) the Federalist articles downloader:
 
 ```scala
 val ec = scala.concurrent.ExecutionContext.global
-// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@21e5345d[Running, parallelism = 6, size = 2, active = 0, running = 0, steals = 2, tasks = 0, submissions = 0]
+// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@7c04ac3f[Running, parallelism = 6, size = 2, active = 0, running = 0, steals = 2, tasks = 0, submissions = 0]
 val blocker = cats.effect.Blocker.liftExecutionContext(ec)
-// blocker: cats.effect.Blocker = cats.effect.Blocker@21e5345d
+// blocker: cats.effect.Blocker = cats.effect.Blocker@7c04ac3f
 implicit val cs = cats.effect.IO.contextShift(ec)
-// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@30caf5e0
+// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@22edcfc1
 
 val articlesIO = FederalistPapers.articles[cats.effect.IO](blocker)
 // articlesIO: cats.effect.IO[List[Article]] = Map(
 //   source = Async(
-//     k = cats.effect.internals.IOBracket$$$Lambda$9924/0x0000000802607a40@1a94d01d,
+//     k = cats.effect.internals.IOBracket$$$Lambda$9982/0x0000000802600c28@6412118f,
 //     trampolineAfter = false
 //   ),
-//   f = axle.data.FederalistPapers$$$Lambda$9937/0x000000080260b0c0@2975ee2e,
+//   f = axle.data.FederalistPapers$$$Lambda$9995/0x00000008026065b0@65b57c23,
 //   index = 0
 // )
 
@@ -99,7 +99,7 @@ import axle.nlp.language.English
 
 import spire.algebra.CRing
 implicit val ringLong: CRing[Long] = spire.implicits.LongAlgebra
-// ringLong: CRing[Long] = spire.std.LongAlgebra@213a6081
+// ringLong: CRing[Long] = spire.std.LongAlgebra@3c0941fe
 
 val corpus = Corpus[Vector, Long](articles.map(_.text).toVector, English)
 // corpus: Corpus[Vector, Long] = Corpus(
@@ -310,7 +310,7 @@ import cats.implicits._
 import spire.random.Generator.rng
 
 val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
-// normalizer: DoubleMatrix => PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$9972/0x0000000802634000@46b8e4b3
+// normalizer: DoubleMatrix => PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$10030/0x0000000802608c08@70560279
 
 val classifier = KMeans[Article, List, DoubleMatrix](
   articles,
@@ -435,12 +435,12 @@ val confusion = ConfusionMatrix[Article, Int, String, Vector, DoubleMatrix](
 // ...
 
 confusion.show
-// res1: String = """ 4  1 19 28 : 52 HAMILTON
+// res1: String = """ 3  1  0 48 : 52 HAMILTON
 //  0  0  0  3 :  3 HAMILTON AND MADISON
-//  7  0  2  6 : 15 MADISON
-//  0  0  1  4 :  5 JAY
-//  0  0  2  9 : 11 HAMILTON OR MADISON
+//  1  9  1  4 : 15 MADISON
+//  0  0  0  5 :  5 JAY
+//  0  1  0 10 : 11 HAMILTON OR MADISON
 // 
-// 11  1 24 50
+//  4 11  1 70
 // """
 ```

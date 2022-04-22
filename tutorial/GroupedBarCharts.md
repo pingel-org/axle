@@ -83,8 +83,8 @@ val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double], Str
 //     )
 //   ),
 //   colorOf = <function2>,
-//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$10375/0x0000000802714000@cacf361,
-//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$10376/0x00000008027145a8@14714d99
+//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$10433/0x000000080270e000@2eef234d,
+//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$10434/0x000000080270e5a8@2b2049d8
 // )
 ```
 
@@ -143,8 +143,8 @@ val chart2 = BarChartGrouped[Int, String, Double, Map[(Int, String), Double], St
 //     )
 //   ),
 //   colorOf = <function2>,
-//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$10375/0x0000000802714000@cacf361,
-//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$10376/0x00000008027145a8@14714d99
+//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$10433/0x000000080270e000@2eef234d,
+//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$10434/0x000000080270e5a8@2b2049d8
 // )
 ```
 
@@ -189,11 +189,11 @@ implicit val timeConverter = {
   import axle.algebra.modules.doubleRationalModule
   Time.converterGraphK2[Double, DirectedSparseGraph]
 }
-// timeConverter: axle.quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[axle.quanta.UnitOfMeasurement[Time], Double => Double]] with axle.quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@47c390b5
+// timeConverter: axle.quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[axle.quanta.UnitOfMeasurement[Time], Double => Double]] with axle.quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@c6e8e58
 import timeConverter.second
 
 val dataUpdates: Observable[Map[String, Double]] = intervalScan(initial, tick, 1d *: second)
-// dataUpdates: Observable[Map[String, Double]] = monix.reactive.internal.operators.ScanObservable@45411643
+// dataUpdates: Observable[Map[String, Double]] = monix.reactive.internal.operators.ScanObservable@45c951
 ```
 
 Create `CurrentValueSubscriber`, which will be used by the `BarChart` to get the latest value

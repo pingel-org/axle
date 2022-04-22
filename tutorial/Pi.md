@@ -57,5 +57,5 @@ resulting aggregation.
 
 ```scala
 monteCarloPiEstimate((1 to 10000).toList, (n: Int) => n.toDouble)
-// res6: Double = 3.1408
+// res6: Double = 3.1204
 ```

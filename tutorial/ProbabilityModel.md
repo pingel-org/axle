@@ -144,7 +144,7 @@ These imports make available a `Generator` as source of entropy
 import spire.random._
 
 val rng = Random.generatorFromSeed(Seed(42))
-// rng: spire.random.rng.Cmwc5 = spire.random.rng.Cmwc5@3c3cdaa9
+// rng: spire.random.rng.Cmwc5 = spire.random.rng.Cmwc5@2f43e3b6
 ```
 
 And then the `.sample` syntax:
@@ -200,7 +200,7 @@ Then tally them
 
 ```scala
 implicit val ringInt: CRing[Int] = spire.implicits.IntAlgebra
-// ringInt: CRing[Int] = spire.std.IntAlgebra@26d40ea9
+// ringInt: CRing[Int] = spire.std.IntAlgebra@23640a5b
 
 import axle.syntax.talliable._
 

@@ -77,29 +77,37 @@ val endState = play(game, strategies, evGame.startState(game), rng).unsafeRunSyn
 // X>  | |           4|5|6
 // X>  | |           7|8|9
 // O> Board:         Movement Key:
-// O> X| |           1|2|3
+// O>  | |           1|2|3
 // O>  | |           4|5|6
-// O>  | |           7|8|9
+// O> X| |           7|8|9
 // X> Board:         Movement Key:
-// X> X| |           1|2|3
-// X>  |O|           4|5|6
-// X>  | |           7|8|9
+// X>  |O|           1|2|3
+// X>  | |           4|5|6
+// X> X| |           7|8|9
 // O> Board:         Movement Key:
-// O> X| |           1|2|3
-// O> X|O|           4|5|6
-// O>  | |           7|8|9
+// O>  |O|           1|2|3
+// O>  |X|           4|5|6
+// O> X| |           7|8|9
 // X> Board:         Movement Key:
-// X> X|O|           1|2|3
-// X> X|O|           4|5|6
-// X>  | |           7|8|9
+// X>  |O|           1|2|3
+// X>  |X|           4|5|6
+// X> X| |O          7|8|9
 // O> Board:         Movement Key:
-// O> X|O|           1|2|3
-// O> X|O|X          4|5|6
-// O>  | |           7|8|9
+// O>  |O|           1|2|3
+// O>  |X|X          4|5|6
+// O> X| |O          7|8|9
+// X> Board:         Movement Key:
+// X>  |O|O          1|2|3
+// X>  |X|X          4|5|6
+// X> X| |O          7|8|9
+// O> Board:         Movement Key:
+// O> X|O|O          1|2|3
+// O>  |X|X          4|5|6
+// O> X| |O          7|8|9
 // X> Board:         Movement Key:
 // X> X|O|O          1|2|3
-// X> X|O|X          4|5|6
-// X>  | |           7|8|9
+// X>  |X|X          4|5|6
+// X> X|O|O          7|8|9
 // endState: TicTacToeState = TicTacToeState(
 //   moverOpt = None,
 //   board = Array(
@@ -107,11 +115,11 @@ val endState = play(game, strategies, evGame.startState(game), rng).unsafeRunSyn
 //     Some(value = Player(id = "O", description = "Player O")),
 //     Some(value = Player(id = "O", description = "Player O")),
 //     Some(value = Player(id = "X", description = "Player X")),
+//     Some(value = Player(id = "X", description = "Player X")),
+//     Some(value = Player(id = "X", description = "Player X")),
+//     Some(value = Player(id = "X", description = "Player X")),
 //     Some(value = Player(id = "O", description = "Player O")),
-//     Some(value = Player(id = "X", description = "Player X")),
-//     Some(value = Player(id = "X", description = "Player X")),
-//     None,
-//     None
+//     Some(value = Player(id = "O", description = "Player O"))
 //   ),
 //   boardSize = 3
 // )

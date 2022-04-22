@@ -21,25 +21,25 @@ Demonstrate it uniformly sampling 15 of the first 100 integers
 ```scala
 val sample = reservoirSampleK(15, LazyList.from(1), rng).drop(100).head
 // sample: List[Int] = List(
-//   88,
-//   79,
+//   101,
+//   93,
+//   90,
+//   81,
 //   76,
 //   74,
+//   73,
+//   68,
 //   67,
-//   66,
-//   57,
-//   55,
-//   52,
-//   40,
-//   33,
+//   32,
 //   29,
-//   22,
+//   27,
 //   15,
-//   5
+//   14,
+//   8
 // )
 
 arithmeticMean(sample.map(_.toDouble))
-// res0: Double = 50.53333333333333
+// res0: Double = 56.53333333333333
 ```
 
 The mean of the sample should be in the ballpark of the mean of the entire list -- 50.

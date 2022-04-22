@@ -104,7 +104,7 @@ Define visualization
 import axle.visualize._
 
 implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
-// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@2b54456f
+// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@72582090
 
 val plot = Plot[String, Rational, UnittedQuantity[Information, Double], D](
   () => List(("h", hm)),

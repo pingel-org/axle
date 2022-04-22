@@ -38,14 +38,14 @@ import axle.data.Iris
 
 ```scala
 val ec = scala.concurrent.ExecutionContext.global
-// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@21e5345d[Running, parallelism = 6, size = 4, active = 0, running = 0, steals = 5, tasks = 0, submissions = 0]
+// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@7c04ac3f[Running, parallelism = 6, size = 4, active = 0, running = 0, steals = 5, tasks = 0, submissions = 0]
 val blocker = cats.effect.Blocker.liftExecutionContext(ec)
-// blocker: cats.effect.Blocker = cats.effect.Blocker@21e5345d
+// blocker: cats.effect.Blocker = cats.effect.Blocker@7c04ac3f
 implicit val cs = cats.effect.IO.contextShift(ec)
-// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@2de9c04f
+// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@307596e
 
 val irisesIO = new Irises[cats.effect.IO](blocker)
-// irisesIO: Irises[cats.effect.IO] = axle.data.Irises@a66ece4
+// irisesIO: Irises[cats.effect.IO] = axle.data.Irises@5adb5272
 val irises = irisesIO.irises.unsafeRunSync()
 // irises: List[Iris] = List(
 //   Iris(
@@ -131,10 +131,10 @@ val irisFeaturizer =
 // irisFeaturizer: Iris => List[Double] = <function1>
 
 implicit val la = linearAlgebraDoubleMatrix[Double]
-// la: algebra.LinearAlgebra[DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@545bab8d
+// la: algebra.LinearAlgebra[DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@1c82698f
 
 val normalizer = (PCAFeatureNormalizer[DoubleMatrix] _).curried.apply(0.98)
-// normalizer: DoubleMatrix => PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$9972/0x0000000802634000@388a0aed
+// normalizer: DoubleMatrix => PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$10030/0x0000000802608c08@4cfeec50
 
 val classifier: KMeans[Iris, List, DoubleMatrix] =
   KMeans[Iris, List, DoubleMatrix](
@@ -261,10 +261,10 @@ val confusion = ConfusionMatrix[Iris, Int, String, Vector, DoubleMatrix](
 
 confusion.show
 // res0: String = """  1  49   0 :  50 Iris-setosa
-//  34   0  16 :  50 Iris-versicolor
-//  16   0  34 :  50 Iris-virginica
+//  36   2  12 :  50 Iris-versicolor
+//  20   0  30 :  50 Iris-virginica
 // 
-//  51  49  50
+//  57  51  42
 // """
 ```
 

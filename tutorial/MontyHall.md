@@ -103,7 +103,7 @@ val endState = play(game, strategies, evGame.startState(game), rng).unsafeRunSyn
 //   placed = true,
 //   firstChoice = Some(value = FirstChoice(door = 3)),
 //   reveal = Some(value = Reveal(door = 2)),
-//   secondChoice = Some(value = Left(value = Change()))
+//   secondChoice = Some(value = Right(value = Stay()))
 // )
 ```
 
@@ -111,11 +111,11 @@ Display outcome to each player
 
 ```scala
 val outcome = evGame.mover(game, endState).swap.toOption.get
-// outcome: MontyHallOutcome = MontyHallOutcome(car = true)
+// outcome: MontyHallOutcome = MontyHallOutcome(car = false)
 
 evGame.players(game).foreach { player =>
   playerToWriter(player)(evGameIO.displayOutcomeTo(game, outcome, player)).unsafeRunSync()
 }
-// C> You won the car!
-// M> Contestant won the car!
+// C> You won a goat
+// M> Contestant won a goat
 ```
