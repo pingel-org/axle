@@ -18,6 +18,7 @@
     
     <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
     <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="../css/main.scss" />
     <script src="../helium/laika-helium.js"></script>
     
     
@@ -199,8 +200,8 @@
 //     )
 //   ),
 //   colorOf = &lt;function2&gt;,
-//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$10441/0x000000080272c000@94b437c,
-//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$10442/0x000000080272c5a8@1bc4b883
+//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$9371/1287710043@49dab8de,
+//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$9372/530768925@72c1000a
 // )</span></code></pre>
         <p>Create the SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
@@ -250,8 +251,8 @@
 //     )
 //   ),
 //   colorOf = &lt;function2&gt;,
-//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$10441/0x000000080272c000@94b437c,
-//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$10442/0x000000080272c5a8@1bc4b883
+//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$9371/1287710043@49dab8de,
+//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$9372/530768925@72c1000a
 // )</span></code></pre>
         <p>Create the second SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
@@ -282,11 +283,11 @@
   </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">modules</span><span>.</span><span class="identifier">doubleRationalModule</span><span>
   </span><span class="type-name">Time</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
 }
-</span><span class="comment">// timeConverter: axle.quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[axle.quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with axle.quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@32257585
+</span><span class="comment">// timeConverter: axle.quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[axle.quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with axle.quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@51eb2a92
 </span><span class="keyword">import</span><span> </span><span class="identifier">timeConverter</span><span>.</span><span class="identifier">second</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">dataUpdates</span><span>: </span><span class="type-name">Observable</span><span>[</span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>]] = </span><span class="identifier">intervalScan</span><span>(</span><span class="identifier">initial</span><span>, </span><span class="identifier">tick</span><span>, </span><span class="number-literal">1d</span><span> *: </span><span class="identifier">second</span><span>)
-</span><span class="comment">// dataUpdates: Observable[Map[String, Double]] = monix.reactive.internal.operators.ScanObservable@1692902</span></code></pre>
+</span><span class="comment">// dataUpdates: Observable[Map[String, Double]] = monix.reactive.internal.operators.ScanObservable@278025d4</span></code></pre>
         <p>Create <code>CurrentValueSubscriber</code>, which will be used by the <code>BarChart</code> to get the latest value</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="type-name">CurrentValueSubscriber</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">monix</span><span>.</span><span class="identifier">execution</span><span>.</span><span class="type-name">Scheduler</span><span>.</span><span class="type-name">Implicits</span><span>.</span><span class="identifier">global</span><span>
