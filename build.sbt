@@ -21,7 +21,7 @@ lazy val monixVersion = "3.1.0"
 lazy val jogampVersion = "2.3.2"
 
 lazy val scoverageSettings = Seq(
-  coverageMinimum := 10,
+  coverageMinimumStmtTotal := 10,
   coverageFailOnMinimum := false,
   coverageHighlighting := true
 )
