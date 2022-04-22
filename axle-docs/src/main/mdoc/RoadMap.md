@@ -337,21 +337,9 @@ that has been its goal since inception.
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
 * Make the `Int` abstract in `KMeans{,Visualization}`, `LinearAlgebra`, etc
 
-## Docs, Site, CI/CD
+## Site
 
 * Friend of Spire
-
-* Experiment with pandoc
-
-* Use sbt-ci-release (rm sbt-release)
-
-* Configure makeSite to preview: previewFixedPort := Some(9999)
-* Copy css using makeSite (not update-docs.sh)
 * Fix markdown lint warnings
 * Figure out better way to reference images in docs
-
-* Site
-  * meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
-  * Remove jekyll from publishing pipeline
-    * [sbt-site](https://www.scala-sbt.org/sbt-site/publishing.html)
-    * sbt-s3
+* meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
