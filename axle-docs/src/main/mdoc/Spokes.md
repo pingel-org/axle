@@ -1,14 +1,8 @@
----
-layout: page
-title: Spokes
-in_header: true
-permalink: /spokes/
----
+# Spokes
 
 Witnesses for 3rd party libraries: The "Spokes"
 
-Parallel Collections
-====================
+## Parallel Collections
 
 ```sbt
 "org.axle-lang" %% "axle-parallel" % "@RELEASE_VERSION@"
@@ -17,8 +11,7 @@ Parallel Collections
 For use with Scala [Parallel Collections](https://github.com/scala/scala-parallel-collections) library
 (`"org.scala-lang.modules" %% "scala-parallel-collections" % ...`)
 
-XML
-===
+## XML
 
 ```sbt
 "org.axle-lang" %% "axle-xml" % "@RELEASE_VERSION@"
@@ -29,8 +22,7 @@ For use with Scala [XML](https://github.com/scala/scala-xml) library
 
 XML includes `axle.web`, where HTML and SVG visualizations reside.
 
-JBLAS
-=====
+## JBLAS
 
 ```sbt
 "org.axle-lang" %% "axle-jblas" % "@RELEASE_VERSION@"
@@ -39,8 +31,7 @@ JBLAS
 [Linear Algebra](/tutorial/linear_algebra/) and other witnesses for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/).
 Includes Principal Component Analysis (PCA).
 
-JODA
-====
+## JODA
 
 ```sbt
 "org.axle-lang" %% "axle-joda" % "@RELEASE_VERSION@"
@@ -48,8 +39,7 @@ JODA
 
 Witnesses for the [Joda](http://www.joda.org/joda-time/) time library.
 
-JUNG
-====
+## JUNG
 
 ```sbt
 "org.axle-lang" %% "axle-jung" % "@RELEASE_VERSION@"
@@ -57,8 +47,7 @@ JUNG
 
 [Graph](/tutorial/graph/) Directed and undirected graph witnesses for the [JUNG](http://jung.sourceforge.net/) library.
 
-AWT
-===
+## AWT
 
 ```sbt
 "org.axle-lang" %% "axle-awt" % "@RELEASE_VERSION@"
