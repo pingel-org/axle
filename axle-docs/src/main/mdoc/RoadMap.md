@@ -4,16 +4,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## CICD
 
-* where are the svg files?
-  * use sbt-site's "mappings"?
-  * site-update.sh should be only a set of sbt commands
-
-* extend README or whatever to describe site structure
+* README.md and directory.conf to structure site
 * fix internal links
 
 * latest released version badge
 * set mdocVariables with latest released version
 * Timestamp / version to site footer
+
+* site-update.sh should be only a set of sbt commands (avoid moving png and svg files)
 
 * update google analytics
 * CNAME (www and root)
