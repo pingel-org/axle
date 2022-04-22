@@ -1,8 +1,6 @@
----
-layout: page
-title: Naïve Bayes
-permalink: /tutorial/naive_bayes/
----
+# Naive Bayes
+
+Naïve Bayes
 
 ## Tennis Example
 

@@ -1,8 +1,4 @@
----
-layout: page
-title: Ackermann
-permalink: /tutorial/ackermann/
----
+# Ackermann
 
 See the Wikipedia page on the [Ackermann function](http://en.wikipedia.org/wiki/Ackermann_function)
 

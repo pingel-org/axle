@@ -1,8 +1,4 @@
----
-layout: page
-title: Monty Hall
-permalink: /tutorial/monty_hall/
----
+# Monty Hall
 
 See the Wikipedia page on the [Monty Hall problem](https://en.wikipedia.org/wiki/Monty_Hall_problem)
 

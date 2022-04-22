@@ -1,8 +1,4 @@
----
-layout: page
-title: Machine Learning
-permalink: /tutorial/machine_learning/
----
+# Machine Learning
 
 ## Algorithms
 

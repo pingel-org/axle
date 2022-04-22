@@ -1,8 +1,4 @@
----
-layout: page
-title: Edit Distance
-permalink: /tutorial/edit_distance/
----
+# Edit Distance
 
 See the Wikipedia page on [Edit distance](https://en.wikipedia.org/wiki/Edit_distance)
 

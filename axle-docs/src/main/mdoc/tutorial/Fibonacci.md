@@ -1,8 +1,4 @@
----
-layout: page
-title: Fibonacci
-permalink: /tutorial/fibonacci/
----
+# Fibonacci
 
 ```scala mdoc:silent
 import axle.math._

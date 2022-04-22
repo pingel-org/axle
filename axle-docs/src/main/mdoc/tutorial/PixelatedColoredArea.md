@@ -1,8 +1,4 @@
----
-layout: page
-title: Pixelated Colored Area
-permalink: /tutorial/pixelated_colored_area/
----
+# Pixelated Colored Area
 
 This visualization shows the composition of a function `f: (X, Y) => V` with a
 colorizing function `c: V => Color`

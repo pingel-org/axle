@@ -1,8 +1,4 @@
----
-layout: page
-title: Bayesian Networks
-permalink: /tutorial/bayesian_networks/
----
+# Bayesian Networks
 
 See the Wikipedia page on [Bayesian networks](https://en.wikipedia.org/wiki/Bayesian_network)
 

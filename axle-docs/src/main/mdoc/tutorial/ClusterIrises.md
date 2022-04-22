@@ -1,12 +1,8 @@
----
-layout: page
-title: Cluster Irises with k-Means Clustering
-permalink: /tutorial/cluster_irises_k_means/
----
+# Cluster Irises
+
+## With k-Means Clustering
 
 See the wikipedia page on [k-Means Clustering](https://en.wikipedia.org/wiki/K-means_clustering)
-
-## Clustering Irises
 
 A demonstration of k-Means Clustering using the [Iris flower data set](https://en.wikipedia.org/wiki/Iris_flower_data_set)
 

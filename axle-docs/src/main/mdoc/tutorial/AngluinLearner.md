@@ -1,8 +1,4 @@
----
-layout: page
-title: Angluin Learner
-permalink: /tutorial/angluin_learner/
----
+# Angluin Learner
 
 Models [Dana Angluin](https://en.wikipedia.org/wiki/Dana_Angluin)'s Language Learner.
 

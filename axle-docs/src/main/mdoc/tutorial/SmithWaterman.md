@@ -1,8 +1,4 @@
----
-layout: page
-title: Smith-Waterman
-permalink: /tutorial/smith_waterman/
----
+# Smith-Waterman
 
 See the Wikipedia page on the
 [Smith-Waterman](https://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm) algorithm.

@@ -1,8 +1,4 @@
----
-layout: page
-title: Natural Language Processing
-permalink: /tutorial/natural_language_processing/
----
+# Natural Language Processing
 
 Sub-topics include
 

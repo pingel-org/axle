@@ -1,8 +1,6 @@
----
-layout: page
-title: Clusters Federalist Papers with k-Means
-permalink: /tutorial/cluster_federalist_papers_k_means/
----
+# Clusters Federalist Papers
+
+## With k-Means
 
 Imports
 

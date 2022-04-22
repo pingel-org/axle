@@ -1,8 +1,4 @@
----
-layout: page
-title: Plots
-permalink: /tutorial/plots/
----
+# Plots
 
 Two-dimensional plots
 

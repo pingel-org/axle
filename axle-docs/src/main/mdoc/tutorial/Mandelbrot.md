@@ -1,8 +1,4 @@
----
-layout: page
-title: Mandelbrot Set
-permalink: /tutorial/mandelbrot/
----
+# Mandelbrot Set
 
 See the wikipedia page on the [Mandelbrot Set](https://en.wikipedia.org/wiki/Mandelbrot_set)
 

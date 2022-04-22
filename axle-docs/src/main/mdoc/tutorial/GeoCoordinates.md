@@ -1,8 +1,4 @@
----
-layout: page
-title: Geo Coordinates
-permalink: /tutorial/geo_coordinates/
----
+# Geo Coordinates
 
 Imports and implicits
 

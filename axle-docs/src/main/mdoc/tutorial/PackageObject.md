@@ -1,8 +1,4 @@
----
-layout: page
-title: axle.math and axle.logic Package Objects
-permalink: /tutorial/axle_package_object/
----
+# Package Objects
 
 This page describes functions in `axle.logic` and `axle.math` package objects.
 

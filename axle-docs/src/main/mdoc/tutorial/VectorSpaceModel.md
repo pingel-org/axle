@@ -1,8 +1,4 @@
----
-layout: page
-title: Vector Space Model
-permalink: /tutorial/vector_space_model/
----
+# Vector Space Model
 
 See the Wikipedia page on [Vector space model](https://en.wikipedia.org/wiki/Vector_space_model)
 

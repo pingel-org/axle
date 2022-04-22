@@ -1,8 +1,4 @@
----
-layout: page
-title: ScatterPlot
-permalink: /tutorial/scatterplot/
----
+# Scatter Plot
 
 ScatterPlot
 

@@ -1,8 +1,4 @@
----
-layout: page
-title: Root-mean-square deviation
-permalink: /tutorial/rmsd/
----
+# Root-mean-square deviation
 
 See the Wikipedia page on
 [Root-mean-square deviation](https://en.wikipedia.org/wiki/Root-mean-square_deviation).

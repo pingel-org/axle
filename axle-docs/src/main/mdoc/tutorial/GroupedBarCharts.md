@@ -1,8 +1,4 @@
----
-layout: page
-title: Grouped Bar Charts
-permalink: /tutorial/grouped_bar_charts/
----
+# Grouped Bar Charts
 
 Two-dimensional grouped bar charts
 

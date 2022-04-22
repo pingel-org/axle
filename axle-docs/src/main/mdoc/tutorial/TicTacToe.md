@@ -1,8 +1,4 @@
----
-layout: page
-title: Tic Tac Toe
-permalink: /tutorial/tic_tac_toe/
----
+# Tic Tac Toe
 
 A Perfect Information, Zero-sum game
 

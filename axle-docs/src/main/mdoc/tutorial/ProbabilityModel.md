@@ -1,8 +1,4 @@
----
-layout: page
-title: Probability Model
-permalink: /tutorial/probability_model/
----
+# Probability Model
 
 Modeling probability, randomness, and uncertainly is one of the primary objectives of Axle.
 

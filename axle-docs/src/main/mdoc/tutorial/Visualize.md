@@ -1,8 +1,4 @@
----
-layout: page
-title: Visualize
-permalink: /tutorial/visualize/
----
+# Visualize
 
 The `show` function is available in the `axle._` package.
 It can be applied to several types of Axle objects.

@@ -1,8 +1,4 @@
----
-layout: page
-title: Mean Average Precision at K
-permalink: /tutorial/map_at_k/
----
+# Mean Average Precision at K
 
 See the page on [mean average precision](https://www.kaggle.com/wiki/MeanAveragePrecision) at Kaggle
 

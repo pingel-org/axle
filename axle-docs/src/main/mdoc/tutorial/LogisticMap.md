@@ -1,8 +1,4 @@
----
-layout: page
-title: Logistic Map
-permalink: /tutorial/logistic_map/
----
+# Logistic Map
 
 See the wikipedia page on [Logistic Map](https://en.wikipedia.org/wiki/Logistic_map) function
 

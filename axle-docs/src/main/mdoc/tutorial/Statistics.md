@@ -1,8 +1,4 @@
----
-layout: page
-title: Statistics
-permalink: /tutorial/statistics/
----
+# Statistics
 
 ## Uniform Distribution
 

@@ -1,8 +1,4 @@
----
-layout: page
-title: π
-permalink: /tutorial/pi/
----
+# Pi
 
 Two estimators for π
 

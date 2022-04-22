@@ -1,8 +1,4 @@
----
-layout: page
-title: Reservoir Sampling
-permalink: /tutorial/reservoir_sampling/
----
+# Reservoir Sampling
 
 Reservoir Sampling is the answer to a common interview question.
 

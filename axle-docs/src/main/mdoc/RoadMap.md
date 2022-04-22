@@ -5,7 +5,11 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## CICD
 
 * titles for all .md files
+* extend README or whatever to describe site structure
+* fix internal links
+* where are the svg files?
 * use sbt-site's "mappings" for favicon.ico, etc?
+  * site-update.sh should be only a set of sbt commands
 
 * latest released version badge
 * set mdocVariables with latest released version

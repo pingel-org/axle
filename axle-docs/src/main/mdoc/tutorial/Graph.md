@@ -1,8 +1,4 @@
----
-layout: page
-title: Graph
-permalink: /tutorial/graph/
----
+# Graph
 
 DirectedGraph typeclass and witnesses for the Jung package
 

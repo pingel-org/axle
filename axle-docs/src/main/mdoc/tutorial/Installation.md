@@ -1,8 +1,4 @@
----
-layout: page
-title: Installation
-permalink: /tutorial/installation/
----
+# Installation
 
 Axle as a dependency of an SBT project.
 

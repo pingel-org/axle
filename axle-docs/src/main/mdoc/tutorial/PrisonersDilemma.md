@@ -1,8 +1,4 @@
----
-layout: page
-title: Prisoner's Dilemma
-permalink: /tutorial/prisoner/
----
+# Prisoner's Dilemma
 
 See the Wikipedia page on the [Prisoner's Dilemma](https://en.wikipedia.org/wiki/Prisoner%27s_dilemma)
 

@@ -1,8 +1,4 @@
----
-layout: page
-title: Entropy of a Biased Coin
-permalink: /tutorial/entropy_biased_coin/
----
+# Entropy of a Biased Coin
 
 Visualize the relationship of a coin's bias to its entropy with this code snippet.
 

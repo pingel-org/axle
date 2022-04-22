@@ -1,8 +1,4 @@
----
-layout: page
-title: Poker
-permalink: /tutorial/poker/
----
+# Poker
 
 An N-Player, Imperfect Information, Zero-sum game
 

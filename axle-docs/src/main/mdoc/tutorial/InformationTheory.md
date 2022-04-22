@@ -1,8 +1,4 @@
----
-layout: page
-title: Information Theory
-permalink: /tutorial/information_theory/
----
+# Information Theory
 
 ## Entropy
 

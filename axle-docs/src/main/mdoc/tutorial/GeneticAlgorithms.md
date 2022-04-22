@@ -1,8 +1,4 @@
----
-layout: page
-title: Genetic Algorithms
-permalink: /tutorial/genetic_algorithms/
----
+# Genetic Algorithms
 
 See the wikipedia page on [Genetic Algorithms](https://en.wikipedia.org/wiki/Genetic_algorithm)
 

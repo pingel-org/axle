@@ -1,8 +1,4 @@
----
-layout: page
-title: Pythagorean Means
-permalink: /tutorial/pythagorean_means/
----
+# Pythagorean Means
 
 Arithmetic, Geometric, and Harmonic Means are all 'Pythagorean'.
 

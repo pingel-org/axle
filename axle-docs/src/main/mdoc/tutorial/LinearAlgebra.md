@@ -1,8 +1,4 @@
----
-layout: page
-title: Linear Algebra
-permalink: /tutorial/linear_algebra/
----
+# Linear Algebra
 
 A `LinearAlgebra` typeclass.
 

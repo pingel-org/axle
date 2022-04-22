@@ -1,8 +1,4 @@
----
-layout: page
-title: Gold Paradigm
-permalink: /tutorial/gold_paradigm/
----
+# Gold Paradigm
 
 Models the Gold Paradigm.
 

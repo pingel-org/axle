@@ -1,8 +1,4 @@
----
-layout: page
-title: Logic
-permalink: /tutorial/logic/
----
+# Logic
 
 ## Conjunctive Normal Form Converter
 

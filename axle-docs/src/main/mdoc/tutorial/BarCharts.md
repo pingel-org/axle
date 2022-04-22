@@ -1,8 +1,4 @@
----
-layout: page
-title: Bar Charts
-permalink: /tutorial/bar_charts/
----
+# Bar Charts
 
 Two-dimensional bar charts.
 
