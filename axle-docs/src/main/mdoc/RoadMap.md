@@ -4,9 +4,8 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## CICD
 
-* rm site-{setup,build,publish}.sh
-
 * titles for all .md files
+
 * latest released version badge
 * set mdocVariables with latest released version
 * Timestamp / version to site footer
