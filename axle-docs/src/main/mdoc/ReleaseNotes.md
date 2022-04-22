@@ -163,7 +163,7 @@ See [Road Map](/road_map/) for the plan of upcoming releases and features.
 ## 0.2.6 (November 2016)
 
 * Depends on cats-core (initially just for Show typeclass)
-* Strategy: (G, MS) => Distribution[M, Rational]
+* Strategy: `(G, MS) => Distribution[M, Rational]`
 * LinearAlgebra.from{Column,Row}MajorArray
 * Implementation of Monty Hall using axle.game typeclasses
 * Implementaiton of Prisoner's Dilemma using axle.game typeclasses

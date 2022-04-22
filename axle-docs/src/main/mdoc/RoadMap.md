@@ -17,7 +17,8 @@ sbt -J-Xmx6G "project axle-docs" makeSite
 export SITEBUILDDIR=axle-docs/target/sitebuild
 
 mkdir -p $SITEBUILDDIR
-#cp axle-docs/src/site/Gemfile $SITEBUILDDIR
+#cp axle-docs/src/site/Gemfile $SITEBUILDDIR # remove theme? # publish this?
+# See https://www.freecodecamp.org/news/create-a-free-static-site-with-github-pages-in-10-minutes/#:~:text=The%20Gemfile%20is%20a%20Ruby,needed%20to%20run%20a%20project.&text=There%20can%20be%20a%20lot,too%20modern%20for%20GitHub%20Pages.
 cp axle-docs/src/site/_config.yml $SITEBUILDDIR
 cp axle-docs/src/site/favicon.ico $SITEBUILDDIR
 cp -R axle-docs/src/site/tutorial $SITEBUILDDIR
@@ -159,7 +160,7 @@ sbt 'project axle-docs' ghpagesCleanSite ghpagesPushSite
 
 * `MonotypeBayesanNetwork`.{`pure`, `map`, `flatMap`, `tailRecR`}
 * Reconcile `MBN` `combine1` & `combine2`
-* Monad tests for MonotypeBayesanNetwork[Alarm-Burglary-Earthquake]
+* Monad tests for `MonotypeBayesanNetwork[Alarm-Burglary-Earthquake]`
 
 * `Bayes[MonotypeBayesanNetwork]` -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself
@@ -324,11 +325,11 @@ that has been its goal since inception.
 * Honor graph vis params in awt graph visualizations
 * `axle.web.Table` and `HtmlFrom[Table[T]]`
 * Log scale
-* SVG[Matrix]
+* `SVG[Matrix]`
 * `BarChart` Variable width bars
 * Horizontal barchart
 * `KMeansVisualization` / `ScatterPlot` similarity (at least DataPoints)
-* SVG[H] for BarChart hover (wrap with \<g\> to do getBBox)
+* `SVG[H]` for BarChart hover (wrap with \<g\> to do getBBox)
 * Background box for `ScatterPlot` hover text?
 * Fix multi-color cube rendering
 * Bloom filter surface
@@ -346,7 +347,7 @@ that has been its goal since inception.
 
 ## Types and Axioms
 
-* Replace Finite with Shapeless's version (eg Sized[Vector[_], nat.2])
+* Replace Finite with Shapeless's version (eg `Sized[Vector[_], nat.2]`)
 * Delete Finite conversions for jung (replace with NaturalTransformation?)
 * Replace with Cats: FoldLeft, Bijection, FunctionPair, Endofunctor
 * Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?

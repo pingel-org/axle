@@ -48,7 +48,7 @@ The Axle jars are compiled with several additional dependencies in `provided` sc
 meaning that they are compiled and packaged with the expectation that the user of the Axle
 jars will explicitly provide those dependencies.
 
-See the project's current (build.sbt)[https://github.com/axlelang/axle/blob/master/build.sbt]
+See the project's current [build.sbt](https://github.com/axlelang/axle/blob/master/build.sbt)
 file for up to date version information.
 
 As of version 0.5.2 the full list of dependencies is below.
