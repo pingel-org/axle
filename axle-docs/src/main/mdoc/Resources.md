@@ -1,9 +1,4 @@
----
-layout: page
-title: Resources
-in_header: true
-permalink: /resources/
----
+# Resources
 
 * [Source code](https://github.com/axlelang/axle) on github
 * Current build status on Github Actins [![Build status](https://github.com/axlelang/axle/workflows/Continuous%20Integration/badge.svg)](https://github.com/axlelang/axle/actions?query=workflow%3A%22Continuous+Integration%22)

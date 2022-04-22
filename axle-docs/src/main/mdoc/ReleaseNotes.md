@@ -1,8 +1,4 @@
----
-layout: page
-title: Release notes
-permalink: /release_notes/
----
+# Release Notes
 
 See [Road Map](/road_map/) for the plan of upcoming releases and features.
 

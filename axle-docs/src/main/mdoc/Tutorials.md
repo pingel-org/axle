@@ -1,9 +1,4 @@
----
-layout: page
-title: Tutorials
-in_header: true
-permalink: /tutorial/
----
+# Tutorials
 
 ## Core
 

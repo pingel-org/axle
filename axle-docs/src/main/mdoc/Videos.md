@@ -1,8 +1,4 @@
----
-layout: page
-title: Videos
-permalink: /videos/
----
+# Videos
 
 Talk at Scala by the Bay 2015
 <iframe

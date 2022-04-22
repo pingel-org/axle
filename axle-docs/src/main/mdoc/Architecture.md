@@ -1,9 +1,4 @@
----
-layout: page
-title: Architecture
-in_header: true
-permalink: /architecture/
----
+# Architecture
 
 Axle generally strives to follow the patterns established
 by the [Typelevel](http://typelevel.org/) projects.
