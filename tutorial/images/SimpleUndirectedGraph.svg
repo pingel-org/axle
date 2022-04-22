@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg version="1.1" width="300.0" height="300.0" onload="init(evt)" xmlns="http://www.w3.org/2000/svg">
+      <style>.caption {
+  font-size: 14px;
+  font-family: Georgia, serif;
+}
+</style>
+      <script type="text/ecmascript"><![CDATA[
+function init(evt) {
+  if ( window.svgDocument == null ) {
+    svgDocument = evt.target.ownerDocument;
+  }
+}
+
+function RectHover(evt, i, c) {
+  rect = svgDocument.getElementById('rect' + i);
+  if( c != null ) {
+    rect.setAttributeNS(null, "fill", c)  
+  }
+  tooltiptext = svgDocument.getElementById('tooltiptext' + i);
+  tooltipbg = svgDocument.getElementById('tooltipbg' + i);
+  if( tooltipbg != null) {
+    tbb = tooltiptext.getBBox();
+    tooltipbg.setAttributeNS(null, "width", tbb.width);
+    tooltipbg.setAttributeNS(null, "height", tbb.height);
+    tooltipbg.setAttributeNS(null, "x", tbb.x);
+    tooltipbg.setAttributeNS(null, "y", tbb.y);
+    tooltipbg.setAttributeNS(null, "visibility", "visible");
+  }
+  tooltiptext.setAttributeNS(null,"visibility","visible");
+}
+
+function RectUnhover(evt, i, c) {
+  rect = svgDocument.getElementById('rect' + i);
+  if( c != null ) {
+    rect.setAttributeNS(null, "fill", c)  
+  }
+  tooltiptext = svgDocument.getElementById('tooltiptext' + i);
+  tooltiptext.setAttributeNS(null,"visibility","hidden");
+  tooltipbg = svgDocument.getElementById('tooltipbg' + i);
+  if( tooltipbg != null ) {
+    tooltipbg.setAttributeNS(null,"visibility","hidden");
+  }
+}
+]]></script>
+      <line x1="71.20344321894072" y1="61.88576291497617" x2="176.5049595879307" y2="146.7235443924194" stroke="rgb(0,0,0)" stroke-width="1"/><line x1="176.5049595879307" y1="146.7235443924194" x2="281.9934686064445" y2="149.0318845727415" stroke="rgb(0,0,0)" stroke-width="1"/><line x1="194.00848782762154" y1="97.25391723891276" x2="281.9934686064445" y2="149.0318845727415" stroke="rgb(0,0,0)" stroke-width="1"/><line x1="281.9934686064445" y1="149.0318845727415" x2="71.20344321894072" y2="61.88576291497617" stroke="rgb(0,0,0)" stroke-width="1"/><line x1="176.5049595879307" y1="146.7235443924194" x2="194.00848782762154" y2="97.25391723891276" stroke="rgb(0,0,0)" stroke-width="1"/><line x1="71.20344321894072" y1="61.88576291497617" x2="194.00848782762154" y2="97.25391723891276" stroke="rgb(0,0,0)" stroke-width="1"/><circle cx="71.20344321894072" cy="61.88576291497617" r="10" fill="rgb(255,255,0)" stroke="rgb(0,0,0)" stroke-width="1"/><circle cx="176.5049595879307" cy="146.7235443924194" r="10" fill="rgb(255,255,0)" stroke="rgb(0,0,0)" stroke-width="1"/><circle cx="194.00848782762154" cy="97.25391723891276" r="10" fill="rgb(255,255,0)" stroke="rgb(0,0,0)" stroke-width="1"/><circle cx="281.9934686064445" cy="149.0318845727415" r="10" fill="rgb(255,255,0)" stroke="rgb(0,0,0)" stroke-width="1"/><text text-anchor="middle" alignment-baseline="middle" x="71.20344321894072" y="61.88576291497617" fill="rgb(0,0,0)" font-size="12">a</text><text text-anchor="middle" alignment-baseline="middle" x="176.5049595879307" y="146.7235443924194" fill="rgb(0,0,0)" font-size="12">b</text><text text-anchor="middle" alignment-baseline="middle" x="194.00848782762154" y="97.25391723891276" fill="rgb(0,0,0)" font-size="12">c</text><text text-anchor="middle" alignment-baseline="middle" x="281.9934686064445" y="149.0318845727415" fill="rgb(0,0,0)" font-size="12">d</text><text text-anchor="middle" alignment-baseline="middle" x="123.85420140343571" y="104.30465365369778" fill="rgb(0,0,0)" font-size="12">hello 10</text><text text-anchor="middle" alignment-baseline="middle" x="229.24921409718758" y="147.87771448258044" fill="rgb(0,0,0)" font-size="12">hey 2</text><text text-anchor="middle" alignment-baseline="middle" x="238.000978217033" y="123.14290090582713" fill="rgb(0,0,0)" font-size="12">hi 3</text><text text-anchor="middle" alignment-baseline="middle" x="176.5984559126926" y="105.45882374385883" fill="rgb(0,0,0)" font-size="12">earth 7</text><text text-anchor="middle" alignment-baseline="middle" x="185.25672370777613" y="121.98873081566609" fill="rgb(0,0,0)" font-size="12">world 1</text><text text-anchor="middle" alignment-baseline="middle" x="132.60596552328113" y="79.56984007694447" fill="rgb(0,0,0)" font-size="12">! 1</text>
+      Sorry, your browser does not support inline SVG.
+    </svg>

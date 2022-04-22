@@ -138,19 +138,19 @@
 </span><span class="keyword">import</span><span> </span><span class="type-name">FederalistPapers</span><span>.</span><span class="type-name">Article</span></code></pre>
         <p>Download (and cache) the Federalist articles downloader:</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ec</span><span> = </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="identifier">global</span><span>
-</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@39fa946a[Running, parallelism = 6, size = 2, active = 0, running = 0, steals = 2, tasks = 0, submissions = 0]
+</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@2df0c10e[Running, parallelism = 6, size = 2, active = 0, running = 0, steals = 1, tasks = 0, submissions = 0]
 </span><span class="keyword">val</span><span> </span><span class="identifier">blocker</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">Blocker</span><span>.</span><span class="identifier">liftExecutionContext</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@39fa946a
+</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@2df0c10e
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">cs</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">contextShift</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@1345875e
+</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@2d5b2f34
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">articlesIO</span><span> = </span><span class="type-name">FederalistPapers</span><span>.</span><span class="identifier">articles</span><span>[</span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>](</span><span class="identifier">blocker</span><span>)
 </span><span class="comment">// articlesIO: cats.effect.IO[List[Article]] = Map(
 //   source = Async(
-//     k = cats.effect.internals.IOBracket$$$Lambda$9962/0x0000000802610c28@7755c1c3,
+//     k = cats.effect.internals.IOBracket$$$Lambda$10072/0x000000080262d1b8@5758ad6b,
 //     trampolineAfter = false
 //   ),
-//   f = axle.data.FederalistPapers$$$Lambda$9975/0x00000008026165b0@76fe87ad,
+//   f = axle.data.FederalistPapers$$$Lambda$10085/0x00000008026305b0@109a67b8,
 //   index = 0
 // )
 </span><span>
@@ -214,7 +214,7 @@
 
 </span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">CRing</span><span>
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringLong</span><span>: </span><span class="type-name">CRing</span><span>[</span><span class="type-name">Long</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">LongAlgebra</span><span>
-</span><span class="comment">// ringLong: CRing[Long] = spire.std.LongAlgebra@1b4a14dc
+</span><span class="comment">// ringLong: CRing[Long] = spire.std.LongAlgebra@3b492c14
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">corpus</span><span> = </span><span class="type-name">Corpus</span><span>[</span><span class="type-name">Vector</span><span>, </span><span class="type-name">Long</span><span>](</span><span class="identifier">articles</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">text</span><span>).</span><span class="identifier">toVector</span><span>, </span><span class="type-name">English</span><span>)
 </span><span class="comment">// corpus: Corpus[Vector, Long] = Corpus(
@@ -410,7 +410,7 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">normalizer</span><span> = (</span><span class="type-name">PCAFeatureNormalizer</span><span>[</span><span class="type-name">DoubleMatrix</span><span>] </span><span class="identifier">_</span><span>).</span><span class="identifier">curried</span><span>.</span><span class="identifier">apply</span><span>(</span><span class="number-literal">0.98</span><span>)
-</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$10010/0x000000080261ca00@240a0f9c
+</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$10120/0x00000008025f7510@4f1f86c6
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">classifier</span><span> = </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Article</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
   </span><span class="identifier">articles</span><span>,
@@ -528,13 +528,13 @@
 // ...
 </span><span>
 </span><span class="identifier">confusion</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res1: String = &quot;&quot;&quot;31  8 13  0 : 52 HAMILTON
-//  3  0  0  0 :  3 HAMILTON AND MADISON
-// 13  1  0  1 : 15 MADISON
-//  4  1  0  0 :  5 JAY
-// 10  0  0  1 : 11 HAMILTON OR MADISON
+</span><span class="comment">// res1: String = &quot;&quot;&quot;13 32  6  1 : 52 HAMILTON
+//  0  3  0  0 :  3 HAMILTON AND MADISON
+//  3  6  4  2 : 15 MADISON
+//  1  2  0  2 :  5 JAY
+//  2  8  0  1 : 11 HAMILTON OR MADISON
 // 
-// 61 10 13  2
+// 19 51 10  6
 // &quot;&quot;&quot;</span></code></pre>
 
       </main>
