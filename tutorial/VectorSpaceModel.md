@@ -45,9 +45,9 @@ import axle.nlp.language.English
 import axle.nlp.TermVectorizer
 
 implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
-// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@38677cfc
+// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@2b54456f
 implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
-// nrootDouble: NRoot[Double] = spire.std.DoubleAlgebra@38677cfc
+// nrootDouble: NRoot[Double] = spire.std.DoubleAlgebra@2b54456f
 
 val vectorizer = TermVectorizer[Double](English.stopWords)
 // vectorizer: TermVectorizer[Double] = TermVectorizer(
@@ -111,7 +111,7 @@ The object defines a `space` method, which returns a `spire.algebra.MetricSpace`
 ```scala
 import axle.nlp.UnweightedDocumentVectorSpace
 implicit val unweighted = UnweightedDocumentVectorSpace().normed
-// unweighted: spire.algebra.NormedVectorSpace[Map[String, Double], Double] = spire.algebra.InnerProductSpace$$anon$1@79fded81
+// unweighted: spire.algebra.NormedVectorSpace[Map[String, Double], Double] = spire.algebra.InnerProductSpace$$anon$1@51383ddc
 
 unweighted.distance(v1, v2)
 // res0: Double = 3.4641016151377544
@@ -180,7 +180,7 @@ dm.distanceMatrix.max
 import axle.nlp.TFIDFDocumentVectorSpace
 
 val tfidf = TFIDFDocumentVectorSpace(corpus, vectorizer).normed
-// tfidf: spire.algebra.NormedVectorSpace[Map[String, Double], Double] = spire.algebra.InnerProductSpace$$anon$1@471da73d
+// tfidf: spire.algebra.NormedVectorSpace[Map[String, Double], Double] = spire.algebra.InnerProductSpace$$anon$1@59f2701a
 
 tfidf.distance(v1, v2)
 // res4: Double = 4.068944074907273

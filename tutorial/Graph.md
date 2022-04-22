@@ -30,7 +30,7 @@ import axle.algebra._
 import axle.jung._
 
 val jdg = DirectedGraph.k2[DirectedSparseGraph, String, Edge]
-// jdg: DirectedGraph[DirectedSparseGraph[String, Edge], String, Edge] = axle.jung.package$$anon$7@2bad9e3e
+// jdg: DirectedGraph[DirectedSparseGraph[String, Edge], String, Edge] = axle.jung.package$$anon$7@4c677ea3
 ```
 
 Use the `jdg` witness's `make` method to create the directed graph
@@ -45,7 +45,7 @@ val dg = jdg.make(List(a, b, c, d),
     (a, c, new Edge("!", 7)),
     (b, d, new Edge("hey", 2))))
 // dg: DirectedSparseGraph[String, Edge] = Vertices:a,b,c,d
-// Edges:repl.MdocSession$App$Edge@3edf0e8d[c,d] repl.MdocSession$App$Edge@13d652d0[a,b] repl.MdocSession$App$Edge@67c82bdf[d,a] repl.MdocSession$App$Edge@56d4dece[b,c] repl.MdocSession$App$Edge@36fb2181[b,d] repl.MdocSession$App$Edge@4629a524[a,c]
+// Edges:repl.MdocSession$App$Edge@68608d30[a,c] repl.MdocSession$App$Edge@6882bcd6[d,a] repl.MdocSession$App$Edge@10196c81[c,d] repl.MdocSession$App$Edge@1c139e28[a,b] repl.MdocSession$App$Edge@591103ce[b,c] repl.MdocSession$App$Edge@393efc81[b,d]
 ```
 
 ```scala
@@ -80,7 +80,7 @@ import cats.Show
 implicit val showEdge: Show[Edge] = new Show[Edge] {
   def show(e: Edge): String = e.s + " " + e.i
 }
-// showEdge: Show[Edge] = repl.MdocSession$App$$anon$1@370feb5f
+// showEdge: Show[Edge] = repl.MdocSession$App$$anon$1@503997ba
 
 import axle.visualize._
 
@@ -97,7 +97,7 @@ val dVis = DirectedGraphVisualization[DirectedSparseGraph[String, Edge], String,
 )
 // dVis: DirectedGraphVisualization[DirectedSparseGraph[String, Edge], String, Edge] = DirectedGraphVisualization(
 //   dg = Vertices:a,b,c,d
-// Edges:repl.MdocSession$App$Edge@3edf0e8d[c,d] repl.MdocSession$App$Edge@13d652d0[a,b] repl.MdocSession$App$Edge@67c82bdf[d,a] repl.MdocSession$App$Edge@56d4dece[b,c] repl.MdocSession$App$Edge@36fb2181[b,d] repl.MdocSession$App$Edge@4629a524[a,c] ,
+// Edges:repl.MdocSession$App$Edge@68608d30[a,c] repl.MdocSession$App$Edge@6882bcd6[d,a] repl.MdocSession$App$Edge@10196c81[c,d] repl.MdocSession$App$Edge@1c139e28[a,b] repl.MdocSession$App$Edge@591103ce[b,c] repl.MdocSession$App$Edge@393efc81[b,d] ,
 //   width = 300,
 //   height = 300,
 //   border = 10,
@@ -145,7 +145,7 @@ import axle.algebra._
 import axle.jung._
 
 val jug = UndirectedGraph.k2[UndirectedSparseGraph, String, Edge]
-// jug: UndirectedGraph[UndirectedSparseGraph[String, Edge], String, Edge] = axle.jung.package$$anon$11@4c63f86f
+// jug: UndirectedGraph[UndirectedSparseGraph[String, Edge], String, Edge] = axle.jung.package$$anon$11@46f5bdc5
 ```
 
 Use the `jug` witness's `make` method to create the undirected graph
@@ -160,7 +160,7 @@ val ug = jug.make(List(a, b, c, d),
     (a, c, new Edge("!", 1)),
     (b, d, new Edge("hey", 2))))
 // ug: UndirectedSparseGraph[String, Edge] = Vertices:a,b,c,d
-// Edges:repl.MdocSession$App7$Edge@4d3ec94f[b,c] repl.MdocSession$App7$Edge@46fc25ae[a,c] repl.MdocSession$App7$Edge@5af38f98[d,a] repl.MdocSession$App7$Edge@7d33f88f[b,d] repl.MdocSession$App7$Edge@5159e7e4[c,d] repl.MdocSession$App7$Edge@3385f2ca[a,b]
+// Edges:repl.MdocSession$App7$Edge@325e280e[b,c] repl.MdocSession$App7$Edge@4d2a122a[a,c] repl.MdocSession$App7$Edge@20438134[a,b] repl.MdocSession$App7$Edge@7d5ea136[c,d] repl.MdocSession$App7$Edge@715c7714[d,a] repl.MdocSession$App7$Edge@e775dd9[b,d]
 ```
 
 ```scala
@@ -189,7 +189,7 @@ import cats.Show
 implicit val showEdge: Show[Edge] = new Show[Edge] {
   def show(e: Edge): String = e.s + " " + e.i
 }
-// showEdge: Show[Edge] = repl.MdocSession$App7$$anon$2@54faa206
+// showEdge: Show[Edge] = repl.MdocSession$App7$$anon$2@362c1c66
 
 import axle.visualize._
 
@@ -201,7 +201,7 @@ val uVis = UndirectedGraphVisualization[UndirectedSparseGraph[String, Edge], Str
   color = Color.yellow)
 // uVis: UndirectedGraphVisualization[UndirectedSparseGraph[String, Edge], String, Edge] = UndirectedGraphVisualization(
 //   ug = Vertices:a,b,c,d
-// Edges:repl.MdocSession$App7$Edge@4d3ec94f[b,c] repl.MdocSession$App7$Edge@46fc25ae[a,c] repl.MdocSession$App7$Edge@5af38f98[d,a] repl.MdocSession$App7$Edge@7d33f88f[b,d] repl.MdocSession$App7$Edge@5159e7e4[c,d] repl.MdocSession$App7$Edge@3385f2ca[a,b] ,
+// Edges:repl.MdocSession$App7$Edge@325e280e[b,c] repl.MdocSession$App7$Edge@4d2a122a[a,c] repl.MdocSession$App7$Edge@20438134[a,b] repl.MdocSession$App7$Edge@7d5ea136[c,d] repl.MdocSession$App7$Edge@715c7714[d,a] repl.MdocSession$App7$Edge@e775dd9[b,d] ,
 //   width = 300,
 //   height = 300,
 //   border = 10,

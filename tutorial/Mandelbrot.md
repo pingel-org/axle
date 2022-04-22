@@ -19,7 +19,7 @@ Define a function to compute the Mandelbrot velocity at point on the plane `(x, 
 
 ```scala
 implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
-// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@38677cfc
+// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@2b54456f
 
 val f = (x0: Double, x1: Double, y0: Double, y1: Double) => inMandelbrotSetAt(4d, x0, y0, 1000).getOrElse(-1)
 // f: (Double, Double, Double, Double) => Int = <function4>

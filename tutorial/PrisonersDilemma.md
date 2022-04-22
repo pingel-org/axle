@@ -74,7 +74,7 @@ val endState = play(game, strategies, evGame.startState(game), rng).unsafeRunSyn
 // P1> You have been caught
 // P2> You have been caught
 // endState: PrisonersDilemmaState = PrisonersDilemmaState(
-//   p1Move = Some(value = Betrayal()),
+//   p1Move = Some(value = Silence()),
 //   p1Moved = true,
 //   p2Move = Some(value = Betrayal())
 // )
@@ -85,15 +85,15 @@ Display outcome to each player
 ```scala
 val outcome = evGame.mover(game, endState).swap.toOption.get
 // outcome: PrisonersDilemmaOutcome = PrisonersDilemmaOutcome(
-//   p1YearsInPrison = 2,
-//   p2YearsInPrison = 2
+//   p1YearsInPrison = 3,
+//   p2YearsInPrison = 0
 // )
 
 evGame.players(game).foreach { player =>
   playerToWriter(player)(evGameIO.displayOutcomeTo(game, outcome, player)).unsafeRunSync()
 }
-// P1> You is imprisoned for 2 years
-// P1> Player 2 is imprisoned for 2 years
-// P2> Player 1 is imprisoned for 2 years
-// P2> You is imprisoned for 2 years
+// P1> You is imprisoned for 3 years
+// P1> Player 2 is imprisoned for 0 years
+// P2> Player 1 is imprisoned for 3 years
+// P2> You is imprisoned for 0 years
 ```

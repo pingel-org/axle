@@ -34,7 +34,7 @@ import axle.visualize.Color.lightGray
 
 ```scala
 implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
-// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@38677cfc
+// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@2b54456f
 
 val chart = BarChart[String, Double, Map[String, Double], String](
   () => sales,
@@ -73,7 +73,7 @@ val chart = BarChart[String, Double, Map[String, Double], String](
 //       )
 //     )
 //   ),
-//   colorOf = axle.visualize.BarChart$$$Lambda$9702/0x000000080254d660@1171193c,
+//   colorOf = axle.visualize.BarChart$$$Lambda$9662/0x000000080253c0b0@4c107c36,
 //   hoverOf = <function1>,
 //   linkOf = <function1>
 // )

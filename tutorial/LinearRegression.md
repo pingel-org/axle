@@ -53,13 +53,13 @@ import spire.algebra.NRoot
 import axle.jblas._
 
 implicit val rngDouble: Rng[Double] = spire.implicits.DoubleAlgebra
-// rngDouble: Rng[Double] = spire.std.DoubleAlgebra@38677cfc
+// rngDouble: Rng[Double] = spire.std.DoubleAlgebra@2b54456f
 implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
-// nrootDouble: NRoot[Double] = spire.std.DoubleAlgebra@38677cfc
+// nrootDouble: NRoot[Double] = spire.std.DoubleAlgebra@2b54456f
 implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
-// laJblasDouble: axle.algebra.LinearAlgebra[org.jblas.DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@776cfc7f
+// laJblasDouble: axle.algebra.LinearAlgebra[org.jblas.DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@3e4db105
 implicit val rngInt: Rng[Int] = spire.implicits.IntAlgebra
-// rngInt: Rng[Int] = spire.std.IntAlgebra@4fb1f0d5
+// rngInt: Rng[Int] = spire.std.IntAlgebra@26d40ea9
 
 import axle.ml.LinearRegression
 

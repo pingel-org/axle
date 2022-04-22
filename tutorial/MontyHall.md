@@ -92,16 +92,16 @@ val endState = play(game, strategies, evGame.startState(game), rng).unsafeRunSyn
 // C> Door #1: 
 // C> Door #2: 
 // C> Door #3: 
-// M> Door #1: goat, first choice
+// M> Door #1: car
 // M> Door #2: goat
-// M> Door #3: car
-// C> Door #1: first choice
+// M> Door #3: goat, first choice
+// C> Door #1: 
 // C> Door #2: , revealed goat
-// C> Door #3: 
+// C> Door #3: first choice
 // endState: MontyHallState = MontyHallState(
-//   placement = Some(value = PlaceCar(door = 3)),
+//   placement = Some(value = PlaceCar(door = 1)),
 //   placed = true,
-//   firstChoice = Some(value = FirstChoice(door = 1)),
+//   firstChoice = Some(value = FirstChoice(door = 3)),
 //   reveal = Some(value = Reveal(door = 2)),
 //   secondChoice = Some(value = Left(value = Change()))
 // )
