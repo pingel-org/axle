@@ -5,6 +5,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## CICD
 
 * titles for all .md files
+* use sbt-site's "mappings" for favicon.ico, etc?
 
 * latest released version badge
 * set mdocVariables with latest released version
