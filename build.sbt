@@ -202,7 +202,7 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
 
 
 lazy val docs = Project("axle-docs", file("axle-docs"))
-  .enablePlugins(GhpagesPlugin, MdocPlugin)
+  .enablePlugins(MdocPlugin, LaikaPlugin, SitePlugin, GhpagesPlugin)
   .in(file("axle-docs/src/main/mdoc"))
   .settings(moduleName := "axle-docs")
   .settings(axleSettings)
@@ -212,9 +212,20 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
       "SNAPSHOT_VERSION" -> "0.6.1-SNAPSHOT"
     ),
     mdocIn := file("axle-docs/src/main/mdoc"),
-    mdocOut := file("axle-docs/target/site"),
+    mdocOut := file("axle-docs/target/mdoc"),
     autoAPIMappings := true,
     publish / skip := true,
+    Laika / sourceDirectories := Seq(file("axle-docs/target/mdoc")),
+    laikaSite / target := file("axle-docs/target/site"),
+    laikaExtensions ++= Seq(
+      laika.markdown.github.GitHubFlavor,
+      laika.parse.code.SyntaxHighlighting),
+    ghpagesNoJekyll := true,
+    siteSourceDirectory := file("axle-docs/target/site"),
+    ghpagesCleanSite / excludeFilter :=
+      new FileFilter {
+        def accept(f: File) = (ghpagesRepository.value / "CNAME").getCanonicalPath == f.getCanonicalPath
+      } || "versions.html",
     git.remoteRepo := "git@github.com:axlelang/axle.git",
     includeFilter in makeSite := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.js" | "*.swf" | "*.yml" | "*.md"
   )
