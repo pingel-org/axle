@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Permutations</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <script src="../helium/laika-helium.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="../index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="../Architecture.html">Remaining Design Issues</a></li>
+        <li class="level1"><a href="../Author.html">Author.md</a></li>
+        <li class="level1"><a href="../History.html">αχλε</a></li>
+        <li class="level1"><a href="../Index.html">Index.md</a></li>
+        <li class="level1"><a href="../ReleaseNotes.html">0.6.1-2 (April 2022)</a></li>
+        <li class="level1"><a href="../Resources.html">Resources.md</a></li>
+        <li class="level1"><a href="../RoadMap.html">Road Map</a></li>
+        <li class="level1"><a href="../Spokes.html">Parallel Collections</a></li>
+        <li class="level1"><a href="../Tutorials.html">Core</a></li>
+        <li class="level1"><a href="../Videos.html">Videos.md</a></li>
+        <li class="level1 nav-header">tutorial</li>
+        <li class="level2"><a href="Ackermann.html">Ackermann.md</a></li>
+        <li class="level2"><a href="Algebra.html">Algebra.md</a></li>
+        <li class="level2"><a href="AngluinLearner.html">Example</a></li>
+        <li class="level2"><a href="BarCharts.html">Example</a></li>
+        <li class="level2"><a href="BayesianNetworks.html">Alarm Example</a></li>
+        <li class="level2"><a href="Bioinformatics.html">Algorithms for DNA sequence alignment</a></li>
+        <li class="level2"><a href="ClusterFederalistPapers.html">ClusterFederalistPapers.md</a></li>
+        <li class="level2"><a href="ClusterIrises.html">Clustering Irises</a></li>
+        <li class="level2"><a href="CoinEntropy.html">CoinEntropy.md</a></li>
+        <li class="level2"><a href="EditDistance.html">Levenshtein</a></li>
+        <li class="level2"><a href="Fibonacci.html">Linear using <code>foldLeft</code></a></li>
+        <li class="level2"><a href="GameTheory.html">GameTheory.md</a></li>
+        <li class="level2"><a href="GeneticAlgorithms.html">Example</a></li>
+        <li class="level2"><a href="GeoCoordinates.html">GeoCoordinates.md</a></li>
+        <li class="level2"><a href="GoldParadigm.html">Example</a></li>
+        <li class="level2"><a href="Graph.html">Directed Graph</a></li>
+        <li class="level2"><a href="GroupedBarCharts.html">Example</a></li>
+        <li class="level2"><a href="InformationTheory.html">Entropy</a></li>
+        <li class="level2"><a href="Installation.html">Install SBT</a></li>
+        <li class="level2"><a href="LanguageModules.html">English</a></li>
+        <li class="level2"><a href="LinearAlgebra.html">Imports and implicits</a></li>
+        <li class="level2"><a href="LinearRegression.html">Predicting Home Prices</a></li>
+        <li class="level2"><a href="Linguistics.html">Linguistics.md</a></li>
+        <li class="level2"><a href="Logic.html">Conjunctive Normal Form Converter</a></li>
+        <li class="level2"><a href="LogisticMap.html">LogisticMap.md</a></li>
+        <li class="level2"><a href="MachineLearning.html">Algorithms</a></li>
+        <li class="level2"><a href="Mandelbrot.html">Mandelbrot.md</a></li>
+        <li class="level2"><a href="MeanAveragePrecisionAtK.html">MeanAveragePrecisionAtK.md</a></li>
+        <li class="level2"><a href="MontyHall.html">MontyHall.md</a></li>
+        <li class="level2"><a href="NaiveBayesClassifier.html">Tennis Example</a></li>
+        <li class="level2"><a href="NaturalLanguageProcessing.html">NaturalLanguageProcessing.md</a></li>
+        <li class="level2"><a href="NeedlemanWunsch.html">Example</a></li>
+        <li class="level2 active"><a href="#">Permutations</a></li>
+        <li class="level2"><a href="Pi.html">Wallis</a></li>
+        <li class="level2"><a href="PixelatedColoredArea.html">Example</a></li>
+        <li class="level2"><a href="Plots.html">Time-series plot example</a></li>
+        <li class="level2"><a href="Poker.html">Example</a></li>
+        <li class="level2"><a href="PrisonersDilemma.html">PrisonersDilemma.md</a></li>
+        <li class="level2"><a href="ProbabilisticGraphicalModels.html">ProbabilisticGraphicalModels.md</a></li>
+        <li class="level2"><a href="ProbabilityModel.html">Imports</a></li>
+        <li class="level2"><a href="PythagoreanMeans.html">Arithmetic, Geometric, and Harmonic Mean Examples</a></li>
+        <li class="level2"><a href="Python2Json.html">Python2Json.md</a></li>
+        <li class="level2"><a href="Quanta.html">Units</a></li>
+        <li class="level2"><a href="ReservoirSampling.html">ReservoirSampling.md</a></li>
+        <li class="level2"><a href="RootMeanSquareDeviation.html">RootMeanSquareDeviation.md</a></li>
+        <li class="level2"><a href="ScatterPlot.html">ScatterPlot.md</a></li>
+        <li class="level2"><a href="SmithWaterman.html">Example</a></li>
+        <li class="level2"><a href="Statistics.html">Uniform Distribution</a></li>
+        <li class="level2"><a href="TicTacToe.html">Example</a></li>
+        <li class="level2"><a href="UnittedTrigonometry.html">Examples</a></li>
+        <li class="level2"><a href="VectorSpaceModel.html">Example</a></li>
+        <li class="level2"><a href="Visualize.html">Visualizations</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Permutations</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#combinations">Combinations</a></li>
+          <li class="level1"><a href="#indexed-cross-product">Indexed Cross Product</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <hr>
+        <p>layout: page
+        title: axle.math and axle.logic Package Objects
+        permalink: /tutorial/axle<em>package</em>object/
+        ---</p>
+        <p>This page describes functions in <code>axle.logic</code> and <code>axle.math</code> package objects.</p>
+        <p>Imports</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">logic</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">rngInt</span><span>: </span><span class="type-name">Rng</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringLong</span><span>: </span><span class="type-name">Ring</span><span>[</span><span class="type-name">Long</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">LongAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">boolBoolean</span><span>: </span><span class="type-name">Bool</span><span>[</span><span class="type-name">Boolean</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">BooleanStructure</span></code></pre>
+        <p>Logic aggregators <code>∃</code> and <code>∀</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>∃(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>)) { </span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span> =&gt; </span><span class="identifier">i</span><span> % </span><span class="number-literal">2</span><span> == </span><span class="number-literal">0</span><span> }
+</span><span class="comment">// res0: Boolean = true
+</span><span>
+∀(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>)) { </span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span> =&gt; </span><span class="identifier">i</span><span> % </span><span class="number-literal">2</span><span> == </span><span class="number-literal">0</span><span> }
+</span><span class="comment">// res1: Boolean = false</span></code></pre>
+        <p>Sum and multiply aggregators <code>Σ</code> and <code>Π</code>.
+        Note that <code>Σ</code> and <code>Π</code> are also available in <code>spire.optional.unicode._</code>.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>Σ((</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">10</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> * </span><span class="number-literal">2</span><span> })
+</span><span class="comment">// res2: Int = 110
+</span><span>
+Π((</span><span class="number-literal">1L</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">10L</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> * </span><span class="number-literal">2</span><span> })
+</span><span class="comment">// res3: Long = 3715891200L</span></code></pre>
+        <p>Doubles, triples, and cross-products</p>
+        <pre><code class="nohighlight"><span class="identifier">doubles</span><span>(</span><span class="type-name">Set</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))
+</span><span class="comment">// res4: Seq[(Int, Int)] = List((1, 2), (1, 3), (2, 1), (2, 3), (3, 1), (3, 2))
+</span><span>
+</span><span class="identifier">triples</span><span>(</span><span class="type-name">Set</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))
+</span><span class="comment">// res5: Seq[(Int, Int, Int)] = List(
+//   (1, 2, 3),
+//   (1, 3, 2),
+//   (2, 1, 3),
+//   (2, 3, 1),
+//   (3, 1, 2),
+//   (3, 2, 1)
+// )
+</span><span>
+⨯(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))(</span><span class="type-name">List</span><span>(</span><span class="number-literal">4</span><span>, </span><span class="number-literal">5</span><span>, </span><span class="number-literal">6</span><span>)).</span><span class="identifier">toList</span><span>
+</span><span class="comment">// res6: List[(Int, Int)] = List(
+//   (1, 4),
+//   (1, 5),
+//   (1, 6),
+//   (2, 4),
+//   (2, 5),
+//   (2, 6),
+//   (3, 4),
+//   (3, 5),
+//   (3, 6)
+// )</span></code></pre>
+        <p>Powerset</p>
+        <pre><code class="nohighlight"><span>℘(</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">4</span><span>)
+</span><span class="comment">// res7: IndexedPowerSet[Int] = Iterable(
+//   Set(),
+//   Set(0),
+//   Set(1),
+//   Set(0, 1),
+//   Set(2),
+//   Set(0, 2),
+//   Set(1, 2),
+//   Set(0, 1, 2),
+//   Set(3),
+//   Set(0, 3),
+//   Set(1, 3),
+//   Set(0, 1, 3),
+//   Set(2, 3),
+//   Set(0, 2, 3),
+//   Set(1, 2, 3),
+//   Set(0, 1, 2, 3)
+// )
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">ps</span><span> = ℘(</span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>, </span><span class="string-literal">&quot;c&quot;</span><span>))
+</span><span class="comment">// ps: IndexedPowerSet[String] = Iterable(
+//   Set(),
+//   Set(&quot;a&quot;),
+//   Set(&quot;b&quot;),
+//   Set(&quot;a&quot;, &quot;b&quot;),
+//   Set(&quot;c&quot;),
+//   Set(&quot;a&quot;, &quot;c&quot;),
+//   Set(&quot;b&quot;, &quot;c&quot;),
+//   Set(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)
+// )
+</span><span>
+</span><span class="identifier">ps</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// res8: Int = 8
+</span><span>
+</span><span class="identifier">ps</span><span>(</span><span class="number-literal">7</span><span>)
+</span><span class="comment">// res9: Set[String] = Set(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)</span></code></pre>
+        <h1 id="permutations" class="title">Permutations</h1>
+        <pre><code class="nohighlight"><span class="identifier">permutations</span><span>(</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">4</span><span>)(</span><span class="number-literal">2</span><span>).</span><span class="identifier">toList</span><span>
+</span><span class="comment">// res10: List[IndexedSeq[Int]] = List(
+//   Vector(0, 1),
+//   Vector(0, 2),
+//   Vector(0, 3),
+//   Vector(1, 0),
+//   Vector(1, 2),
+//   Vector(1, 3),
+//   Vector(2, 0),
+//   Vector(2, 1),
+//   Vector(2, 3),
+//   Vector(3, 0),
+//   Vector(3, 1),
+//   Vector(3, 2)
+// )</span></code></pre>
+        
+        <h2 id="combinations" class="section"><a class="anchor-link left" href="#combinations"><i class="icofont-laika">&#xef71;</i></a>Combinations</h2>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">combinations</span><span>(</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">4</span><span>)(</span><span class="number-literal">2</span><span>).</span><span class="identifier">toList</span><span>
+</span><span class="comment">// res11: List[IndexedSeq[Int]] = List(
+//   Vector(0, 1),
+//   Vector(0, 2),
+//   Vector(0, 3),
+//   Vector(1, 2),
+//   Vector(1, 3),
+//   Vector(2, 3)
+// )</span></code></pre>
+        
+        <h2 id="indexed-cross-product" class="section"><a class="anchor-link left" href="#indexed-cross-product"><i class="icofont-laika">&#xef71;</i></a>Indexed Cross Product</h2>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">icp</span><span> = </span><span class="type-name">IndexedCrossProduct</span><span>(</span><span class="type-name">Vector</span><span>(
+  </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>, </span><span class="string-literal">&quot;c&quot;</span><span>),
+  </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;d&quot;</span><span>, </span><span class="string-literal">&quot;e&quot;</span><span>),
+  </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;f&quot;</span><span>, </span><span class="string-literal">&quot;g&quot;</span><span>, </span><span class="string-literal">&quot;h&quot;</span><span>)))
+</span><span class="comment">// icp: IndexedCrossProduct[String] = Iterable(
+//   List(&quot;a&quot;, &quot;d&quot;, &quot;f&quot;),
+//   List(&quot;a&quot;, &quot;d&quot;, &quot;g&quot;),
+//   List(&quot;a&quot;, &quot;d&quot;, &quot;h&quot;),
+//   List(&quot;a&quot;, &quot;e&quot;, &quot;f&quot;),
+//   List(&quot;a&quot;, &quot;e&quot;, &quot;g&quot;),
+//   List(&quot;a&quot;, &quot;e&quot;, &quot;h&quot;),
+//   List(&quot;b&quot;, &quot;d&quot;, &quot;f&quot;),
+//   List(&quot;b&quot;, &quot;d&quot;, &quot;g&quot;),
+//   List(&quot;b&quot;, &quot;d&quot;, &quot;h&quot;),
+//   List(&quot;b&quot;, &quot;e&quot;, &quot;f&quot;),
+//   List(&quot;b&quot;, &quot;e&quot;, &quot;g&quot;),
+//   List(&quot;b&quot;, &quot;e&quot;, &quot;h&quot;),
+//   List(&quot;c&quot;, &quot;d&quot;, &quot;f&quot;),
+//   List(&quot;c&quot;, &quot;d&quot;, &quot;g&quot;),
+//   List(&quot;c&quot;, &quot;d&quot;, &quot;h&quot;),
+//   List(&quot;c&quot;, &quot;e&quot;, &quot;f&quot;),
+//   List(&quot;c&quot;, &quot;e&quot;, &quot;g&quot;),
+//   List(&quot;c&quot;, &quot;e&quot;, &quot;h&quot;)
+// )
+</span><span>
+</span><span class="identifier">icp</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// res12: Int = 18
+</span><span>
+</span><span class="identifier">icp</span><span>(</span><span class="number-literal">4</span><span>)
+</span><span class="comment">// res13: Seq[String] = List(&quot;a&quot;, &quot;e&quot;, &quot;g&quot;)</span></code></pre>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

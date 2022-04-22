@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Tennis Example</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <script src="../helium/laika-helium.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="../index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="../Architecture.html">Remaining Design Issues</a></li>
+        <li class="level1"><a href="../Author.html">Author.md</a></li>
+        <li class="level1"><a href="../History.html">αχλε</a></li>
+        <li class="level1"><a href="../Index.html">Index.md</a></li>
+        <li class="level1"><a href="../ReleaseNotes.html">0.6.1-2 (April 2022)</a></li>
+        <li class="level1"><a href="../Resources.html">Resources.md</a></li>
+        <li class="level1"><a href="../RoadMap.html">Road Map</a></li>
+        <li class="level1"><a href="../Spokes.html">Parallel Collections</a></li>
+        <li class="level1"><a href="../Tutorials.html">Core</a></li>
+        <li class="level1"><a href="../Videos.html">Videos.md</a></li>
+        <li class="level1 nav-header">tutorial</li>
+        <li class="level2"><a href="Ackermann.html">Ackermann.md</a></li>
+        <li class="level2"><a href="Algebra.html">Algebra.md</a></li>
+        <li class="level2"><a href="AngluinLearner.html">Example</a></li>
+        <li class="level2"><a href="BarCharts.html">Example</a></li>
+        <li class="level2"><a href="BayesianNetworks.html">Alarm Example</a></li>
+        <li class="level2"><a href="Bioinformatics.html">Algorithms for DNA sequence alignment</a></li>
+        <li class="level2"><a href="ClusterFederalistPapers.html">ClusterFederalistPapers.md</a></li>
+        <li class="level2"><a href="ClusterIrises.html">Clustering Irises</a></li>
+        <li class="level2"><a href="CoinEntropy.html">CoinEntropy.md</a></li>
+        <li class="level2"><a href="EditDistance.html">Levenshtein</a></li>
+        <li class="level2"><a href="Fibonacci.html">Linear using <code>foldLeft</code></a></li>
+        <li class="level2"><a href="GameTheory.html">GameTheory.md</a></li>
+        <li class="level2"><a href="GeneticAlgorithms.html">Example</a></li>
+        <li class="level2"><a href="GeoCoordinates.html">GeoCoordinates.md</a></li>
+        <li class="level2"><a href="GoldParadigm.html">Example</a></li>
+        <li class="level2"><a href="Graph.html">Directed Graph</a></li>
+        <li class="level2"><a href="GroupedBarCharts.html">Example</a></li>
+        <li class="level2"><a href="InformationTheory.html">Entropy</a></li>
+        <li class="level2"><a href="Installation.html">Install SBT</a></li>
+        <li class="level2"><a href="LanguageModules.html">English</a></li>
+        <li class="level2"><a href="LinearAlgebra.html">Imports and implicits</a></li>
+        <li class="level2"><a href="LinearRegression.html">Predicting Home Prices</a></li>
+        <li class="level2"><a href="Linguistics.html">Linguistics.md</a></li>
+        <li class="level2"><a href="Logic.html">Conjunctive Normal Form Converter</a></li>
+        <li class="level2"><a href="LogisticMap.html">LogisticMap.md</a></li>
+        <li class="level2"><a href="MachineLearning.html">Algorithms</a></li>
+        <li class="level2"><a href="Mandelbrot.html">Mandelbrot.md</a></li>
+        <li class="level2"><a href="MeanAveragePrecisionAtK.html">MeanAveragePrecisionAtK.md</a></li>
+        <li class="level2"><a href="MontyHall.html">MontyHall.md</a></li>
+        <li class="level2 active"><a href="#">Tennis Example</a></li>
+        <li class="level2"><a href="NaturalLanguageProcessing.html">NaturalLanguageProcessing.md</a></li>
+        <li class="level2"><a href="NeedlemanWunsch.html">Example</a></li>
+        <li class="level2"><a href="PackageObject.html">Permutations</a></li>
+        <li class="level2"><a href="Pi.html">Wallis</a></li>
+        <li class="level2"><a href="PixelatedColoredArea.html">Example</a></li>
+        <li class="level2"><a href="Plots.html">Time-series plot example</a></li>
+        <li class="level2"><a href="Poker.html">Example</a></li>
+        <li class="level2"><a href="PrisonersDilemma.html">PrisonersDilemma.md</a></li>
+        <li class="level2"><a href="ProbabilisticGraphicalModels.html">ProbabilisticGraphicalModels.md</a></li>
+        <li class="level2"><a href="ProbabilityModel.html">Imports</a></li>
+        <li class="level2"><a href="PythagoreanMeans.html">Arithmetic, Geometric, and Harmonic Mean Examples</a></li>
+        <li class="level2"><a href="Python2Json.html">Python2Json.md</a></li>
+        <li class="level2"><a href="Quanta.html">Units</a></li>
+        <li class="level2"><a href="ReservoirSampling.html">ReservoirSampling.md</a></li>
+        <li class="level2"><a href="RootMeanSquareDeviation.html">RootMeanSquareDeviation.md</a></li>
+        <li class="level2"><a href="ScatterPlot.html">ScatterPlot.md</a></li>
+        <li class="level2"><a href="SmithWaterman.html">Example</a></li>
+        <li class="level2"><a href="Statistics.html">Uniform Distribution</a></li>
+        <li class="level2"><a href="TicTacToe.html">Example</a></li>
+        <li class="level2"><a href="UnittedTrigonometry.html">Examples</a></li>
+        <li class="level2"><a href="VectorSpaceModel.html">Example</a></li>
+        <li class="level2"><a href="Visualize.html">Visualizations</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Tennis Example</a></p>
+        
+        <ul class="nav-list">
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <hr>
+        <p>layout: page
+        title: Naïve Bayes
+        permalink: /tutorial/naive_bayes/
+        ---</p>
+        <h1 id="tennis-example" class="title">Tennis Example</h1>
+        <pre><code class="nohighlight"><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Tennis</span><span>(</span><span class="identifier">outlook</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">temperature</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">humidity</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">wind</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">play</span><span>: </span><span class="type-name">Boolean</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">events</span><span> = </span><span class="type-name">List</span><span>(
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Sunny&quot;</span><span>, </span><span class="string-literal">&quot;Hot&quot;</span><span>, </span><span class="string-literal">&quot;High&quot;</span><span>, </span><span class="string-literal">&quot;Weak&quot;</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Sunny&quot;</span><span>, </span><span class="string-literal">&quot;Hot&quot;</span><span>, </span><span class="string-literal">&quot;High&quot;</span><span>, </span><span class="string-literal">&quot;Strong&quot;</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Overcast&quot;</span><span>, </span><span class="string-literal">&quot;Hot&quot;</span><span>, </span><span class="string-literal">&quot;High&quot;</span><span>, </span><span class="string-literal">&quot;Weak&quot;</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Rain&quot;</span><span>, </span><span class="string-literal">&quot;Mild&quot;</span><span>, </span><span class="string-literal">&quot;High&quot;</span><span>, </span><span class="string-literal">&quot;Weak&quot;</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Rain&quot;</span><span>, </span><span class="string-literal">&quot;Cool&quot;</span><span>, </span><span class="string-literal">&quot;Normal&quot;</span><span>, </span><span class="string-literal">&quot;Weak&quot;</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Rain&quot;</span><span>, </span><span class="string-literal">&quot;Cool&quot;</span><span>, </span><span class="string-literal">&quot;Normal&quot;</span><span>, </span><span class="string-literal">&quot;Strong&quot;</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Overcast&quot;</span><span>, </span><span class="string-literal">&quot;Cool&quot;</span><span>, </span><span class="string-literal">&quot;Normal&quot;</span><span>, </span><span class="string-literal">&quot;Strong&quot;</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Sunny&quot;</span><span>, </span><span class="string-literal">&quot;Mild&quot;</span><span>, </span><span class="string-literal">&quot;High&quot;</span><span>, </span><span class="string-literal">&quot;Weak&quot;</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Sunny&quot;</span><span>, </span><span class="string-literal">&quot;Cool&quot;</span><span>, </span><span class="string-literal">&quot;Normal&quot;</span><span>, </span><span class="string-literal">&quot;Weak&quot;</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Rain&quot;</span><span>, </span><span class="string-literal">&quot;Mild&quot;</span><span>, </span><span class="string-literal">&quot;Normal&quot;</span><span>, </span><span class="string-literal">&quot;Weak&quot;</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Sunny&quot;</span><span>, </span><span class="string-literal">&quot;Mild&quot;</span><span>, </span><span class="string-literal">&quot;Normal&quot;</span><span>, </span><span class="string-literal">&quot;Strong&quot;</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Overcast&quot;</span><span>, </span><span class="string-literal">&quot;Mild&quot;</span><span>, </span><span class="string-literal">&quot;High&quot;</span><span>, </span><span class="string-literal">&quot;Strong&quot;</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Overcast&quot;</span><span>, </span><span class="string-literal">&quot;Hot&quot;</span><span>, </span><span class="string-literal">&quot;Normal&quot;</span><span>, </span><span class="string-literal">&quot;Weak&quot;</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Rain&quot;</span><span>, </span><span class="string-literal">&quot;Mild&quot;</span><span>, </span><span class="string-literal">&quot;High&quot;</span><span>, </span><span class="string-literal">&quot;Strong&quot;</span><span>, </span><span class="boolean-literal">false</span><span>))
+</span><span class="comment">// events: List[Tennis] = List(
+//   Tennis(
+//     outlook = &quot;Sunny&quot;,
+//     temperature = &quot;Hot&quot;,
+//     humidity = &quot;High&quot;,
+//     wind = &quot;Weak&quot;,
+//     play = false
+//   ),
+//   Tennis(
+//     outlook = &quot;Sunny&quot;,
+//     temperature = &quot;Hot&quot;,
+//     humidity = &quot;High&quot;,
+//     wind = &quot;Strong&quot;,
+//     play = false
+//   ),
+//   Tennis(
+//     outlook = &quot;Overcast&quot;,
+//     temperature = &quot;Hot&quot;,
+//     humidity = &quot;High&quot;,
+//     wind = &quot;Weak&quot;,
+//     play = true
+//   ),
+//   Tennis(
+//     outlook = &quot;Rain&quot;,
+//     temperature = &quot;Mild&quot;,
+//     humidity = &quot;High&quot;,
+//     wind = &quot;Weak&quot;,
+//     play = true
+//   ),
+//   Tennis(
+//     outlook = &quot;Rain&quot;,
+//     temperature = &quot;Cool&quot;,
+//     humidity = &quot;Normal&quot;,
+//     wind = &quot;Weak&quot;,
+//     play = true
+//   ),
+//   Tennis(
+//     outlook = &quot;Rain&quot;,
+//     temperature = &quot;Cool&quot;,
+//     humidity = &quot;Normal&quot;,
+//     wind = &quot;Strong&quot;,
+//     play = false
+//   ),
+//   Tennis(
+//     outlook = &quot;Overcast&quot;,
+//     temperature = &quot;Cool&quot;,
+//     humidity = &quot;Normal&quot;,
+//     wind = &quot;Strong&quot;,
+//     play = true
+// ...</span></code></pre>
+        <p>Build a classifier to predict the Boolean feature &#39;play&#39; given all the other features of the observations</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">probability</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">NaiveBayesClassifier</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">classifier</span><span> = </span><span class="type-name">NaiveBayesClassifier</span><span>[</span><span class="type-name">Tennis</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Boolean</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">Rational</span><span>](
+  </span><span class="identifier">events</span><span>,
+  </span><span class="type-name">List</span><span>(
+    (</span><span class="type-name">Variable</span><span>[</span><span class="type-name">String</span><span>](</span><span class="string-literal">&quot;Outlook&quot;</span><span>) -&gt; </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;Sunny&quot;</span><span>, </span><span class="string-literal">&quot;Overcast&quot;</span><span>, </span><span class="string-literal">&quot;Rain&quot;</span><span>)),
+    (</span><span class="type-name">Variable</span><span>[</span><span class="type-name">String</span><span>](</span><span class="string-literal">&quot;Temperature&quot;</span><span>) -&gt; </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;Hot&quot;</span><span>, </span><span class="string-literal">&quot;Mild&quot;</span><span>, </span><span class="string-literal">&quot;Cool&quot;</span><span>)),
+    (</span><span class="type-name">Variable</span><span>[</span><span class="type-name">String</span><span>](</span><span class="string-literal">&quot;Humidity&quot;</span><span>) -&gt; </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;High&quot;</span><span>, </span><span class="string-literal">&quot;Normal&quot;</span><span>, </span><span class="string-literal">&quot;Low&quot;</span><span>)),
+    (</span><span class="type-name">Variable</span><span>[</span><span class="type-name">String</span><span>](</span><span class="string-literal">&quot;Wind&quot;</span><span>) -&gt; </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;Weak&quot;</span><span>, </span><span class="string-literal">&quot;Strong&quot;</span><span>))),
+  (</span><span class="type-name">Variable</span><span>[</span><span class="type-name">Boolean</span><span>](</span><span class="string-literal">&quot;Play&quot;</span><span>) -&gt; </span><span class="type-name">Vector</span><span>(</span><span class="boolean-literal">true</span><span>, </span><span class="boolean-literal">false</span><span>)),
+  (</span><span class="identifier">t</span><span>: </span><span class="type-name">Tennis</span><span>) =&gt; </span><span class="identifier">t</span><span>.</span><span class="identifier">outlook</span><span> :: </span><span class="identifier">t</span><span>.</span><span class="identifier">temperature</span><span> :: </span><span class="identifier">t</span><span>.</span><span class="identifier">humidity</span><span> :: </span><span class="identifier">t</span><span>.</span><span class="identifier">wind</span><span> :: </span><span class="type-name">Nil</span><span>,
+  (</span><span class="identifier">t</span><span>: </span><span class="type-name">Tennis</span><span>) =&gt; </span><span class="identifier">t</span><span>.</span><span class="identifier">play</span><span>)
+</span><span class="comment">// classifier: NaiveBayesClassifier[Tennis, String, Boolean, List, Rational] = NaiveBayesClassifier(
+//   data = List(
+//     Tennis(
+//       outlook = &quot;Sunny&quot;,
+//       temperature = &quot;Hot&quot;,
+//       humidity = &quot;High&quot;,
+//       wind = &quot;Weak&quot;,
+//       play = false
+//     ),
+//     Tennis(
+//       outlook = &quot;Sunny&quot;,
+//       temperature = &quot;Hot&quot;,
+//       humidity = &quot;High&quot;,
+//       wind = &quot;Strong&quot;,
+//       play = false
+//     ),
+//     Tennis(
+//       outlook = &quot;Overcast&quot;,
+//       temperature = &quot;Hot&quot;,
+//       humidity = &quot;High&quot;,
+//       wind = &quot;Weak&quot;,
+//       play = true
+//     ),
+//     Tennis(
+//       outlook = &quot;Rain&quot;,
+//       temperature = &quot;Mild&quot;,
+//       humidity = &quot;High&quot;,
+//       wind = &quot;Weak&quot;,
+//       play = true
+//     ),
+//     Tennis(
+//       outlook = &quot;Rain&quot;,
+//       temperature = &quot;Cool&quot;,
+//       humidity = &quot;Normal&quot;,
+//       wind = &quot;Weak&quot;,
+//       play = true
+//     ),
+//     Tennis(
+//       outlook = &quot;Rain&quot;,
+//       temperature = &quot;Cool&quot;,
+//       humidity = &quot;Normal&quot;,
+//       wind = &quot;Strong&quot;,
+//       play = false
+//     ),
+//     Tennis(
+//       outlook = &quot;Overcast&quot;,
+//       temperature = &quot;Cool&quot;,
+//       humidity = &quot;Normal&quot;,
+//       wind = &quot;Strong&quot;,
+// ...</span></code></pre>
+        <p>Use the classifier to predict:</p>
+        <pre><code class="nohighlight"><span class="identifier">events</span><span> </span><span class="identifier">map</span><span> { </span><span class="identifier">datum</span><span> =&gt; </span><span class="identifier">datum</span><span>.</span><span class="identifier">toString</span><span> + </span><span class="string-literal">&quot;</span><span class="escape-sequence">\t</span><span class="string-literal">&quot;</span><span> + </span><span class="identifier">classifier</span><span>(</span><span class="identifier">datum</span><span>) } </span><span class="identifier">mkString</span><span>(</span><span class="string-literal">&quot;</span><span class="escape-sequence">\n</span><span class="string-literal">&quot;</span><span>)
+</span><span class="comment">// res0: String = &quot;&quot;&quot;Tennis(Sunny,Hot,High,Weak,false)	false
+// Tennis(Sunny,Hot,High,Strong,false)	false
+// Tennis(Overcast,Hot,High,Weak,true)	true
+// Tennis(Rain,Mild,High,Weak,true)	true
+// Tennis(Rain,Cool,Normal,Weak,true)	true
+// Tennis(Rain,Cool,Normal,Strong,false)	true
+// Tennis(Overcast,Cool,Normal,Strong,true)	true
+// Tennis(Sunny,Mild,High,Weak,false)	false
+// Tennis(Sunny,Cool,Normal,Weak,true)	true
+// Tennis(Rain,Mild,Normal,Weak,true)	true
+// Tennis(Sunny,Mild,Normal,Strong,true)	true
+// Tennis(Overcast,Mild,High,Strong,true)	true
+// Tennis(Overcast,Hot,Normal,Weak,true)	true
+// Tennis(Rain,Mild,High,Strong,false)	false&quot;&quot;&quot;</span></code></pre>
+        <p>Measure the classifier&#39;s performance</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">ClassifierPerformance</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">perf</span><span> = </span><span class="type-name">ClassifierPerformance</span><span>[</span><span class="type-name">Rational</span><span>, </span><span class="type-name">Tennis</span><span>, </span><span class="type-name">List</span><span>](</span><span class="identifier">events</span><span>, </span><span class="identifier">classifier</span><span>, </span><span class="identifier">_</span><span>.</span><span class="identifier">play</span><span>)
+</span><span class="comment">// perf: ClassifierPerformance[Rational, Tennis, List] = ClassifierPerformance(
+//   data = List(
+//     Tennis(
+//       outlook = &quot;Sunny&quot;,
+//       temperature = &quot;Hot&quot;,
+//       humidity = &quot;High&quot;,
+//       wind = &quot;Weak&quot;,
+//       play = false
+//     ),
+//     Tennis(
+//       outlook = &quot;Sunny&quot;,
+//       temperature = &quot;Hot&quot;,
+//       humidity = &quot;High&quot;,
+//       wind = &quot;Strong&quot;,
+//       play = false
+//     ),
+//     Tennis(
+//       outlook = &quot;Overcast&quot;,
+//       temperature = &quot;Hot&quot;,
+//       humidity = &quot;High&quot;,
+//       wind = &quot;Weak&quot;,
+//       play = true
+//     ),
+//     Tennis(
+//       outlook = &quot;Rain&quot;,
+//       temperature = &quot;Mild&quot;,
+//       humidity = &quot;High&quot;,
+//       wind = &quot;Weak&quot;,
+//       play = true
+//     ),
+//     Tennis(
+//       outlook = &quot;Rain&quot;,
+//       temperature = &quot;Cool&quot;,
+//       humidity = &quot;Normal&quot;,
+//       wind = &quot;Weak&quot;,
+//       play = true
+//     ),
+//     Tennis(
+//       outlook = &quot;Rain&quot;,
+//       temperature = &quot;Cool&quot;,
+//       humidity = &quot;Normal&quot;,
+//       wind = &quot;Strong&quot;,
+//       play = false
+//     ),
+//     Tennis(
+//       outlook = &quot;Overcast&quot;,
+//       temperature = &quot;Cool&quot;,
+//       humidity = &quot;Normal&quot;,
+//       wind = &quot;Strong&quot;,
+// ...
+</span><span>
+</span><span class="identifier">perf</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res1: String = &quot;&quot;&quot;Precision   9/10
+// Recall      1
+// Specificity 4/5
+// Accuracy    13/14
+// F1 Score    18/19
+// &quot;&quot;&quot;</span></code></pre>
+        <p>See <a href="http://en.wikipedia.org/wiki/Precision_and_recall">Precision and Recall</a>
+        for the definition of the performance metrics.</p>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

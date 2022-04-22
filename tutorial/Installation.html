@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Install SBT</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <script src="../helium/laika-helium.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="../index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="../Architecture.html">Remaining Design Issues</a></li>
+        <li class="level1"><a href="../Author.html">Author.md</a></li>
+        <li class="level1"><a href="../History.html">αχλε</a></li>
+        <li class="level1"><a href="../Index.html">Index.md</a></li>
+        <li class="level1"><a href="../ReleaseNotes.html">0.6.1-2 (April 2022)</a></li>
+        <li class="level1"><a href="../Resources.html">Resources.md</a></li>
+        <li class="level1"><a href="../RoadMap.html">Road Map</a></li>
+        <li class="level1"><a href="../Spokes.html">Parallel Collections</a></li>
+        <li class="level1"><a href="../Tutorials.html">Core</a></li>
+        <li class="level1"><a href="../Videos.html">Videos.md</a></li>
+        <li class="level1 nav-header">tutorial</li>
+        <li class="level2"><a href="Ackermann.html">Ackermann.md</a></li>
+        <li class="level2"><a href="Algebra.html">Algebra.md</a></li>
+        <li class="level2"><a href="AngluinLearner.html">Example</a></li>
+        <li class="level2"><a href="BarCharts.html">Example</a></li>
+        <li class="level2"><a href="BayesianNetworks.html">Alarm Example</a></li>
+        <li class="level2"><a href="Bioinformatics.html">Algorithms for DNA sequence alignment</a></li>
+        <li class="level2"><a href="ClusterFederalistPapers.html">ClusterFederalistPapers.md</a></li>
+        <li class="level2"><a href="ClusterIrises.html">Clustering Irises</a></li>
+        <li class="level2"><a href="CoinEntropy.html">CoinEntropy.md</a></li>
+        <li class="level2"><a href="EditDistance.html">Levenshtein</a></li>
+        <li class="level2"><a href="Fibonacci.html">Linear using <code>foldLeft</code></a></li>
+        <li class="level2"><a href="GameTheory.html">GameTheory.md</a></li>
+        <li class="level2"><a href="GeneticAlgorithms.html">Example</a></li>
+        <li class="level2"><a href="GeoCoordinates.html">GeoCoordinates.md</a></li>
+        <li class="level2"><a href="GoldParadigm.html">Example</a></li>
+        <li class="level2"><a href="Graph.html">Directed Graph</a></li>
+        <li class="level2"><a href="GroupedBarCharts.html">Example</a></li>
+        <li class="level2"><a href="InformationTheory.html">Entropy</a></li>
+        <li class="level2 active"><a href="#">Install SBT</a></li>
+        <li class="level2"><a href="LanguageModules.html">English</a></li>
+        <li class="level2"><a href="LinearAlgebra.html">Imports and implicits</a></li>
+        <li class="level2"><a href="LinearRegression.html">Predicting Home Prices</a></li>
+        <li class="level2"><a href="Linguistics.html">Linguistics.md</a></li>
+        <li class="level2"><a href="Logic.html">Conjunctive Normal Form Converter</a></li>
+        <li class="level2"><a href="LogisticMap.html">LogisticMap.md</a></li>
+        <li class="level2"><a href="MachineLearning.html">Algorithms</a></li>
+        <li class="level2"><a href="Mandelbrot.html">Mandelbrot.md</a></li>
+        <li class="level2"><a href="MeanAveragePrecisionAtK.html">MeanAveragePrecisionAtK.md</a></li>
+        <li class="level2"><a href="MontyHall.html">MontyHall.md</a></li>
+        <li class="level2"><a href="NaiveBayesClassifier.html">Tennis Example</a></li>
+        <li class="level2"><a href="NaturalLanguageProcessing.html">NaturalLanguageProcessing.md</a></li>
+        <li class="level2"><a href="NeedlemanWunsch.html">Example</a></li>
+        <li class="level2"><a href="PackageObject.html">Permutations</a></li>
+        <li class="level2"><a href="Pi.html">Wallis</a></li>
+        <li class="level2"><a href="PixelatedColoredArea.html">Example</a></li>
+        <li class="level2"><a href="Plots.html">Time-series plot example</a></li>
+        <li class="level2"><a href="Poker.html">Example</a></li>
+        <li class="level2"><a href="PrisonersDilemma.html">PrisonersDilemma.md</a></li>
+        <li class="level2"><a href="ProbabilisticGraphicalModels.html">ProbabilisticGraphicalModels.md</a></li>
+        <li class="level2"><a href="ProbabilityModel.html">Imports</a></li>
+        <li class="level2"><a href="PythagoreanMeans.html">Arithmetic, Geometric, and Harmonic Mean Examples</a></li>
+        <li class="level2"><a href="Python2Json.html">Python2Json.md</a></li>
+        <li class="level2"><a href="Quanta.html">Units</a></li>
+        <li class="level2"><a href="ReservoirSampling.html">ReservoirSampling.md</a></li>
+        <li class="level2"><a href="RootMeanSquareDeviation.html">RootMeanSquareDeviation.md</a></li>
+        <li class="level2"><a href="ScatterPlot.html">ScatterPlot.md</a></li>
+        <li class="level2"><a href="SmithWaterman.html">Example</a></li>
+        <li class="level2"><a href="Statistics.html">Uniform Distribution</a></li>
+        <li class="level2"><a href="TicTacToe.html">Example</a></li>
+        <li class="level2"><a href="UnittedTrigonometry.html">Examples</a></li>
+        <li class="level2"><a href="VectorSpaceModel.html">Example</a></li>
+        <li class="level2"><a href="Visualize.html">Visualizations</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Install SBT</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#create-sbt-project">Create SBT Project</a></li>
+          <li class="level1"><a href="#next-steps">Next Steps</a></li>
+          <li class="level1"><a href="#releases">Releases</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <hr>
+        <p>layout: page
+        title: Installation
+        permalink: /tutorial/installation/
+        ---</p>
+        <p>Axle as a dependency of an SBT project.</p>
+        <h1 id="install-sbt" class="title">Install SBT</h1>
+        <p>See <a href="http://www.scala-sbt.org/">SBT</a></p>
+        
+        <h2 id="create-sbt-project" class="section"><a class="anchor-link left" href="#create-sbt-project"><i class="icofont-laika">&#xef71;</i></a>Create SBT Project</h2>
+        <pre class="keep-together pdf epub"><code class="bash">mkdir demo
+cd demo</code></pre>
+        <p>Create a <code>build.sbt</code> file</p>
+        <pre><code class="sbt">name := &quot;demo&quot;
+
+version := &quot;0.1-SNAPSHOT&quot;
+
+organization := &quot;org.acme&quot;
+
+scalaVersion := &quot;2.13.3&quot;
+
+// resolvers += &quot;sonatype snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
+
+resolvers += &quot;sonatype releases&quot; at &quot;https://oss.sonatype.org/content/repositories/releases/&quot;
+
+libraryDependencies ++= Seq(
+  &quot;org.axle-lang&quot; %% &quot;axle-core&quot;  % &quot;0.6.0&quot;,
+  &quot;org.axle-lang&quot; %% &quot;axle-xml&quot;   % &quot;0.6.0&quot;,
+  &quot;org.axle-lang&quot; %% &quot;axle-wheel&quot; % &quot;0.6.0&quot;,
+  &quot;org.axle-lang&quot; %% &quot;axle-jung&quot;  % &quot;0.6.0&quot;,
+  &quot;org.axle-lang&quot; %% &quot;axle-jblas&quot; % &quot;0.6.0&quot;,
+  &quot;org.axle-lang&quot; %% &quot;axle-joda&quot;  % &quot;0.6.0&quot;
+)</code></pre>
+        <p>(Less commonly used <code>axle-laws</code>, <code>axle-awt</code>, and <code>axle-parallel</code> are not shown.)</p>
+        <p>The Axle jars are compiled with several additional dependencies in <code>provided</code> scope,
+        meaning that they are compiled and packaged with the expectation that the user of the Axle
+        jars will explicitly provide those dependencies.</p>
+        <p>See the project&#39;s current <a href="https://github.com/axlelang/axle/blob/master/build.sbt">build.sbt</a>
+        file for up to date version information.</p>
+        <p>As of version 0.5.2 the full list of dependencies is below.
+        Add this section to your <code>build.sbt</code> file to pull them all in to the <code>demo</code> project:</p>
+        <pre><code class="sbt">libraryDependencies ++= Seq(
+
+  // needed by axle-jung (and for unit conversions)
+  &quot;net.sf.jung&quot;            % &quot;jung-visualization&quot; % &quot;2.1&quot;,
+  &quot;net.sf.jung&quot;            % &quot;jung-algorithms&quot;    % &quot;2.1&quot;,
+  &quot;net.sf.jung&quot;            % &quot;jung-api&quot;           % &quot;2.1&quot;,
+  &quot;net.sf.jung&quot;            % &quot;jung-graph-impl&quot;    % &quot;2.1&quot;,
+  //&quot;net.sf.jung&quot;          % &quot;jung-io&quot;            % &quot;2.1&quot;,
+
+  // for animations
+  &quot;io.monix&quot;               %% &quot;monix-reactive&quot;    % &quot;2.3.0&quot;,
+  &quot;io.monix&quot;               %% &quot;monix-cats&quot;        % &quot;2.3.0&quot;,
+
+  // needed by axle-jblas
+  &quot;org.jblas&quot;              % &quot;jblas&quot;              % &quot;1.2.4&quot;,
+
+  // needed by axle-joda
+  &quot;joda-time&quot;              % &quot;joda-time&quot;          % &quot;2.9.4&quot;,
+  &quot;org.joda&quot;               % &quot;joda-convert&quot;       % &quot;1.8.1&quot;,
+
+  // needed by axle-xml
+  &quot;org.scala-lang.modules&quot; %% &quot;scala-xml&quot;         % &quot;1.3.0&quot;,
+)</code></pre>
+        
+        <h2 id="next-steps" class="section"><a class="anchor-link left" href="#next-steps"><i class="icofont-laika">&#xef71;</i></a>Next Steps</h2>
+        <p>Run <code>sbt console</code> to launch the Scala REPL with the Axle jars in the classpath.
+        Axle works well interactively -- especially during prototyping, debugging, and testing.
+        Any of the <a href="/tutorial/">Axle tutorials</a> can be copied and pasted into the REPL.</p>
+        <p>To start writing code, do <code>mkdir -p src/main/scala/org/acme/demo</code>, and add your code there.</p>
+        
+        <h2 id="releases" class="section"><a class="anchor-link left" href="#releases"><i class="icofont-laika">&#xef71;</i></a>Releases</h2>
+        <p>Version 0.6.1-SNAPSHOT is hosted on the <a href="https://oss.sonatype.org/content/repositories/snapshots">Sonatype snapshot repo</a>.
+        The schedule for publishing snapshot versions is irregular.
+        The full dependency is:</p>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-core&quot; % &quot;0.6.1-SNAPSHOT&quot;</code></pre>
+        <p>0.6.0 is the most recent released version:</p>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-core&quot; % &quot;0.6.0&quot;</code></pre>
+        <p>In addition to <code>axle-core</code> the artifacts <code>axle-jblas</code>, <code>axle-joda</code>, and <code>axle-wheel</code>
+        are also published to Sonatype.</p>
+        <p>See the <a href="/road_map/">Road Map</a> for more information on the release schedule.</p>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

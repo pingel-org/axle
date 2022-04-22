@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Clustering Irises</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <script src="../helium/laika-helium.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="../index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="../Architecture.html">Remaining Design Issues</a></li>
+        <li class="level1"><a href="../Author.html">Author.md</a></li>
+        <li class="level1"><a href="../History.html">αχλε</a></li>
+        <li class="level1"><a href="../Index.html">Index.md</a></li>
+        <li class="level1"><a href="../ReleaseNotes.html">0.6.1-2 (April 2022)</a></li>
+        <li class="level1"><a href="../Resources.html">Resources.md</a></li>
+        <li class="level1"><a href="../RoadMap.html">Road Map</a></li>
+        <li class="level1"><a href="../Spokes.html">Parallel Collections</a></li>
+        <li class="level1"><a href="../Tutorials.html">Core</a></li>
+        <li class="level1"><a href="../Videos.html">Videos.md</a></li>
+        <li class="level1 nav-header">tutorial</li>
+        <li class="level2"><a href="Ackermann.html">Ackermann.md</a></li>
+        <li class="level2"><a href="Algebra.html">Algebra.md</a></li>
+        <li class="level2"><a href="AngluinLearner.html">Example</a></li>
+        <li class="level2"><a href="BarCharts.html">Example</a></li>
+        <li class="level2"><a href="BayesianNetworks.html">Alarm Example</a></li>
+        <li class="level2"><a href="Bioinformatics.html">Algorithms for DNA sequence alignment</a></li>
+        <li class="level2"><a href="ClusterFederalistPapers.html">ClusterFederalistPapers.md</a></li>
+        <li class="level2 active"><a href="#">Clustering Irises</a></li>
+        <li class="level2"><a href="CoinEntropy.html">CoinEntropy.md</a></li>
+        <li class="level2"><a href="EditDistance.html">Levenshtein</a></li>
+        <li class="level2"><a href="Fibonacci.html">Linear using <code>foldLeft</code></a></li>
+        <li class="level2"><a href="GameTheory.html">GameTheory.md</a></li>
+        <li class="level2"><a href="GeneticAlgorithms.html">Example</a></li>
+        <li class="level2"><a href="GeoCoordinates.html">GeoCoordinates.md</a></li>
+        <li class="level2"><a href="GoldParadigm.html">Example</a></li>
+        <li class="level2"><a href="Graph.html">Directed Graph</a></li>
+        <li class="level2"><a href="GroupedBarCharts.html">Example</a></li>
+        <li class="level2"><a href="InformationTheory.html">Entropy</a></li>
+        <li class="level2"><a href="Installation.html">Install SBT</a></li>
+        <li class="level2"><a href="LanguageModules.html">English</a></li>
+        <li class="level2"><a href="LinearAlgebra.html">Imports and implicits</a></li>
+        <li class="level2"><a href="LinearRegression.html">Predicting Home Prices</a></li>
+        <li class="level2"><a href="Linguistics.html">Linguistics.md</a></li>
+        <li class="level2"><a href="Logic.html">Conjunctive Normal Form Converter</a></li>
+        <li class="level2"><a href="LogisticMap.html">LogisticMap.md</a></li>
+        <li class="level2"><a href="MachineLearning.html">Algorithms</a></li>
+        <li class="level2"><a href="Mandelbrot.html">Mandelbrot.md</a></li>
+        <li class="level2"><a href="MeanAveragePrecisionAtK.html">MeanAveragePrecisionAtK.md</a></li>
+        <li class="level2"><a href="MontyHall.html">MontyHall.md</a></li>
+        <li class="level2"><a href="NaiveBayesClassifier.html">Tennis Example</a></li>
+        <li class="level2"><a href="NaturalLanguageProcessing.html">NaturalLanguageProcessing.md</a></li>
+        <li class="level2"><a href="NeedlemanWunsch.html">Example</a></li>
+        <li class="level2"><a href="PackageObject.html">Permutations</a></li>
+        <li class="level2"><a href="Pi.html">Wallis</a></li>
+        <li class="level2"><a href="PixelatedColoredArea.html">Example</a></li>
+        <li class="level2"><a href="Plots.html">Time-series plot example</a></li>
+        <li class="level2"><a href="Poker.html">Example</a></li>
+        <li class="level2"><a href="PrisonersDilemma.html">PrisonersDilemma.md</a></li>
+        <li class="level2"><a href="ProbabilisticGraphicalModels.html">ProbabilisticGraphicalModels.md</a></li>
+        <li class="level2"><a href="ProbabilityModel.html">Imports</a></li>
+        <li class="level2"><a href="PythagoreanMeans.html">Arithmetic, Geometric, and Harmonic Mean Examples</a></li>
+        <li class="level2"><a href="Python2Json.html">Python2Json.md</a></li>
+        <li class="level2"><a href="Quanta.html">Units</a></li>
+        <li class="level2"><a href="ReservoirSampling.html">ReservoirSampling.md</a></li>
+        <li class="level2"><a href="RootMeanSquareDeviation.html">RootMeanSquareDeviation.md</a></li>
+        <li class="level2"><a href="ScatterPlot.html">ScatterPlot.md</a></li>
+        <li class="level2"><a href="SmithWaterman.html">Example</a></li>
+        <li class="level2"><a href="Statistics.html">Uniform Distribution</a></li>
+        <li class="level2"><a href="TicTacToe.html">Example</a></li>
+        <li class="level2"><a href="UnittedTrigonometry.html">Examples</a></li>
+        <li class="level2"><a href="VectorSpaceModel.html">Example</a></li>
+        <li class="level2"><a href="Visualize.html">Visualizations</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Clustering Irises</a></p>
+        
+        <ul class="nav-list">
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <hr>
+        <p>layout: page
+        title: Cluster Irises with k-Means Clustering
+        permalink: /tutorial/cluster<em>irises</em>k_means/
+        ---</p>
+        <p>See the wikipedia page on <a href="https://en.wikipedia.org/wiki/K-means_clustering">k-Means Clustering</a></p>
+        <h1 id="clustering-irises" class="title">Clustering Irises</h1>
+        <p>A demonstration of k-Means Clustering using the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set">Iris flower data set</a></p>
+        <p>Imports for Distance quanta</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">DirectedSparseGraph</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quanta</span><span>.</span><span class="type-name">Distance</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quanta</span><span>.</span><span class="type-name">DistanceConverter</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">distanceConverter</span><span> = {
+  </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">modules</span><span>.</span><span class="identifier">doubleRationalModule</span><span>
+  </span><span class="type-name">Distance</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
+}</span></code></pre>
+        <p>Import the Irises data set</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Irises</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Iris</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ec</span><span> = </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="identifier">global</span><span>
+</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@6e86a5b4[Running, parallelism = 6, size = 3, active = 0, running = 0, steals = 3, tasks = 0, submissions = 0]
+</span><span class="keyword">val</span><span> </span><span class="identifier">blocker</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">Blocker</span><span>.</span><span class="identifier">liftExecutionContext</span><span>(</span><span class="identifier">ec</span><span>)
+</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@6e86a5b4
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">cs</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">contextShift</span><span>(</span><span class="identifier">ec</span><span>)
+</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@50945e4f
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">irisesIO</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">Irises</span><span>[</span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>](</span><span class="identifier">blocker</span><span>)
+</span><span class="comment">// irisesIO: Irises[cats.effect.IO] = axle.data.Irises@296067a1
+</span><span class="keyword">val</span><span> </span><span class="identifier">irises</span><span> = </span><span class="identifier">irisesIO</span><span>.</span><span class="identifier">irises</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
+</span><span class="comment">// irises: List[Iris] = List(
+//   Iris(
+//     sepalLength = UnittedQuantity(
+//       magnitude = 5.1,
+//       unit = UnitOfMeasurement(
+//         name = &quot;centimeter&quot;,
+//         symbol = &quot;cm&quot;,
+//         wikipediaUrl = None
+//       )
+//     ),
+//     sepalWidth = UnittedQuantity(
+//       magnitude = 3.5,
+//       unit = UnitOfMeasurement(
+//         name = &quot;centimeter&quot;,
+//         symbol = &quot;cm&quot;,
+//         wikipediaUrl = None
+//       )
+//     ),
+//     petalLength = UnittedQuantity(
+//       magnitude = 1.4,
+//       unit = UnitOfMeasurement(
+//         name = &quot;centimeter&quot;,
+//         symbol = &quot;cm&quot;,
+//         wikipediaUrl = None
+//       )
+//     ),
+//     petalWidth = UnittedQuantity(
+//       magnitude = 0.2,
+//       unit = UnitOfMeasurement(
+//         name = &quot;centimeter&quot;,
+//         symbol = &quot;cm&quot;,
+//         wikipediaUrl = None
+//       )
+//     ),
+//     species = &quot;Iris-setosa&quot;
+//   ),
+//   Iris(
+//     sepalLength = UnittedQuantity(
+//       magnitude = 4.9,
+//       unit = UnitOfMeasurement(
+//         name = &quot;centimeter&quot;,
+//         symbol = &quot;cm&quot;,
+//         wikipediaUrl = None
+//       )
+//     ),
+//     sepalWidth = UnittedQuantity(
+//       magnitude = 3.0,
+//       unit = UnitOfMeasurement(
+//         name = &quot;centimeter&quot;,
+// ...</span></code></pre>
+        <p>Make a 2-D Euclidean space implicitly available for clustering</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="type-name">DoubleMatrix</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">distance</span><span>.</span><span class="type-name">Euclidean</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">linearAlgebraDoubleMatrix</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">rowVectorInnerProductSpace</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">space</span><span>: </span><span class="type-name">Euclidean</span><span>[</span><span class="type-name">DoubleMatrix</span><span>, </span><span class="type-name">Double</span><span>] = {
+  </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringInt</span><span>: </span><span class="type-name">Ring</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
+  </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">inner</span><span> = </span><span class="identifier">rowVectorInnerProductSpace</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Double</span><span>](</span><span class="number-literal">2</span><span>)
+  </span><span class="keyword">new</span><span> </span><span class="type-name">Euclidean</span><span>[</span><span class="type-name">DoubleMatrix</span><span>, </span><span class="type-name">Double</span><span>]
+}</span></code></pre>
+        <p>Build a classifier of irises based on sepal length and width using the K-Means algorithm</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">KMeans</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">PCAFeatureNormalizer</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">distanceConverter</span><span>.</span><span class="identifier">cm</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">irisFeaturizer</span><span> =
+  (</span><span class="identifier">iris</span><span>: </span><span class="type-name">Iris</span><span>) =&gt; </span><span class="type-name">List</span><span>((</span><span class="identifier">iris</span><span>.</span><span class="identifier">sepalLength</span><span> </span><span class="identifier">in</span><span> </span><span class="identifier">cm</span><span>).</span><span class="identifier">magnitude</span><span>.</span><span class="identifier">toDouble</span><span>, (</span><span class="identifier">iris</span><span>.</span><span class="identifier">sepalWidth</span><span> </span><span class="identifier">in</span><span> </span><span class="identifier">cm</span><span>).</span><span class="identifier">magnitude</span><span>.</span><span class="identifier">toDouble</span><span>)
+</span><span class="comment">// irisFeaturizer: Iris =&gt; List[Double] = &lt;function1&gt;
+</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">la</span><span> = </span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
+</span><span class="comment">// la: algebra.LinearAlgebra[DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@313fd221
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">normalizer</span><span> = (</span><span class="type-name">PCAFeatureNormalizer</span><span>[</span><span class="type-name">DoubleMatrix</span><span>] </span><span class="identifier">_</span><span>).</span><span class="identifier">curried</span><span>.</span><span class="identifier">apply</span><span>(</span><span class="number-literal">0.98</span><span>)
+</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$10297/0x000000080264e3d0@65fad7f4
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">classifier</span><span>: </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>] =
+  </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
+    </span><span class="identifier">irises</span><span>,
+    </span><span class="type-name">N</span><span> = </span><span class="number-literal">2</span><span>,
+    </span><span class="identifier">irisFeaturizer</span><span>,
+    </span><span class="identifier">normalizer</span><span>,
+    </span><span class="type-name">K</span><span> = </span><span class="number-literal">3</span><span>,
+    </span><span class="identifier">iterations</span><span> = </span><span class="number-literal">20</span><span>)(</span><span class="identifier">rng</span><span>)
+</span><span class="comment">// classifier: KMeans[Iris, List, DoubleMatrix] = KMeans(
+//   data = List(
+//     Iris(
+//       sepalLength = UnittedQuantity(
+//         magnitude = 5.1,
+//         unit = UnitOfMeasurement(
+//           name = &quot;centimeter&quot;,
+//           symbol = &quot;cm&quot;,
+//           wikipediaUrl = None
+//         )
+//       ),
+//       sepalWidth = UnittedQuantity(
+//         magnitude = 3.5,
+//         unit = UnitOfMeasurement(
+//           name = &quot;centimeter&quot;,
+//           symbol = &quot;cm&quot;,
+//           wikipediaUrl = None
+//         )
+//       ),
+//       petalLength = UnittedQuantity(
+//         magnitude = 1.4,
+//         unit = UnitOfMeasurement(
+//           name = &quot;centimeter&quot;,
+//           symbol = &quot;cm&quot;,
+//           wikipediaUrl = None
+//         )
+//       ),
+//       petalWidth = UnittedQuantity(
+//         magnitude = 0.2,
+//         unit = UnitOfMeasurement(
+//           name = &quot;centimeter&quot;,
+//           symbol = &quot;cm&quot;,
+//           wikipediaUrl = None
+//         )
+//       ),
+//       species = &quot;Iris-setosa&quot;
+//     ),
+//     Iris(
+//       sepalLength = UnittedQuantity(
+//         magnitude = 4.9,
+//         unit = UnitOfMeasurement(
+//           name = &quot;centimeter&quot;,
+//           symbol = &quot;cm&quot;,
+//           wikipediaUrl = None
+//         )
+//       ),
+//       sepalWidth = UnittedQuantity(
+//         magnitude = 3.0,
+//         unit = UnitOfMeasurement(
+// ...</span></code></pre>
+        <p>Produce a &quot;confusion matrix&quot;</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">ConfusionMatrix</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">confusion</span><span> = </span><span class="type-name">ConfusionMatrix</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Vector</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
+  </span><span class="identifier">classifier</span><span>,
+  </span><span class="identifier">irises</span><span>.</span><span class="identifier">toVector</span><span>,
+  </span><span class="identifier">_</span><span>.</span><span class="identifier">species</span><span>,
+  </span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">2</span><span>)
+</span><span class="comment">// confusion: ConfusionMatrix[Iris, Int, String, Vector, DoubleMatrix] = ConfusionMatrix(
+//   classifier = KMeans(
+//     data = List(
+//       Iris(
+//         sepalLength = UnittedQuantity(
+//           magnitude = 5.1,
+//           unit = UnitOfMeasurement(
+//             name = &quot;centimeter&quot;,
+//             symbol = &quot;cm&quot;,
+//             wikipediaUrl = None
+//           )
+//         ),
+//         sepalWidth = UnittedQuantity(
+//           magnitude = 3.5,
+//           unit = UnitOfMeasurement(
+//             name = &quot;centimeter&quot;,
+//             symbol = &quot;cm&quot;,
+//             wikipediaUrl = None
+//           )
+//         ),
+//         petalLength = UnittedQuantity(
+//           magnitude = 1.4,
+//           unit = UnitOfMeasurement(
+//             name = &quot;centimeter&quot;,
+//             symbol = &quot;cm&quot;,
+//             wikipediaUrl = None
+//           )
+//         ),
+//         petalWidth = UnittedQuantity(
+//           magnitude = 0.2,
+//           unit = UnitOfMeasurement(
+//             name = &quot;centimeter&quot;,
+//             symbol = &quot;cm&quot;,
+//             wikipediaUrl = None
+//           )
+//         ),
+//         species = &quot;Iris-setosa&quot;
+//       ),
+//       Iris(
+//         sepalLength = UnittedQuantity(
+//           magnitude = 4.9,
+//           unit = UnitOfMeasurement(
+//             name = &quot;centimeter&quot;,
+//             symbol = &quot;cm&quot;,
+//             wikipediaUrl = None
+//           )
+//         ),
+//         sepalWidth = UnittedQuantity(
+//           magnitude = 3.0,
+// ...
+</span><span>
+</span><span class="identifier">confusion</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res0: String = &quot;&quot;&quot;  0  49   1 :  50 Iris-setosa
+//  12   2  36 :  50 Iris-versicolor
+//  31   0  19 :  50 Iris-virginica
+// 
+//  43  51  56
+// &quot;&quot;&quot;</span></code></pre>
+        <p>Visualize the final (two dimensional) centroid positions</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">KMeansVisualization</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">Color</span><span>.</span><span class="identifier">_</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">colors</span><span> = </span><span class="type-name">Vector</span><span>(</span><span class="identifier">red</span><span>, </span><span class="identifier">blue</span><span>, </span><span class="identifier">green</span><span>)
+</span><span class="comment">// colors: Vector[visualize.Color] = Vector(
+//   Color(r = 255, g = 0, b = 0),
+//   Color(r = 0, g = 0, b = 255),
+//   Color(r = 0, g = 255, b = 0)
+// )
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">vis</span><span> = </span><span class="type-name">KMeansVisualization</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](</span><span class="identifier">classifier</span><span>, </span><span class="identifier">colors</span><span>)
+</span><span class="comment">// vis: KMeansVisualization[Iris, List, DoubleMatrix] = KMeansVisualization(
+//   classifier = KMeans(
+//     data = List(
+//       Iris(
+//         sepalLength = UnittedQuantity(
+//           magnitude = 5.1,
+//           unit = UnitOfMeasurement(
+//             name = &quot;centimeter&quot;,
+//             symbol = &quot;cm&quot;,
+//             wikipediaUrl = None
+//           )
+//         ),
+//         sepalWidth = UnittedQuantity(
+//           magnitude = 3.5,
+//           unit = UnitOfMeasurement(
+//             name = &quot;centimeter&quot;,
+//             symbol = &quot;cm&quot;,
+//             wikipediaUrl = None
+//           )
+//         ),
+//         petalLength = UnittedQuantity(
+//           magnitude = 1.4,
+//           unit = UnitOfMeasurement(
+//             name = &quot;centimeter&quot;,
+//             symbol = &quot;cm&quot;,
+//             wikipediaUrl = None
+//           )
+//         ),
+//         petalWidth = UnittedQuantity(
+//           magnitude = 0.2,
+//           unit = UnitOfMeasurement(
+//             name = &quot;centimeter&quot;,
+//             symbol = &quot;cm&quot;,
+//             wikipediaUrl = None
+//           )
+//         ),
+//         species = &quot;Iris-setosa&quot;
+//       ),
+//       Iris(
+//         sepalLength = UnittedQuantity(
+//           magnitude = 4.9,
+//           unit = UnitOfMeasurement(
+//             name = &quot;centimeter&quot;,
+//             symbol = &quot;cm&quot;,
+//             wikipediaUrl = None
+//           )
+//         ),
+//         sepalWidth = UnittedQuantity(
+//           magnitude = 3.0,
+// ...
+</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">vis</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;k_means.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/tutorial/images/k_means.svg" alt="kmeans"></p>
+        <p>Average centroid/cluster vs iteration:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">collection</span><span>.</span><span class="identifier">immutable</span><span>.</span><span class="type-name">TreeMap</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">plot</span><span> = </span><span class="type-name">Plot</span><span>(
+  () =&gt; </span><span class="identifier">classifier</span><span>.</span><span class="identifier">distanceLogSeries</span><span>,
+  </span><span class="identifier">connect</span><span> = </span><span class="boolean-literal">true</span><span>,
+  </span><span class="identifier">drawKey</span><span> = </span><span class="boolean-literal">true</span><span>,
+  </span><span class="identifier">colorOf</span><span> = </span><span class="identifier">colors</span><span>,
+  </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;KMeans Mean Centroid Distances&quot;</span><span>),
+  </span><span class="identifier">xAxis</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="number-literal">0d</span><span>),
+  </span><span class="identifier">xAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;step&quot;</span><span>),
+  </span><span class="identifier">yAxis</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="number-literal">0</span><span>),
+  </span><span class="identifier">yAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;average distance to centroid&quot;</span><span>))
+</span><span class="comment">// plot: Plot[Int, Int, Double, TreeMap[Int, Double]] = Plot(
+//   dataFn = &lt;function0&gt;,
+//   connect = true,
+//   drawKey = true,
+//   width = 700,
+//   height = 600,
+//   border = 50,
+//   pointDiameter = 4,
+//   keyLeftPadding = 20,
+//   keyTopPadding = 50,
+//   keyWidth = 80,
+//   fontName = &quot;Courier New&quot;,
+//   fontSize = 12,
+//   bold = false,
+//   titleFontName = &quot;Palatino&quot;,
+//   titleFontSize = 20,
+//   colorOf = Vector(
+//     Color(r = 255, g = 0, b = 0),
+//     Color(r = 0, g = 0, b = 255),
+//     Color(r = 0, g = 255, b = 0)
+//   ),
+//   title = Some(value = &quot;KMeans Mean Centroid Distances&quot;),
+//   keyTitle = None,
+//   xAxis = Some(value = 0.0),
+//   xAxisLabel = Some(value = &quot;step&quot;),
+//   yAxis = Some(value = 0),
+//   yAxisLabel = Some(value = &quot;average distance to centroid&quot;)
+// )
+</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">plot</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;kmeansvsiteration.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/tutorial/images/kmeansvsiteration.svg" alt="kmeans"></p>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

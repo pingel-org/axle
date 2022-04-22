@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Parallel Collections</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <script src="helium/laika-helium.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="Architecture.html">Remaining Design Issues</a></li>
+        <li class="level1"><a href="Author.html">Author.md</a></li>
+        <li class="level1"><a href="History.html">αχλε</a></li>
+        <li class="level1"><a href="Index.html">Index.md</a></li>
+        <li class="level1"><a href="ReleaseNotes.html">0.6.1-2 (April 2022)</a></li>
+        <li class="level1"><a href="Resources.html">Resources.md</a></li>
+        <li class="level1"><a href="RoadMap.html">Road Map</a></li>
+        <li class="level1 active"><a href="#">Parallel Collections</a></li>
+        <li class="level1"><a href="Tutorials.html">Core</a></li>
+        <li class="level1"><a href="Videos.html">Videos.md</a></li>
+        <li class="level1 nav-header">tutorial</li>
+        <li class="level2"><a href="tutorial/Ackermann.html">Ackermann.md</a></li>
+        <li class="level2"><a href="tutorial/Algebra.html">Algebra.md</a></li>
+        <li class="level2"><a href="tutorial/AngluinLearner.html">Example</a></li>
+        <li class="level2"><a href="tutorial/BarCharts.html">Example</a></li>
+        <li class="level2"><a href="tutorial/BayesianNetworks.html">Alarm Example</a></li>
+        <li class="level2"><a href="tutorial/Bioinformatics.html">Algorithms for DNA sequence alignment</a></li>
+        <li class="level2"><a href="tutorial/ClusterFederalistPapers.html">ClusterFederalistPapers.md</a></li>
+        <li class="level2"><a href="tutorial/ClusterIrises.html">Clustering Irises</a></li>
+        <li class="level2"><a href="tutorial/CoinEntropy.html">CoinEntropy.md</a></li>
+        <li class="level2"><a href="tutorial/EditDistance.html">Levenshtein</a></li>
+        <li class="level2"><a href="tutorial/Fibonacci.html">Linear using <code>foldLeft</code></a></li>
+        <li class="level2"><a href="tutorial/GameTheory.html">GameTheory.md</a></li>
+        <li class="level2"><a href="tutorial/GeneticAlgorithms.html">Example</a></li>
+        <li class="level2"><a href="tutorial/GeoCoordinates.html">GeoCoordinates.md</a></li>
+        <li class="level2"><a href="tutorial/GoldParadigm.html">Example</a></li>
+        <li class="level2"><a href="tutorial/Graph.html">Directed Graph</a></li>
+        <li class="level2"><a href="tutorial/GroupedBarCharts.html">Example</a></li>
+        <li class="level2"><a href="tutorial/InformationTheory.html">Entropy</a></li>
+        <li class="level2"><a href="tutorial/Installation.html">Install SBT</a></li>
+        <li class="level2"><a href="tutorial/LanguageModules.html">English</a></li>
+        <li class="level2"><a href="tutorial/LinearAlgebra.html">Imports and implicits</a></li>
+        <li class="level2"><a href="tutorial/LinearRegression.html">Predicting Home Prices</a></li>
+        <li class="level2"><a href="tutorial/Linguistics.html">Linguistics.md</a></li>
+        <li class="level2"><a href="tutorial/Logic.html">Conjunctive Normal Form Converter</a></li>
+        <li class="level2"><a href="tutorial/LogisticMap.html">LogisticMap.md</a></li>
+        <li class="level2"><a href="tutorial/MachineLearning.html">Algorithms</a></li>
+        <li class="level2"><a href="tutorial/Mandelbrot.html">Mandelbrot.md</a></li>
+        <li class="level2"><a href="tutorial/MeanAveragePrecisionAtK.html">MeanAveragePrecisionAtK.md</a></li>
+        <li class="level2"><a href="tutorial/MontyHall.html">MontyHall.md</a></li>
+        <li class="level2"><a href="tutorial/NaiveBayesClassifier.html">Tennis Example</a></li>
+        <li class="level2"><a href="tutorial/NaturalLanguageProcessing.html">NaturalLanguageProcessing.md</a></li>
+        <li class="level2"><a href="tutorial/NeedlemanWunsch.html">Example</a></li>
+        <li class="level2"><a href="tutorial/PackageObject.html">Permutations</a></li>
+        <li class="level2"><a href="tutorial/Pi.html">Wallis</a></li>
+        <li class="level2"><a href="tutorial/PixelatedColoredArea.html">Example</a></li>
+        <li class="level2"><a href="tutorial/Plots.html">Time-series plot example</a></li>
+        <li class="level2"><a href="tutorial/Poker.html">Example</a></li>
+        <li class="level2"><a href="tutorial/PrisonersDilemma.html">PrisonersDilemma.md</a></li>
+        <li class="level2"><a href="tutorial/ProbabilisticGraphicalModels.html">ProbabilisticGraphicalModels.md</a></li>
+        <li class="level2"><a href="tutorial/ProbabilityModel.html">Imports</a></li>
+        <li class="level2"><a href="tutorial/PythagoreanMeans.html">Arithmetic, Geometric, and Harmonic Mean Examples</a></li>
+        <li class="level2"><a href="tutorial/Python2Json.html">Python2Json.md</a></li>
+        <li class="level2"><a href="tutorial/Quanta.html">Units</a></li>
+        <li class="level2"><a href="tutorial/ReservoirSampling.html">ReservoirSampling.md</a></li>
+        <li class="level2"><a href="tutorial/RootMeanSquareDeviation.html">RootMeanSquareDeviation.md</a></li>
+        <li class="level2"><a href="tutorial/ScatterPlot.html">ScatterPlot.md</a></li>
+        <li class="level2"><a href="tutorial/SmithWaterman.html">Example</a></li>
+        <li class="level2"><a href="tutorial/Statistics.html">Uniform Distribution</a></li>
+        <li class="level2"><a href="tutorial/TicTacToe.html">Example</a></li>
+        <li class="level2"><a href="tutorial/UnittedTrigonometry.html">Examples</a></li>
+        <li class="level2"><a href="tutorial/VectorSpaceModel.html">Example</a></li>
+        <li class="level2"><a href="tutorial/Visualize.html">Visualizations</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Parallel Collections</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#xml">XML</a></li>
+          <li class="level1"><a href="#jblas">JBLAS</a></li>
+          <li class="level1"><a href="#joda">JODA</a></li>
+          <li class="level1"><a href="#jung">JUNG</a></li>
+          <li class="level1"><a href="#awt">AWT</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <hr>
+        <p>layout: page
+        title: Spokes
+        in_header: true
+        permalink: /spokes/
+        ---</p>
+        <p>Witnesses for 3rd party libraries: The &quot;Spokes&quot;</p>
+        <h1 id="parallel-collections" class="title">Parallel Collections</h1>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-parallel&quot; % &quot;0.6.0&quot;</code></pre>
+        <p>For use with Scala <a href="https://github.com/scala/scala-parallel-collections">Parallel Collections</a> library
+        (<code>&quot;org.scala-lang.modules&quot; %% &quot;scala-parallel-collections&quot; % ...</code>)</p>
+        
+        <h1 id="xml" class="section"><a class="anchor-link left" href="#xml"><i class="icofont-laika">&#xef71;</i></a>XML</h1>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-xml&quot; % &quot;0.6.0&quot;</code></pre>
+        <p>For use with Scala <a href="https://github.com/scala/scala-xml">XML</a> library
+        (<code>&quot;org.scala-lang.modules&quot; %% &quot;scala-xml&quot; % ...</code>)</p>
+        <p>XML includes <code>axle.web</code>, where HTML and SVG visualizations reside.</p>
+        
+        <h1 id="jblas" class="section"><a class="anchor-link left" href="#jblas"><i class="icofont-laika">&#xef71;</i></a>JBLAS</h1>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-jblas&quot; % &quot;0.6.0&quot;</code></pre>
+        <p><a href="/tutorial/linear_algebra/">Linear Algebra</a> and other witnesses for <a href="http://jblas.org/">JBLAS</a> which itself is a wrapper for <a href="http://www.netlib.org/lapack/">LAPACK</a>.
+        Includes Principal Component Analysis (PCA).</p>
+        
+        <h1 id="joda" class="section"><a class="anchor-link left" href="#joda"><i class="icofont-laika">&#xef71;</i></a>JODA</h1>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-joda&quot; % &quot;0.6.0&quot;</code></pre>
+        <p>Witnesses for the <a href="http://www.joda.org/joda-time/">Joda</a> time library.</p>
+        
+        <h1 id="jung" class="section"><a class="anchor-link left" href="#jung"><i class="icofont-laika">&#xef71;</i></a>JUNG</h1>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-jung&quot; % &quot;0.6.0&quot;</code></pre>
+        <p><a href="/tutorial/graph/">Graph</a> Directed and undirected graph witnesses for the <a href="http://jung.sourceforge.net/">JUNG</a> library.</p>
+        
+        <h1 id="awt" class="section"><a class="anchor-link left" href="#awt"><i class="icofont-laika">&#xef71;</i></a>AWT</h1>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-awt&quot; % &quot;0.6.0&quot;</code></pre>
+        <p>Witnesses for <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/package-summary.html">AWT</a></p>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

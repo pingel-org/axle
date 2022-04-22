@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Core</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <script src="helium/laika-helium.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="Architecture.html">Remaining Design Issues</a></li>
+        <li class="level1"><a href="Author.html">Author.md</a></li>
+        <li class="level1"><a href="History.html">αχλε</a></li>
+        <li class="level1"><a href="Index.html">Index.md</a></li>
+        <li class="level1"><a href="ReleaseNotes.html">0.6.1-2 (April 2022)</a></li>
+        <li class="level1"><a href="Resources.html">Resources.md</a></li>
+        <li class="level1"><a href="RoadMap.html">Road Map</a></li>
+        <li class="level1"><a href="Spokes.html">Parallel Collections</a></li>
+        <li class="level1 active"><a href="#">Core</a></li>
+        <li class="level1"><a href="Videos.html">Videos.md</a></li>
+        <li class="level1 nav-header">tutorial</li>
+        <li class="level2"><a href="tutorial/Ackermann.html">Ackermann.md</a></li>
+        <li class="level2"><a href="tutorial/Algebra.html">Algebra.md</a></li>
+        <li class="level2"><a href="tutorial/AngluinLearner.html">Example</a></li>
+        <li class="level2"><a href="tutorial/BarCharts.html">Example</a></li>
+        <li class="level2"><a href="tutorial/BayesianNetworks.html">Alarm Example</a></li>
+        <li class="level2"><a href="tutorial/Bioinformatics.html">Algorithms for DNA sequence alignment</a></li>
+        <li class="level2"><a href="tutorial/ClusterFederalistPapers.html">ClusterFederalistPapers.md</a></li>
+        <li class="level2"><a href="tutorial/ClusterIrises.html">Clustering Irises</a></li>
+        <li class="level2"><a href="tutorial/CoinEntropy.html">CoinEntropy.md</a></li>
+        <li class="level2"><a href="tutorial/EditDistance.html">Levenshtein</a></li>
+        <li class="level2"><a href="tutorial/Fibonacci.html">Linear using <code>foldLeft</code></a></li>
+        <li class="level2"><a href="tutorial/GameTheory.html">GameTheory.md</a></li>
+        <li class="level2"><a href="tutorial/GeneticAlgorithms.html">Example</a></li>
+        <li class="level2"><a href="tutorial/GeoCoordinates.html">GeoCoordinates.md</a></li>
+        <li class="level2"><a href="tutorial/GoldParadigm.html">Example</a></li>
+        <li class="level2"><a href="tutorial/Graph.html">Directed Graph</a></li>
+        <li class="level2"><a href="tutorial/GroupedBarCharts.html">Example</a></li>
+        <li class="level2"><a href="tutorial/InformationTheory.html">Entropy</a></li>
+        <li class="level2"><a href="tutorial/Installation.html">Install SBT</a></li>
+        <li class="level2"><a href="tutorial/LanguageModules.html">English</a></li>
+        <li class="level2"><a href="tutorial/LinearAlgebra.html">Imports and implicits</a></li>
+        <li class="level2"><a href="tutorial/LinearRegression.html">Predicting Home Prices</a></li>
+        <li class="level2"><a href="tutorial/Linguistics.html">Linguistics.md</a></li>
+        <li class="level2"><a href="tutorial/Logic.html">Conjunctive Normal Form Converter</a></li>
+        <li class="level2"><a href="tutorial/LogisticMap.html">LogisticMap.md</a></li>
+        <li class="level2"><a href="tutorial/MachineLearning.html">Algorithms</a></li>
+        <li class="level2"><a href="tutorial/Mandelbrot.html">Mandelbrot.md</a></li>
+        <li class="level2"><a href="tutorial/MeanAveragePrecisionAtK.html">MeanAveragePrecisionAtK.md</a></li>
+        <li class="level2"><a href="tutorial/MontyHall.html">MontyHall.md</a></li>
+        <li class="level2"><a href="tutorial/NaiveBayesClassifier.html">Tennis Example</a></li>
+        <li class="level2"><a href="tutorial/NaturalLanguageProcessing.html">NaturalLanguageProcessing.md</a></li>
+        <li class="level2"><a href="tutorial/NeedlemanWunsch.html">Example</a></li>
+        <li class="level2"><a href="tutorial/PackageObject.html">Permutations</a></li>
+        <li class="level2"><a href="tutorial/Pi.html">Wallis</a></li>
+        <li class="level2"><a href="tutorial/PixelatedColoredArea.html">Example</a></li>
+        <li class="level2"><a href="tutorial/Plots.html">Time-series plot example</a></li>
+        <li class="level2"><a href="tutorial/Poker.html">Example</a></li>
+        <li class="level2"><a href="tutorial/PrisonersDilemma.html">PrisonersDilemma.md</a></li>
+        <li class="level2"><a href="tutorial/ProbabilisticGraphicalModels.html">ProbabilisticGraphicalModels.md</a></li>
+        <li class="level2"><a href="tutorial/ProbabilityModel.html">Imports</a></li>
+        <li class="level2"><a href="tutorial/PythagoreanMeans.html">Arithmetic, Geometric, and Harmonic Mean Examples</a></li>
+        <li class="level2"><a href="tutorial/Python2Json.html">Python2Json.md</a></li>
+        <li class="level2"><a href="tutorial/Quanta.html">Units</a></li>
+        <li class="level2"><a href="tutorial/ReservoirSampling.html">ReservoirSampling.md</a></li>
+        <li class="level2"><a href="tutorial/RootMeanSquareDeviation.html">RootMeanSquareDeviation.md</a></li>
+        <li class="level2"><a href="tutorial/ScatterPlot.html">ScatterPlot.md</a></li>
+        <li class="level2"><a href="tutorial/SmithWaterman.html">Example</a></li>
+        <li class="level2"><a href="tutorial/Statistics.html">Uniform Distribution</a></li>
+        <li class="level2"><a href="tutorial/TicTacToe.html">Example</a></li>
+        <li class="level2"><a href="tutorial/UnittedTrigonometry.html">Examples</a></li>
+        <li class="level2"><a href="tutorial/VectorSpaceModel.html">Example</a></li>
+        <li class="level2"><a href="tutorial/Visualize.html">Visualizations</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Core</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#fundamental-data-structures-and-functions">Fundamental data structures and functions</a></li>
+          <li class="level1"><a href="#units-of-measurement">Units of measurement</a></li>
+          <li class="level1"><a href="#commonly-used-mathematical-functions">Commonly Used Mathematical Functions</a></li>
+          <li class="level1"><a href="#randomness-and-uncertainty">Randomness and Uncertainty</a></li>
+          <li class="level1"><a href="#machine-learning">Machine Learning</a></li>
+          <li class="level1"><a href="#domain-specific-functions">Domain-specific functions</a></li>
+          <li class="level1"><a href="#visualization">Visualization</a></li>
+          <li class="level1"><a href="#wheel">Wheel</a></li>
+          <li class="level2"><a href="#data">Data</a></li>
+          <li class="level2"><a href="#games">Games</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <hr>
+        <p>layout: page
+        title: Tutorials
+        in_header: true
+        permalink: /tutorial/
+        ---</p>
+        <h1 id="core" class="title">Core</h1>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-core&quot;  % &quot;0.6.0&quot;
+&quot;org.axle-lang&quot; %% &quot;axle-laws&quot;  % &quot;0.6.0&quot;
+&quot;org.axle-lang&quot; %% &quot;axle-xml&quot;   % &quot;0.6.0&quot;
+&quot;org.axle-lang&quot; %% &quot;axle-jung&quot;  % &quot;0.6.0&quot;
+&quot;org.axle-lang&quot; %% &quot;axle-jblas&quot; % &quot;0.6.0&quot;</code></pre>
+        
+        <h3 id="fundamental-data-structures-and-functions" class="section"><a class="anchor-link left" href="#fundamental-data-structures-and-functions"><i class="icofont-laika">&#xef71;</i></a>Fundamental data structures and functions</h3>
+        <ul>
+          <li><a href="/tutorial/axle_package_object/">Package Object</a> Extensions to core Scala data types. Indexed Power Set, Indexed Cross Product, Combinations, Permutations, and UTF aliases</li>
+          <li><a href="/tutorial/algebra/">Algebra</a> Typeclasses Functor, Indexed, Finite, LengthSpace</li>
+          <li><a href="/tutorial/linear_algebra/">Linear Algebra</a> including Principal Component Analysis (PCA)</li>
+          <li><a href="/tutorial/graph/">Graph</a></li>
+          <li><a href="/tutorial/logic/">Logic</a> First-Order Predicate Logic</li>
+        </ul>
+        
+        <h3 id="units-of-measurement" class="section"><a class="anchor-link left" href="#units-of-measurement"><i class="icofont-laika">&#xef71;</i></a>Units of measurement</h3>
+        <ul>
+          <li><a href="/tutorial/quanta/">Quanta</a> Units (second, mile, gram, etc) for various quanta (Speed, Distance, Mass, etc) and conversions between them</li>
+          <li><a href="/tutorial/unitted_trigonometry/">Unitted Trigonometry</a></li>
+        </ul>
+        
+        <h3 id="commonly-used-mathematical-functions" class="section"><a class="anchor-link left" href="#commonly-used-mathematical-functions"><i class="icofont-laika">&#xef71;</i></a>Commonly Used Mathematical Functions</h3>
+        <ul>
+          <li><a href="/tutorial/pythagorean_means/">Pythagorean Means</a> Arithmetic, Harmonic, Geometric, and Generalized means</li>
+          <li><a href="/tutorial/map_at_k"><a href="mailto:MAP@K">MAP@K</a></a> Mean Average Precision at K (ranking metric)</li>
+          <li>Historically important functions</li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/pi/">π</a> estimation</li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/fibonacci/">Fibonacci</a></li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/ackermann/">Ackermann</a></li>
+        </ul>
+        
+        <h3 id="randomness-and-uncertainty" class="section"><a class="anchor-link left" href="#randomness-and-uncertainty"><i class="icofont-laika">&#xef71;</i></a>Randomness and Uncertainty</h3>
+        <ul>
+          <li><a href="/tutorial/probability_model">Probability Models</a> axiomatic probability models</li>
+        </ul>
+        <ul>
+          <li>Sampler, Region, Kolmogorov, Bayes, and Monad</li>
+          <li><a href="/tutorial/statistics/">Statistics</a> Random Variables, Probability, Distributions, Standard Deviation</li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/rmsd/">Root-mean-square deviation</a> (aka RMSE)</li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/reservoir_sampling/">Reservoir Sampling</a></li>
+          <li><a href="/tutorial/information_theory/">Information Theory</a></li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/entropy_biased_coin/">Entropy of a Coin</a></li>
+          <li><a href="/tutorial/probabilistic_graphical_models/">Probabilistic Graphical Models</a> (PGM)</li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/bayesian_networks/">Bayesian Networks</a></li>
+          <li><a href="/tutorial/game_theory/">Game Theory</a> Framework for the game playing jar.</li>
+        </ul>
+        
+        <h3 id="machine-learning" class="section"><a class="anchor-link left" href="#machine-learning"><i class="icofont-laika">&#xef71;</i></a>Machine Learning</h3>
+        <ul>
+          <li><a href="/tutorial/linear_regression/">Linear Regression</a></li>
+          <li><a href="/tutorial/naive_bayes/">Naive Bayes Clustering</a> Tennis example</li>
+          <li>k-Means Clustering</li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/cluster_irises_k_means/">Cluster Irises</a></li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/cluster_federalist_papers_k_means/">Cluster Federalist Papers</a></li>
+          <li><a href="/tutorial/genetic_algorithms/">Genetic Algorithms</a></li>
+        </ul>
+        
+        <h3 id="domain-specific-functions" class="section"><a class="anchor-link left" href="#domain-specific-functions"><i class="icofont-laika">&#xef71;</i></a>Domain-specific functions</h3>
+        <ul>
+          <li><a href="/tutorial/geo_coordinates/">Geo Coordinates</a></li>
+          <li><a href="/tutorial/natural_language_processing/">Natural Langage Processing (NLP)</a></li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/language_modules/">Language Modules</a> including Stemming and Stop Words</li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/edit_distance/">Edit Distance</a> Levenshtein</li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/vector_space_model/">Vector Space Model</a> including TF-IDF</li>
+          <li><a href="/tutorial/linguistics/">Linguistics</a></li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/angluin_learner/">Angluin Learner</a></li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/gold_paradigm/">Gold Paradigm</a></li>
+          <li><a href="/tutorial/bioinformatics/">Bioinformatics</a> DNA Sequence alignment algorithms</li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/smith_waterman/">Smith Waterman</a></li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/needleman_wunsch/">Needleman Wunsch</a></li>
+          <li>Chaos Theory</li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/logistic_map/">Logistic Map</a></li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/mandelbrot/">Mandelbrot Set</a></li>
+        </ul>
+        
+        <h3 id="visualization" class="section"><a class="anchor-link left" href="#visualization"><i class="icofont-laika">&#xef71;</i></a>Visualization</h3>
+        <ul>
+          <li><a href="/tutorial/visualize/">Visualize</a></li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/plots/">Plots</a></li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/scatterplot/">ScatterPlot</a></li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/bar_charts/">Bar Charts</a></li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/grouped_bar_charts/">Grouped Bar Charts</a></li>
+        </ul>
+        <ul>
+          <li><a href="/tutorial/pixelated_colored_area/">Pixelated Colored Area</a></li>
+        </ul>
+        
+        <h2 id="wheel" class="section"><a class="anchor-link left" href="#wheel"><i class="icofont-laika">&#xef71;</i></a>Wheel</h2>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-wheel&quot; % &quot;0.6.0&quot;</code></pre>
+        
+        <h3 id="data" class="section"><a class="anchor-link left" href="#data"><i class="icofont-laika">&#xef71;</i></a>Data</h3>
+        <ul>
+          <li>Data sets from <code>axle.data</code></li>
+        </ul>
+        <ul>
+          <li>Astronomy</li>
+        </ul>
+        <ul>
+          <li>Evolution</li>
+        </ul>
+        <ul>
+          <li>Federalist Papers</li>
+        </ul>
+        <ul>
+          <li>Irises</li>
+        </ul>
+        
+        <h3 id="games" class="section"><a class="anchor-link left" href="#games"><i class="icofont-laika">&#xef71;</i></a>Games</h3>
+        <ul>
+          <li><a href="/tutorial/tic_tac_toe/">Tic Tac Toe</a></li>
+          <li><a href="/tutorial/poker/">Poker</a></li>
+          <li><a href="/tutorial/monty_hall/">Monty Hall</a></li>
+          <li><a href="/tutorial/prisoner/">Prisoners Dilemma</a></li>
+        </ul>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>
