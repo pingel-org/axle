@@ -12,12 +12,13 @@ sbt -J-Xmx6G 'project axle-docs' mdoc
 export SITEBUILDDIR=axle-docs/target/site
 
 mkdir -p $SITEBUILDDIR
+
+sbt 'project axle-docs' laikaSite
+
 cp axle-docs/src/site/favicon.ico $SITEBUILDDIR
-cp -R axle-docs/target/mdoc/* $SITEBUILDDIR
-# cp -R axle-docs/src/site/tutorial $SITEBUILDDIR
 mkdir -p $SITEBUILDDIR/tutorial/images/
 mv *.svg *.png $SITEBUILDDIR/tutorial/images/ # Where does bowl.html belong?
-cp -R axle-docs/src/site/css $SITEBUILDDIR
+#cp -R axle-docs/src/site/css $SITEBUILDDIR
 
 # Where is $SITEBUILDDIR/target coming from?
 
