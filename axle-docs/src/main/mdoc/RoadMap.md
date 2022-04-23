@@ -9,20 +9,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * latest released version badge
 * set mdocVariables with latest released version
-* Timestamp / version to site footer
-
-* site-update.sh should be only a set of sbt commands (avoid moving png and svg files)
-
 * update google analytics
 * CNAME (www and root)
 * update publishing.txt
-* simplify "Installation"
-
-* ghpagesCleanSite leaving stale files
-* GitHub "Releases" in sidebar should show "latest"
 * Create and publish code coverage reports
+
+* site-update.sh should be only a set of sbt commands (avoid moving png and svg files)
+* trigger site build via github action?
+* simplify "Installation"
 * ProbabilityModel.md:207 (mdoc generated code) method any2stringadd in object Predef is deprecated
-* Do "sonatype lift" emails following release suffice for security scan?
 
 ## 0.6.3
 
@@ -342,4 +337,9 @@ that has been its goal since inception.
 * Friend of Spire
 * Fix markdown lint warnings
 * Figure out better way to reference images in docs
-* meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
+* Meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
+* Debug problems with laikaIncludePDF
+* GitHub "Releases" in sidebar should show "latest"
+* Do "sonatype lift" emails following release suffice for security scan?
+* ghpagesCleanSite leaving stale files?
+* Timestamp / version to site footer
