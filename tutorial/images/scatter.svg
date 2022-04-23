@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg version="1.1" width="600.0" height="600.0" onload="init(evt)" xmlns="http://www.w3.org/2000/svg">
+      <style>.caption {
+  font-size: 14px;
+  font-family: Georgia, serif;
+}
+</style>
+      <script type="text/ecmascript"><![CDATA[
+function init(evt) {
+  if ( window.svgDocument == null ) {
+    svgDocument = evt.target.ownerDocument;
+  }
+}
+
+function RectHover(evt, i, c) {
+  rect = svgDocument.getElementById('rect' + i);
+  if( c != null ) {
+    rect.setAttributeNS(null, "fill", c)  
+  }
+  tooltiptext = svgDocument.getElementById('tooltiptext' + i);
+  tooltipbg = svgDocument.getElementById('tooltipbg' + i);
+  if( tooltipbg != null) {
+    tbb = tooltiptext.getBBox();
+    tooltipbg.setAttributeNS(null, "width", tbb.width);
+    tooltipbg.setAttributeNS(null, "height", tbb.height);
+    tooltipbg.setAttributeNS(null, "x", tbb.x);
+    tooltipbg.setAttributeNS(null, "y", tbb.y);
+    tooltipbg.setAttributeNS(null, "visibility", "visible");
+  }
+  tooltiptext.setAttributeNS(null,"visibility","visible");
+}
+
+function RectUnhover(evt, i, c) {
+  rect = svgDocument.getElementById('rect' + i);
+  if( c != null ) {
+    rect.setAttributeNS(null, "fill", c)  
+  }
+  tooltiptext = svgDocument.getElementById('tooltiptext' + i);
+  tooltiptext.setAttributeNS(null,"visibility","hidden");
+  tooltipbg = svgDocument.getElementById('tooltipbg' + i);
+  if( tooltipbg != null ) {
+    tooltipbg.setAttributeNS(null,"visibility","hidden");
+  }
+}
+]]></script>
+      <line x1="50.0" y1="550.0" x2="550.0" y2="550.0" stroke="rgb(0,0,0)" stroke-width="1"/><line x1="50.0" y1="550.0" x2="50.0" y2="50.0" stroke="rgb(0,0,0)" stroke-width="1"/><line x1="50.0" y1="550.0" x2="50.0" y2="50.0" stroke="rgb(192,192,192)" stroke-width="1"/><line x1="50.0" y1="548.0" x2="50.0" y2="552.0" stroke="rgb(192,192,192)" stroke-width="1"/><text text-anchor="middle" alignment-baseline="hanging" x="50.0" y="553.0" font-size="12.0">0</text><line x1="216.66666666666666" y1="550.0" x2="216.66666666666666" y2="50.0" stroke="rgb(192,192,192)" stroke-width="1"/><line x1="216.66666666666666" y1="548.0" x2="216.66666666666666" y2="552.0" stroke="rgb(192,192,192)" stroke-width="1"/><text text-anchor="middle" alignment-baseline="hanging" x="216.66666666666666" y="553.0" font-size="12.0">1</text><line x1="383.3333333333333" y1="550.0" x2="383.3333333333333" y2="50.0" stroke="rgb(192,192,192)" stroke-width="1"/><line x1="383.3333333333333" y1="548.0" x2="383.3333333333333" y2="552.0" stroke="rgb(192,192,192)" stroke-width="1"/><text text-anchor="middle" alignment-baseline="hanging" x="383.3333333333333" y="553.0" font-size="12.0">2</text><line x1="550.0" y1="550.0" x2="550.0" y2="50.0" stroke="rgb(192,192,192)" stroke-width="1"/><line x1="550.0" y1="548.0" x2="550.0" y2="552.0" stroke="rgb(192,192,192)" stroke-width="1"/><text text-anchor="middle" alignment-baseline="hanging" x="550.0" y="553.0" font-size="12.0">3</text><line x1="50.0" y1="550.0" x2="550.0" y2="550.0" stroke="rgb(192,192,192)" stroke-width="1"/><text text-anchor="end" alignment-baseline="middle" x="45.0" y="550.0" font-size="12.0">1</text><line x1="48.0" y1="550.0" x2="52.0" y2="550.0" stroke="rgb(192,192,192)" stroke-width="1"/><line x1="50.0" y1="300.0" x2="550.0" y2="300.0" stroke="rgb(192,192,192)" stroke-width="1"/><text text-anchor="end" alignment-baseline="middle" x="45.0" y="300.0" font-size="12.0">2</text><line x1="48.0" y1="300.0" x2="52.0" y2="300.0" stroke="rgb(192,192,192)" stroke-width="1"/><line x1="50.0" y1="50.0" x2="550.0" y2="50.0" stroke="rgb(192,192,192)" stroke-width="1"/><text text-anchor="end" alignment-baseline="middle" x="45.0" y="50.0" font-size="12.0">3</text><line x1="48.0" y1="50.0" x2="52.0" y2="50.0" stroke="rgb(192,192,192)" stroke-width="1"/><circle onmouseout="HideTooltip(evt, 0)" onmousemove="ShowTooltip(evt, 0)" id="circle0" cx="383.3333333333333" cy="300.0" r="5.0" fill="rgb(255,0,0)"/><circle onmouseout="HideTooltip(evt, 1)" onmousemove="ShowTooltip(evt, 1)" id="circle1" cx="383.3333333333333" cy="550.0" r="5.0" fill="rgb(0,0,255)"/><circle onmouseout="HideTooltip(evt, 2)" onmousemove="ShowTooltip(evt, 2)" id="circle2" cx="550.0" cy="300.0" r="5.0" fill="rgb(0,0,255)"/><circle onmouseout="HideTooltip(evt, 3)" onmousemove="ShowTooltip(evt, 3)" id="circle3" cx="550.0" cy="50.0" r="5.0" fill="rgb(255,0,0)"/><circle onmouseout="HideTooltip(evt, 4)" onmousemove="ShowTooltip(evt, 4)" id="circle4" cx="216.66666666666666" cy="50.0" r="5.0" fill="rgb(0,255,0)"/><circle onmouseout="HideTooltip(evt, 5)" onmousemove="ShowTooltip(evt, 5)" id="circle5" cx="50.0" cy="300.0" r="5.0" fill="rgb(0,255,0)"/><circle onmouseout="HideTooltip(evt, 6)" onmousemove="ShowTooltip(evt, 6)" id="circle6" cx="50.0" cy="550.0" r="5.0" fill="rgb(0,255,0)"/><circle onmouseout="HideTooltip(evt, 7)" onmousemove="ShowTooltip(evt, 7)" id="circle7" cx="216.66666666666666" cy="550.0" r="5.0" fill="rgb(255,0,0)"/><text class="pointLabel" id="tooltiptext0" x="388.3333333333333" y="295.0" visibility="hidden">0</text><text class="pointLabel" id="tooltiptext1" x="388.3333333333333" y="545.0" visibility="hidden">1</text><text class="pointLabel" id="tooltiptext2" x="555.0" y="295.0" visibility="hidden">1</text><text class="pointLabel" id="tooltiptext3" x="555.0" y="45.0" visibility="hidden">0</text><text class="pointLabel" id="tooltiptext4" x="221.66666666666666" y="45.0" visibility="hidden">2</text><text class="pointLabel" id="tooltiptext5" x="55.0" y="295.0" visibility="hidden">2</text><text class="pointLabel" id="tooltiptext6" x="55.0" y="545.0" visibility="hidden">2</text><text class="pointLabel" id="tooltiptext7" x="221.66666666666666" y="545.0" visibility="hidden">0</text>
+      Sorry, your browser does not support inline SVG.
+    </svg>

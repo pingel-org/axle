@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<svg version="1.1" width="300.0" height="300.0" onload="init(evt)" xmlns="http://www.w3.org/2000/svg">
+      <style>.caption {
+  font-size: 14px;
+  font-family: Georgia, serif;
+}
+</style>
+      <script type="text/ecmascript"><![CDATA[
+function init(evt) {
+  if ( window.svgDocument == null ) {
+    svgDocument = evt.target.ownerDocument;
+  }
+}
+
+function RectHover(evt, i, c) {
+  rect = svgDocument.getElementById('rect' + i);
+  if( c != null ) {
+    rect.setAttributeNS(null, "fill", c)  
+  }
+  tooltiptext = svgDocument.getElementById('tooltiptext' + i);
+  tooltipbg = svgDocument.getElementById('tooltipbg' + i);
+  if( tooltipbg != null) {
+    tbb = tooltiptext.getBBox();
+    tooltipbg.setAttributeNS(null, "width", tbb.width);
+    tooltipbg.setAttributeNS(null, "height", tbb.height);
+    tooltipbg.setAttributeNS(null, "x", tbb.x);
+    tooltipbg.setAttributeNS(null, "y", tbb.y);
+    tooltipbg.setAttributeNS(null, "visibility", "visible");
+  }
+  tooltiptext.setAttributeNS(null,"visibility","visible");
+}
+
+function RectUnhover(evt, i, c) {
+  rect = svgDocument.getElementById('rect' + i);
+  if( c != null ) {
+    rect.setAttributeNS(null, "fill", c)  
+  }
+  tooltiptext = svgDocument.getElementById('tooltiptext' + i);
+  tooltiptext.setAttributeNS(null,"visibility","hidden");
+  tooltipbg = svgDocument.getElementById('tooltipbg' + i);
+  if( tooltipbg != null ) {
+    tooltipbg.setAttributeNS(null,"visibility","hidden");
+  }
+}
+]]></script>
+      <line x1="127.032362725782" y1="211.42110175487215" x2="92.25706984343874" y2="189.74283420435683" stroke="rgb(0,0,0)" stroke-width="1"/><line x1="234.50173937196925" y1="232.56418066368389" x2="127.032362725782" y2="211.42110175487215" stroke="rgb(0,0,0)" stroke-width="1"/><line x1="234.50173937196925" y1="232.56418066368389" x2="92.25706984343874" y2="189.74283420435683" stroke="rgb(0,0,0)" stroke-width="1"/><line x1="92.25706984343874" y1="189.74283420435683" x2="190.85078393970895" y2="19.591054957003195" stroke="rgb(0,0,0)" stroke-width="1"/><line x1="190.85078393970895" y1="19.591054957003195" x2="234.50173937196925" y2="232.56418066368389" stroke="rgb(0,0,0)" stroke-width="1"/><line x1="190.85078393970895" y1="19.591054957003195" x2="127.032362725782" y2="211.42110175487215" stroke="rgb(0,0,0)" stroke-width="1"/><polygon points="10,0 20,3 20,-3" fill="black" transform="translate(92.25706984343874,189.74283420435683) rotate(31.938642196371944)"/><polygon points="10,0 20,3 20,-3" fill="black" transform="translate(127.032362725782,211.42110175487215) rotate(11.129991117499173)"/><polygon points="10,0 20,3 20,-3" fill="black" transform="translate(92.25706984343874,189.74283420435683) rotate(16.753900222638748)"/><polygon points="10,0 20,3 20,-3" fill="black" transform="translate(190.85078393970895,19.591054957003195) rotate(120.08996211497725)"/><polygon points="10,0 20,3 20,-3" fill="black" transform="translate(234.50173937196925,232.56418066368389) rotate(258.41707743122953)"/><polygon points="10,0 20,3 20,-3" fill="black" transform="translate(127.032362725782,211.42110175487215) rotate(288.4013602056157)"/><circle cx="190.85078393970895" cy="19.591054957003195" r="10" fill="rgb(0,255,0)" stroke="rgb(0,0,0)" stroke-width="1"/><circle cx="234.50173937196925" cy="232.56418066368389" r="10" fill="rgb(0,255,0)" stroke="rgb(0,0,0)" stroke-width="1"/><circle cx="127.032362725782" cy="211.42110175487215" r="10" fill="rgb(0,255,0)" stroke="rgb(0,0,0)" stroke-width="1"/><circle cx="92.25706984343874" cy="189.74283420435683" r="10" fill="rgb(0,255,0)" stroke="rgb(0,0,0)" stroke-width="1"/><text text-anchor="middle" alignment-baseline="middle" x="190.85078393970895" y="19.591054957003195" fill="rgb(0,0,0)" font-size="12">a</text><text text-anchor="middle" alignment-baseline="middle" x="234.50173937196925" y="232.56418066368389" fill="rgb(0,0,0)" font-size="12">b</text><text text-anchor="middle" alignment-baseline="middle" x="127.032362725782" y="211.42110175487215" fill="rgb(0,0,0)" font-size="12">c</text><text text-anchor="middle" alignment-baseline="middle" x="92.25706984343874" y="189.74283420435683" fill="rgb(0,0,0)" font-size="12">d</text><text text-anchor="middle" alignment-baseline="middle" x="106.16718699637605" y="198.41414122456297" fill="rgb(0,0,0)" font-size="12">hi 3</text><text text-anchor="middle" alignment-baseline="middle" x="170.0201133842569" y="219.87833331839684" fill="rgb(0,0,0)" font-size="12">world 4</text><text text-anchor="middle" alignment-baseline="middle" x="149.15493765485095" y="206.87137278808765" fill="rgb(0,0,0)" font-size="12">hey 2</text><text text-anchor="middle" alignment-baseline="middle" x="151.41329830120085" y="87.65176665594466" fill="rgb(0,0,0)" font-size="12">earth 1</text><text text-anchor="middle" alignment-baseline="middle" x="217.04135719906512" y="147.3749303810116" fill="rgb(0,0,0)" font-size="12">hello 1</text><text text-anchor="middle" alignment-baseline="middle" x="152.55973121135278" y="134.68908303572456" fill="rgb(0,0,0)" font-size="12">! 7</text>
+      Sorry, your browser does not support inline SVG.
+    </svg>
