@@ -10,13 +10,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * latest released version badge
 * set mdocVariables with latest released version
 * update google analytics
+* simplify "Installation"
 * CNAME (www and root)
+
 * update publishing.txt
 * Create and publish code coverage reports
-
 * site-update.sh should be only a set of sbt commands (avoid moving png and svg files)
 * trigger site build via github action?
-* simplify "Installation"
 * ProbabilityModel.md:207 (mdoc generated code) method any2stringadd in object Predef is deprecated
 
 ## 0.6.3
