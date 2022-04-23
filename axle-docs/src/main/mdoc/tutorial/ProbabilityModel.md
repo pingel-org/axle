@@ -10,7 +10,7 @@ The capabilies are available via four typeclasses and one trait
 * Bayes
 * Monad (`cats.Monad`)
 
-Concrete number type are avoided in favor of structures from Abstract Algebra -- 
+Concrete number type are avoided in favor of structures from Abstract Algebra --
 primarily `Ring` and `Field`.
 These are represented as context bounds, usually passed implicitly.
 
