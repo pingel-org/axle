@@ -141,7 +141,7 @@
           <li class="level1"><a href="#visualization">Visualization</a></li>
           <li class="level1"><a href="#mathematics">Mathematics</a></li>
           <li class="level1"><a href="#types-and-axioms">Types and Axioms</a></li>
-          <li class="level1"><a href="#docs-site-ci-cd">Docs, Site, CI/CD</a></li>
+          <li class="level1"><a href="#site">Site</a></li>
         </ul>
         
         <p class="footer"></p>
@@ -154,17 +154,11 @@
         
         <h2 id="cicd" class="section"><a class="anchor-link left" href="#cicd"><i class="icofont-laika">&#xef71;</i></a>CICD</h2>
         <ul>
-          <li>where are the svg files?</li>
-        </ul>
-        <ul>
-          <li>use sbt-site&#39;s &quot;mappings&quot;?</li>
-        </ul>
-        <ul>
           <li>
-            <p>site-update.sh should be only a set of sbt commands</p>
+            <p>Missing Home icon at top (include .woff and .woff2 files?)</p>
           </li>
           <li>
-            <p>extend README or whatever to describe site structure</p>
+            <p>README.md and directory.conf to structure site</p>
           </li>
           <li>
             <p>fix internal links</p>
@@ -177,6 +171,12 @@
           </li>
           <li>
             <p>Timestamp / version to site footer</p>
+          </li>
+          <li>
+            <p>site-update.sh should be only a set of sbt commands (avoid moving png and svg files)</p>
+          </li>
+          <li>
+            <p>trigger site build via github action?</p>
           </li>
           <li>
             <p>update google analytics</p>
@@ -715,44 +715,12 @@
           <li>Make the <code>Int</code> abstract in <code>KMeans{,Visualization}</code>, <code>LinearAlgebra</code>, etc</li>
         </ul>
         
-        <h2 id="docs-site-ci-cd" class="section"><a class="anchor-link left" href="#docs-site-ci-cd"><i class="icofont-laika">&#xef71;</i></a>Docs, Site, CI/CD</h2>
+        <h2 id="site" class="section"><a class="anchor-link left" href="#site"><i class="icofont-laika">&#xef71;</i></a>Site</h2>
         <ul>
-          <li>
-            <p>Friend of Spire</p>
-          </li>
-          <li>
-            <p>Experiment with pandoc</p>
-          </li>
-          <li>
-            <p>Use sbt-ci-release (rm sbt-release)</p>
-          </li>
-          <li>
-            <p>Configure makeSite to preview: previewFixedPort := Some(9999)</p>
-          </li>
-          <li>
-            <p>Copy css using makeSite (not update-docs.sh)</p>
-          </li>
-          <li>
-            <p>Fix markdown lint warnings</p>
-          </li>
-          <li>
-            <p>Figure out better way to reference images in docs</p>
-          </li>
-          <li>
-            <p>Site</p>
-          </li>
-        </ul>
-        <ul>
+          <li>Friend of Spire</li>
+          <li>Fix markdown lint warnings</li>
+          <li>Figure out better way to reference images in docs</li>
           <li>meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel</li>
-        </ul>
-        <ul>
-          <li>
-            Remove jekyll from publishing pipeline
-            <ul>
-              <li><a href="https://www.scala-sbt.org/sbt-site/publishing.html">sbt-site</a></li>
-              <li>sbt-s3</li>
-            </ul>
-          </li>
         </ul>
 
       </main>
