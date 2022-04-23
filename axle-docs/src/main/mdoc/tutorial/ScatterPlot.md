@@ -47,4 +47,4 @@ import cats.effect._
 plot.svg[IO]("scatter.svg").unsafeRunSync()
 ```
 
-<object data="/tutorial/images/scatter.svg" type="image/svg+xml" alt="scatter plot"/>
+![scatter plot](/tutorial/images/scatter.svg)
