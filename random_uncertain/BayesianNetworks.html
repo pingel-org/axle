@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Bayesian Networks</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="../css/main.scss" />
+    <script src="../helium/laika-helium.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="../index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="../RoadMap.html">Road Map</a></li>
+        <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
+        <li class="level1 nav-header">appendix</li>
+        <li class="level2"><a href="../appendix/Author.html">Author</a></li>
+        <li class="level2"><a href="../appendix/History.html">History</a></li>
+        <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
+        <li class="level2"><a href="../appendix/RoadMap.html">Road Map</a></li>
+        <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
+        <li class="level1 nav-header">bioinformatics</li>
+        <li class="level2"><a href="../bioinformatics/Bioinformatics.html">Bioinformatics</a></li>
+        <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
+        <li class="level2"><a href="../bioinformatics/SmithWaterman.html">Smith-Waterman</a></li>
+        <li class="level1 nav-header">chaos_theory</li>
+        <li class="level2"><a href="../chaos_theory/LogisticMap.html">Logistic Map</a></li>
+        <li class="level2"><a href="../chaos_theory/Mandelbrot.html">Mandelbrot Set</a></li>
+        <li class="level1 nav-header">fundamental</li>
+        <li class="level2"><a href="../fundamental/Algebra.html">Algebra</a></li>
+        <li class="level2"><a href="../fundamental/Graph.html">Graph</a></li>
+        <li class="level2"><a href="../fundamental/LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level2"><a href="../fundamental/Logic.html">Logic</a></li>
+        <li class="level2"><a href="../fundamental/PackageObject.html">Package Objects</a></li>
+        <li class="level1 nav-header">game_theory</li>
+        <li class="level2"><a href="../game_theory/GameTheory.html">Game Theory</a></li>
+        <li class="level2"><a href="../game_theory/MontyHall.html">Monty Hall</a></li>
+        <li class="level2"><a href="../game_theory/Poker.html">Poker</a></li>
+        <li class="level2"><a href="../game_theory/PrisonersDilemma.html">Prisoner&#39;s Dilemma</a></li>
+        <li class="level2"><a href="../game_theory/TicTacToe.html">Tic Tac Toe</a></li>
+        <li class="level1 nav-header">introduction</li>
+        <li class="level2"><a href="../introduction/Architecture.html">Architecture</a></li>
+        <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
+        <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
+        <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
+        <li class="level2"><a href="../introduction/Spokes.html">Spokes</a></li>
+        <li class="level1 nav-header">machine_learning</li>
+        <li class="level2"><a href="../machine_learning/ClusterFederalistPapers.html">Clusters Federalist Papers</a></li>
+        <li class="level2"><a href="../machine_learning/ClusterIrises.html">Cluster Irises</a></li>
+        <li class="level2"><a href="../machine_learning/GeneticAlgorithms.html">Genetic Algorithms</a></li>
+        <li class="level2"><a href="../machine_learning/LinearRegression.html">Linear Regression</a></li>
+        <li class="level2"><a href="../machine_learning/MachineLearning.html">Machine Learning</a></li>
+        <li class="level2"><a href="../machine_learning/NaiveBayesClassifier.html">Naive Bayes</a></li>
+        <li class="level1 nav-header">math</li>
+        <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
+        <li class="level2"><a href="../math/Fibonacci.html">Fibonacci</a></li>
+        <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
+        <li class="level2"><a href="../math/MeanAveragePrecisionAtK.html">Mean Average Precision at K</a></li>
+        <li class="level2"><a href="../math/Pi.html">Pi</a></li>
+        <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
+        <li class="level1 nav-header">random_uncertain</li>
+        <li class="level2 active"><a href="#">Bayesian Networks</a></li>
+        <li class="level2"><a href="CoinEntropy.html">Entropy of a Biased Coin</a></li>
+        <li class="level2"><a href="InformationTheory.html">Information Theory</a></li>
+        <li class="level2"><a href="ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
+        <li class="level2"><a href="ProbabilityModel.html">Probability Model</a></li>
+        <li class="level2"><a href="ReservoirSampling.html">Reservoir Sampling</a></li>
+        <li class="level2"><a href="RootMeanSquareDeviation.html">Root-mean-square deviation</a></li>
+        <li class="level2"><a href="Statistics.html">Statistics</a></li>
+        <li class="level1 nav-header">text</li>
+        <li class="level2"><a href="../text/AngluinLearner.html">Angluin Learner</a></li>
+        <li class="level2"><a href="../text/EditDistance.html">Edit Distance</a></li>
+        <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
+        <li class="level2"><a href="../text/LanguageModules.html">Language Modules</a></li>
+        <li class="level2"><a href="../text/Linguistics.html">Linguistics</a></li>
+        <li class="level2"><a href="../text/NaturalLanguageProcessing.html">Natural Language Processing</a></li>
+        <li class="level2"><a href="../text/Python2Json.html">python2json.py</a></li>
+        <li class="level2"><a href="../text/VectorSpaceModel.html">Vector Space Model</a></li>
+        <li class="level1 nav-header">units</li>
+        <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
+        <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
+        <li class="level1 nav-header">visualization</li>
+        <li class="level2"><a href="../visualization/BarCharts.html">Bar Charts</a></li>
+        <li class="level2"><a href="../visualization/GroupedBarCharts.html">Grouped Bar Charts</a></li>
+        <li class="level2"><a href="../visualization/PixelatedColoredArea.html">Pixelated Colored Area</a></li>
+        <li class="level2"><a href="../visualization/Plots.html">Plots</a></li>
+        <li class="level2"><a href="../visualization/ScatterPlot.html">Scatter Plot</a></li>
+        <li class="level2"><a href="../visualization/Visualize.html">Visualize</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Bayesian Networks</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#alarm-example">Alarm Example</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="bayesian-networks" class="title">Bayesian Networks</h1>
+        <p>See the Wikipedia page on <a href="https://en.wikipedia.org/wiki/Bayesian_network">Bayesian networks</a></p>
+        
+        <h2 id="alarm-example" class="section"><a class="anchor-link left" href="#alarm-example"><i class="icofont-laika">&#xef71;</i></a>Alarm Example</h2>
+        <p>Define random variables</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">probability</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">bools</span><span> = </span><span class="type-name">Vector</span><span>(</span><span class="boolean-literal">true</span><span>, </span><span class="boolean-literal">false</span><span>)
+</span><span class="comment">// bools: Vector[Boolean] = Vector(true, false)
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="type-name">B</span><span> = </span><span class="type-name">Variable</span><span>[</span><span class="type-name">Boolean</span><span>](</span><span class="string-literal">&quot;Burglary&quot;</span><span>)
+</span><span class="comment">// B: Variable[Boolean] = Variable(name = &quot;Burglary&quot;)
+</span><span class="keyword">val</span><span> </span><span class="type-name">E</span><span> = </span><span class="type-name">Variable</span><span>[</span><span class="type-name">Boolean</span><span>](</span><span class="string-literal">&quot;Earthquake&quot;</span><span>)
+</span><span class="comment">// E: Variable[Boolean] = Variable(name = &quot;Earthquake&quot;)
+</span><span class="keyword">val</span><span> </span><span class="type-name">A</span><span> = </span><span class="type-name">Variable</span><span>[</span><span class="type-name">Boolean</span><span>](</span><span class="string-literal">&quot;Alarm&quot;</span><span>)
+</span><span class="comment">// A: Variable[Boolean] = Variable(name = &quot;Alarm&quot;)
+</span><span class="keyword">val</span><span> </span><span class="type-name">J</span><span> = </span><span class="type-name">Variable</span><span>[</span><span class="type-name">Boolean</span><span>](</span><span class="string-literal">&quot;John Calls&quot;</span><span>)
+</span><span class="comment">// J: Variable[Boolean] = Variable(name = &quot;John Calls&quot;)
+</span><span class="keyword">val</span><span> </span><span class="type-name">M</span><span> = </span><span class="type-name">Variable</span><span>[</span><span class="type-name">Boolean</span><span>](</span><span class="string-literal">&quot;Mary Calls&quot;</span><span>)
+</span><span class="comment">// M: Variable[Boolean] = Variable(name = &quot;Mary Calls&quot;)</span></code></pre>
+        <p>Define Factor for each variable</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">bFactor</span><span> =
+  </span><span class="type-name">Factor</span><span>(</span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> -&gt; </span><span class="identifier">bools</span><span>), </span><span class="type-name">Map</span><span>(
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">999</span><span>, </span><span class="number-literal">1000</span><span>)))
+</span><span class="comment">// bFactor: Factor[Boolean, Rational] = Factor(
+//   variablesWithValues = Vector(
+//     (Variable(name = &quot;Burglary&quot;), Vector(true, false))
+//   ),
+//   probabilities = Map(
+//     Vector(RegionEq(x = true)) -&gt; 1/1000,
+//     Vector(RegionEq(x = false)) -&gt; 999/1000
+//   )
+// )
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">eFactor</span><span> =
+  </span><span class="type-name">Factor</span><span>(</span><span class="type-name">Vector</span><span>(</span><span class="type-name">E</span><span> -&gt; </span><span class="identifier">bools</span><span>), </span><span class="type-name">Map</span><span>(
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">500</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">499</span><span>, </span><span class="number-literal">500</span><span>)))
+</span><span class="comment">// eFactor: Factor[Boolean, Rational] = Factor(
+//   variablesWithValues = Vector(
+//     (Variable(name = &quot;Earthquake&quot;), Vector(true, false))
+//   ),
+//   probabilities = Map(
+//     Vector(RegionEq(x = true)) -&gt; 1/500,
+//     Vector(RegionEq(x = false)) -&gt; 499/500
+//   )
+// )
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">aFactor</span><span> =
+  </span><span class="type-name">Factor</span><span>(</span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> -&gt; </span><span class="identifier">bools</span><span>, </span><span class="type-name">E</span><span> -&gt; </span><span class="identifier">bools</span><span>, </span><span class="type-name">A</span><span> -&gt; </span><span class="identifier">bools</span><span>), </span><span class="type-name">Map</span><span>(
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">999</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">940</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">60</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">290</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">710</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">950</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">50</span><span>, </span><span class="number-literal">1000</span><span>)))
+</span><span class="comment">// aFactor: Factor[Boolean, Rational] = Factor(
+//   variablesWithValues = Vector(
+//     (Variable(name = &quot;Burglary&quot;), Vector(true, false)),
+//     (Variable(name = &quot;Earthquake&quot;), Vector(true, false)),
+//     (Variable(name = &quot;Alarm&quot;), Vector(true, false))
+//   ),
+//   probabilities = HashMap(
+//     Vector(RegionEq(x = false), RegionEq(x = false), RegionEq(x = false)) -&gt; 999/1000,
+//     Vector(RegionEq(x = true), RegionEq(x = false), RegionEq(x = true)) -&gt; 47/50,
+//     Vector(RegionEq(x = true), RegionEq(x = true), RegionEq(x = false)) -&gt; 1/20,
+//     Vector(RegionEq(x = false), RegionEq(x = true), RegionEq(x = true)) -&gt; 29/100,
+//     Vector(RegionEq(x = true), RegionEq(x = false), RegionEq(x = false)) -&gt; 3/50,
+//     Vector(RegionEq(x = true), RegionEq(x = true), RegionEq(x = true)) -&gt; 19/20,
+//     Vector(RegionEq(x = false), RegionEq(x = false), RegionEq(x = true)) -&gt; 1/1000,
+//     Vector(RegionEq(x = false), RegionEq(x = true), RegionEq(x = false)) -&gt; 71/100
+//   )
+// )
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">jFactor</span><span> =
+  </span><span class="type-name">Factor</span><span>(</span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> -&gt; </span><span class="identifier">bools</span><span>, </span><span class="type-name">J</span><span> -&gt; </span><span class="identifier">bools</span><span>), </span><span class="type-name">Map</span><span>(
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">J</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">9</span><span>, </span><span class="number-literal">10</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">J</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">10</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">J</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">5</span><span>, </span><span class="number-literal">100</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">J</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">95</span><span>, </span><span class="number-literal">100</span><span>)))
+</span><span class="comment">// jFactor: Factor[Boolean, Rational] = Factor(
+//   variablesWithValues = Vector(
+//     (Variable(name = &quot;Alarm&quot;), Vector(true, false)),
+//     (Variable(name = &quot;John Calls&quot;), Vector(true, false))
+//   ),
+//   probabilities = Map(
+//     Vector(RegionEq(x = true), RegionEq(x = true)) -&gt; 9/10,
+//     Vector(RegionEq(x = true), RegionEq(x = false)) -&gt; 1/10,
+//     Vector(RegionEq(x = false), RegionEq(x = true)) -&gt; 1/20,
+//     Vector(RegionEq(x = false), RegionEq(x = false)) -&gt; 19/20
+//   )
+// )
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">mFactor</span><span> =
+  </span><span class="type-name">Factor</span><span>(</span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> -&gt; </span><span class="identifier">bools</span><span>, </span><span class="type-name">M</span><span> -&gt; </span><span class="identifier">bools</span><span>), </span><span class="type-name">Map</span><span>(
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">M</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">7</span><span>, </span><span class="number-literal">10</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">M</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">3</span><span>, </span><span class="number-literal">10</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">M</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">100</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">M</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">99</span><span>, </span><span class="number-literal">100</span><span>)))
+</span><span class="comment">// mFactor: Factor[Boolean, Rational] = Factor(
+//   variablesWithValues = Vector(
+//     (Variable(name = &quot;Alarm&quot;), Vector(true, false)),
+//     (Variable(name = &quot;Mary Calls&quot;), Vector(true, false))
+//   ),
+//   probabilities = Map(
+//     Vector(RegionEq(x = true), RegionEq(x = true)) -&gt; 7/10,
+//     Vector(RegionEq(x = true), RegionEq(x = false)) -&gt; 3/10,
+//     Vector(RegionEq(x = false), RegionEq(x = true)) -&gt; 1/100,
+//     Vector(RegionEq(x = false), RegionEq(x = false)) -&gt; 99/100
+//   )
+// )</span></code></pre>
+        <p>Arrange into a graph</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">pgm</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">DirectedSparseGraph</span><span>
+
+</span><span class="comment">// edges: ba, ea, aj, am
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">bn</span><span>: </span><span class="type-name">BayesianNetwork</span><span>[</span><span class="type-name">Boolean</span><span>, </span><span class="type-name">Rational</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>[</span><span class="type-name">BayesianNetworkNode</span><span>[</span><span class="type-name">Boolean</span><span>, </span><span class="type-name">Rational</span><span>], </span><span class="type-name">Edge</span><span>]] =
+  </span><span class="type-name">BayesianNetwork</span><span>.</span><span class="identifier">withGraphK2</span><span>[</span><span class="type-name">Boolean</span><span>, </span><span class="type-name">Rational</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>](
+    </span><span class="type-name">Map</span><span>(
+      </span><span class="type-name">B</span><span> -&gt; </span><span class="identifier">bFactor</span><span>,
+      </span><span class="type-name">E</span><span> -&gt; </span><span class="identifier">eFactor</span><span>,
+      </span><span class="type-name">A</span><span> -&gt; </span><span class="identifier">aFactor</span><span>,
+      </span><span class="type-name">J</span><span> -&gt; </span><span class="identifier">jFactor</span><span>,
+      </span><span class="type-name">M</span><span> -&gt; </span><span class="identifier">mFactor</span><span>))
+</span><span class="comment">// bn: BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]] = BayesianNetwork(
+//   variableFactorMap = HashMap(
+//     Variable(name = &quot;John Calls&quot;) -&gt; Factor(
+//       variablesWithValues = Vector(
+//         (Variable(name = &quot;Alarm&quot;), Vector(true, false)),
+//         (Variable(name = &quot;John Calls&quot;), Vector(true, false))
+//       ),
+//       probabilities = Map(
+//         Vector(RegionEq(x = true), RegionEq(x = true)) -&gt; 9/10,
+//         Vector(RegionEq(x = true), RegionEq(x = false)) -&gt; 1/10,
+//         Vector(RegionEq(x = false), RegionEq(x = true)) -&gt; 1/20,
+//         Vector(RegionEq(x = false), RegionEq(x = false)) -&gt; 19/20
+//       )
+//     ),
+//     Variable(name = &quot;Mary Calls&quot;) -&gt; Factor(
+//       variablesWithValues = Vector(
+//         (Variable(name = &quot;Alarm&quot;), Vector(true, false)),
+//         (Variable(name = &quot;Mary Calls&quot;), Vector(true, false))
+//       ),
+//       probabilities = Map(
+//         Vector(RegionEq(x = true), RegionEq(x = true)) -&gt; 7/10,
+//         Vector(RegionEq(x = true), RegionEq(x = false)) -&gt; 3/10,
+//         Vector(RegionEq(x = false), RegionEq(x = true)) -&gt; 1/100,
+//         Vector(RegionEq(x = false), RegionEq(x = false)) -&gt; 99/100
+//       )
+//     ),
+//     Variable(name = &quot;Alarm&quot;) -&gt; Factor(
+//       variablesWithValues = Vector(
+//         (Variable(name = &quot;Burglary&quot;), Vector(true, false)),
+//         (Variable(name = &quot;Earthquake&quot;), Vector(true, false)),
+//         (Variable(name = &quot;Alarm&quot;), Vector(true, false))
+//       ),
+//       probabilities = HashMap(
+//         Vector(RegionEq(x = false), RegionEq(x = false), RegionEq(x = false)) -&gt; 999/1000,
+//         Vector(RegionEq(x = true), RegionEq(x = false), RegionEq(x = true)) -&gt; 47/50,
+//         Vector(RegionEq(x = true), RegionEq(x = true), RegionEq(x = false)) -&gt; 1/20,
+//         Vector(RegionEq(x = false), RegionEq(x = true), RegionEq(x = true)) -&gt; 29/100,
+//         Vector(RegionEq(x = true), RegionEq(x = false), RegionEq(x = false)) -&gt; 3/50,
+//         Vector(RegionEq(x = true), RegionEq(x = true), RegionEq(x = true)) -&gt; 19/20,
+//         Vector(RegionEq(x = false), RegionEq(x = false), RegionEq(x = true)) -&gt; 1/1000,
+//         Vector(RegionEq(x = false), RegionEq(x = true), RegionEq(x = false)) -&gt; 71/100
+// ...</span></code></pre>
+        <p>Create an SVG visualization</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">bnVis</span><span>  = </span><span class="type-name">BayesianNetworkVisualization</span><span>(</span><span class="identifier">bn</span><span>, </span><span class="number-literal">1000</span><span>, </span><span class="number-literal">1000</span><span>, </span><span class="number-literal">20</span><span>)
+</span><span class="comment">// bnVis: BayesianNetworkVisualization[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNode[Boolean, Rational], Edge]] = BayesianNetworkVisualization(
+//   bn = BayesianNetwork(
+//     variableFactorMap = HashMap(
+//       Variable(name = &quot;John Calls&quot;) -&gt; Factor(
+//         variablesWithValues = Vector(
+//           (Variable(name = &quot;Alarm&quot;), Vector(true, false)),
+//           (Variable(name = &quot;John Calls&quot;), Vector(true, false))
+//         ),
+//         probabilities = Map(
+//           Vector(RegionEq(x = true), RegionEq(x = true)) -&gt; 9/10,
+//           Vector(RegionEq(x = true), RegionEq(x = false)) -&gt; 1/10,
+//           Vector(RegionEq(x = false), RegionEq(x = true)) -&gt; 1/20,
+//           Vector(RegionEq(x = false), RegionEq(x = false)) -&gt; 19/20
+//         )
+//       ),
+//       Variable(name = &quot;Mary Calls&quot;) -&gt; Factor(
+//         variablesWithValues = Vector(
+//           (Variable(name = &quot;Alarm&quot;), Vector(true, false)),
+//           (Variable(name = &quot;Mary Calls&quot;), Vector(true, false))
+//         ),
+//         probabilities = Map(
+//           Vector(RegionEq(x = true), RegionEq(x = true)) -&gt; 7/10,
+//           Vector(RegionEq(x = true), RegionEq(x = false)) -&gt; 3/10,
+//           Vector(RegionEq(x = false), RegionEq(x = true)) -&gt; 1/100,
+//           Vector(RegionEq(x = false), RegionEq(x = false)) -&gt; 99/100
+//         )
+//       ),
+//       Variable(name = &quot;Alarm&quot;) -&gt; Factor(
+//         variablesWithValues = Vector(
+//           (Variable(name = &quot;Burglary&quot;), Vector(true, false)),
+//           (Variable(name = &quot;Earthquake&quot;), Vector(true, false)),
+//           (Variable(name = &quot;Alarm&quot;), Vector(true, false))
+//         ),
+//         probabilities = HashMap(
+//           Vector(RegionEq(x = false), RegionEq(x = false), RegionEq(x = false)) -&gt; 999/1000,
+//           Vector(RegionEq(x = true), RegionEq(x = false), RegionEq(x = true)) -&gt; 47/50,
+//           Vector(RegionEq(x = true), RegionEq(x = true), RegionEq(x = false)) -&gt; 1/20,
+//           Vector(RegionEq(x = false), RegionEq(x = true), RegionEq(x = true)) -&gt; 29/100,
+//           Vector(RegionEq(x = true), RegionEq(x = false), RegionEq(x = false)) -&gt; 3/50,
+//           Vector(RegionEq(x = true), RegionEq(x = true), RegionEq(x = true)) -&gt; 19/20,
+//           Vector(RegionEq(x = false), RegionEq(x = false), RegionEq(x = true)) -&gt; 1/1000,
+//           Vector(RegionEq(x = false), RegionEq(x = true), RegionEq(x = false)) -...</span></code></pre>
+        <p>Render as SVG file</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">bnVis</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/alarm_bayes.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/alarm_bayes.svg" alt="alarm bayes network"></p>
+        <p>The network can be used to compute the joint probability table:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">showRational</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">jpt</span><span> = </span><span class="identifier">bn</span><span>.</span><span class="identifier">jointProbabilityTable</span><span>
+</span><span class="comment">// jpt: Factor[Boolean, Rational] = Factor(
+//   variablesWithValues = Vector(
+//     (Variable(name = &quot;John Calls&quot;), Vector(true, false)),
+//     (Variable(name = &quot;Alarm&quot;), Vector(true, false)),
+//     (Variable(name = &quot;Earthquake&quot;), Vector(true, false)),
+//     (Variable(name = &quot;Burglary&quot;), Vector(true, false)),
+//     (Variable(name = &quot;Mary Calls&quot;), Vector(true, false))
+//   ),
+//   probabilities = HashMap(
+//     Vector(
+//       RegionEq(x = true),
+//       RegionEq(x = true),
+//       RegionEq(x = true),
+//       RegionEq(x = true),
+//       RegionEq(x = true)
+//     ) -&gt; 1197/1000000000,
+//     Vector(
+//       RegionEq(x = true),
+//       RegionEq(x = false),
+//       RegionEq(x = true),
+//       RegionEq(x = true),
+//       RegionEq(x = true)
+//     ) -&gt; 1/20000000000,
+//     Vector(
+//       RegionEq(x = false),
+//       RegionEq(x = false),
+//       RegionEq(x = false),
+//       RegionEq(x = false),
+//       RegionEq(x = true)
+//     ) -&gt; 9462047481/1000000000000,
+//     Vector(
+//       RegionEq(x = false),
+//       RegionEq(x = true),
+//       RegionEq(x = false),
+//       RegionEq(x = true),
+//       RegionEq(x = false)
+//     ) -&gt; 70359/2500000000,
+//     Vector(
+//       RegionEq(x = true),
+//       RegionEq(x = true),
+//       RegionEq(x = false),
+//       RegionEq(x = false),
+//       RegionEq(x = true)
+//     ) -&gt; 31405563/50000000000,
+//     Vector(
+//       RegionEq(x = true),
+//       RegionEq(x = true),
+//       RegionEq(x = false),
+//       RegionEq(x = true),
+// ...
+</span><span>
+</span><span class="identifier">jpt</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res1: String = &quot;&quot;&quot;John Calls Alarm Earthquake Burglary Mary Calls
+// true       true  true       true     true       1197/1000000000
+// true       true  true       true     false      513/1000000000
+// true       true  true       false    true       1825173/5000000000
+// true       true  true       false    false      782217/5000000000
+// true       true  false      true     true       1477539/2500000000
+// true       true  false      true     false      633231/2500000000
+// true       true  false      false    true       31405563/50000000000
+// true       true  false      false    false      13459527/50000000000
+// true       false true       true     true       1/20000000000
+// true       false true       true     false      99/20000000000
+// true       false true       false    true       70929/100000000000
+// true       false true       false    false      7021971/100000000000
+// true       false false      true     true       1497/50000000000
+// true       false false      true     false      148203/50000000000
+// true       false false      false    true       498002499/1000000000000
+// true       false false      false    false      49302247401/1000000000000
+// false      true  true       true     true       133/1000000000
+// false      true  true       true     false      57/1000000000
+// false      true  true       false    true       202797/5000000000
+// false      true  true       false    false      86913/5000000000
+// false      true  false      true     true       164171/2500000000
+// false      true  false      true     false      70359/2500000000
+// false      true  false      false    true       3489507/50000000000
+// false      true  false      false    false      1495503/50000000000
+// false      false true       true     true       19/20000000000
+// false      false true       true     false      1881/20000000000
+// false      false true       false    true       1347651/100000000000
+// false      false true       false    false      133417449/100000000000
+// false      false false      true     true       28443/50000000000
+// false      false false      true     false      2815857/50000000000
+// false      false false      false    true       9462047481/1000000000000
+// false      false false      false    false      936742700619/1000000000000&quot;&quot;&quot;</span></code></pre>
+        <p>Variables can be summed out of the factor:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">jpt</span><span>.Σ(</span><span class="type-name">M</span><span>).Σ(</span><span class="type-name">J</span><span>).Σ(</span><span class="type-name">A</span><span>).Σ(</span><span class="type-name">B</span><span>).Σ(</span><span class="type-name">E</span><span>)
+</span><span class="comment">// res2: Factor[Boolean, Rational] = Factor(
+//   variablesWithValues = Vector(),
+//   probabilities = Map(Vector() -&gt; 1)
+// )</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">jpt</span><span>.</span><span class="identifier">sumOut</span><span>(</span><span class="type-name">M</span><span>).</span><span class="identifier">sumOut</span><span>(</span><span class="type-name">J</span><span>).</span><span class="identifier">sumOut</span><span>(</span><span class="type-name">A</span><span>).</span><span class="identifier">sumOut</span><span>(</span><span class="type-name">B</span><span>).</span><span class="identifier">sumOut</span><span>(</span><span class="type-name">E</span><span>)
+</span><span class="comment">// res3: Factor[Boolean, Rational] = Factor(
+//   variablesWithValues = Vector(),
+//   probabilities = Map(Vector() -&gt; 1)
+// )</span></code></pre>
+        <p>Multiplication of factors also works:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">multiplicativeSemigroupOps</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">f</span><span> = (</span><span class="identifier">bn</span><span>.</span><span class="identifier">factorFor</span><span>(</span><span class="type-name">A</span><span>) * </span><span class="identifier">bn</span><span>.</span><span class="identifier">factorFor</span><span>(</span><span class="type-name">B</span><span>)) * </span><span class="identifier">bn</span><span>.</span><span class="identifier">factorFor</span><span>(</span><span class="type-name">E</span><span>)
+</span><span class="comment">// f: Factor[Boolean, Rational] = Factor(
+//   variablesWithValues = Vector(
+//     (Variable(name = &quot;Burglary&quot;), Vector(true, false)),
+//     (Variable(name = &quot;Earthquake&quot;), Vector(true, false)),
+//     (Variable(name = &quot;Alarm&quot;), Vector(true, false))
+//   ),
+//   probabilities = HashMap(
+//     Vector(RegionEq(x = false), RegionEq(x = false), RegionEq(x = false)) -&gt; 498002499/500000000,
+//     Vector(RegionEq(x = true), RegionEq(x = false), RegionEq(x = true)) -&gt; 23453/25000000,
+//     Vector(RegionEq(x = true), RegionEq(x = true), RegionEq(x = false)) -&gt; 1/10000000,
+//     Vector(RegionEq(x = false), RegionEq(x = true), RegionEq(x = true)) -&gt; 28971/50000000,
+//     Vector(RegionEq(x = true), RegionEq(x = false), RegionEq(x = false)) -&gt; 1497/25000000,
+//     Vector(RegionEq(x = true), RegionEq(x = true), RegionEq(x = true)) -&gt; 19/10000000,
+//     Vector(RegionEq(x = false), RegionEq(x = false), RegionEq(x = true)) -&gt; 498501/500000000,
+//     Vector(RegionEq(x = false), RegionEq(x = true), RegionEq(x = false)) -&gt; 70929/50000000
+//   )
+// )
+</span><span>
+</span><span class="identifier">f</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res4: String = &quot;&quot;&quot;Burglary Earthquake Alarm
+// true     true       true  19/10000000
+// true     true       false 1/10000000
+// true     false      true  23453/25000000
+// true     false      false 1497/25000000
+// false    true       true  28971/50000000
+// false    true       false 70929/50000000
+// false    false      true  498501/500000000
+// false    false      false 498002499/500000000&quot;&quot;&quot;</span></code></pre>
+        <p>Markov assumptions:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">bn</span><span>.</span><span class="identifier">markovAssumptionsFor</span><span>(</span><span class="type-name">M</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res5: String = &quot;I({Mary Calls}, {Alarm}, {John Calls, Earthquake, Burglary})&quot;</span></code></pre>
+        <p>This is read as &quot;M is independent of E, B, and J given A&quot;.</p>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

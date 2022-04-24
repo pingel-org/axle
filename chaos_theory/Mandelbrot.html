@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Mandelbrot Set</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="../css/main.scss" />
+    <script src="../helium/laika-helium.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="../index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="../RoadMap.html">Road Map</a></li>
+        <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
+        <li class="level1 nav-header">appendix</li>
+        <li class="level2"><a href="../appendix/Author.html">Author</a></li>
+        <li class="level2"><a href="../appendix/History.html">History</a></li>
+        <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
+        <li class="level2"><a href="../appendix/RoadMap.html">Road Map</a></li>
+        <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
+        <li class="level1 nav-header">bioinformatics</li>
+        <li class="level2"><a href="../bioinformatics/Bioinformatics.html">Bioinformatics</a></li>
+        <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
+        <li class="level2"><a href="../bioinformatics/SmithWaterman.html">Smith-Waterman</a></li>
+        <li class="level1 nav-header">chaos_theory</li>
+        <li class="level2"><a href="LogisticMap.html">Logistic Map</a></li>
+        <li class="level2 active"><a href="#">Mandelbrot Set</a></li>
+        <li class="level1 nav-header">fundamental</li>
+        <li class="level2"><a href="../fundamental/Algebra.html">Algebra</a></li>
+        <li class="level2"><a href="../fundamental/Graph.html">Graph</a></li>
+        <li class="level2"><a href="../fundamental/LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level2"><a href="../fundamental/Logic.html">Logic</a></li>
+        <li class="level2"><a href="../fundamental/PackageObject.html">Package Objects</a></li>
+        <li class="level1 nav-header">game_theory</li>
+        <li class="level2"><a href="../game_theory/GameTheory.html">Game Theory</a></li>
+        <li class="level2"><a href="../game_theory/MontyHall.html">Monty Hall</a></li>
+        <li class="level2"><a href="../game_theory/Poker.html">Poker</a></li>
+        <li class="level2"><a href="../game_theory/PrisonersDilemma.html">Prisoner&#39;s Dilemma</a></li>
+        <li class="level2"><a href="../game_theory/TicTacToe.html">Tic Tac Toe</a></li>
+        <li class="level1 nav-header">introduction</li>
+        <li class="level2"><a href="../introduction/Architecture.html">Architecture</a></li>
+        <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
+        <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
+        <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
+        <li class="level2"><a href="../introduction/Spokes.html">Spokes</a></li>
+        <li class="level1 nav-header">machine_learning</li>
+        <li class="level2"><a href="../machine_learning/ClusterFederalistPapers.html">Clusters Federalist Papers</a></li>
+        <li class="level2"><a href="../machine_learning/ClusterIrises.html">Cluster Irises</a></li>
+        <li class="level2"><a href="../machine_learning/GeneticAlgorithms.html">Genetic Algorithms</a></li>
+        <li class="level2"><a href="../machine_learning/LinearRegression.html">Linear Regression</a></li>
+        <li class="level2"><a href="../machine_learning/MachineLearning.html">Machine Learning</a></li>
+        <li class="level2"><a href="../machine_learning/NaiveBayesClassifier.html">Naive Bayes</a></li>
+        <li class="level1 nav-header">math</li>
+        <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
+        <li class="level2"><a href="../math/Fibonacci.html">Fibonacci</a></li>
+        <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
+        <li class="level2"><a href="../math/MeanAveragePrecisionAtK.html">Mean Average Precision at K</a></li>
+        <li class="level2"><a href="../math/Pi.html">Pi</a></li>
+        <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
+        <li class="level1 nav-header">random_uncertain</li>
+        <li class="level2"><a href="../random_uncertain/BayesianNetworks.html">Bayesian Networks</a></li>
+        <li class="level2"><a href="../random_uncertain/CoinEntropy.html">Entropy of a Biased Coin</a></li>
+        <li class="level2"><a href="../random_uncertain/InformationTheory.html">Information Theory</a></li>
+        <li class="level2"><a href="../random_uncertain/ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
+        <li class="level2"><a href="../random_uncertain/ProbabilityModel.html">Probability Model</a></li>
+        <li class="level2"><a href="../random_uncertain/ReservoirSampling.html">Reservoir Sampling</a></li>
+        <li class="level2"><a href="../random_uncertain/RootMeanSquareDeviation.html">Root-mean-square deviation</a></li>
+        <li class="level2"><a href="../random_uncertain/Statistics.html">Statistics</a></li>
+        <li class="level1 nav-header">text</li>
+        <li class="level2"><a href="../text/AngluinLearner.html">Angluin Learner</a></li>
+        <li class="level2"><a href="../text/EditDistance.html">Edit Distance</a></li>
+        <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
+        <li class="level2"><a href="../text/LanguageModules.html">Language Modules</a></li>
+        <li class="level2"><a href="../text/Linguistics.html">Linguistics</a></li>
+        <li class="level2"><a href="../text/NaturalLanguageProcessing.html">Natural Language Processing</a></li>
+        <li class="level2"><a href="../text/Python2Json.html">python2json.py</a></li>
+        <li class="level2"><a href="../text/VectorSpaceModel.html">Vector Space Model</a></li>
+        <li class="level1 nav-header">units</li>
+        <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
+        <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
+        <li class="level1 nav-header">visualization</li>
+        <li class="level2"><a href="../visualization/BarCharts.html">Bar Charts</a></li>
+        <li class="level2"><a href="../visualization/GroupedBarCharts.html">Grouped Bar Charts</a></li>
+        <li class="level2"><a href="../visualization/PixelatedColoredArea.html">Pixelated Colored Area</a></li>
+        <li class="level2"><a href="../visualization/Plots.html">Plots</a></li>
+        <li class="level2"><a href="../visualization/ScatterPlot.html">Scatter Plot</a></li>
+        <li class="level2"><a href="../visualization/Visualize.html">Visualize</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Mandelbrot Set</a></p>
+        
+        <ul class="nav-list">
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="mandelbrot-set" class="title">Mandelbrot Set</h1>
+        <p>See the wikipedia page on the <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot Set</a></p>
+        <p>First a couple imports:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>Define a function to compute the Mandelbrot velocity at point on the plane <code>(x, y)</code></p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@6d115ab7
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">f</span><span> = (</span><span class="identifier">x0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">x1</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y1</span><span>: </span><span class="type-name">Double</span><span>) =&gt; </span><span class="identifier">inMandelbrotSetAt</span><span>(</span><span class="number-literal">4d</span><span>, </span><span class="identifier">x0</span><span>, </span><span class="identifier">y0</span><span>, </span><span class="number-literal">1000</span><span>).</span><span class="identifier">getOrElse</span><span>(-</span><span class="number-literal">1</span><span>)
+</span><span class="comment">// f: (Double, Double, Double, Double) =&gt; Int = &lt;function4&gt;</span></code></pre>
+        <p>Import visualization package</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>Define a &quot;velocity to color&quot; function</p>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">colors</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">255</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">g</span><span> =&gt; </span><span class="type-name">Color</span><span>(</span><span class="number-literal">0</span><span>, </span><span class="identifier">g</span><span>, </span><span class="number-literal">255</span><span>)).</span><span class="identifier">toArray</span><span>
+</span><span class="comment">// colors: Array[Color] = Array(
+//   Color(r = 0, g = 0, b = 255),
+//   Color(r = 0, g = 1, b = 255),
+//   Color(r = 0, g = 2, b = 255),
+//   Color(r = 0, g = 3, b = 255),
+//   Color(r = 0, g = 4, b = 255),
+//   Color(r = 0, g = 5, b = 255),
+//   Color(r = 0, g = 6, b = 255),
+//   Color(r = 0, g = 7, b = 255),
+//   Color(r = 0, g = 8, b = 255),
+//   Color(r = 0, g = 9, b = 255),
+//   Color(r = 0, g = 10, b = 255),
+//   Color(r = 0, g = 11, b = 255),
+//   Color(r = 0, g = 12, b = 255),
+//   Color(r = 0, g = 13, b = 255),
+//   Color(r = 0, g = 14, b = 255),
+//   Color(r = 0, g = 15, b = 255),
+//   Color(r = 0, g = 16, b = 255),
+//   Color(r = 0, g = 17, b = 255),
+//   Color(r = 0, g = 18, b = 255),
+//   Color(r = 0, g = 19, b = 255),
+//   Color(r = 0, g = 20, b = 255),
+//   Color(r = 0, g = 21, b = 255),
+//   Color(r = 0, g = 22, b = 255),
+//   Color(r = 0, g = 23, b = 255),
+//   Color(r = 0, g = 24, b = 255),
+//   Color(r = 0, g = 25, b = 255),
+//   Color(r = 0, g = 26, b = 255),
+//   Color(r = 0, g = 27, b = 255),
+//   Color(r = 0, g = 28, b = 255),
+//   Color(r = 0, g = 29, b = 255),
+//   Color(r = 0, g = 30, b = 255),
+//   Color(r = 0, g = 31, b = 255),
+//   Color(r = 0, g = 32, b = 255),
+//   Color(r = 0, g = 33, b = 255),
+//   Color(r = 0, g = 34, b = 255),
+//   Color(r = 0, g = 35, b = 255),
+//   Color(r = 0, g = 36, b = 255),
+//   Color(r = 0, g = 37, b = 255),
+//   Color(r = 0, g = 38, b = 255),
+//   Color(r = 0, g = 39, b = 255),
+//   Color(r = 0, g = 40, b = 255),
+//   Color(r = 0, g = 41, b = 255),
+//   Color(r = 0, g = 42, b = 255),
+//   Color(r = 0, g = 43, b = 255),
+//   Color(r = 0, g = 44, b = 255),
+//   Color(r = 0, g = 45, b = 255),
+//   Color(r = 0, g = 46, b = 255),
+//   Color(r = 0, g = 47, b = 255),
+// ...
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">v2c</span><span> = (</span><span class="identifier">v</span><span>: </span><span class="type-name">Int</span><span>) =&gt; </span><span class="keyword">if</span><span>( </span><span class="identifier">v</span><span> == -</span><span class="number-literal">1</span><span> ) </span><span class="type-name">Color</span><span>.</span><span class="identifier">black</span><span> </span><span class="keyword">else</span><span> </span><span class="identifier">colors</span><span>((</span><span class="identifier">v</span><span>*</span><span class="number-literal">5</span><span>) % </span><span class="number-literal">256</span><span>)
+</span><span class="comment">// v2c: Int =&gt; Color = &lt;function1&gt;</span></code></pre>
+        <p>Define a <code>PixelatedColoredArea</code> to show a range of the Mandelbrot Set.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(</span><span class="identifier">f</span><span>, </span><span class="identifier">v2c</span><span>, </span><span class="number-literal">400</span><span>, </span><span class="number-literal">400</span><span>, </span><span class="number-literal">0.25d</span><span>, </span><span class="number-literal">0.45</span><span>, </span><span class="number-literal">0.50</span><span>, </span><span class="number-literal">0.70d</span><span>)
+</span><span class="comment">// pca: PixelatedColoredArea[Double, Double, Int] = PixelatedColoredArea(
+//   f = &lt;function4&gt;,
+//   c = &lt;function1&gt;,
+//   width = 400,
+//   height = 400,
+//   minX = 0.25,
+//   maxX = 0.45,
+//   minY = 0.5,
+//   maxY = 0.7
+// )</span></code></pre>
+        <p>Create PNG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">awt</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">pca</span><span>.</span><span class="identifier">png</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/mandelbrot.png&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()
+</span><span class="comment">// res0: Boolean = true</span></code></pre>
+        <p><img src="/images/mandelbrot.png" alt="Mandelbrot Set"></p>
+        <p>Some other parts of the set to explore:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(</span><span class="identifier">f</span><span>, </span><span class="identifier">v2c</span><span>, </span><span class="number-literal">1600</span><span>, </span><span class="number-literal">1600</span><span>, </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1d</span><span>, </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1d</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(</span><span class="identifier">f</span><span>, </span><span class="identifier">v2c</span><span>, </span><span class="number-literal">1600</span><span>, </span><span class="number-literal">1600</span><span>, </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">0.5</span><span>, </span><span class="number-literal">0.5</span><span>, </span><span class="number-literal">1d</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(</span><span class="identifier">f</span><span>, </span><span class="identifier">v2c</span><span>, </span><span class="number-literal">1600</span><span>, </span><span class="number-literal">1600</span><span>, </span><span class="number-literal">0.25d</span><span>, </span><span class="number-literal">0.5</span><span>, </span><span class="number-literal">0.5</span><span>, </span><span class="number-literal">0.75d</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(</span><span class="identifier">f</span><span>, </span><span class="identifier">v2c</span><span>, </span><span class="number-literal">3000</span><span>, </span><span class="number-literal">3000</span><span>, </span><span class="number-literal">0.20d</span><span>, </span><span class="number-literal">0.45</span><span>, </span><span class="number-literal">0.45</span><span>, </span><span class="number-literal">0.70d</span><span>)</span></code></pre>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

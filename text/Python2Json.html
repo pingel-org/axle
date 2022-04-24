@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>python2json.py</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="../css/main.scss" />
+    <script src="../helium/laika-helium.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="../index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="../RoadMap.html">Road Map</a></li>
+        <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
+        <li class="level1 nav-header">appendix</li>
+        <li class="level2"><a href="../appendix/Author.html">Author</a></li>
+        <li class="level2"><a href="../appendix/History.html">History</a></li>
+        <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
+        <li class="level2"><a href="../appendix/RoadMap.html">Road Map</a></li>
+        <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
+        <li class="level1 nav-header">bioinformatics</li>
+        <li class="level2"><a href="../bioinformatics/Bioinformatics.html">Bioinformatics</a></li>
+        <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
+        <li class="level2"><a href="../bioinformatics/SmithWaterman.html">Smith-Waterman</a></li>
+        <li class="level1 nav-header">chaos_theory</li>
+        <li class="level2"><a href="../chaos_theory/LogisticMap.html">Logistic Map</a></li>
+        <li class="level2"><a href="../chaos_theory/Mandelbrot.html">Mandelbrot Set</a></li>
+        <li class="level1 nav-header">fundamental</li>
+        <li class="level2"><a href="../fundamental/Algebra.html">Algebra</a></li>
+        <li class="level2"><a href="../fundamental/Graph.html">Graph</a></li>
+        <li class="level2"><a href="../fundamental/LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level2"><a href="../fundamental/Logic.html">Logic</a></li>
+        <li class="level2"><a href="../fundamental/PackageObject.html">Package Objects</a></li>
+        <li class="level1 nav-header">game_theory</li>
+        <li class="level2"><a href="../game_theory/GameTheory.html">Game Theory</a></li>
+        <li class="level2"><a href="../game_theory/MontyHall.html">Monty Hall</a></li>
+        <li class="level2"><a href="../game_theory/Poker.html">Poker</a></li>
+        <li class="level2"><a href="../game_theory/PrisonersDilemma.html">Prisoner&#39;s Dilemma</a></li>
+        <li class="level2"><a href="../game_theory/TicTacToe.html">Tic Tac Toe</a></li>
+        <li class="level1 nav-header">introduction</li>
+        <li class="level2"><a href="../introduction/Architecture.html">Architecture</a></li>
+        <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
+        <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
+        <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
+        <li class="level2"><a href="../introduction/Spokes.html">Spokes</a></li>
+        <li class="level1 nav-header">machine_learning</li>
+        <li class="level2"><a href="../machine_learning/ClusterFederalistPapers.html">Clusters Federalist Papers</a></li>
+        <li class="level2"><a href="../machine_learning/ClusterIrises.html">Cluster Irises</a></li>
+        <li class="level2"><a href="../machine_learning/GeneticAlgorithms.html">Genetic Algorithms</a></li>
+        <li class="level2"><a href="../machine_learning/LinearRegression.html">Linear Regression</a></li>
+        <li class="level2"><a href="../machine_learning/MachineLearning.html">Machine Learning</a></li>
+        <li class="level2"><a href="../machine_learning/NaiveBayesClassifier.html">Naive Bayes</a></li>
+        <li class="level1 nav-header">math</li>
+        <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
+        <li class="level2"><a href="../math/Fibonacci.html">Fibonacci</a></li>
+        <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
+        <li class="level2"><a href="../math/MeanAveragePrecisionAtK.html">Mean Average Precision at K</a></li>
+        <li class="level2"><a href="../math/Pi.html">Pi</a></li>
+        <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
+        <li class="level1 nav-header">random_uncertain</li>
+        <li class="level2"><a href="../random_uncertain/BayesianNetworks.html">Bayesian Networks</a></li>
+        <li class="level2"><a href="../random_uncertain/CoinEntropy.html">Entropy of a Biased Coin</a></li>
+        <li class="level2"><a href="../random_uncertain/InformationTheory.html">Information Theory</a></li>
+        <li class="level2"><a href="../random_uncertain/ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
+        <li class="level2"><a href="../random_uncertain/ProbabilityModel.html">Probability Model</a></li>
+        <li class="level2"><a href="../random_uncertain/ReservoirSampling.html">Reservoir Sampling</a></li>
+        <li class="level2"><a href="../random_uncertain/RootMeanSquareDeviation.html">Root-mean-square deviation</a></li>
+        <li class="level2"><a href="../random_uncertain/Statistics.html">Statistics</a></li>
+        <li class="level1 nav-header">text</li>
+        <li class="level2"><a href="AngluinLearner.html">Angluin Learner</a></li>
+        <li class="level2"><a href="EditDistance.html">Edit Distance</a></li>
+        <li class="level2"><a href="GoldParadigm.html">Gold Paradigm</a></li>
+        <li class="level2"><a href="LanguageModules.html">Language Modules</a></li>
+        <li class="level2"><a href="Linguistics.html">Linguistics</a></li>
+        <li class="level2"><a href="NaturalLanguageProcessing.html">Natural Language Processing</a></li>
+        <li class="level2 active"><a href="#">python2json.py</a></li>
+        <li class="level2"><a href="VectorSpaceModel.html">Vector Space Model</a></li>
+        <li class="level1 nav-header">units</li>
+        <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
+        <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
+        <li class="level1 nav-header">visualization</li>
+        <li class="level2"><a href="../visualization/BarCharts.html">Bar Charts</a></li>
+        <li class="level2"><a href="../visualization/GroupedBarCharts.html">Grouped Bar Charts</a></li>
+        <li class="level2"><a href="../visualization/PixelatedColoredArea.html">Pixelated Colored Area</a></li>
+        <li class="level2"><a href="../visualization/Plots.html">Plots</a></li>
+        <li class="level2"><a href="../visualization/ScatterPlot.html">Scatter Plot</a></li>
+        <li class="level2"><a href="../visualization/Visualize.html">Visualize</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">python2json.py</a></p>
+        
+        <ul class="nav-list">
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="python2json-py" class="title">python2json.py</h1>
+        <p>This is part of a larger project on source code search algorithms.</p>
+        <p><code>python2json.py</code> will take any python 2.6 (or older) file and return a json document that represents the
+        abstract syntax tree.
+        There are a couple of minor problems with it, but for the most part it works.</p>
+        <p>As an example, let&#39;s say we have the following python in
+        example.py:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">x</span><span> = </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span>
+</span><span class="keyword">print</span><span> </span><span class="identifier">x</span></code></pre>
+        <p>Invoke the script like so to turn example.py into json:</p>
+        <pre class="keep-together pdf epub"><code class="bash">python2json.py -f example.py</code></pre>
+        <p>You can also provide the input via stdin:</p>
+        <pre class="keep-together pdf epub"><code class="bash">cat example.py | python2json.py</code></pre>
+        <p>I find it useful to chain this pretty-printer when debugging:</p>
+        <pre class="keep-together pdf epub"><code class="bash">cat example.py | python2json.py | python -mjson.tool</code></pre>
+        <p>The pretty-printed result in this case is:</p>
+        <pre><code class="nohighlight"><span>{
+    </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="literal-value">null</span><span>,
+    </span><span class="string-literal">&quot;node&quot;</span><span>: {
+        </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="literal-value">null</span><span>,
+        </span><span class="string-literal">&quot;spread&quot;</span><span>: [
+            {
+                </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">2</span><span>,
+                </span><span class="string-literal">&quot;expr&quot;</span><span>: {
+                    </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">2</span><span>,
+                    </span><span class="string-literal">&quot;left&quot;</span><span>: {
+                        </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">2</span><span>,
+                        </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Const&quot;</span><span>,
+                        </span><span class="string-literal">&quot;value&quot;</span><span>: </span><span class="string-literal">&quot;1&quot;</span><span>
+                    },
+                    </span><span class="string-literal">&quot;right&quot;</span><span>: {
+                        </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">2</span><span>,
+                        </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Const&quot;</span><span>,
+                        </span><span class="string-literal">&quot;value&quot;</span><span>: </span><span class="string-literal">&quot;2&quot;</span><span>
+                    },
+                    </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Add&quot;</span><span>
+                },
+                </span><span class="string-literal">&quot;nodes&quot;</span><span>: [
+                    {
+                        </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">2</span><span>,
+                        </span><span class="string-literal">&quot;name&quot;</span><span>: </span><span class="string-literal">&quot;x&quot;</span><span>,
+                        </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;AssName&quot;</span><span>
+                    }
+                ], 
+                </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Assign&quot;</span><span>
+            }, 
+            {
+                </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">3</span><span>,
+                </span><span class="string-literal">&quot;nodes&quot;</span><span>: [
+                    {
+                        </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">3</span><span>,
+                        </span><span class="string-literal">&quot;name&quot;</span><span>: </span><span class="string-literal">&quot;x&quot;</span><span>,
+                        </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Name&quot;</span><span>
+                    }
+                ],
+                </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Printnl&quot;</span><span>
+            }
+        ],
+        </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Stmt&quot;</span><span>
+    },
+    </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Module&quot;</span><span>
+}</span></code></pre>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

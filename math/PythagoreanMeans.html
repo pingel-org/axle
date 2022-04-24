@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Pythagorean Means</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="../css/main.scss" />
+    <script src="../helium/laika-helium.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="../index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="../RoadMap.html">Road Map</a></li>
+        <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
+        <li class="level1 nav-header">appendix</li>
+        <li class="level2"><a href="../appendix/Author.html">Author</a></li>
+        <li class="level2"><a href="../appendix/History.html">History</a></li>
+        <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
+        <li class="level2"><a href="../appendix/RoadMap.html">Road Map</a></li>
+        <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
+        <li class="level1 nav-header">bioinformatics</li>
+        <li class="level2"><a href="../bioinformatics/Bioinformatics.html">Bioinformatics</a></li>
+        <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
+        <li class="level2"><a href="../bioinformatics/SmithWaterman.html">Smith-Waterman</a></li>
+        <li class="level1 nav-header">chaos_theory</li>
+        <li class="level2"><a href="../chaos_theory/LogisticMap.html">Logistic Map</a></li>
+        <li class="level2"><a href="../chaos_theory/Mandelbrot.html">Mandelbrot Set</a></li>
+        <li class="level1 nav-header">fundamental</li>
+        <li class="level2"><a href="../fundamental/Algebra.html">Algebra</a></li>
+        <li class="level2"><a href="../fundamental/Graph.html">Graph</a></li>
+        <li class="level2"><a href="../fundamental/LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level2"><a href="../fundamental/Logic.html">Logic</a></li>
+        <li class="level2"><a href="../fundamental/PackageObject.html">Package Objects</a></li>
+        <li class="level1 nav-header">game_theory</li>
+        <li class="level2"><a href="../game_theory/GameTheory.html">Game Theory</a></li>
+        <li class="level2"><a href="../game_theory/MontyHall.html">Monty Hall</a></li>
+        <li class="level2"><a href="../game_theory/Poker.html">Poker</a></li>
+        <li class="level2"><a href="../game_theory/PrisonersDilemma.html">Prisoner&#39;s Dilemma</a></li>
+        <li class="level2"><a href="../game_theory/TicTacToe.html">Tic Tac Toe</a></li>
+        <li class="level1 nav-header">introduction</li>
+        <li class="level2"><a href="../introduction/Architecture.html">Architecture</a></li>
+        <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
+        <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
+        <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
+        <li class="level2"><a href="../introduction/Spokes.html">Spokes</a></li>
+        <li class="level1 nav-header">machine_learning</li>
+        <li class="level2"><a href="../machine_learning/ClusterFederalistPapers.html">Clusters Federalist Papers</a></li>
+        <li class="level2"><a href="../machine_learning/ClusterIrises.html">Cluster Irises</a></li>
+        <li class="level2"><a href="../machine_learning/GeneticAlgorithms.html">Genetic Algorithms</a></li>
+        <li class="level2"><a href="../machine_learning/LinearRegression.html">Linear Regression</a></li>
+        <li class="level2"><a href="../machine_learning/MachineLearning.html">Machine Learning</a></li>
+        <li class="level2"><a href="../machine_learning/NaiveBayesClassifier.html">Naive Bayes</a></li>
+        <li class="level1 nav-header">math</li>
+        <li class="level2"><a href="Ackermann.html">Ackermann</a></li>
+        <li class="level2"><a href="Fibonacci.html">Fibonacci</a></li>
+        <li class="level2"><a href="GeoCoordinates.html">Geo Coordinates</a></li>
+        <li class="level2"><a href="MeanAveragePrecisionAtK.html">Mean Average Precision at K</a></li>
+        <li class="level2"><a href="Pi.html">Pi</a></li>
+        <li class="level2 active"><a href="#">Pythagorean Means</a></li>
+        <li class="level1 nav-header">random_uncertain</li>
+        <li class="level2"><a href="../random_uncertain/BayesianNetworks.html">Bayesian Networks</a></li>
+        <li class="level2"><a href="../random_uncertain/CoinEntropy.html">Entropy of a Biased Coin</a></li>
+        <li class="level2"><a href="../random_uncertain/InformationTheory.html">Information Theory</a></li>
+        <li class="level2"><a href="../random_uncertain/ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
+        <li class="level2"><a href="../random_uncertain/ProbabilityModel.html">Probability Model</a></li>
+        <li class="level2"><a href="../random_uncertain/ReservoirSampling.html">Reservoir Sampling</a></li>
+        <li class="level2"><a href="../random_uncertain/RootMeanSquareDeviation.html">Root-mean-square deviation</a></li>
+        <li class="level2"><a href="../random_uncertain/Statistics.html">Statistics</a></li>
+        <li class="level1 nav-header">text</li>
+        <li class="level2"><a href="../text/AngluinLearner.html">Angluin Learner</a></li>
+        <li class="level2"><a href="../text/EditDistance.html">Edit Distance</a></li>
+        <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
+        <li class="level2"><a href="../text/LanguageModules.html">Language Modules</a></li>
+        <li class="level2"><a href="../text/Linguistics.html">Linguistics</a></li>
+        <li class="level2"><a href="../text/NaturalLanguageProcessing.html">Natural Language Processing</a></li>
+        <li class="level2"><a href="../text/Python2Json.html">python2json.py</a></li>
+        <li class="level2"><a href="../text/VectorSpaceModel.html">Vector Space Model</a></li>
+        <li class="level1 nav-header">units</li>
+        <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
+        <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
+        <li class="level1 nav-header">visualization</li>
+        <li class="level2"><a href="../visualization/BarCharts.html">Bar Charts</a></li>
+        <li class="level2"><a href="../visualization/GroupedBarCharts.html">Grouped Bar Charts</a></li>
+        <li class="level2"><a href="../visualization/PixelatedColoredArea.html">Pixelated Colored Area</a></li>
+        <li class="level2"><a href="../visualization/Plots.html">Plots</a></li>
+        <li class="level2"><a href="../visualization/ScatterPlot.html">Scatter Plot</a></li>
+        <li class="level2"><a href="../visualization/Visualize.html">Visualize</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Pythagorean Means</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#arithmetic-geometric-and-harmonic-mean-examples">Arithmetic, Geometric, and Harmonic Mean Examples</a></li>
+          <li class="level1"><a href="#generalized-mean">Generalized Mean</a></li>
+          <li class="level1"><a href="#moving-means">Moving means</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="pythagorean-means" class="title">Pythagorean Means</h1>
+        <p>Arithmetic, Geometric, and Harmonic Means are all &#39;Pythagorean&#39;.</p>
+        <p>See the wikipedia page on <a href="https://en.wikipedia.org/wiki/Pythagorean_means">Pythagorean Means</a>
+        for more.</p>
+        
+        <h2 id="arithmetic-geometric-and-harmonic-mean-examples" class="section"><a class="anchor-link left" href="#arithmetic-geometric-and-harmonic-mean-examples"><i class="icofont-laika">&#xef71;</i></a>Arithmetic, Geometric, and Harmonic Mean Examples</h2>
+        <p>Imports</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">Real</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">NRoot</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span></code></pre>
+        <p>Examples</p>
+        <p>Arithmetic mean</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">arithmeticMean</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>))
+</span><span class="comment">// res0: Double = 3.5</span></code></pre>
+        <p>Geometric mean</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">geometricMean</span><span>[</span><span class="type-name">Real</span><span>, </span><span class="type-name">List</span><span>](</span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>))
+</span><span class="comment">// res1: Real = Inexact(f = spire.math.Real$$Lambda$9371/1869417325@2dd02fd3)</span></code></pre>
+        <p>Harmonic mean</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">harmonicMean</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>))
+</span><span class="comment">// res2: Double = 3.116883116883117</span></code></pre>
+        
+        <h2 id="generalized-mean" class="section"><a class="anchor-link left" href="#generalized-mean"><i class="icofont-laika">&#xef71;</i></a>Generalized Mean</h2>
+        <p>See the wikipedia page on <a href="https://en.wikipedia.org/wiki/Generalized_mean">Generalized Mean</a>.</p>
+        <p>When the parameter <code>p</code> is 1, it is the arithmetic mean.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">generalizedMean</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">List</span><span>](</span><span class="number-literal">1d</span><span>, </span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>))
+</span><span class="comment">// res3: Double = 3.5</span></code></pre>
+        <p>As <code>p</code> approaches 0, it is the geometric mean.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">generalizedMean</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">List</span><span>](</span><span class="number-literal">0.0001</span><span>, </span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>))
+</span><span class="comment">// res4: Double = 5.00043173370165</span></code></pre>
+        <p>At -1 it is the harmonic mean.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">generalizedMean</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">List</span><span>](-</span><span class="number-literal">1d</span><span>, </span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>))
+</span><span class="comment">// res5: Double = 3.116883116883117</span></code></pre>
+        
+        <h2 id="moving-means" class="section"><a class="anchor-link left" href="#moving-means"><i class="icofont-laika">&#xef71;</i></a>Moving means</h2>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>Moving arithmetic mean</p>
+        <pre><code class="nohighlight"><span class="identifier">movingArithmeticMean</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Double</span><span>](
+    (</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">100</span><span>).</span><span class="identifier">toList</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>),
+    </span><span class="number-literal">5</span><span>)
+</span><span class="comment">// res6: List[Double] = List(
+//   3.0,
+//   4.0,
+//   5.0,
+//   6.0,
+//   7.0,
+//   8.0,
+//   9.0,
+//   10.0,
+//   11.0,
+//   12.0,
+//   13.0,
+//   14.0,
+//   15.0,
+//   16.0,
+//   17.0,
+//   18.0,
+//   19.0,
+//   20.0,
+//   21.0,
+//   22.0,
+//   23.0,
+//   24.0,
+//   25.0,
+//   26.0,
+//   27.0,
+//   28.0,
+//   29.0,
+//   30.0,
+//   31.0,
+//   32.0,
+//   33.0,
+//   34.0,
+//   35.0,
+//   36.0,
+//   37.0,
+//   38.0,
+//   39.0,
+//   40.0,
+//   41.0,
+//   42.0,
+//   43.0,
+//   44.0,
+//   45.0,
+//   46.0,
+//   47.0,
+//   48.0,
+//   49.0,
+//   50.0,
+// ...</span></code></pre>
+        <p>Moving geometric mean</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">movingGeometricMean</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Real</span><span>](
+    </span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>, </span><span class="number-literal">125d</span><span>, </span><span class="number-literal">625d</span><span>),
+    </span><span class="number-literal">3</span><span>)
+</span><span class="comment">// res7: List[Real] = List(
+//   Inexact(f = spire.math.Real$$Lambda$9371/1869417325@3cdebc5c),
+//   Inexact(f = spire.math.Real$$Lambda$9376/158518446@7f004a53),
+//   Inexact(f = spire.math.Real$$Lambda$9376/158518446@6cc6f1ec)
+// )</span></code></pre>
+        <p>Moving harmonic mean</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">movingHarmonicMean</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Real</span><span>](
+    (</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">5</span><span>).</span><span class="identifier">toList</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="type-name">Real</span><span>(</span><span class="identifier">v</span><span>)),
+    </span><span class="number-literal">3</span><span>)
+</span><span class="comment">// res8: List[Real] = List(
+//   Exact(n = 18/11),
+//   Exact(n = 36/13),
+//   Exact(n = 180/47)
+// )</span></code></pre>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

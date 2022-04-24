@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Release Notes</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="../helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="../helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="../css/main.scss" />
+    <script src="../helium/laika-helium.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="../index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="../RoadMap.html">Road Map</a></li>
+        <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
+        <li class="level1 nav-header">appendix</li>
+        <li class="level2"><a href="Author.html">Author</a></li>
+        <li class="level2"><a href="History.html">History</a></li>
+        <li class="level2 active"><a href="#">Release Notes</a></li>
+        <li class="level2"><a href="RoadMap.html">Road Map</a></li>
+        <li class="level2"><a href="Videos.html">Videos</a></li>
+        <li class="level1 nav-header">bioinformatics</li>
+        <li class="level2"><a href="../bioinformatics/Bioinformatics.html">Bioinformatics</a></li>
+        <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
+        <li class="level2"><a href="../bioinformatics/SmithWaterman.html">Smith-Waterman</a></li>
+        <li class="level1 nav-header">chaos_theory</li>
+        <li class="level2"><a href="../chaos_theory/LogisticMap.html">Logistic Map</a></li>
+        <li class="level2"><a href="../chaos_theory/Mandelbrot.html">Mandelbrot Set</a></li>
+        <li class="level1 nav-header">fundamental</li>
+        <li class="level2"><a href="../fundamental/Algebra.html">Algebra</a></li>
+        <li class="level2"><a href="../fundamental/Graph.html">Graph</a></li>
+        <li class="level2"><a href="../fundamental/LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level2"><a href="../fundamental/Logic.html">Logic</a></li>
+        <li class="level2"><a href="../fundamental/PackageObject.html">Package Objects</a></li>
+        <li class="level1 nav-header">game_theory</li>
+        <li class="level2"><a href="../game_theory/GameTheory.html">Game Theory</a></li>
+        <li class="level2"><a href="../game_theory/MontyHall.html">Monty Hall</a></li>
+        <li class="level2"><a href="../game_theory/Poker.html">Poker</a></li>
+        <li class="level2"><a href="../game_theory/PrisonersDilemma.html">Prisoner&#39;s Dilemma</a></li>
+        <li class="level2"><a href="../game_theory/TicTacToe.html">Tic Tac Toe</a></li>
+        <li class="level1 nav-header">introduction</li>
+        <li class="level2"><a href="../introduction/Architecture.html">Architecture</a></li>
+        <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
+        <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
+        <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
+        <li class="level2"><a href="../introduction/Spokes.html">Spokes</a></li>
+        <li class="level1 nav-header">machine_learning</li>
+        <li class="level2"><a href="../machine_learning/ClusterFederalistPapers.html">Clusters Federalist Papers</a></li>
+        <li class="level2"><a href="../machine_learning/ClusterIrises.html">Cluster Irises</a></li>
+        <li class="level2"><a href="../machine_learning/GeneticAlgorithms.html">Genetic Algorithms</a></li>
+        <li class="level2"><a href="../machine_learning/LinearRegression.html">Linear Regression</a></li>
+        <li class="level2"><a href="../machine_learning/MachineLearning.html">Machine Learning</a></li>
+        <li class="level2"><a href="../machine_learning/NaiveBayesClassifier.html">Naive Bayes</a></li>
+        <li class="level1 nav-header">math</li>
+        <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
+        <li class="level2"><a href="../math/Fibonacci.html">Fibonacci</a></li>
+        <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
+        <li class="level2"><a href="../math/MeanAveragePrecisionAtK.html">Mean Average Precision at K</a></li>
+        <li class="level2"><a href="../math/Pi.html">Pi</a></li>
+        <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
+        <li class="level1 nav-header">random_uncertain</li>
+        <li class="level2"><a href="../random_uncertain/BayesianNetworks.html">Bayesian Networks</a></li>
+        <li class="level2"><a href="../random_uncertain/CoinEntropy.html">Entropy of a Biased Coin</a></li>
+        <li class="level2"><a href="../random_uncertain/InformationTheory.html">Information Theory</a></li>
+        <li class="level2"><a href="../random_uncertain/ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
+        <li class="level2"><a href="../random_uncertain/ProbabilityModel.html">Probability Model</a></li>
+        <li class="level2"><a href="../random_uncertain/ReservoirSampling.html">Reservoir Sampling</a></li>
+        <li class="level2"><a href="../random_uncertain/RootMeanSquareDeviation.html">Root-mean-square deviation</a></li>
+        <li class="level2"><a href="../random_uncertain/Statistics.html">Statistics</a></li>
+        <li class="level1 nav-header">text</li>
+        <li class="level2"><a href="../text/AngluinLearner.html">Angluin Learner</a></li>
+        <li class="level2"><a href="../text/EditDistance.html">Edit Distance</a></li>
+        <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
+        <li class="level2"><a href="../text/LanguageModules.html">Language Modules</a></li>
+        <li class="level2"><a href="../text/Linguistics.html">Linguistics</a></li>
+        <li class="level2"><a href="../text/NaturalLanguageProcessing.html">Natural Language Processing</a></li>
+        <li class="level2"><a href="../text/Python2Json.html">python2json.py</a></li>
+        <li class="level2"><a href="../text/VectorSpaceModel.html">Vector Space Model</a></li>
+        <li class="level1 nav-header">units</li>
+        <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
+        <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
+        <li class="level1 nav-header">visualization</li>
+        <li class="level2"><a href="../visualization/BarCharts.html">Bar Charts</a></li>
+        <li class="level2"><a href="../visualization/GroupedBarCharts.html">Grouped Bar Charts</a></li>
+        <li class="level2"><a href="../visualization/PixelatedColoredArea.html">Pixelated Colored Area</a></li>
+        <li class="level2"><a href="../visualization/Plots.html">Plots</a></li>
+        <li class="level2"><a href="../visualization/ScatterPlot.html">Scatter Plot</a></li>
+        <li class="level2"><a href="../visualization/Visualize.html">Visualize</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Release Notes</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#_0-6-1-2-april-2022">0.6.1-2 (April 2022)</a></li>
+          <li class="level1"><a href="#_0-6-0-cats-effect-for-axle-game-december-31-2020">0.6.0 cats.effect for axle.game (December 31, 2020)</a></li>
+          <li class="level1"><a href="#_0-5-4-sampler-axioms-package-reorg-september-28-2020">0.5.4 Sampler Axioms + package reorg (September 28, 2020)</a></li>
+          <li class="level1"><a href="#_0-5-3-september-13-2020">0.5.3 (September 13, 2020)</a></li>
+          <li class="level1"><a href="#_0-5-2-september-7-2020">0.5.2 (September 7, 2020)</a></li>
+          <li class="level1"><a href="#_0-4-1-june-4-2017">0.4.1 (June 4, 2017)</a></li>
+          <li class="level1"><a href="#_0-4-0-may-30-2017">0.4.0 (May 30, 2017)</a></li>
+          <li class="level1"><a href="#_0-3-6-may-29-2017">0.3.6 (May 29, 2017)</a></li>
+          <li class="level1"><a href="#_0-3-5-may-23-2017">0.3.5 (May 23, 2017)</a></li>
+          <li class="level1"><a href="#_0-3-4-may-22-2017">0.3.4 (May 22, 2017)</a></li>
+          <li class="level1"><a href="#_0-3-3-may-7-2017">0.3.3 (May 7, 2017)</a></li>
+          <li class="level1"><a href="#_0-3-2-may-6-2017">0.3.2 (May 6, 2017)</a></li>
+          <li class="level1"><a href="#_0-3-1-may-1-2017">0.3.1 (May 1, 2017)</a></li>
+          <li class="level1"><a href="#_0-3-0-april-12-2017">0.3.0 (April 12, 2017)</a></li>
+          <li class="level1"><a href="#_0-2-8-march-28-2016">0.2.8 (March 28, 2016)</a></li>
+          <li class="level1"><a href="#_0-2-7-january-2016">0.2.7 (January 2016)</a></li>
+          <li class="level1"><a href="#_0-2-6-november-2016">0.2.6 (November 2016)</a></li>
+          <li class="level1"><a href="#_0-2-5-october-2016">0.2.5 (October 2016)</a></li>
+          <li class="level1"><a href="#_0-2-4-september-5-2016">0.2.4 (September 5, 2016)</a></li>
+          <li class="level1"><a href="#_0-2-3-july-30-2016">0.2.3 (July 30, 2016)</a></li>
+          <li class="level1"><a href="#_0-2-2-october-10-2015">0.2.2 (October 10, 2015)</a></li>
+          <li class="level1"><a href="#_0-2-0-august-12-2015">0.2.0 (August 12, 2015)</a></li>
+          <li class="level1"><a href="#_0-1-13-through-0-1-17-october-12-2014">0.1.13 through 0.1.17 (October 12, 2014)</a></li>
+          <li class="level1"><a href="#_0-1-m12-june-26-2014">0.1-M12 (June 26, 2014)</a></li>
+          <li class="level1"><a href="#_0-1-m11-february-26-2014">0.1-M11 (February 26, 2014)</a></li>
+          <li class="level1"><a href="#_0-1-m10-may-14-2013">0.1-M10 (May 14, 2013)</a></li>
+          <li class="level1"><a href="#_0-1-m9-april-7-2013">0.1-M9 (April 7, 2013)</a></li>
+          <li class="level1"><a href="#_0-1-m8-march-11-2013">0.1-M8 (March 11, 2013)</a></li>
+          <li class="level1"><a href="#_0-1-m7-february-19-2013">0.1-M7 (February 19, 2013)</a></li>
+          <li class="level1"><a href="#_0-1-m6-february-13-2013">0.1-M6 (February 13, 2013)</a></li>
+          <li class="level1"><a href="#_0-1-m5-january-1-2013">0.1-M5 (January 1, 2013)</a></li>
+          <li class="level1"><a href="#_0-1-m4-december-16-2013">0.1-M4 (December 16, 2013)</a></li>
+          <li class="level1"><a href="#_0-1-m3-december-11-2012">0.1-M3 (December 11, 2012)</a></li>
+          <li class="level1"><a href="#_0-1-m2-october-24-2012">0.1.M2 (October 24, 2012)</a></li>
+          <li class="level1"><a href="#_0-1-m1-july-15-2012">0.1.M1 (July 15, 2012)</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="release-notes" class="title">Release Notes</h1>
+        <p>See <a href="/road_map/">Road Map</a> for the plan of upcoming releases and features.</p>
+        
+        <h2 id="_0-6-1-2-april-2022" class="section"><a class="anchor-link left" href="#_0-6-1-2-april-2022"><i class="icofont-laika">&#xef71;</i></a>0.6.1-2 (April 2022)</h2>
+        <ul>
+          <li>CI/CD enhancements</li>
+        </ul>
+        <ul>
+          <li>Automated releases via <code>sbt-ci-release</code></li>
+        </ul>
+        <ul>
+          <li>Move away from PRs</li>
+        </ul>
+        
+        <h2 id="_0-6-0-cats-effect-for-axle-game-december-31-2020" class="section"><a class="anchor-link left" href="#_0-6-0-cats-effect-for-axle-game-december-31-2020"><i class="icofont-laika">&#xef71;</i></a>0.6.0 cats.effect for axle.game (December 31, 2020)</h2>
+        <ul>
+          <li>Wrap <code>axle.IO.getLine</code> in <code>F[_]</code></li>
+          <li>Remove from <code>Game</code>: method <code>probabilityDist</code>, <code>sampler</code>, and type params <code>V</code> and <code>PM[_, _]</code></li>
+          <li>Move <code>strategyFor</code> from <code>Game</code> to <code>strategies</code> argument in <code>axle.game</code> package methods</li>
+          <li>Define <code>Indexed.slyce</code> for non-1-step Ranges</li>
+          <li>Improve <code>axle.lx.{Gold, Angluin}</code> coverage</li>
+          <li><code>axle.laws.generator</code> includes generators for GeoCoordinates, UnittedQuantities, and Units</li>
+          <li>Simpler <code>hardCodedStrategy</code> and <code>aiMover</code> signatures</li>
+          <li>Replace <code>randomMove</code> with <code>ConditionalProbabilityTable.uniform</code></li>
+        </ul>
+        
+        <h2 id="_0-5-4-sampler-axioms-package-reorg-september-28-2020" class="section"><a class="anchor-link left" href="#_0-5-4-sampler-axioms-package-reorg-september-28-2020"><i class="icofont-laika">&#xef71;</i></a>0.5.4 Sampler Axioms + package reorg (September 28, 2020)</h2>
+        <ul>
+          <li>
+            <p>Sampler Axioms</p>
+            <ol class="arabic">
+              <li>ProbabilityOf(RegionEq(sample(gen))) &gt; 0?</li>
+              <li>Sampled distribution converges to model&#39;s</li>
+            </ol>
+          </li>
+          <li>
+            <p>Pre-compute <code>ConditionalProbabilityTable.bars</code> for <code>Sampler</code> witness</p>
+          </li>
+          <li>
+            <p>Move everything from <code>axle._</code> into sub-packages (<code>algebra</code>, <code>math</code>, <code>logic</code>)</p>
+          </li>
+          <li>
+            <p>Organize <code>axle.algebra._</code> package object</p>
+          </li>
+          <li>
+            <p><code>axle.laws.generator</code></p>
+          </li>
+          <li>
+            <p><code>rationalProbabilityDist</code> is now implicitly available</p>
+          </li>
+        </ul>
+        
+        <h2 id="_0-5-3-september-13-2020" class="section"><a class="anchor-link left" href="#_0-5-3-september-13-2020"><i class="icofont-laika">&#xef71;</i></a>0.5.3 (September 13, 2020)</h2>
+        <ul>
+          <li>
+            <p>Split <code>ProbabilityModel</code> into three new typeclasses
+            -- <code>Bayes</code>, <code>Kolmogorov</code>, <code>Sampler</code> --
+            as well as <code>cats.Monad</code>.
+            The three axle typeclasses include syntax.</p>
+          </li>
+          <li>
+            <p>Rename <code>ConditionalProbabilityTable.values</code> to <code>domain</code></p>
+          </li>
+          <li>
+            <p>Bugs fixed</p>
+          </li>
+        </ul>
+        <ul>
+          <li>Bayes axiom should avoid P(A) == P(B) == 0</li>
+        </ul>
+        <ul>
+          <li><code>UnittedQuantity</code> <code>LengthSpace</code> unit mismatch</li>
+        </ul>
+        <ul>
+          <li>
+            <p><code>BarChart</code> was missing <code>Order[C]</code></p>
+          </li>
+          <li>
+            <p>Expanded documentation</p>
+          </li>
+        </ul>
+        
+        <h2 id="_0-5-2-september-7-2020" class="section"><a class="anchor-link left" href="#_0-5-2-september-7-2020"><i class="icofont-laika">&#xef71;</i></a>0.5.2 (September 7, 2020)</h2>
+        <ul>
+          <li>Move to Scala 2.12 and 2.13</li>
+          <li>Changes in <code>axle.game</code> to provide <code>Generator</code> where needed, and return a <code>ConditionalProbabilityTable0</code></li>
+          <li>Redo <code>axle.stats</code></li>
+        </ul>
+        <ul>
+          <li><code>ProbabilityModel</code> typeclass (refactored from <code>Distribution</code>) including syntactic support</li>
+        </ul>
+        <ul>
+          <li>Implicitly conjurable <code>cats.Monad</code> from a <code>ProbabilityModel</code>, which supports for comprehensions via cats syntax support</li>
+        </ul>
+        <ul>
+          <li><code>Variable</code> instead of <code>RandomVariable</code></li>
+        </ul>
+        <ul>
+          <li>remove <code>Bayes</code></li>
+          <li><code>axle.quantumcircuit</code> package for modelling computing with quantum circuits</li>
+          <li>Replace <code>axle.agebra.Zero</code> with <code>spire.algebra.AdditiveMonoid.zero</code></li>
+          <li>Remove <code>axle-spark</code> (Spark &quot;spoke&quot;) for now</li>
+          <li>Move <code>axle.ml.distance</code> to <code>axle.algebra.distance</code></li>
+          <li><code>axle.dummy</code> for a handful of scanLeft calls</li>
+          <li>Remove Spark impacts on typeclasses in <code>axle.algebra</code>. Eg: Spark&#39;s <code>ClassTag</code> requirement <code>map</code> created the difficulty:</li>
+        </ul>
+        <ul>
+          <li><code>Functor</code>: removed and replaced with <code>cats.Functor</code></li>
+        </ul>
+        <ul>
+          <li><code>Scanner</code>, <code>Aggregator</code>, <code>Zipper</code>, <code>Indexed</code>, <code>Talliable</code>, <code>Finite</code>: Refactored as Kind-1 typeclasses</li>
+          <li>Vertex and Edge projections for jung graphs</li>
+          <li>Fix <code>axle.joda.TicsSpec</code> handling of timezones</li>
+          <li>ScaleExp works with negative exponent</li>
+          <li>ScalaCheck tests for</li>
+        </ul>
+        <ul>
+          <li>Group and Module of UnittedQuantity</li>
+        </ul>
+        <ul>
+          <li>MetricSpace axle.algebra.GeoMetricSpace</li>
+          <li><code>axle.ml.GeneticAlgorithm</code> rewritten in terms of <a href="https://github.com/milessabin/kittens">kittens</a></li>
+          <li><code>Show</code>, <code>Order</code>, <code>Eq</code> witnesses</li>
+        </ul>
+        <ul>
+          <li>Eq.fromUniversalEquals where applicable</li>
+        </ul>
+        <ul>
+          <li>SAM inference elsewhere</li>
+          <li>Remove <code>axle.string</code> and <code>axle.show</code>.</li>
+        </ul>
+        <ul>
+          <li>Replace uses with <code>.show</code> from <code>cats.implicits</code> or show string interpolation</li>
+          <li>Remove extraneous <code>cutoff</code> argument for <code>PCA</code></li>
+          <li>Replace Tut with MDoc</li>
+          <li>Lawful ScalaCheck tests for</li>
+        </ul>
+        <ul>
+          <li><code>Module</code>s in <code>axle.algebra</code></li>
+        </ul>
+        <ul>
+          <li><code>SimilaritySpace</code>s for <code>SmithWaterman</code> &amp; <code>NeedlemanWunsch</code></li>
+          <li>Fix <code>Order[Card]</code></li>
+          <li><code>Deck.riffleShuffle</code></li>
+          <li><code>GuessRiffle</code> game</li>
+          <li><code>axle.algebra.etc</code> via <code>axle.algebra.EnrichedRinged</code></li>
+          <li><code>bernoulliDistribution</code></li>
+          <li><code>axle.stats.expectation(CPT)</code></li>
+          <li><code>axle.IO</code> consolidates IO to <code>cats.effect</code> (eg <code>[F[_]: ContextShift: Sync]</code>)</li>
+          <li>Create <code>axle-awt</code>, <code>axle-xml</code>, and <code>axle-jogl</code> (leaving <code>axle.scene.{Shape,Color}</code> in <code>axle-core</code>)</li>
+          <li>Remove <code>axle-jogl</code> due to instability of underlying dependencies</li>
+        </ul>
+        
+        <h2 id="_0-4-1-june-4-2017" class="section"><a class="anchor-link left" href="#_0-4-1-june-4-2017"><i class="icofont-laika">&#xef71;</i></a>0.4.1 (June 4, 2017)</h2>
+        <ul>
+          <li>Fix all warnings, and turn on fatal warnings</li>
+          <li>DrawPanel typeclass</li>
+          <li>Configurable visualization parameters for {un,}directedGraph and BayesianNetwork</li>
+          <li>Make Monix &quot;provided&quot;</li>
+        </ul>
+        
+        <h2 id="_0-4-0-may-30-2017" class="section"><a class="anchor-link left" href="#_0-4-0-may-30-2017"><i class="icofont-laika">&#xef71;</i></a>0.4.0 (May 30, 2017)</h2>
+        <ul>
+          <li>axle-core gets axle-visualize and most of axle-algorithm</li>
+          <li>new axle-wheel formed from axle-{test, games, languages} and parts of axle-algorithms</li>
+        </ul>
+        
+        <h2 id="_0-3-6-may-29-2017" class="section"><a class="anchor-link left" href="#_0-3-6-may-29-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.6 (May 29, 2017)</h2>
+        <ul>
+          <li>Replace Akka with Monix for animating visualizations</li>
+          <li><code>ScatterPlot</code> <code>play</code> to awt</li>
+        </ul>
+        
+        <h2 id="_0-3-5-may-23-2017" class="section"><a class="anchor-link left" href="#_0-3-5-may-23-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.5 (May 23, 2017)</h2>
+        <ul>
+          <li>Move math methods from <code>axle.algebra._</code> package object to <code>axle.math._</code></li>
+        </ul>
+        
+        <h2 id="_0-3-4-may-22-2017" class="section"><a class="anchor-link left" href="#_0-3-4-may-22-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.4 (May 22, 2017)</h2>
+        <ul>
+          <li>Move mathy methods from <code>axle._</code> package object to new <code>axle.math._</code> package object</li>
+          <li>Sieve of Eratosthenes</li>
+          <li>Remove some <code>Eq</code> and <code>Order</code> witnesses from <code>axle._</code> as they are now available in <code>cats._</code></li>
+          <li>Revert Tut to version 0.4.8</li>
+        </ul>
+        
+        <h2 id="_0-3-3-may-7-2017" class="section"><a class="anchor-link left" href="#_0-3-3-may-7-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.3 (May 7, 2017)</h2>
+        <ul>
+          <li><code>BarChart.hoverof</code> -- center text in bar</li>
+          <li><code>BarChart{,Grouped}.linkOf</code></li>
+        </ul>
+        
+        <h2 id="_0-3-2-may-6-2017" class="section"><a class="anchor-link left" href="#_0-3-2-may-6-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.2 (May 6, 2017)</h2>
+        <ul>
+          <li>Remove `axle.jblas.{additiveCMonoidDoubleMatrix, multiplicativeMonoidDoubleMatrix, module, ring}</li>
+          <li><code>axle.math.exponentiateByRecursiveSquaring</code></li>
+          <li>Rename <code>fibonacci*</code> methods</li>
+          <li><code>PixelatedColoredArea</code> should take a function that is given a rectangle (not just a point)</li>
+          <li>Logistic Map vis using <code>PixelatedColoredArea</code> (documentation)</li>
+        </ul>
+        
+        <h2 id="_0-3-1-may-1-2017" class="section"><a class="anchor-link left" href="#_0-3-1-may-1-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.1 (May 1, 2017)</h2>
+        <ul>
+          <li><code>BarChart*.hoverOf</code></li>
+          <li><code>BarChart*</code> label angle is Option. None indicates no labels below bars.</li>
+          <li><code>axle.xml</code> package in axle-visualize</li>
+        </ul>
+        
+        <h2 id="_0-3-0-april-12-2017" class="section"><a class="anchor-link left" href="#_0-3-0-april-12-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.0 (April 12, 2017)</h2>
+        <ul>
+          <li>Scala org to Typelevel</li>
+          <li>Fix malformed distribution in ConditionalProbabilityTable and TallyDistribution0</li>
+          <li>Depend on Spire 0.14.1 (fix mistaken dependency on snapshot release in 0.2.8)</li>
+        </ul>
+        
+        <h2 id="_0-2-8-march-28-2016" class="section"><a class="anchor-link left" href="#_0-2-8-march-28-2016"><i class="icofont-laika">&#xef71;</i></a>0.2.8 (March 28, 2016)</h2>
+        <ul>
+          <li>Fix SVG rendering of negative values in BarChart</li>
+          <li>Make more arguments to vis components functions (colorOf, labelOf, diameterOf)</li>
+          <li>Depend on Spire 0.13.1-SNAPSHOT (which depends on Typelevel Algebra)</li>
+        </ul>
+        
+        <h2 id="_0-2-7-january-2016" class="section"><a class="anchor-link left" href="#_0-2-7-january-2016"><i class="icofont-laika">&#xef71;</i></a>0.2.7 (January 2016)</h2>
+        <ul>
+          <li>Use cats-kernel&#39;s Eq and Order in favor of Spire&#39;s (with Shims to continue to work with Spire)</li>
+          <li>Convert tests to use scalatest (to match Cats and Spire)</li>
+        </ul>
+        
+        <h2 id="_0-2-6-november-2016" class="section"><a class="anchor-link left" href="#_0-2-6-november-2016"><i class="icofont-laika">&#xef71;</i></a>0.2.6 (November 2016)</h2>
+        <ul>
+          <li>Depends on cats-core (initially just for Show typeclass)</li>
+          <li>Strategy: <code>(G, MS) =&gt; Distribution[M, Rational]</code></li>
+          <li>LinearAlgebra.from{Column,Row}MajorArray</li>
+          <li>Implementation of Monty Hall using axle.game typeclasses</li>
+          <li>Implementaiton of Prisoner&#39;s Dilemma using axle.game typeclasses</li>
+          <li>Minor Poker fixes</li>
+        </ul>
+        
+        <h2 id="_0-2-5-october-2016" class="section"><a class="anchor-link left" href="#_0-2-5-october-2016"><i class="icofont-laika">&#xef71;</i></a>0.2.5 (October 2016)</h2>
+        <ul>
+          <li>Typeclasses for axle.game</li>
+          <li>Increase test coverage to 78%</li>
+        </ul>
+        
+        <h2 id="_0-2-4-september-5-2016" class="section"><a class="anchor-link left" href="#_0-2-4-september-5-2016"><i class="icofont-laika">&#xef71;</i></a>0.2.4 (September 5, 2016)</h2>
+        <ul>
+          <li>Redo all and extend documentation using Tut</li>
+          <li>Convert Build.scala to build.sbt</li>
+          <li>LinearAlgebra doc fixes / clarification</li>
+          <li>Make some axle.nlp.Corpus methods more consistent</li>
+          <li>Avoid using wget in axle.data._</li>
+          <li>float*Module witnesses in axle._</li>
+        </ul>
+        
+        <h2 id="_0-2-3-july-30-2016" class="section"><a class="anchor-link left" href="#_0-2-3-july-30-2016"><i class="icofont-laika">&#xef71;</i></a>0.2.3 (July 30, 2016)</h2>
+        <ul>
+          <li>ScatterPlot</li>
+          <li>Logistic Map and Mandelbrot</li>
+          <li>PixelatedColoredArea</li>
+        </ul>
+        
+        <h2 id="_0-2-2-october-10-2015" class="section"><a class="anchor-link left" href="#_0-2-2-october-10-2015"><i class="icofont-laika">&#xef71;</i></a>0.2.2 (October 10, 2015)</h2>
+        <ul>
+          <li>Pythagorean means</li>
+        </ul>
+        
+        <h2 id="_0-2-0-august-12-2015" class="section"><a class="anchor-link left" href="#_0-2-0-august-12-2015"><i class="icofont-laika">&#xef71;</i></a>0.2.0 (August 12, 2015)</h2>
+        <ul>
+          <li>reorganize to minimize dependencies from axle-core, with witnesses in the axle-X jars (axle.X package) for library X</li>
+          <li>LinearAlgebra typeclass</li>
+          <li>Functor, Aggregatable typeclasses</li>
+          <li>Show, Draw, Play typeclasses</li>
+          <li><a href="mailto:MAP@k">MAP@k</a>, harmonicMean</li>
+          <li>axle-spark</li>
+          <li>Apache 2.0 license</li>
+        </ul>
+        
+        <h2 id="_0-1-13-through-0-1-17-october-12-2014" class="section"><a class="anchor-link left" href="#_0-1-13-through-0-1-17-october-12-2014"><i class="icofont-laika">&#xef71;</i></a>0.1.13 through 0.1.17 (October 12, 2014)</h2>
+        <ul>
+          <li>Distribution as a Monad</li>
+          <li>Spire &#39;Module&#39; for axle.quanta</li>
+        </ul>
+        
+        <h2 id="_0-1-m12-june-26-2014" class="section"><a class="anchor-link left" href="#_0-1-m12-june-26-2014"><i class="icofont-laika">&#xef71;</i></a>0.1-M12 (June 26, 2014)</h2>
+        <ul>
+          <li>Upgrade to Scala 2.11.1</li>
+          <li>Field context bound for classes in axle.stats and pgm</li>
+          <li>axle.quanta conversions as Rational</li>
+        </ul>
+        
+        <h2 id="_0-1-m11-february-26-2014" class="section"><a class="anchor-link left" href="#_0-1-m11-february-26-2014"><i class="icofont-laika">&#xef71;</i></a>0.1-M11 (February 26, 2014)</h2>
+        <ul>
+          <li>REPL</li>
+          <li>3d visualizations using OpenGL (via jogl)</li>
+          <li>More prevalent use of Spire typeclasses and number types</li>
+        </ul>
+        
+        <h2 id="_0-1-m10-may-14-2013" class="section"><a class="anchor-link left" href="#_0-1-m10-may-14-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M10 (May 14, 2013)</h2>
+        <ul>
+          <li>bug fixes in cards and poker</li>
+          <li>api changes and bug fixes to visualizations required by hammer</li>
+          <li>upgrade to akka 2.2-M3 and spire 0.4.0</li>
+        </ul>
+        
+        <h2 id="_0-1-m9-april-7-2013" class="section"><a class="anchor-link left" href="#_0-1-m9-april-7-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M9 (April 7, 2013)</h2>
+        <ul>
+          <li>DNA sequence alignment algorithms in <code>axle.bio</code></li>
+          <li><code>axle.logic</code></li>
+          <li>multi-project build, rename axle to axle-core, and split out axle-visualize</li>
+        </ul>
+        
+        <h2 id="_0-1-m8-march-11-2013" class="section"><a class="anchor-link left" href="#_0-1-m8-march-11-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M8 (March 11, 2013)</h2>
+        <ul>
+          <li>Akka for streaming data updates to Plot and Chart</li>
+          <li>Tartarus English stemmer</li>
+          <li>Create <code>axle.nlp</code> package and move much of <code>axle.lx</code> there</li>
+          <li>Move Bayesian Networks code to <code>axle.pgm</code></li>
+          <li><code>axle.actor</code> for Akka-related code</li>
+        </ul>
+        
+        <h2 id="_0-1-m7-february-19-2013" class="section"><a class="anchor-link left" href="#_0-1-m7-february-19-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M7 (February 19, 2013)</h2>
+        <ul>
+          <li>Use <code>spire.math.Number</code> in <code>axle.quanta</code></li>
+          <li>Use <code>spire.algebra.MetricSpace</code> for <code>axle.lx.*VectorSpace</code> and <code>axle.ml.distance.*</code></li>
+        </ul>
+        
+        <h2 id="_0-1-m6-february-13-2013" class="section"><a class="anchor-link left" href="#_0-1-m6-february-13-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M6 (February 13, 2013)</h2>
+        <ul>
+          <li>Initial version of <code>axle.algebra</code></li>
+          <li>No mutable state (except for permutations, combinations, and mutable buffer enrichment)</li>
+          <li><code>axle.quanta</code> conversion graph edges as functions</li>
+          <li>Redoing <code>JblasMatrixFactory</code> as <code>JblasMatrixModule</code> (preparing for &quot;cake&quot; pattern&quot;)</li>
+        </ul>
+        
+        <h2 id="_0-1-m5-january-1-2013" class="section"><a class="anchor-link left" href="#_0-1-m5-january-1-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M5 (January 1, 2013)</h2>
+        <ul>
+          <li>Bar Chart</li>
+          <li>Minimax</li>
+          <li>Texas Hold Em Poker</li>
+        </ul>
+        
+        <h2 id="_0-1-m4-december-16-2013" class="section"><a class="anchor-link left" href="#_0-1-m4-december-16-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M4 (December 16, 2013)</h2>
+        <ul>
+          <li>Clean up <code>axle.graph</code> by scrapping attempt at family polymorphism</li>
+          <li>Generalize InfoPlottable to QuantaPlottable</li>
+        </ul>
+        
+        <h2 id="_0-1-m3-december-11-2012" class="section"><a class="anchor-link left" href="#_0-1-m3-december-11-2012"><i class="icofont-laika">&#xef71;</i></a>0.1-M3 (December 11, 2012)</h2>
+        <ul>
+          <li>Immutable graphs</li>
+        </ul>
+        
+        <h2 id="_0-1-m2-october-24-2012" class="section"><a class="anchor-link left" href="#_0-1-m2-october-24-2012"><i class="icofont-laika">&#xef71;</i></a>0.1.M2 (October 24, 2012)</h2>
+        <ul>
+          <li>Genetic Algorithms</li>
+          <li>Bug: x and y axis outside of plot area</li>
+          <li>Naive Bayes</li>
+          <li><code>show()</code> in <code>axle.visualize</code></li>
+          <li>PCA</li>
+          <li>Immutable matrices</li>
+          <li>Optimize Plot of <code>axle.quanta</code></li>
+        </ul>
+        
+        <h2 id="_0-1-m1-july-15-2012" class="section"><a class="anchor-link left" href="#_0-1-m1-july-15-2012"><i class="icofont-laika">&#xef71;</i></a>0.1.M1 (July 15, 2012)</h2>
+        <ul>
+          <li>Jblas-backed Matrix</li>
+          <li>Jung-backed Graph</li>
+          <li>Quanta (units of measurement)</li>
+          <li>Linear Regression</li>
+          <li>K-means</li>
+        </ul>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>
