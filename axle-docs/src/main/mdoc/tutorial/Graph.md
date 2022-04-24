@@ -164,7 +164,7 @@ Render as an SVG file
 import axle.web._
 import cats.effect._
 
-uVis.svg[IO]("SimpleUndirectedGraph.svg").unsafeRunSync()
+uVis.svg[IO]("@DOCWD@/images/SimpleUndirectedGraph.svg").unsafeRunSync()
 ```
 
-![undirected graph](/tutorial/images/SimpleUndirectedGraph.svg)
+![undirected graph](/images/SimpleUndirectedGraph.svg)
