@@ -44,3 +44,5 @@ import cats.effect._
 ```scala mdoc
 chart.svg[IO]("@DOCWD@/images/fruitsales.svg").unsafeRunSync()
 ```
+
+![fruitsales](/images/fruitsales.svg)

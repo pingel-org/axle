@@ -1,6 +1,6 @@
 # Axle
 
-![axle]("/images/axle.png")
+![axle](/images/axle.png)
 
 Axle is an open-source Scala-embedded domain specific language for scientific computing.
 
