@@ -6,16 +6,13 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * README.md and directory.conf to structure site
 * fix internal links
-
-* latest released version badge
 * set mdocVariables with latest released version
-* update google analytics
 * simplify "Installation"
+* update google analytics
 * CNAME (www and root)
 
 * update publishing.txt
-* Create and publish code coverage reports
-* site-update.sh should be only a set of sbt commands (avoid moving png and svg files)
+* create and publish code coverage reports
 * trigger site build via github action?
 
 ## 0.6.3
