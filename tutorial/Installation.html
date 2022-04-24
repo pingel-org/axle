@@ -126,6 +126,7 @@
           <li class="level1"><a href="#create-sbt-project">Create SBT Project</a></li>
           <li class="level1"><a href="#next-steps">Next Steps</a></li>
           <li class="level1"><a href="#releases">Releases</a></li>
+          <li class="level1"><a href="#snapshots">Snapshots</a></li>
         </ul>
         
         <p class="footer"></p>
@@ -151,17 +152,15 @@ organization := &quot;org.acme&quot;
 
 scalaVersion := &quot;2.13.3&quot;
 
-// resolvers += &quot;sonatype snapshots&quot; at &quot;https://oss.sonatype.org/content/repositories/snapshots&quot;
-
 resolvers += &quot;sonatype releases&quot; at &quot;https://oss.sonatype.org/content/repositories/releases/&quot;
 
 libraryDependencies ++= Seq(
-  &quot;org.axle-lang&quot; %% &quot;axle-core&quot;  % &quot;0.6.0&quot;,
-  &quot;org.axle-lang&quot; %% &quot;axle-xml&quot;   % &quot;0.6.0&quot;,
-  &quot;org.axle-lang&quot; %% &quot;axle-wheel&quot; % &quot;0.6.0&quot;,
-  &quot;org.axle-lang&quot; %% &quot;axle-jung&quot;  % &quot;0.6.0&quot;,
-  &quot;org.axle-lang&quot; %% &quot;axle-jblas&quot; % &quot;0.6.0&quot;,
-  &quot;org.axle-lang&quot; %% &quot;axle-joda&quot;  % &quot;0.6.0&quot;
+  &quot;org.axle-lang&quot; %% &quot;axle-core&quot;  % &quot;0.6.2&quot;,
+  &quot;org.axle-lang&quot; %% &quot;axle-xml&quot;   % &quot;0.6.2&quot;,
+  &quot;org.axle-lang&quot; %% &quot;axle-wheel&quot; % &quot;0.6.2&quot;,
+  &quot;org.axle-lang&quot; %% &quot;axle-jung&quot;  % &quot;0.6.2&quot;,
+  &quot;org.axle-lang&quot; %% &quot;axle-jblas&quot; % &quot;0.6.2&quot;,
+  &quot;org.axle-lang&quot; %% &quot;axle-joda&quot;  % &quot;0.6.2&quot;
 )</code></pre>
         <p>(Less commonly used <code>axle-laws</code>, <code>axle-awt</code>, and <code>axle-parallel</code> are not shown.)</p>
         <p>The Axle jars are compiled with several additional dependencies in <code>provided</code> scope,
@@ -202,15 +201,15 @@ libraryDependencies ++= Seq(
         <p>To start writing code, do <code>mkdir -p src/main/scala/org/acme/demo</code>, and add your code there.</p>
         
         <h2 id="releases" class="section"><a class="anchor-link left" href="#releases"><i class="icofont-laika">&#xef71;</i></a>Releases</h2>
-        <p>Version 0.6.1-SNAPSHOT is hosted on the <a href="https://oss.sonatype.org/content/repositories/snapshots">Sonatype snapshot repo</a>.
-        The schedule for publishing snapshot versions is irregular.
-        The full dependency is:</p>
-        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-core&quot; % &quot;0.6.1-SNAPSHOT&quot;</code></pre>
-        <p>0.6.0 is the most recent released version:</p>
-        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-core&quot; % &quot;0.6.0&quot;</code></pre>
+        <p>0.6.2 is the most recent released version:</p>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-core&quot; % &quot;0.6.2&quot;</code></pre>
         <p>In addition to <code>axle-core</code> the artifacts <code>axle-jblas</code>, <code>axle-joda</code>, and <code>axle-wheel</code>
         are also published to Sonatype.</p>
         <p>See the <a href="/road_map/">Road Map</a> for more information on the release schedule.</p>
+        
+        <h2 id="snapshots" class="section"><a class="anchor-link left" href="#snapshots"><i class="icofont-laika">&#xef71;</i></a>Snapshots</h2>
+        <p>Snapshot versions are created for every commit and
+        hosted on the <a href="https://oss.sonatype.org/content/repositories/snapshots">Sonatype snapshot repo</a>.</p>
 
       </main>
 
