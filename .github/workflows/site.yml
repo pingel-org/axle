@@ -1,0 +1,17 @@
+name: site
+on:
+  push:
+    branches: [master, main]
+    tags: ["*"]
+jobs:
+  publish:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 0
+      - uses: olafurpg/setup-scala@v13
+      - run: sbt 'project axle-docs' clean
+      - run: sbt -J-Xmx6G 'project axle-docs' mdoc
+      - run: sbt 'project axle-docs' laikaSite
+      - run: sbt 'project axle-docs' ghpagesPushSite
