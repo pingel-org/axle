@@ -51,9 +51,9 @@
       <ul class="nav-list">
         <li class="level1"><a href="../Architecture.html">Architecture</a></li>
         <li class="level1"><a href="../Author.html">Author</a></li>
+        <li class="level1"><a href="../Gallery.html">Gallery</a></li>
         <li class="level1"><a href="../History.html">History</a></li>
         <li class="level1"><a href="../INFO.html">docwork</a></li>
-        <li class="level1"><a href="../Index.html">Axle</a></li>
         <li class="level1"><a href="../ReleaseNotes.html">Release Notes</a></li>
         <li class="level1"><a href="../Resources.html">Resources</a></li>
         <li class="level1"><a href="../RoadMap.html">Road Map</a></li>
@@ -140,7 +140,7 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span></code></pre>
         <p>Define a function to compute the Mandelbrot velocity at point on the plane <code>(x, y)</code></p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
-</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@1a8cbf44
+</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@2bc67c37
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">f</span><span> = (</span><span class="identifier">x0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">x1</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y1</span><span>: </span><span class="type-name">Double</span><span>) =&gt; </span><span class="identifier">inMandelbrotSetAt</span><span>(</span><span class="number-literal">4d</span><span>, </span><span class="identifier">x0</span><span>, </span><span class="identifier">y0</span><span>, </span><span class="number-literal">1000</span><span>).</span><span class="identifier">getOrElse</span><span>(-</span><span class="number-literal">1</span><span>)
 </span><span class="comment">// f: (Double, Double, Double, Double) =&gt; Int = &lt;function4&gt;</span></code></pre>
