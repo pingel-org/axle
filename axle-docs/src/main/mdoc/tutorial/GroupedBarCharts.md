@@ -47,10 +47,10 @@ Create the SVG
 import axle.web._
 import cats.effect._
 
-chart.svg[IO]("barchart1.svg").unsafeRunSync()
+chart.svg[IO]("@DOCWD@/images/barchart1.svg").unsafeRunSync()
 ```
 
-![barchart1](/tutorial/images/barchart1.svg)
+![barchart1](/images/barchart1.svg)
 
 Or alternatively
 
@@ -72,10 +72,10 @@ Create the second SVG
 import axle.web._
 import cats.effect._
 
-chart.svg[IO]("barchart2.svg").unsafeRunSync()
+chart.svg[IO]("@DOCWD@/images/barchart2.svg").unsafeRunSync()
 ```
 
-![barchart2](/tutorial/images/barchart2.svg)
+![barchart2](/images/barchart2.svg)
 
 ## Animation
 

@@ -85,10 +85,10 @@ Render as sn SVG file
 import axle.web._
 import cats.effect._
 
-dVis.svg[IO]("SimpleDirectedGraph.svg").unsafeRunSync()
+dVis.svg[IO]("@DOCWD@/images/SimpleDirectedGraph.svg").unsafeRunSync()
 ```
 
-![directed graph](/tutorial/images/SimpleDirectedGraph.svg)
+![directed graph](/images/SimpleDirectedGraph.svg)
 
 ## Undirected Graph
 

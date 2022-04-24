@@ -55,7 +55,7 @@ Create the PNG
 import axle.awt._
 import cats.effect._
 
-pca.png[IO]("logMap.png").unsafeRunSync()
+pca.png[IO]("@DOCWD@/images/logMap.png").unsafeRunSync()
 ```
 
-![Logistic Map](/tutorial/images/logMap.png)
+![Logistic Map](/images/logMap.png)

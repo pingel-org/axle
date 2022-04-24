@@ -61,8 +61,10 @@ val dgVis = DirectedGraphVisualization[DirectedSparseGraph[UnitOfMeasurement[Dis
 import axle.web._
 import cats.effect._
 
-dgVis.svg[IO]("Distance.svg").unsafeRunSync()
+dgVis.svg[IO]("@DOCWD@/images/Distance.svg").unsafeRunSync()
 ```
+
+![distance]("/images/Distance.svg")
 
 ## Units
 

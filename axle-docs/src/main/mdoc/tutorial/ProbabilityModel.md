@@ -95,10 +95,10 @@ val d6vis = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rational], 
 Create an SVG
 
 ```scala mdoc:silent
-d6vis.svg[IO]("d6.svg").unsafeRunSync()
+d6vis.svg[IO]("@DOCWD@/images/d6.svg").unsafeRunSync()
 ```
 
-![d6](/tutorial/images/d6.svg)
+![d6](/images/d6.svg)
 
 ## Sampler
 
@@ -168,10 +168,10 @@ val d6oneKvis = BarChart[Int, Int, Map[Int, Int], String](
 Create SVG
 
 ```scala mdoc
-d6oneKvis.svg[IO]("d6-1Ksamples.svg").unsafeRunSync()
+d6oneKvis.svg[IO]("@DOCWD@/images/d6-1Ksamples.svg").unsafeRunSync()
 ```
 
-![1k d6 samples](/tutorial/images/d6-1Ksamples.svg)
+![1k d6 samples](/images/d6-1Ksamples.svg)
 
 ## Sigma Algebra Regions
 
@@ -422,10 +422,10 @@ val monadicChart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rati
 Create SVG
 
 ```scala mdoc:silent
-monadicChart.svg[IO]("distributionMonad.svg").unsafeRunSync()
+monadicChart.svg[IO]("@DOCWD@/images/distributionMonad.svg").unsafeRunSync()
 ```
 
-![Monadic d6 + d6](/tutorial/images/distributionMonad.svg)
+![Monadic d6 + d6](/images/distributionMonad.svg)
 
 ### Iffy
 
@@ -476,10 +476,10 @@ val iffyChart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rationa
 Create SVG
 
 ```scala mdoc:silent
-iffyChart.svg[IO]("iffy.svg").unsafeRunSync()
+iffyChart.svg[IO]("@DOCWD@/images/iffy.svg").unsafeRunSync()
 ```
 
-![heads => d6+d6, else d10+d10](/tutorial/images/iffy.svg)
+![heads => d6+d6, else d10+d10](/images/iffy.svg)
 
 ### Further Reading
 

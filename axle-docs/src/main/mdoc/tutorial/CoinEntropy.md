@@ -67,9 +67,9 @@ Create the SVG
 import axle.web._
 import cats.effect._
 
-plot.svg[IO]("coinentropy.svg").unsafeRunSync()
+plot.svg[IO]("@DOCWD@/images/coinentropy.svg").unsafeRunSync()
 ```
 
 The result is the classic Claude Shannon graph
 
-![coin entropy](/tutorial/images/coinentropy.svg)
+![coin entropy](/images/coinentropy.svg)

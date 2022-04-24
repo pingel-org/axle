@@ -66,7 +66,7 @@ val errorPlot = Plot(
 import axle.web._
 import cats.effect._
 
-errorPlot.svg[IO]("lrerror.svg").unsafeRunSync()
+errorPlot.svg[IO]("@DOCWD@/images/lrerror.svg").unsafeRunSync()
 ```
 
-![lr error](/tutorial/images/lrerror.svg)
+![lr error](/images/lrerror.svg)

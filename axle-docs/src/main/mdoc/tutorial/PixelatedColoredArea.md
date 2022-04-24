@@ -48,10 +48,10 @@ Create PNG
 import axle.awt._
 import cats.effect._
 
-pca.png[IO]("roy_diagonal.png").unsafeRunSync()
+pca.png[IO]("@DOCWD@/images/roy_diagonal.png").unsafeRunSync()
 ```
 
-![ROY Diagonal](/tutorial/images/roy_diagonal.png)
+![ROY Diagonal](/images/roy_diagonal.png)
 
 ## Second example
 
@@ -74,7 +74,7 @@ val gpPca = PixelatedColoredArea(
 import axle.awt._
 import cats.effect._
 
-gpPca.png[IO]("green_polar.png").unsafeRunSync()
+gpPca.png[IO]("@DOCWD@/images/green_polar.png").unsafeRunSync()
 ```
 
-![Green Polar](/tutorial/images/green_polar.png)
+![Green Polar](/images/green_polar.png)

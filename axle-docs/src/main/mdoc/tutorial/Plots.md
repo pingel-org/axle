@@ -87,10 +87,10 @@ Create the SVG
 import axle.web._
 import cats.effect._
 
-plot.svg[IO]("random_waves.svg").unsafeRunSync()
+plot.svg[IO]("@DOCWD@/images/random_waves.svg").unsafeRunSync()
 ```
 
-![waves](/tutorial/images/random_waves.svg)
+![waves](/images/random_waves.svg)
 
 ## Animation
 

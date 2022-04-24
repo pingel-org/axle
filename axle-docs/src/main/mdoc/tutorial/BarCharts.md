@@ -42,7 +42,7 @@ import cats.effect._
 ```
 
 ```scala mdoc
-chart.svg[IO]("fruitsales.svg").unsafeRunSync()
+chart.svg[IO]("@DOCWD@/images/fruitsales.svg").unsafeRunSync()
 ```
 
-<object data="/tutorial/images/fruitsales.svg" type="image/svg+xml" alt="fruit sales"/>
+![fruit sales]("/images/fruitsales.svg")

@@ -45,10 +45,10 @@ Create PNG
 import axle.awt._
 import cats.effect._
 
-pca.png[IO]("mandelbrot.png").unsafeRunSync()
+pca.png[IO]("@DOCWD@/images/mandelbrot.png").unsafeRunSync()
 ```
 
-![Mandelbrot Set](/tutorial/images/mandelbrot.png)
+![Mandelbrot Set](/images/mandelbrot.png)
 
 Some other parts of the set to explore:
 

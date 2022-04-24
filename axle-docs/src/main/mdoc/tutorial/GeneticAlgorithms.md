@@ -86,7 +86,7 @@ Render to an SVG file
 import axle.web._
 import cats.effect._
 
-plot.svg[IO]("ga.svg").unsafeRunSync()
+plot.svg[IO]("@DOCWD@/images/ga.svg").unsafeRunSync()
 ```
 
-![ga](/tutorial/images/ga.svg)
+![ga](/images/ga.svg)
