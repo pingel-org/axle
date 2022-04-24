@@ -95,12 +95,7 @@ lazy val commonSettings = Seq(
     Resolver.sonatypeRepo("releases"),
     Resolver.sonatypeRepo("snapshots")
   ),
-  libraryDependencies ++= Seq(
-    // TODO simulacrum, machinist, etc
-  ),
   parallelExecution in Test := false
-  //autoCompilerPlugins := true,
-//  scalacOptions in (Compile, doc) := (scalacOptions in (Compile, doc)).value.filter(_ != "-Xfatal-warnings")
 )
 
 lazy val commonJvmSettings = Seq(
