@@ -6,6 +6,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * README.md and directory.conf to structure site
 * fix internal links
+* BarCharts.md: fruitsales.svg
 * set mdocVariables with latest released version
 * simplify "Installation"
 * update google analytics
