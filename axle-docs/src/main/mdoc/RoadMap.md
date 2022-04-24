@@ -4,11 +4,14 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## CICD
 
+* no 'docwork' links
 * README.md and directory.conf to structure site
 * fix internal links
+
 * set mdocVariables with latest released version
-* simplify "Installation"
 * update google analytics
+* gallery images should be same width
+* simplify "Installation"
 * CNAME (www and root)
 
 * update publishing.txt
