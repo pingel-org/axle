@@ -52,6 +52,7 @@
         <li class="level1"><a href="../Architecture.html">Architecture</a></li>
         <li class="level1"><a href="../Author.html">Author</a></li>
         <li class="level1"><a href="../History.html">History</a></li>
+        <li class="level1"><a href="../INFO.html">docwork</a></li>
         <li class="level1"><a href="../Index.html">Axle</a></li>
         <li class="level1"><a href="../ReleaseNotes.html">Release Notes</a></li>
         <li class="level1"><a href="../Resources.html">Resources</a></li>
@@ -59,6 +60,7 @@
         <li class="level1"><a href="../Spokes.html">Spokes</a></li>
         <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
         <li class="level1"><a href="../Videos.html">Videos</a></li>
+        <li class="level1"><a href="../images/index.html">docwork images</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="Algebra.html">Algebra</a></li>
@@ -186,28 +188,28 @@
 // C&gt; Door #1: 
 // C&gt; Door #2: 
 // C&gt; Door #3: 
-// M&gt; Door #1: car
+// M&gt; Door #1: goat, first choice
 // M&gt; Door #2: goat
-// M&gt; Door #3: goat, first choice
-// C&gt; Door #1: 
+// M&gt; Door #3: car
+// C&gt; Door #1: first choice
 // C&gt; Door #2: , revealed goat
-// C&gt; Door #3: first choice
+// C&gt; Door #3: 
 // endState: MontyHallState = MontyHallState(
-//   placement = Some(value = PlaceCar(door = 1)),
+//   placement = Some(value = PlaceCar(door = 3)),
 //   placed = true,
-//   firstChoice = Some(value = FirstChoice(door = 3)),
+//   firstChoice = Some(value = FirstChoice(door = 1)),
 //   reveal = Some(value = Reveal(door = 2)),
-//   secondChoice = Some(value = Right(value = Stay()))
+//   secondChoice = Some(value = Left(value = Change()))
 // )</span></code></pre>
         <p>Display outcome to each player</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
-</span><span class="comment">// outcome: MontyHallOutcome = MontyHallOutcome(car = false)
+</span><span class="comment">// outcome: MontyHallOutcome = MontyHallOutcome(car = true)
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// C&gt; You won a goat
-// M&gt; Contestant won a goat</span></code></pre>
+</span><span class="comment">// C&gt; You won the car!
+// M&gt; Contestant won the car!</span></code></pre>
 
       </main>
 

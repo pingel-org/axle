@@ -52,6 +52,7 @@
         <li class="level1"><a href="../Architecture.html">Architecture</a></li>
         <li class="level1"><a href="../Author.html">Author</a></li>
         <li class="level1"><a href="../History.html">History</a></li>
+        <li class="level1"><a href="../INFO.html">docwork</a></li>
         <li class="level1"><a href="../Index.html">Axle</a></li>
         <li class="level1"><a href="../ReleaseNotes.html">Release Notes</a></li>
         <li class="level1"><a href="../Resources.html">Resources</a></li>
@@ -59,6 +60,7 @@
         <li class="level1"><a href="../Spokes.html">Spokes</a></li>
         <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
         <li class="level1"><a href="../Videos.html">Videos</a></li>
+        <li class="level1"><a href="../images/index.html">docwork images</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="Algebra.html">Algebra</a></li>
@@ -186,48 +188,32 @@
 // X&gt;  | |           4|5|6
 // X&gt;  | |           7|8|9
 // O&gt; Board:         Movement Key:
-// O&gt;  | |           1|2|3
-// O&gt;  | |X          4|5|6
+// O&gt; X| |           1|2|3
+// O&gt;  | |           4|5|6
 // O&gt;  | |           7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt;  | |           1|2|3
-// X&gt; O| |X          4|5|6
+// X&gt; X| |           1|2|3
+// X&gt;  | |O          4|5|6
 // X&gt;  | |           7|8|9
 // O&gt; Board:         Movement Key:
-// O&gt;  |X|           1|2|3
-// O&gt; O| |X          4|5|6
-// O&gt;  | |           7|8|9
+// O&gt; X| |           1|2|3
+// O&gt;  | |O          4|5|6
+// O&gt;  | |X          7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt;  |X|           1|2|3
-// X&gt; O| |X          4|5|6
-// X&gt; O| |           7|8|9
-// O&gt; Board:         Movement Key:
-// O&gt;  |X|           1|2|3
-// O&gt; O|X|X          4|5|6
-// O&gt; O| |           7|8|9
-// X&gt; Board:         Movement Key:
-// X&gt;  |X|           1|2|3
-// X&gt; O|X|X          4|5|6
-// X&gt; O|O|           7|8|9
-// O&gt; Board:         Movement Key:
-// O&gt;  |X|           1|2|3
-// O&gt; O|X|X          4|5|6
-// O&gt; O|O|X          7|8|9
-// X&gt; Board:         Movement Key:
-// X&gt;  |X|O          1|2|3
-// X&gt; O|X|X          4|5|6
-// X&gt; O|O|X          7|8|9
+// X&gt; X| |O          1|2|3
+// X&gt;  | |O          4|5|6
+// X&gt;  | |X          7|8|9
 // endState: TicTacToeState = TicTacToeState(
 //   moverOpt = None,
 //   board = Array(
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     None,
+//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
+//     None,
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
-//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
-//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
-//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
-//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
-//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
+//     None,
+//     None,
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;))
 //   ),
 //   boardSize = 3

@@ -52,6 +52,7 @@
         <li class="level1"><a href="../Architecture.html">Architecture</a></li>
         <li class="level1"><a href="../Author.html">Author</a></li>
         <li class="level1"><a href="../History.html">History</a></li>
+        <li class="level1"><a href="../INFO.html">docwork</a></li>
         <li class="level1"><a href="../Index.html">Axle</a></li>
         <li class="level1"><a href="../ReleaseNotes.html">Release Notes</a></li>
         <li class="level1"><a href="../Resources.html">Resources</a></li>
@@ -59,6 +60,7 @@
         <li class="level1"><a href="../Spokes.html">Spokes</a></li>
         <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
         <li class="level1"><a href="../Videos.html">Videos</a></li>
+        <li class="level1"><a href="../images/index.html">docwork images</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="Algebra.html">Algebra</a></li>
@@ -141,25 +143,25 @@
         <p>Demonstrate it uniformly sampling 15 of the first 100 integers</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sample</span><span> = </span><span class="identifier">reservoirSampleK</span><span>(</span><span class="number-literal">15</span><span>, </span><span class="type-name">LazyList</span><span>.</span><span class="identifier">from</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">drop</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">head</span><span>
 </span><span class="comment">// sample: List[Int] = List(
-//   100,
-//   94,
-//   90,
-//   85,
+//   99,
+//   93,
+//   91,
+//   88,
+//   87,
 //   79,
-//   75,
-//   74,
-//   64,
-//   60,
-//   57,
-//   26,
-//   20,
-//   17,
-//   14,
-//   6
+//   65,
+//   62,
+//   49,
+//   48,
+//   47,
+//   45,
+//   36,
+//   21,
+//   11
 // )
 </span><span>
 </span><span class="identifier">arithmeticMean</span><span>(</span><span class="identifier">sample</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>))
-</span><span class="comment">// res0: Double = 57.4</span></code></pre>
+</span><span class="comment">// res0: Double = 61.4</span></code></pre>
         <p>The mean of the sample should be in the ballpark of the mean of the entire list -- 50.</p>
 
       </main>

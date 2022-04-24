@@ -52,6 +52,7 @@
         <li class="level1"><a href="../Architecture.html">Architecture</a></li>
         <li class="level1"><a href="../Author.html">Author</a></li>
         <li class="level1"><a href="../History.html">History</a></li>
+        <li class="level1"><a href="../INFO.html">docwork</a></li>
         <li class="level1"><a href="../Index.html">Axle</a></li>
         <li class="level1"><a href="../ReleaseNotes.html">Release Notes</a></li>
         <li class="level1"><a href="../Resources.html">Resources</a></li>
@@ -59,6 +60,7 @@
         <li class="level1"><a href="../Spokes.html">Spokes</a></li>
         <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
         <li class="level1"><a href="../Videos.html">Videos</a></li>
+        <li class="level1"><a href="../images/index.html">docwork images</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="Algebra.html">Algebra</a></li>
@@ -219,7 +221,7 @@
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
-</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@653d718c
+</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@1a8cbf44
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">plot</span><span> = </span><span class="type-name">Plot</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Rational</span><span>, </span><span class="type-name">UnittedQuantity</span><span>[</span><span class="type-name">Information</span><span>, </span><span class="type-name">Double</span><span>], </span><span class="type-name">D</span><span>](
   () =&gt; </span><span class="type-name">List</span><span>((</span><span class="string-literal">&quot;h&quot;</span><span>, </span><span class="identifier">hm</span><span>)),
@@ -266,9 +268,9 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
 
-</span><span class="identifier">plot</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;coinentropy.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+</span><span class="identifier">plot</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/coinentropy.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
         <p>The result is the classic Claude Shannon graph</p>
-        <p><img src="/tutorial/images/coinentropy.svg" alt="coin entropy"></p>
+        <p><img src="/images/coinentropy.svg" alt="coin entropy"></p>
 
       </main>
 

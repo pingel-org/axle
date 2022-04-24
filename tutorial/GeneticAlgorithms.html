@@ -52,6 +52,7 @@
         <li class="level1"><a href="../Architecture.html">Architecture</a></li>
         <li class="level1"><a href="../Author.html">Author</a></li>
         <li class="level1"><a href="../History.html">History</a></li>
+        <li class="level1"><a href="../INFO.html">docwork</a></li>
         <li class="level1"><a href="../Index.html">Axle</a></li>
         <li class="level1"><a href="../ReleaseNotes.html">Release Notes</a></li>
         <li class="level1"><a href="../Resources.html">Resources</a></li>
@@ -59,6 +60,7 @@
         <li class="level1"><a href="../Spokes.html">Spokes</a></li>
         <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
         <li class="level1"><a href="../Videos.html">Videos</a></li>
+        <li class="level1"><a href="../images/index.html">docwork images</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="Algebra.html">Algebra</a></li>
@@ -141,7 +143,7 @@
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">shapeless</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">gen</span><span> = </span><span class="type-name">Generic</span><span>[</span><span class="type-name">Rabbit</span><span>]
-</span><span class="comment">// gen: Generic[Rabbit]{type Repr = Int :: Double :: Double :: Double :: Double :: Double :: Double :: Double :: shapeless.HNil} = shapeless.Generic$$anon$1@674e7043
+</span><span class="comment">// gen: Generic[Rabbit]{type Repr = Int :: Double :: Double :: Double :: Double :: Double :: Double :: Double :: shapeless.HNil} = shapeless.Generic$$anon$1@4f6c2651
 </span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="identifier">_</span><span>
 
@@ -171,7 +173,7 @@
   }
 
 }
-</span><span class="comment">// rabbitSpecies: AnyRef with Species[gen.Repr] = repl.MdocSession$App$$anon$1@393b08b4</span></code></pre>
+</span><span class="comment">// rabbitSpecies: AnyRef with Species[gen.Repr] = repl.MdocSession$App$$anon$1@1e2da8ef</span></code></pre>
         <p>Run the genetic algorithm</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 
@@ -184,25 +186,25 @@
 </span><span class="keyword">val</span><span> </span><span class="identifier">log</span><span> = </span><span class="identifier">ga</span><span>.</span><span class="identifier">run</span><span>(</span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>)
 </span><span class="comment">// log: GeneticAlgorithmLog[gen.Repr] = GeneticAlgorithmLog(
 //   winners = Vector(
-//     2 :: 24.95657430876979 :: 3.341321258268984 :: 12.476575182519387 :: 14.883063726350676 :: 2.0051281932462066 :: 7.711971828637539 :: 2.0844143325931412 :: HNil,
-//     2 :: 24.95657430876979 :: 4.930064079979573 :: 12.476575182519387 :: 14.813545711969034 :: 2.0051281932462066 :: 7.643247787545469 :: 2.0844143325931412 :: HNil,
-//     2 :: 24.95657430876979 :: 4.930064079979573 :: 11.93133795210932 :: 14.883063726350676 :: 2.0051281932462066 :: 7.711971828637539 :: 2.0844143325931412 :: HNil,
-//     2 :: 24.95657430876979 :: 4.930064079979573 :: 12.476575182519387 :: 14.883063726350676 :: 2.0051281932462066 :: 3.4450563052960743 :: 2.3997560808309872 :: HNil,
-//     2 :: 17.740585456463634 :: 4.930064079979573 :: 12.476575182519387 :: 14.883063726350676 :: 2.0051281932462066 :: 3.009386393779143 :: 2.0844143325931412 :: HNil,
-//     2 :: 24.95657430876979 :: 3.7374948675930497 :: 12.476575182519387 :: 14.883063726350676 :: 2.0051281932462066 :: 7.334107094927722 :: 2.0844143325931412 :: HNil,
-//     2 :: 24.95657430876979 :: 2.8907019807434184 :: 7.461007001877061 :: 14.883063726350676 :: 2.0051281932462066 :: 7.711971828637539 :: 8.16481457108114 :: HNil,
-//     2 :: 24.95657430876979 :: 4.930064079979573 :: 11.93133795210932 :: 14.883063726350676 :: 2.9468305970668216 :: 7.711971828637539 :: 2.0844143325931412 :: HNil,
-//     2 :: 24.95657430876979 :: 4.930064079979573 :: 11.93133795210932 :: 14.883063726350676 :: 2.0051281932462066 :: 7.711971828637539 :: 2.0844143325931412 :: HNil,
-//     2 :: 24.95657430876979 :: 4.930064079979573 :: 4.821158041951829 :: 14.979210203232471 :: 2.0051281932462066 :: 7.711971828637539 :: 2.0844143325931412 :: HNil,
-//     2 :: 24.95657430876979 :: 4.930064079979573 :: 11.55364545379626 :: 14.883063726350676 :: 2.0051281932462066 :: 7.711971828637539 :: 2.127962683641428 :: HNil,
-//     2 :: 24.95657430876979 :: 4.930064079979573 :: 11.93133795210932 :: 14.883063726350676 :: 2.0051281932462066 :: 7.711971828637539 :: 2.3997560808309872 :: HNil,
-//     2 :: 24.95657430876979 :: 4.930064079979573 :: 12.476575182519387 :: 14.883063726350676 :: 2.0051281932462066 :: 7.711971828637539 :: 2.3116691952493698 :: HNil,
-//     2 :: 24.95657430876979 :: 4.930064079979573 :: 12.476575182519387 :: 14.635316513219532 :: 2.0051281932462066 :: 7.711971828637539 :: 10.559224861020628 :: HNil,
-//     2 :: 24.95657430876979 :: 4.930064079979573 :: 12.476575182519387 :: 14.635316513219532 :: 2.0051281932462066 :: 7.711971828637539 :: 2.0844143325931412 :: HNil,
-//     2 :: 24.95657430876979 :: 4.672508162829776 :: 12.476575182519387 :: 14.883063726350676 :: 2.0051281932462066 :: 7.711971828637539 :: 2.6719674719718407 :: ...
+//     2 :: 24.988234173929676 :: 4.818351977502498 :: 11.617284583014573 :: 14.901851938085645 :: 2.0036108650320195 :: 7.858434285829125 :: 3.425561300381765 :: HNil,
+//     2 :: 24.988234173929676 :: 4.818351977502498 :: 11.617284583014573 :: 14.313454410857187 :: 2.249378162959948 :: 7.858434285829125 :: 2.060520126558794 :: HNil,
+//     2 :: 24.988234173929676 :: 4.818351977502498 :: 11.617284583014573 :: 14.901851938085645 :: 2.0036108650320195 :: 7.858434285829125 :: 2.060520126558794 :: HNil,
+//     2 :: 24.988234173929676 :: 4.818351977502498 :: 11.617284583014573 :: 13.348690537735504 :: 2.0036108650320195 :: 7.858434285829125 :: 2.060520126558794 :: HNil,
+//     2 :: 24.988234173929676 :: 4.818351977502498 :: 11.617284583014573 :: 14.832169504236457 :: 2.0068857486119835 :: 7.858434285829125 :: 2.060520126558794 :: HNil,
+//     2 :: 24.988234173929676 :: 3.4373198880429716 :: 11.617284583014573 :: 14.901851938085645 :: 2.0036108650320195 :: 7.858434285829125 :: 2.060520126558794 :: HNil,
+//     2 :: 24.988234173929676 :: 3.4373198880429716 :: 11.617284583014573 :: 14.901851938085645 :: 2.0036108650320195 :: 7.858434285829125 :: 2.060520126558794 :: HNil,
+//     2 :: 24.988234173929676 :: 4.87002243314225 :: 11.617284583014573 :: 13.348690537735504 :: 2.0036108650320195 :: 7.858434285829125 :: 2.060520126558794 :: HNil,
+//     2 :: 24.988234173929676 :: 4.818351977502498 :: 11.228853861352212 :: 14.901851938085645 :: 2.0068857486119835 :: 7.858434285829125 :: 2.060520126558794 :: HNil,
+//     2 :: 24.988234173929676 :: 2.024880366607239 :: 11.617284583014573 :: 14.901851938085645 :: 2.0068857486119835 :: 7.858434285829125 :: 2.060520126558794 :: HNil,
+//     2 :: 24.988234173929676 :: 4.818351977502498 :: 11.617284583014573 :: 14.901851938085645 :: 3.4121868800237958 :: 7.858434285829125 :: 2.060520126558794 :: HNil,
+//     2 :: 8.755078849400713 :: 4.818351977502498 :: 11.617284583014573 :: 14.901851938085645 :: 2.0036108650320195 :: 7.858434285829125 :: 2.060520126558794 :: HNil,
+//     2 :: 7.90527134905926 :: 4.818351977502498 :: 5.338765414573541 :: 14.901851938085645 :: 2.0036108650320195 :: 7.858434285829125 :: 2.060520126558794 :: HNil,
+//     2 :: 24.988234173929676 :: 4.818351977502498 :: 11.617284583014573 :: 14.901851938085645 :: 2.0068857486119835 :: 7.858434285829125 :: 2.060520126558794 :: HNil,
+//     2 :: 24.988234173929676 :: 4.818351977502498 :: 11.617284583014573 :: 14.901851938085645 :: 2.0036108650320195 :: 7.858434285829125 :: 3.425561300381765 :: HNil,
+//     2 :: 24.988234173929676 :: 4.818351977502498 :: 11.617284583014573 :: 14.901851938085645 :: 2.0068857486119835 :: 7.858434285829125 :: 2.060520126558794 :: ...
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">winner</span><span> = </span><span class="identifier">log</span><span>.</span><span class="identifier">winners</span><span>.</span><span class="identifier">last</span><span>
-</span><span class="comment">// winner: gen.Repr = 1 :: 24.95657430876979 :: 4.930064079979573 :: 11.93133795210932 :: 14.883063726350676 :: 2.0051281932462066 :: 6.914404841071088 :: 2.0844143325931412 :: HNil</span></code></pre>
+</span><span class="comment">// winner: gen.Repr = 2 :: 24.988234173929676 :: 4.818351977502498 :: 11.617284583014573 :: 14.901851938085645 :: 2.0036108650320195 :: 7.858434285829125 :: 2.060520126558794 :: HNil</span></code></pre>
         <p>Plot the min, average, and max fitness function by generation</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">collection</span><span>.</span><span class="identifier">immutable</span><span>.</span><span class="type-name">TreeMap</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
@@ -247,8 +249,8 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
 
-</span><span class="identifier">plot</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;ga.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
-        <p><img src="/tutorial/images/ga.svg" alt="ga"></p>
+</span><span class="identifier">plot</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/ga.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/ga.svg" alt="ga"></p>
 
       </main>
 

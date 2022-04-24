@@ -52,6 +52,7 @@
         <li class="level1"><a href="../Architecture.html">Architecture</a></li>
         <li class="level1"><a href="../Author.html">Author</a></li>
         <li class="level1"><a href="../History.html">History</a></li>
+        <li class="level1"><a href="../INFO.html">docwork</a></li>
         <li class="level1"><a href="../Index.html">Axle</a></li>
         <li class="level1"><a href="../ReleaseNotes.html">Release Notes</a></li>
         <li class="level1"><a href="../Resources.html">Resources</a></li>
@@ -59,6 +60,7 @@
         <li class="level1"><a href="../Spokes.html">Spokes</a></li>
         <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
         <li class="level1"><a href="../Videos.html">Videos</a></li>
+        <li class="level1"><a href="../images/index.html">docwork images</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="Algebra.html">Algebra</a></li>
@@ -168,9 +170,9 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">nlp</span><span>.</span><span class="type-name">TermVectorizer</span><span>
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
-</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@653d718c
+</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@1a8cbf44
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
-</span><span class="comment">// nrootDouble: NRoot[Double] = spire.std.DoubleAlgebra@653d718c
+</span><span class="comment">// nrootDouble: NRoot[Double] = spire.std.DoubleAlgebra@1a8cbf44
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">vectorizer</span><span> = </span><span class="type-name">TermVectorizer</span><span>[</span><span class="type-name">Double</span><span>](</span><span class="type-name">English</span><span>.</span><span class="identifier">stopWords</span><span>)
 </span><span class="comment">// vectorizer: TermVectorizer[Double] = TermVectorizer(
@@ -230,7 +232,7 @@
         <p>The object defines a <code>space</code> method, which returns a <code>spire.algebra.MetricSpace</code> for document vectors:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">nlp</span><span>.</span><span class="type-name">UnweightedDocumentVectorSpace</span><span>
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">unweighted</span><span> = </span><span class="type-name">UnweightedDocumentVectorSpace</span><span>().</span><span class="identifier">normed</span><span>
-</span><span class="comment">// unweighted: spire.algebra.NormedVectorSpace[Map[String, Double], Double] = spire.algebra.InnerProductSpace$$anon$1@921b1d5
+</span><span class="comment">// unweighted: spire.algebra.NormedVectorSpace[Map[String, Double], Double] = spire.algebra.InnerProductSpace$$anon$1@377ec8d0
 </span><span>
 </span><span class="identifier">unweighted</span><span>.</span><span class="identifier">distance</span><span>(</span><span class="identifier">v1</span><span>, </span><span class="identifier">v2</span><span>)
 </span><span class="comment">// res0: Double = 3.4641016151377544
@@ -292,7 +294,7 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">nlp</span><span>.</span><span class="type-name">TFIDFDocumentVectorSpace</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">tfidf</span><span> = </span><span class="type-name">TFIDFDocumentVectorSpace</span><span>(</span><span class="identifier">corpus</span><span>, </span><span class="identifier">vectorizer</span><span>).</span><span class="identifier">normed</span><span>
-</span><span class="comment">// tfidf: spire.algebra.NormedVectorSpace[Map[String, Double], Double] = spire.algebra.InnerProductSpace$$anon$1@78d6ae0f
+</span><span class="comment">// tfidf: spire.algebra.NormedVectorSpace[Map[String, Double], Double] = spire.algebra.InnerProductSpace$$anon$1@4f528640
 </span><span>
 </span><span class="identifier">tfidf</span><span>.</span><span class="identifier">distance</span><span>(</span><span class="identifier">v1</span><span>, </span><span class="identifier">v2</span><span>)
 </span><span class="comment">// res4: Double = 4.068944074907273

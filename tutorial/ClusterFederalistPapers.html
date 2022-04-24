@@ -52,6 +52,7 @@
         <li class="level1"><a href="../Architecture.html">Architecture</a></li>
         <li class="level1"><a href="../Author.html">Author</a></li>
         <li class="level1"><a href="../History.html">History</a></li>
+        <li class="level1"><a href="../INFO.html">docwork</a></li>
         <li class="level1"><a href="../Index.html">Axle</a></li>
         <li class="level1"><a href="../ReleaseNotes.html">Release Notes</a></li>
         <li class="level1"><a href="../Resources.html">Resources</a></li>
@@ -59,6 +60,7 @@
         <li class="level1"><a href="../Spokes.html">Spokes</a></li>
         <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
         <li class="level1"><a href="../Videos.html">Videos</a></li>
+        <li class="level1"><a href="../images/index.html">docwork images</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="Algebra.html">Algebra</a></li>
@@ -138,19 +140,19 @@
 </span><span class="keyword">import</span><span> </span><span class="type-name">FederalistPapers</span><span>.</span><span class="type-name">Article</span></code></pre>
         <p>Download (and cache) the Federalist articles downloader:</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ec</span><span> = </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="identifier">global</span><span>
-</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@275d2da1[Running, parallelism = 4, size = 3, active = 0, running = 0, steals = 6, tasks = 0, submissions = 0]
+</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@26a2add8[Running, parallelism = 4, size = 2, active = 0, running = 0, steals = 6, tasks = 0, submissions = 0]
 </span><span class="keyword">val</span><span> </span><span class="identifier">blocker</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">Blocker</span><span>.</span><span class="identifier">liftExecutionContext</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@275d2da1
+</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@26a2add8
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">cs</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">contextShift</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@626f0c34
+</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@3b39f89b
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">articlesIO</span><span> = </span><span class="type-name">FederalistPapers</span><span>.</span><span class="identifier">articles</span><span>[</span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>](</span><span class="identifier">blocker</span><span>)
 </span><span class="comment">// articlesIO: cats.effect.IO[List[Article]] = Map(
 //   source = Async(
-//     k = cats.effect.internals.IOBracket$$$Lambda$8851/1957082114@5c433146,
+//     k = cats.effect.internals.IOBracket$$$Lambda$8827/2036062096@7112544b,
 //     trampolineAfter = false
 //   ),
-//   f = axle.data.FederalistPapers$$$Lambda$8864/1703354041@13cbb0fb,
+//   f = axle.data.FederalistPapers$$$Lambda$8840/1305579792@430d91fc,
 //   index = 0
 // )
 </span><span>
@@ -214,7 +216,7 @@
 
 </span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">CRing</span><span>
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringLong</span><span>: </span><span class="type-name">CRing</span><span>[</span><span class="type-name">Long</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">LongAlgebra</span><span>
-</span><span class="comment">// ringLong: CRing[Long] = spire.std.LongAlgebra@5d35b706
+</span><span class="comment">// ringLong: CRing[Long] = spire.std.LongAlgebra@70f22828
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">corpus</span><span> = </span><span class="type-name">Corpus</span><span>[</span><span class="type-name">Vector</span><span>, </span><span class="type-name">Long</span><span>](</span><span class="identifier">articles</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">text</span><span>).</span><span class="identifier">toVector</span><span>, </span><span class="type-name">English</span><span>)
 </span><span class="comment">// corpus: Corpus[Vector, Long] = Corpus(
@@ -410,7 +412,7 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">normalizer</span><span> = (</span><span class="type-name">PCAFeatureNormalizer</span><span>[</span><span class="type-name">DoubleMatrix</span><span>] </span><span class="identifier">_</span><span>).</span><span class="identifier">curried</span><span>.</span><span class="identifier">apply</span><span>(</span><span class="number-literal">0.98</span><span>)
-</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$8899/262254631@2adde9b
+</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$8875/1703147932@67a84745
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">classifier</span><span> = </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Article</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
   </span><span class="identifier">articles</span><span>,
@@ -528,13 +530,13 @@
 // ...
 </span><span>
 </span><span class="identifier">confusion</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res1: String = &quot;&quot;&quot; 0  7 14 31 : 52 HAMILTON
+</span><span class="comment">// res1: String = &quot;&quot;&quot; 1 12 10 29 : 52 HAMILTON
 //  0  0  0  3 :  3 HAMILTON AND MADISON
-//  3  3  1  8 : 15 MADISON
-//  0  0  1  4 :  5 JAY
-//  3  0  1  7 : 11 HAMILTON OR MADISON
+//  3  3  0  9 : 15 MADISON
+//  0  1  0  4 :  5 JAY
+//  0  1  0 10 : 11 HAMILTON OR MADISON
 // 
-//  6 10 17 53
+//  4 17 10 55
 // &quot;&quot;&quot;</span></code></pre>
 
       </main>

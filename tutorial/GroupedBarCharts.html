@@ -52,6 +52,7 @@
         <li class="level1"><a href="../Architecture.html">Architecture</a></li>
         <li class="level1"><a href="../Author.html">Author</a></li>
         <li class="level1"><a href="../History.html">History</a></li>
+        <li class="level1"><a href="../INFO.html">docwork</a></li>
         <li class="level1"><a href="../Index.html">Axle</a></li>
         <li class="level1"><a href="../ReleaseNotes.html">Release Notes</a></li>
         <li class="level1"><a href="../Resources.html">Resources</a></li>
@@ -59,6 +60,7 @@
         <li class="level1"><a href="../Spokes.html">Spokes</a></li>
         <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
         <li class="level1"><a href="../Videos.html">Videos</a></li>
+        <li class="level1"><a href="../images/index.html">docwork images</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="Algebra.html">Algebra</a></li>
@@ -200,15 +202,15 @@
 //     )
 //   ),
 //   colorOf = &lt;function2&gt;,
-//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$9302/1592809095@1beef195,
-//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$9303/448333932@5c932c6f
+//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$9278/1089036715@7f5c75e3,
+//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$9279/1405701680@37edcb80
 // )</span></code></pre>
         <p>Create the SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
 
-</span><span class="identifier">chart</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;barchart1.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
-        <p><img src="/tutorial/images/barchart1.svg" alt="barchart1"></p>
+</span><span class="identifier">chart</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/barchart1.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/barchart1.svg" alt="barchart1"></p>
         <p>Or alternatively</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">chart2</span><span> = </span><span class="type-name">BarChartGrouped</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Map</span><span>[(</span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>), </span><span class="type-name">Double</span><span>], </span><span class="type-name">String</span><span>](
   () =&gt; </span><span class="identifier">sales</span><span> </span><span class="identifier">map</span><span> { </span><span class="keyword">case</span><span> (</span><span class="identifier">k</span><span>, </span><span class="identifier">v</span><span>) =&gt; (</span><span class="identifier">k</span><span class="number-literal">._2</span><span>, </span><span class="identifier">k</span><span class="number-literal">._1</span><span>) -&gt; </span><span class="identifier">v</span><span>},
@@ -251,15 +253,15 @@
 //     )
 //   ),
 //   colorOf = &lt;function2&gt;,
-//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$9302/1592809095@1beef195,
-//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$9303/448333932@5c932c6f
+//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$9278/1089036715@7f5c75e3,
+//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$9279/1405701680@37edcb80
 // )</span></code></pre>
         <p>Create the second SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
 
-</span><span class="identifier">chart</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;barchart2.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
-        <p><img src="/tutorial/images/barchart2.svg" alt="barchart2"></p>
+</span><span class="identifier">chart</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/barchart2.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/barchart2.svg" alt="barchart2"></p>
         
         <h2 id="animation" class="section"><a class="anchor-link left" href="#animation"><i class="icofont-laika">&#xef71;</i></a>Animation</h2>
         <p>This example keeps the &quot;bar&quot; value steady at 1.0 while assigning a new random Double (between 0 and 1) to &quot;foo&quot; every second.</p>
@@ -283,11 +285,11 @@
   </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">modules</span><span>.</span><span class="identifier">doubleRationalModule</span><span>
   </span><span class="type-name">Time</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
 }
-</span><span class="comment">// timeConverter: axle.quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[axle.quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with axle.quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@5331a8a9
+</span><span class="comment">// timeConverter: axle.quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[axle.quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with axle.quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@508ce997
 </span><span class="keyword">import</span><span> </span><span class="identifier">timeConverter</span><span>.</span><span class="identifier">second</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">dataUpdates</span><span>: </span><span class="type-name">Observable</span><span>[</span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>]] = </span><span class="identifier">intervalScan</span><span>(</span><span class="identifier">initial</span><span>, </span><span class="identifier">tick</span><span>, </span><span class="number-literal">1d</span><span> *: </span><span class="identifier">second</span><span>)
-</span><span class="comment">// dataUpdates: Observable[Map[String, Double]] = monix.reactive.internal.operators.ScanObservable@60268ce0</span></code></pre>
+</span><span class="comment">// dataUpdates: Observable[Map[String, Double]] = monix.reactive.internal.operators.ScanObservable@24bae8df</span></code></pre>
         <p>Create <code>CurrentValueSubscriber</code>, which will be used by the <code>BarChart</code> to get the latest value</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="type-name">CurrentValueSubscriber</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">monix</span><span>.</span><span class="identifier">execution</span><span>.</span><span class="type-name">Scheduler</span><span>.</span><span class="type-name">Implicits</span><span>.</span><span class="identifier">global</span><span>

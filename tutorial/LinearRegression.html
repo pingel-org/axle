@@ -52,6 +52,7 @@
         <li class="level1"><a href="../Architecture.html">Architecture</a></li>
         <li class="level1"><a href="../Author.html">Author</a></li>
         <li class="level1"><a href="../History.html">History</a></li>
+        <li class="level1"><a href="../INFO.html">docwork</a></li>
         <li class="level1"><a href="../Index.html">Axle</a></li>
         <li class="level1"><a href="../ReleaseNotes.html">Release Notes</a></li>
         <li class="level1"><a href="../Resources.html">Resources</a></li>
@@ -59,6 +60,7 @@
         <li class="level1"><a href="../Spokes.html">Spokes</a></li>
         <li class="level1"><a href="../Tutorials.html">Tutorials</a></li>
         <li class="level1"><a href="../Videos.html">Videos</a></li>
+        <li class="level1"><a href="../images/index.html">docwork images</a></li>
         <li class="level1 nav-header">tutorial</li>
         <li class="level2"><a href="Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="Algebra.html">Algebra</a></li>
@@ -173,13 +175,13 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">rngDouble</span><span>: </span><span class="type-name">Rng</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
-</span><span class="comment">// rngDouble: Rng[Double] = spire.std.DoubleAlgebra@653d718c
+</span><span class="comment">// rngDouble: Rng[Double] = spire.std.DoubleAlgebra@1a8cbf44
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
-</span><span class="comment">// nrootDouble: NRoot[Double] = spire.std.DoubleAlgebra@653d718c
+</span><span class="comment">// nrootDouble: NRoot[Double] = spire.std.DoubleAlgebra@1a8cbf44
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">laJblasDouble</span><span> = </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
-</span><span class="comment">// laJblasDouble: axle.algebra.LinearAlgebra[org.jblas.DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@2d16daf3
+</span><span class="comment">// laJblasDouble: axle.algebra.LinearAlgebra[org.jblas.DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@21b1ff5c
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">rngInt</span><span>: </span><span class="type-name">Rng</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
-</span><span class="comment">// rngInt: Rng[Int] = spire.std.IntAlgebra@68c6f935
+</span><span class="comment">// rngInt: Rng[Int] = spire.std.IntAlgebra@2758882e
 </span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">LinearRegression</span><span>
 
@@ -272,8 +274,8 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
 
-</span><span class="identifier">errorPlot</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;lrerror.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
-        <p><img src="/tutorial/images/lrerror.svg" alt="lr error"></p>
+</span><span class="identifier">errorPlot</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/lrerror.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/lrerror.svg" alt="lr error"></p>
 
       </main>
 
