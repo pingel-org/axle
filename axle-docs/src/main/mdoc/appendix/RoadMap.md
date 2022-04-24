@@ -4,17 +4,23 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## CICD
 
-* set mdocVariables with latest released version
+* titles in directory.conf
+* directory.conf files to establish order
+* README.md and directory.conf to structure site
+* find home for Tutorials.md
+* fix internal links
+
+* simplify "Installation"
+* include CICD info somewhere
+
+* Do "sonatype lift" emails following release suffice for security scan?
+* site build via github action
+* update google analytics
+* create and publish code coverage reports
 * gallery images should be same width
 * simplify "Installation"
 * include CICD info somewhere
 
-* update google analytics
-* create and publish code coverage reports
-* trigger site build via github action?
-
-* README.md and directory.conf to structure site
-* fix internal links
 * CNAME (www and root)
 * tweet / post
 
@@ -339,6 +345,5 @@ that has been its goal since inception.
 * Meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
 * Debug problems with laikaIncludePDF
 * GitHub "Releases" in sidebar should show "latest"
-* Do "sonatype lift" emails following release suffice for security scan?
 * ghpagesCleanSite leaving stale files?
 * Timestamp / version to site footer
