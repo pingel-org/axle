@@ -24,8 +24,6 @@ organization := "org.acme"
 
 scalaVersion := "2.13.3"
 
-// resolvers += "sonatype snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
-
 resolvers += "sonatype releases" at "https://oss.sonatype.org/content/repositories/releases/"
 
 libraryDependencies ++= Seq(
@@ -86,14 +84,6 @@ To start writing code, do `mkdir -p src/main/scala/org/acme/demo`, and add your 
 
 ## Releases
 
-Version @SNAPSHOT_VERSION@ is hosted on the [Sonatype snapshot repo](https://oss.sonatype.org/content/repositories/snapshots).
-The schedule for publishing snapshot versions is irregular.
-The full dependency is:
-
-```sbt
-"org.axle-lang" %% "axle-core" % "@SNAPSHOT_VERSION@"
-```
-
 @RELEASE_VERSION@ is the most recent released version:
 
 ```sbt
@@ -104,3 +94,8 @@ In addition to `axle-core` the artifacts `axle-jblas`, `axle-joda`, and `axle-wh
 are also published to Sonatype.
 
 See the [Road Map](/road_map/) for more information on the release schedule.
+
+## Snapshots
+
+Snapshot versions are created for every commit and
+hosted on the [Sonatype snapshot repo](https://oss.sonatype.org/content/repositories/snapshots).

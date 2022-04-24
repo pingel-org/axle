@@ -210,8 +210,7 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
     publish / skip := true,
     mdocVariables := Map(
       "DOCWD" -> docwd,
-      "RELEASE_VERSION" -> "0.6.0",
-      "SNAPSHOT_VERSION" -> "0.6.1-SNAPSHOT"
+      "RELEASE_VERSION" -> "0.6.0"
     ),
     mdocIn := file("axle-docs/src/main/mdoc"),
     mdocOut := file("axle-docs/target/mdoc"),

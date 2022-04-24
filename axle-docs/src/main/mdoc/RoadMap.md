@@ -4,19 +4,19 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## CICD
 
-* no 'docwork' links
-* README.md and directory.conf to structure site
-* fix internal links
-
 * set mdocVariables with latest released version
-* update google analytics
 * gallery images should be same width
 * simplify "Installation"
-* CNAME (www and root)
+* include CICD info somewhere
 
-* update publishing.txt
+* update google analytics
 * create and publish code coverage reports
 * trigger site build via github action?
+
+* README.md and directory.conf to structure site
+* fix internal links
+* CNAME (www and root)
+* tweet / post
 
 ## 0.6.3
 
