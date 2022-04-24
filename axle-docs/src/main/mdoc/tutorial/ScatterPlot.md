@@ -44,7 +44,7 @@ import cats.effect._
 ```
 
 ```scala mdoc
-plot.svg[IO]("scatter.svg").unsafeRunSync()
+plot.svg[IO]("@DOCWD@/images/scatter.svg").unsafeRunSync()
 ```
 
-![scatter plot](/tutorial/images/scatter.svg)
+![scatter plot](/images/scatter.svg)

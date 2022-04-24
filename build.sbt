@@ -199,6 +199,7 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
   axleJblas
 )
 
+lazy val docwd = "docwork"
 
 lazy val docs = Project("axle-docs", file("axle-docs"))
   .enablePlugins(MdocPlugin, LaikaPlugin, SitePlugin, GhpagesPlugin)
@@ -208,6 +209,7 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
     autoAPIMappings := true,
     publish / skip := true,
     mdocVariables := Map(
+      "DOCWD" -> docwd,
       "RELEASE_VERSION" -> "0.6.0",
       "SNAPSHOT_VERSION" -> "0.6.1-SNAPSHOT"
     ),
@@ -217,13 +219,14 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
     makeSite / includeFilter := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.svg" | "*.js" | "*.swf" | "*.yml" | "*.md" | "favicon.ico" | "*.woff" | "*.woff2",
     Laika / sourceDirectories := Seq(
       file("axle-docs/target/mdoc"),
-      file("axle-docs/src/site")
+      file("axle-docs/src/site"),
+      file(docwd)
     ),
     laikaSite / target := file("axle-docs/target/site"),
     laikaExtensions ++= Seq(
       laika.markdown.github.GitHubFlavor,
       laika.parse.code.SyntaxHighlighting),
-    // laikaIncludePDF := true,
+      laikaIncludePDF := false, // TODO find bug and re-enable
     ghpagesNoJekyll := true,
     ghpagesCleanSite / excludeFilter :=
       new FileFilter {
