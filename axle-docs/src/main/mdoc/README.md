@@ -6,7 +6,7 @@ Axle is an open-source Scala-embedded domain specific language for scientific co
 
 * [Introduction](introduction/Introduction.md)
 * [Fundamental](fundamental/Fundamental.md) data structures and functions
-* [Units](Units.md) of measurement
+* [Units](units/Units.md) of measurement
 
 ## Commonly Used Mathematical Functions
 
