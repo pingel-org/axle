@@ -1,6 +1,6 @@
 # Road Map
 
-See [Release Notes](/release_notes/) for the record of previously released features.
+See [Release Notes](ReleaseNotes.md) for the record of previously released features.
 
 ## CICD
 

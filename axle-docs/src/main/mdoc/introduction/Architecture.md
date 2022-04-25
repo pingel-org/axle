@@ -18,10 +18,10 @@ upon these typeclasses.
 Many such witnesses are provided by Axle for native Scala collections.
 
 Witnesses are also defined for other common jars from the Java and Scala ecosystems.
-Read more about these ["spokes"](/spokes/).
+Read more about these ["spokes"](Spokes.md).
 
 ## Remaining Design Issues
 
-See the [Road Map](/road_map/) for more details on the timing of upcoming changes.
+See the [Road Map](RoadMap.md) for more details on the timing of upcoming changes.
 
 Please get in touch if you'd like to discuss these or other questions.

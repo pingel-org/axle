@@ -1,6 +1,6 @@
 # Release Notes
 
-See [Road Map](/road_map/) for the plan of upcoming releases and features.
+See [Road Map](RoadMap.md) for the plan of upcoming releases and features.
 
 ## 0.6.1-2 (April 2022)
 

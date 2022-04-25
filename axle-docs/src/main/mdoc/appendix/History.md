@@ -81,4 +81,4 @@ computational linguistics (Lx 212 08) at UCLA.
 
 ### Author
 
-See the [author](/author/) page for more about the author.
+See the [author](Author.md) page for more about the author.

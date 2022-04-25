@@ -4,7 +4,7 @@
 
 [![coin entropy](/images/coinentropy.svg)](../random_uncertain/CoinEntropy.md)
 
-[![alarm bayes](/images/alarm_bayes.svg)](../random_uncertain/BayesianNetwork.md)
+[![alarm bayes](/images/alarm_bayes.svg)](../random_uncertain/BayesianNetworks.md)
 
 [![logistic map](/images/logMap.png)](../chaos_theory/LogisticMap.md)
 
