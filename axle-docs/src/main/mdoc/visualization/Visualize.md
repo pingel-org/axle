@@ -19,9 +19,11 @@ svg(plot, "plot.svg")
 
 ## Visualizations
 
-* [Bar Charts](/tutorial/bar_charts/)
-* [Grouped Bar Charts](/tutorial/grouped_bar_charts/)
-* [Plots](/tutorial/plots/)
+* [Bar Charts](BarCharts.md)
+* [Grouped Bar Charts](GroupedBarCharts.md)
+* [Plots](Plots.md)
+* [Scatter Plots](ScatterPlot.md)
+* [Pixelated Colored Area](PixelatedColoredArea.md)
 
 ## Animation
 
@@ -35,4 +37,4 @@ The implicit argument is a `monix.execution.Scheduler`.
 An `axle.reactive.CurrentValueSubscriber` based on the `Observable[D]` can be used to create the
 `dataFn` read by the visualization.
 
-See [Grouped Bar Charts](/tutorial/grouped_bar_charts/) for a full example of animation.
+See [Grouped Bar Charts](GroupedBarCharts.md) for a full example of animation.

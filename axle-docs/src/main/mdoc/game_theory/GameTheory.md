@@ -1,4 +1,10 @@
 # Game Theory
 
 Framework for expressing arbitrary games.
-Used for [Tic-Tac-Toe](/tutorial/tic_tac_toe/) and [Poker](/tutorial/poker/).
+
+Examples:
+
+* [Tic-Tac-Toe](TicTacToe.md)
+* [Poker](Poker.md)
+* [Monty Hall](MontyHall.md)
+* [Prisoner's Dilemma](PrisonersDilemma.md)

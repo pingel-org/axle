@@ -50,4 +50,4 @@ val biasedCoin = Coin.flipModel(Rational(7, 10))
 entropy[Symbol, Rational](biasedCoin).show
 ```
 
-See also the [Coin Entropy](/tutorial/entropy_biased_coin/) example.
+See also the [Coin Entropy](CoinEntropy.md) example.

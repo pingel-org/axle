@@ -5,9 +5,15 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 ## CICD
 
 * fix internal links
+
+* simplify top level README
+* each section should have an intro markdown doc
+* and also a "next steps" doc
+
 * clean up Resources.md
 * simplify "Installation"
 * include CICD info somewhere
+* move GeoCoordinates.md to "fundamental" or "units"
 
 * gallery images should be same width
 * update google analytics

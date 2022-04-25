@@ -26,4 +26,4 @@ implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 standardDeviation(X)
 ```
 
-See also [Probability Model](/tutorial/probability_model/).
+See also [Probability Model](ProbabilityModel.md)

@@ -2,7 +2,9 @@
 
 ## Algorithms
 
-* [Linear Regression](/tutorial/linear_regression/)
-* [K-Means Clustering](/tutorial/k_means_clustering/)
-* [Naive Bayes Clustering](/tutorial/naive_bayes/)
-* [Genetic Algorithms](/tutorial/genetic_algorithms/)
+* [Linear Regression](LinearRegression.md)
+* K-Means Clustering
+  * [Irises](ClusterIrises.md)
+  * [Federalist Papers](ClusterFederalistPapers.md)
+* [Naive Bayes Clustering](NaiveBayesClassifier.md)
+* [Genetic Algorithms](GeneticAlgorithms.md)
