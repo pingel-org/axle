@@ -13,73 +13,80 @@ Axle is an open-source Scala-embedded domain specific language for scientific co
 
 ### Fundamental data structures and functions
 
-* [Package Object](/tutorial/axle_package_object/) Extensions to core Scala data types. Indexed Power Set, Indexed Cross Product, Combinations, Permutations, and UTF aliases
-* [Algebra](/tutorial/algebra/) Typeclasses Functor, Indexed, Finite, LengthSpace
-* [Linear Algebra](/tutorial/linear_algebra/) including Principal Component Analysis (PCA)
-* [Graph](/tutorial/graph/)
-* [Logic](/tutorial/logic/) First-Order Predicate Logic
+* [Package Object](fundamental/PackageObject.md) Extensions to core Scala data types. Indexed Power Set, Indexed Cross Product, Combinations, Permutations, and UTF aliases
+* [Algebra](fundamental/Algebra.md) Typeclasses Functor, Indexed, Finite, LengthSpace
+* [Linear Algebra](fundamental/LinearAlgebra.md) including Principal Component Analysis (PCA)
+* [Graph](fundamental/Graph.md)
+* [Logic](fundamental/Logic.md) First-Order Predicate Logic
 
 ### Units of measurement
 
-* [Quanta](/tutorial/quanta/) Units (second, mile, gram, etc) for various quanta (Speed, Distance, Mass, etc) and conversions between them
-* [Unitted Trigonometry](/tutorial/unitted_trigonometry/)
+* [Quanta](units/Quanta.md) Units (second, mile, gram, etc) for various quanta (Speed, Distance, Mass, etc) and conversions between them
+* [Unitted Trigonometry](units/UnittedTrigonometry.md)
 
 ### Commonly Used Mathematical Functions
 
-* [Pythagorean Means](/tutorial/pythagorean_means/) Arithmetic, Harmonic, Geometric, and Generalized means
-* [MAP@K](/tutorial/map_at_k) Mean Average Precision at K (ranking metric)
+* [Pythagorean Means](math/PythagoreanMeans.md) Arithmetic, Harmonic, Geometric, and Generalized means
+* [MAP@K](math/MeanAveragePrecisionAtK.md) Mean Average Precision at K (ranking metric)
 * Historically important functions
-  * [π](/tutorial/pi/) estimation
-  * [Fibonacci](/tutorial/fibonacci/)
-  * [Ackermann](/tutorial/ackermann/)
+  * [π](math/Pi.md) estimation
+  * [Fibonacci](math/Fibonacci.md)
+  * [Ackermann](math/Ackermann.md)
 
 ### Randomness and Uncertainty
 
-* [Probability Models](/tutorial/probability_model) axiomatic probability models
+* [Probability Models](random_uncertain/ProbabilityModel.md) axiomatic probability models
   * Sampler, Region, Kolmogorov, Bayes, and Monad
-* [Statistics](/tutorial/statistics/) Random Variables, Probability, Distributions, Standard Deviation
-  * [Root-mean-square deviation](/tutorial/rmsd/) (aka RMSE)
-  * [Reservoir Sampling](/tutorial/reservoir_sampling/)
-* [Information Theory](/tutorial/information_theory/)
-  * [Entropy of a Coin](/tutorial/entropy_biased_coin/)
-* [Probabilistic Graphical Models](/tutorial/probabilistic_graphical_models/) (PGM)
-  * [Bayesian Networks](/tutorial/bayesian_networks/)
-* [Game Theory](/tutorial/game_theory/) Framework for the game playing jar.
+* [Statistics](random_uncertain/Statistics.md) Random Variables, Probability, Distributions, Standard Deviation
+  * [Root-mean-square deviation](random_uncertain/RootMeanSquareDeviation.md) (aka RMSE)
+  * [Reservoir Sampling](random_uncertain/ReservoirSampling.md)
+* [Information Theory](random_uncertain/InformationTheory.md)
+  * [Entropy of a Coin](random_uncertain/CoinEntropy.md)
+* [Probabilistic Graphical Models](random_uncertain/ProbabilisticGraphicalModels.md) (PGM)
+  * [Bayesian Networks](random_uncertain/BayesianNetworks.md)
+
+### Game Theory
+
+* [Game Theory](game_theory/GameTheory.md) Framework for the game playing
+* [Tic Tac Toe](game_theory/TicTacToe.md)
+* [Poker](game_theory/Poker.md)
+* [Monty Hall](game_theory/MontyHall.md)
+* [Prisoners Dilemma](game_theory/PrisonersDilemma.md)
 
 ### Machine Learning
 
-* [Linear Regression](/tutorial/linear_regression/)
-* [Naive Bayes Clustering](/tutorial/naive_bayes/) Tennis example
+* [Linear Regression](machine_learning/LinearRegression.md)
+* [Naive Bayes Clustering](machine_learning/NaiveBayesClassifier.md) Tennis example
 * k-Means Clustering
-  * [Cluster Irises](/tutorial/cluster_irises_k_means/)
-  * [Cluster Federalist Papers](/tutorial/cluster_federalist_papers_k_means/)
-* [Genetic Algorithms](/tutorial/genetic_algorithms/)
+  * [Cluster Irises](machine_learning/ClusterIrises.md)
+  * [Cluster Federalist Papers](machine_learning/ClusterFederalistPapers.md)
+* [Genetic Algorithms](machine_learning/GeneticAlgorithms.md)
 
 ### Domain-specific functions
 
-* [Geo Coordinates](/tutorial/geo_coordinates/)
-* [Natural Langage Processing (NLP)](/tutorial/natural_language_processing/)
-  * [Language Modules](/tutorial/language_modules/) including Stemming and Stop Words
-  * [Edit Distance](/tutorial/edit_distance/) Levenshtein
-  * [Vector Space Model](/tutorial/vector_space_model/) including TF-IDF
-* [Linguistics](/tutorial/linguistics/)
-  * [Angluin Learner](/tutorial/angluin_learner/)
-  * [Gold Paradigm](/tutorial/gold_paradigm/)
-* [Bioinformatics](/tutorial/bioinformatics/) DNA Sequence alignment algorithms
-  * [Smith Waterman](/tutorial/smith_waterman/)
-  * [Needleman Wunsch](/tutorial/needleman_wunsch/)
+* [Geo Coordinates](math/GeoCoordinates.md)
+* [Natural Langage Processing (NLP)](text/NaturalLanguageProcessing.md)
+  * [Language Modules](text/LanguageModules.md) including Stemming and Stop Words
+  * [Edit Distance](text/EditDistance.md) Levenshtein
+  * [Vector Space Model](text/VectorSpaceModel.md) including TF-IDF
+* [Linguistics](text/Linguistics.md)
+  * [Angluin Learner](text/AngluinLearner.md)
+  * [Gold Paradigm](text/GoldParadigm.md)
+* [Bioinformatics](bioinformatics/Bioinformatics.md) DNA Sequence alignment algorithms
+  * [Smith Waterman](bioinformatics/SmithWaterman.md)
+  * [Needleman Wunsch](bioinformatics/NeedlemanWunsch.md)
 * Chaos Theory
-  * [Logistic Map](/tutorial/logistic_map/)
-  * [Mandelbrot Set](/tutorial/mandelbrot/)
+  * [Logistic Map](chaos_theory/LogisticMap.md)
+  * [Mandelbrot Set](chaos_theory/Mandelbrot.md)
 
 ### Visualization
 
-* [Visualize](/tutorial/visualize/)
-  * [Plots](/tutorial/plots/)
-  * [ScatterPlot](/tutorial/scatterplot/)
-  * [Bar Charts](/tutorial/bar_charts/)
-  * [Grouped Bar Charts](/tutorial/grouped_bar_charts/)
-  * [Pixelated Colored Area](/tutorial/pixelated_colored_area/)
+* [Visualize](visualization/Visualize.md)
+  * [Plots](visualization/Plots.md)
+  * [ScatterPlot](visualization/ScatterPlot.md)
+  * [Bar Charts](visualization/BarCharts.md)
+  * [Grouped Bar Charts](visualization/GroupedBarCharts.md)
+  * [Pixelated Colored Area](visualization/PixelatedColoredArea.md)
 
 ### Data
 
@@ -88,13 +95,6 @@ Axle is an open-source Scala-embedded domain specific language for scientific co
   * Evolution
   * Federalist Papers
   * Irises
-
-### Games
-
-* [Tic Tac Toe](/tutorial/tic_tac_toe/)
-* [Poker](/tutorial/poker/)
-* [Monty Hall](/tutorial/monty_hall/)
-* [Prisoners Dilemma](/tutorial/prisoner/)
 
 ## Additional context
 
