@@ -68,6 +68,7 @@
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
         <li class="level1 nav-header">Math</li>
+        <li class="level2"><a href="../math/Math.html">Math</a></li>
         <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
         <li class="level2"><a href="../math/MeanAveragePrecisionAtK.html">Mean Average Precision at K</a></li>
         <li class="level2"><a href="../math/Pi.html">Pi</a></li>
@@ -75,13 +76,14 @@
         <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
         <li class="level1 nav-header">Visualization</li>
-        <li class="level2"><a href="../visualization/Visualize.html">Visualize</a></li>
+        <li class="level2"><a href="../visualization/Visualize.html">Visualization</a></li>
         <li class="level2"><a href="../visualization/Plots.html">Plots</a></li>
         <li class="level2"><a href="../visualization/ScatterPlot.html">Scatter Plot</a></li>
         <li class="level2"><a href="../visualization/BarCharts.html">Bar Charts</a></li>
         <li class="level2"><a href="../visualization/GroupedBarCharts.html">Grouped Bar Charts</a></li>
         <li class="level2"><a href="../visualization/PixelatedColoredArea.html">Pixelated Colored Area</a></li>
         <li class="level1 nav-header">Randomness and Uncertainty</li>
+        <li class="level2"><a href="../random_uncertain/RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
         <li class="level2"><a href="../random_uncertain/ProbabilityModel.html">Probability Model</a></li>
         <li class="level2"><a href="../random_uncertain/Statistics.html">Statistics</a></li>
         <li class="level2"><a href="../random_uncertain/RootMeanSquareDeviation.html">Root-mean-square deviation</a></li>
@@ -97,6 +99,7 @@
         <li class="level2"><a href="../game_theory/PrisonersDilemma.html">Prisoner&#39;s Dilemma</a></li>
         <li class="level2"><a href="../game_theory/TicTacToe.html">Tic Tac Toe</a></li>
         <li class="level1 nav-header">Chaos Theory</li>
+        <li class="level2"><a href="../chaos_theory/ChaosTheory.html">Chaos Theory</a></li>
         <li class="level2"><a href="../chaos_theory/LogisticMap.html">Logistic Map</a></li>
         <li class="level2"><a href="../chaos_theory/Mandelbrot.html">Mandelbrot Set</a></li>
         <li class="level1 nav-header">Machine Learning</li>
@@ -111,15 +114,15 @@
         <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
         <li class="level2"><a href="../bioinformatics/SmithWaterman.html">Smith-Waterman</a></li>
         <li class="level1 nav-header">Text</li>
-        <li class="level2"><a href="../text/NaturalLanguageProcessing.html">Natural Language Processing</a></li>
+        <li class="level2"><a href="../text/Text.html">Text</a></li>
         <li class="level2"><a href="../text/LanguageModules.html">Language Modules</a></li>
         <li class="level2"><a href="../text/EditDistance.html">Edit Distance</a></li>
         <li class="level2"><a href="../text/VectorSpaceModel.html">Vector Space Model</a></li>
-        <li class="level2"><a href="../text/Linguistics.html">Linguistics</a></li>
         <li class="level2"><a href="../text/AngluinLearner.html">Angluin Learner</a></li>
         <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
         <li class="level2"><a href="../text/Python2Json.html">python2json.py</a></li>
         <li class="level1 nav-header">Appendix</li>
+        <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
         <li class="level2"><a href="../appendix/RoadMap.html">Road Map</a></li>
         <li class="level2"><a href="../appendix/History.html">History</a></li>
@@ -167,14 +170,14 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Irises</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Iris</span></code></pre>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ec</span><span> = </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="identifier">global</span><span>
-</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@736bd929[Running, parallelism = 4, size = 3, active = 0, running = 0, steals = 12, tasks = 0, submissions = 0]
+</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@25e2e67a[Running, parallelism = 4, size = 2, active = 0, running = 0, steals = 12, tasks = 0, submissions = 0]
 </span><span class="keyword">val</span><span> </span><span class="identifier">blocker</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">Blocker</span><span>.</span><span class="identifier">liftExecutionContext</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@736bd929
+</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@25e2e67a
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">cs</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">contextShift</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@12017dc8
+</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@41776463
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">irisesIO</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">Irises</span><span>[</span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>](</span><span class="identifier">blocker</span><span>)
-</span><span class="comment">// irisesIO: Irises[cats.effect.IO] = axle.data.Irises@30310971
+</span><span class="comment">// irisesIO: Irises[cats.effect.IO] = axle.data.Irises@63bb3068
 </span><span class="keyword">val</span><span> </span><span class="identifier">irises</span><span> = </span><span class="identifier">irisesIO</span><span>.</span><span class="identifier">irises</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
 </span><span class="comment">// irises: List[Iris] = List(
 //   Iris(
@@ -249,10 +252,10 @@
 </span><span class="comment">// irisFeaturizer: Iris =&gt; List[Double] = &lt;function1&gt;
 </span><span>
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">la</span><span> = </span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
-</span><span class="comment">// la: algebra.LinearAlgebra[DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@ecf0021
+</span><span class="comment">// la: algebra.LinearAlgebra[DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@22c96dc2
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">normalizer</span><span> = (</span><span class="type-name">PCAFeatureNormalizer</span><span>[</span><span class="type-name">DoubleMatrix</span><span>] </span><span class="identifier">_</span><span>).</span><span class="identifier">curried</span><span>.</span><span class="identifier">apply</span><span>(</span><span class="number-literal">0.98</span><span>)
-</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$9107/2087311842@5d7db36a
+</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$9174/1241027722@4b755c35
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">classifier</span><span>: </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>] =
   </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
@@ -371,11 +374,11 @@
 // ...
 </span><span>
 </span><span class="identifier">confusion</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res0: String = &quot;&quot;&quot; 49   1   0 :  50 Iris-setosa
-//   0  34  16 :  50 Iris-versicolor
-//   0  16  34 :  50 Iris-virginica
+</span><span class="comment">// res0: String = &quot;&quot;&quot; 14  36   0 :  50 Iris-setosa
+//   1   7  42 :  50 Iris-versicolor
+//   5   1  44 :  50 Iris-virginica
 // 
-//  49  51  50
+//  20  44  86
 // &quot;&quot;&quot;</span></code></pre>
         <p>Visualize the final (two dimensional) centroid positions</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">KMeansVisualization</span><span>

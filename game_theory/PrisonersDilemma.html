@@ -68,6 +68,7 @@
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
         <li class="level1 nav-header">Math</li>
+        <li class="level2"><a href="../math/Math.html">Math</a></li>
         <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
         <li class="level2"><a href="../math/MeanAveragePrecisionAtK.html">Mean Average Precision at K</a></li>
         <li class="level2"><a href="../math/Pi.html">Pi</a></li>
@@ -75,13 +76,14 @@
         <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
         <li class="level1 nav-header">Visualization</li>
-        <li class="level2"><a href="../visualization/Visualize.html">Visualize</a></li>
+        <li class="level2"><a href="../visualization/Visualize.html">Visualization</a></li>
         <li class="level2"><a href="../visualization/Plots.html">Plots</a></li>
         <li class="level2"><a href="../visualization/ScatterPlot.html">Scatter Plot</a></li>
         <li class="level2"><a href="../visualization/BarCharts.html">Bar Charts</a></li>
         <li class="level2"><a href="../visualization/GroupedBarCharts.html">Grouped Bar Charts</a></li>
         <li class="level2"><a href="../visualization/PixelatedColoredArea.html">Pixelated Colored Area</a></li>
         <li class="level1 nav-header">Randomness and Uncertainty</li>
+        <li class="level2"><a href="../random_uncertain/RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
         <li class="level2"><a href="../random_uncertain/ProbabilityModel.html">Probability Model</a></li>
         <li class="level2"><a href="../random_uncertain/Statistics.html">Statistics</a></li>
         <li class="level2"><a href="../random_uncertain/RootMeanSquareDeviation.html">Root-mean-square deviation</a></li>
@@ -97,6 +99,7 @@
         <li class="level2 active"><a href="#">Prisoner&#39;s Dilemma</a></li>
         <li class="level2"><a href="TicTacToe.html">Tic Tac Toe</a></li>
         <li class="level1 nav-header">Chaos Theory</li>
+        <li class="level2"><a href="../chaos_theory/ChaosTheory.html">Chaos Theory</a></li>
         <li class="level2"><a href="../chaos_theory/LogisticMap.html">Logistic Map</a></li>
         <li class="level2"><a href="../chaos_theory/Mandelbrot.html">Mandelbrot Set</a></li>
         <li class="level1 nav-header">Machine Learning</li>
@@ -111,15 +114,15 @@
         <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
         <li class="level2"><a href="../bioinformatics/SmithWaterman.html">Smith-Waterman</a></li>
         <li class="level1 nav-header">Text</li>
-        <li class="level2"><a href="../text/NaturalLanguageProcessing.html">Natural Language Processing</a></li>
+        <li class="level2"><a href="../text/Text.html">Text</a></li>
         <li class="level2"><a href="../text/LanguageModules.html">Language Modules</a></li>
         <li class="level2"><a href="../text/EditDistance.html">Edit Distance</a></li>
         <li class="level2"><a href="../text/VectorSpaceModel.html">Vector Space Model</a></li>
-        <li class="level2"><a href="../text/Linguistics.html">Linguistics</a></li>
         <li class="level2"><a href="../text/AngluinLearner.html">Angluin Learner</a></li>
         <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
         <li class="level2"><a href="../text/Python2Json.html">python2json.py</a></li>
         <li class="level1 nav-header">Appendix</li>
+        <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
         <li class="level2"><a href="../appendix/RoadMap.html">Road Map</a></li>
         <li class="level2"><a href="../appendix/History.html">History</a></li>
@@ -194,24 +197,24 @@
 </span><span class="comment">// P1&gt; You have been caught
 // P2&gt; You have been caught
 // endState: PrisonersDilemmaState = PrisonersDilemmaState(
-//   p1Move = Some(value = Silence()),
+//   p1Move = Some(value = Betrayal()),
 //   p1Moved = true,
 //   p2Move = Some(value = Silence())
 // )</span></code></pre>
         <p>Display outcome to each player</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
 </span><span class="comment">// outcome: PrisonersDilemmaOutcome = PrisonersDilemmaOutcome(
-//   p1YearsInPrison = 1,
-//   p2YearsInPrison = 1
+//   p1YearsInPrison = 0,
+//   p2YearsInPrison = 3
 // )
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// P1&gt; You is imprisoned for 1 years
-// P1&gt; Player 2 is imprisoned for 1 years
-// P2&gt; Player 1 is imprisoned for 1 years
-// P2&gt; You is imprisoned for 1 years</span></code></pre>
+</span><span class="comment">// P1&gt; You is imprisoned for 0 years
+// P1&gt; Player 2 is imprisoned for 3 years
+// P2&gt; Player 1 is imprisoned for 0 years
+// P2&gt; You is imprisoned for 3 years</span></code></pre>
 
       </main>
 

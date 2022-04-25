@@ -68,6 +68,7 @@
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
         <li class="level1 nav-header">Math</li>
+        <li class="level2"><a href="../math/Math.html">Math</a></li>
         <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
         <li class="level2"><a href="../math/MeanAveragePrecisionAtK.html">Mean Average Precision at K</a></li>
         <li class="level2"><a href="../math/Pi.html">Pi</a></li>
@@ -75,13 +76,14 @@
         <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
         <li class="level1 nav-header">Visualization</li>
-        <li class="level2"><a href="../visualization/Visualize.html">Visualize</a></li>
+        <li class="level2"><a href="../visualization/Visualize.html">Visualization</a></li>
         <li class="level2"><a href="../visualization/Plots.html">Plots</a></li>
         <li class="level2"><a href="../visualization/ScatterPlot.html">Scatter Plot</a></li>
         <li class="level2"><a href="../visualization/BarCharts.html">Bar Charts</a></li>
         <li class="level2"><a href="../visualization/GroupedBarCharts.html">Grouped Bar Charts</a></li>
         <li class="level2"><a href="../visualization/PixelatedColoredArea.html">Pixelated Colored Area</a></li>
         <li class="level1 nav-header">Randomness and Uncertainty</li>
+        <li class="level2"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
         <li class="level2 active"><a href="#">Probability Model</a></li>
         <li class="level2"><a href="Statistics.html">Statistics</a></li>
         <li class="level2"><a href="RootMeanSquareDeviation.html">Root-mean-square deviation</a></li>
@@ -97,6 +99,7 @@
         <li class="level2"><a href="../game_theory/PrisonersDilemma.html">Prisoner&#39;s Dilemma</a></li>
         <li class="level2"><a href="../game_theory/TicTacToe.html">Tic Tac Toe</a></li>
         <li class="level1 nav-header">Chaos Theory</li>
+        <li class="level2"><a href="../chaos_theory/ChaosTheory.html">Chaos Theory</a></li>
         <li class="level2"><a href="../chaos_theory/LogisticMap.html">Logistic Map</a></li>
         <li class="level2"><a href="../chaos_theory/Mandelbrot.html">Mandelbrot Set</a></li>
         <li class="level1 nav-header">Machine Learning</li>
@@ -111,15 +114,15 @@
         <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
         <li class="level2"><a href="../bioinformatics/SmithWaterman.html">Smith-Waterman</a></li>
         <li class="level1 nav-header">Text</li>
-        <li class="level2"><a href="../text/NaturalLanguageProcessing.html">Natural Language Processing</a></li>
+        <li class="level2"><a href="../text/Text.html">Text</a></li>
         <li class="level2"><a href="../text/LanguageModules.html">Language Modules</a></li>
         <li class="level2"><a href="../text/EditDistance.html">Edit Distance</a></li>
         <li class="level2"><a href="../text/VectorSpaceModel.html">Vector Space Model</a></li>
-        <li class="level2"><a href="../text/Linguistics.html">Linguistics</a></li>
         <li class="level2"><a href="../text/AngluinLearner.html">Angluin Learner</a></li>
         <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
         <li class="level2"><a href="../text/Python2Json.html">python2json.py</a></li>
         <li class="level1 nav-header">Appendix</li>
+        <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
         <li class="level2"><a href="../appendix/RoadMap.html">Road Map</a></li>
         <li class="level2"><a href="../appendix/History.html">History</a></li>
@@ -264,7 +267,7 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">rng</span><span> = </span><span class="type-name">Random</span><span>.</span><span class="identifier">generatorFromSeed</span><span>(</span><span class="type-name">Seed</span><span>(</span><span class="number-literal">42</span><span>))
-</span><span class="comment">// rng: spire.random.rng.Cmwc5 = spire.random.rng.Cmwc5@43036eee</span></code></pre>
+</span><span class="comment">// rng: spire.random.rng.Cmwc5 = spire.random.rng.Cmwc5@10006a61</span></code></pre>
         <p>And then the <code>.sample</code> syntax:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">sampler</span><span>.</span><span class="identifier">_</span></code></pre>
         <p>Note that it must be provided with a Spire <code>Generator</code>.
@@ -304,7 +307,7 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">rolls</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">1000</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> =&gt; </span><span class="identifier">d6</span><span>.</span><span class="identifier">sample</span><span>(</span><span class="identifier">rng</span><span>) }</span></code></pre>
         <p>Then tally them</p>
         <pre><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringInt</span><span>: </span><span class="type-name">CRing</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
-</span><span class="comment">// ringInt: CRing[Int] = spire.std.IntAlgebra@7a218db3
+</span><span class="comment">// ringInt: CRing[Int] = spire.std.IntAlgebra@5333599e
 </span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">talliable</span><span>.</span><span class="identifier">_</span><span>
 
