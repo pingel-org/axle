@@ -22,6 +22,6 @@ Read more about these ["spokes"](Spokes.md).
 
 ## Remaining Design Issues
 
-See the [Road Map](RoadMap.md) for more details on the timing of upcoming changes.
+See the [Road Map](../appendix/RoadMap.md) for more details on the timing of upcoming changes.
 
 Please get in touch if you'd like to discuss these or other questions.

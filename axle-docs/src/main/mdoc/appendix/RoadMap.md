@@ -4,8 +4,6 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## CICD
 
-* fix internal links
-
 * simplify top level README
 * each section should have an intro markdown doc
 * and also a "next steps" doc
