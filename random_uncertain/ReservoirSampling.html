@@ -152,24 +152,24 @@
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sample</span><span> = </span><span class="identifier">reservoirSampleK</span><span>(</span><span class="number-literal">15</span><span>, </span><span class="type-name">LazyList</span><span>.</span><span class="identifier">from</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">drop</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">head</span><span>
 </span><span class="comment">// sample: List[Int] = List(
 //   98,
-//   88,
-//   87,
-//   77,
-//   63,
-//   50,
-//   47,
-//   38,
-//   36,
-//   32,
-//   31,
-//   19,
-//   18,
-//   5,
-//   3
+//   96,
+//   94,
+//   76,
+//   74,
+//   70,
+//   56,
+//   53,
+//   40,
+//   37,
+//   24,
+//   20,
+//   14,
+//   13,
+//   9
 // )
 </span><span>
 </span><span class="identifier">arithmeticMean</span><span>(</span><span class="identifier">sample</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>))
-</span><span class="comment">// res0: Double = 46.13333333333333</span></code></pre>
+</span><span class="comment">// res0: Double = 51.6</span></code></pre>
         <p>The mean of the sample should be in the ballpark of the mean of the entire list -- 50.</p>
 
       </main>
