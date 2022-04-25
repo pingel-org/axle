@@ -1,4 +1,6 @@
-# Visualize
+# Visualization
+
+See the [Gallery](../introduction/Gallery.md) for more examples.
 
 The `show` function is available in the `axle._` package.
 It can be applied to several types of Axle objects.
@@ -19,10 +21,10 @@ svg(plot, "plot.svg")
 
 ## Visualizations
 
+* [Plots](Plots.md)
+* [ScatterPlot](ScatterPlot.md)
 * [Bar Charts](BarCharts.md)
 * [Grouped Bar Charts](GroupedBarCharts.md)
-* [Plots](Plots.md)
-* [Scatter Plots](ScatterPlot.md)
 * [Pixelated Colored Area](PixelatedColoredArea.md)
 
 ## Animation

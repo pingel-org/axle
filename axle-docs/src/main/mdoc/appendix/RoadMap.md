@@ -4,14 +4,15 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## CICD
 
-* simplify top level README
-* each section should have an intro markdown doc
-* and also a "next steps" doc
+* separate Architecture section
+* move much of Road Map to chapter-specific "next steps" sections
 
 * clean up Resources.md
+* README: data sets from `axle.data` (Astronomy, Evolutoin, Federalist Papers, Irises)
 * simplify "Installation"
 * include CICD info somewhere
 * move GeoCoordinates.md to "fundamental" or "units"
+* update Author.md
 
 * gallery images should be same width
 * update google analytics
