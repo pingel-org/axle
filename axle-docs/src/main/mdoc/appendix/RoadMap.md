@@ -4,6 +4,8 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## CICD
 
+* more sections vs bullets (for right sidebar)
+* fix SFO to HEL image link
 * separate Architecture section
 * move much of Road Map to chapter-specific "next steps" sections
 
