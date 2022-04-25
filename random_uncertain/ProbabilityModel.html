@@ -50,18 +50,21 @@
       
       <ul class="nav-list">
         <li class="level1 nav-header">Introduction</li>
+        <li class="level2"><a href="../introduction/Introduction.html">Introduction</a></li>
         <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
         <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
         <li class="level2"><a href="../introduction/Architecture.html">Architecture</a></li>
         <li class="level2"><a href="../introduction/Spokes.html">Spokes</a></li>
         <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
         <li class="level1 nav-header">Fundamental</li>
+        <li class="level2"><a href="../fundamental/Fundamental.html">Fundamental</a></li>
         <li class="level2"><a href="../fundamental/PackageObject.html">Package Objects</a></li>
         <li class="level2"><a href="../fundamental/Algebra.html">Algebra</a></li>
         <li class="level2"><a href="../fundamental/LinearAlgebra.html">Linear Algebra</a></li>
         <li class="level2"><a href="../fundamental/Graph.html">Graph</a></li>
         <li class="level2"><a href="../fundamental/Logic.html">Logic</a></li>
-        <li class="level1 nav-header">Units</li>
+        <li class="level1 nav-header">Units of Measurement</li>
+        <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
         <li class="level1 nav-header">Math</li>
@@ -261,7 +264,7 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">rng</span><span> = </span><span class="type-name">Random</span><span>.</span><span class="identifier">generatorFromSeed</span><span>(</span><span class="type-name">Seed</span><span>(</span><span class="number-literal">42</span><span>))
-</span><span class="comment">// rng: spire.random.rng.Cmwc5 = spire.random.rng.Cmwc5@6cf6f7ec</span></code></pre>
+</span><span class="comment">// rng: spire.random.rng.Cmwc5 = spire.random.rng.Cmwc5@43036eee</span></code></pre>
         <p>And then the <code>.sample</code> syntax:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">sampler</span><span>.</span><span class="identifier">_</span></code></pre>
         <p>Note that it must be provided with a Spire <code>Generator</code>.
@@ -301,7 +304,7 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">rolls</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">1000</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> =&gt; </span><span class="identifier">d6</span><span>.</span><span class="identifier">sample</span><span>(</span><span class="identifier">rng</span><span>) }</span></code></pre>
         <p>Then tally them</p>
         <pre><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringInt</span><span>: </span><span class="type-name">CRing</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
-</span><span class="comment">// ringInt: CRing[Int] = spire.std.IntAlgebra@667d52ff
+</span><span class="comment">// ringInt: CRing[Int] = spire.std.IntAlgebra@7a218db3
 </span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">talliable</span><span>.</span><span class="identifier">_</span><span>
 

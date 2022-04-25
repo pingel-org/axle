@@ -50,18 +50,21 @@
       
       <ul class="nav-list">
         <li class="level1 nav-header">Introduction</li>
+        <li class="level2"><a href="../introduction/Introduction.html">Introduction</a></li>
         <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
         <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
         <li class="level2"><a href="../introduction/Architecture.html">Architecture</a></li>
         <li class="level2"><a href="../introduction/Spokes.html">Spokes</a></li>
         <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
         <li class="level1 nav-header">Fundamental</li>
+        <li class="level2"><a href="../fundamental/Fundamental.html">Fundamental</a></li>
         <li class="level2"><a href="../fundamental/PackageObject.html">Package Objects</a></li>
         <li class="level2"><a href="../fundamental/Algebra.html">Algebra</a></li>
         <li class="level2"><a href="../fundamental/LinearAlgebra.html">Linear Algebra</a></li>
         <li class="level2"><a href="../fundamental/Graph.html">Graph</a></li>
         <li class="level2"><a href="../fundamental/Logic.html">Logic</a></li>
-        <li class="level1 nav-header">Units</li>
+        <li class="level1 nav-header">Units of Measurement</li>
+        <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
         <li class="level1 nav-header">Math</li>
@@ -151,25 +154,25 @@
         <p>Demonstrate it uniformly sampling 15 of the first 100 integers</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sample</span><span> = </span><span class="identifier">reservoirSampleK</span><span>(</span><span class="number-literal">15</span><span>, </span><span class="type-name">LazyList</span><span>.</span><span class="identifier">from</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">drop</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">head</span><span>
 </span><span class="comment">// sample: List[Int] = List(
-//   92,
+//   97,
+//   95,
+//   94,
+//   83,
+//   82,
 //   77,
-//   75,
-//   48,
-//   45,
-//   38,
-//   36,
-//   33,
-//   32,
-//   31,
-//   22,
-//   19,
-//   13,
-//   2,
-//   1
+//   68,
+//   66,
+//   52,
+//   49,
+//   46,
+//   34,
+//   24,
+//   12,
+//   8
 // )
 </span><span>
 </span><span class="identifier">arithmeticMean</span><span>(</span><span class="identifier">sample</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>))
-</span><span class="comment">// res0: Double = 37.6</span></code></pre>
+</span><span class="comment">// res0: Double = 59.13333333333333</span></code></pre>
         <p>The mean of the sample should be in the ballpark of the mean of the entire list -- 50.</p>
 
       </main>

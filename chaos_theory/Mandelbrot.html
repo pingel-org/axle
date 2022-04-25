@@ -50,18 +50,21 @@
       
       <ul class="nav-list">
         <li class="level1 nav-header">Introduction</li>
+        <li class="level2"><a href="../introduction/Introduction.html">Introduction</a></li>
         <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
         <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
         <li class="level2"><a href="../introduction/Architecture.html">Architecture</a></li>
         <li class="level2"><a href="../introduction/Spokes.html">Spokes</a></li>
         <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
         <li class="level1 nav-header">Fundamental</li>
+        <li class="level2"><a href="../fundamental/Fundamental.html">Fundamental</a></li>
         <li class="level2"><a href="../fundamental/PackageObject.html">Package Objects</a></li>
         <li class="level2"><a href="../fundamental/Algebra.html">Algebra</a></li>
         <li class="level2"><a href="../fundamental/LinearAlgebra.html">Linear Algebra</a></li>
         <li class="level2"><a href="../fundamental/Graph.html">Graph</a></li>
         <li class="level2"><a href="../fundamental/Logic.html">Logic</a></li>
-        <li class="level1 nav-header">Units</li>
+        <li class="level1 nav-header">Units of Measurement</li>
+        <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
         <li class="level1 nav-header">Math</li>
@@ -148,7 +151,7 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span></code></pre>
         <p>Define a function to compute the Mandelbrot velocity at point on the plane <code>(x, y)</code></p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
-</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@9b4d2bc
+</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@3263a4a8
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">f</span><span> = (</span><span class="identifier">x0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">x1</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y1</span><span>: </span><span class="type-name">Double</span><span>) =&gt; </span><span class="identifier">inMandelbrotSetAt</span><span>(</span><span class="number-literal">4d</span><span>, </span><span class="identifier">x0</span><span>, </span><span class="identifier">y0</span><span>, </span><span class="number-literal">1000</span><span>).</span><span class="identifier">getOrElse</span><span>(-</span><span class="number-literal">1</span><span>)
 </span><span class="comment">// f: (Double, Double, Double, Double) =&gt; Int = &lt;function4&gt;</span></code></pre>

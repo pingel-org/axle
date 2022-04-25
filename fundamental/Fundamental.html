@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
-    <title>Installation</title>
+    <title>Fundamental</title>
     
     
       <meta name="description" content="axle-docs"/>
@@ -50,19 +50,19 @@
       
       <ul class="nav-list">
         <li class="level1 nav-header">Introduction</li>
-        <li class="level2"><a href="Introduction.html">Introduction</a></li>
-        <li class="level2 active"><a href="#">Installation</a></li>
-        <li class="level2"><a href="Gallery.html">Gallery</a></li>
-        <li class="level2"><a href="Architecture.html">Architecture</a></li>
-        <li class="level2"><a href="Spokes.html">Spokes</a></li>
-        <li class="level2"><a href="Resources.html">Resources</a></li>
+        <li class="level2"><a href="../introduction/Introduction.html">Introduction</a></li>
+        <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
+        <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
+        <li class="level2"><a href="../introduction/Architecture.html">Architecture</a></li>
+        <li class="level2"><a href="../introduction/Spokes.html">Spokes</a></li>
+        <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
         <li class="level1 nav-header">Fundamental</li>
-        <li class="level2"><a href="../fundamental/Fundamental.html">Fundamental</a></li>
-        <li class="level2"><a href="../fundamental/PackageObject.html">Package Objects</a></li>
-        <li class="level2"><a href="../fundamental/Algebra.html">Algebra</a></li>
-        <li class="level2"><a href="../fundamental/LinearAlgebra.html">Linear Algebra</a></li>
-        <li class="level2"><a href="../fundamental/Graph.html">Graph</a></li>
-        <li class="level2"><a href="../fundamental/Logic.html">Logic</a></li>
+        <li class="level2 active"><a href="#">Fundamental</a></li>
+        <li class="level2"><a href="PackageObject.html">Package Objects</a></li>
+        <li class="level2"><a href="Algebra.html">Algebra</a></li>
+        <li class="level2"><a href="LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level2"><a href="Graph.html">Graph</a></li>
+        <li class="level2"><a href="Logic.html">Logic</a></li>
         <li class="level1 nav-header">Units of Measurement</li>
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
@@ -132,14 +132,9 @@
     <div id="container">
 
       <nav id="page-nav">
-        <p class="header"><a href="#">Installation</a></p>
+        <p class="header"><a href="#">Fundamental</a></p>
         
         <ul class="nav-list">
-          <li class="level1"><a href="#install-sbt">Install SBT</a></li>
-          <li class="level1"><a href="#create-sbt-project">Create SBT Project</a></li>
-          <li class="level1"><a href="#next-steps">Next Steps</a></li>
-          <li class="level1"><a href="#releases">Releases</a></li>
-          <li class="level1"><a href="#snapshots">Snapshots</a></li>
         </ul>
         
         <p class="footer"></p>
@@ -147,76 +142,15 @@
 
       <main class="content">
 
-        <h1 id="installation" class="title">Installation</h1>
-        <p>Axle as a dependency of an SBT project.</p>
-        
-        <h2 id="install-sbt" class="section"><a class="anchor-link left" href="#install-sbt"><i class="icofont-laika">&#xef71;</i></a>Install SBT</h2>
-        <p>See <a href="http://www.scala-sbt.org/">SBT</a></p>
-        
-        <h2 id="create-sbt-project" class="section"><a class="anchor-link left" href="#create-sbt-project"><i class="icofont-laika">&#xef71;</i></a>Create SBT Project</h2>
-        <pre class="keep-together pdf epub"><code class="bash">mkdir demo
-cd demo</code></pre>
-        <p>Create a <code>build.sbt</code> file</p>
-        <pre><code class="sbt">name := &quot;demo&quot;
-
-version := &quot;0.1-SNAPSHOT&quot;
-
-organization := &quot;org.acme&quot;
-
-scalaVersion := &quot;2.13.3&quot;
-
-resolvers += &quot;sonatype releases&quot; at &quot;https://oss.sonatype.org/content/repositories/releases/&quot;
-
-libraryDependencies ++= Seq(
-  &quot;org.axle-lang&quot; %% &quot;axle-core&quot;  % &quot;0.6.2&quot;,
-  &quot;org.axle-lang&quot; %% &quot;axle-xml&quot;   % &quot;0.6.2&quot;,
-  &quot;org.axle-lang&quot; %% &quot;axle-jung&quot;  % &quot;0.6.2&quot;,
-  &quot;org.axle-lang&quot; %% &quot;axle-jblas&quot; % &quot;0.6.2&quot;,
-  &quot;org.axle-lang&quot; %% &quot;axle-joda&quot;  % &quot;0.6.2&quot;
-)</code></pre>
-        <p>(Less commonly used <code>axle-laws</code>, <code>axle-awt</code>, and <code>axle-parallel</code> are not shown.)</p>
-        <p>The Axle jars are compiled with several additional dependencies in <code>provided</code> scope,
-        meaning that they are compiled and packaged with the expectation that the user of the Axle
-        jars will explicitly provide those dependencies.</p>
-        <p>As of version 0.5.2 the full list of dependencies is below.
-        Add this section to your <code>build.sbt</code> file to pull them all in to the <code>demo</code> project:</p>
-        <pre><code class="sbt">libraryDependencies ++= Seq(
-
-  // needed by axle-jung (and for unit conversions)
-  &quot;net.sf.jung&quot;            % &quot;jung-visualization&quot; % &quot;2.1&quot;,
-  &quot;net.sf.jung&quot;            % &quot;jung-algorithms&quot;    % &quot;2.1&quot;,
-  &quot;net.sf.jung&quot;            % &quot;jung-api&quot;           % &quot;2.1&quot;,
-  &quot;net.sf.jung&quot;            % &quot;jung-graph-impl&quot;    % &quot;2.1&quot;,
-  //&quot;net.sf.jung&quot;          % &quot;jung-io&quot;            % &quot;2.1&quot;,
-
-  // for animations
-  &quot;io.monix&quot;               %% &quot;monix-reactive&quot;    % &quot;2.3.0&quot;,
-  &quot;io.monix&quot;               %% &quot;monix-cats&quot;        % &quot;2.3.0&quot;,
-
-  // needed by axle-jblas
-  &quot;org.jblas&quot;              % &quot;jblas&quot;              % &quot;1.2.4&quot;,
-
-  // needed by axle-joda
-  &quot;joda-time&quot;              % &quot;joda-time&quot;          % &quot;2.9.4&quot;,
-  &quot;org.joda&quot;               % &quot;joda-convert&quot;       % &quot;1.8.1&quot;,
-
-  // needed by axle-xml
-  &quot;org.scala-lang.modules&quot; %% &quot;scala-xml&quot;         % &quot;1.3.0&quot;,
-)</code></pre>
-        
-        <h2 id="next-steps" class="section"><a class="anchor-link left" href="#next-steps"><i class="icofont-laika">&#xef71;</i></a>Next Steps</h2>
-        <p>Run <code>sbt console</code> to launch the Scala REPL with the Axle jars in the classpath.
-        Axle works well interactively -- especially during prototyping, debugging, and testing.
-        Any of the Axle tutorials can be copied and pasted into the REPL.</p>
-        <p>To start writing code, do <code>mkdir -p src/main/scala/org/acme/demo</code>, and add your code there.</p>
-        
-        <h2 id="releases" class="section"><a class="anchor-link left" href="#releases"><i class="icofont-laika">&#xef71;</i></a>Releases</h2>
-        <p>0.6.2 is the most recent released version:</p>
-        <p>See the <a href="../appendix/RoadMap.html">Road Map</a> for more information on the release schedule.</p>
-        
-        <h2 id="snapshots" class="section"><a class="anchor-link left" href="#snapshots"><i class="icofont-laika">&#xef71;</i></a>Snapshots</h2>
-        <p>Snapshot versions are created for every commit and
-        hosted on the <a href="https://oss.sonatype.org/content/repositories/snapshots">Sonatype snapshot repo</a>.</p>
+        <h1 id="fundamental" class="title">Fundamental</h1>
+        <p>Data structures and functions</p>
+        <ul>
+          <li><a href="PackageObject.html">Package Object</a> Extensions to core Scala data types. Indexed Power Set, Indexed Cross Product, Combinations, Permutations, and UTF aliases</li>
+          <li><a href="Algebra.html">Algebra</a> Typeclasses Functor, Indexed, Finite, LengthSpace</li>
+          <li><a href="LinearAlgebra.html">Linear Algebra</a> including Principal Component Analysis (PCA)</li>
+          <li><a href="Graph.html">Graph</a></li>
+          <li><a href="Logic.html">Logic</a> First-Order Predicate Logic</li>
+        </ul>
 
       </main>
 
