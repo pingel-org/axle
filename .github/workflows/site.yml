@@ -11,6 +11,4 @@ jobs:
         with:
           fetch-depth: 0
       - uses: olafurpg/setup-scala@v13
-      - run: sbt -J-Xmx8G 'project axle-docs' clean mdoc laikaSite ghpagesPushSite
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+      - run: sbt -J-Xmx8G 'project axle-docs' clean mdoc laikaSite
