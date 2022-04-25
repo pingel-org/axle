@@ -29,7 +29,6 @@ resolvers += "sonatype releases" at "https://oss.sonatype.org/content/repositori
 libraryDependencies ++= Seq(
   "org.axle-lang" %% "axle-core"  % "@RELEASE_VERSION@",
   "org.axle-lang" %% "axle-xml"   % "@RELEASE_VERSION@",
-  "org.axle-lang" %% "axle-wheel" % "@RELEASE_VERSION@",
   "org.axle-lang" %% "axle-jung"  % "@RELEASE_VERSION@",
   "org.axle-lang" %% "axle-jblas" % "@RELEASE_VERSION@",
   "org.axle-lang" %% "axle-joda"  % "@RELEASE_VERSION@"
@@ -41,9 +40,6 @@ libraryDependencies ++= Seq(
 The Axle jars are compiled with several additional dependencies in `provided` scope,
 meaning that they are compiled and packaged with the expectation that the user of the Axle
 jars will explicitly provide those dependencies.
-
-See the project's current [build.sbt](https://github.com/axlelang/axle/blob/master/build.sbt)
-file for up to date version information.
 
 As of version 0.5.2 the full list of dependencies is below.
 Add this section to your `build.sbt` file to pull them all in to the `demo` project:
@@ -86,14 +82,7 @@ To start writing code, do `mkdir -p src/main/scala/org/acme/demo`, and add your 
 
 @RELEASE_VERSION@ is the most recent released version:
 
-```sbt
-"org.axle-lang" %% "axle-core" % "@RELEASE_VERSION@"
-```
-
-In addition to `axle-core` the artifacts `axle-jblas`, `axle-joda`, and `axle-wheel`
-are also published to Sonatype.
-
-See the [Road Map](/road_map/) for more information on the release schedule.
+See the [Road Map](../appendix/RoadMap.md) for more information on the release schedule.
 
 ## Snapshots
 
