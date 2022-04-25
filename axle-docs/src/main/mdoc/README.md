@@ -81,12 +81,6 @@ Axle is an open-source Scala-embedded domain specific language for scientific co
   * [Grouped Bar Charts](/tutorial/grouped_bar_charts/)
   * [Pixelated Colored Area](/tutorial/pixelated_colored_area/)
 
-## Wheel
-
-```sbt
-"org.axle-lang" %% "axle-wheel" % "@RELEASE_VERSION@"
-```
-
 ### Data
 
 * Data sets from `axle.data`
