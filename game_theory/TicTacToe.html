@@ -203,58 +203,62 @@
 // X&gt;  | |           7|8|9
 // O&gt; Board:         Movement Key:
 // O&gt;  | |           1|2|3
-// O&gt;  | |           4|5|6
-// O&gt;  |X|           7|8|9
+// O&gt;  | |X          4|5|6
+// O&gt;  | |           7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt; O| |           1|2|3
-// X&gt;  | |           4|5|6
-// X&gt;  |X|           7|8|9
+// X&gt;  | |           1|2|3
+// X&gt;  | |X          4|5|6
+// X&gt; O| |           7|8|9
 // O&gt; Board:         Movement Key:
-// O&gt; O| |           1|2|3
-// O&gt; X| |           4|5|6
-// O&gt;  |X|           7|8|9
+// O&gt;  |X|           1|2|3
+// O&gt;  | |X          4|5|6
+// O&gt; O| |           7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt; O| |           1|2|3
-// X&gt; X| |           4|5|6
-// X&gt;  |X|O          7|8|9
+// X&gt;  |X|O          1|2|3
+// X&gt;  | |X          4|5|6
+// X&gt; O| |           7|8|9
 // O&gt; Board:         Movement Key:
-// O&gt; O|X|           1|2|3
-// O&gt; X| |           4|5|6
-// O&gt;  |X|O          7|8|9
+// O&gt;  |X|O          1|2|3
+// O&gt;  |X|X          4|5|6
+// O&gt; O| |           7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt; O|X|O          1|2|3
-// X&gt; X| |           4|5|6
-// X&gt;  |X|O          7|8|9
+// X&gt;  |X|O          1|2|3
+// X&gt;  |X|X          4|5|6
+// X&gt; O|O|           7|8|9
 // O&gt; Board:         Movement Key:
-// O&gt; O|X|O          1|2|3
-// O&gt; X| |           4|5|6
-// O&gt; X|X|O          7|8|9
+// O&gt; X|X|O          1|2|3
+// O&gt;  |X|X          4|5|6
+// O&gt; O|O|           7|8|9
+// X&gt; Board:         Movement Key:
+// X&gt; X|X|O          1|2|3
+// X&gt; O|X|X          4|5|6
+// X&gt; O|O|           7|8|9
 // endState: TicTacToeState = TicTacToeState(
 //   moverOpt = None,
 //   board = Array(
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
-//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
-//     None,
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
-//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
-//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
-//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;))
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;))
 //   ),
 //   boardSize = 3
 // )</span></code></pre>
         <p>Display outcome to each player</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
 </span><span class="comment">// outcome: TicTacToeOutcome = TicTacToeOutcome(
-//   winner = Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;))
+//   winner = Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;))
 // )
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// X&gt; Player O beat You!
-// O&gt; You beat Player X!</span></code></pre>
+</span><span class="comment">// X&gt; You beat Player O!
+// O&gt; Player X beat You!</span></code></pre>
 
       </main>
 

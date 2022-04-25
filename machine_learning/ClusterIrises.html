@@ -170,14 +170,14 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Irises</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Iris</span></code></pre>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ec</span><span> = </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="identifier">global</span><span>
-</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@2b1b76a9[Running, parallelism = 6, size = 4, active = 0, running = 0, steals = 4, tasks = 0, submissions = 0]
+</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@36e1fb3b[Running, parallelism = 6, size = 4, active = 0, running = 0, steals = 4, tasks = 0, submissions = 0]
 </span><span class="keyword">val</span><span> </span><span class="identifier">blocker</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">Blocker</span><span>.</span><span class="identifier">liftExecutionContext</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@2b1b76a9
+</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@36e1fb3b
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">cs</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">contextShift</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@117b0026
+</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@5257b11
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">irisesIO</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">Irises</span><span>[</span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>](</span><span class="identifier">blocker</span><span>)
-</span><span class="comment">// irisesIO: Irises[cats.effect.IO] = axle.data.Irises@779a2068
+</span><span class="comment">// irisesIO: Irises[cats.effect.IO] = axle.data.Irises@56714add
 </span><span class="keyword">val</span><span> </span><span class="identifier">irises</span><span> = </span><span class="identifier">irisesIO</span><span>.</span><span class="identifier">irises</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
 </span><span class="comment">// irises: List[Iris] = List(
 //   Iris(
@@ -252,10 +252,10 @@
 </span><span class="comment">// irisFeaturizer: Iris =&gt; List[Double] = &lt;function1&gt;
 </span><span>
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">la</span><span> = </span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
-</span><span class="comment">// la: algebra.LinearAlgebra[DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@228023a2
+</span><span class="comment">// la: algebra.LinearAlgebra[DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@1968ea99
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">normalizer</span><span> = (</span><span class="type-name">PCAFeatureNormalizer</span><span>[</span><span class="type-name">DoubleMatrix</span><span>] </span><span class="identifier">_</span><span>).</span><span class="identifier">curried</span><span>.</span><span class="identifier">apply</span><span>(</span><span class="number-literal">0.98</span><span>)
-</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$11528/0x0000000802b0d3d0@73e818f4
+</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$10074/0x0000000802695cb0@13e8063f
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">classifier</span><span>: </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>] =
   </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
@@ -374,11 +374,11 @@
 // ...
 </span><span>
 </span><span class="identifier">confusion</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res0: String = &quot;&quot;&quot; 41   8   1 :  50 Iris-setosa
-//   1   1  48 :  50 Iris-versicolor
-//   0   5  45 :  50 Iris-virginica
+</span><span class="comment">// res0: String = &quot;&quot;&quot; 49   1   0 :  50 Iris-setosa
+//   2  36  12 :  50 Iris-versicolor
+//   0  20  30 :  50 Iris-virginica
 // 
-//  42  14  94
+//  51  57  42
 // &quot;&quot;&quot;</span></code></pre>
         <p>Visualize the final (two dimensional) centroid positions</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">KMeansVisualization</span><span>
