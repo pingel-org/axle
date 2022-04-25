@@ -6,7 +6,7 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 * more sections vs bullets (for right sidebar)
 * fix SFO to HEL image link
-* separate Architecture section
+* separate Architecture section (or rename Fund. to Foundation and include Architecture, Cats, Spire, FP, ...)
 * move much of Road Map to chapter-specific "next steps" sections
 
 * clean up Resources.md
