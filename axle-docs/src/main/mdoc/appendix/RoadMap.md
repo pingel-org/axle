@@ -4,32 +4,47 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 ## CICD
 
-* titles in directory.conf
-* directory.conf files to establish order
-* README.md and directory.conf to structure site
-* find home for Tutorials.md
 * fix internal links
-
+* clean up Resources.md
 * simplify "Installation"
 * include CICD info somewhere
 
-* Do "sonatype lift" emails following release suffice for security scan?
-* site build via github action
-* update google analytics
-* create and publish code coverage reports
 * gallery images should be same width
-* simplify "Installation"
-* include CICD info somewhere
-
+* update google analytics
+* create and publish code coverage reports. See [this](https://github.com/marketplace/actions/codecov)
 * CNAME (www and root)
 * tweet / post
 
-## 0.6.3
+## 0.6.4
+
+* Do "sonatype lift" emails following release suffice for security scan?
+* merge mdoc and site directories?
+* site build via github action?
+
+* QuantumCircuit.md
+* QBit2.factor
+* Fix and enable DeutschOracleSpec
+* QBit CCNot
+* Shor's algorithm
+
+## 0.6.5
 
 * factor out `axle-ast-python`
-* Scala 3
+* move ast view xml (how is it able to refer to `xml.Node`?)
+  * ast.view.AstNodeFormatter (xml.Utility.escape)
+  * ast.view.AstNodeFormatterXhtmlLines
+  * ast.view.AstNodeFormatterXhtml
+* Tests for `axle.ast`
+* `axle-ast-python`
+* `cats.effect` for `axle.ast.python2`
 
-## 0.6.4+ Further buildout of axle.game (2021H1)
+## 0.7.x Scala 3
+
+* Scala 3
+* convert to scalameta munit for dotty
+* correct "Package Objects" doc
+
+## 0.8.x Further buildout of axle.game (2021H1)
 
 ### Missing functionality
 
@@ -87,8 +102,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * performance benchmark
 
-* convert to scalameta munit for dotty
-
 * Replace `axle.game.moveFromRandomState.mapToProb`
 
 * Clean up `axle.game.playWithIntroAndOutcomes`
@@ -103,7 +116,7 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * `Game.players` should be a part of GameState (or take it as an argument)?  Will wait for pressing use case.
 
-## 0.7.x Factoring and Bayesian Networks
+## 0.9.x Factoring and Bayesian Networks
 
 * Reorder Probability mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
   * Footnotes (Giry, etc)
@@ -140,14 +153,9 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 * `Bayes[MonotypeBayesanNetwork]` -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself
 
-* QuantumCircuit.md
-* QBit2.factor
-* Fix and enable DeutschOracleSpec
-* QBit CCNot
-
 * Review complex analysis
 
-## 0.8.x Bugs and adoption barriers
+## 0.10.x Bugs and adoption barriers
 
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
 
@@ -164,14 +172,6 @@ See [Release Notes](/release_notes/) for the record of previously released featu
 
 * `axle-png` to avoid Xvfb requirement during tests
 * Chicklet borders / colors on site
-
-* move ast view xml (how is it able to refer to `xml.Node`?)
-  * ast.view.AstNodeFormatter (xml.Utility.escape)
-  * ast.view.AstNodeFormatterXhtmlLines
-  * ast.view.AstNodeFormatterXhtml
-* Tests for `axle.ast`
-* `axle-ast-python`
-* `cats.effect` for `axle.ast.python2`
 
 * Factor `axle.algebra.chain` in terms of well-known combinators
 
@@ -209,7 +209,6 @@ that has been its goal since inception.
 * Typeclass for unindex
 * Deutsch-Jozsa algorithm (D.O. for n-bits) (Oracle separation between EQP and P)
 * Simon's periodicity problem (oracle separation between BQP and BPP)
-* Shor's algorithm
 * Grover's algorithm
 * Quantum cryptographic key exchange
 * Check out Qiskit
@@ -282,7 +281,7 @@ that has been its goal since inception.
 * remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well
 * Fix "unreachable" default pattern match cases
 * Review remaining usage of: `asInstanceOf`, `ClassTag`, and `Manifest`
-* Review groupBy uses -- they use university equality.  Replace with Eq
+* Review `groupBy` uses -- they use university equality.  Replace with `Eq`
 * axle.algorithms coverage > 80%
 * axle.core coverage > 80%
 * Rm throws from axle.quanta.UnitConverterGraph
@@ -340,8 +339,6 @@ that has been its goal since inception.
 ## Site
 
 * Friend of Spire
-* Fix markdown lint warnings
-* Figure out better way to reference images in docs
 * Meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
 * Debug problems with laikaIncludePDF
 * GitHub "Releases" in sidebar should show "latest"
