@@ -4,8 +4,6 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## CICD
 
-* more sections vs bullets (for right sidebar)
-* fix SFO to HEL image link
 * separate Architecture section (or rename Fund. to Foundation and include Architecture, Cats, Spire, FP, ...)
 * move much of Road Map to chapter-specific "next steps" sections
 
@@ -16,6 +14,7 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * move GeoCoordinates.md to "fundamental" or "units"
 * update Author.md
 
+* more sections vs bullets (for right sidebar)
 * gallery images should be same width
 * update google analytics
 * create and publish code coverage reports. See [this](https://github.com/marketplace/actions/codecov)
