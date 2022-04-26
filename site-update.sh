@@ -2,8 +2,7 @@
 
 set -e
 
-sbt 'project axle-docs' clean
-sbt -J-Xmx6G 'project axle-docs' mdoc
-sbt 'project axle-docs' laikaSite
-# sbt 'project axle-docs' ghpagesCleanSite
-sbt 'project axle-docs' ghpagesPushSite
+date
+sbt -J-Xmx8G 'project axle-docs' clean mdoc laikaSite ghpagesPushSite
+# ghpagesCleanSite
+date
