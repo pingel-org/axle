@@ -41,10 +41,10 @@ If it looks good, push with:
 sbt docs/ghpagesCleanSite docs/ghpagesPushSite
 ```
 
-Monitor [https://github.com/axlelang/axle/actions/workflows/pages/pages-build-deployment](progress) of action.
+Monitor [progress](https://github.com/axlelang/axle/actions/workflows/pages/pages-build-deployment) of action.
 
-Verify by browsing to the [site](https://www.axle-lang.org) or look at 
-the (`gh-pages` branch)[https://github.com/axlelang/axle/tree/gh-pages]
+Verify by browsing to the [site](https://www.axle-lang.org) or look at
+the `gh-pages` [branch](https://github.com/axlelang/axle/tree/gh-pages)
 
 ## References
 
