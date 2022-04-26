@@ -45,4 +45,4 @@ Use it to compute the points at 10% increments from SFO to HEL
 (0 to 10).map(i => geoCoordinatesLengthSpace.onPath(sfo, hel, i / 10d)) map { mp => mp.show } mkString("\n")
 ```
 
-![SFO to HEL](/tutorial/images/sfo_hel.png)
+![SFO to HEL](/images/sfo_hel.png)
