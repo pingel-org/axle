@@ -27,10 +27,23 @@ Confirm jars are present at the [sonatype repo](https://oss.sonatype.org/content
 
 Run the `site-update.sh` script
 
+Monitor [progress](https://github.com/axlelang/axle/actions/workflows/pages/pages-build-deployment) of action.
+
+Verify by browsing to the [site](https://www.axle-lang.org) or look at
+the `gh-pages` [branch](https://github.com/axlelang/axle/tree/gh-pages)
+
+## Verify before update
+
+Just to do the build locally, run
+
+```bash
+sbt -J-Xmx8G 'project axle-docs' clean mdoc laikaSite
+```
+
 To preview the changes, do:
 
 ```bash
-sbt docs/laikaPreview
+sbt 'project axle-docs' laikaPreview
 ```
 
 then browse to [https://localhost:4242](https://localhost:4242)
@@ -38,13 +51,10 @@ then browse to [https://localhost:4242](https://localhost:4242)
 If it looks good, push with:
 
 ```bash
-sbt docs/ghpagesCleanSite docs/ghpagesPushSite
+sbt 'project axle-docs' ghpagesCleanSite ghpagesPushSite
 ```
 
-Monitor [progress](https://github.com/axlelang/axle/actions/workflows/pages/pages-build-deployment) of action.
-
-Verify by browsing to the [site](https://www.axle-lang.org) or look at
-the `gh-pages` [branch](https://github.com/axlelang/axle/tree/gh-pages)
+Monitor and verify as before.
 
 ## References
 
