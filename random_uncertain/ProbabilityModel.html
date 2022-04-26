@@ -268,7 +268,7 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">rng</span><span> = </span><span class="type-name">Random</span><span>.</span><span class="identifier">generatorFromSeed</span><span>(</span><span class="type-name">Seed</span><span>(</span><span class="number-literal">42</span><span>))
-</span><span class="comment">// rng: spire.random.rng.Cmwc5 = spire.random.rng.Cmwc5@47b1dc8c</span></code></pre>
+</span><span class="comment">// rng: spire.random.rng.Cmwc5 = spire.random.rng.Cmwc5@902b2d9</span></code></pre>
         <p>And then the <code>.sample</code> syntax:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">sampler</span><span>.</span><span class="identifier">_</span></code></pre>
         <p>Note that it must be provided with a Spire <code>Generator</code>.
@@ -308,7 +308,7 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">rolls</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">1000</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> =&gt; </span><span class="identifier">d6</span><span>.</span><span class="identifier">sample</span><span>(</span><span class="identifier">rng</span><span>) }</span></code></pre>
         <p>Then tally them</p>
         <pre><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringInt</span><span>: </span><span class="type-name">CRing</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
-</span><span class="comment">// ringInt: CRing[Int] = spire.std.IntAlgebra@2f0c10a2
+</span><span class="comment">// ringInt: CRing[Int] = spire.std.IntAlgebra@20ac0add
 </span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">talliable</span><span>.</span><span class="identifier">_</span><span>
 
