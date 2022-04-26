@@ -7,17 +7,14 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * separate Architecture section (or rename Fund. to Foundation and include Architecture, Cats, Spire, FP, ...)
 * move much of Road Map to chapter-specific "next steps" sections
 
-* clean up Resources.md
-* README: data sets from `axle.data` (Astronomy, Evolutoin, Federalist Papers, Irises)
-* simplify "Installation"
-* include CICD info somewhere
+* README: data sets from `axle.data` (Astronomy, Evolution, Federalist Papers, Irises)
+* simplify "Installation"; make dependencies clear in each section
 * move GeoCoordinates.md to "fundamental" or "units"
-* update Author.md
 
-* more sections vs bullets (for right sidebar)
+* what to do about empty right sidebars? convert bullets into sections? disable somehow?
 * gallery images should be same width
 * update google analytics
-* create and publish code coverage reports. See [this](https://github.com/marketplace/actions/codecov)
+* create and publish code coverage reports. See [this](https://github.com/marketplace/actions/codecov) . Update "Resources" with correct link
 * CNAME (www and root)
 * tweet / post
 
