@@ -4,10 +4,18 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## CICD
 
+* add download link to pdf (eg /downloads/axle-docs-0.6.pdf)
+
+* gallery images should be same width
+
+* Create and publish code coverage reports
+  * See [this](https://github.com/marketplace/actions/codecov)
+  * Update "Resources" with correct link
+
 * update google analytics
-* create and publish code coverage reports. See [this](https://github.com/marketplace/actions/codecov) . Update "Resources" with correct link
 
 * separate Architecture section (or rename Fund. to Foundation and include Architecture, Cats, Spire, FP, ...)
+* look for opportunities to use `mdoc:silent`
 * move much of Road Map to chapter-specific "next steps" sections
 * README: data sets from `axle.data` (Astronomy, Evolution, Federalist Papers, Irises)
 * simplify "Installation"; make dependencies clear in each section
@@ -15,7 +23,6 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * document Quantum Circuits
 
 * what to do about empty right sidebars? convert bullets into sections? disable somehow?
-* gallery images should be same width
 * CNAME (www and root)
 * tweet / post
 

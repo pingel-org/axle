@@ -210,7 +210,7 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
     mdocIn := file("axle-docs/src/main/mdoc"),
     mdocOut := file("axle-docs/target/mdoc"),
     siteSourceDirectory := file("axle-docs/target/site"),
-    makeSite / includeFilter := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.svg" | "*.js" | "*.swf" | "*.yml" | "*.md" | "favicon.ico" | "*.woff" | "*.woff2",
+    makeSite / includeFilter := "*.html" | "*.css" | "*.png" | "*.jpg" | "*.gif" | "*.svg" | "*.js" | "*.swf" | "*.yml" | "*.md" | "favicon.ico" | "*.woff" | "*.woff2" | "*.pdf",
     Laika / sourceDirectories := Seq(
       file("axle-docs/target/mdoc"),
       file("axle-docs/src/site"),
@@ -220,7 +220,7 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
     laikaExtensions ++= Seq(
       laika.markdown.github.GitHubFlavor,
       laika.parse.code.SyntaxHighlighting),
-      laikaIncludePDF := false, // TODO find bug and re-enable
+      laikaIncludePDF := true,
     ghpagesNoJekyll := true,
     ghpagesCleanSite / excludeFilter :=
       new FileFilter {
