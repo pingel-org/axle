@@ -29,6 +29,6 @@ For more background, see his accounts on:
 * [LinkedIn](http://www.linkedin.com/in/adampingel)
 * [StackOverflow](http://stackoverflow.com/users/528536/adam-p)
 * [@pingel](https://twitter.com/#!/pingel) on Twitter
-* [Google Scholar](http://scholar.google.com/citations?user=xj0ZeKQAAAAJ&hl=en)
+* [Google Scholar](http://scholar.google.com/citations?user=xj0ZeKQAAAAJ)
 
 He can be reached at `adam@axle-lang.org`.
