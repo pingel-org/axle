@@ -12,6 +12,7 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * README: data sets from `axle.data` (Astronomy, Evolution, Federalist Papers, Irises)
 * simplify "Installation"; make dependencies clear in each section
 * move GeoCoordinates.md to "fundamental" or "units"
+* document Quantum Circuits
 
 * what to do about empty right sidebars? convert bullets into sections? disable somehow?
 * gallery images should be same width
