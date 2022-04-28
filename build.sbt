@@ -206,6 +206,7 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
     mdocVariables := Map(
       "DOCWD" -> docwd,
       "RELEASE_VERSION" -> (ThisBuild / previousStableVersion).value.getOrElse("0.6.3")
+      "PDF_VERSION" -> "0.6"
     ),
     mdocIn := file("axle-docs/src/main/mdoc"),
     mdocOut := file("axle-docs/target/mdoc"),
@@ -220,7 +221,7 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
     laikaExtensions ++= Seq(
       laika.markdown.github.GitHubFlavor,
       laika.parse.code.SyntaxHighlighting),
-      laikaIncludePDF := true,
+    laikaIncludePDF := true,
     ghpagesNoJekyll := true,
     ghpagesCleanSite / excludeFilter :=
       new FileFilter {
