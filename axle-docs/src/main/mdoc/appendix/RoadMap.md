@@ -4,7 +4,7 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## CICD
 
-* update google analytics
+* update google analytics UA-8146066-2
 * git tag
 * CNAME (www and root)
 
