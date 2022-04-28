@@ -4,8 +4,7 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## CICD
 
-* `laikaIncludeAPI := true` in `build.sbt`
-* CNAME (www and root)
+* confirm cutover to [axle-lang.org](https://axle-lang.org/) worked
 
 * gallery images should be same width
 * separate Architecture section (or rename Fund. to Foundation and include Architecture, Cats, Spire, FP, ...)
@@ -18,16 +17,17 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * what to do about empty right sidebars? convert bullets into sections? disable somehow?
 * tweet / post
 
+## 0.6.4
+
 * stop hard-coding PDF_VERSION n build.sbt
+* `laikaIncludeAPI := true` in `build.sbt`
 * look at more of [these options](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
 * README: data sets from `axle.data` (Astronomy, Evolution, Federalist Papers, Irises)
 * update google analytics version
-
-## 0.6.4
-
-* Do "sonatype lift" emails following release suffice for security scan?
 * merge mdoc and site directories?
 * site build via github action?
+
+## 0.6.5
 
 * QuantumCircuit.md
 * QBit2.factor
