@@ -1,4 +1,4 @@
-# Buid and Deploy
+# Build and Deploy
 
 For contributors
 
