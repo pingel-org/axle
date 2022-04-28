@@ -17,6 +17,7 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * README: data sets from `axle.data` (Astronomy, Evolution, Federalist Papers, Irises)
 * move GeoCoordinates.md to "fundamental" or "units"
 * document Quantum Circuits
+* rename python2json.py page to be just 'Python'
 * what to do about empty right sidebars? convert bullets into sections? disable somehow?
 * tweet / post
 
