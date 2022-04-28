@@ -2,6 +2,10 @@
 
 For contributors
 
+* [Source code](https://github.com/axlelang/axle) on GitHub
+* Build status on Github Actions [![Build status](https://github.com/axlelang/axle/workflows/CI%20Release/badge.svg)](https://github.com/axlelang/axle/actions?query=workflow%3A%22CI+Release%22)
+* Code coverage [![codecov](http://codecov.io/github/axlelang/axle/coverage.svg?branch=main)](http://codecov.io/github/axlelang/axle?branch=main)
+
 ## Publish snapshots
 
 Push commits to repo.
