@@ -164,81 +164,81 @@
   </span><span class="type-name">Deck</span><span>().</span><span class="identifier">cards</span><span>.</span><span class="identifier">take</span><span>(</span><span class="identifier">handSize</span><span>).</span><span class="identifier">combinations</span><span>(</span><span class="number-literal">5</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">cs</span><span> =&gt; </span><span class="type-name">PokerHand</span><span>(</span><span class="identifier">cs</span><span>.</span><span class="identifier">toVector</span><span>)).</span><span class="identifier">toList</span><span>.</span><span class="identifier">max</span><span>
 
 </span><span class="identifier">winnerFromHandSize</span><span>(</span><span class="number-literal">7</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res0: String = &quot;5♣ 6♢ 7♣ K♢ A♣&quot;</span></code></pre>
+</span><span class="comment">// res0: String = &quot;6♡ 7♢ 7♣ 8♠ A♢&quot;</span></code></pre>
         <p>20 simulated 5-card hands made of 7-card hands.  Sorted.</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">hands</span><span> = (</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">20</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">n</span><span> =&gt; </span><span class="identifier">winnerFromHandSize</span><span>(</span><span class="number-literal">7</span><span>)).</span><span class="identifier">sorted</span><span>
 </span><span class="comment">// hands: IndexedSeq[PokerHand] = Vector(
 //   PokerHand(
 //     cards = Vector(
 //       Card(
-//         rank = axle.game.cards.R4$@a07a0bf,
-//         suit = axle.game.cards.Clubs$@701c3c9b
+//         rank = axle.game.cards.R6$@8518de0,
+//         suit = axle.game.cards.Hearts$@4cbcb6bf
 //       ),
 //       Card(
-//         rank = axle.game.cards.R7$@76f7bf7f,
-//         suit = axle.game.cards.Clubs$@701c3c9b
+//         rank = axle.game.cards.R8$@72faca6,
+//         suit = axle.game.cards.Spades$@3950f2e
 //       ),
 //       Card(
-//         rank = axle.game.cards.R5$@28d70951,
-//         suit = axle.game.cards.Hearts$@3e038e2a
+//         rank = axle.game.cards.Jack$@9ddb26f,
+//         suit = axle.game.cards.Spades$@3950f2e
 //       ),
 //       Card(
-//         rank = axle.game.cards.R8$@215b3091,
-//         suit = axle.game.cards.Hearts$@3e038e2a
+//         rank = axle.game.cards.R10$@20453bd9,
+//         suit = axle.game.cards.Spades$@3950f2e
 //       ),
 //       Card(
-//         rank = axle.game.cards.Ace$@3c981282,
-//         suit = axle.game.cards.Clubs$@701c3c9b
+//         rank = axle.game.cards.Queen$@3d357b8a,
+//         suit = axle.game.cards.Diamonds$@5d332346
 //       )
 //     )
 //   ),
 //   PokerHand(
 //     cards = Vector(
 //       Card(
-//         rank = axle.game.cards.Ace$@3c981282,
-//         suit = axle.game.cards.Hearts$@3e038e2a
+//         rank = axle.game.cards.Jack$@9ddb26f,
+//         suit = axle.game.cards.Diamonds$@5d332346
 //       ),
 //       Card(
-//         rank = axle.game.cards.Jack$@341e0a30,
-//         suit = axle.game.cards.Hearts$@3e038e2a
+//         rank = axle.game.cards.Queen$@3d357b8a,
+//         suit = axle.game.cards.Hearts$@4cbcb6bf
 //       ),
 //       Card(
-//         rank = axle.game.cards.R8$@215b3091,
-//         suit = axle.game.cards.Hearts$@3e038e2a
+//         rank = axle.game.cards.R7$@569be5dc,
+//         suit = axle.game.cards.Hearts$@4cbcb6bf
 //       ),
 //       Card(
-//         rank = axle.game.cards.R9$@2cca2474,
-//         suit = axle.game.cards.Spades$@4a50d951
+//         rank = axle.game.cards.King$@28ac6104,
+//         suit = axle.game.cards.Clubs$@201c4e31
 //       ),
 //       Card(
-//         rank = axle.game.cards.R10$@37c4b259,
-//         suit = axle.game.cards.Diamonds$@700e42fa
+//         rank = axle.game.cards.R8$@72faca6,
+//         suit = axle.game.cards.Hearts$@4cbcb6bf
 //       )
 //     )
 //   ),
 // ...
 </span><span>
 </span><span class="identifier">hands</span><span>.</span><span class="identifier">map</span><span>({ </span><span class="identifier">hand</span><span> =&gt; </span><span class="identifier">hand</span><span>.</span><span class="identifier">show</span><span> + </span><span class="string-literal">&quot;  &quot;</span><span> + </span><span class="identifier">hand</span><span>.</span><span class="identifier">description</span><span> }).</span><span class="identifier">mkString</span><span>(</span><span class="string-literal">&quot;</span><span class="escape-sequence">\n</span><span class="string-literal">&quot;</span><span>)
-</span><span class="comment">// res1: String = &quot;&quot;&quot;4♣ 5♡ 7♣ 8♡ A♣  high A high
-// 8♡ 9♠ T♢ J♡ A♡  high A high
-// 2♡ 2♢ 8♠ 9♣ J♠  pair of 2
-// 3♠ 3♡ 7♡ J♠ Q♣  pair of 3
-// 3♠ 3♣ 9♡ Q♡ K♣  pair of 3
-// 6♡ 6♣ T♠ J♣ A♣  pair of 6
-// 7♠ 7♢ J♠ K♠ A♣  pair of 7
-// 9♢ T♣ J♠ J♣ A♠  pair of J
-// 9♢ J♡ J♣ Q♡ A♡  pair of J
-// 6♠ 7♢ J♠ Q♠ Q♢  pair of Q
-// 6♣ J♡ Q♠ Q♢ A♠  pair of Q
-// 8♡ T♢ K♡ K♢ A♣  pair of K
-// 7♢ 9♡ Q♣ A♠ A♢  pair of A
-// 8♢ Q♣ K♠ A♡ A♣  pair of A
-// 4♡ 4♢ 8♡ J♢ J♣  two pair J and 4
-// 3♡ T♠ T♡ J♠ J♣  two pair J and T
-// 2♢ 2♣ 6♣ Q♠ Q♡  two pair Q and 2
-// 9♢ 9♣ J♡ Q♢ Q♣  two pair Q and 9
-// 8♢ 9♡ T♣ J♡ Q♣  straight to Q
-// Q♠ Q♡ Q♢ K♡ K♣  full house Q over K&quot;&quot;&quot;</span></code></pre>
+</span><span class="comment">// res1: String = &quot;&quot;&quot;6♡ 8♠ T♠ J♠ Q♢  high Q high
+// 7♡ 8♡ J♢ Q♡ K♣  high K high
+// 8♢ 9♣ J♢ Q♠ K♡  high K high
+// 3♠ 3♡ 8♡ 9♠ K♠  pair of 3
+// 4♠ 4♡ J♢ K♢ A♢  pair of 4
+// 5♠ 6♡ 6♣ T♣ A♣  pair of 6
+// 6♢ 8♡ 9♢ 9♣ Q♢  pair of 9
+// 4♣ 9♡ 9♢ J♠ Q♡  pair of 9
+// 6♠ 9♢ K♢ K♣ A♢  pair of K
+// 6♢ J♢ K♠ K♡ A♢  pair of K
+// T♡ J♡ K♠ K♡ A♠  pair of K
+// 5♢ 8♡ 9♢ A♡ A♢  pair of A
+// 8♢ T♡ Q♣ A♠ A♣  pair of A
+// 2♢ 2♣ 5♡ 5♢ K♠  two pair 5 and 2
+// 4♠ 4♡ 7♢ 7♣ K♢  two pair 7 and 4
+// 5♡ 5♢ J♠ J♡ A♡  two pair J and 5
+// 5♢ 7♢ 7♣ Q♡ Q♢  two pair Q and 7
+// 9♣ K♠ K♡ K♢ A♢  three of a kind of K
+// 4♠ 4♢ 4♣ T♠ T♢  full house 4 over T
+// 5♠ 5♡ 5♢ 9♠ 9♡  full house 5 over 9&quot;&quot;&quot;</span></code></pre>
         <p>Record 1000 simulated hands for each drawn hand size from 5 to 9</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">poker</span><span>.</span><span class="type-name">PokerHandCategory</span><span>
 
@@ -248,54 +248,54 @@
     </span><span class="identifier">trial</span><span> &lt;- </span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">1000</span><span>
   } </span><span class="keyword">yield</span><span> (</span><span class="identifier">winnerFromHandSize</span><span>(</span><span class="identifier">handSize</span><span>).</span><span class="identifier">category</span><span>, </span><span class="identifier">handSize</span><span>)
 </span><span class="comment">// data: IndexedSeq[(PokerHandCategory, Int)] = Vector(
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.TwoPair$@35881d7f, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.TwoPair$@35881d7f, 5),
-//   (axle.game.poker.TwoPair$@35881d7f, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.TwoPair$@35881d7f, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.High$@2458856, 5),
-//   (axle.game.poker.Pair$@208e42ca, 5),
-//   (axle.game.poker.High$@2458856, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.TwoPair$@4914c35e, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.TwoPair$@4914c35e, 5),
+//   (axle.game.poker.TwoPair$@4914c35e, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.ThreeOfAKind$@4d9ca0af, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.High$@b07aefe, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
+//   (axle.game.poker.Pair$@d4ef0c7, 5),
 // ...</span></code></pre>
         <p>BarChartGrouped to visualize the results</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">CRing</span><span>
@@ -305,7 +305,7 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">talliable</span><span>.</span><span class="identifier">talliableOps</span><span>
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringInt</span><span>: </span><span class="type-name">CRing</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
-</span><span class="comment">// ringInt: CRing[Int] = spire.std.IntAlgebra@13125bde
+</span><span class="comment">// ringInt: CRing[Int] = spire.std.IntAlgebra@66a2eea8
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">colors</span><span> = </span><span class="type-name">List</span><span>(</span><span class="identifier">black</span><span>, </span><span class="identifier">red</span><span>, </span><span class="identifier">blue</span><span>, </span><span class="identifier">yellow</span><span>, </span><span class="identifier">green</span><span>)
 </span><span class="comment">// colors: List[axle.visualize.Color] = List(
@@ -359,7 +359,7 @@
 //   ),
 //   colorOf = &lt;function2&gt;,
 //   hoverOf = &lt;function2&gt;,
-//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$8876/1753078713@dde04f7
+//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$8714/103144775@4a538f34
 // )</span></code></pre>
         <p>Render as SVG file</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
@@ -431,136 +431,115 @@
 // P1&gt; Pot: 3
 // P1&gt; Shared: 
 // P1&gt; 
-// P1&gt; P1:  hand K♠ A♡ in for $1, $99 remaining
+// P1&gt; P1:  hand K♠ 8♠ in for $1, $99 remaining
 // P1&gt; P2:  hand -- in for $2, $98 remaining
 // P2&gt; To: You
-// P2&gt; Current bet: 32
-// P2&gt; Pot: 34
+// P2&gt; Current bet: 67
+// P2&gt; Pot: 69
 // P2&gt; Shared: 
 // P2&gt; 
-// P2&gt; P1:  hand -- in for $32, $68 remaining
-// P2&gt; P2:  hand T♠ A♣ in for $2, $98 remaining
+// P2&gt; P1:  hand -- in for $67, $33 remaining
+// P2&gt; P2:  hand 6♢ 9♠ in for $2, $98 remaining
 // P1&gt; To: You
-// P1&gt; Current bet: 67
-// P1&gt; Pot: 99
+// P1&gt; Current bet: 72
+// P1&gt; Pot: 139
 // P1&gt; Shared: 
 // P1&gt; 
-// P1&gt; P1:  hand K♠ A♡ in for $32, $68 remaining
-// P1&gt; P2:  hand -- in for $67, $33 remaining
+// P1&gt; P1:  hand K♠ 8♠ in for $67, $33 remaining
+// P1&gt; P2:  hand -- in for $72, $28 remaining
 // P2&gt; To: You
-// P2&gt; Current bet: 72
-// P2&gt; Pot: 139
+// P2&gt; Current bet: 95
+// P2&gt; Pot: 167
 // P2&gt; Shared: 
 // P2&gt; 
-// P2&gt; P1:  hand -- in for $72, $28 remaining
-// P2&gt; P2:  hand T♠ A♣ in for $67, $33 remaining
-// P1&gt; To: You
-// P1&gt; Current bet: 84
-// P1&gt; Pot: 156
-// P1&gt; Shared: 
-// P1&gt; 
-// P1&gt; P1:  hand K♠ A♡ in for $72, $28 remaining
-// P1&gt; P2:  hand -- in for $84, $16 remaining
-// P2&gt; To: You
-// P2&gt; Current bet: 96
-// P2&gt; Pot: 180
-// P2&gt; Shared: 
-// P2&gt; 
-// P2&gt; P1:  hand -- in for $96, $4 remaining
-// P2&gt; P2:  hand T♠ A♣ in for $84, $16 remaining
+// P2&gt; P1:  hand -- in for $95, $5 remaining
+// P2&gt; P2:  hand 6♢ 9♠ in for $72, $28 remaining
 // P1&gt; To: You
 // P1&gt; Current bet: 99
-// P1&gt; Pot: 195
+// P1&gt; Pot: 194
 // P1&gt; Shared: 
 // P1&gt; 
-// P1&gt; P1:  hand K♠ A♡ in for $96, $4 remaining
+// P1&gt; P1:  hand K♠ 8♠ in for $95, $5 remaining
 // P1&gt; P2:  hand -- in for $99, $1 remaining
+// P2&gt; To: You
+// P2&gt; Current bet: 100
+// P2&gt; Pot: 199
+// P2&gt; Shared: 
+// P2&gt; 
+// P2&gt; P1:  hand -- in for $100, $0 remaining
+// P2&gt; P2:  hand 6♢ 9♠ in for $99, $1 remaining
 // D&gt; To: You
-// D&gt; Current bet: 99
-// D&gt; Pot: 198
+// D&gt; Current bet: 100
+// D&gt; Pot: 199
 // D&gt; Shared: 
 // D&gt; 
-// D&gt; P1:  hand -- in for $99, $1 remaining
-// D&gt; P2:  hand -- in for $99, $1 remaining
-// P1&gt; To: You
-// P1&gt; Current bet: 0
-// P1&gt; Pot: 198
-// P1&gt; Shared: Q♢ 9♠ 5♡
-// P1&gt; 
-// P1&gt; P1:  hand K♠ A♡ in for $--, $1 remaining
-// P1&gt; P2:  hand -- in for $--, $1 remaining
-// D&gt; To: You
-// D&gt; Current bet: 0
-// D&gt; Pot: 198
-// D&gt; Shared: Q♢ 9♠ 5♡
-// D&gt; 
-// D&gt; P1:  hand -- out, $1 remaining
-// D&gt; P2:  hand -- in for $--, $1 remaining
+// D&gt; P1:  hand -- in for $100, $0 remaining
+// D&gt; P2:  hand -- out, $1 remaining
 // endState: PokerState = PokerState(
-//   moverFn = axle.game.poker.package$$anon$1$$Lambda$8978/443087747@6f8ac059,
+//   moverFn = axle.game.poker.package$$anon$1$$Lambda$8811/989303085@4e8005a5,
 //   deck = Deck(
 //     cards = List(
 //       Card(
-//         rank = axle.game.cards.R2$@5d90a061,
-//         suit = axle.game.cards.Hearts$@3e038e2a
+//         rank = axle.game.cards.R4$@4514810e,
+//         suit = axle.game.cards.Hearts$@4cbcb6bf
 //       ),
 //       Card(
-//         rank = axle.game.cards.R7$@76f7bf7f,
-//         suit = axle.game.cards.Spades$@4a50d951
+//         rank = axle.game.cards.R8$@72faca6,
+//         suit = axle.game.cards.Hearts$@4cbcb6bf
 //       ),
 //       Card(
-//         rank = axle.game.cards.R10$@37c4b259,
-//         suit = axle.game.cards.Hearts$@3e038e2a
+//         rank = axle.game.cards.R7$@569be5dc,
+//         suit = axle.game.cards.Clubs$@201c4e31
 //       ),
 //       Card(
-//         rank = axle.game.cards.R5$@28d70951,
-//         suit = axle.game.cards.Clubs$@701c3c9b
+//         rank = axle.game.cards.R3$@45001ff1,
+//         suit = axle.game.cards.Clubs$@201c4e31
 //       ),
 //       Card(
-//         rank = axle.game.cards.R6$@5103b96b,
-//         suit = axle.game.cards.Diamonds$@700e42fa
+//         rank = axle.game.cards.R5$@2ab548ad,
+//         suit = axle.game.cards.Hearts$@4cbcb6bf
 //       ),
 //       Card(
-//         rank = axle.game.cards.R3$@edb15a1,
-//         suit = axle.game.cards.Spades$@4a50d951
+//         rank = axle.game.cards.R3$@45001ff1,
+//         suit = axle.game.cards.Spades$@3950f2e
 //       ),
 //       Card(
-//         rank = axle.game.cards.R8$@215b3091,
-//         suit = axle.game.cards.Diamonds$@700e42fa
+//         rank = axle.game.cards.R2$@3e53b6b0,
+//         suit = axle.game.cards.Diamonds$@5d332346
 //       ),
 //       Card(
-//         rank = axle.game.cards.R6$@5103b96b,
-//         suit = axle.game.cards.Clubs$@701c3c9b
+//         rank = axle.game.cards.King$@28ac6104,
+//         suit = axle.game.cards.Hearts$@4cbcb6bf
 //       ),
 //       Card(
-//         rank = axle.game.cards.Ace$@3c981282,
-//         suit = axle.game.cards.Spades$@4a50d951
+//         rank = axle.game.cards.R4$@4514810e,
+//         suit = axle.game.cards.Spades$@3950f2e
 //       ),
 //       Card(
-//         rank = axle.game.cards.R8$@215b3091,
-//         suit = axle.game.cards.Hearts$@3e038e2a
+//         rank = axle.game.cards.R6$@8518de0,
+//         suit = axle.game.cards.Hearts$@4cbcb6bf
 //       ),
 //       Card(
-//         rank = axle.game.cards.R2$@5d90a061,
-//         suit = axle.game.cards.Clubs$@701c3c9b
+//         rank = axle.game.cards.R2$@3e53b6b0,
+//         suit = axle.game.cards.Spades$@3950f2e
 //       ),
 //       Card(
 // ...</span></code></pre>
         <p>Display outcome to each player</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
 </span><span class="comment">// outcome: PokerOutcome = PokerOutcome(
-//   winner = Some(value = Player(id = &quot;P2&quot;, description = &quot;Player 2&quot;)),
+//   winner = Some(value = Player(id = &quot;P1&quot;, description = &quot;Player 1&quot;)),
 //   hand = None
 // )
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// D&gt; Winner: Player 2
+</span><span class="comment">// D&gt; Winner: Player 1
 // D&gt; Hand  : not shown
-// P1&gt; Winner: Player 2
+// P1&gt; Winner: Player 1
 // P1&gt; Hand  : not shown
-// P2&gt; Winner: Player 2
+// P2&gt; Winner: Player 1
 // P2&gt; Hand  : not shown</span></code></pre>
 
       </main>

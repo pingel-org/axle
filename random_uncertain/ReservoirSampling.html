@@ -158,25 +158,25 @@
         <p>Demonstrate it uniformly sampling 15 of the first 100 integers</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sample</span><span> = </span><span class="identifier">reservoirSampleK</span><span>(</span><span class="number-literal">15</span><span>, </span><span class="type-name">LazyList</span><span>.</span><span class="identifier">from</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">drop</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">head</span><span>
 </span><span class="comment">// sample: List[Int] = List(
-//   97,
-//   83,
+//   99,
+//   98,
+//   94,
+//   93,
+//   86,
 //   73,
-//   67,
-//   63,
-//   62,
-//   60,
-//   58,
-//   55,
-//   49,
-//   48,
+//   69,
+//   59,
 //   46,
-//   43,
-//   36,
-//   3
+//   35,
+//   32,
+//   30,
+//   18,
+//   10,
+//   9
 // )
 </span><span>
 </span><span class="identifier">arithmeticMean</span><span>(</span><span class="identifier">sample</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>))
-</span><span class="comment">// res0: Double = 56.2</span></code></pre>
+</span><span class="comment">// res0: Double = 56.733333333333334</span></code></pre>
         <p>The mean of the sample should be in the ballpark of the mean of the entire list -- 50.</p>
 
       </main>
