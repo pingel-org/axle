@@ -4,8 +4,7 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## CICD
 
-* update google analytics UA-8146066-2
-* git tag
+* `laikaIncludeAPI := true` in `build.sbt`
 * CNAME (www and root)
 
 * gallery images should be same width
@@ -17,12 +16,12 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * document Quantum Circuits
 * rename python2json.py page to be just 'Python'
 * what to do about empty right sidebars? convert bullets into sections? disable somehow?
-* `laikaIncludeAPI := true` in `build.sbt`
 * tweet / post
 
 * stop hard-coding PDF_VERSION n build.sbt
 * look at more of [these options](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
 * README: data sets from `axle.data` (Astronomy, Evolution, Federalist Papers, Irises)
+* update google analytics version
 
 ## 0.6.4
 
