@@ -10,7 +10,7 @@ For contributors
 
 Push commits to repo.
 
-Monitor [progress](https://github.com/axlelang/axle/actions/workflows/ci-release.yml) of github action.
+Monitor [progress](https://github.com/axlelang/axle/actions/workflows/ci_release.yml) of github action.
 
 Confirm jars are present at the [sonatype snapshot repo](https://oss.sonatype.org/content/repositories/snapshots/org/axle-lang/)
 
@@ -23,7 +23,7 @@ git tag -a v0.1.6 -m "v.0.1.6"
 git push origin v0.1.6
 ```
 
-Monitor [progress](https://github.com/axlelang/axle/actions/workflows/ci-release.yml)
+Monitor [progress](https://github.com/axlelang/axle/actions/workflows/ci_release.yml)
 
 Confirm jars are present at the [sonatype repo](https://oss.sonatype.org/content/repositories/releases/org/axle-lang/)
 
@@ -41,13 +41,14 @@ the `gh-pages` [branch](https://github.com/axlelang/axle/tree/gh-pages)
 Just to do the build locally, run
 
 ```bash
-sbt -J-Xmx8G 'project axle-docs' clean mdoc laikaSite
+sbt -J-Xmx8G mdoc
+sbt laikaSite
 ```
 
 To preview the changes, do:
 
 ```bash
-sbt 'project axle-docs' laikaPreview
+sbt laikaPreview
 ```
 
 then browse to [https://localhost:4242](https://localhost:4242)
@@ -55,7 +56,7 @@ then browse to [https://localhost:4242](https://localhost:4242)
 If it looks good, push with:
 
 ```bash
-sbt 'project axle-docs' ghpagesCleanSite ghpagesPushSite
+sbt ghpagesCleanSite ghpagesPushSite
 ```
 
 Monitor and verify as before.
