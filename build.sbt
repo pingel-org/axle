@@ -222,6 +222,7 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
       laika.markdown.github.GitHubFlavor,
       laika.parse.code.SyntaxHighlighting),
     laikaIncludePDF := true,
+    laikaIncludeAPI := false, // TODO flip to true
     ghpagesNoJekyll := true,
     ghpagesCleanSite / excludeFilter :=
       new FileFilter {
