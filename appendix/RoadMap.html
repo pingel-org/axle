@@ -126,7 +126,7 @@
         <li class="level2"><a href="Appendix.html">Appendix</a></li>
         <li class="level2"><a href="ReleaseNotes.html">Release Notes</a></li>
         <li class="level2 active"><a href="#">Road Map</a></li>
-        <li class="level2"><a href="BuildDeploy.html">Buid and Deploy</a></li>
+        <li class="level2"><a href="BuildDeploy.html">Build and Deploy</a></li>
         <li class="level2"><a href="History.html">History</a></li>
         <li class="level2"><a href="Author.html">Author</a></li>
         <li class="level2"><a href="Videos.html">Videos</a></li>
@@ -142,7 +142,8 @@
         <ul class="nav-list">
           <li class="level1"><a href="#cicd">CICD</a></li>
           <li class="level1"><a href="#_0-6-4">0.6.4</a></li>
-          <li class="level1"><a href="#_0-6-5">0.6.5</a></li>
+          <li class="level1"><a href="#_0-6-5-1">0.6.5</a></li>
+          <li class="level1"><a href="#_0-6-5-2">0.6.5</a></li>
           <li class="level1"><a href="#_0-7-x-scala-3">0.7.x Scala 3</a></li>
           <li class="level1"><a href="#_0-8-x-further-buildout-of-axle-game-2021h1">0.8.x Further buildout of axle.game (2021H1)</a></li>
           <li class="level2"><a href="#missing-functionality">Missing functionality</a></li>
@@ -175,13 +176,7 @@
         <h2 id="cicd" class="section"><a class="anchor-link left" href="#cicd"><i class="icofont-laika">&#xef71;</i></a>CICD</h2>
         <ul>
           <li>
-            <p>update google analytics</p>
-          </li>
-          <li>
-            <p>git tag</p>
-          </li>
-          <li>
-            <p>CNAME (www and root)</p>
+            <p>confirm certificate for <a href="https://axle-lang.org/">axle-lang.org</a></p>
           </li>
           <li>
             <p>gallery images should be same width</p>
@@ -199,16 +194,13 @@
             <p>simplify &quot;Installation&quot;; make dependencies clear in each section</p>
           </li>
           <li>
-            <p>stop hard-coding PDF_VERSION n build.sbt</p>
-          </li>
-          <li>
-            <p>README: data sets from <code>axle.data</code> (Astronomy, Evolution, Federalist Papers, Irises)</p>
-          </li>
-          <li>
             <p>move GeoCoordinates.md to &quot;fundamental&quot; or &quot;units&quot;</p>
           </li>
           <li>
             <p>document Quantum Circuits</p>
+          </li>
+          <li>
+            <p>rename python2json.py page to be just &#39;Python&#39;</p>
           </li>
           <li>
             <p>what to do about empty right sidebars? convert bullets into sections? disable somehow?</p>
@@ -220,33 +212,25 @@
         
         <h2 id="_0-6-4" class="section"><a class="anchor-link left" href="#_0-6-4"><i class="icofont-laika">&#xef71;</i></a>0.6.4</h2>
         <ul>
-          <li>
-            <p>Do &quot;sonatype lift&quot; emails following release suffice for security scan?</p>
-          </li>
-          <li>
-            <p>merge mdoc and site directories?</p>
-          </li>
-          <li>
-            <p>site build via github action?</p>
-          </li>
-          <li>
-            <p>QuantumCircuit.md</p>
-          </li>
-          <li>
-            <p>QBit2.factor</p>
-          </li>
-          <li>
-            <p>Fix and enable DeutschOracleSpec</p>
-          </li>
-          <li>
-            <p>QBit CCNot</p>
-          </li>
-          <li>
-            <p>Shor&#39;s algorithm</p>
-          </li>
+          <li>stop hard-coding PDF_VERSION n build.sbt</li>
+          <li><code>laikaIncludeAPI := true</code> in <code>build.sbt</code></li>
+          <li>look at more of <a href="https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html">these options</a></li>
+          <li>README: data sets from <code>axle.data</code> (Astronomy, Evolution, Federalist Papers, Irises)</li>
+          <li>update google analytics version</li>
+          <li>merge mdoc and site directories?</li>
+          <li>site build via github action?</li>
         </ul>
         
-        <h2 id="_0-6-5" class="section"><a class="anchor-link left" href="#_0-6-5"><i class="icofont-laika">&#xef71;</i></a>0.6.5</h2>
+        <h2 id="_0-6-5-1" class="section"><a class="anchor-link left" href="#_0-6-5-1"><i class="icofont-laika">&#xef71;</i></a>0.6.5</h2>
+        <ul>
+          <li>QuantumCircuit.md</li>
+          <li>QBit2.factor</li>
+          <li>Fix and enable DeutschOracleSpec</li>
+          <li>QBit CCNot</li>
+          <li>Shor&#39;s algorithm</li>
+        </ul>
+        
+        <h2 id="_0-6-5-2" class="section"><a class="anchor-link left" href="#_0-6-5-2"><i class="icofont-laika">&#xef71;</i></a>0.6.5</h2>
         <ul>
           <li>factor out <code>axle-ast-python</code></li>
           <li>move ast view xml (how is it able to refer to <code>xml.Node</code>?)</li>

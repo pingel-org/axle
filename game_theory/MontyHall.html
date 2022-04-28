@@ -126,7 +126,7 @@
         <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
         <li class="level2"><a href="../appendix/RoadMap.html">Road Map</a></li>
-        <li class="level2"><a href="../appendix/BuildDeploy.html">Buid and Deploy</a></li>
+        <li class="level2"><a href="../appendix/BuildDeploy.html">Build and Deploy</a></li>
         <li class="level2"><a href="../appendix/History.html">History</a></li>
         <li class="level2"><a href="../appendix/Author.html">Author</a></li>
         <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
@@ -205,16 +205,16 @@
 // C&gt; Door #2: 
 // C&gt; Door #3: 
 // M&gt; Door #1: car
-// M&gt; Door #2: goat, first choice
-// M&gt; Door #3: goat
+// M&gt; Door #2: goat
+// M&gt; Door #3: goat, first choice
 // C&gt; Door #1: 
-// C&gt; Door #2: first choice
-// C&gt; Door #3: , revealed goat
+// C&gt; Door #2: , revealed goat
+// C&gt; Door #3: first choice
 // endState: MontyHallState = MontyHallState(
 //   placement = Some(value = PlaceCar(door = 1)),
 //   placed = true,
-//   firstChoice = Some(value = FirstChoice(door = 2)),
-//   reveal = Some(value = Reveal(door = 3)),
+//   firstChoice = Some(value = FirstChoice(door = 3)),
+//   reveal = Some(value = Reveal(door = 2)),
 //   secondChoice = Some(value = Left(value = Change()))
 // )</span></code></pre>
         <p>Display outcome to each player</p>

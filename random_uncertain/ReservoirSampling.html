@@ -126,7 +126,7 @@
         <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
         <li class="level2"><a href="../appendix/RoadMap.html">Road Map</a></li>
-        <li class="level2"><a href="../appendix/BuildDeploy.html">Buid and Deploy</a></li>
+        <li class="level2"><a href="../appendix/BuildDeploy.html">Build and Deploy</a></li>
         <li class="level2"><a href="../appendix/History.html">History</a></li>
         <li class="level2"><a href="../appendix/Author.html">Author</a></li>
         <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
@@ -159,25 +159,25 @@
         <p>Demonstrate it uniformly sampling 15 of the first 100 integers</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sample</span><span> = </span><span class="identifier">reservoirSampleK</span><span>(</span><span class="number-literal">15</span><span>, </span><span class="type-name">LazyList</span><span>.</span><span class="identifier">from</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">drop</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">head</span><span>
 </span><span class="comment">// sample: List[Int] = List(
-//   99,
-//   98,
-//   94,
-//   93,
-//   86,
+//   96,
+//   92,
+//   87,
+//   80,
 //   73,
-//   69,
-//   59,
-//   46,
-//   35,
-//   32,
-//   30,
-//   18,
-//   10,
-//   9
+//   52,
+//   47,
+//   43,
+//   41,
+//   40,
+//   37,
+//   34,
+//   27,
+//   15,
+//   2
 // )
 </span><span>
 </span><span class="identifier">arithmeticMean</span><span>(</span><span class="identifier">sample</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>))
-</span><span class="comment">// res0: Double = 56.733333333333334</span></code></pre>
+</span><span class="comment">// res0: Double = 51.06666666666667</span></code></pre>
         <p>The mean of the sample should be in the ballpark of the mean of the entire list -- 50.</p>
 
       </main>
