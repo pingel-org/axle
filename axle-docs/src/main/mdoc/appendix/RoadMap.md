@@ -4,7 +4,7 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## CICD
 
-* update google analytics
+* update google analytics UA-8146066-2
 * git tag
 * CNAME (www and root)
 
@@ -13,13 +13,14 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * look for opportunities to use `mdoc:silent`
 * move much of Road Map to chapter-specific "next steps" sections
 * simplify "Installation"; make dependencies clear in each section
-* stop hard-coding PDF_VERSION n build.sbt
-* README: data sets from `axle.data` (Astronomy, Evolution, Federalist Papers, Irises)
 * move GeoCoordinates.md to "fundamental" or "units"
 * document Quantum Circuits
 * rename python2json.py page to be just 'Python'
 * what to do about empty right sidebars? convert bullets into sections? disable somehow?
 * tweet / post
+
+* stop hard-coding PDF_VERSION n build.sbt
+* README: data sets from `axle.data` (Astronomy, Evolution, Federalist Papers, Irises)
 
 ## 0.6.4
 
