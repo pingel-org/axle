@@ -41,14 +41,14 @@ the `gh-pages` [branch](https://github.com/axlelang/axle/tree/gh-pages)
 Just to do the build locally, run
 
 ```bash
-sbt -J-Xmx8G mdoc
-sbt laikaSite
+sbt -J-Xmx8G 'project axle-docs' mdoc
+sbt 'project axle-docs' laikaSite
 ```
 
 To preview the changes, do:
 
 ```bash
-sbt laikaPreview
+sbt 'project axle-docs' laikaPreview
 ```
 
 then browse to [https://localhost:4242](https://localhost:4242)
@@ -56,7 +56,7 @@ then browse to [https://localhost:4242](https://localhost:4242)
 If it looks good, push with:
 
 ```bash
-sbt ghpagesCleanSite ghpagesPushSite
+sbt 'project axle-docs' ghpagesCleanSite ghpagesPushSite
 ```
 
 Monitor and verify as before.
