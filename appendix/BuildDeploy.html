@@ -180,13 +180,13 @@ git push origin v0.1.6</code></pre>
         
         <h2 id="verify-before-update" class="section"><a class="anchor-link left" href="#verify-before-update"><i class="icofont-laika">&#xef71;</i></a>Verify before update</h2>
         <p>Just to do the build locally, run</p>
-        <pre class="keep-together pdf epub"><code class="bash">sbt -J-Xmx8G mdoc
-sbt laikaSite</code></pre>
+        <pre class="keep-together pdf epub"><code class="bash">sbt -J-Xmx8G &#39;project axle-docs&#39; mdoc
+sbt &#39;project axle-docs&#39; laikaSite</code></pre>
         <p>To preview the changes, do:</p>
-        <pre class="keep-together pdf epub"><code class="bash">sbt laikaPreview</code></pre>
+        <pre class="keep-together pdf epub"><code class="bash">sbt &#39;project axle-docs&#39; laikaPreview</code></pre>
         <p>then browse to <a href="https://localhost:4242"><a href="https://localhost:4242">https://localhost:4242</a></a></p>
         <p>If it looks good, push with:</p>
-        <pre class="keep-together pdf epub"><code class="bash">sbt ghpagesCleanSite ghpagesPushSite</code></pre>
+        <pre class="keep-together pdf epub"><code class="bash">sbt &#39;project axle-docs&#39; ghpagesCleanSite ghpagesPushSite</code></pre>
         <p>Monitor and verify as before.</p>
         
         <h2 id="references" class="section"><a class="anchor-link left" href="#references"><i class="icofont-laika">&#xef71;</i></a>References</h2>
