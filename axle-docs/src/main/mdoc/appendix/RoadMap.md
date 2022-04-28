@@ -4,8 +4,6 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## CICD
 
-* confirm certificate for [axle-lang.org](https://axle-lang.org/)
-
 * gallery images should be same width
 * separate Architecture section (or rename Fund. to Foundation and include Architecture, Cats, Spire, FP, ...)
 * look for opportunities to use `mdoc:silent`
