@@ -2,11 +2,6 @@
 
 See [Release Notes](ReleaseNotes.md) for the record of previously released features.
 
-## CICD
-
-* Future Work for: Quanta
-* move GeoCoordinates.md to "Units"
-
 * gallery images should be same width
 
 * look for opportunities to use `mdoc:silent`
@@ -19,32 +14,21 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
   * Footnotes (Giry, etc)
 
 * document Quantum Circuits
-* tweet / post
 
-## 0.6.4 More Doc/Build improvecments
-
-* stop hard-coding PDF_VERSION n build.sbt
 * `laikaIncludeAPI := true` in `build.sbt`
 * look at more of [these options](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
-* README: data sets from `axle.data` (Astronomy, Evolution, Federalist Papers, Irises)
-* what to do about empty right sidebars? convert bullets into sections? disable somehow?
-* update google analytics version
-* merge mdoc and site directories?
-* site build via github action?
 
-* Friend of Spire
 * Meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
 * GitHub "Releases" in sidebar should show "latest"
-* ghpagesCleanSite leaving stale files?
 * Timestamp / version to site footer
+
+* update google analytics version
+
+* tweet / post
 
 ## 0.6.5
 
 * Near-term stuff from [quantum circuit future work](../quantum_circuits/FutureWork.md)
-
-## 0.6.6
-
-* Near-term stuff from [text](../text/FutureWork.md)
 
 ## 0.7.x Scala 3
 
@@ -64,10 +48,14 @@ See [Future Work](../random_uncertain/FutureWork.md) for Randomness and Uncertai
 
 See [Future work](../foundation/FutureWork.md) for Foundation
 
-## Visualization
+## 0.11.x Text improvements
+
+* Near-term stuff from [text](../text/FutureWork.md)
+
+## 0.12.x Visualization
 
 See [future work](../visualization/FutureWork.md) for axle visualization
 
-## Mathematics
+## 0.13.x Mathematics
 
 See [future work](../math/FutureWork.md)

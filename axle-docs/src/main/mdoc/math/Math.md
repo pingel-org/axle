@@ -6,6 +6,5 @@
   * [π](Pi.md) estimation
   * [Fibonacci](Fibonacci.md)
   * [Ackermann](Ackermann.md)
-* [Geo Coordinates](GeoCoordinates.md)
 
 * [Future Work](FutureWork.md)

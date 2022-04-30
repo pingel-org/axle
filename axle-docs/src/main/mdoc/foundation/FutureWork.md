@@ -67,3 +67,13 @@
 * axle.core coverage > 80%
 * Rm throws from axle.jung
 * Rm throws from axle.pgm.BayesianNetwork
+
+## Site
+
+* stop hard-coding PDF_VERSION n build.sbt
+* ghpagesCleanSite leaving stale files?
+* Friend of Spire
+* README: data sets from `axle.data` (Astronomy, Evolution, Federalist Papers, Irises)
+* what to do about empty right sidebars? convert bullets into sections? disable somehow?
+* merge mdoc and site directories?
+* site build via github action?
