@@ -4,12 +4,13 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## CICD
 
+* move much of Road Map to chapter-specific "future work" sections
+
 * Foundation should include Architecture, Cats, Spire, FP, ...
 * gallery images should be same width
 
 * rename "Spokes"
 * look for opportunities to use `mdoc:silent`
-* move much of Road Map to chapter-specific "next steps" sections
 * more expostion for Architecture, FP, Cats
 * simplify "Installation"
 * make dependencies clear in each section
@@ -54,9 +55,9 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * convert to scalameta munit
 * correct "Package Objects" doc
 
-## 0.8.x Further buildout of axle.game
+## 0.8.x Mature Game
 
-See [Future Work for Axle Game](../game_theory/FutureWork.md)
+See [Future Work](../game_theory/FutureWork.md) for Axle Game
 
 ## 0.9.x Factoring and Bayesian Networks
 
@@ -94,8 +95,6 @@ See [Future Work for Axle Game](../game_theory/FutureWork.md)
 
 * `Bayes[MonotypeBayesanNetwork]` -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself
-
-* Review complex analysis
 
 ## 0.10.x Bugs and adoption barriers
 
@@ -207,32 +206,14 @@ See [Future Work for Axle Game](../game_theory/FutureWork.md)
 
 ## Visualization
 
-* WebGL
-* SVG Animation
-* Box Plot
-* Candlestick Chart
-* Honor graph vis params in awt graph visualizations
-* `axle.web.Table` and `HtmlFrom[Table[T]]`
-* Log scale
-* `SVG[Matrix]`
-* `BarChart` Variable width bars
-* Horizontal barchart
-* `KMeansVisualization` / `ScatterPlot` similarity (at least DataPoints)
-* `SVG[H]` for BarChart hover (wrap with \<g\> to do getBBox)
-* Background box for `ScatterPlot` hover text?
-* Fix multi-color cube rendering
-* Bloom filter surface
-* Factor similarity between SVG and Draw?
-* Re-enable `axle-jogl`
-  * May require jogamop 2.4, which is not yet released
-  * Or possibly use [jogamp archive](https://jogamp.org/deployment/archive/rc/v2.4.0-rc-20200307/jar/)
-  * See processing's approach in [this commit](https://github.com/processing/processing4/pull/85/commits/17a20bea37e7bcfa5589dbcb2f4a58c4174f7fe0)
+See [future work](../visualization/FutureWork.md) for axle visualization
 
 ## Mathematics
 
 * Collatz Conjecture [vis](https://en.wikipedia.org/wiki/Collatz_conjecture#/media/File:Collatz-stopping-time.svg)
 * Demo Mandelbrot with Rational
 * Scrutinize `axle.math` and move out less reusable functions
+* Complex Analysis
 
 ## Types and Axioms
 
