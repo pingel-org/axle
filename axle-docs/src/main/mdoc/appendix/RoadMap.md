@@ -12,7 +12,6 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 * look for opportunities to use `mdoc:silent`
 * make dependencies clear in each section
-
 * rename "Spokes"
 * more exposition for Architecture, FP, Cats
 * simplify "Installation"
