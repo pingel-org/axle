@@ -5,16 +5,20 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 ## CICD
 
 * move much of Road Map to chapter-specific "future work" sections
+* move GeoCoordinates.md to "Units"
 
 * Foundation should include Architecture, Cats, Spire, FP, ...
 * gallery images should be same width
 
-* rename "Spokes"
 * look for opportunities to use `mdoc:silent`
-* more expostion for Architecture, FP, Cats
-* simplify "Installation"
 * make dependencies clear in each section
-* move GeoCoordinates.md to "foundation" or "units"
+
+* rename "Spokes"
+* more exposition for Architecture, FP, Cats
+* simplify "Installation"
+* copy some test cases to QuantumCircuits.md
+* Reorder Probability mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
+  * Footnotes (Giry, etc)
 
 * document Quantum Circuits
 * tweet / post
@@ -32,11 +36,9 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## 0.6.5
 
-* QuantumCircuit.md
 * QBit2.factor
 * Fix and enable DeutschOracleSpec
 * QBit CCNot
-* Shor's algorithm
 
 ## 0.6.6
 
@@ -61,47 +63,14 @@ See [Future Work](../game_theory/FutureWork.md) for Axle Game
 
 ## 0.9.x Factoring and Bayesian Networks
 
-* Reorder Probability mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
-  * Footnotes (Giry, etc)
-
-* `{CPT,TD}.tailRecM` then ScalaCheck `Monad[CPT,TD]`
-* Functor for CPT, TD
-
-* `SigmaAlgebra` for the CPT
-  * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
-  * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
-  * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
-
-* Measure Theory
-
-* Test: start with `ABE.jointProbabilityTable` (monotype `tuple5[Boolean]`)
-  * Factor out each variable until original 5-note network is reached
-  * Basically the inverse of factor multiplication
-  * `bn.factorFor(B) * bn.factorFor(E)` should be defined? (It errors)
-  * `MonotypeBayesanNetwork.filter` collapase into a single BNN
-
-* Rename `ConditionalProbabilityTable`?
-
-* Laws for `Factor`
-
-* Review `InteractionGraph`, `EliminationGraph`, `JoinTree` and the functions they power
-
-* Consider a "case" to be a `Map` vs a `Vector`
-* Consider usefulness of `Factor` in terms of `Region`
-
-* `MonotypeBayesanNetwork`.{`pure`, `map`, `flatMap`, `tailRecR`}
-* Reconcile `MBN` `combine1` & `combine2`
-* Monad tests for `MonotypeBayesanNetwork[Alarm-Burglary-Earthquake]`
-
-* `Bayes[MonotypeBayesanNetwork]` -- could be viewed as "belief updating" (vs "conditioning")
-  * If it took a ProbabilityModel itself
+See [Future Work](../random_uncertain/FutureWork.md) for Randomness and Uncertainty
 
 ## 0.10.x Bugs and adoption barriers
 
 * Fix `LogisticRegression` and move `LogisticRegression.md` back
 
 * Fix `GeneticAlgorithmSpec`
-* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told # features
+* Featurizing functions should return HLists or other typelevel sequences in order to avoid being told the number of features
 
 * Redo Logic using Abstract Algebra
 
@@ -115,17 +84,6 @@ See [Future Work](../game_theory/FutureWork.md) for Axle Game
 * Chicklet borders / colors on site
 
 * Factor `axle.algebra.chain` in terms of well-known combinators
-
-## Quantum Circuits
-
-* Property test reversibility (& own inverse)
-* Typeclass for "negate" (etc), Binary, CBit
-* Typeclass for unindex
-* Deutsch-Jozsa algorithm (D.O. for n-bits) (Oracle separation between EQP and P)
-* Simon's periodicity problem (oracle separation between BQP and BPP)
-* Grover's algorithm
-* Quantum cryptographic key exchange
-* Check out Qiskit
 
 ## Algorithm / Concept breadth
 

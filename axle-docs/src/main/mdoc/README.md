@@ -15,4 +15,5 @@ Axle is an open-source Scala-embedded domain specific language for scientific co
 * [Machine Learning](machine_learning/MachineLearning.md)
 * [Bioinformatics](bioinformatics/Bioinformatics.md)
 * [Text](text/Text.md)
+* [Quantum Circuits](quantum_circuits/QuantumCircuits.md)
 * [Appendix](appendix/Appendix.md)
