@@ -4,7 +4,7 @@ See the wikipedia page on [Logistic Map](https://en.wikipedia.org/wiki/Logistic_
 
 Create data for a range of the logistic map function
 
-```scala mdoc
+```scala mdoc:silent
 import spire.algebra._
 
 val initial = 0.3
@@ -28,30 +28,33 @@ def lhsContainsMark(minX: Double, maxX: Double, maxY: Double, minY: Double): Boo
 
 Define a "value to color" function.
 
-```scala mdoc
+```scala mdoc:silent
 import axle.visualize._
 
-val v2c = (v: Boolean) => if (v) Color.black else Color.white
+val v2c: Boolean => Color =
+  (v: Boolean) => if (v) Color.black else Color.white
 ```
 
 Define a `PixelatedColoredArea` to show a range of Logistic Map.
 
-```scala mdoc
+```scala mdoc:silent
 import cats.implicits._
 
 val pca = PixelatedColoredArea[Double, Double, Boolean](
   lhsContainsMark,
   v2c,
-  4000,    // width
-  4000,    // height
-  2.9, 4d, // x range
-  0d, 1d   // y range
+  width = 500,
+  height = 500,
+  minX = 2.9,
+  maxX = 4d,
+  minY = 0d,
+  maxY = 1d
 )
 ```
 
 Create the PNG
 
-```scala mdoc
+```scala mdoc:silent
 import axle.awt._
 import cats.effect._
 

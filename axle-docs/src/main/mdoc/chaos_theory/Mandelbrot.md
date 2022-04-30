@@ -13,10 +13,13 @@ import axle.math._
 
 Define a function to compute the Mandelbrot velocity at point on the plane `(x, y)`
 
-```scala mdoc
-implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+```scala mdoc:silent
+implicit val fieldDouble: Field[Double] =
+  spire.implicits.DoubleAlgebra
 
-val f = (x0: Double, x1: Double, y0: Double, y1: Double) => inMandelbrotSetAt(4d, x0, y0, 1000).getOrElse(-1)
+val f: (Double, Double, Double, Double) => Int =
+  (x0: Double, x1: Double, y0: Double, y1: Double) =>
+    inMandelbrotSetAt(4d, x0, y0, 1000).getOrElse(-1)
 ```
 
 Import visualization package
@@ -27,21 +30,30 @@ import axle.visualize._
 
 Define a "velocity to color" function
 
-```scala mdoc
+```scala mdoc:silent
 val colors = (0 to 255).map(g => Color(0, g, 255)).toArray
 
-val v2c = (v: Int) => if( v == -1 ) Color.black else colors((v*5) % 256)
+val v2c: Int => Color =
+  (v: Int) => if( v == -1 ) Color.black else colors((v*5) % 256)
 ```
 
 Define a `PixelatedColoredArea` to show a range of the Mandelbrot Set.
 
-```scala mdoc
-val pca = PixelatedColoredArea(f, v2c, 400, 400, 0.25d, 0.45, 0.50, 0.70d)
+```scala mdoc:silent
+val pca = PixelatedColoredArea[Double, Double, Int](
+  f,
+  v2c,
+  width = 500,
+  height = 500,
+  minX = 0.25,
+  maxX = 0.45,
+  minY = 0.50,
+  maxY = 0.70)
 ```
 
 Create PNG
 
-```scala mdoc
+```scala mdoc:silent
 import axle.awt._
 import cats.effect._
 
