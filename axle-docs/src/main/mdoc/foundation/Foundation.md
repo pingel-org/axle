@@ -12,3 +12,5 @@ Data structures and functions
 * [Graph](Graph.md)
 * [Logic](Logic.md) First-Order Predicate Logic
 * [Spokes](Spokes.md) Support for third-party libraries
+
+See [Future Work](FutureWork.md)

@@ -72,6 +72,8 @@
 
 ## Game Theory and Examples
 
+* Game Theory: information sets, equilibria
+
 * Factor `axle.game.moveFromRandomState` in terms of a random walk on a graph.
   * See "TODO scale mass down"
   * Compare to Brownian motion, Random walk, Ito process, ...

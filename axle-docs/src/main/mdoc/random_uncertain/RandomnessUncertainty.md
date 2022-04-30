@@ -9,3 +9,5 @@
   * [Entropy of a Coin](CoinEntropy.md)
 * [Probabilistic Graphical Models](ProbabilisticGraphicalModels.md) (PGM)
   * [Bayesian Networks](BayesianNetworks.md)
+
+* [Future Work](FutureWork.md)

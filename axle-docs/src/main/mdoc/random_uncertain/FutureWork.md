@@ -39,3 +39,18 @@
 
 * `Bayes[MonotypeBayesanNetwork]` -- could be viewed as "belief updating" (vs "conditioning")
   * If it took a ProbabilityModel itself
+
+* Bettings odds
+* Stochastic Lambda Calculus
+
+* Multi-armed bandit
+* Recursive grid search
+* P-values
+* z & t scores
+* Correlation
+* Regression
+* Accuracy, Precision
+* Bias, Variance
+* Cohen's Kappa
+
+* Rm throws from axle.stats.TallyDistribution

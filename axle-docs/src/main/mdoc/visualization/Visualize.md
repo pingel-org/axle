@@ -2,6 +2,10 @@
 
 See the [Gallery](../introduction/Gallery.md) for more examples.
 
+See [Future Work](FutureWork.md)
+
+## Output Formats
+
 The `show` function is available in the `axle._` package.
 It can be applied to several types of Axle objects.
 

@@ -20,3 +20,5 @@
   * May require jogamop 2.4, which is not yet released
   * Or possibly use [jogamp archive](https://jogamp.org/deployment/archive/rc/v2.4.0-rc-20200307/jar/)
   * See processing's approach in [this commit](https://github.com/processing/processing4/pull/85/commits/17a20bea37e7bcfa5589dbcb2f4a58c4174f7fe0)
+
+* Unchecked constraint in PlotDataView

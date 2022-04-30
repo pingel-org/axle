@@ -9,3 +9,5 @@
   * [Gold Paradigm](GoldParadigm.md)
 * Programming Languages
   * [Python](PythonGrammar.md)
+
+* [Future Work](FutureWork.md)

@@ -8,3 +8,5 @@ Examples:
 * [Poker](Poker.md)
 * [Monty Hall](MontyHall.md)
 * [Prisoner's Dilemma](PrisonersDilemma.md)
+
+See [Future Work](FutureWork.md)
