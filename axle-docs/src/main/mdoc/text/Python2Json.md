@@ -1,4 +1,4 @@
-# python2json.py
+# Python Grammar
 
 This is part of a larger project on source code search algorithms.
 
