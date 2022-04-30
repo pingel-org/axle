@@ -59,6 +59,7 @@
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
+        <li class="level2"><a href="../units/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Math</li>
         <li class="level2"><a href="../math/Math.html">Math</a></li>
         <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
@@ -67,6 +68,7 @@
         <li class="level2"><a href="../math/Fibonacci.html">Fibonacci</a></li>
         <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
+        <li class="level2"><a href="../math/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Visualization</li>
         <li class="level2"><a href="../visualization/Visualize.html">Visualization</a></li>
         <li class="level2"><a href="../visualization/Plots.html">Plots</a></li>
@@ -104,6 +106,7 @@
         <li class="level2"><a href="../machine_learning/ClusterIrises.html">Cluster Irises</a></li>
         <li class="level2"><a href="../machine_learning/ClusterFederalistPapers.html">Clusters Federalist Papers</a></li>
         <li class="level2"><a href="../machine_learning/GeneticAlgorithms.html">Genetic Algorithms</a></li>
+        <li class="level2"><a href="../machine_learning/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Bioinformatics</li>
         <li class="level2"><a href="../bioinformatics/Bioinformatics.html">Bioinformatics</a></li>
         <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
@@ -116,6 +119,7 @@
         <li class="level2"><a href="../text/AngluinLearner.html">Angluin Learner</a></li>
         <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
         <li class="level2"><a href="../text/PythonGrammar.html">Python Grammar</a></li>
+        <li class="level2"><a href="../text/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Appendix</li>
         <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
@@ -211,22 +215,22 @@
 // endState: PrisonersDilemmaState = PrisonersDilemmaState(
 //   p1Move = Some(value = Silence()),
 //   p1Moved = true,
-//   p2Move = Some(value = Silence())
+//   p2Move = Some(value = Betrayal())
 // )</span></code></pre>
         <p>Display outcome to each player</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
 </span><span class="comment">// outcome: PrisonersDilemmaOutcome = PrisonersDilemmaOutcome(
-//   p1YearsInPrison = 1,
-//   p2YearsInPrison = 1
+//   p1YearsInPrison = 3,
+//   p2YearsInPrison = 0
 // )
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// P1&gt; You is imprisoned for 1 years
-// P1&gt; Player 2 is imprisoned for 1 years
-// P2&gt; Player 1 is imprisoned for 1 years
-// P2&gt; You is imprisoned for 1 years</span></code></pre>
+</span><span class="comment">// P1&gt; You is imprisoned for 3 years
+// P1&gt; Player 2 is imprisoned for 0 years
+// P2&gt; Player 1 is imprisoned for 3 years
+// P2&gt; You is imprisoned for 0 years</span></code></pre>
 
       </main>
 

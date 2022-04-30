@@ -59,6 +59,7 @@
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
+        <li class="level2"><a href="../units/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Math</li>
         <li class="level2"><a href="../math/Math.html">Math</a></li>
         <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
@@ -67,6 +68,7 @@
         <li class="level2"><a href="../math/Fibonacci.html">Fibonacci</a></li>
         <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
+        <li class="level2"><a href="../math/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Visualization</li>
         <li class="level2"><a href="Visualize.html">Visualization</a></li>
         <li class="level2 active"><a href="#">Plots</a></li>
@@ -104,6 +106,7 @@
         <li class="level2"><a href="../machine_learning/ClusterIrises.html">Cluster Irises</a></li>
         <li class="level2"><a href="../machine_learning/ClusterFederalistPapers.html">Clusters Federalist Papers</a></li>
         <li class="level2"><a href="../machine_learning/GeneticAlgorithms.html">Genetic Algorithms</a></li>
+        <li class="level2"><a href="../machine_learning/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Bioinformatics</li>
         <li class="level2"><a href="../bioinformatics/Bioinformatics.html">Bioinformatics</a></li>
         <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
@@ -116,6 +119,7 @@
         <li class="level2"><a href="../text/AngluinLearner.html">Angluin Learner</a></li>
         <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
         <li class="level2"><a href="../text/PythonGrammar.html">Python Grammar</a></li>
+        <li class="level2"><a href="../text/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Appendix</li>
         <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
@@ -182,7 +186,7 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">Color</span><span>.</span><span class="identifier">_</span></code></pre>
         <p>Generate the time-series to plot</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">now</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">DateTime</span><span>()
-</span><span class="comment">// now: DateTime = 2022-04-30T12:00:57.274-04:00
+</span><span class="comment">// now: DateTime = 2022-04-30T14:29:55.000-04:00
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">colors</span><span> = </span><span class="type-name">Vector</span><span>(</span><span class="identifier">red</span><span>, </span><span class="identifier">blue</span><span>, </span><span class="identifier">green</span><span>, </span><span class="identifier">yellow</span><span>, </span><span class="identifier">orange</span><span>)
 </span><span class="comment">// colors: Vector[Color] = Vector(
@@ -205,53 +209,53 @@
 </span><span class="keyword">val</span><span> </span><span class="identifier">waves</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">20</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">i</span><span> =&gt; </span><span class="identifier">randomTimeSeries</span><span>(</span><span class="identifier">i</span><span>, </span><span class="identifier">rng</span><span>)).</span><span class="identifier">toList</span><span>
 </span><span class="comment">// waves: List[(String, TreeMap[DateTime, Double])] = List(
 //   (
-//     &quot;series 0 0.06 0.59 0.51&quot;,
+//     &quot;series 0 0.06 0.56 0.16&quot;,
 //     TreeMap(
-//       2022-04-30T12:00:57.274-04:00 -&gt; 0.03378341862984726,
-//       2022-04-30T12:02:57.274-04:00 -&gt; 0.3140790287322756,
-//       2022-04-30T12:04:57.274-04:00 -&gt; 0.515381472626012,
-//       2022-04-30T12:06:57.274-04:00 -&gt; 0.5870617176344795,
-//       2022-04-30T12:08:57.274-04:00 -&gt; 0.511091659395893,
-//       2022-04-30T12:10:57.274-04:00 -&gt; 0.30657832158371146,
-//       2022-04-30T12:12:57.274-04:00 -&gt; 0.024958300111070243,
-//       2022-04-30T12:14:57.274-04:00 -&gt; -0.2629389158527721,
-//       2022-04-30T12:16:57.274-04:00 -&gt; -0.48470507694635734,
-//       2022-04-30T12:18:57.274-04:00 -&gt; -0.5845643763817004,
-//       2022-04-30T12:20:57.274-04:00 -&gt; -0.5374014721074112,
-//       2022-04-30T12:22:57.274-04:00 -&gt; -0.3550781784931437,
-//       2022-04-30T12:24:57.274-04:00 -&gt; -0.08345013351103608,
-//       2022-04-30T12:26:57.274-04:00 -&gt; 0.20916622862545806,
-//       2022-04-30T12:28:57.274-04:00 -&gt; 0.4491757588771653,
-//       2022-04-30T12:30:57.274-04:00 -&gt; 0.5762143100695082,
-//       2022-04-30T12:32:57.274-04:00 -&gt; 0.5583307601242212,
-//       2022-04-30T12:34:57.274-04:00 -&gt; 0.4000229522718167,
-//       2022-04-30T12:36:57.274-04:00 -&gt; 0.1411064546777142,
-//       2022-04-30T12:38:57.274-04:00 -&gt; -0.15329934531415204,
-//       2022-04-30T12:40:57.274-04:00 -&gt; -0.4091492419941593,
-//       2022-04-30T12:42:57.274-04:00 -&gt; -0.562095120512053,
-//       2022-04-30T12:44:57.274-04:00 -&gt; -0.5736699770329579,
-//       2022-04-30T12:46:57.274-04:00 -&gt; -0.4409626507299691,
-//       2022-04-30T12:48:57.274-04:00 -&gt; -0.19735000196232766,
-//       2022-04-30T12:50:57.274-04:00 -&gt; 0.09589761151218712,
-//       2022-04-30T12:52:57.274-04:00 -&gt; 0.36502627633936724,
-//       2022-04-30T12:54:57.274-04:00 -&gt; 0.5423481706419399,
-//       2022-04-30T12:56:57.274-04:00 -&gt; 0.5832655448483371,
-//       2022-04-30T12:58:57.274-04:00 -&gt; 0.47748738094772475,
-//       2022-04-30T13:00:57.274-04:00 -&gt; 0.251617658568982,
-//       2022-04-30T13:02:57.274-04:00 -&gt; -0.03753573991067082,
-//       2022-04-30T13:04:57.274-04:00 -&gt; -0.3172486260660916,
-//       2022-04-30T13:06:57.274-04:00 -&gt; -0.5171711691684587,
-//       2022-04-30T13:08:57.274-04:00 -&gt; -0.5870213916534217,
-//       2022-04-30T13:10:57.274-04:00 -&gt; -0.5092314531696515,
-//       2022-04-30T13:12:57.274-04:00 -&gt; -0.3033660905441014,
-//       2022-04-30T13:14:57.274-04:00 -&gt; -0.02120194379037606,
-//       2022-04-30T13:16:57.274-04:00 -&gt; 0.26629464644593576,
-//       2022-04-30T13:18:57.274-04:00 -&gt; 0.48681619109549157,
-//       2022-04-30T13:20:57.274-04:00 -&gt; 0.5848999134825856,
-//       2022-04-30T13:22:57.274-04:00 -&gt; 0.535877042132205,
-//       2022-04-30T13:24:57.274-04:00 -&gt; 0.3520771866978138,
-//       2022-04-30T13:26:57.274-04:00 -&gt; 0.07972735121742609,
-//       2022-04-30T13:28:57.274-04:00 -&gt; -0.21267449452139214,
+//       2022-04-30T14:29:55.000-04:00 -&gt; 0.03318825839631263,
+//       2022-04-30T14:31:55.000-04:00 -&gt; 0.1233910017776387,
+//       2022-04-30T14:33:55.000-04:00 -&gt; 0.21031183305285112,
+//       2022-04-30T14:35:55.000-04:00 -&gt; 0.2916388613682743,
+//       2022-04-30T14:37:55.000-04:00 -&gt; 0.3652089779482488,
+//       2022-04-30T14:39:55.000-04:00 -&gt; 0.4290653897302858,
+//       2022-04-30T14:41:55.000-04:00 -&gt; 0.481509665484707,
+//       2022-04-30T14:43:55.000-04:00 -&gt; 0.5211469101136917,
+//       2022-04-30T14:45:55.000-04:00 -&gt; 0.5469228655990153,
+//       2022-04-30T14:47:55.000-04:00 -&gt; 0.5581519518000255,
+//       2022-04-30T14:49:55.000-04:00 -&gt; 0.5545355012822032,
+//       2022-04-30T14:51:55.000-04:00 -&gt; 0.5361697031725073,
+//       2022-04-30T14:53:55.000-04:00 -&gt; 0.5035430447535298,
+//       2022-04-30T14:55:55.000-04:00 -&gt; 0.4575233188440717,
+//       2022-04-30T14:57:55.000-04:00 -&gt; 0.39933454253943484,
+//       2022-04-30T14:59:55.000-04:00 -&gt; 0.33052440121896554,
+//       2022-04-30T15:01:55.000-04:00 -&gt; 0.25292308373411676,
+//       2022-04-30T15:03:55.000-04:00 -&gt; 0.1685946036647671,
+//       2022-04-30T15:05:55.000-04:00 -&gt; 0.07978190138454715,
+//       2022-04-30T15:07:55.000-04:00 -&gt; -0.011152812908141673,
+//       2022-04-30T15:09:55.000-04:00 -&gt; -0.10179088845754179,
+//       2022-04-30T15:11:55.000-04:00 -&gt; -0.18972156440479837,
+//       2022-04-30T15:13:55.000-04:00 -&gt; -0.2726060903894102,
+//       2022-04-30T15:15:55.000-04:00 -&gt; -0.34823993183981594,
+//       2022-04-30T15:17:55.000-04:00 -&gt; -0.41461140543784897,
+//       2022-04-30T15:19:55.000-04:00 -&gt; -0.4699551851908199,
+//       2022-04-30T15:21:55.000-04:00 -&gt; -0.512799255974833,
+//       2022-04-30T15:23:55.000-04:00 -&gt; -0.5420040656948771,
+//       2022-04-30T15:25:55.000-04:00 -&gt; -0.5567928347057908,
+//       2022-04-30T15:27:55.000-04:00 -&gt; -0.5567722163343786,
+//       2022-04-30T15:29:55.000-04:00 -&gt; -0.5419427589811059,
+//       2022-04-30T15:31:55.000-04:00 -&gt; -0.5126988915339277,
+//       2022-04-30T15:33:55.000-04:00 -&gt; -0.4698184324822127,
+//       2022-04-30T15:35:55.000-04:00 -&gt; -0.4144419017638028,
+//       2022-04-30T15:37:55.000-04:00 -&gt; -0.34804218560168837,
+//       2022-04-30T15:39:55.000-04:00 -&gt; -0.27238536117471873,
+//       2022-04-30T15:41:55.000-04:00 -&gt; -0.1894837230944949,
+//       2022-04-30T15:43:55.000-04:00 -&gt; -0.10154226107430522,
+//       2022-04-30T15:45:55.000-04:00 -&gt; -0.010900012358968498,
+//       2022-04-30T15:47:55.000-04:00 -&gt; 0.08003215119620619,
+//       2022-04-30T15:49:55.000-04:00 -&gt; 0.1688356466791125,
+//       2022-04-30T15:51:55.000-04:00 -&gt; 0.253148508770629,
+//       2022-04-30T15:53:55.000-04:00 -&gt; 0.3307282124988141,
+//       2022-04-30T15:55:55.000-04:00 -&gt; 0.3995113191591748,
+//       2022-04-30T15:57:55.000-04:00 -&gt; 0.4576683589589968,
 // ...</span></code></pre>
         <p>Imports for visualization</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Show</span><span>
@@ -296,12 +300,12 @@
 //   keyTitle = None,
 //   xAxis = Some(value = 0.0),
 //   xAxisLabel = Some(value = &quot;time (t)&quot;),
-//   yAxis = Some(value = 2022-04-30T12:00:57.274-04:00),
+//   yAxis = Some(value = 2022-04-30T14:29:55.000-04:00),
 //   yAxisLabel = Some(value = &quot;A·sin(ω·t + φ)&quot;)
 // )</span></code></pre>
         <p>If instead we had supplied <code>(Color, String)</code> pairs, we would have needed something like preciding the <code>Plot</code> definition:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showCL</span><span>: </span><span class="type-name">Show</span><span>[(</span><span class="type-name">Color</span><span>, </span><span class="type-name">String</span><span>)] = </span><span class="keyword">new</span><span> </span><span class="type-name">Show</span><span>[(</span><span class="type-name">Color</span><span>, </span><span class="type-name">String</span><span>)] { </span><span class="keyword">def</span><span> </span><span class="declaration-name">show</span><span>(</span><span class="identifier">cl</span><span>: (</span><span class="type-name">Color</span><span>, </span><span class="type-name">String</span><span>)): </span><span class="type-name">String</span><span> = </span><span class="identifier">cl</span><span class="number-literal">._2</span><span> }
-</span><span class="comment">// showCL: Show[(Color, String)] = repl.MdocSession$App$$anon$1@28bf2560</span></code></pre>
+</span><span class="comment">// showCL: Show[(Color, String)] = repl.MdocSession$App$$anon$1@33882d8d</span></code></pre>
         <p>Create the SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
@@ -356,12 +360,12 @@
   </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">modules</span><span>.</span><span class="identifier">doubleRationalModule</span><span>
   </span><span class="type-name">Time</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
 }
-</span><span class="comment">// timeConverter: quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@2b2e721a
+</span><span class="comment">// timeConverter: quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@77dd2bf3
 </span><span class="keyword">import</span><span> </span><span class="identifier">timeConverter</span><span>.</span><span class="identifier">millisecond</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">dataUpdates</span><span>: </span><span class="type-name">Observable</span><span>[</span><span class="type-name">Seq</span><span>[(</span><span class="type-name">String</span><span>, </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>])]] =
   </span><span class="identifier">intervalScan</span><span>(</span><span class="identifier">initialData</span><span>, </span><span class="identifier">refreshFn</span><span>, </span><span class="number-literal">500d</span><span> *: </span><span class="identifier">millisecond</span><span>)
-</span><span class="comment">// dataUpdates: Observable[Seq[(String, TreeMap[DateTime, Double])]] = monix.reactive.internal.operators.ScanObservable@7c97b86</span></code></pre>
+</span><span class="comment">// dataUpdates: Observable[Seq[(String, TreeMap[DateTime, Double])]] = monix.reactive.internal.operators.ScanObservable@167fb325</span></code></pre>
         <p>Create <code>CurrentValueSubscriber</code>, which will be used by the <code>Plot</code> to get the latest values</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">monix</span><span>.</span><span class="identifier">execution</span><span>.</span><span class="type-name">Scheduler</span><span>.</span><span class="type-name">Implicits</span><span>.</span><span class="identifier">global</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="type-name">CurrentValueSubscriber</span><span>

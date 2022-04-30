@@ -59,6 +59,7 @@
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
+        <li class="level2"><a href="../units/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Math</li>
         <li class="level2"><a href="../math/Math.html">Math</a></li>
         <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
@@ -67,6 +68,7 @@
         <li class="level2"><a href="../math/Fibonacci.html">Fibonacci</a></li>
         <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
+        <li class="level2"><a href="../math/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Visualization</li>
         <li class="level2"><a href="../visualization/Visualize.html">Visualization</a></li>
         <li class="level2"><a href="../visualization/Plots.html">Plots</a></li>
@@ -104,6 +106,7 @@
         <li class="level2"><a href="../machine_learning/ClusterIrises.html">Cluster Irises</a></li>
         <li class="level2"><a href="../machine_learning/ClusterFederalistPapers.html">Clusters Federalist Papers</a></li>
         <li class="level2"><a href="../machine_learning/GeneticAlgorithms.html">Genetic Algorithms</a></li>
+        <li class="level2"><a href="../machine_learning/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Bioinformatics</li>
         <li class="level2"><a href="../bioinformatics/Bioinformatics.html">Bioinformatics</a></li>
         <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
@@ -116,6 +119,7 @@
         <li class="level2"><a href="../text/AngluinLearner.html">Angluin Learner</a></li>
         <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
         <li class="level2"><a href="../text/PythonGrammar.html">Python Grammar</a></li>
+        <li class="level2"><a href="../text/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Appendix</li>
         <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
@@ -150,6 +154,11 @@
         <p class="header"><a href="#">Future Work</a></p>
         
         <ul class="nav-list">
+          <li class="level1"><a href="#scala-3">Scala 3</a></li>
+          <li class="level1"><a href="#bugs-and-adoption-barriers">Bugs and adoption barriers</a></li>
+          <li class="level1"><a href="#types-and-axioms">Types and Axioms</a></li>
+          <li class="level1"><a href="#compute-engines">Compute Engines</a></li>
+          <li class="level1"><a href="#hygiene">Hygiene</a></li>
         </ul>
         
         <p class="footer"></p>
@@ -158,7 +167,112 @@
       <main class="content">
 
         <h1 id="future-work" class="title">Future Work</h1>
-        <p>To be written...</p>
+        
+        <h2 id="scala-3" class="section"><a class="anchor-link left" href="#scala-3"><i class="icofont-laika">&#xef71;</i></a>Scala 3</h2>
+        <ul>
+          <li>Scala 3</li>
+          <li>convert to scalameta munit</li>
+          <li>correct &quot;Package Objects&quot; doc</li>
+        </ul>
+        
+        <h2 id="bugs-and-adoption-barriers" class="section"><a class="anchor-link left" href="#bugs-and-adoption-barriers"><i class="icofont-laika">&#xef71;</i></a>Bugs and adoption barriers</h2>
+        <ul>
+          <li>
+            <p>Fix <code>LogisticRegression</code> and move <code>LogisticRegression.md</code> back</p>
+          </li>
+          <li>
+            <p>Fix <code>GeneticAlgorithmSpec</code></p>
+          </li>
+          <li>
+            <p>Featurizing functions should return HLists or other typelevel sequences in order to avoid being told the number of features</p>
+          </li>
+          <li>
+            <p>Redo Logic using Abstract Algebra</p>
+          </li>
+          <li>
+            <p>Simple graph implementation so that <code>axle-core</code> can avoid including <code>axle-jung</code></p>
+          </li>
+          <li>
+            <p><code>svgJungDirectedGraphVisualization</code> move to a <code>axle-jung-xml</code> jar?</p>
+          </li>
+        </ul>
+        <ul>
+          <li>Will require externalizing the layout to its own.... typeclass?</li>
+        </ul>
+        <ul>
+          <li>
+            <p>Layout of bayesian network is quite bad -- check ABE SVG</p>
+          </li>
+          <li>
+            <p><code>axle-png</code> to avoid Xvfb requirement during tests</p>
+          </li>
+          <li>
+            <p>Chicklet borders / colors on site</p>
+          </li>
+          <li>
+            <p>Factor <code>axle.algebra.chain</code> in terms of well-known combinators</p>
+          </li>
+        </ul>
+        
+        <h2 id="types-and-axioms" class="section"><a class="anchor-link left" href="#types-and-axioms"><i class="icofont-laika">&#xef71;</i></a>Types and Axioms</h2>
+        <ul>
+          <li>Replace <code>Finite</code> with Shapeless&#39;s version (eg <code>Sized[Vector[_], nat.2]</code>)</li>
+          <li>Delete <code>Finite</code> conversions for jung</li>
+          <li>Replace with Cats: <code>FoldLeft</code>, <code>Bijection</code>, <code>FunctionPair</code>, <code>Endofunctor</code></li>
+          <li>Define laws for <code>Scanner</code>, <code>Aggregator</code>, <code>Zipper</code>, <code>Indexed</code>, <code>Talliable</code>, <code>Finite</code>?</li>
+          <li>Sort out <code>MapFrom</code>, <code>FromStream</code>, <code>FromSet</code></li>
+          <li>Test <code>axle.algebra.tuple2Field</code></li>
+          <li><code>similarity</code> syntax for <code>SimilaritySpace</code> (see <code>axle.bio.*</code>)</li>
+          <li>Projections of jung graphs for <code>Finite</code></li>
+          <li>kittens or magnolia</li>
+        </ul>
+        <ul>
+          <li>pattern match in <code>FirstOrderPredicateLogic</code></li>
+        </ul>
+        <ul>
+          <li>
+            <p>subtyping for <code>Suit</code> and <code>Rank</code></p>
+          </li>
+          <li>
+            <p>Machinist?</p>
+          </li>
+          <li>
+            <p>Type-level matrix dimension using <code>-Yliteral-types</code> and <code>singleton-ops</code> in <code>LinearAlgebra</code> typeclass</p>
+          </li>
+          <li>
+            <p>Make the <code>Int</code> abstract in <code>KMeans{,Visualization}</code>, <code>LinearAlgebra</code>, etc</p>
+          </li>
+          <li>
+            <p>Eigenvectors</p>
+          </li>
+          <li>
+            <p>Σ ⊣ Δ ⊣ Π means &quot;sums are left adjoint to diagonals, which are left adjoint to products.&quot;</p>
+          </li>
+        </ul>
+        
+        <h2 id="compute-engines" class="section"><a class="anchor-link left" href="#compute-engines"><i class="icofont-laika">&#xef71;</i></a>Compute Engines</h2>
+        <ul>
+          <li>Bring back Spark spoke -- Solve the Spark ClassTag issue (see Frameless?)</li>
+          <li>Performance benchmarking</li>
+          <li>netlib-java Matrix</li>
+          <li>GPU/CUDA support</li>
+          <li>Algebird/Scalding for distributed matrices, HyperLogLog, etc</li>
+          <li>Most MapRedicible witnesses are inefficient (eg calling toVector, toSeq, etc)</li>
+        </ul>
+        
+        <h2 id="hygiene" class="section"><a class="anchor-link left" href="#hygiene"><i class="icofont-laika">&#xef71;</i></a>Hygiene</h2>
+        <ul>
+          <li>Get rid of implicit arg passing to KMeans in <code>ClusterIrises.md</code> (and KMeansSpecification)</li>
+          <li>Factor tics and tics-{joda,algebra,spire} into separate libs?</li>
+          <li>remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well</li>
+          <li>Fix &quot;unreachable&quot; default pattern match cases</li>
+          <li>Review remaining usage of: <code>asInstanceOf</code>, <code>ClassTag</code>, and <code>Manifest</code></li>
+          <li>Review <code>groupBy</code> uses -- they use university equality.  Replace with <code>Eq</code></li>
+          <li>axle.algorithms coverage &gt; 80%</li>
+          <li>axle.core coverage &gt; 80%</li>
+          <li>Rm throws from axle.jung</li>
+          <li>Rm throws from axle.pgm.BayesianNetwork</li>
+        </ul>
 
       </main>
 

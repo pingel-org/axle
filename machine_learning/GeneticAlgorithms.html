@@ -59,6 +59,7 @@
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
+        <li class="level2"><a href="../units/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Math</li>
         <li class="level2"><a href="../math/Math.html">Math</a></li>
         <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
@@ -67,6 +68,7 @@
         <li class="level2"><a href="../math/Fibonacci.html">Fibonacci</a></li>
         <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
         <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
+        <li class="level2"><a href="../math/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Visualization</li>
         <li class="level2"><a href="../visualization/Visualize.html">Visualization</a></li>
         <li class="level2"><a href="../visualization/Plots.html">Plots</a></li>
@@ -104,6 +106,7 @@
         <li class="level2"><a href="ClusterIrises.html">Cluster Irises</a></li>
         <li class="level2"><a href="ClusterFederalistPapers.html">Clusters Federalist Papers</a></li>
         <li class="level2 active"><a href="#">Genetic Algorithms</a></li>
+        <li class="level2"><a href="FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Bioinformatics</li>
         <li class="level2"><a href="../bioinformatics/Bioinformatics.html">Bioinformatics</a></li>
         <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
@@ -116,6 +119,7 @@
         <li class="level2"><a href="../text/AngluinLearner.html">Angluin Learner</a></li>
         <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
         <li class="level2"><a href="../text/PythonGrammar.html">Python Grammar</a></li>
+        <li class="level2"><a href="../text/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Appendix</li>
         <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
@@ -169,7 +173,7 @@
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">shapeless</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">gen</span><span> = </span><span class="type-name">Generic</span><span>[</span><span class="type-name">Rabbit</span><span>]
-</span><span class="comment">// gen: Generic[Rabbit]{type Repr = Int :: Double :: Double :: Double :: Double :: Double :: Double :: Double :: shapeless.HNil} = shapeless.Generic$$anon$1@9ba642f
+</span><span class="comment">// gen: Generic[Rabbit]{type Repr = Int :: Double :: Double :: Double :: Double :: Double :: Double :: Double :: shapeless.HNil} = shapeless.Generic$$anon$1@7129710b
 </span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="identifier">_</span><span>
 
@@ -199,7 +203,7 @@
   }
 
 }
-</span><span class="comment">// rabbitSpecies: AnyRef with Species[gen.Repr] = repl.MdocSession$App$$anon$1@3d522d2</span></code></pre>
+</span><span class="comment">// rabbitSpecies: AnyRef with Species[gen.Repr] = repl.MdocSession$App$$anon$1@1a4ed40d</span></code></pre>
         <p>Run the genetic algorithm</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 
@@ -212,25 +216,25 @@
 </span><span class="keyword">val</span><span> </span><span class="identifier">log</span><span> = </span><span class="identifier">ga</span><span>.</span><span class="identifier">run</span><span>(</span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>)
 </span><span class="comment">// log: GeneticAlgorithmLog[gen.Repr] = GeneticAlgorithmLog(
 //   winners = Vector(
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 2.2032405290528265 :: 7.944410131596751 :: 2.0492908185658756 :: HNil,
-//     2 :: 24.899325171314423 :: 4.653972071034428 :: 7.094341087481284 :: 14.055093038636471 :: 2.1189778279019427 :: 7.944410131596751 :: 2.089158603000877 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 2.0435044805817233 :: 4.054493555090552 :: 11.262806340280422 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 2.0435044805817233 :: 7.944410131596751 :: 2.089158603000877 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 2.0435044805817233 :: 7.944410131596751 :: 2.0492908185658756 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 2.1189778279019427 :: 6.878832661277519 :: 2.089158603000877 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 2.0435044805817233 :: 7.944410131596751 :: 2.089158603000877 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 2.0435044805817233 :: 6.878832661277519 :: 2.089158603000877 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 11.060623072059688 :: 14.829741324474558 :: 2.0435044805817233 :: 4.3510895092633275 :: 2.0492908185658756 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 2.0435044805817233 :: 7.944410131596751 :: 2.089158603000877 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 2.0435044805817233 :: 7.944410131596751 :: 2.0492908185658756 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.711126512808756 :: 14.829741324474558 :: 2.0435044805817233 :: 7.944410131596751 :: 2.0492908185658756 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 2.1189778279019427 :: 6.471873719383901 :: 2.089158603000877 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 2.0435044805817233 :: 7.944410131596751 :: 2.089158603000877 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 2.0435044805817233 :: 6.471873719383901 :: 2.0492908185658756 :: HNil,
-//     2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 3.201577409184643 :: 7.944410131596751 :: 11.867760853068662 :: ...
+//     2 :: 24.867239037327707 :: 4.881126951080155 :: 12.37090373010568 :: 14.522009405316215 :: 2.3405219939985145 :: 7.980611371318243 :: 3.2729648910434777 :: HNil,
+//     2 :: 24.867239037327707 :: 4.881126951080155 :: 12.684777001232884 :: 14.522009405316215 :: 2.058683070420059 :: 7.832297802248507 :: 3.2729648910434777 :: HNil,
+//     2 :: 24.867239037327707 :: 4.881126951080155 :: 12.37090373010568 :: 14.365797810445109 :: 2.058683070420059 :: 7.670683272712685 :: 3.2729648910434777 :: HNil,
+//     2 :: 24.867239037327707 :: 4.881126951080155 :: 12.684777001232884 :: 14.934600426271876 :: 2.058683070420059 :: 7.980611371318243 :: 2.449212995010826 :: HNil,
+//     2 :: 10.125623680423804 :: 4.881126951080155 :: 12.684777001232884 :: 14.160934754030894 :: 2.0119305973533095 :: 7.832297802248507 :: 3.2729648910434777 :: HNil,
+//     2 :: 24.867239037327707 :: 4.756313393446584 :: 12.37090373010568 :: 14.7149394979009 :: 2.058683070420059 :: 4.344413814785804 :: 2.7990204320049243 :: HNil,
+//     2 :: 24.867239037327707 :: 4.881126951080155 :: 12.37090373010568 :: 14.468762662070652 :: 2.0119305973533095 :: 7.832297802248507 :: 3.2729648910434777 :: HNil,
+//     2 :: 24.867239037327707 :: 4.881126951080155 :: 12.37090373010568 :: 14.365797810445109 :: 2.1355362055297737 :: 7.670683272712685 :: 3.2729648910434777 :: HNil,
+//     2 :: 24.867239037327707 :: 4.881126951080155 :: 12.684777001232884 :: 14.365797810445109 :: 2.1355362055297737 :: 5.811600293097911 :: 2.312903776221851 :: HNil,
+//     2 :: 24.867239037327707 :: 4.881126951080155 :: 12.37090373010568 :: 14.522009405316215 :: 2.058683070420059 :: 7.980611371318243 :: 2.7990204320049243 :: HNil,
+//     2 :: 24.867239037327707 :: 4.881126951080155 :: 12.684777001232884 :: 14.468762662070652 :: 2.058683070420059 :: 7.670683272712685 :: 3.2729648910434777 :: HNil,
+//     2 :: 24.867239037327707 :: 4.881126951080155 :: 12.37090373010568 :: 14.365797810445109 :: 2.0119305973533095 :: 7.980611371318243 :: 3.3373226077263 :: HNil,
+//     2 :: 24.867239037327707 :: 4.756313393446584 :: 12.684777001232884 :: 14.522009405316215 :: 2.058683070420059 :: 4.344413814785804 :: 2.7990204320049243 :: HNil,
+//     2 :: 11.711172466563442 :: 4.881126951080155 :: 12.37090373010568 :: 14.363786110370643 :: 2.058683070420059 :: 7.980611371318243 :: 3.2729648910434777 :: HNil,
+//     2 :: 24.867239037327707 :: 4.881126951080155 :: 12.684777001232884 :: 14.7149394979009 :: 2.058683070420059 :: 7.670683272712685 :: 3.2729648910434777 :: HNil,
+//     2 :: 24.867239037327707 :: 4.881126951080155 :: 12.684777001232884 :: 14.7149394979009 :: 2.0119305973533095 :: 7.832297802248507 :: 2.449212995010826 :: HN...
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">winner</span><span> = </span><span class="identifier">log</span><span>.</span><span class="identifier">winners</span><span>.</span><span class="identifier">last</span><span>
-</span><span class="comment">// winner: gen.Repr = 2 :: 24.899325171314423 :: 4.9415239428463416 :: 12.745374200052888 :: 14.829741324474558 :: 2.0435044805817233 :: 7.944410131596751 :: 2.0492908185658756 :: HNil</span></code></pre>
+</span><span class="comment">// winner: gen.Repr = 2 :: 24.867239037327707 :: 4.881126951080155 :: 12.37090373010568 :: 14.468762662070652 :: 2.0119305973533095 :: 7.832297802248507 :: 3.2729648910434777 :: HNil</span></code></pre>
         <p>Plot the min, average, and max fitness function by generation</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">collection</span><span>.</span><span class="identifier">immutable</span><span>.</span><span class="type-name">TreeMap</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
