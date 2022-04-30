@@ -11,7 +11,7 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * move much of Road Map to chapter-specific "next steps" sections
 * simplify "Installation"
 * make dependencies clear in each section
-* move GeoCoordinates.md to "fundamental" or "units"
+* move GeoCoordinates.md to "foundation" or "units"
 * document Quantum Circuits
 * what to do about empty right sidebars? convert bullets into sections? disable somehow?
 * tweet / post

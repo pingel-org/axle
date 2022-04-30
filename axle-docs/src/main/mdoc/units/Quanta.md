@@ -122,7 +122,7 @@ as long as a spire `Field` is implicitly available.
 
 A Quantum defines a directed graph, where the UnitsOfMeasurement
 are the vertices, and the Conversions define the directed edges.
-See the [Graph](../fundamental/Graph.md) package for more on how graphs work.
+See the [Graph](../foundation/Graph.md) package for more on how graphs work.
 
 Quantities can be converted into other units of measurement.
 This is possible as long as 1) the values are in the same

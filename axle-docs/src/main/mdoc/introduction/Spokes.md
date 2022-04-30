@@ -28,7 +28,7 @@ XML includes `axle.web`, where HTML and SVG visualizations reside.
 "org.axle-lang" %% "axle-jblas" % "@RELEASE_VERSION@"
 ```
 
-[Linear Algebra](../fundamental/LinearAlgebra.md) and other witnesses for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/).
+[Linear Algebra](../foundation/LinearAlgebra.md) and other witnesses for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/).
 Includes Principal Component Analysis (PCA).
 
 ## JODA
@@ -45,7 +45,7 @@ Witnesses for the [Joda](http://www.joda.org/joda-time/) time library.
 "org.axle-lang" %% "axle-jung" % "@RELEASE_VERSION@"
 ```
 
-[Graph](../fundamental/Graph.md) Directed and undirected graph witnesses for the [JUNG](http://jung.sourceforge.net/) library.
+[Graph](../foundation/Graph.md) Directed and undirected graph witnesses for the [JUNG](http://jung.sourceforge.net/) library.
 
 ## AWT
 
