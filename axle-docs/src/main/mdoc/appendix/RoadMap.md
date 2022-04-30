@@ -9,6 +9,9 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * rename "Spokes"
 * simplify "Installation"
 * more exposition for Architecture, FP, Scala, Cats
+* Objectives.md
+  * Lawful AI
+  * No doubles (easy path to "theorems for free")
 
 * copy some test cases to QuantumCircuits.md
 * document Quantum Circuits
