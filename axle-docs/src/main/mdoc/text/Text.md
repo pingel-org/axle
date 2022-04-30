@@ -8,4 +8,4 @@
   * [Angluin Learner](AngluinLearner.md)
   * [Gold Paradigm](GoldParadigm.md)
 * Programming Languages
-  * [Python](Python2Json.md)
+  * [Python](PythonGrammar.md)
