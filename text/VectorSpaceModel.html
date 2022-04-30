@@ -52,6 +52,7 @@
       <ul class="nav-list">
         <li class="level1 nav-header">Introduction</li>
         <li class="level2"><a href="../introduction/Introduction.html">Introduction</a></li>
+        <li class="level2"><a href="../introduction/Objectives.html">Objectives</a></li>
         <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
         <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
         <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
@@ -60,6 +61,7 @@
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
         <li class="level2"><a href="../units/FutureWork.html">Future Work</a></li>
+        <li class="level2"><a href="../units/GeoCoordinates.html">Geo Coordinates</a></li>
         <li class="level1 nav-header">Math</li>
         <li class="level2"><a href="../math/Math.html">Math</a></li>
         <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
@@ -67,7 +69,6 @@
         <li class="level2"><a href="../math/Pi.html">Pi</a></li>
         <li class="level2"><a href="../math/Fibonacci.html">Fibonacci</a></li>
         <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
-        <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
         <li class="level2"><a href="../math/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Visualization</li>
         <li class="level2"><a href="../visualization/Visualize.html">Visualization</a></li>
@@ -200,9 +201,9 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">nlp</span><span>.</span><span class="type-name">TermVectorizer</span><span>
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
-</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@525152b3
+</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@5cbc1690
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
-</span><span class="comment">// nrootDouble: NRoot[Double] = spire.std.DoubleAlgebra@525152b3
+</span><span class="comment">// nrootDouble: NRoot[Double] = spire.std.DoubleAlgebra@5cbc1690
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">vectorizer</span><span> = </span><span class="type-name">TermVectorizer</span><span>[</span><span class="type-name">Double</span><span>](</span><span class="type-name">English</span><span>.</span><span class="identifier">stopWords</span><span>)
 </span><span class="comment">// vectorizer: TermVectorizer[Double] = TermVectorizer(
@@ -262,7 +263,7 @@
         <p>The object defines a <code>space</code> method, which returns a <code>spire.algebra.MetricSpace</code> for document vectors:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">nlp</span><span>.</span><span class="type-name">UnweightedDocumentVectorSpace</span><span>
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">unweighted</span><span> = </span><span class="type-name">UnweightedDocumentVectorSpace</span><span>().</span><span class="identifier">normed</span><span>
-</span><span class="comment">// unweighted: spire.algebra.NormedVectorSpace[Map[String, Double], Double] = spire.algebra.InnerProductSpace$$anon$1@5b7688ed
+</span><span class="comment">// unweighted: spire.algebra.NormedVectorSpace[Map[String, Double], Double] = spire.algebra.InnerProductSpace$$anon$1@7c1fe60f
 </span><span>
 </span><span class="identifier">unweighted</span><span>.</span><span class="identifier">distance</span><span>(</span><span class="identifier">v1</span><span>, </span><span class="identifier">v2</span><span>)
 </span><span class="comment">// res0: Double = 3.4641016151377544
@@ -324,7 +325,7 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">nlp</span><span>.</span><span class="type-name">TFIDFDocumentVectorSpace</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">tfidf</span><span> = </span><span class="type-name">TFIDFDocumentVectorSpace</span><span>(</span><span class="identifier">corpus</span><span>, </span><span class="identifier">vectorizer</span><span>).</span><span class="identifier">normed</span><span>
-</span><span class="comment">// tfidf: spire.algebra.NormedVectorSpace[Map[String, Double], Double] = spire.algebra.InnerProductSpace$$anon$1@52df4afa
+</span><span class="comment">// tfidf: spire.algebra.NormedVectorSpace[Map[String, Double], Double] = spire.algebra.InnerProductSpace$$anon$1@1cf41031
 </span><span>
 </span><span class="identifier">tfidf</span><span>.</span><span class="identifier">distance</span><span>(</span><span class="identifier">v1</span><span>, </span><span class="identifier">v2</span><span>)
 </span><span class="comment">// res4: Double = 4.068944074907273

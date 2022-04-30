@@ -52,6 +52,7 @@
       <ul class="nav-list">
         <li class="level1 nav-header">Introduction</li>
         <li class="level2"><a href="../introduction/Introduction.html">Introduction</a></li>
+        <li class="level2"><a href="../introduction/Objectives.html">Objectives</a></li>
         <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
         <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
         <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
@@ -60,6 +61,7 @@
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
         <li class="level2"><a href="../units/FutureWork.html">Future Work</a></li>
+        <li class="level2"><a href="../units/GeoCoordinates.html">Geo Coordinates</a></li>
         <li class="level1 nav-header">Math</li>
         <li class="level2"><a href="../math/Math.html">Math</a></li>
         <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
@@ -67,7 +69,6 @@
         <li class="level2"><a href="../math/Pi.html">Pi</a></li>
         <li class="level2"><a href="../math/Fibonacci.html">Fibonacci</a></li>
         <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
-        <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
         <li class="level2"><a href="../math/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Visualization</li>
         <li class="level2"><a href="../visualization/Visualize.html">Visualization</a></li>
@@ -235,12 +236,12 @@
         
         <h2 id="random-matrices" class="section"><a class="anchor-link left" href="#random-matrices"><i class="icofont-laika">&#xef71;</i></a>Random matrices</h2>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">r</span><span> = </span><span class="identifier">rand</span><span>(</span><span class="number-literal">3</span><span>, </span><span class="number-literal">3</span><span>)
-</span><span class="comment">// r: org.jblas.DoubleMatrix = [0.285874, 0.782845, 0.315104; 0.556492, 0.396178, 0.682843; 0.913544, 0.086279, 0.845071]
+</span><span class="comment">// r: org.jblas.DoubleMatrix = [0.379566, 0.651040, 0.256883; 0.923975, 0.609531, 0.503639; 0.023257, 0.186926, 0.716630]
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res6: String = &quot;&quot;&quot;0.285874 0.782845 0.315104
-// 0.556492 0.396178 0.682843
-// 0.913544 0.086279 0.845071&quot;&quot;&quot;</span></code></pre>
+</span><span class="comment">// res6: String = &quot;&quot;&quot;0.379566 0.651040 0.256883
+// 0.923975 0.609531 0.503639
+// 0.023257 0.186926 0.716630&quot;&quot;&quot;</span></code></pre>
         
         <h2 id="matrices-defined-by-functions" class="section"><a class="anchor-link left" href="#matrices-defined-by-functions"><i class="icofont-laika">&#xef71;</i></a>Matrices defined by functions</h2>
         <pre><code class="nohighlight"><span class="identifier">matrix</span><span>(</span><span class="number-literal">4</span><span>, </span><span class="number-literal">5</span><span>, (</span><span class="identifier">r</span><span>, </span><span class="identifier">c</span><span>) =&gt; </span><span class="identifier">r</span><span> / (</span><span class="identifier">c</span><span> + </span><span class="number-literal">1d</span><span>)).</span><span class="identifier">show</span><span>
@@ -348,104 +349,104 @@
         
         <h2 id="mins-maxs-ranges-and-sorts" class="section"><a class="anchor-link left" href="#mins-maxs-ranges-and-sorts"><i class="icofont-laika">&#xef71;</i></a>Mins, Maxs, Ranges, and Sorts</h2>
         <pre><code class="nohighlight"><span class="identifier">r</span><span>.</span><span class="identifier">max</span><span>
-</span><span class="comment">// res28: Double = 0.9135442641863176
+</span><span class="comment">// res28: Double = 0.9239750075395379
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">min</span><span>
-</span><span class="comment">// res29: Double = 0.08627935810154475
+</span><span class="comment">// res29: Double = 0.023257104140576135
 </span><span>
 </span><span class="comment">// r.ceil
 // r.floor
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">rowMaxs</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res30: String = &quot;&quot;&quot;0.782845
-// 0.682843
-// 0.913544&quot;&quot;&quot;
+</span><span class="comment">// res30: String = &quot;&quot;&quot;0.651040
+// 0.923975
+// 0.716630&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">rowMins</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res31: String = &quot;&quot;&quot;0.285874
-// 0.396178
-// 0.086279&quot;&quot;&quot;
+</span><span class="comment">// res31: String = &quot;&quot;&quot;0.256883
+// 0.503639
+// 0.023257&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">columnMaxs</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res32: String = &quot;0.913544 0.782845 0.845071&quot;
+</span><span class="comment">// res32: String = &quot;0.923975 0.651040 0.716630&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">columnMins</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res33: String = &quot;0.285874 0.086279 0.315104&quot;
+</span><span class="comment">// res33: String = &quot;0.023257 0.186926 0.256883&quot;
 </span><span>
 </span><span class="identifier">rowRange</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res34: String = &quot;&quot;&quot;0.496971
-// 0.286665
-// 0.827265&quot;&quot;&quot;
+</span><span class="comment">// res34: String = &quot;&quot;&quot;0.394157
+// 0.420336
+// 0.693373&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">columnRange</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res35: String = &quot;0.627670 0.696566 0.529968&quot;
+</span><span class="comment">// res35: String = &quot;0.900718 0.464114 0.459747&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">sortRows</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res36: String = &quot;&quot;&quot;0.285874 0.315104 0.782845
-// 0.396178 0.556492 0.682843
-// 0.086279 0.845071 0.913544&quot;&quot;&quot;
+</span><span class="comment">// res36: String = &quot;&quot;&quot;0.256883 0.379566 0.651040
+// 0.503639 0.609531 0.923975
+// 0.023257 0.186926 0.716630&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">sortColumns</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res37: String = &quot;&quot;&quot;0.285874 0.086279 0.315104
-// 0.556492 0.396178 0.682843
-// 0.913544 0.782845 0.845071&quot;&quot;&quot;
+</span><span class="comment">// res37: String = &quot;&quot;&quot;0.023257 0.186926 0.256883
+// 0.379566 0.609531 0.503639
+// 0.923975 0.651040 0.716630&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">sortRows</span><span>.</span><span class="identifier">sortColumns</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res38: String = &quot;&quot;&quot;0.086279 0.315104 0.682843
-// 0.285874 0.556492 0.782845
-// 0.396178 0.845071 0.913544&quot;&quot;&quot;</span></code></pre>
+</span><span class="comment">// res38: String = &quot;&quot;&quot;0.023257 0.186926 0.651040
+// 0.256883 0.379566 0.716630
+// 0.503639 0.609531 0.923975&quot;&quot;&quot;</span></code></pre>
         
         <h2 id="statistics" class="section"><a class="anchor-link left" href="#statistics"><i class="icofont-laika">&#xef71;</i></a>Statistics</h2>
         <pre><code class="nohighlight"><span class="identifier">r</span><span>.</span><span class="identifier">rowMeans</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res39: String = &quot;&quot;&quot;0.461275
-// 0.545171
-// 0.614965&quot;&quot;&quot;
+</span><span class="comment">// res39: String = &quot;&quot;&quot;0.429163
+// 0.679048
+// 0.308938&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">columnMeans</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res40: String = &quot;0.585304 0.421768 0.614339&quot;
+</span><span class="comment">// res40: String = &quot;0.442266 0.482499 0.492384&quot;
 </span><span>
 </span><span class="comment">// median(r)
 </span><span>
 </span><span class="identifier">sumsq</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res41: String = &quot;1.225971 0.777248 1.279711&quot;
+</span><span class="comment">// res41: String = &quot;0.998341 0.830322 0.833199&quot;
 </span><span>
 </span><span class="identifier">std</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res42: String = &quot;0.257054 0.284947 0.221714&quot;
+</span><span class="comment">// res42: String = &quot;0.370380 0.209688 0.187860&quot;
 </span><span>
 </span><span class="identifier">cov</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res43: String = &quot;&quot;&quot;0.029886 -0.003468 -0.032740
-// -0.003468 0.000218 -0.007661
-// -0.032740 -0.007661 0.017746&quot;&quot;&quot;
+</span><span class="comment">// res43: String = &quot;&quot;&quot;0.001310 0.027063 0.032892
+// 0.027063 0.005379 -0.001109
+// 0.032892 -0.001109 0.016762&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">centerRows</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res44: String = &quot;&quot;&quot;-0.175400 0.321571 -0.146171
-// 0.011321 -0.148993 0.137672
-// 0.298579 -0.528686 0.230106&quot;&quot;&quot;
+</span><span class="comment">// res44: String = &quot;&quot;&quot;-0.049597 0.221877 -0.172280
+// 0.244927 -0.069517 -0.175409
+// -0.285681 -0.122012 0.407692&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">centerColumns</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res45: String = &quot;&quot;&quot;-0.299429 0.361078 -0.299236
-// -0.028811 -0.025590 0.068504
-// 0.328241 -0.335488 0.230732&quot;&quot;&quot;
+</span><span class="comment">// res45: String = &quot;&quot;&quot;-0.062700 0.168541 -0.235501
+// 0.481709 0.127032 0.011255
+// -0.419009 -0.295573 0.224246&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">zscore</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res46: String = &quot;&quot;&quot;-1.164851 1.267175 -1.349644
-// -0.112083 -0.089805 0.308972
-// 1.276934 -1.177371 1.040672&quot;&quot;&quot;</span></code></pre>
+</span><span class="comment">// res46: String = &quot;&quot;&quot;-0.169285 0.803773 -1.253601
+// 1.300581 0.605815 0.059911
+// -1.131296 -1.409588 1.193690&quot;&quot;&quot;</span></code></pre>
         
         <h2 id="principal-component-analysis" class="section"><a class="anchor-link left" href="#principal-component-analysis"><i class="icofont-laika">&#xef71;</i></a>Principal Component Analysis</h2>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> (</span><span class="identifier">u</span><span>, </span><span class="identifier">s</span><span>) = </span><span class="identifier">pca</span><span>(</span><span class="identifier">r</span><span>)
-</span><span class="comment">// u: org.jblas.DoubleMatrix = [-0.765146, -0.543730, 0.344833; -0.039829, -0.494577, -0.868221; 0.642624, -0.678050, 0.356767]
-// s: org.jblas.DoubleMatrix = [0.057203; 0.014097; 0.004743]
+</span><span class="comment">// u: org.jblas.DoubleMatrix = [-0.657652, 0.741183, -0.134692; -0.386637, -0.485548, -0.784063; -0.646534, -0.463563, 0.605890]
+// s: org.jblas.DoubleMatrix = [0.049557; 0.036990; 0.010885]
 </span><span>
 </span><span class="identifier">u</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res47: String = &quot;&quot;&quot;-0.765146 -0.543730 0.344833
-// -0.039829 -0.494577 -0.868221
-// 0.642624 -0.678050 0.356767&quot;&quot;&quot;
+</span><span class="comment">// res47: String = &quot;&quot;&quot;-0.657652 0.741183 -0.134692
+// -0.386637 -0.485548 -0.784063
+// -0.646534 -0.463563 0.605890&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">s</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res48: String = &quot;&quot;&quot;0.057203
-// 0.014097
-// 0.004743&quot;&quot;&quot;</span></code></pre>
+</span><span class="comment">// res48: String = &quot;&quot;&quot;0.049557
+// 0.036990
+// 0.010885&quot;&quot;&quot;</span></code></pre>
         
         <h2 id="horizontal-and-vertical-concatenation" class="section"><a class="anchor-link left" href="#horizontal-and-vertical-concatenation"><i class="icofont-laika">&#xef71;</i></a>Horizontal and vertical concatenation</h2>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span>(</span><span class="identifier">x</span><span> </span><span class="identifier">aside</span><span> </span><span class="identifier">y</span><span>).</span><span class="identifier">show</span><span>
@@ -507,7 +508,7 @@
         
         <h2 id="map-element-values" class="section"><a class="anchor-link left" href="#map-element-values"><i class="icofont-laika">&#xef71;</i></a>Map element values</h2>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">endo</span><span> = </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">endoFunctorDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
-</span><span class="comment">// endo: algebra.Endofunctor[org.jblas.DoubleMatrix, Double] = axle.jblas.package$$anon$1@77ec4998
+</span><span class="comment">// endo: algebra.Endofunctor[org.jblas.DoubleMatrix, Double] = axle.jblas.package$$anon$1@26bfd1c
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">endofunctor</span><span>.</span><span class="identifier">endofunctorOps</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">half</span><span> = </span><span class="identifier">ones</span><span>(</span><span class="number-literal">3</span><span>, </span><span class="number-literal">3</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> / </span><span class="number-literal">2d</span><span>)
@@ -521,23 +522,23 @@
         <h2 id="boolean-operators" class="section"><a class="anchor-link left" href="#boolean-operators"><i class="icofont-laika">&#xef71;</i></a>Boolean operators</h2>
         <pre><code class="nohighlight"><span>(</span><span class="identifier">r</span><span> </span><span class="identifier">lt</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
 </span><span class="comment">// res60: String = &quot;&quot;&quot;1.000000 0.000000 1.000000
-// 0.000000 1.000000 0.000000
-// 0.000000 1.000000 0.000000&quot;&quot;&quot;
+// 0.000000 0.000000 0.000000
+// 1.000000 1.000000 0.000000&quot;&quot;&quot;
 </span><span>
 (</span><span class="identifier">r</span><span> </span><span class="identifier">le</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
 </span><span class="comment">// res61: String = &quot;&quot;&quot;1.000000 0.000000 1.000000
-// 0.000000 1.000000 0.000000
-// 0.000000 1.000000 0.000000&quot;&quot;&quot;
+// 0.000000 0.000000 0.000000
+// 1.000000 1.000000 0.000000&quot;&quot;&quot;
 </span><span>
 (</span><span class="identifier">r</span><span> </span><span class="identifier">gt</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
 </span><span class="comment">// res62: String = &quot;&quot;&quot;0.000000 1.000000 0.000000
-// 1.000000 0.000000 1.000000
-// 1.000000 0.000000 1.000000&quot;&quot;&quot;
+// 1.000000 1.000000 1.000000
+// 0.000000 0.000000 1.000000&quot;&quot;&quot;
 </span><span>
 (</span><span class="identifier">r</span><span> </span><span class="identifier">ge</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
 </span><span class="comment">// res63: String = &quot;&quot;&quot;0.000000 1.000000 0.000000
-// 1.000000 0.000000 1.000000
-// 1.000000 0.000000 1.000000&quot;&quot;&quot;
+// 1.000000 1.000000 1.000000
+// 0.000000 0.000000 1.000000&quot;&quot;&quot;
 </span><span>
 (</span><span class="identifier">r</span><span> </span><span class="identifier">eq</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
 </span><span class="comment">// res64: String = &quot;&quot;&quot;0.000000 0.000000 0.000000
@@ -566,8 +567,8 @@
 </span><span>
 ((</span><span class="identifier">r</span><span> </span><span class="identifier">lt</span><span> </span><span class="identifier">half</span><span>) </span><span class="identifier">not</span><span>).</span><span class="identifier">show</span><span>
 </span><span class="comment">// res69: String = &quot;&quot;&quot;0.000000 1.000000 0.000000
-// 1.000000 0.000000 1.000000
-// 1.000000 0.000000 1.000000&quot;&quot;&quot;</span></code></pre>
+// 1.000000 1.000000 1.000000
+// 0.000000 0.000000 1.000000&quot;&quot;&quot;</span></code></pre>
         
         <h2 id="higher-order-methods" class="section"><a class="anchor-link left" href="#higher-order-methods"><i class="icofont-laika">&#xef71;</i></a>Higher order methods</h2>
         <pre><code class="nohighlight"><span>(</span><span class="identifier">m</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> + </span><span class="number-literal">1</span><span>)).</span><span class="identifier">show</span><span>

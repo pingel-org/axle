@@ -52,6 +52,7 @@
       <ul class="nav-list">
         <li class="level1 nav-header">Introduction</li>
         <li class="level2"><a href="../introduction/Introduction.html">Introduction</a></li>
+        <li class="level2"><a href="../introduction/Objectives.html">Objectives</a></li>
         <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
         <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
         <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
@@ -60,6 +61,7 @@
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
         <li class="level2"><a href="../units/FutureWork.html">Future Work</a></li>
+        <li class="level2"><a href="../units/GeoCoordinates.html">Geo Coordinates</a></li>
         <li class="level1 nav-header">Math</li>
         <li class="level2"><a href="../math/Math.html">Math</a></li>
         <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
@@ -67,7 +69,6 @@
         <li class="level2"><a href="../math/Pi.html">Pi</a></li>
         <li class="level2"><a href="../math/Fibonacci.html">Fibonacci</a></li>
         <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
-        <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
         <li class="level2"><a href="../math/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Visualization</li>
         <li class="level2"><a href="../visualization/Visualize.html">Visualization</a></li>
@@ -219,38 +220,46 @@
 // X&gt;  | |           7|8|9
 // O&gt; Board:         Movement Key:
 // O&gt;  | |           1|2|3
-// O&gt;  |X|           4|5|6
-// O&gt;  | |           7|8|9
+// O&gt;  | |           4|5|6
+// O&gt; X| |           7|8|9
 // X&gt; Board:         Movement Key:
 // X&gt;  | |           1|2|3
-// X&gt; O|X|           4|5|6
-// X&gt;  | |           7|8|9
+// X&gt; O| |           4|5|6
+// X&gt; X| |           7|8|9
 // O&gt; Board:         Movement Key:
 // O&gt;  | |           1|2|3
-// O&gt; O|X|           4|5|6
-// O&gt;  | |X          7|8|9
+// O&gt; O| |X          4|5|6
+// O&gt; X| |           7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt;  | |           1|2|3
-// X&gt; O|X|O          4|5|6
-// X&gt;  | |X          7|8|9
+// X&gt; O| |           1|2|3
+// X&gt; O| |X          4|5|6
+// X&gt; X| |           7|8|9
 // O&gt; Board:         Movement Key:
-// O&gt;  | |           1|2|3
-// O&gt; O|X|O          4|5|6
-// O&gt;  |X|X          7|8|9
+// O&gt; O| |           1|2|3
+// O&gt; O| |X          4|5|6
+// O&gt; X| |X          7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt;  | |           1|2|3
-// X&gt; O|X|O          4|5|6
-// X&gt; O|X|X          7|8|9
+// X&gt; O| |           1|2|3
+// X&gt; O|O|X          4|5|6
+// X&gt; X| |X          7|8|9
+// O&gt; Board:         Movement Key:
+// O&gt; O|X|           1|2|3
+// O&gt; O|O|X          4|5|6
+// O&gt; X| |X          7|8|9
+// X&gt; Board:         Movement Key:
+// X&gt; O|X|O          1|2|3
+// X&gt; O|O|X          4|5|6
+// X&gt; X| |X          7|8|9
 // endState: TicTacToeState = TicTacToeState(
 //   moverOpt = None,
 //   board = Array(
-//     None,
-//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
-//     None,
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
+//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;))
 //   ),

@@ -52,6 +52,7 @@
       <ul class="nav-list">
         <li class="level1 nav-header">Introduction</li>
         <li class="level2"><a href="../introduction/Introduction.html">Introduction</a></li>
+        <li class="level2"><a href="../introduction/Objectives.html">Objectives</a></li>
         <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
         <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
         <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
@@ -60,6 +61,7 @@
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
         <li class="level2"><a href="../units/FutureWork.html">Future Work</a></li>
+        <li class="level2"><a href="../units/GeoCoordinates.html">Geo Coordinates</a></li>
         <li class="level1 nav-header">Math</li>
         <li class="level2"><a href="../math/Math.html">Math</a></li>
         <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
@@ -67,7 +69,6 @@
         <li class="level2"><a href="../math/Pi.html">Pi</a></li>
         <li class="level2"><a href="../math/Fibonacci.html">Fibonacci</a></li>
         <li class="level2"><a href="../math/Ackermann.html">Ackermann</a></li>
-        <li class="level2"><a href="../math/GeoCoordinates.html">Geo Coordinates</a></li>
         <li class="level2"><a href="../math/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Visualization</li>
         <li class="level2"><a href="../visualization/Visualize.html">Visualization</a></li>
@@ -154,16 +155,14 @@
         <p class="header"><a href="#">Road Map</a></p>
         
         <ul class="nav-list">
-          <li class="level1"><a href="#cicd">CICD</a></li>
-          <li class="level1"><a href="#_0-6-4-more-doc-build-improvecments">0.6.4 More Doc/Build improvecments</a></li>
           <li class="level1"><a href="#_0-6-5">0.6.5</a></li>
-          <li class="level1"><a href="#_0-6-6">0.6.6</a></li>
           <li class="level1"><a href="#_0-7-x-scala-3">0.7.x Scala 3</a></li>
           <li class="level1"><a href="#_0-8-x-game">0.8.x Game</a></li>
           <li class="level1"><a href="#_0-9-x-randomness-and-uncertainty">0.9.x Randomness and Uncertainty</a></li>
           <li class="level1"><a href="#_0-10-x-bugs-and-adoption-barriers">0.10.x Bugs and adoption barriers</a></li>
-          <li class="level1"><a href="#visualization">Visualization</a></li>
-          <li class="level1"><a href="#mathematics">Mathematics</a></li>
+          <li class="level1"><a href="#_0-11-x-text-improvements">0.11.x Text improvements</a></li>
+          <li class="level1"><a href="#_0-12-x-visualization">0.12.x Visualization</a></li>
+          <li class="level1"><a href="#_0-13-x-mathematics">0.13.x Mathematics</a></li>
         </ul>
         
         <p class="footer"></p>
@@ -173,20 +172,15 @@
 
         <h1 id="road-map" class="title">Road Map</h1>
         <p>See <a href="ReleaseNotes.html">Release Notes</a> for the record of previously released features.</p>
-        
-        <h2 id="cicd" class="section"><a class="anchor-link left" href="#cicd"><i class="icofont-laika">&#xef71;</i></a>CICD</h2>
         <ul>
-          <li>
-            <p>Future Work for: Quanta</p>
-          </li>
-          <li>
-            <p>move GeoCoordinates.md to &quot;Units&quot;</p>
-          </li>
           <li>
             <p>gallery images should be same width</p>
           </li>
           <li>
             <p>look for opportunities to use <code>mdoc:silent</code></p>
+          </li>
+          <li>
+            <p>Copy some test cases to QuantumCircuits.md</p>
           </li>
           <li>
             <p>make dependencies clear in each section</p>
@@ -195,81 +189,37 @@
             <p>rename &quot;Spokes&quot;</p>
           </li>
           <li>
-            <p>more exposition for Architecture, FP, Scala, Cats</p>
-          </li>
-          <li>
             <p>simplify &quot;Installation&quot;</p>
           </li>
           <li>
-            <p>copy some test cases to QuantumCircuits.md</p>
+            <p>more exposition for Architecture, FP, Scala, Cats</p>
           </li>
           <li>
-            <p>Reorder Probability mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)</p>
-          </li>
-        </ul>
-        <ul>
-          <li>
-            <p>Footnotes (Giry, etc)</p>
-          </li>
-          <li>
-            <p>document Quantum Circuits</p>
+            <p>Introduction: Objectives</p>
           </li>
           <li>
             <p>tweet / post</p>
-          </li>
-        </ul>
-        
-        <h2 id="_0-6-4-more-doc-build-improvecments" class="section"><a class="anchor-link left" href="#_0-6-4-more-doc-build-improvecments"><i class="icofont-laika">&#xef71;</i></a>0.6.4 More Doc/Build improvecments</h2>
-        <ul>
-          <li>
-            <p>stop hard-coding PDF_VERSION n build.sbt</p>
           </li>
           <li>
             <p><code>laikaIncludeAPI := true</code> in <code>build.sbt</code></p>
           </li>
           <li>
-            <p>look at more of <a href="https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html">these options</a></p>
+            <p>look at more of <a href="https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html">these options</a>* Meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel</p>
           </li>
           <li>
-            <p>README: data sets from <code>axle.data</code> (Astronomy, Evolution, Federalist Papers, Irises)</p>
-          </li>
-          <li>
-            <p>what to do about empty right sidebars? convert bullets into sections? disable somehow?</p>
-          </li>
-          <li>
-            <p>update google analytics version</p>
-          </li>
-          <li>
-            <p>merge mdoc and site directories?</p>
-          </li>
-          <li>
-            <p>site build via github action?</p>
-          </li>
-          <li>
-            <p>Friend of Spire</p>
-          </li>
-          <li>
-            <p>Meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel</p>
+            <p>Timestamp / version to site footer</p>
           </li>
           <li>
             <p>GitHub &quot;Releases&quot; in sidebar should show &quot;latest&quot;</p>
           </li>
           <li>
-            <p>ghpagesCleanSite leaving stale files?</p>
-          </li>
-          <li>
-            <p>Timestamp / version to site footer</p>
+            <p>update google analytics version</p>
           </li>
         </ul>
         
         <h2 id="_0-6-5" class="section"><a class="anchor-link left" href="#_0-6-5"><i class="icofont-laika">&#xef71;</i></a>0.6.5</h2>
         <ul>
           <li>Near-term stuff from <a href="../quantum_circuits/FutureWork.html">quantum circuit future work</a></li>
-        </ul>
-        
-        <h2 id="_0-6-6" class="section"><a class="anchor-link left" href="#_0-6-6"><i class="icofont-laika">&#xef71;</i></a>0.6.6</h2>
-        <ul>
-          <li>Near-term stuff from <a href="../text/FutureWork.html">text</a></li>
         </ul>
         
         <h2 id="_0-7-x-scala-3" class="section"><a class="anchor-link left" href="#_0-7-x-scala-3"><i class="icofont-laika">&#xef71;</i></a>0.7.x Scala 3</h2>
@@ -285,10 +235,15 @@
         <h2 id="_0-10-x-bugs-and-adoption-barriers" class="section"><a class="anchor-link left" href="#_0-10-x-bugs-and-adoption-barriers"><i class="icofont-laika">&#xef71;</i></a>0.10.x Bugs and adoption barriers</h2>
         <p>See <a href="../foundation/FutureWork.html">Future work</a> for Foundation</p>
         
-        <h2 id="visualization" class="section"><a class="anchor-link left" href="#visualization"><i class="icofont-laika">&#xef71;</i></a>Visualization</h2>
+        <h2 id="_0-11-x-text-improvements" class="section"><a class="anchor-link left" href="#_0-11-x-text-improvements"><i class="icofont-laika">&#xef71;</i></a>0.11.x Text improvements</h2>
+        <ul>
+          <li>Near-term stuff from <a href="../text/FutureWork.html">text</a></li>
+        </ul>
+        
+        <h2 id="_0-12-x-visualization" class="section"><a class="anchor-link left" href="#_0-12-x-visualization"><i class="icofont-laika">&#xef71;</i></a>0.12.x Visualization</h2>
         <p>See <a href="../visualization/FutureWork.html">future work</a> for axle visualization</p>
         
-        <h2 id="mathematics" class="section"><a class="anchor-link left" href="#mathematics"><i class="icofont-laika">&#xef71;</i></a>Mathematics</h2>
+        <h2 id="_0-13-x-mathematics" class="section"><a class="anchor-link left" href="#_0-13-x-mathematics"><i class="icofont-laika">&#xef71;</i></a>0.13.x Mathematics</h2>
         <p>See <a href="../math/FutureWork.html">future work</a></p>
 
       </main>
