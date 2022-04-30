@@ -16,6 +16,6 @@
 
 [![linear regression](/images/lrerror.svg)](../machine_learning/LinearRegression.md)
 
-[![geo coordinates](/images/sfo_hel_small.png)](../math/GeoCoordinates.md)
+[![geo coordinates](/images/sfo_hel_small.png)](../units/GeoCoordinates.md)
 
 [![random waves](/images/random_waves.svg)](../visualization/Plots.md)
