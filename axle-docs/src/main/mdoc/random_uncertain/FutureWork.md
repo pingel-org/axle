@@ -54,3 +54,5 @@
 * Cohen's Kappa
 
 * Rm throws from axle.stats.TallyDistribution
+
+* do-calculus (Causality)

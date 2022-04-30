@@ -4,3 +4,12 @@
 * Demo Mandelbrot with Rational
 * Scrutinize `axle.math` and move out less reusable functions
 * Complex Analysis
+
+* Topoi
+* N Queens
+* Connection between dynamic programming and semiring
+* Fourier transformations
+* Abadi Plotkin pathology
+* JVP: Jacobian
+* Blockchain
+* Rainbow Tables
