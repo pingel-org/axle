@@ -9,10 +9,10 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * rename "Spokes"
 * look for opportunities to use `mdoc:silent`
 * move much of Road Map to chapter-specific "next steps" sections
-* simplify "Installation"; make dependencies clear in each section
+* simplify "Installation"
+* make dependencies clear in each section
 * move GeoCoordinates.md to "fundamental" or "units"
 * document Quantum Circuits
-* rename python2json.py page to be just 'Python'
 * what to do about empty right sidebars? convert bullets into sections? disable somehow?
 * tweet / post
 
