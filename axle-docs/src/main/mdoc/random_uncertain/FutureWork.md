@@ -41,7 +41,6 @@
   * If it took a ProbabilityModel itself
 
 * Bettings odds
-* Stochastic Lambda Calculus
 
 * Multi-armed bandit
 * Recursive grid search
@@ -56,3 +55,7 @@
 * Rm throws from axle.stats.TallyDistribution
 
 * do-calculus (Causality)
+
+* Stochastic Lambda Calculus
+* Abadi Plotkin pathology
+* Jacobian Vector Products (JVP)

@@ -9,7 +9,5 @@
 * N Queens
 * Connection between dynamic programming and semiring
 * Fourier transformations
-* Abadi Plotkin pathology
-* JVP: Jacobian
 * Blockchain
 * Rainbow Tables
