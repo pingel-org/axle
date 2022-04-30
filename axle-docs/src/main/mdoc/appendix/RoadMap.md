@@ -36,9 +36,7 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## 0.6.5
 
-* QBit2.factor
-* Fix and enable DeutschOracleSpec
-* QBit CCNot
+near-term stuff from [quantum circuit future work](../quantum_circuits/FutureWork.md)
 
 ## 0.6.6
 

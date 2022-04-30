@@ -1,5 +1,13 @@
 # Future Work
 
+## Soon
+
+* `QBit2.factor`
+* Fix and enable `DeutschOracleSpec`
+* QBit CCNot
+
+## Later
+
 * `{CPT,TD}.tailRecM` then ScalaCheck `Monad[CPT,TD]`
 * Functor for CPT, TD
 
