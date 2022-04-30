@@ -7,13 +7,12 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * move much of Road Map to chapter-specific "future work" sections
 * move GeoCoordinates.md to "Units"
 
-* Foundation should include Architecture, Cats, Spire, FP, ...
 * gallery images should be same width
 
 * look for opportunities to use `mdoc:silent`
 * make dependencies clear in each section
 * rename "Spokes"
-* more exposition for Architecture, FP, Cats
+* more exposition for Architecture, FP, Scala, Cats
 * simplify "Installation"
 * copy some test cases to QuantumCircuits.md
 * Reorder Probability mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
@@ -35,18 +34,11 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## 0.6.5
 
-near-term stuff from [quantum circuit future work](../quantum_circuits/FutureWork.md)
+* Near-term stuff from [quantum circuit future work](../quantum_circuits/FutureWork.md)
 
 ## 0.6.6
 
-* factor out `axle-ast-python`
-* move ast view xml (how is it able to refer to `xml.Node`?)
-  * ast.view.AstNodeFormatter (xml.Utility.escape)
-  * ast.view.AstNodeFormatterXhtmlLines
-  * ast.view.AstNodeFormatterXhtml
-* Tests for `axle.ast`
-* `axle-ast-python`
-* `cats.effect` for `axle.ast.python2`
+* Near-term stuff from [text](../text/FutureWork.md)
 
 ## 0.7.x Scala 3
 
