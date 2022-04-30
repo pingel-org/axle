@@ -9,12 +9,9 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 * rename "Spokes"
 * simplify "Installation"
 * more exposition for Architecture, FP, Scala, Cats
-* Objectives.md
-  * Lawful AI
-  * No doubles (easy path to "theorems for free")
+* Introduction: Objectives
 
-* copy some test cases to QuantumCircuits.md
-* document Quantum Circuits
+* Copy some test cases to QuantumCircuits.md
 
 * `laikaIncludeAPI := true` in `build.sbt`
 * look at more of [these options](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
