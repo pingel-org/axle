@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
-    <title>Gallery</title>
+    <title>Architecture</title>
     
     
       <meta name="description" content="axle-docs"/>
@@ -51,10 +51,10 @@
       
       <ul class="nav-list">
         <li class="level1 nav-header">Introduction</li>
-        <li class="level2"><a href="Introduction.html">Introduction</a></li>
-        <li class="level2"><a href="Installation.html">Installation</a></li>
-        <li class="level2 active"><a href="#">Gallery</a></li>
-        <li class="level2"><a href="Resources.html">Resources</a></li>
+        <li class="level2"><a href="../introduction/Introduction.html">Introduction</a></li>
+        <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
+        <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
+        <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
         <li class="level1 nav-header">Units of Measurement</li>
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
@@ -125,18 +125,18 @@
         <li class="level2"><a href="../appendix/Author.html">Author</a></li>
         <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
         <li class="level1 nav-header">Foundation</li>
-        <li class="level2"><a href="../foundation/Foundation.html">Foundation</a></li>
-        <li class="level2"><a href="../foundation/Functional.html">Funcational</a></li>
-        <li class="level2"><a href="../foundation/Scala.html">Scala</a></li>
-        <li class="level2"><a href="../foundation/Cats.html">Cats</a></li>
-        <li class="level2"><a href="../foundation/Architecture.html">Architecture</a></li>
-        <li class="level2"><a href="../foundation/PackageObject.html">Package Objects</a></li>
-        <li class="level2"><a href="../foundation/Algebra.html">Algebra</a></li>
-        <li class="level2"><a href="../foundation/LinearAlgebra.html">Linear Algebra</a></li>
-        <li class="level2"><a href="../foundation/Graph.html">Graph</a></li>
-        <li class="level2"><a href="../foundation/Logic.html">Logic</a></li>
-        <li class="level2"><a href="../foundation/Spokes.html">Spokes</a></li>
-        <li class="level2"><a href="../foundation/FutureWork.html">Future Work</a></li>
+        <li class="level2"><a href="Foundation.html">Foundation</a></li>
+        <li class="level2"><a href="Functional.html">Funcational</a></li>
+        <li class="level2"><a href="Scala.html">Scala</a></li>
+        <li class="level2"><a href="Cats.html">Cats</a></li>
+        <li class="level2 active"><a href="#">Architecture</a></li>
+        <li class="level2"><a href="PackageObject.html">Package Objects</a></li>
+        <li class="level2"><a href="Algebra.html">Algebra</a></li>
+        <li class="level2"><a href="LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level2"><a href="Graph.html">Graph</a></li>
+        <li class="level2"><a href="Logic.html">Logic</a></li>
+        <li class="level2"><a href="Spokes.html">Spokes</a></li>
+        <li class="level2"><a href="FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Quantum Circuits</li>
         <li class="level2"><a href="../quantum_circuits/FutureWork.html">Future Work</a></li>
         <li class="level2"><a href="../quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
@@ -147,9 +147,10 @@
     <div id="container">
 
       <nav id="page-nav">
-        <p class="header"><a href="#">Gallery</a></p>
+        <p class="header"><a href="#">Architecture</a></p>
         
         <ul class="nav-list">
+          <li class="level1"><a href="#remaining-design-issues">Remaining Design Issues</a></li>
         </ul>
         
         <p class="footer"></p>
@@ -157,17 +158,27 @@
 
       <main class="content">
 
-        <h1 id="gallery" class="title">Gallery</h1>
-        <p><a href="../chaos_theory/Mandelbrot.html"><img src="/images/mandelbrot.png" alt="mandelbrot"></a></p>
-        <p><a href="../random_uncertain/CoinEntropy.html"><img src="/images/coinentropy.svg" alt="coin entropy"></a></p>
-        <p><a href="../random_uncertain/BayesianNetworks.html"><img src="/images/alarm_bayes.svg" alt="alarm bayes"></a></p>
-        <p><a href="../chaos_theory/LogisticMap.html"><img src="/images/logMap.png" alt="logistic map"></a></p>
-        <p><a href="../game_theory/Poker.html"><img src="/images/poker_hands.svg" alt="poker hands"></a></p>
-        <p><a href="../random_uncertain/ProbabilityModel.html"><img src="/images/iffy.svg" alt="probability monad"></a></p>
-        <p><a href="../machine_learning/ClusterIrises.html"><img src="/images/k_means.svg" alt="cluster irises"></a></p>
-        <p><a href="../machine_learning/LinearRegression.html"><img src="/images/lrerror.svg" alt="linear regression"></a></p>
-        <p><a href="../math/GeoCoordinates.html"><img src="/images/sfo_hel_small.png" alt="geo coordinates"></a></p>
-        <p><a href="../visualization/Plots.html"><img src="/images/random_waves.svg" alt="random waves"></a></p>
+        <h1 id="architecture" class="title">Architecture</h1>
+        <p>Axle generally strives to follow the patterns established
+        by the <a href="http://typelevel.org/">Typelevel</a> projects.</p>
+        <p>With few exceptions, the functions are side-effect free.</p>
+        <p>The typeclass patterns are drawn from two traditions:</p>
+        <ol class="arabic">
+          <li><a href="https://wiki.haskell.org/Typeclassopedia">Typeclassopedia</a></li>
+          <li>Abstract Algebra</li>
+        </ol>
+        <p>The algorithms are increasingly defined only in terms of these typeclasses.
+        Concrete runtime implementations will require witnesses that map non-Axle data structures
+        onto the typeclass methods and laws.
+        Laws are organized into a separate <code>axle-laws</code> jar for use in tests by code that builds
+        upon these typeclasses.
+        Many such witnesses are provided by Axle for native Scala collections.</p>
+        <p>Witnesses are also defined for other common jars from the Java and Scala ecosystems.
+        Read more about these <a href="Spokes.html">&quot;spokes&quot;</a>.</p>
+        
+        <h2 id="remaining-design-issues" class="section"><a class="anchor-link left" href="#remaining-design-issues"><i class="icofont-laika">&#xef71;</i></a>Remaining Design Issues</h2>
+        <p>See the <a href="../appendix/RoadMap.html">Road Map</a> for more details on the timing of upcoming changes.</p>
+        <p>Please get in touch if you&#39;d like to discuss these or other questions.</p>
 
       </main>
 

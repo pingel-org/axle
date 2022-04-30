@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
-    <title>Smith-Waterman</title>
+    <title>Future Work</title>
     
     
       <meta name="description" content="axle-docs"/>
@@ -87,12 +87,12 @@
         <li class="level2"><a href="../random_uncertain/BayesianNetworks.html">Bayesian Networks</a></li>
         <li class="level2"><a href="../random_uncertain/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Game Theory</li>
-        <li class="level2"><a href="../game_theory/GameTheory.html">Game Theory</a></li>
-        <li class="level2"><a href="../game_theory/MontyHall.html">Monty Hall</a></li>
-        <li class="level2"><a href="../game_theory/Poker.html">Poker</a></li>
-        <li class="level2"><a href="../game_theory/PrisonersDilemma.html">Prisoner&#39;s Dilemma</a></li>
-        <li class="level2"><a href="../game_theory/TicTacToe.html">Tic Tac Toe</a></li>
-        <li class="level2"><a href="../game_theory/FutureWork.html">Future Work</a></li>
+        <li class="level2"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level2"><a href="MontyHall.html">Monty Hall</a></li>
+        <li class="level2"><a href="Poker.html">Poker</a></li>
+        <li class="level2"><a href="PrisonersDilemma.html">Prisoner&#39;s Dilemma</a></li>
+        <li class="level2"><a href="TicTacToe.html">Tic Tac Toe</a></li>
+        <li class="level2 active"><a href="#">Future Work</a></li>
         <li class="level1 nav-header">Chaos Theory</li>
         <li class="level2"><a href="../chaos_theory/ChaosTheory.html">Chaos Theory</a></li>
         <li class="level2"><a href="../chaos_theory/LogisticMap.html">Logistic Map</a></li>
@@ -105,9 +105,9 @@
         <li class="level2"><a href="../machine_learning/ClusterFederalistPapers.html">Clusters Federalist Papers</a></li>
         <li class="level2"><a href="../machine_learning/GeneticAlgorithms.html">Genetic Algorithms</a></li>
         <li class="level1 nav-header">Bioinformatics</li>
-        <li class="level2"><a href="Bioinformatics.html">Bioinformatics</a></li>
-        <li class="level2"><a href="NeedlemanWunsch.html">Needleman-Wunsch</a></li>
-        <li class="level2 active"><a href="#">Smith-Waterman</a></li>
+        <li class="level2"><a href="../bioinformatics/Bioinformatics.html">Bioinformatics</a></li>
+        <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
+        <li class="level2"><a href="../bioinformatics/SmithWaterman.html">Smith-Waterman</a></li>
         <li class="level1 nav-header">Text</li>
         <li class="level2"><a href="../text/Text.html">Text</a></li>
         <li class="level2"><a href="../text/LanguageModules.html">Language Modules</a></li>
@@ -147,10 +147,14 @@
     <div id="container">
 
       <nav id="page-nav">
-        <p class="header"><a href="#">Smith-Waterman</a></p>
+        <p class="header"><a href="#">Future Work</a></p>
         
         <ul class="nav-list">
-          <li class="level1"><a href="#example">Example</a></li>
+          <li class="level1"><a href="#missing-functionality">Missing functionality</a></li>
+          <li class="level1"><a href="#motivating-examples">Motivating Examples</a></li>
+          <li class="level1"><a href="#deeper-changes-to-axle-game">Deeper changes to axle.game</a></li>
+          <li class="level1"><a href="#hygeine">Hygeine</a></li>
+          <li class="level1"><a href="#game-theory-and-examples">Game Theory and Examples</a></li>
         </ul>
         
         <p class="footer"></p>
@@ -158,47 +162,186 @@
 
       <main class="content">
 
-        <h1 id="smith-waterman" class="title">Smith-Waterman</h1>
-        <p>See the Wikipedia page on the
-        <a href="https://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm">Smith-Waterman</a> algorithm.</p>
+        <h1 id="future-work" class="title">Future Work</h1>
         
-        <h2 id="example" class="section"><a class="anchor-link left" href="#example"><i class="icofont-laika">&#xef71;</i></a>Example</h2>
-        <p>Imports and implicits</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="type-name">DoubleMatrix</span><span>
-
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Ring</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">NRoot</span><span>
-
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">bio</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="type-name">SmithWatermanDefaults</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="type-name">SmithWaterman</span><span>.</span><span class="identifier">optimalAlignment</span><span>
-
-</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringInt</span><span>: </span><span class="type-name">Ring</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
-</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootInt</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
-</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">laJblasInt</span><span> = </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Int</span><span>]</span></code></pre>
-        <p>Setup</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">dna3</span><span> = </span><span class="string-literal">&quot;ACACACTA&quot;</span><span>
-</span><span class="comment">// dna3: String = &quot;ACACACTA&quot;
-</span><span class="keyword">val</span><span> </span><span class="identifier">dna4</span><span> = </span><span class="string-literal">&quot;AGCACACA&quot;</span><span>
-</span><span class="comment">// dna4: String = &quot;AGCACACA&quot;</span></code></pre>
-        <p>Align the sequences</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">swAlignment</span><span> = </span><span class="identifier">optimalAlignment</span><span>[</span><span class="type-name">IndexedSeq</span><span>, </span><span class="type-name">Char</span><span>, </span><span class="type-name">DoubleMatrix</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>](
-  </span><span class="identifier">dna3</span><span>, </span><span class="identifier">dna4</span><span>, </span><span class="identifier">w</span><span>, </span><span class="identifier">mismatchPenalty</span><span>, </span><span class="identifier">gap</span><span>)
-</span><span class="comment">// swAlignment: (IndexedSeq[Char], IndexedSeq[Char]) = (
-//   Vector(&#39;A&#39;, &#39;-&#39;, &#39;C&#39;, &#39;A&#39;, &#39;C&#39;, &#39;A&#39;, &#39;C&#39;, &#39;T&#39;, &#39;A&#39;),
-//   Vector(&#39;A&#39;, &#39;G&#39;, &#39;C&#39;, &#39;A&#39;, &#39;C&#39;, &#39;A&#39;, &#39;C&#39;, &#39;-&#39;, &#39;A&#39;)
-// )</span></code></pre>
-        <p>Compute distance of the sequences</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">space</span><span> = </span><span class="type-name">SmithWatermanSimilaritySpace</span><span>[</span><span class="type-name">IndexedSeq</span><span>, </span><span class="type-name">Char</span><span>, </span><span class="type-name">DoubleMatrix</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>](</span><span class="identifier">w</span><span>, </span><span class="identifier">mismatchPenalty</span><span>)
-</span><span class="comment">// space: SmithWatermanSimilaritySpace[IndexedSeq, Char, DoubleMatrix, Int, Int] = SmithWatermanSimilaritySpace(
-//   w = &lt;function3&gt;,
-//   mismatchPenalty = -1
-// )
-</span><span>
-</span><span class="identifier">space</span><span>.</span><span class="identifier">similarity</span><span>(</span><span class="identifier">dna3</span><span>, </span><span class="identifier">dna4</span><span>)
-</span><span class="comment">// res0: Int = 12</span></code></pre>
+        <h2 id="missing-functionality" class="section"><a class="anchor-link left" href="#missing-functionality"><i class="icofont-laika">&#xef71;</i></a>Missing functionality</h2>
+        <ul>
+          <li>
+            <p>Remove moveStateStream</p>
+          </li>
+          <li>
+            <p>For one game (probably Poker)</p>
+          </li>
+        </ul>
+        <ul>
+          <li>Record witnessed and unwitnessed history <code>Seq[(M, S)]</code> in <code>State</code></li>
+        </ul>
+        <ul>
+          <li>
+            Display to user in interactiveMove
+            <ul>
+              <li><code>val mm = evGame.maskMove(game, move, mover, observer)</code></li>
+              <li><code>evGameIO.displayMoveTo(game, mm, mover, observer)</code></li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>Then generalize and pull into framework</li>
+        </ul>
+        
+        <h2 id="motivating-examples" class="section"><a class="anchor-link left" href="#motivating-examples"><i class="icofont-laika">&#xef71;</i></a>Motivating Examples</h2>
+        <ul>
+          <li>
+            <p>Generalize <code>OldMontyHall.chanceOfWinning</code></p>
+          </li>
+          <li>
+            <p>GuessRiffle.md</p>
+          </li>
+        </ul>
+        <ul>
+          <li>Walk through game</li>
+        </ul>
+        <ul>
+          <li>Plot distribution of sum(entropy) for both strategies</li>
+        </ul>
+        <ul>
+          <li>Plot entropy by turn # for each strategy</li>
+        </ul>
+        <ul>
+          <li>
+            <p>Plot simulated score distribution for each strategy</p>
+          </li>
+          <li>
+            <p>GuessRiffleSpec: use <code>moveFromRandomState</code></p>
+          </li>
+          <li>
+            <p>Gerrymandering sensitivity</p>
+          </li>
+          <li>
+            <p>&quot;You split, I choose&quot; as game</p>
+          </li>
+        </ul>
+        
+        <h2 id="deeper-changes-to-axle-game" class="section"><a class="anchor-link left" href="#deeper-changes-to-axle-game"><i class="icofont-laika">&#xef71;</i></a>Deeper changes to axle.game</h2>
+        <ul>
+          <li><code>aiMover.unmask</code> prevents <code>MontyHallSpec</code> &quot;AI vs. AI game produces moveStateStream&quot; from working</li>
+        </ul>
+        <ul>
+          <li>
+            <p>will be an issue for all non-perfect information</p>
+          </li>
+          <li>
+            <p>Identify all uses of <code>spire.random.Generator</code> (and other random value generation)</p>
+          </li>
+          <li>
+            <p>See uses of <code>seed</code> in <code>GuessRiffleProperties</code></p>
+          </li>
+          <li>
+            <p>Eliminate entropy consumption of <code>rng</code> side-effect (eg <code>applyMove(Riffle())</code>)</p>
+          </li>
+        </ul>
+        <ul>
+          <li><code>Chance</code> should be its own player</li>
+        </ul>
+        <ul>
+          <li>
+            Consider whether <code>PM</code> should be a part of <code>Strategy</code> type (<code>MS =&gt; PM[M, V]</code>)
+            <ul>
+              <li>More abstractly, more many intents and purposes, all we are about is that resolving PM to M consumes entropy</li>
+              <li>In which cases should the <code>PM</code> be retained?</li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>Each N bits consumed during <code>Riffle()</code> is its own move</li>
+        </ul>
+        <ul>
+          <li>
+            <p>Chance moves consume <code>UnittedQuantity[Information, N]</code></p>
+          </li>
+          <li>
+            <p><code>perceive</code> could return a lower-entropy probability model</p>
+          </li>
+        </ul>
+        <ul>
+          <li>Perhaps in exchange for a given amount of energy</li>
+        </ul>
+        <ul>
+          <li>
+            <p>Or ask for a 0-entropy model and be told how expensive that was</p>
+          </li>
+          <li>
+            <p>Game theory axioms (Nash, etc)</p>
+          </li>
+          <li>
+            <p><code>axle.game</code>: <code>Observable[T]</code></p>
+          </li>
+        </ul>
+        
+        <h2 id="hygeine" class="section"><a class="anchor-link left" href="#hygeine"><i class="icofont-laika">&#xef71;</i></a>Hygeine</h2>
+        <ul>
+          <li>
+            <p>performance benchmark</p>
+          </li>
+          <li>
+            <p>Replace <code>axle.game.moveFromRandomState.mapToProb</code></p>
+          </li>
+          <li>
+            <p>Clean up <code>axle.game.playWithIntroAndOutcomes</code></p>
+          </li>
+          <li>
+            <p>The references to <code>movesMap</code> in <code>MoveFromRandomStateSpec.scala</code> illustrate a need for a cleaner way to create a hard-coded strategy -- which could just be in the form of a couple utility functions from <code>movesMap</code> to the data needed by <code>evGame.{moves,applyMove}</code> and <code>rm</code> strategy</p>
+          </li>
+          <li>
+            <p>Generalize <code>ConditionalProbabilityTable.uniform</code> into typeclass</p>
+          </li>
+          <li>
+            <p>Simplify <code>GuessRiffleProperties</code> (especially second property)</p>
+          </li>
+          <li>
+            <p>stateStreamMap only used in GuessRiffleProperties -- stop using chain?</p>
+          </li>
+          <li>
+            <p>stateStrategyMoveStream only used in GuessRiffleProperties</p>
+          </li>
+          <li>
+            <p><code>Game.players</code> should be a part of GameState (or take it as an argument)?  Will wait for pressing use case.</p>
+          </li>
+        </ul>
+        
+        <h2 id="game-theory-and-examples" class="section"><a class="anchor-link left" href="#game-theory-and-examples"><i class="icofont-laika">&#xef71;</i></a>Game Theory and Examples</h2>
+        <ul>
+          <li>Factor <code>axle.game.moveFromRandomState</code> in terms of a random walk on a graph.</li>
+        </ul>
+        <ul>
+          <li>See &quot;TODO scale mass down&quot;</li>
+        </ul>
+        <ul>
+          <li>Compare to Brownian motion, Random walk, Ito process, ...</li>
+        </ul>
+        <ul>
+          <li>
+            Provide some axioms
+            <ul>
+              <li>no outgoing with path in from non-zero mass monotonically increases</li>
+              <li>no incoming with path out monotonically decreases</li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>possibly provide a version for acyclic graphs</li>
+          <li>Iterative game playing algorithm is intractible, but shares intent with sequential monte carlo</li>
+          <li>Think about Information Theory&#39;s &quot;Omega&quot; vis-a-vis Sequential Monte Carlo</li>
+          <li>Improve <code>axle.stats.rationalProbabilityDist</code> as probabilities become smaller</li>
+          <li>SimpsonsParadox.md</li>
+          <li>Axioms of partial differentiation</li>
+        </ul>
+        <ul>
+          <li><a href="https://math.ucr.edu/home/baez/mathematical/ACTUCR/Plotkin_Partial_Differentiation.pdf">Plotkin Partial Differentiation</a></li>
+          <li>Conal Elliott: Efficient automatic differentiation made easy via category theory</li>
+          <li>Max bet for Poker</li>
+          <li>syntax for <code>Game</code> typeclass</li>
+        </ul>
 
       </main>
 

@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
-    <title>Gallery</title>
+    <title>Python Grammar</title>
     
     
       <meta name="description" content="axle-docs"/>
@@ -51,10 +51,10 @@
       
       <ul class="nav-list">
         <li class="level1 nav-header">Introduction</li>
-        <li class="level2"><a href="Introduction.html">Introduction</a></li>
-        <li class="level2"><a href="Installation.html">Installation</a></li>
-        <li class="level2 active"><a href="#">Gallery</a></li>
-        <li class="level2"><a href="Resources.html">Resources</a></li>
+        <li class="level2"><a href="../introduction/Introduction.html">Introduction</a></li>
+        <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
+        <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
+        <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
         <li class="level1 nav-header">Units of Measurement</li>
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
@@ -109,13 +109,13 @@
         <li class="level2"><a href="../bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
         <li class="level2"><a href="../bioinformatics/SmithWaterman.html">Smith-Waterman</a></li>
         <li class="level1 nav-header">Text</li>
-        <li class="level2"><a href="../text/Text.html">Text</a></li>
-        <li class="level2"><a href="../text/LanguageModules.html">Language Modules</a></li>
-        <li class="level2"><a href="../text/EditDistance.html">Edit Distance</a></li>
-        <li class="level2"><a href="../text/VectorSpaceModel.html">Vector Space Model</a></li>
-        <li class="level2"><a href="../text/AngluinLearner.html">Angluin Learner</a></li>
-        <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
-        <li class="level2"><a href="../text/PythonGrammar.html">Python Grammar</a></li>
+        <li class="level2"><a href="Text.html">Text</a></li>
+        <li class="level2"><a href="LanguageModules.html">Language Modules</a></li>
+        <li class="level2"><a href="EditDistance.html">Edit Distance</a></li>
+        <li class="level2"><a href="VectorSpaceModel.html">Vector Space Model</a></li>
+        <li class="level2"><a href="AngluinLearner.html">Angluin Learner</a></li>
+        <li class="level2"><a href="GoldParadigm.html">Gold Paradigm</a></li>
+        <li class="level2 active"><a href="#">Python Grammar</a></li>
         <li class="level1 nav-header">Appendix</li>
         <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
@@ -147,7 +147,7 @@
     <div id="container">
 
       <nav id="page-nav">
-        <p class="header"><a href="#">Gallery</a></p>
+        <p class="header"><a href="#">Python Grammar</a></p>
         
         <ul class="nav-list">
         </ul>
@@ -157,17 +157,68 @@
 
       <main class="content">
 
-        <h1 id="gallery" class="title">Gallery</h1>
-        <p><a href="../chaos_theory/Mandelbrot.html"><img src="/images/mandelbrot.png" alt="mandelbrot"></a></p>
-        <p><a href="../random_uncertain/CoinEntropy.html"><img src="/images/coinentropy.svg" alt="coin entropy"></a></p>
-        <p><a href="../random_uncertain/BayesianNetworks.html"><img src="/images/alarm_bayes.svg" alt="alarm bayes"></a></p>
-        <p><a href="../chaos_theory/LogisticMap.html"><img src="/images/logMap.png" alt="logistic map"></a></p>
-        <p><a href="../game_theory/Poker.html"><img src="/images/poker_hands.svg" alt="poker hands"></a></p>
-        <p><a href="../random_uncertain/ProbabilityModel.html"><img src="/images/iffy.svg" alt="probability monad"></a></p>
-        <p><a href="../machine_learning/ClusterIrises.html"><img src="/images/k_means.svg" alt="cluster irises"></a></p>
-        <p><a href="../machine_learning/LinearRegression.html"><img src="/images/lrerror.svg" alt="linear regression"></a></p>
-        <p><a href="../math/GeoCoordinates.html"><img src="/images/sfo_hel_small.png" alt="geo coordinates"></a></p>
-        <p><a href="../visualization/Plots.html"><img src="/images/random_waves.svg" alt="random waves"></a></p>
+        <h1 id="python-grammar" class="title">Python Grammar</h1>
+        <p>This is part of a larger project on source code search algorithms.</p>
+        <p><code>python2json.py</code> will take any python 2.6 (or older) file and return a json document that represents the
+        abstract syntax tree.
+        There are a couple of minor problems with it, but for the most part it works.</p>
+        <p>As an example, let&#39;s say we have the following python in
+        example.py:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">x</span><span> = </span><span class="number-literal">1</span><span> + </span><span class="number-literal">2</span><span>
+</span><span class="keyword">print</span><span> </span><span class="identifier">x</span></code></pre>
+        <p>Invoke the script like so to turn example.py into json:</p>
+        <pre class="keep-together pdf epub"><code class="bash">python2json.py -f example.py</code></pre>
+        <p>You can also provide the input via stdin:</p>
+        <pre class="keep-together pdf epub"><code class="bash">cat example.py | python2json.py</code></pre>
+        <p>I find it useful to chain this pretty-printer when debugging:</p>
+        <pre class="keep-together pdf epub"><code class="bash">cat example.py | python2json.py | python -mjson.tool</code></pre>
+        <p>The pretty-printed result in this case is:</p>
+        <pre><code class="nohighlight"><span>{
+    </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="literal-value">null</span><span>,
+    </span><span class="string-literal">&quot;node&quot;</span><span>: {
+        </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="literal-value">null</span><span>,
+        </span><span class="string-literal">&quot;spread&quot;</span><span>: [
+            {
+                </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">2</span><span>,
+                </span><span class="string-literal">&quot;expr&quot;</span><span>: {
+                    </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">2</span><span>,
+                    </span><span class="string-literal">&quot;left&quot;</span><span>: {
+                        </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">2</span><span>,
+                        </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Const&quot;</span><span>,
+                        </span><span class="string-literal">&quot;value&quot;</span><span>: </span><span class="string-literal">&quot;1&quot;</span><span>
+                    },
+                    </span><span class="string-literal">&quot;right&quot;</span><span>: {
+                        </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">2</span><span>,
+                        </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Const&quot;</span><span>,
+                        </span><span class="string-literal">&quot;value&quot;</span><span>: </span><span class="string-literal">&quot;2&quot;</span><span>
+                    },
+                    </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Add&quot;</span><span>
+                },
+                </span><span class="string-literal">&quot;nodes&quot;</span><span>: [
+                    {
+                        </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">2</span><span>,
+                        </span><span class="string-literal">&quot;name&quot;</span><span>: </span><span class="string-literal">&quot;x&quot;</span><span>,
+                        </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;AssName&quot;</span><span>
+                    }
+                ], 
+                </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Assign&quot;</span><span>
+            }, 
+            {
+                </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">3</span><span>,
+                </span><span class="string-literal">&quot;nodes&quot;</span><span>: [
+                    {
+                        </span><span class="string-literal">&quot;_lineno&quot;</span><span>: </span><span class="number-literal">3</span><span>,
+                        </span><span class="string-literal">&quot;name&quot;</span><span>: </span><span class="string-literal">&quot;x&quot;</span><span>,
+                        </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Name&quot;</span><span>
+                    }
+                ],
+                </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Printnl&quot;</span><span>
+            }
+        ],
+        </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Stmt&quot;</span><span>
+    },
+    </span><span class="string-literal">&quot;type&quot;</span><span>: </span><span class="string-literal">&quot;Module&quot;</span><span>
+}</span></code></pre>
 
       </main>
 

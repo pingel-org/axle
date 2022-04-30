@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
-    <title>Gallery</title>
+    <title>Spokes</title>
     
     
       <meta name="description" content="axle-docs"/>
@@ -51,10 +51,10 @@
       
       <ul class="nav-list">
         <li class="level1 nav-header">Introduction</li>
-        <li class="level2"><a href="Introduction.html">Introduction</a></li>
-        <li class="level2"><a href="Installation.html">Installation</a></li>
-        <li class="level2 active"><a href="#">Gallery</a></li>
-        <li class="level2"><a href="Resources.html">Resources</a></li>
+        <li class="level2"><a href="../introduction/Introduction.html">Introduction</a></li>
+        <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
+        <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
+        <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
         <li class="level1 nav-header">Units of Measurement</li>
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
@@ -125,18 +125,18 @@
         <li class="level2"><a href="../appendix/Author.html">Author</a></li>
         <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
         <li class="level1 nav-header">Foundation</li>
-        <li class="level2"><a href="../foundation/Foundation.html">Foundation</a></li>
-        <li class="level2"><a href="../foundation/Functional.html">Funcational</a></li>
-        <li class="level2"><a href="../foundation/Scala.html">Scala</a></li>
-        <li class="level2"><a href="../foundation/Cats.html">Cats</a></li>
-        <li class="level2"><a href="../foundation/Architecture.html">Architecture</a></li>
-        <li class="level2"><a href="../foundation/PackageObject.html">Package Objects</a></li>
-        <li class="level2"><a href="../foundation/Algebra.html">Algebra</a></li>
-        <li class="level2"><a href="../foundation/LinearAlgebra.html">Linear Algebra</a></li>
-        <li class="level2"><a href="../foundation/Graph.html">Graph</a></li>
-        <li class="level2"><a href="../foundation/Logic.html">Logic</a></li>
-        <li class="level2"><a href="../foundation/Spokes.html">Spokes</a></li>
-        <li class="level2"><a href="../foundation/FutureWork.html">Future Work</a></li>
+        <li class="level2"><a href="Foundation.html">Foundation</a></li>
+        <li class="level2"><a href="Functional.html">Funcational</a></li>
+        <li class="level2"><a href="Scala.html">Scala</a></li>
+        <li class="level2"><a href="Cats.html">Cats</a></li>
+        <li class="level2"><a href="Architecture.html">Architecture</a></li>
+        <li class="level2"><a href="PackageObject.html">Package Objects</a></li>
+        <li class="level2"><a href="Algebra.html">Algebra</a></li>
+        <li class="level2"><a href="LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level2"><a href="Graph.html">Graph</a></li>
+        <li class="level2"><a href="Logic.html">Logic</a></li>
+        <li class="level2 active"><a href="#">Spokes</a></li>
+        <li class="level2"><a href="FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Quantum Circuits</li>
         <li class="level2"><a href="../quantum_circuits/FutureWork.html">Future Work</a></li>
         <li class="level2"><a href="../quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
@@ -147,9 +147,15 @@
     <div id="container">
 
       <nav id="page-nav">
-        <p class="header"><a href="#">Gallery</a></p>
+        <p class="header"><a href="#">Spokes</a></p>
         
         <ul class="nav-list">
+          <li class="level1"><a href="#parallel-collections">Parallel Collections</a></li>
+          <li class="level1"><a href="#xml">XML</a></li>
+          <li class="level1"><a href="#jblas">JBLAS</a></li>
+          <li class="level1"><a href="#joda">JODA</a></li>
+          <li class="level1"><a href="#jung">JUNG</a></li>
+          <li class="level1"><a href="#awt">AWT</a></li>
         </ul>
         
         <p class="footer"></p>
@@ -157,17 +163,36 @@
 
       <main class="content">
 
-        <h1 id="gallery" class="title">Gallery</h1>
-        <p><a href="../chaos_theory/Mandelbrot.html"><img src="/images/mandelbrot.png" alt="mandelbrot"></a></p>
-        <p><a href="../random_uncertain/CoinEntropy.html"><img src="/images/coinentropy.svg" alt="coin entropy"></a></p>
-        <p><a href="../random_uncertain/BayesianNetworks.html"><img src="/images/alarm_bayes.svg" alt="alarm bayes"></a></p>
-        <p><a href="../chaos_theory/LogisticMap.html"><img src="/images/logMap.png" alt="logistic map"></a></p>
-        <p><a href="../game_theory/Poker.html"><img src="/images/poker_hands.svg" alt="poker hands"></a></p>
-        <p><a href="../random_uncertain/ProbabilityModel.html"><img src="/images/iffy.svg" alt="probability monad"></a></p>
-        <p><a href="../machine_learning/ClusterIrises.html"><img src="/images/k_means.svg" alt="cluster irises"></a></p>
-        <p><a href="../machine_learning/LinearRegression.html"><img src="/images/lrerror.svg" alt="linear regression"></a></p>
-        <p><a href="../math/GeoCoordinates.html"><img src="/images/sfo_hel_small.png" alt="geo coordinates"></a></p>
-        <p><a href="../visualization/Plots.html"><img src="/images/random_waves.svg" alt="random waves"></a></p>
+        <h1 id="spokes" class="title">Spokes</h1>
+        <p>Witnesses for 3rd party libraries: The &quot;Spokes&quot;</p>
+        
+        <h2 id="parallel-collections" class="section"><a class="anchor-link left" href="#parallel-collections"><i class="icofont-laika">&#xef71;</i></a>Parallel Collections</h2>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-parallel&quot; % &quot;0.6.3&quot;</code></pre>
+        <p>For use with Scala <a href="https://github.com/scala/scala-parallel-collections">Parallel Collections</a> library
+        (<code>&quot;org.scala-lang.modules&quot; %% &quot;scala-parallel-collections&quot; % ...</code>)</p>
+        
+        <h2 id="xml" class="section"><a class="anchor-link left" href="#xml"><i class="icofont-laika">&#xef71;</i></a>XML</h2>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-xml&quot; % &quot;0.6.3&quot;</code></pre>
+        <p>For use with Scala <a href="https://github.com/scala/scala-xml">XML</a> library
+        (<code>&quot;org.scala-lang.modules&quot; %% &quot;scala-xml&quot; % ...</code>)</p>
+        <p>XML includes <code>axle.web</code>, where HTML and SVG visualizations reside.</p>
+        
+        <h2 id="jblas" class="section"><a class="anchor-link left" href="#jblas"><i class="icofont-laika">&#xef71;</i></a>JBLAS</h2>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-jblas&quot; % &quot;0.6.3&quot;</code></pre>
+        <p><a href="LinearAlgebra.html">Linear Algebra</a> and other witnesses for <a href="http://jblas.org/">JBLAS</a> which itself is a wrapper for <a href="http://www.netlib.org/lapack/">LAPACK</a>.
+        Includes Principal Component Analysis (PCA).</p>
+        
+        <h2 id="joda" class="section"><a class="anchor-link left" href="#joda"><i class="icofont-laika">&#xef71;</i></a>JODA</h2>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-joda&quot; % &quot;0.6.3&quot;</code></pre>
+        <p>Witnesses for the <a href="http://www.joda.org/joda-time/">Joda</a> time library.</p>
+        
+        <h2 id="jung" class="section"><a class="anchor-link left" href="#jung"><i class="icofont-laika">&#xef71;</i></a>JUNG</h2>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-jung&quot; % &quot;0.6.3&quot;</code></pre>
+        <p><a href="Graph.html">Graph</a> Directed and undirected graph witnesses for the <a href="http://jung.sourceforge.net/">JUNG</a> library.</p>
+        
+        <h2 id="awt" class="section"><a class="anchor-link left" href="#awt"><i class="icofont-laika">&#xef71;</i></a>AWT</h2>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-awt&quot; % &quot;0.6.3&quot;</code></pre>
+        <p>Witnesses for <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/package-summary.html">AWT</a></p>
 
       </main>
 

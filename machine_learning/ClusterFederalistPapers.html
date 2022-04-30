@@ -54,16 +54,7 @@
         <li class="level2"><a href="../introduction/Introduction.html">Introduction</a></li>
         <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
         <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
-        <li class="level2"><a href="../introduction/Architecture.html">Architecture</a></li>
-        <li class="level2"><a href="../introduction/Spokes.html">Spokes</a></li>
         <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
-        <li class="level1 nav-header">Fundamental</li>
-        <li class="level2"><a href="../fundamental/Fundamental.html">Fundamental</a></li>
-        <li class="level2"><a href="../fundamental/PackageObject.html">Package Objects</a></li>
-        <li class="level2"><a href="../fundamental/Algebra.html">Algebra</a></li>
-        <li class="level2"><a href="../fundamental/LinearAlgebra.html">Linear Algebra</a></li>
-        <li class="level2"><a href="../fundamental/Graph.html">Graph</a></li>
-        <li class="level2"><a href="../fundamental/Logic.html">Logic</a></li>
         <li class="level1 nav-header">Units of Measurement</li>
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
@@ -83,6 +74,7 @@
         <li class="level2"><a href="../visualization/BarCharts.html">Bar Charts</a></li>
         <li class="level2"><a href="../visualization/GroupedBarCharts.html">Grouped Bar Charts</a></li>
         <li class="level2"><a href="../visualization/PixelatedColoredArea.html">Pixelated Colored Area</a></li>
+        <li class="level2"><a href="../visualization/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Randomness and Uncertainty</li>
         <li class="level2"><a href="../random_uncertain/RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
         <li class="level2"><a href="../random_uncertain/ProbabilityModel.html">Probability Model</a></li>
@@ -93,12 +85,14 @@
         <li class="level2"><a href="../random_uncertain/CoinEntropy.html">Entropy of a Biased Coin</a></li>
         <li class="level2"><a href="../random_uncertain/ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
         <li class="level2"><a href="../random_uncertain/BayesianNetworks.html">Bayesian Networks</a></li>
+        <li class="level2"><a href="../random_uncertain/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Game Theory</li>
         <li class="level2"><a href="../game_theory/GameTheory.html">Game Theory</a></li>
         <li class="level2"><a href="../game_theory/MontyHall.html">Monty Hall</a></li>
         <li class="level2"><a href="../game_theory/Poker.html">Poker</a></li>
         <li class="level2"><a href="../game_theory/PrisonersDilemma.html">Prisoner&#39;s Dilemma</a></li>
         <li class="level2"><a href="../game_theory/TicTacToe.html">Tic Tac Toe</a></li>
+        <li class="level2"><a href="../game_theory/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Chaos Theory</li>
         <li class="level2"><a href="../chaos_theory/ChaosTheory.html">Chaos Theory</a></li>
         <li class="level2"><a href="../chaos_theory/LogisticMap.html">Logistic Map</a></li>
@@ -121,7 +115,7 @@
         <li class="level2"><a href="../text/VectorSpaceModel.html">Vector Space Model</a></li>
         <li class="level2"><a href="../text/AngluinLearner.html">Angluin Learner</a></li>
         <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
-        <li class="level2"><a href="../text/Python2Json.html">python2json.py</a></li>
+        <li class="level2"><a href="../text/PythonGrammar.html">Python Grammar</a></li>
         <li class="level1 nav-header">Appendix</li>
         <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
@@ -130,6 +124,22 @@
         <li class="level2"><a href="../appendix/History.html">History</a></li>
         <li class="level2"><a href="../appendix/Author.html">Author</a></li>
         <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
+        <li class="level1 nav-header">Foundation</li>
+        <li class="level2"><a href="../foundation/Foundation.html">Foundation</a></li>
+        <li class="level2"><a href="../foundation/Functional.html">Funcational</a></li>
+        <li class="level2"><a href="../foundation/Scala.html">Scala</a></li>
+        <li class="level2"><a href="../foundation/Cats.html">Cats</a></li>
+        <li class="level2"><a href="../foundation/Architecture.html">Architecture</a></li>
+        <li class="level2"><a href="../foundation/PackageObject.html">Package Objects</a></li>
+        <li class="level2"><a href="../foundation/Algebra.html">Algebra</a></li>
+        <li class="level2"><a href="../foundation/LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level2"><a href="../foundation/Graph.html">Graph</a></li>
+        <li class="level2"><a href="../foundation/Logic.html">Logic</a></li>
+        <li class="level2"><a href="../foundation/Spokes.html">Spokes</a></li>
+        <li class="level2"><a href="../foundation/FutureWork.html">Future Work</a></li>
+        <li class="level1 nav-header">Quantum Circuits</li>
+        <li class="level2"><a href="../quantum_circuits/FutureWork.html">Future Work</a></li>
+        <li class="level2"><a href="../quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
       </ul>
       
     </nav>
@@ -156,19 +166,19 @@
 </span><span class="keyword">import</span><span> </span><span class="type-name">FederalistPapers</span><span>.</span><span class="type-name">Article</span></code></pre>
         <p>Download (and cache) the Federalist articles downloader:</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ec</span><span> = </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="identifier">global</span><span>
-</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@22ee37bd[Running, parallelism = 6, size = 3, active = 0, running = 0, steals = 2, tasks = 0, submissions = 0]
+</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@37cd066c[Running, parallelism = 4, size = 2, active = 0, running = 0, steals = 6, tasks = 0, submissions = 0]
 </span><span class="keyword">val</span><span> </span><span class="identifier">blocker</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">Blocker</span><span>.</span><span class="identifier">liftExecutionContext</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@22ee37bd
+</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@37cd066c
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">cs</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">contextShift</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@28db5a8f
+</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@297b3138
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">articlesIO</span><span> = </span><span class="type-name">FederalistPapers</span><span>.</span><span class="identifier">articles</span><span>[</span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>](</span><span class="identifier">blocker</span><span>)
 </span><span class="comment">// articlesIO: cats.effect.IO[List[Article]] = Map(
 //   source = Async(
-//     k = cats.effect.internals.IOBracket$$$Lambda$10637/0x0000000802738858@2618debc,
+//     k = cats.effect.internals.IOBracket$$$Lambda$9066/939298429@2a47ae13,
 //     trampolineAfter = false
 //   ),
-//   f = axle.data.FederalistPapers$$$Lambda$10650/0x000000080273e000@2dc4b9d1,
+//   f = axle.data.FederalistPapers$$$Lambda$9079/1177935277@6d874fff,
 //   index = 0
 // )
 </span><span>
@@ -232,7 +242,7 @@
 
 </span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">CRing</span><span>
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringLong</span><span>: </span><span class="type-name">CRing</span><span>[</span><span class="type-name">Long</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">LongAlgebra</span><span>
-</span><span class="comment">// ringLong: CRing[Long] = spire.std.LongAlgebra@7ec4200b
+</span><span class="comment">// ringLong: CRing[Long] = spire.std.LongAlgebra@3226da45
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">corpus</span><span> = </span><span class="type-name">Corpus</span><span>[</span><span class="type-name">Vector</span><span>, </span><span class="type-name">Long</span><span>](</span><span class="identifier">articles</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">text</span><span>).</span><span class="identifier">toVector</span><span>, </span><span class="type-name">English</span><span>)
 </span><span class="comment">// corpus: Corpus[Vector, Long] = Corpus(
@@ -428,7 +438,7 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">normalizer</span><span> = (</span><span class="type-name">PCAFeatureNormalizer</span><span>[</span><span class="type-name">DoubleMatrix</span><span>] </span><span class="identifier">_</span><span>).</span><span class="identifier">curried</span><span>.</span><span class="identifier">apply</span><span>(</span><span class="number-literal">0.98</span><span>)
-</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$10684/0x000000080272efb8@cb9127e
+</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$9113/1221614945@5584c6a9
 </span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">classifier</span><span> = </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Article</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
   </span><span class="identifier">articles</span><span>,
@@ -546,13 +556,13 @@
 // ...
 </span><span>
 </span><span class="identifier">confusion</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res1: String = &quot;&quot;&quot; 3 32  7 10 : 52 HAMILTON
-//  0  3  0  0 :  3 HAMILTON AND MADISON
-//  0  3  5  7 : 15 MADISON
-//  0  5  0  0 :  5 JAY
-//  0  8  1  2 : 11 HAMILTON OR MADISON
+</span><span class="comment">// res1: String = &quot;&quot;&quot; 1 13 32  6 : 52 HAMILTON
+//  0  0  3  0 :  3 HAMILTON AND MADISON
+//  8  0  4  3 : 15 MADISON
+//  0  1  4  0 :  5 JAY
+//  3  0  8  0 : 11 HAMILTON OR MADISON
 // 
-//  3 51 13 19
+// 12 14 51  9
 // &quot;&quot;&quot;</span></code></pre>
 
       </main>
