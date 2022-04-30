@@ -59,3 +59,8 @@
 * Stochastic Lambda Calculus
 * Abadi Plotkin pathology
 * Jacobian Vector Products (JVP)
+
+## Docs
+
+* Reorder Probability mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)?
+  * Footnotes (Giry, etc)

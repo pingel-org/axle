@@ -3,28 +3,25 @@
 See [Release Notes](ReleaseNotes.md) for the record of previously released features.
 
 * gallery images should be same width
-
 * look for opportunities to use `mdoc:silent`
+
 * make dependencies clear in each section
 * rename "Spokes"
-* more exposition for Architecture, FP, Scala, Cats
 * simplify "Installation"
-* copy some test cases to QuantumCircuits.md
-* Reorder Probability mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)
-  * Footnotes (Giry, etc)
+* more exposition for Architecture, FP, Scala, Cats
 
+* copy some test cases to QuantumCircuits.md
 * document Quantum Circuits
 
 * `laikaIncludeAPI := true` in `build.sbt`
 * look at more of [these options](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
 
-* Meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
-* GitHub "Releases" in sidebar should show "latest"
-* Timestamp / version to site footer
-
-* update google analytics version
-
 * tweet / post
+
+* Meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
+* Timestamp / version to site footer
+* GitHub "Releases" in sidebar should show "latest"
+* update google analytics version
 
 ## 0.6.5
 
