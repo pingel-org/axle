@@ -5,7 +5,8 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 ## CICD
 
 * gallery images should be same width
-* separate Architecture section (or rename Fund. to Foundation and include Architecture, Cats, Spire, FP, ...)
+* Foundation should include Architecture, Cats, Spire, FP, ...
+* rename "Spokes"
 * look for opportunities to use `mdoc:silent`
 * move much of Road Map to chapter-specific "next steps" sections
 * simplify "Installation"; make dependencies clear in each section
@@ -327,17 +328,17 @@ that has been its goal since inception.
 
 ## Types and Axioms
 
-* Replace Finite with Shapeless's version (eg `Sized[Vector[_], nat.2]`)
-* Delete Finite conversions for jung (replace with NaturalTransformation?)
-* Replace with Cats: FoldLeft, Bijection, FunctionPair, Endofunctor
-* Define laws for Scanner, Aggregator, Zipper, Indexed, Talliable, Finite?
-* Sort out MapFrom, FromStream, FromSet
+* Replace `Finite` with Shapeless's version (eg `Sized[Vector[_], nat.2]`)
+* Delete `Finite` conversions for jung
+* Replace with Cats: `FoldLeft`, `Bijection`, `FunctionPair`, `Endofunctor`
+* Define laws for `Scanner`, `Aggregator`, `Zipper`, `Indexed`, `Talliable`, `Finite`?
+* Sort out `MapFrom`, `FromStream`, `FromSet`
 * Test `axle.algebra.tuple2Field`
 * `similarity` syntax for `SimilaritySpace` (see `axle.bio.*`)
-* Projections of jung graphs for Finite
+* Projections of jung graphs for `Finite`
 * kittens or magnolia
-  * pattern match in FirstOrderPredicateLogic
-  * subtyping for Suit and Rank
+  * pattern match in `FirstOrderPredicateLogic`
+  * subtyping for `Suit` and `Rank`
 * Machinist?
 * Type-level matrix dimension using `-Yliteral-types` and `singleton-ops` in `LinearAlgebra` typeclass
 * Make the `Int` abstract in `KMeans{,Visualization}`, `LinearAlgebra`, etc

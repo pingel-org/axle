@@ -1,4 +1,4 @@
-# Fundamental
+# Foundation
 
 Data structures and functions
 
