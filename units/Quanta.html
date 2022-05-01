@@ -299,10 +299,23 @@
         
         <h2 id="show" class="section"><a class="anchor-link left" href="#show"><i class="icofont-laika">&#xef71;</i></a>Show</h2>
         <p>A witness for the <code>cats.Show</code> typeclass is defined, <code>.show</code> will return a <code>String</code> representation.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+(</span><span class="number-literal">10d</span><span> *: </span><span class="identifier">gram</span><span> </span><span class="identifier">in</span><span> </span><span class="identifier">kilogram</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res12: String = &quot;0.010000000000000002 Kg&quot;</span></code></pre>
         
         <h2 id="math" class="section"><a class="anchor-link left" href="#math"><i class="icofont-laika">&#xef71;</i></a>Math</h2>
         <p>Addition and subtraction are defined on Quantity by converting the
         right Quantity to the unit of the left.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">additiveGroupOps</span><span>
+
+((</span><span class="number-literal">7d</span><span> *: </span><span class="identifier">mile</span><span>) - (</span><span class="number-literal">123d</span><span> *: </span><span class="identifier">foot</span><span>)).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res13: String = &quot;36837.0 ft&quot;</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>{
+  </span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+  ((</span><span class="number-literal">1d</span><span> *: </span><span class="identifier">kilogram</span><span>) + (</span><span class="number-literal">10d</span><span> *: </span><span class="identifier">gram</span><span>)).</span><span class="identifier">show</span><span>
+}
+</span><span class="comment">// res14: String = &quot;1010.0 g&quot;</span></code></pre>
         <p>Addition and subtraction between different quanta is rejected at compile time:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span>(</span><span class="number-literal">1d</span><span> *: </span><span class="identifier">gram</span><span>) + (</span><span class="number-literal">2d</span><span> *: </span><span class="identifier">foot</span><span>)
 </span><span class="comment">// error: type mismatch;
@@ -316,6 +329,12 @@
 // (1d *: gram) + (2d *: foot)
 //                    ^^^^^^^</span></code></pre>
         <p>Multiplication comes from Spire&#39;s <code>CModule</code> typeclass:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">rightModuleOps</span><span>
+
+((</span><span class="number-literal">5.4</span><span> *: </span><span class="identifier">second</span><span>) :* </span><span class="number-literal">100d</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res16: String = &quot;540.0 s&quot;</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>((</span><span class="number-literal">32d</span><span> *: </span><span class="identifier">century</span><span>) :* (</span><span class="number-literal">1d</span><span>/</span><span class="number-literal">3</span><span>)).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res17: String = &quot;10.666666666666666 century&quot;</span></code></pre>
 
       </main>
 
