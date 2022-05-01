@@ -115,6 +115,17 @@ as long as a spire `Field` is implicitly available.
 200d *: watt
 ```
 
+## Show
+
+A witness for the `cats.Show` typeclass is defined.
+`show` will return a `String` representation.
+
+```scala mdoc
+import cats.implicits._
+
+(10d *: gram).show
+```
+
 ## Conversion
 
 A Quantum defines a directed graph, where the UnitsOfMeasurement
@@ -126,23 +137,13 @@ This is possible as long as 1) the values are in the same
 Quantum, and 2) there is a path in the Quantum between the two.
 
 ```scala mdoc
-10d *: gram in kilogram
+(10d *: gram in kilogram).show
 ```
 
 Converting between quanta is not allowed, and is caught at compile time:
 
 ```scala mdoc:fail
-(1 *: gram) in mile
-```
-
-## Show
-
-A witness for the `cats.Show` typeclass is defined, `.show` will return a `String` representation.
-
-```scala mdoc
-import cats.implicits._
-
-(10d *: gram in kilogram).show
+((1 *: gram) in mile).show
 ```
 
 ## Math
