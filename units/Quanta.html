@@ -173,7 +173,7 @@
         <h2 id="quanta-units-and-conversions" class="section"><a class="anchor-link left" href="#quanta-units-and-conversions"><i class="icofont-laika">&#xef71;</i></a>Quanta, Units, and Conversions</h2>
         <p><code>UnittedQuantity</code> is the primary case class in <code>axle.quanta</code></p>
         <p>The <code>axle.quanta</code> package models units of measurement.
-        Via typeclasses, it implements expected operators like <code>+ - * over by</code>,
+        Via typeclasses, it implements expected operators like <code>+</code>, <code>-</code>,
         a unit conversion operator <code>in</code>,
         and a right associative value constructor <code>*:</code></p>
         <p>The &quot;quanta&quot; are
@@ -185,7 +185,6 @@
         and Volume.
         Axle&#39;s values are represented in such a way that a value&#39;s &quot;quantum&quot; is present in the type,
         meaning that nonsensical expressions like <code>mile + gram</code> can be rejected at compile time.</p>
-        <p><img src="/images/Distance.svg" alt="Distance conversions"></p>
         <p>Additionally, various values within the Quantum objects are imported.
         This package uses the definition of &quot;Quantum&quot; as &quot;something that can
         be quantified or measured&quot;.</p>
@@ -218,6 +217,7 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="identifier">dgVis</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/Distance.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/Distance.svg" alt="Distance conversions"></p>
         
         <h2 id="units" class="section"><a class="anchor-link left" href="#units"><i class="icofont-laika">&#xef71;</i></a>Units</h2>
         <p>A conversion graph must be created with type parameters specifying the numeric type to
@@ -231,12 +231,9 @@
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">powerConverter</span><span> = </span><span class="type-name">Power</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
 </span><span class="keyword">import</span><span> </span><span class="identifier">powerConverter</span><span>.</span><span class="identifier">_</span><span>
 
-</span><span class="comment">//implicit val energyConverter = Energy.converterGraphK2[Double, DirectedSparseGraph]
-//import energyConverter._
-</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">modules</span><span>.</span><span class="identifier">doubleRationalModule</span><span>
 
-</span><span class="comment">// distanceConverter defined above
+</span><span class="comment">// reuse distanceConverter defined in preceding section
 </span><span class="keyword">import</span><span> </span><span class="identifier">distanceConverter</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">timeConverter</span><span> = </span><span class="type-name">Time</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
@@ -266,47 +263,15 @@
         <h2 id="construction" class="section"><a class="anchor-link left" href="#construction"><i class="icofont-laika">&#xef71;</i></a>Construction</h2>
         <p>Values with units are constructed with the right-associative <code>*:</code> method on any spire <code>Number</code> type
         as long as a spire <code>Field</code> is implicitly available.</p>
-        <pre><code class="nohighlight"><span class="number-literal">10d</span><span> *: </span><span class="identifier">gram</span><span>
-</span><span class="comment">// res5: UnittedQuantity[Mass, Double] = UnittedQuantity(
-//   magnitude = 10.0,
-//   unit = UnitOfMeasurement(name = &quot;gram&quot;, symbol = &quot;g&quot;, wikipediaUrl = None)
-// )
-</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="number-literal">10d</span><span> *: </span><span class="identifier">gram</span><span>
+
 </span><span class="number-literal">3d</span><span> *: </span><span class="identifier">lightyear</span><span>
-</span><span class="comment">// res6: UnittedQuantity[Distance, Double] = UnittedQuantity(
-//   magnitude = 3.0,
-//   unit = UnitOfMeasurement(
-//     name = &quot;lightyear&quot;,
-//     symbol = &quot;ly&quot;,
-//     wikipediaUrl = Some(value = &quot;http://en.wikipedia.org/wiki/Light-year&quot;)
-//   )
-// )
-</span><span>
+
 </span><span class="number-literal">5d</span><span> *: </span><span class="identifier">horsepower</span><span>
-</span><span class="comment">// res7: UnittedQuantity[Power, Double] = UnittedQuantity(
-//   magnitude = 5.0,
-//   unit = UnitOfMeasurement(
-//     name = &quot;horsepower&quot;,
-//     symbol = &quot;hp&quot;,
-//     wikipediaUrl = None
-//   )
-// )
-</span><span>
+
 </span><span class="number-literal">3.14</span><span> *: </span><span class="identifier">second</span><span>
-</span><span class="comment">// res8: UnittedQuantity[Time, Double] = UnittedQuantity(
-//   magnitude = 3.14,
-//   unit = UnitOfMeasurement(
-//     name = &quot;second&quot;,
-//     symbol = &quot;s&quot;,
-//     wikipediaUrl = Some(value = &quot;http://en.wikipedia.org/wiki/Second&quot;)
-//   )
-// )
-</span><span>
-</span><span class="number-literal">200d</span><span> *: </span><span class="identifier">watt</span><span>
-</span><span class="comment">// res9: UnittedQuantity[Power, Double] = UnittedQuantity(
-//   magnitude = 200.0,
-//   unit = UnitOfMeasurement(name = &quot;watt&quot;, symbol = &quot;W&quot;, wikipediaUrl = None)
-// )</span></code></pre>
+
+</span><span class="number-literal">200d</span><span> *: </span><span class="identifier">watt</span></code></pre>
         
         <h2 id="conversion" class="section"><a class="anchor-link left" href="#conversion"><i class="icofont-laika">&#xef71;</i></a>Conversion</h2>
         <p>A Quantum defines a directed graph, where the UnitsOfMeasurement
@@ -334,64 +299,23 @@
         
         <h2 id="show" class="section"><a class="anchor-link left" href="#show"><i class="icofont-laika">&#xef71;</i></a>Show</h2>
         <p>A witness for the <code>cats.Show</code> typeclass is defined, <code>.show</code> will return a <code>String</code> representation.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
-
-(</span><span class="number-literal">10d</span><span> *: </span><span class="identifier">gram</span><span> </span><span class="identifier">in</span><span> </span><span class="identifier">kilogram</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res12: String = &quot;0.010000000000000002 Kg&quot;</span></code></pre>
         
         <h2 id="math" class="section"><a class="anchor-link left" href="#math"><i class="icofont-laika">&#xef71;</i></a>Math</h2>
         <p>Addition and subtraction are defined on Quantity by converting the
         right Quantity to the unit of the left.</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">additiveGroupOps</span><span>
-
-(</span><span class="number-literal">7d</span><span> *: </span><span class="identifier">mile</span><span>) - (</span><span class="number-literal">123d</span><span> *: </span><span class="identifier">foot</span><span>)
-</span><span class="comment">// res13: UnittedQuantity[Distance, Double] = UnittedQuantity(
-//   magnitude = 36837.0,
-//   unit = UnitOfMeasurement(name = &quot;foot&quot;, symbol = &quot;ft&quot;, wikipediaUrl = None)
-// )
-</span><span>
-{
-  </span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
-  (</span><span class="number-literal">1d</span><span> *: </span><span class="identifier">kilogram</span><span>) + (</span><span class="number-literal">10d</span><span> *: </span><span class="identifier">gram</span><span>)
-}
-</span><span class="comment">// res14: UnittedQuantity[Mass, Double] = UnittedQuantity(
-//   magnitude = 1010.0,
-//   unit = UnitOfMeasurement(name = &quot;gram&quot;, symbol = &quot;g&quot;, wikipediaUrl = None)
-// )</span></code></pre>
         <p>Addition and subtraction between different quanta is rejected at compile time:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span>(</span><span class="number-literal">1d</span><span> *: </span><span class="identifier">gram</span><span>) + (</span><span class="number-literal">2d</span><span> *: </span><span class="identifier">foot</span><span>)
-</span><span class="comment">// error: axle.quanta.UnittedQuantity[axle.quanta.Distance,Double] does not take parameters
-// (7d *: mile) - (123d *: foot)
-//                ^
+</span><span class="comment">// error: type mismatch;
+//  found   : String
+//  required: Int
+//   ((1d *: kilogram) + (10d *: gram)).show
+//    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 // error: type mismatch;
 //  found   : axle.quanta.UnittedQuantity[axle.quanta.Distance,Double]
 //  required: String
 // (1d *: gram) + (2d *: foot)
 //                    ^^^^^^^</span></code></pre>
         <p>Multiplication comes from Spire&#39;s <code>CModule</code> typeclass:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">rightModuleOps</span><span>
-
-(</span><span class="number-literal">5.4</span><span> *: </span><span class="identifier">second</span><span>) :* </span><span class="number-literal">100d</span><span>
-</span><span class="comment">// res16: UnittedQuantity[Time, Double] = UnittedQuantity(
-//   magnitude = 540.0,
-//   unit = UnitOfMeasurement(
-//     name = &quot;second&quot;,
-//     symbol = &quot;s&quot;,
-//     wikipediaUrl = Some(value = &quot;http://en.wikipedia.org/wiki/Second&quot;)
-//   )
-// )
-</span><span>
-(</span><span class="number-literal">32d</span><span> *: </span><span class="identifier">century</span><span>) :* (</span><span class="number-literal">1d</span><span>/</span><span class="number-literal">3</span><span>)
-</span><span class="comment">// res17: UnittedQuantity[Time, Double] = UnittedQuantity(
-//   magnitude = 10.666666666666666,
-//   unit = UnitOfMeasurement(
-//     name = &quot;century&quot;,
-//     symbol = &quot;century&quot;,
-//     wikipediaUrl = Some(value = &quot;http://en.wikipedia.org/wiki/Century&quot;)
-//   )
-// )</span></code></pre>
-        <p>The methods <code>over</code> and <code>by</code> are used to multiply and divide other values with units.
-        This behavior is not yet implemented.</p>
 
       </main>
 
