@@ -41,8 +41,12 @@ import axle.algebra.GeoCoordinates.geoCoordinatesLengthSpace
 
 Use it to compute the points at 10% increments from SFO to HEL
 
-```scala mdoc
-(0 to 10).map(i => geoCoordinatesLengthSpace.onPath(sfo, hel, i / 10d)) map { mp => mp.show } mkString("\n")
+```scala mdoc:silent
+val midpoints = (0 to 10).map(i => geoCoordinatesLengthSpace.onPath(sfo, hel, i / 10d))
+```
+
+```scala mdoc:passthrough
+midpoints map { _.show } map { println }
 ```
 
 ![SFO to HEL](/images/sfo_hel.png)
