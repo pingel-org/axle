@@ -2,11 +2,9 @@
 
 Versions of the trigonometric functions sine, cosine, and tangent, require that the arguments are Angles.
 
-## Examples
+## Preamble
 
-Examples of the functions
-
-Imports and implicits
+Imports, implicits, etc
 
 ```scala mdoc:silent
 import edu.uci.ics.jung.graph.DirectedSparseGraph
@@ -31,7 +29,7 @@ import angleConverter.degree
 import angleConverter.radian
 ```
 
-Usage
+## Examples
 
 ```scala mdoc
 cosine(10d *: degree)
