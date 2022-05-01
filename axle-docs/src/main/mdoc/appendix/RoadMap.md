@@ -2,15 +2,25 @@
 
 See [Release Notes](ReleaseNotes.md) for the record of previously released features.
 
-* gallery images should be same width
-* look for opportunities to use `mdoc:silent`
+* Look for opportunities to use `mdoc:silent`
 * Copy some test cases to QuantumCircuits.md
+* Simplify "Installation"
+* Make dependencies clear in each section
 
-* make dependencies clear in each section
-* rename "Spokes"
-* simplify "Installation"
-* more exposition for Architecture, FP, Scala, Cats
-* Introduction: Objectives
+* Writing
+  * A few words in README for each section
+  * Introduction
+    * Write "Objectives"
+    * Smaller images for Gallery
+  * Foundation
+    * Architecture
+    * Functional Programming
+    * Scala
+    * Cats: Show, EQ, IO, Algebra, Spire
+    * rename "Spokes"
+    * rename "Resources"
+  * Units
+    * Quanta: fix Distance, Energy, Time links
 
 * tweet / post
 

@@ -5,7 +5,7 @@
 `UnittedQuantity` is the primary case class in `axle.quanta`
 
 The `axle.quanta` package models units of measurement.
-Via typeclasses, it implements expected operators like `+ - * over by`,
+Via typeclasses, it implements expected operators like `+`, `-`,
 a unit conversion operator `in`,
 and a right associative value constructor `*:`
 
@@ -18,8 +18,6 @@ Flow, Force, Frequency, Information, Mass, Money, MoneyFlow, MoneyPerForce, Powe
 and Volume.
 Axle's values are represented in such a way that a value's "quantum" is present in the type,
 meaning that nonsensical expressions like `mile + gram` can be rejected at compile time.
-
-![Distance conversions](/images/Distance.svg)
 
 Additionally, various values within the Quantum objects are imported.
 This package uses the definition of "Quantum" as "something that can
@@ -64,6 +62,8 @@ import cats.effect._
 dgVis.svg[IO]("@DOCWD@/images/Distance.svg").unsafeRunSync()
 ```
 
+![Distance conversions](/images/Distance.svg)
+
 ## Units
 
 A conversion graph must be created with type parameters specifying the numeric type to
@@ -79,12 +79,9 @@ import massConverter._
 implicit val powerConverter = Power.converterGraphK2[Double, DirectedSparseGraph]
 import powerConverter._
 
-//implicit val energyConverter = Energy.converterGraphK2[Double, DirectedSparseGraph]
-//import energyConverter._
-
 import axle.algebra.modules.doubleRationalModule
 
-// distanceConverter defined above
+// reuse distanceConverter defined in preceding section
 import distanceConverter._
 
 implicit val timeConverter = Time.converterGraphK2[Double, DirectedSparseGraph]
@@ -106,7 +103,7 @@ meter
 Values with units are constructed with the right-associative `*:` method on any spire `Number` type
 as long as a spire `Field` is implicitly available.
 
-```scala mdoc
+```scala mdoc:silent
 10d *: gram
 
 3d *: lightyear
@@ -142,7 +139,7 @@ Converting between quanta is not allowed, and is caught at compile time:
 
 A witness for the `cats.Show` typeclass is defined, `.show` will return a `String` representation.
 
-```scala mdoc
+```scala mdoc:passthrough
 import cats.implicits._
 
 (10d *: gram in kilogram).show
@@ -153,14 +150,16 @@ import cats.implicits._
 Addition and subtraction are defined on Quantity by converting the
 right Quantity to the unit of the left.
 
-```scala mdoc
+```scala mdoc:passthrough
 import spire.implicits.additiveGroupOps
 
-(7d *: mile) - (123d *: foot)
+((7d *: mile) - (123d *: foot)).show
+```
 
+```scala mdoc:passthrough
 {
   import spire.implicits._
-  (1d *: kilogram) + (10d *: gram)
+  ((1d *: kilogram) + (10d *: gram)).show
 }
 ```
 
@@ -172,13 +171,12 @@ Addition and subtraction between different quanta is rejected at compile time:
 
 Multiplication comes from Spire's `CModule` typeclass:
 
-```scala mdoc
+```scala mdoc:passthrough
 import spire.implicits.rightModuleOps
 
-(5.4 *: second) :* 100d
-
-(32d *: century) :* (1d/3)
+((5.4 *: second) :* 100d).show
 ```
 
-The methods `over` and `by` are used to multiply and divide other values with units.
-This behavior is not yet implemented.
+```scala mdoc:passthrough
+((32d *: century) :* (1d/3)).show
+```
