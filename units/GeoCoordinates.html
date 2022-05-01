@@ -60,8 +60,8 @@
         <li class="level2"><a href="Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="Quanta.html">Quanta</a></li>
         <li class="level2"><a href="UnittedTrigonometry.html">Unitted Trigonometry</a></li>
-        <li class="level2"><a href="FutureWork.html">Future Work</a></li>
         <li class="level2 active"><a href="#">Geo Coordinates</a></li>
+        <li class="level2"><a href="FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Math</li>
         <li class="level2"><a href="../math/Math.html">Math</a></li>
         <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
@@ -195,17 +195,20 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">GeoCoordinates</span><span>.</span><span class="identifier">geoCoordinatesLengthSpace</span></code></pre>
         <p>Use it to compute the points at 10% increments from SFO to HEL</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">midpoints</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">10</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">i</span><span> =&gt; </span><span class="identifier">geoCoordinatesLengthSpace</span><span>.</span><span class="identifier">onPath</span><span>(</span><span class="identifier">sfo</span><span>, </span><span class="identifier">hel</span><span>, </span><span class="identifier">i</span><span> / </span><span class="number-literal">10d</span><span>))</span></code></pre>
-        <p>37.618900000000004° N 122.37500000000003° W
-        45.13070460867812° N 119.34966960499106° W
-        52.538395227224065° N 115.40855064022753° W
-        59.76229827032038° N 109.88311454897514° W
-        66.62843399359917° N 101.39331801935985° W
-        72.70253233457194° N 86.91316673834633° W
-        76.8357649372965° N 61.093630209243706° W
-        77.01752181288721° N 25.892878424459116° W
-        73.11964173748505° N -0.9862308621078928° W
-        67.1423066577233° N -16.143753987066464° W
-        60.3172° N -24.9633° W</p>
+        <pre><code class="nohighlight"><span class="identifier">midpoints</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">show</span><span>)
+</span><span class="comment">// res2: IndexedSeq[String] = Vector(
+//   &quot;37.618900000000004° N 122.37500000000003° W&quot;,
+//   &quot;45.13070460867812° N 119.34966960499106° W&quot;,
+//   &quot;52.538395227224065° N 115.40855064022753° W&quot;,
+//   &quot;59.76229827032038° N 109.88311454897514° W&quot;,
+//   &quot;66.62843399359917° N 101.39331801935985° W&quot;,
+//   &quot;72.70253233457194° N 86.91316673834633° W&quot;,
+//   &quot;76.8357649372965° N 61.093630209243706° W&quot;,
+//   &quot;77.01752181288721° N 25.892878424459116° W&quot;,
+//   &quot;73.11964173748505° N -0.9862308621078928° W&quot;,
+//   &quot;67.1423066577233° N -16.143753987066464° W&quot;,
+//   &quot;60.3172° N -24.9633° W&quot;
+// )</span></code></pre>
         <p><img src="/images/sfo_hel.png" alt="SFO to HEL"></p>
 
       </main>

@@ -60,8 +60,8 @@
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
         <li class="level2"><a href="../units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
-        <li class="level2"><a href="../units/FutureWork.html">Future Work</a></li>
         <li class="level2"><a href="../units/GeoCoordinates.html">Geo Coordinates</a></li>
+        <li class="level2"><a href="../units/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Math</li>
         <li class="level2"><a href="../math/Math.html">Math</a></li>
         <li class="level2"><a href="../math/PythagoreanMeans.html">Pythagorean Means</a></li>
@@ -220,27 +220,27 @@
 // C&gt; Door #2: 
 // C&gt; Door #3: 
 // M&gt; Door #1: goat
-// M&gt; Door #2: goat, first choice
-// M&gt; Door #3: car
-// C&gt; Door #1: , revealed goat
+// M&gt; Door #2: car, first choice
+// M&gt; Door #3: goat
+// C&gt; Door #1: 
 // C&gt; Door #2: first choice
-// C&gt; Door #3: 
+// C&gt; Door #3: , revealed goat
 // endState: MontyHallState = MontyHallState(
-//   placement = Some(value = PlaceCar(door = 3)),
+//   placement = Some(value = PlaceCar(door = 2)),
 //   placed = true,
 //   firstChoice = Some(value = FirstChoice(door = 2)),
-//   reveal = Some(value = Reveal(door = 1)),
+//   reveal = Some(value = Reveal(door = 3)),
 //   secondChoice = Some(value = Left(value = Change()))
 // )</span></code></pre>
         <p>Display outcome to each player</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
-</span><span class="comment">// outcome: MontyHallOutcome = MontyHallOutcome(car = true)
+</span><span class="comment">// outcome: MontyHallOutcome = MontyHallOutcome(car = false)
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// C&gt; You won the car!
-// M&gt; Contestant won the car!</span></code></pre>
+</span><span class="comment">// C&gt; You won a goat
+// M&gt; Contestant won a goat</span></code></pre>
 
       </main>
 
