@@ -27,10 +27,20 @@ import angleConverter.°
 
 Locations of SFO and HEL airports:
 
-```scala mdoc
+```scala mdoc:silent
 val sfo = GeoCoordinates(37.6189 *: °, 122.3750 *: °)
+```
 
+```scala mdoc
+sfo.show
+```
+
+```scala mdoc:silent
 val hel = GeoCoordinates(60.3172 *: °, -24.9633 *: °)
+```
+
+```scala mdoc
+hel.show
 ```
 
 Import the `LengthSpace`
@@ -45,8 +55,8 @@ Use it to compute the points at 10% increments from SFO to HEL
 val midpoints = (0 to 10).map(i => geoCoordinatesLengthSpace.onPath(sfo, hel, i / 10d))
 ```
 
-```scala mdoc:passthrough
-midpoints map { _.show } map { println }
+```scala mdoc
+midpoints.map(_.show)
 ```
 
 ![SFO to HEL](/images/sfo_hel.png)
