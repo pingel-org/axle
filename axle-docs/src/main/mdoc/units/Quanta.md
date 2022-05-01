@@ -36,17 +36,22 @@ about relative scale:
 Distance().wikipediaUrl
 ```
 
-A visualization of each Quantum (like the one for Distance shown above) is produced with:
+A visualization of the Units of Measurement for a given Quantum can be produced by first creating the converter:
 
 ```scala mdoc:silent
 import edu.uci.ics.jung.graph.DirectedSparseGraph
 import cats.implicits._
-import cats.Show
 import spire.algebra.Field
 import axle.algebra.modules.doubleRationalModule
 
 implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 implicit val distanceConverter = Distance.converterGraphK2[Double, DirectedSparseGraph]
+```
+
+Create a `DirectedGraph` visualization for it.
+
+```scala mdoc:silent
+import cats.Show
 
 implicit val showDDAt1 = new Show[Double => Double] {
   def show(f: Double => Double): String = f(1d).toString
@@ -55,7 +60,11 @@ implicit val showDDAt1 = new Show[Double => Double] {
 import axle.visualize._
 
 val dgVis = DirectedGraphVisualization[DirectedSparseGraph[UnitOfMeasurement[Distance],Double => Double], UnitOfMeasurement[Distance], Double => Double](distanceConverter.conversionGraph)
+```
 
+Render to an SVG.
+
+```scala mdoc:silent
 import axle.web._
 import cats.effect._
 
@@ -170,7 +179,7 @@ Addition and subtraction between different quanta is rejected at compile time:
 (1d *: gram) + (2d *: foot)
 ```
 
-Multiplication comes from Spire's `CModule` typeclass:
+Scalar multiplication comes from Spire's `CModule` typeclass:
 
 ```scala mdoc
 import spire.implicits.rightModuleOps
