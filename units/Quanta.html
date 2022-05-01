@@ -158,8 +158,8 @@
           <li class="level1"><a href="#quanta-units-and-conversions">Quanta, Units, and Conversions</a></li>
           <li class="level1"><a href="#units">Units</a></li>
           <li class="level1"><a href="#construction">Construction</a></li>
-          <li class="level1"><a href="#conversion">Conversion</a></li>
           <li class="level1"><a href="#show">Show</a></li>
+          <li class="level1"><a href="#conversion">Conversion</a></li>
           <li class="level1"><a href="#math">Math</a></li>
         </ul>
         
@@ -273,6 +273,14 @@
 
 </span><span class="number-literal">200d</span><span> *: </span><span class="identifier">watt</span></code></pre>
         
+        <h2 id="show" class="section"><a class="anchor-link left" href="#show"><i class="icofont-laika">&#xef71;</i></a>Show</h2>
+        <p>A witness for the <code>cats.Show</code> typeclass is defined.
+        <code>show</code> will return a <code>String</code> representation.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+(</span><span class="number-literal">10d</span><span> *: </span><span class="identifier">gram</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res10: String = &quot;10.0 g&quot;</span></code></pre>
+        
         <h2 id="conversion" class="section"><a class="anchor-link left" href="#conversion"><i class="icofont-laika">&#xef71;</i></a>Conversion</h2>
         <p>A Quantum defines a directed graph, where the UnitsOfMeasurement
         are the vertices, and the Conversions define the directed edges.
@@ -280,15 +288,8 @@
         <p>Quantities can be converted into other units of measurement.
         This is possible as long as 1) the values are in the same
         Quantum, and 2) there is a path in the Quantum between the two.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="number-literal">10d</span><span> *: </span><span class="identifier">gram</span><span> </span><span class="identifier">in</span><span> </span><span class="identifier">kilogram</span><span>
-</span><span class="comment">// res10: UnittedQuantity[Mass, Double] = UnittedQuantity(
-//   magnitude = 0.010000000000000002,
-//   unit = UnitOfMeasurement(
-//     name = &quot;kilogram&quot;,
-//     symbol = &quot;Kg&quot;,
-//     wikipediaUrl = None
-//   )
-// )</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>(</span><span class="number-literal">10d</span><span> *: </span><span class="identifier">gram</span><span> </span><span class="identifier">in</span><span> </span><span class="identifier">kilogram</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res11: String = &quot;0.010000000000000002 Kg&quot;</span></code></pre>
         <p>Converting between quanta is not allowed, and is caught at compile time:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span>(</span><span class="number-literal">1</span><span> *: </span><span class="identifier">gram</span><span>) </span><span class="identifier">in</span><span> </span><span class="identifier">mile</span><span>
 </span><span class="comment">// error: type mismatch;
@@ -296,13 +297,6 @@
 //  required: axle.quanta.UnitOfMeasurement[axle.quanta.Mass]
 // (1 *: gram) in mile
 //                ^^^^</span></code></pre>
-        
-        <h2 id="show" class="section"><a class="anchor-link left" href="#show"><i class="icofont-laika">&#xef71;</i></a>Show</h2>
-        <p>A witness for the <code>cats.Show</code> typeclass is defined, <code>.show</code> will return a <code>String</code> representation.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
-
-(</span><span class="number-literal">10d</span><span> *: </span><span class="identifier">gram</span><span> </span><span class="identifier">in</span><span> </span><span class="identifier">kilogram</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res12: String = &quot;0.010000000000000002 Kg&quot;</span></code></pre>
         
         <h2 id="math" class="section"><a class="anchor-link left" href="#math"><i class="icofont-laika">&#xef71;</i></a>Math</h2>
         <p>Addition and subtraction are defined on Quantity by converting the

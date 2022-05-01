@@ -233,8 +233,8 @@
 //     )
 //   ),
 //   colorOf = &lt;function2&gt;,
-//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$9614/1558397474@ac09ad9,
-//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$8930/846501711@3a2d9a96
+//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$9598/1223727249@23aa1018,
+//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$8919/41035331@16617e8d
 // )</span></code></pre>
         <p>Create the SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
@@ -284,8 +284,8 @@
 //     )
 //   ),
 //   colorOf = &lt;function2&gt;,
-//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$9614/1558397474@ac09ad9,
-//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$8930/846501711@3a2d9a96
+//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$9598/1223727249@23aa1018,
+//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$8919/41035331@16617e8d
 // )</span></code></pre>
         <p>Create the second SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
@@ -316,11 +316,11 @@
   </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">modules</span><span>.</span><span class="identifier">doubleRationalModule</span><span>
   </span><span class="type-name">Time</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
 }
-</span><span class="comment">// timeConverter: axle.quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[axle.quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with axle.quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@7f426766
+</span><span class="comment">// timeConverter: axle.quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[axle.quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with axle.quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@2c364225
 </span><span class="keyword">import</span><span> </span><span class="identifier">timeConverter</span><span>.</span><span class="identifier">second</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">dataUpdates</span><span>: </span><span class="type-name">Observable</span><span>[</span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>]] = </span><span class="identifier">intervalScan</span><span>(</span><span class="identifier">initial</span><span>, </span><span class="identifier">tick</span><span>, </span><span class="number-literal">1d</span><span> *: </span><span class="identifier">second</span><span>)
-</span><span class="comment">// dataUpdates: Observable[Map[String, Double]] = monix.reactive.internal.operators.ScanObservable@400e9617</span></code></pre>
+</span><span class="comment">// dataUpdates: Observable[Map[String, Double]] = monix.reactive.internal.operators.ScanObservable@200f0cc3</span></code></pre>
         <p>Create <code>CurrentValueSubscriber</code>, which will be used by the <code>BarChart</code> to get the latest value</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="type-name">CurrentValueSubscriber</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">monix</span><span>.</span><span class="identifier">execution</span><span>.</span><span class="type-name">Scheduler</span><span>.</span><span class="type-name">Implicits</span><span>.</span><span class="identifier">global</span><span>
