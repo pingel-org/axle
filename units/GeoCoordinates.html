@@ -185,45 +185,12 @@
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">angleConverter</span><span> = </span><span class="type-name">Angle</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
 </span><span class="keyword">import</span><span> </span><span class="identifier">angleConverter</span><span>.°</span></code></pre>
         <p>Locations of SFO and HEL airports:</p>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sfo</span><span> = </span><span class="type-name">GeoCoordinates</span><span>(</span><span class="number-literal">37.6189</span><span> *: °, </span><span class="number-literal">122.3750</span><span> *: °)
-</span><span class="comment">// sfo: GeoCoordinates[Double] = GeoCoordinates(
-//   latitude = UnittedQuantity(
-//     magnitude = 37.6189,
-//     unit = UnitOfMeasurement(
-//       name = &quot;degree&quot;,
-//       symbol = &quot;°&quot;,
-//       wikipediaUrl = Some(value = &quot;http://en.wikipedia.org/wiki/Degree_(angle)&quot;)
-//     )
-//   ),
-//   longitude = UnittedQuantity(
-//     magnitude = 122.375,
-//     unit = UnitOfMeasurement(
-//       name = &quot;degree&quot;,
-//       symbol = &quot;°&quot;,
-//       wikipediaUrl = Some(value = &quot;http://en.wikipedia.org/wiki/Degree_(angle)&quot;)
-//     )
-//   )
-// )
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">hel</span><span> = </span><span class="type-name">GeoCoordinates</span><span>(</span><span class="number-literal">60.3172</span><span> *: °, -</span><span class="number-literal">24.9633</span><span> *: °)
-</span><span class="comment">// hel: GeoCoordinates[Double] = GeoCoordinates(
-//   latitude = UnittedQuantity(
-//     magnitude = 60.3172,
-//     unit = UnitOfMeasurement(
-//       name = &quot;degree&quot;,
-//       symbol = &quot;°&quot;,
-//       wikipediaUrl = Some(value = &quot;http://en.wikipedia.org/wiki/Degree_(angle)&quot;)
-//     )
-//   ),
-//   longitude = UnittedQuantity(
-//     magnitude = -24.9633,
-//     unit = UnitOfMeasurement(
-//       name = &quot;degree&quot;,
-//       symbol = &quot;°&quot;,
-//       wikipediaUrl = Some(value = &quot;http://en.wikipedia.org/wiki/Degree_(angle)&quot;)
-//     )
-//   )
-// )</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sfo</span><span> = </span><span class="type-name">GeoCoordinates</span><span>(</span><span class="number-literal">37.6189</span><span> *: °, </span><span class="number-literal">122.3750</span><span> *: °)</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">sfo</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res0: String = &quot;37.6189° N 122.375° W&quot;</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">hel</span><span> = </span><span class="type-name">GeoCoordinates</span><span>(</span><span class="number-literal">60.3172</span><span> *: °, -</span><span class="number-literal">24.9633</span><span> *: °)</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">hel</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res1: String = &quot;60.3172° N -24.9633° W&quot;</span></code></pre>
         <p>Import the <code>LengthSpace</code></p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">GeoCoordinates</span><span>.</span><span class="identifier">geoCoordinatesLengthSpace</span></code></pre>
         <p>Use it to compute the points at 10% increments from SFO to HEL</p>
