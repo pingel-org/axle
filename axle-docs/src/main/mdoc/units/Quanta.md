@@ -139,7 +139,7 @@ Converting between quanta is not allowed, and is caught at compile time:
 
 A witness for the `cats.Show` typeclass is defined, `.show` will return a `String` representation.
 
-```scala mdoc:passthrough
+```scala mdoc
 import cats.implicits._
 
 (10d *: gram in kilogram).show
@@ -150,13 +150,13 @@ import cats.implicits._
 Addition and subtraction are defined on Quantity by converting the
 right Quantity to the unit of the left.
 
-```scala mdoc:passthrough
+```scala mdoc
 import spire.implicits.additiveGroupOps
 
 ((7d *: mile) - (123d *: foot)).show
 ```
 
-```scala mdoc:passthrough
+```scala mdoc
 {
   import spire.implicits._
   ((1d *: kilogram) + (10d *: gram)).show
@@ -171,12 +171,12 @@ Addition and subtraction between different quanta is rejected at compile time:
 
 Multiplication comes from Spire's `CModule` typeclass:
 
-```scala mdoc:passthrough
+```scala mdoc
 import spire.implicits.rightModuleOps
 
 ((5.4 *: second) :* 100d).show
 ```
 
-```scala mdoc:passthrough
+```scala mdoc
 ((32d *: century) :* (1d/3)).show
 ```
