@@ -143,7 +143,7 @@ Quantum, and 2) there is a path in the Quantum between the two.
 Converting between quanta is not allowed, and is caught at compile time:
 
 ```scala mdoc:fail
-((1 *: gram) in mile).show
+(1 *: gram) in mile
 ```
 
 ## Math
