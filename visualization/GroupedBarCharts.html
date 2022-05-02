@@ -169,22 +169,14 @@
         
         <h2 id="example" class="section"><a class="anchor-link left" href="#example"><i class="icofont-laika">&#xef71;</i></a>Example</h2>
         <p>The following example dataset:</p>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sales</span><span> = </span><span class="type-name">Map</span><span>(
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sales</span><span> = </span><span class="type-name">Map</span><span>(
   (</span><span class="string-literal">&quot;apple&quot;</span><span>, </span><span class="number-literal">2011</span><span>) -&gt; </span><span class="number-literal">43.0</span><span>,
   (</span><span class="string-literal">&quot;apple&quot;</span><span>, </span><span class="number-literal">2012</span><span>) -&gt; </span><span class="number-literal">83.8</span><span>,
   (</span><span class="string-literal">&quot;banana&quot;</span><span>, </span><span class="number-literal">2011</span><span>) -&gt; </span><span class="number-literal">11.3</span><span>,
   (</span><span class="string-literal">&quot;banana&quot;</span><span>, </span><span class="number-literal">2012</span><span>) -&gt; </span><span class="number-literal">77.9</span><span>,
   (</span><span class="string-literal">&quot;coconut&quot;</span><span>, </span><span class="number-literal">2011</span><span>) -&gt; </span><span class="number-literal">88.0</span><span>,
   (</span><span class="string-literal">&quot;coconut&quot;</span><span>, </span><span class="number-literal">2012</span><span>) -&gt; </span><span class="number-literal">10.1</span><span>
-)
-</span><span class="comment">// sales: Map[(String, Int), Double] = HashMap(
-//   (&quot;banana&quot;, 2011) -&gt; 11.3,
-//   (&quot;apple&quot;, 2012) -&gt; 83.8,
-//   (&quot;banana&quot;, 2012) -&gt; 77.9,
-//   (&quot;coconut&quot;, 2012) -&gt; 10.1,
-//   (&quot;apple&quot;, 2011) -&gt; 43.0,
-//   (&quot;coconut&quot;, 2011) -&gt; 88.0
-// )</span></code></pre>
+)</span></code></pre>
         <p>Shared imports</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
@@ -193,49 +185,14 @@
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span></code></pre>
         <p>The data can be grouped in two ways to produce bar charts:</p>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">chart</span><span> = </span><span class="type-name">BarChartGrouped</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Map</span><span>[(</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>), </span><span class="type-name">Double</span><span>], </span><span class="type-name">String</span><span>](
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">chart</span><span> = </span><span class="type-name">BarChartGrouped</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Map</span><span>[(</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>), </span><span class="type-name">Double</span><span>], </span><span class="type-name">String</span><span>](
   () =&gt; </span><span class="identifier">sales</span><span>,
   </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;fruit sales&quot;</span><span>),
   </span><span class="identifier">colorOf</span><span> = (</span><span class="identifier">label</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">year</span><span>: </span><span class="type-name">Int</span><span>) =&gt; </span><span class="identifier">year</span><span> </span><span class="keyword">match</span><span> {
     </span><span class="keyword">case</span><span> </span><span class="number-literal">2011</span><span> =&gt; </span><span class="identifier">red</span><span>
     </span><span class="keyword">case</span><span> </span><span class="number-literal">2012</span><span> =&gt; </span><span class="identifier">blue</span><span>
   }
-)
-</span><span class="comment">// chart: BarChartGrouped[String, Int, Double, Map[(String, Int), Double], String] = BarChartGrouped(
-//   dataFn = &lt;function0&gt;,
-//   drawKey = true,
-//   width = 700,
-//   height = 600,
-//   border = 50,
-//   barWidthPercent = 0.8,
-//   keyLeftPadding = 20,
-//   keyTopPadding = 50,
-//   keyWidth = 80,
-//   title = Some(value = &quot;fruit sales&quot;),
-//   keyTitle = None,
-//   normalFontName = &quot;Courier New&quot;,
-//   normalFontSize = 12,
-//   titleFontName = &quot;Palatino&quot;,
-//   titleFontSize = 20,
-//   xAxis = None,
-//   xAxisLabel = None,
-//   yAxisLabel = None,
-//   labelAngle = Some(
-//     value = UnittedQuantity(
-//       magnitude = 36.0,
-//       unit = UnitOfMeasurement(
-//         name = &quot;degree&quot;,
-//         symbol = &quot;°&quot;,
-//         wikipediaUrl = Some(
-//           value = &quot;http://en.wikipedia.org/wiki/Degree_(angle)&quot;
-//         )
-//       )
-//     )
-//   ),
-//   colorOf = &lt;function2&gt;,
-//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$9611/1657359929@70c1e028,
-//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$8931/185252088@755be098
-// )</span></code></pre>
+)</span></code></pre>
         <p>Create the SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
@@ -243,7 +200,7 @@
 </span><span class="identifier">chart</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/barchart1.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
         <p><img src="/images/barchart1.svg" alt="barchart1"></p>
         <p>Or alternatively</p>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">chart2</span><span> = </span><span class="type-name">BarChartGrouped</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Map</span><span>[(</span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>), </span><span class="type-name">Double</span><span>], </span><span class="type-name">String</span><span>](
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">chart2</span><span> = </span><span class="type-name">BarChartGrouped</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Map</span><span>[(</span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>), </span><span class="type-name">Double</span><span>], </span><span class="type-name">String</span><span>](
   () =&gt; </span><span class="identifier">sales</span><span> </span><span class="identifier">map</span><span> { </span><span class="keyword">case</span><span> (</span><span class="identifier">k</span><span>, </span><span class="identifier">v</span><span>) =&gt; (</span><span class="identifier">k</span><span class="number-literal">._2</span><span>, </span><span class="identifier">k</span><span class="number-literal">._1</span><span>) -&gt; </span><span class="identifier">v</span><span>},
   </span><span class="identifier">colorOf</span><span> = (</span><span class="identifier">year</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">label</span><span>: </span><span class="type-name">String</span><span>) =&gt; </span><span class="identifier">label</span><span> </span><span class="keyword">match</span><span> {
     </span><span class="keyword">case</span><span> </span><span class="string-literal">&quot;apple&quot;</span><span> =&gt; </span><span class="identifier">red</span><span>
@@ -251,42 +208,7 @@
     </span><span class="keyword">case</span><span> </span><span class="string-literal">&quot;coconut&quot;</span><span> =&gt; </span><span class="identifier">brown</span><span>
   },
   </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;fruit sales&quot;</span><span>)
-)
-</span><span class="comment">// chart2: BarChartGrouped[Int, String, Double, Map[(Int, String), Double], String] = BarChartGrouped(
-//   dataFn = &lt;function0&gt;,
-//   drawKey = true,
-//   width = 700,
-//   height = 600,
-//   border = 50,
-//   barWidthPercent = 0.8,
-//   keyLeftPadding = 20,
-//   keyTopPadding = 50,
-//   keyWidth = 80,
-//   title = Some(value = &quot;fruit sales&quot;),
-//   keyTitle = None,
-//   normalFontName = &quot;Courier New&quot;,
-//   normalFontSize = 12,
-//   titleFontName = &quot;Palatino&quot;,
-//   titleFontSize = 20,
-//   xAxis = None,
-//   xAxisLabel = None,
-//   yAxisLabel = None,
-//   labelAngle = Some(
-//     value = UnittedQuantity(
-//       magnitude = 36.0,
-//       unit = UnitOfMeasurement(
-//         name = &quot;degree&quot;,
-//         symbol = &quot;°&quot;,
-//         wikipediaUrl = Some(
-//           value = &quot;http://en.wikipedia.org/wiki/Degree_(angle)&quot;
-//         )
-//       )
-//     )
-//   ),
-//   colorOf = &lt;function2&gt;,
-//   hoverOf = axle.visualize.BarChartGrouped$$$Lambda$9611/1657359929@70c1e028,
-//   linkOf = axle.visualize.BarChartGrouped$$$Lambda$8931/185252088@755be098
-// )</span></code></pre>
+)</span></code></pre>
         <p>Create the second SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
@@ -304,23 +226,18 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">monix</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="identifier">intervalScan</span></code></pre>
         <p>Define stream of data updates</p>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">groups</span><span> = </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;foo&quot;</span><span>, </span><span class="string-literal">&quot;bar&quot;</span><span>)
-</span><span class="comment">// groups: Vector[String] = Vector(&quot;foo&quot;, &quot;bar&quot;)
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">groups</span><span> = </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;foo&quot;</span><span>, </span><span class="string-literal">&quot;bar&quot;</span><span>)
 </span><span class="keyword">val</span><span> </span><span class="identifier">initial</span><span> = </span><span class="type-name">Map</span><span>(</span><span class="string-literal">&quot;foo&quot;</span><span> -&gt; </span><span class="number-literal">1d</span><span>, </span><span class="string-literal">&quot;bar&quot;</span><span> -&gt; </span><span class="number-literal">1d</span><span>)
-</span><span class="comment">// initial: Map[String, Double] = Map(&quot;foo&quot; -&gt; 1.0, &quot;bar&quot; -&gt; 1.0)
-</span><span>
+
 </span><span class="keyword">val</span><span> </span><span class="identifier">tick</span><span> = (</span><span class="identifier">previous</span><span>: </span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>]) =&gt; </span><span class="identifier">previous</span><span> + (</span><span class="string-literal">&quot;foo&quot;</span><span> -&gt; </span><span class="identifier">nextDouble</span><span>())
-</span><span class="comment">// tick: Map[String, Double] =&gt; Map[String, Double] = &lt;function1&gt;
-</span><span>
+
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">timeConverter</span><span> = {
   </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">modules</span><span>.</span><span class="identifier">doubleRationalModule</span><span>
   </span><span class="type-name">Time</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
 }
-</span><span class="comment">// timeConverter: axle.quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[axle.quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with axle.quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@5870d57f
 </span><span class="keyword">import</span><span> </span><span class="identifier">timeConverter</span><span>.</span><span class="identifier">second</span><span>
 
-</span><span class="keyword">val</span><span> </span><span class="identifier">dataUpdates</span><span>: </span><span class="type-name">Observable</span><span>[</span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>]] = </span><span class="identifier">intervalScan</span><span>(</span><span class="identifier">initial</span><span>, </span><span class="identifier">tick</span><span>, </span><span class="number-literal">1d</span><span> *: </span><span class="identifier">second</span><span>)
-</span><span class="comment">// dataUpdates: Observable[Map[String, Double]] = monix.reactive.internal.operators.ScanObservable@6421d86e</span></code></pre>
+</span><span class="keyword">val</span><span> </span><span class="identifier">dataUpdates</span><span>: </span><span class="type-name">Observable</span><span>[</span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>]] = </span><span class="identifier">intervalScan</span><span>(</span><span class="identifier">initial</span><span>, </span><span class="identifier">tick</span><span>, </span><span class="number-literal">1d</span><span> *: </span><span class="identifier">second</span><span>)</span></code></pre>
         <p>Create <code>CurrentValueSubscriber</code>, which will be used by the <code>BarChart</code> to get the latest value</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="type-name">CurrentValueSubscriber</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">monix</span><span>.</span><span class="identifier">execution</span><span>.</span><span class="type-name">Scheduler</span><span>.</span><span class="type-name">Implicits</span><span>.</span><span class="identifier">global</span><span>

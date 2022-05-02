@@ -179,21 +179,8 @@
         <p>Some alternatives that are not in Axle include</p>
         
         <h2 id="recursive-with-memoization" class="section"><a class="anchor-link left" href="#recursive-with-memoization"><i class="icofont-laika">&#xef71;</i></a>Recursive with memoization</h2>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">memo</span><span> = </span><span class="identifier">collection</span><span>.</span><span class="identifier">mutable</span><span>.</span><span class="type-name">Map</span><span>(</span><span class="number-literal">0</span><span> -&gt; </span><span class="number-literal">0L</span><span>, </span><span class="number-literal">1</span><span> -&gt; </span><span class="number-literal">1L</span><span>)
-</span><span class="comment">// memo: collection.mutable.Map[Int, Long] = HashMap(
-//   0 -&gt; 0L,
-//   1 -&gt; 1L,
-//   2 -&gt; 1L,
-//   3 -&gt; 2L,
-//   4 -&gt; 3L,
-//   5 -&gt; 5L,
-//   6 -&gt; 8L,
-//   7 -&gt; 13L,
-//   8 -&gt; 21L,
-//   9 -&gt; 34L,
-//   10 -&gt; 55L
-// )
-</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">memo</span><span> = </span><span class="identifier">collection</span><span>.</span><span class="identifier">mutable</span><span>.</span><span class="type-name">Map</span><span>(</span><span class="number-literal">0</span><span> -&gt; </span><span class="number-literal">0L</span><span>, </span><span class="number-literal">1</span><span> -&gt; </span><span class="number-literal">1L</span><span>)
+
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">fibonacciRecursivelyWithMemo</span><span>(</span><span class="identifier">n</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">Long</span><span> = {
   </span><span class="keyword">if</span><span> (</span><span class="identifier">memo</span><span>.</span><span class="identifier">contains</span><span>(</span><span class="identifier">n</span><span>)) {
     </span><span class="identifier">memo</span><span>(</span><span class="identifier">n</span><span>)
@@ -202,9 +189,8 @@
     </span><span class="identifier">memo</span><span> += </span><span class="identifier">n</span><span> -&gt; </span><span class="identifier">result</span><span>
     </span><span class="identifier">result</span><span>
   }
-}
-
-</span><span class="identifier">fibonacciRecursivelyWithMemo</span><span>(</span><span class="number-literal">10</span><span>)
+}</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">fibonacciRecursivelyWithMemo</span><span>(</span><span class="number-literal">10</span><span>)
 </span><span class="comment">// res2: Long = 55L</span></code></pre>
         
         <h2 id="recursive-squaring" class="section"><a class="anchor-link left" href="#recursive-squaring"><i class="icofont-laika">&#xef71;</i></a>Recursive squaring</h2>
@@ -229,8 +215,7 @@
         By employing the general-purpose strategy for exponentiation called &quot;recursive squaring&quot;,
         we can achieve sub-linear time.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">base</span><span> = </span><span class="identifier">fromColumnMajorArray</span><span>(</span><span class="number-literal">2</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">1d</span><span>, </span><span class="number-literal">1d</span><span>, </span><span class="number-literal">0d</span><span>).</span><span class="identifier">toArray</span><span>)
-</span><span class="comment">// base: DoubleMatrix = [1.000000, 1.000000; 1.000000, 0.000000]
-</span><span>
+
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">fibonacciSubLinear</span><span>(</span><span class="identifier">n</span><span>: </span><span class="type-name">Int</span><span>): </span><span class="type-name">Long</span><span> = </span><span class="identifier">n</span><span> </span><span class="keyword">match</span><span> {
   </span><span class="keyword">case</span><span> </span><span class="number-literal">0</span><span> =&gt; </span><span class="number-literal">0L</span><span>
   </span><span class="keyword">case</span><span> </span><span class="identifier">_</span><span> =&gt; </span><span class="identifier">exponentiateByRecursiveSquaring</span><span>(</span><span class="identifier">base</span><span>, </span><span class="identifier">n</span><span>).</span><span class="identifier">get</span><span>(</span><span class="number-literal">0</span><span>, </span><span class="number-literal">1</span><span>).</span><span class="identifier">toLong</span><span>

@@ -284,10 +284,10 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">rng</span><span> = </span><span class="type-name">Random</span><span>.</span><span class="identifier">generatorFromSeed</span><span>(</span><span class="type-name">Seed</span><span>(</span><span class="number-literal">42</span><span>))
-</span><span class="comment">// rng: spire.random.rng.Cmwc5 = spire.random.rng.Cmwc5@6a098255</span></code></pre>
+</span><span class="comment">// rng: spire.random.rng.Cmwc5 = spire.random.rng.Cmwc5@489c4332</span></code></pre>
         <p>And then the <code>.sample</code> syntax:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">sampler</span><span>.</span><span class="identifier">_</span></code></pre>
-        <p>Note that it must be provided with a Spire <code>Generator</code>.
+        <p><code>sample</code> requires a Spire <code>Generator</code>.
         It also requires context bounds on the value type <code>V</code> that give the method
         the ability to produces values with a distribution conforming to the probability model.</p>
         <pre><code class="nohighlight"><span>(</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">10</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> =&gt; </span><span class="identifier">fairCoin</span><span>.</span><span class="identifier">sample</span><span>(</span><span class="identifier">rng</span><span>) }
@@ -302,9 +302,8 @@
 //   &#39;TAIL,
 //   &#39;TAIL,
 //   &#39;HEAD
-// )
-</span><span>
-(</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">10</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> =&gt; </span><span class="identifier">biasedCoin</span><span>.</span><span class="identifier">sample</span><span>(</span><span class="identifier">rng</span><span>) }
+// )</span></code></pre>
+        <pre><code class="nohighlight"><span>(</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">10</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> =&gt; </span><span class="identifier">biasedCoin</span><span>.</span><span class="identifier">sample</span><span>(</span><span class="identifier">rng</span><span>) }
 </span><span class="comment">// res2: IndexedSeq[Symbol] = Vector(
 //   &#39;HEAD,
 //   &#39;HEAD,
@@ -316,19 +315,16 @@
 //   &#39;HEAD,
 //   &#39;HEAD,
 //   &#39;HEAD
-// )
-</span><span>
-(</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">10</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> =&gt; </span><span class="identifier">d6</span><span>.</span><span class="identifier">sample</span><span>(</span><span class="identifier">rng</span><span>) }
+// )</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>(</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">10</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> =&gt; </span><span class="identifier">d6</span><span>.</span><span class="identifier">sample</span><span>(</span><span class="identifier">rng</span><span>) }
 </span><span class="comment">// res3: IndexedSeq[Int] = Vector(3, 2, 5, 2, 6, 2, 6, 1, 1, 5)</span></code></pre>
         <p>Simulate 1k rolls of one d6</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">rolls</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">1000</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> =&gt; </span><span class="identifier">d6</span><span>.</span><span class="identifier">sample</span><span>(</span><span class="identifier">rng</span><span>) }</span></code></pre>
         <p>Then tally them</p>
-        <pre><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringInt</span><span>: </span><span class="type-name">CRing</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
-</span><span class="comment">// ringInt: CRing[Int] = spire.std.IntAlgebra@5e60f283
-</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">talliable</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringInt</span><span>: </span><span class="type-name">CRing</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
 
-</span><span class="keyword">val</span><span> </span><span class="identifier">oneKd6Histogram</span><span> = </span><span class="identifier">rolls</span><span>.</span><span class="identifier">tally</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">talliable</span><span>.</span><span class="identifier">_</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">oneKd6Histogram</span><span> = </span><span class="identifier">rolls</span><span>.</span><span class="identifier">tally</span><span>
 </span><span class="comment">// oneKd6Histogram: Map[Int, Int] = Map(
 //   5 -&gt; 167,
 //   1 -&gt; 160,
@@ -345,7 +341,7 @@
   </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;1,000 d6 samples&quot;</span><span>),
   </span><span class="identifier">labelAngle</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="number-literal">0d</span><span> *: </span><span class="identifier">angleDouble</span><span>.</span><span class="identifier">degree</span><span>),
   </span><span class="identifier">drawKey</span><span> = </span><span class="boolean-literal">false</span><span>)</span></code></pre>
-        <p>Create SVG</p>
+        <p>Create the SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">d6oneKvis</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/d6-1Ksamples.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
         <p><img src="/images/d6-1Ksamples.svg" alt="1k d6 samples"></p>
         
@@ -468,9 +464,23 @@
         <p>The most straigtfoward workaround is just to conjure the monad witness
         directly and use it, passing the model in as the sole argument to the
         first parameter group.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">monad</span><span> = </span><span class="type-name">ConditionalProbabilityTable</span><span>.</span><span class="identifier">monadWitness</span><span>[</span><span class="type-name">Rational</span><span>]
-
-</span><span class="identifier">monad</span><span>.</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">d6</span><span>) { </span><span class="identifier">a</span><span> =&gt; </span><span class="identifier">monad</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">d6</span><span>) { </span><span class="identifier">b</span><span> =&gt; </span><span class="identifier">a</span><span> + </span><span class="identifier">b</span><span> } }</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">monad</span><span> = </span><span class="type-name">ConditionalProbabilityTable</span><span>.</span><span class="identifier">monadWitness</span><span>[</span><span class="type-name">Rational</span><span>]</span></code></pre>
+        <pre><code class="nohighlight"><span class="identifier">monad</span><span>.</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">d6</span><span>) { </span><span class="identifier">a</span><span> =&gt; </span><span class="identifier">monad</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">d6</span><span>) { </span><span class="identifier">b</span><span> =&gt; </span><span class="identifier">a</span><span> + </span><span class="identifier">b</span><span> } }
+</span><span class="comment">// res11: ConditionalProbabilityTable[Int, Rational] = ConditionalProbabilityTable(
+//   p = HashMap(
+//     5 -&gt; 1/9,
+//     10 -&gt; 1/12,
+//     6 -&gt; 5/36,
+//     9 -&gt; 1/9,
+//     2 -&gt; 1/36,
+//     12 -&gt; 1/36,
+//     7 -&gt; 1/6,
+//     3 -&gt; 1/18,
+//     11 -&gt; 1/18,
+//     8 -&gt; 5/36,
+//     4 -&gt; 1/12
+//   )
+// )</span></code></pre>
         <p>Another strategy to use <code>map</code> and <code>flatMap</code> directly on
         the model is a type that can be seen as <code>M[_]</code> along with
         a type annotation:</p>
@@ -557,7 +567,7 @@
     }
   }</span></code></pre>
         <p>An example of that pattern: &quot;if heads, d6+d6, otherwise d10+d10&quot;</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Eq</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Eq</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">headsD6D6taildD10D10</span><span> = </span><span class="identifier">monad</span><span>.</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">fairCoin</span><span>) { </span><span class="identifier">side</span><span> =&gt;
   </span><span class="keyword">if</span><span>( </span><span class="type-name">Eq</span><span>[</span><span class="type-name">Symbol</span><span>].</span><span class="identifier">eqv</span><span>(</span><span class="identifier">side</span><span>, </span><span class="identifier">head</span><span>) ) {
@@ -565,30 +575,7 @@
   } </span><span class="keyword">else</span><span> {
     </span><span class="identifier">monad</span><span>.</span><span class="identifier">flatMap</span><span>(</span><span class="identifier">d10</span><span>) { </span><span class="identifier">a</span><span> =&gt; </span><span class="identifier">monad</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">d10</span><span>) { </span><span class="identifier">b</span><span> =&gt; </span><span class="identifier">a</span><span> + </span><span class="identifier">b</span><span> } }
   }
-}
-</span><span class="comment">// headsD6D6taildD10D10: ConditionalProbabilityTable[Int, Rational] = ConditionalProbabilityTable(
-//   p = HashMap(
-//     5 -&gt; 17/225,
-//     10 -&gt; 13/150,
-//     14 -&gt; 7/200,
-//     20 -&gt; 1/200,
-//     6 -&gt; 17/180,
-//     9 -&gt; 43/450,
-//     13 -&gt; 1/25,
-//     2 -&gt; 17/900,
-//     17 -&gt; 1/50,
-//     12 -&gt; 53/900,
-//     7 -&gt; 17/150,
-//     3 -&gt; 17/450,
-//     18 -&gt; 3/200,
-//     16 -&gt; 1/40,
-//     11 -&gt; 7/90,
-//     8 -&gt; 47/450,
-//     19 -&gt; 1/100,
-//     4 -&gt; 17/300,
-//     15 -&gt; 3/100
-//   )
-// )</span></code></pre>
+}</span></code></pre>
         <p>Create visualization</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">iffyChart</span><span> = </span><span class="type-name">BarChart</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">Rational</span><span>, </span><span class="type-name">ConditionalProbabilityTable</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">Rational</span><span>], </span><span class="type-name">String</span><span>](
   () =&gt; </span><span class="identifier">headsD6D6taildD10D10</span><span>,
@@ -597,7 +584,7 @@
   </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;if heads, d6+d6, else d10+d10&quot;</span><span>),
   </span><span class="identifier">labelAngle</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="number-literal">0d</span><span> *: </span><span class="identifier">angleDouble</span><span>.</span><span class="identifier">degree</span><span>),
   </span><span class="identifier">drawKey</span><span> = </span><span class="boolean-literal">false</span><span>)</span></code></pre>
-        <p>Create SVG</p>
+        <p>Create the SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">iffyChart</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/iffy.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
         <p><img src="/images/iffy.svg" alt="heads => d6+d6, else d10+d10"></p>
         

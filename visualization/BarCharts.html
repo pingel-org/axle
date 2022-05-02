@@ -172,65 +172,25 @@
   </span><span class="string-literal">&quot;apple&quot;</span><span> -&gt; </span><span class="number-literal">83.8</span><span>,
   </span><span class="string-literal">&quot;banana&quot;</span><span> -&gt; </span><span class="number-literal">77.9</span><span>,
   </span><span class="string-literal">&quot;coconut&quot;</span><span> -&gt; </span><span class="number-literal">10.1</span><span>
-)
-</span><span class="comment">// sales: Map[String, Double] = Map(
-//   &quot;apple&quot; -&gt; 83.8,
-//   &quot;banana&quot; -&gt; 77.9,
-//   &quot;coconut&quot; -&gt; 10.1
-// )</span></code></pre>
+)</span></code></pre>
         <p>Define a bar chart visualization</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">BarChart</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">Color</span><span>.</span><span class="identifier">lightGray</span></code></pre>
-        <pre><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
-</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@77909997
-</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+
 </span><span class="keyword">val</span><span> </span><span class="identifier">chart</span><span> = </span><span class="type-name">BarChart</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>], </span><span class="type-name">String</span><span>](
   () =&gt; </span><span class="identifier">sales</span><span>,
   </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;fruit sales&quot;</span><span>),
   </span><span class="identifier">hoverOf</span><span> = (</span><span class="identifier">c</span><span>: </span><span class="type-name">String</span><span>) =&gt; </span><span class="type-name">Some</span><span>(</span><span class="identifier">c</span><span>),
   </span><span class="identifier">linkOf</span><span> = (</span><span class="identifier">c</span><span>: </span><span class="type-name">String</span><span>) =&gt; </span><span class="type-name">Some</span><span>((</span><span class="keyword">new</span><span> </span><span class="identifier">java</span><span>.</span><span class="identifier">net</span><span>.</span><span class="type-name">URL</span><span>(</span><span class="string-literal">s&quot;http://wikipedia.org/wiki/</span><span class="substitution">$c</span><span class="string-literal">&quot;</span><span>), </span><span class="identifier">lightGray</span><span>))
-)
-</span><span class="comment">// chart: BarChart[String, Double, Map[String, Double], String] = BarChart(
-//   dataFn = &lt;function0&gt;,
-//   drawKey = true,
-//   width = 700,
-//   height = 600,
-//   border = 50,
-//   barWidthPercent = 0.8,
-//   keyLeftPadding = 20,
-//   keyTopPadding = 50,
-//   keyWidth = 80,
-//   title = Some(value = &quot;fruit sales&quot;),
-//   keyTitle = None,
-//   normalFontName = &quot;Courier New&quot;,
-//   normalFontSize = 12,
-//   titleFontName = &quot;Palatino&quot;,
-//   titleFontSize = 20,
-//   xAxis = None,
-//   xAxisLabel = None,
-//   yAxisLabel = None,
-//   labelAngle = Some(
-//     value = UnittedQuantity(
-//       magnitude = 36.0,
-//       unit = UnitOfMeasurement(
-//         name = &quot;degree&quot;,
-//         symbol = &quot;°&quot;,
-//         wikipediaUrl = Some(
-//           value = &quot;http://en.wikipedia.org/wiki/Degree_(angle)&quot;
-//         )
-//       )
-//     )
-//   ),
-//   colorOf = axle.visualize.BarChart$$$Lambda$9601/1625755247@4b46fdb5,
-//   hoverOf = &lt;function1&gt;,
-//   linkOf = &lt;function1&gt;
-// )</span></code></pre>
+)</span></code></pre>
         <p>Create the SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span></code></pre>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">chart</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/fruitsales.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">chart</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/fruitsales.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
         <p><img src="/images/fruitsales.svg" alt="fruitsales"></p>
 
       </main>

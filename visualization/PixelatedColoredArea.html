@@ -178,85 +178,26 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span></code></pre>
         <p>Define a function to compute an <code>Double</code> for each point on the plane <code>(x, y): (Double, Double)</code></p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">f</span><span>(</span><span class="identifier">x0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">x1</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y1</span><span>: </span><span class="type-name">Double</span><span>) = </span><span class="identifier">x0</span><span> + </span><span class="identifier">y0</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">f</span><span>(</span><span class="identifier">x0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">x1</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y1</span><span>: </span><span class="type-name">Double</span><span>) =
+  </span><span class="identifier">x0</span><span> + </span><span class="identifier">y0</span></code></pre>
         <p>Define a <code>toColor</code> function.
         Here we first prepare an array of colors to avoid creating the objects during rendering.</p>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">n</span><span> = </span><span class="number-literal">100</span><span>
-</span><span class="comment">// n: Int = 100
-</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">n</span><span> = </span><span class="number-literal">100</span><span>
+
 </span><span class="comment">// red to orange to yellow
-</span><span class="keyword">val</span><span> </span><span class="identifier">roy</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="identifier">n</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">i</span><span> =&gt; </span><span class="type-name">Color</span><span>(</span><span class="number-literal">255</span><span>, ((</span><span class="identifier">i</span><span> / </span><span class="identifier">n</span><span>.</span><span class="identifier">toDouble</span><span>) * </span><span class="number-literal">255</span><span>).</span><span class="identifier">toInt</span><span>, </span><span class="number-literal">0</span><span>)).</span><span class="identifier">toArray</span><span>
-</span><span class="comment">// roy: Array[Color] = Array(
-//   Color(r = 255, g = 0, b = 0),
-//   Color(r = 255, g = 2, b = 0),
-//   Color(r = 255, g = 5, b = 0),
-//   Color(r = 255, g = 7, b = 0),
-//   Color(r = 255, g = 10, b = 0),
-//   Color(r = 255, g = 12, b = 0),
-//   Color(r = 255, g = 15, b = 0),
-//   Color(r = 255, g = 17, b = 0),
-//   Color(r = 255, g = 20, b = 0),
-//   Color(r = 255, g = 22, b = 0),
-//   Color(r = 255, g = 25, b = 0),
-//   Color(r = 255, g = 28, b = 0),
-//   Color(r = 255, g = 30, b = 0),
-//   Color(r = 255, g = 33, b = 0),
-//   Color(r = 255, g = 35, b = 0),
-//   Color(r = 255, g = 38, b = 0),
-//   Color(r = 255, g = 40, b = 0),
-//   Color(r = 255, g = 43, b = 0),
-//   Color(r = 255, g = 45, b = 0),
-//   Color(r = 255, g = 48, b = 0),
-//   Color(r = 255, g = 51, b = 0),
-//   Color(r = 255, g = 53, b = 0),
-//   Color(r = 255, g = 56, b = 0),
-//   Color(r = 255, g = 58, b = 0),
-//   Color(r = 255, g = 61, b = 0),
-//   Color(r = 255, g = 63, b = 0),
-//   Color(r = 255, g = 66, b = 0),
-//   Color(r = 255, g = 68, b = 0),
-//   Color(r = 255, g = 71, b = 0),
-//   Color(r = 255, g = 73, b = 0),
-//   Color(r = 255, g = 76, b = 0),
-//   Color(r = 255, g = 79, b = 0),
-//   Color(r = 255, g = 81, b = 0),
-//   Color(r = 255, g = 84, b = 0),
-//   Color(r = 255, g = 86, b = 0),
-//   Color(r = 255, g = 89, b = 0),
-//   Color(r = 255, g = 91, b = 0),
-//   Color(r = 255, g = 94, b = 0),
-//   Color(r = 255, g = 96, b = 0),
-//   Color(r = 255, g = 99, b = 0),
-//   Color(r = 255, g = 102, b = 0),
-//   Color(r = 255, g = 104, b = 0),
-//   Color(r = 255, g = 107, b = 0),
-//   Color(r = 255, g = 109, b = 0),
-//   Color(r = 255, g = 112, b = 0),
-//   Color(r = 255, g = 114, b = 0),
-//   Color(r = 255, g = 117, b = 0),
-//   Color(r = 255, g = 119, b = 0),
-// ...
-</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">roy</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="identifier">n</span><span>).</span><span class="identifier">map</span><span>( </span><span class="identifier">i</span><span> =&gt;
+  </span><span class="type-name">Color</span><span>(</span><span class="number-literal">255</span><span>, ((</span><span class="identifier">i</span><span> / </span><span class="identifier">n</span><span>.</span><span class="identifier">toDouble</span><span>) * </span><span class="number-literal">255</span><span>).</span><span class="identifier">toInt</span><span>, </span><span class="number-literal">0</span><span>)
+).</span><span class="identifier">toArray</span><span>
+
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">toColor</span><span>(</span><span class="identifier">v</span><span>: </span><span class="type-name">Double</span><span>) = </span><span class="identifier">roy</span><span>(</span><span class="identifier">v</span><span>.</span><span class="identifier">toInt</span><span> % </span><span class="identifier">n</span><span>)</span></code></pre>
         <p>Define a <code>PixelatedColoredArea</code> to show <code>toColor ∘ f</code> over the range <code>(0,0)</code> to <code>(1000,1000)</code>
         represented as a 400 pixel square.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(</span><span class="identifier">f</span><span>, </span><span class="identifier">toColor</span><span>, </span><span class="number-literal">400</span><span>, </span><span class="number-literal">400</span><span>, </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1000d</span><span>, </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1000d</span><span>)
-</span><span class="comment">// pca: PixelatedColoredArea[Double, Double, Double] = PixelatedColoredArea(
-//   f = &lt;function4&gt;,
-//   c = &lt;function1&gt;,
-//   width = 400,
-//   height = 400,
-//   minX = 0.0,
-//   maxX = 1000.0,
-//   minY = 0.0,
-//   maxY = 1000.0
-// )</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(</span><span class="identifier">f</span><span>, </span><span class="identifier">toColor</span><span>, </span><span class="number-literal">400</span><span>, </span><span class="number-literal">400</span><span>, </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1000d</span><span>, </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1000d</span><span>)</span></code></pre>
         <p>Create PNG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">awt</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
 
-</span><span class="identifier">pca</span><span>.</span><span class="identifier">png</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/roy_diagonal.png&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()
-</span><span class="comment">// res0: Boolean = true</span></code></pre>
+</span><span class="identifier">pca</span><span>.</span><span class="identifier">png</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/roy_diagonal.png&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
         <p><img src="/images/roy_diagonal.png" alt="ROY Diagonal"></p>
         
         <h2 id="second-example" class="section"><a class="anchor-link left" href="#second-example"><i class="icofont-laika">&#xef71;</i></a>Second example</h2>
@@ -264,82 +205,22 @@
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">sqrt</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">m</span><span> = </span><span class="number-literal">200</span><span>
-</span><span class="comment">// m: Int = 200
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">greens</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="identifier">m</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">i</span><span> =&gt; </span><span class="type-name">Color</span><span>(</span><span class="number-literal">0</span><span>, ((</span><span class="identifier">i</span><span> / </span><span class="identifier">m</span><span>.</span><span class="identifier">toDouble</span><span>) * </span><span class="number-literal">255</span><span>).</span><span class="identifier">toInt</span><span>, </span><span class="number-literal">0</span><span>)).</span><span class="identifier">toArray</span><span>
-</span><span class="comment">// greens: Array[Color] = Array(
-//   Color(r = 0, g = 0, b = 0),
-//   Color(r = 0, g = 1, b = 0),
-//   Color(r = 0, g = 2, b = 0),
-//   Color(r = 0, g = 3, b = 0),
-//   Color(r = 0, g = 5, b = 0),
-//   Color(r = 0, g = 6, b = 0),
-//   Color(r = 0, g = 7, b = 0),
-//   Color(r = 0, g = 8, b = 0),
-//   Color(r = 0, g = 10, b = 0),
-//   Color(r = 0, g = 11, b = 0),
-//   Color(r = 0, g = 12, b = 0),
-//   Color(r = 0, g = 14, b = 0),
-//   Color(r = 0, g = 15, b = 0),
-//   Color(r = 0, g = 16, b = 0),
-//   Color(r = 0, g = 17, b = 0),
-//   Color(r = 0, g = 19, b = 0),
-//   Color(r = 0, g = 20, b = 0),
-//   Color(r = 0, g = 21, b = 0),
-//   Color(r = 0, g = 22, b = 0),
-//   Color(r = 0, g = 24, b = 0),
-//   Color(r = 0, g = 25, b = 0),
-//   Color(r = 0, g = 26, b = 0),
-//   Color(r = 0, g = 28, b = 0),
-//   Color(r = 0, g = 29, b = 0),
-//   Color(r = 0, g = 30, b = 0),
-//   Color(r = 0, g = 31, b = 0),
-//   Color(r = 0, g = 33, b = 0),
-//   Color(r = 0, g = 34, b = 0),
-//   Color(r = 0, g = 35, b = 0),
-//   Color(r = 0, g = 36, b = 0),
-//   Color(r = 0, g = 38, b = 0),
-//   Color(r = 0, g = 39, b = 0),
-//   Color(r = 0, g = 40, b = 0),
-//   Color(r = 0, g = 42, b = 0),
-//   Color(r = 0, g = 43, b = 0),
-//   Color(r = 0, g = 44, b = 0),
-//   Color(r = 0, g = 45, b = 0),
-//   Color(r = 0, g = 47, b = 0),
-//   Color(r = 0, g = 48, b = 0),
-//   Color(r = 0, g = 49, b = 0),
-//   Color(r = 0, g = 51, b = 0),
-//   Color(r = 0, g = 52, b = 0),
-//   Color(r = 0, g = 53, b = 0),
-//   Color(r = 0, g = 54, b = 0),
-//   Color(r = 0, g = 56, b = 0),
-//   Color(r = 0, g = 57, b = 0),
-//   Color(r = 0, g = 58, b = 0),
-//   Color(r = 0, g = 59, b = 0),
-// ...
-</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">greens</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="identifier">m</span><span>).</span><span class="identifier">map</span><span>( </span><span class="identifier">i</span><span> =&gt;
+  </span><span class="type-name">Color</span><span>(</span><span class="number-literal">0</span><span>, ((</span><span class="identifier">i</span><span> / </span><span class="identifier">m</span><span>.</span><span class="identifier">toDouble</span><span>) * </span><span class="number-literal">255</span><span>).</span><span class="identifier">toInt</span><span>, </span><span class="number-literal">0</span><span>)
+).</span><span class="identifier">toArray</span><span>
+
 </span><span class="keyword">val</span><span> </span><span class="identifier">gpPca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(
     (</span><span class="identifier">x0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">x1</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y1</span><span>: </span><span class="type-name">Double</span><span>) =&gt; </span><span class="identifier">sqrt</span><span>(</span><span class="identifier">x0</span><span>*</span><span class="identifier">x0</span><span> + </span><span class="identifier">y0</span><span>*</span><span class="identifier">y0</span><span>),
     (</span><span class="identifier">v</span><span>: </span><span class="type-name">Double</span><span>) =&gt; </span><span class="identifier">greens</span><span>(</span><span class="identifier">v</span><span>.</span><span class="identifier">toInt</span><span> % </span><span class="identifier">m</span><span>),
     </span><span class="number-literal">400</span><span>, </span><span class="number-literal">400</span><span>,
     </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1000d</span><span>,
-    </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1000d</span><span>)
-</span><span class="comment">// gpPca: PixelatedColoredArea[Double, Double, Double] = PixelatedColoredArea(
-//   f = &lt;function4&gt;,
-//   c = &lt;function1&gt;,
-//   width = 400,
-//   height = 400,
-//   minX = 0.0,
-//   maxX = 1000.0,
-//   minY = 0.0,
-//   maxY = 1000.0
-// )
-</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">awt</span><span>.</span><span class="identifier">_</span><span>
+    </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1000d</span><span>)</span></code></pre>
+        <p>Create the PNG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">awt</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
 
-</span><span class="identifier">gpPca</span><span>.</span><span class="identifier">png</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/green_polar.png&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()
-</span><span class="comment">// res1: Boolean = true</span></code></pre>
+</span><span class="identifier">gpPca</span><span>.</span><span class="identifier">png</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/green_polar.png&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
         <p><img src="/images/green_polar.png" alt="Green Polar"></p>
 
       </main>

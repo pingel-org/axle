@@ -168,7 +168,6 @@
         <p>Two-dimensional plots</p>
         
         <h2 id="time-series-plot-example" class="section"><a class="anchor-link left" href="#time-series-plot-example"><i class="icofont-laika">&#xef71;</i></a>Time-series plot example</h2>
-        <p><code>axle.visualize.Plot</code></p>
         <p>Imports</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">joda</span><span>.</span><span class="identifier">time</span><span>.</span><span class="type-name">DateTime</span><span>
 
@@ -187,17 +186,9 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">Color</span><span>.</span><span class="identifier">_</span></code></pre>
         <p>Generate the time-series to plot</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">now</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">DateTime</span><span>()
-</span><span class="comment">// now: DateTime = 2022-05-01T20:34:57.684-04:00
-</span><span>
+
 </span><span class="keyword">val</span><span> </span><span class="identifier">colors</span><span> = </span><span class="type-name">Vector</span><span>(</span><span class="identifier">red</span><span>, </span><span class="identifier">blue</span><span>, </span><span class="identifier">green</span><span>, </span><span class="identifier">yellow</span><span>, </span><span class="identifier">orange</span><span>)
-</span><span class="comment">// colors: Vector[Color] = Vector(
-//   Color(r = 255, g = 0, b = 0),
-//   Color(r = 0, g = 0, b = 255),
-//   Color(r = 0, g = 255, b = 0),
-//   Color(r = 255, g = 255, b = 0),
-//   Color(r = 255, g = 200, b = 0)
-// )
-</span><span>
+
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">randomTimeSeries</span><span>(</span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">gen</span><span>: </span><span class="type-name">Generator</span><span>) = {
   </span><span class="keyword">val</span><span> φ = </span><span class="identifier">gen</span><span>.</span><span class="identifier">nextDouble</span><span>()
   </span><span class="keyword">val</span><span> </span><span class="type-name">A</span><span> = </span><span class="identifier">gen</span><span>.</span><span class="identifier">nextDouble</span><span>()
@@ -207,57 +198,7 @@
       (</span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">100</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">t</span><span> =&gt; (</span><span class="identifier">now</span><span>.</span><span class="identifier">plusMinutes</span><span>(</span><span class="number-literal">2</span><span> * </span><span class="identifier">t</span><span>) -&gt; </span><span class="type-name">A</span><span> * </span><span class="identifier">sin</span><span>(ω * </span><span class="identifier">t</span><span> + φ))).</span><span class="identifier">toMap</span><span>)
 }
 
-</span><span class="keyword">val</span><span> </span><span class="identifier">waves</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">20</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">i</span><span> =&gt; </span><span class="identifier">randomTimeSeries</span><span>(</span><span class="identifier">i</span><span>, </span><span class="identifier">rng</span><span>)).</span><span class="identifier">toList</span><span>
-</span><span class="comment">// waves: List[(String, TreeMap[DateTime, Double])] = List(
-//   (
-//     &quot;series 0 0.76 0.00 1.90&quot;,
-//     TreeMap(
-//       2022-05-01T20:34:57.684-04:00 -&gt; 0.0029384038962523245,
-//       2022-05-01T20:36:57.684-04:00 -&gt; 0.002013526559626952,
-//       2022-05-01T20:38:57.684-04:00 -&gt; -0.004227651312627681,
-//       2022-05-01T20:40:57.684-04:00 -&gt; 6.934099374763895E-4,
-//       2022-05-01T20:42:57.684-04:00 -&gt; 0.003783665626863466,
-//       2022-05-01T20:44:57.684-04:00 -&gt; -0.00311606540757147,
-//       2022-05-01T20:46:57.684-04:00 -&gt; -0.0017884700548157612,
-//       2022-05-01T20:48:57.684-04:00 -&gt; 0.004261210668462944,
-//       2022-05-01T20:50:57.684-04:00 -&gt; -9.399542704957413E-4,
-//       2022-05-01T20:52:57.684-04:00 -&gt; -0.0036593643163730406,
-//       2022-05-01T20:54:57.684-04:00 -&gt; 0.003283020453508584,
-//       2022-05-01T20:56:57.684-04:00 -&gt; 0.001557268559375629,
-//       2022-05-01T20:58:57.684-04:00 -&gt; -0.004280128963043014,
-//       2022-05-01T21:00:57.684-04:00 -&gt; 0.0011832690218017844,
-//       2022-05-01T21:02:57.684-04:00 -&gt; 0.0035224898239210566,
-//       2022-05-01T21:04:57.684-04:00 -&gt; -0.003438695394493937,
-//       2022-05-01T21:06:57.684-04:00 -&gt; -0.0013207164567624423,
-//       2022-05-01T21:08:57.684-04:00 -&gt; 0.004284341195143746,
-//       2022-05-01T21:10:57.684-04:00 -&gt; -0.001422518188095163,
-//       2022-05-01T21:12:57.684-04:00 -&gt; -0.0033735124355328463,
-//       2022-05-01T21:14:57.684-04:00 -&gt; 0.003582555348184375,
-//       2022-05-01T21:16:57.684-04:00 -&gt; 0.0010796265145424577,
-//       2022-05-01T21:18:57.684-04:00 -&gt; -0.004273832891988974,
-//       2022-05-01T21:20:57.684-04:00 -&gt; 0.001656879734989001,
-//       2022-05-01T21:22:57.684-04:00 -&gt; 0.003212944021481564,
-//       2022-05-01T21:24:57.684-04:00 -&gt; -0.0037141060272616283,
-//       2022-05-01T21:26:57.684-04:00 -&gt; -8.348270918105277E-4,
-//       2022-05-01T21:28:57.684-04:00 -&gt; 0.004248640158977404,
-//       2022-05-01T21:30:57.684-04:00 -&gt; -0.0018855484214308183,
-//       2022-05-01T21:32:57.684-04:00 -&gt; -0.003041336277557203,
-//       2022-05-01T21:34:57.684-04:00 -&gt; 0.003832895437750149,
-//       2022-05-01T21:36:57.684-04:00 -&gt; 5.871592930371582E-4,
-//       2022-05-01T21:38:57.684-04:00 -&gt; -0.004208849555628374,
-//       2022-05-01T21:40:57.684-04:00 -&gt; 0.002107738566423812,
-//       2022-05-01T21:42:57.684-04:00 -&gt; 0.00285927882949897,
-//       2022-05-01T21:44:57.684-04:00 -&gt; -0.003938515432019874,
-//       2022-05-01T21:46:57.684-04:00 -&gt; -3.3747407812445535E-4,
-//       2022-05-01T21:48:57.684-04:00 -&gt; 0.004154597798172612,
-//       2022-05-01T21:50:57.684-04:00 -&gt; -0.0023226867485423683,
-//       2022-05-01T21:52:57.684-04:00 -&gt; -0.0026673972071050256,
-//       2022-05-01T21:54:57.684-04:00 -&gt; 0.004030603111137598,
-//       2022-05-01T21:56:57.684-04:00 -&gt; 8.662933859902088E-5,
-//       2022-05-01T21:58:57.684-04:00 -&gt; -0.00408607128981006,
-//       2022-05-01T22:00:57.684-04:00 -&gt; 0.0025296544289660173,
-//       2022-05-01T22:02:57.684-04:00 -&gt; 0.0024663506949790643,
-// ...</span></code></pre>
+</span><span class="keyword">val</span><span> </span><span class="identifier">waves</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">20</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">i</span><span> =&gt; </span><span class="identifier">randomTimeSeries</span><span>(</span><span class="identifier">i</span><span>, </span><span class="identifier">rng</span><span>)).</span><span class="identifier">toList</span></code></pre>
         <p>Imports for visualization</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Show</span><span>
 
@@ -272,41 +213,20 @@
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span></code></pre>
         <p>Define the visualization</p>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">plot</span><span> = </span><span class="type-name">Plot</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>]](
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">plot</span><span> = </span><span class="type-name">Plot</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>]](
   () =&gt; </span><span class="identifier">waves</span><span>,
   </span><span class="identifier">connect</span><span> = </span><span class="boolean-literal">true</span><span>,
   </span><span class="identifier">colorOf</span><span> = </span><span class="identifier">s</span><span> =&gt; </span><span class="identifier">colors</span><span>(</span><span class="identifier">s</span><span>.</span><span class="identifier">hash</span><span>.</span><span class="identifier">abs</span><span> % </span><span class="identifier">colors</span><span>.</span><span class="identifier">length</span><span>),
   </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;Random Waves&quot;</span><span>),
   </span><span class="identifier">xAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;time (t)&quot;</span><span>),
   </span><span class="identifier">yAxis</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="identifier">now</span><span>),
-  </span><span class="identifier">yAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;A·sin(ω·t + φ)&quot;</span><span>)).</span><span class="identifier">zeroXAxis</span><span>
-</span><span class="comment">// plot: Plot[String, DateTime, Double, TreeMap[DateTime, Double]] = Plot(
-//   dataFn = &lt;function0&gt;,
-//   connect = true,
-//   drawKey = true,
-//   width = 700,
-//   height = 600,
-//   border = 50,
-//   pointDiameter = 4,
-//   keyLeftPadding = 20,
-//   keyTopPadding = 50,
-//   keyWidth = 80,
-//   fontName = &quot;Courier New&quot;,
-//   fontSize = 12,
-//   bold = false,
-//   titleFontName = &quot;Palatino&quot;,
-//   titleFontSize = 20,
-//   colorOf = &lt;function1&gt;,
-//   title = Some(value = &quot;Random Waves&quot;),
-//   keyTitle = None,
-//   xAxis = Some(value = 0.0),
-//   xAxisLabel = Some(value = &quot;time (t)&quot;),
-//   yAxis = Some(value = 2022-05-01T20:34:57.684-04:00),
-//   yAxisLabel = Some(value = &quot;A·sin(ω·t + φ)&quot;)
-// )</span></code></pre>
+  </span><span class="identifier">yAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;A·sin(ω·t + φ)&quot;</span><span>)).</span><span class="identifier">zeroXAxis</span></code></pre>
         <p>If instead we had supplied <code>(Color, String)</code> pairs, we would have needed something like preciding the <code>Plot</code> definition:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showCL</span><span>: </span><span class="type-name">Show</span><span>[(</span><span class="type-name">Color</span><span>, </span><span class="type-name">String</span><span>)] = </span><span class="keyword">new</span><span> </span><span class="type-name">Show</span><span>[(</span><span class="type-name">Color</span><span>, </span><span class="type-name">String</span><span>)] { </span><span class="keyword">def</span><span> </span><span class="declaration-name">show</span><span>(</span><span class="identifier">cl</span><span>: (</span><span class="type-name">Color</span><span>, </span><span class="type-name">String</span><span>)): </span><span class="type-name">String</span><span> = </span><span class="identifier">cl</span><span class="number-literal">._2</span><span> }
-</span><span class="comment">// showCL: Show[(Color, String)] = repl.MdocSession$App$$anon$1@63714406</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showCL</span><span>: </span><span class="type-name">Show</span><span>[(</span><span class="type-name">Color</span><span>, </span><span class="type-name">String</span><span>)] =
+  </span><span class="keyword">new</span><span> </span><span class="type-name">Show</span><span>[(</span><span class="type-name">Color</span><span>, </span><span class="type-name">String</span><span>)] {
+    </span><span class="keyword">def</span><span> </span><span class="declaration-name">show</span><span>(</span><span class="identifier">cl</span><span>: (</span><span class="type-name">Color</span><span>, </span><span class="type-name">String</span><span>)): </span><span class="type-name">String</span><span> = </span><span class="identifier">cl</span><span class="number-literal">._2</span><span>
+  }
+</span><span class="comment">// showCL: Show[(Color, String)] = repl.MdocSession$App$$anon$1@5766fbe6</span></code></pre>
         <p>Create the SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
@@ -341,8 +261,6 @@
 //   (&quot;saw 2&quot;, TreeMap())
 // )
 </span><span>
-</span><span class="comment">// Note: uses zeroDT defined above
-</span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">saw1</span><span> = (</span><span class="identifier">t</span><span>: </span><span class="type-name">Long</span><span>) =&gt; (</span><span class="identifier">t</span><span> % </span><span class="number-literal">10000</span><span>) / </span><span class="number-literal">10000d</span><span>
 </span><span class="comment">// saw1: Long =&gt; Double = &lt;function1&gt;
 </span><span class="keyword">val</span><span> </span><span class="identifier">saw2</span><span> = (</span><span class="identifier">t</span><span>: </span><span class="type-name">Long</span><span>) =&gt; (</span><span class="identifier">t</span><span> % </span><span class="number-literal">100000</span><span>) / </span><span class="number-literal">50000d</span><span>
@@ -361,12 +279,12 @@
   </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">modules</span><span>.</span><span class="identifier">doubleRationalModule</span><span>
   </span><span class="type-name">Time</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
 }
-</span><span class="comment">// timeConverter: quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@6198b120
+</span><span class="comment">// timeConverter: quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@79f19e01
 </span><span class="keyword">import</span><span> </span><span class="identifier">timeConverter</span><span>.</span><span class="identifier">millisecond</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">dataUpdates</span><span>: </span><span class="type-name">Observable</span><span>[</span><span class="type-name">Seq</span><span>[(</span><span class="type-name">String</span><span>, </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>])]] =
   </span><span class="identifier">intervalScan</span><span>(</span><span class="identifier">initialData</span><span>, </span><span class="identifier">refreshFn</span><span>, </span><span class="number-literal">500d</span><span> *: </span><span class="identifier">millisecond</span><span>)
-</span><span class="comment">// dataUpdates: Observable[Seq[(String, TreeMap[DateTime, Double])]] = monix.reactive.internal.operators.ScanObservable@60212020</span></code></pre>
+</span><span class="comment">// dataUpdates: Observable[Seq[(String, TreeMap[DateTime, Double])]] = monix.reactive.internal.operators.ScanObservable@791fd4a4</span></code></pre>
         <p>Create <code>CurrentValueSubscriber</code>, which will be used by the <code>Plot</code> to get the latest values</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">monix</span><span>.</span><span class="identifier">execution</span><span>.</span><span class="type-name">Scheduler</span><span>.</span><span class="type-name">Implicits</span><span>.</span><span class="identifier">global</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="type-name">CurrentValueSubscriber</span><span>
@@ -374,9 +292,7 @@
 </span><span class="keyword">val</span><span> </span><span class="identifier">cvSub</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">CurrentValueSubscriber</span><span>[</span><span class="type-name">Seq</span><span>[(</span><span class="type-name">String</span><span>, </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>])]]()
 </span><span class="keyword">val</span><span> </span><span class="identifier">cvCancellable</span><span> = </span><span class="identifier">dataUpdates</span><span>.</span><span class="identifier">subscribe</span><span>(</span><span class="identifier">cvSub</span><span>)
 
-</span><span class="comment">// [DateTime, Double, TreeMap[DateTime, Double]]
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">plot</span><span> = </span><span class="type-name">Plot</span><span>(
+</span><span class="keyword">val</span><span> </span><span class="identifier">plot</span><span> = </span><span class="type-name">Plot</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>]](
   () =&gt; </span><span class="identifier">cvSub</span><span>.</span><span class="identifier">currentValue</span><span>.</span><span class="identifier">getOrElse</span><span>(</span><span class="identifier">initialData</span><span>),
   </span><span class="identifier">connect</span><span> = </span><span class="boolean-literal">true</span><span>,
   </span><span class="identifier">colorOf</span><span> = (</span><span class="identifier">label</span><span>: </span><span class="type-name">String</span><span>) =&gt; </span><span class="type-name">Color</span><span>.</span><span class="identifier">black</span><span>,

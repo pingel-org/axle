@@ -214,24 +214,24 @@
 </span><span class="comment">// P1&gt; You have been caught
 // P2&gt; You have been caught
 // endState: PrisonersDilemmaState = PrisonersDilemmaState(
-//   p1Move = Some(value = Betrayal()),
+//   p1Move = Some(value = Silence()),
 //   p1Moved = true,
-//   p2Move = Some(value = Betrayal())
+//   p2Move = Some(value = Silence())
 // )</span></code></pre>
         <p>Display outcome to each player</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
 </span><span class="comment">// outcome: PrisonersDilemmaOutcome = PrisonersDilemmaOutcome(
-//   p1YearsInPrison = 2,
-//   p2YearsInPrison = 2
+//   p1YearsInPrison = 1,
+//   p2YearsInPrison = 1
 // )
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// P1&gt; You is imprisoned for 2 years
-// P1&gt; Player 2 is imprisoned for 2 years
-// P2&gt; Player 1 is imprisoned for 2 years
-// P2&gt; You is imprisoned for 2 years</span></code></pre>
+</span><span class="comment">// P1&gt; You is imprisoned for 1 years
+// P1&gt; Player 2 is imprisoned for 1 years
+// P2&gt; Player 1 is imprisoned for 1 years
+// P2&gt; You is imprisoned for 1 years</span></code></pre>
 
       </main>
 
