@@ -70,6 +70,44 @@
 
 ## Site
 
+### Near term
+
+* Look for opportunities to use `mdoc:silent`
+* How to make chapters more prominent in pdf?
+  * See [this example](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
+
+* Writing
+  * A few words in README for each section
+  * Introduction
+    * Write "Objectives"
+    * Smaller images for Gallery
+    * !!! Simplify "Installation"
+  * Foundation
+    * Cats, Scala, etc are at end -- how to get them in correct order
+    * Architecture
+    * Functional Programming
+    * Scala
+    * Cats: Show, EQ, IO, Algebra, Spire
+    * rename "Spokes"
+    * rename "Resources"
+  * Units
+    * Quanta: fix Distance, Energy, Time links
+  * Math
+    * Intro section bullets not nesting
+  * Quantum Circuits
+    * !!! Copy some test cases to QuantumCircuits.md
+
+* Make dependencies clear in each section
+
+### Later
+
+* `laikaIncludeAPI := true` in `build.sbt`
+* look at more of [these options](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
+* Meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
+* Timestamp / version to site footer
+* GitHub "Releases" in sidebar should show "latest"
+* update google analytics version
+
 * stop hard-coding PDF_VERSION n build.sbt
 * ghpagesCleanSite leaving stale files?
 * Friend of Spire

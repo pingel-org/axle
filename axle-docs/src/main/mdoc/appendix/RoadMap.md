@@ -2,33 +2,8 @@
 
 See [Release Notes](ReleaseNotes.md) for the record of previously released features.
 
-* Look for opportunities to use `mdoc:silent`
-* Copy some test cases to QuantumCircuits.md
-* Simplify "Installation"
-* Make dependencies clear in each section
-
-* Writing
-  * A few words in README for each section
-  * Introduction
-    * Write "Objectives"
-    * Smaller images for Gallery
-  * Foundation
-    * Architecture
-    * Functional Programming
-    * Scala
-    * Cats: Show, EQ, IO, Algebra, Spire
-    * rename "Spokes"
-    * rename "Resources"
-  * Units
-    * Quanta: fix Distance, Energy, Time links
-
+* Near term [items](../foundation/FutureWork.md) in site todo
 * tweet / post
-
-* `laikaIncludeAPI := true` in `build.sbt`
-* look at more of [these options](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)* Meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
-* Timestamp / version to site footer
-* GitHub "Releases" in sidebar should show "latest"
-* update google analytics version
 
 ## 0.6.5
 
