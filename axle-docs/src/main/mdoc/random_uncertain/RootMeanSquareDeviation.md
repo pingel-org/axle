@@ -22,8 +22,8 @@ val data = List(1d, 2d, 3d, 4d)
 ```
 
 ```scala mdoc
-def estimator(x: Double): Double => Double =
+def estimator(x: Double): Double =
   x + 0.2
 
-rootMeanSquareDeviation(data, estimator)
+rootMeanSquareDeviation[List, Double](data, estimator)
 ```
