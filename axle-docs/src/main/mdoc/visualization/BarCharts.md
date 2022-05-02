@@ -6,7 +6,7 @@ Two-dimensional bar charts.
 
 The dataset:
 
-```scala mdoc
+```scala mdoc:silent
 val sales = Map(
   "apple" -> 83.8,
   "banana" -> 77.9,
@@ -23,7 +23,7 @@ import axle.visualize.BarChart
 import axle.visualize.Color.lightGray
 ```
 
-```scala mdoc
+```scala mdoc:silent
 implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
 val chart = BarChart[String, Double, Map[String, Double], String](
@@ -39,9 +39,7 @@ Create the SVG
 ```scala mdoc:silent
 import axle.web._
 import cats.effect._
-```
 
-```scala mdoc
 chart.svg[IO]("@DOCWD@/images/fruitsales.svg").unsafeRunSync()
 ```
 
