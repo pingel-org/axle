@@ -17,10 +17,13 @@ implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 
 Given four numbers and an estimator function, compute the RMSD:
 
-```scala mdoc
+```scala mdoc:silent
 val data = List(1d, 2d, 3d, 4d)
+```
 
-def estimator(x: Double) = x + 0.2
+```scala mdoc
+def estimator(x: Double): Double => Double =
+  x + 0.2
 
 rootMeanSquareDeviation(data, estimator)
 ```
