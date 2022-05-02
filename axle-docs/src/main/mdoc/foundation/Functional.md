@@ -1,3 +1,3 @@
-# Funcational
+# Functional
 
 To be written
