@@ -6,7 +6,7 @@ ScatterPlot
 import axle.visualize._
 ```
 
-```scala mdoc
+```scala mdoc:silent
 val data = Map(
   (1, 1) -> 0,
   (2, 2) -> 0,
@@ -25,7 +25,7 @@ import axle.visualize.Color._
 import cats.implicits._
 ```
 
-```scala mdoc
+```scala mdoc:silent
 val plot = ScatterPlot[String, Int, Int, Map[(Int, Int), Int]](
   () => data,
   colorOf = (x: Int, y: Int) => data((x, y)) match {
@@ -41,9 +41,7 @@ Create the SVG
 ```scala mdoc:silent
 import axle.web._
 import cats.effect._
-```
 
-```scala mdoc
 plot.svg[IO]("@DOCWD@/images/scatter.svg").unsafeRunSync()
 ```
 
