@@ -6,7 +6,7 @@ Two-dimensional grouped bar charts
 
 The following example dataset:
 
-```scala mdoc
+```scala mdoc:silent
 val sales = Map(
   ("apple", 2011) -> 43.0,
   ("apple", 2012) -> 83.8,
@@ -30,7 +30,7 @@ implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
 The data can be grouped in two ways to produce bar charts:
 
-```scala mdoc
+```scala mdoc:silent
 val chart = BarChartGrouped[String, Int, Double, Map[(String, Int), Double], String](
   () => sales,
   title = Some("fruit sales"),
@@ -54,7 +54,7 @@ chart.svg[IO]("@DOCWD@/images/barchart1.svg").unsafeRunSync()
 
 Or alternatively
 
-```scala mdoc
+```scala mdoc:silent
 val chart2 = BarChartGrouped[Int, String, Double, Map[(Int, String), Double], String](
   () => sales map { case (k, v) => (k._2, k._1) -> v},
   colorOf = (year: Int, label: String) => label match {
@@ -68,7 +68,7 @@ val chart2 = BarChartGrouped[Int, String, Double, Map[(Int, String), Double], St
 
 Create the second SVG
 
-```scala mdoc
+```scala mdoc:silent
 import axle.web._
 import cats.effect._
 
@@ -94,7 +94,7 @@ import axle.reactive.intervalScan
 
 Define stream of data updates
 
-```scala mdoc
+```scala mdoc:silent
 val groups = Vector("foo", "bar")
 val initial = Map("foo" -> 1d, "bar" -> 1d)
 
