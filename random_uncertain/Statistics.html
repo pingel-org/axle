@@ -131,7 +131,7 @@
         <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
         <li class="level1 nav-header">Foundation</li>
         <li class="level2"><a href="../foundation/Foundation.html">Foundation</a></li>
-        <li class="level2"><a href="../foundation/Functional.html">Funcational</a></li>
+        <li class="level2"><a href="../foundation/Functional.html">Functional</a></li>
         <li class="level2"><a href="../foundation/Scala.html">Scala</a></li>
         <li class="level2"><a href="../foundation/Cats.html">Cats</a></li>
         <li class="level2"><a href="../foundation/Architecture.html">Architecture</a></li>
@@ -165,17 +165,16 @@
       <main class="content">
 
         <h1 id="statistics" class="title">Statistics</h1>
-        
-        <h2 id="uniform-distribution" class="section"><a class="anchor-link left" href="#uniform-distribution"><i class="icofont-laika">&#xef71;</i></a>Uniform Distribution</h2>
-        <p>Example</p>
+        <p>Common imports and implicits</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">probability</span><span>.</span><span class="identifier">_</span><span>
 
-</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
-</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@37ce4bc0
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="type-name">X</span><span> = </span><span class="identifier">uniformDistribution</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">7d</span><span>, </span><span class="number-literal">9d</span><span>))
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span></code></pre>
+        
+        <h2 id="uniform-distribution" class="section"><a class="anchor-link left" href="#uniform-distribution"><i class="icofont-laika">&#xef71;</i></a>Uniform Distribution</h2>
+        <p>Example</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="type-name">X</span><span> = </span><span class="identifier">uniformDistribution</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">7d</span><span>, </span><span class="number-literal">9d</span><span>))
 </span><span class="comment">// X: ConditionalProbabilityTable[Double, spire.math.Rational] = ConditionalProbabilityTable(
 //   p = HashMap(5.0 -&gt; 1/4, 9.0 -&gt; 1/8, 2.0 -&gt; 1/8, 7.0 -&gt; 1/8, 4.0 -&gt; 3/8)
 // )</span></code></pre>
@@ -184,10 +183,8 @@
         <p>Example</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">stats</span><span>.</span><span class="identifier">_</span><span>
 
-</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
-</span><span class="comment">// nrootDouble: NRoot[Double] = spire.std.DoubleAlgebra@37ce4bc0
-</span><span>
-</span><span class="identifier">standardDeviation</span><span>(</span><span class="type-name">X</span><span>)
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">standardDeviation</span><span>(</span><span class="type-name">X</span><span>)
 </span><span class="comment">// res0: Double = 2.0</span></code></pre>
         <p>See also <a href="ProbabilityModel.html">Probability Model</a></p>
 

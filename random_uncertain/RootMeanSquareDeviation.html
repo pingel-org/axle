@@ -131,7 +131,7 @@
         <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
         <li class="level1 nav-header">Foundation</li>
         <li class="level2"><a href="../foundation/Foundation.html">Foundation</a></li>
-        <li class="level2"><a href="../foundation/Functional.html">Funcational</a></li>
+        <li class="level2"><a href="../foundation/Functional.html">Functional</a></li>
         <li class="level2"><a href="../foundation/Scala.html">Scala</a></li>
         <li class="level2"><a href="../foundation/Cats.html">Cats</a></li>
         <li class="level2"><a href="../foundation/Architecture.html">Architecture</a></li>
@@ -175,12 +175,11 @@
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span></code></pre>
         <p>Given four numbers and an estimator function, compute the RMSD:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">data</span><span> = </span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>)
-</span><span class="comment">// data: List[Double] = List(1.0, 2.0, 3.0, 4.0)
-</span><span>
-</span><span class="keyword">def</span><span> </span><span class="declaration-name">estimator</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">Double</span><span>) = </span><span class="identifier">x</span><span> + </span><span class="number-literal">0.2</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">data</span><span> = </span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>)</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">estimator</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">Double</span><span>): </span><span class="type-name">Double</span><span> =
+  </span><span class="identifier">x</span><span> + </span><span class="number-literal">0.2</span><span>
 
-</span><span class="identifier">rootMeanSquareDeviation</span><span>(</span><span class="identifier">data</span><span>, </span><span class="identifier">estimator</span><span>)
+</span><span class="identifier">rootMeanSquareDeviation</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">Double</span><span>](</span><span class="identifier">data</span><span>, </span><span class="identifier">estimator</span><span>)
 </span><span class="comment">// res0: Double = 0.4000000000000002</span></code></pre>
 
       </main>
