@@ -72,7 +72,7 @@ import spire.math._
 
 Moving arithmetic mean
 
-```scala mdoc
+```scala mdoc:height=15
 movingArithmeticMean[List, Int, Double](
     (1 to 100).toList.map(_.toDouble),
     5)
@@ -80,7 +80,7 @@ movingArithmeticMean[List, Int, Double](
 
 Moving geometric mean
 
-```scala mdoc
+```scala mdoc:height=15
 movingGeometricMean[List, Int, Real](
     List(1d, 5d, 25d, 125d, 625d),
     3)
@@ -88,7 +88,7 @@ movingGeometricMean[List, Int, Real](
 
 Moving harmonic mean
 
-```scala mdoc
+```scala mdoc:height=15
 movingHarmonicMean[List, Int, Real](
     (1 to 5).toList.map(v => Real(v)),
     3)
