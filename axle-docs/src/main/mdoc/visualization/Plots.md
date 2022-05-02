@@ -4,8 +4,6 @@ Two-dimensional plots
 
 ## Time-series plot example
 
-`axle.visualize.Plot`
-
 Imports
 
 ```scala mdoc:silent
@@ -28,7 +26,7 @@ import axle.visualize.Color._
 
 Generate the time-series to plot
 
-```scala mdoc
+```scala mdoc:silent
 val now = new DateTime()
 
 val colors = Vector(red, blue, green, yellow, orange)
@@ -64,7 +62,7 @@ implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 
 Define the visualization
 
-```scala mdoc
+```scala mdoc:silent
 val plot = Plot[String, DateTime, Double, TreeMap[DateTime, Double]](
   () => waves,
   connect = true,
@@ -78,12 +76,15 @@ val plot = Plot[String, DateTime, Double, TreeMap[DateTime, Double]](
 If instead we had supplied `(Color, String)` pairs, we would have needed something like preciding the `Plot` definition:
 
 ```scala mdoc
-implicit val showCL: Show[(Color, String)] = new Show[(Color, String)] { def show(cl: (Color, String)): String = cl._2 }
+implicit val showCL: Show[(Color, String)] =
+  new Show[(Color, String)] {
+    def show(cl: (Color, String)): String = cl._2
+  }
 ```
 
 Create the SVG
 
-```scala mdoc
+```scala mdoc:silent
 import axle.web._
 import cats.effect._
 
@@ -123,8 +124,6 @@ val initialData = List(
   ("saw 2", new TreeMap[DateTime, Double]())
 )
 
-// Note: uses zeroDT defined above
-
 val saw1 = (t: Long) => (t % 10000) / 10000d
 val saw2 = (t: Long) => (t % 100000) / 50000d
 
@@ -154,9 +153,7 @@ import axle.reactive.CurrentValueSubscriber
 val cvSub = new CurrentValueSubscriber[Seq[(String, TreeMap[DateTime, Double])]]()
 val cvCancellable = dataUpdates.subscribe(cvSub)
 
-// [DateTime, Double, TreeMap[DateTime, Double]]
-
-val plot = Plot(
+val plot = Plot[DateTime, Double, TreeMap[DateTime, Double]](
   () => cvSub.currentValue.getOrElse(initialData),
   connect = true,
   colorOf = (label: String) => Color.black,
