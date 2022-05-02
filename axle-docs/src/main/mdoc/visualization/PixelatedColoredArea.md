@@ -19,18 +19,21 @@ import axle.visualize._
 
 Define a function to compute an `Double` for each point on the plane `(x, y): (Double, Double)`
 
-```scala mdoc
-def f(x0: Double, x1: Double, y0: Double, y1: Double) = x0 + y0
+```scala mdoc:silent
+def f(x0: Double, x1: Double, y0: Double, y1: Double) =
+  x0 + y0
 ```
 
 Define a `toColor` function.
 Here we first prepare an array of colors to avoid creating the objects during rendering.
 
-```scala mdoc
+```scala mdoc:silent
 val n = 100
 
 // red to orange to yellow
-val roy = (0 until n).map(i => Color(255, ((i / n.toDouble) * 255).toInt, 0)).toArray
+val roy = (0 until n).map( i =>
+  Color(255, ((i / n.toDouble) * 255).toInt, 0)
+).toArray
 
 def toColor(v: Double) = roy(v.toInt % n)
 ```
@@ -38,13 +41,13 @@ def toColor(v: Double) = roy(v.toInt % n)
 Define a `PixelatedColoredArea` to show `toColor ∘ f` over the range `(0,0)` to `(1000,1000)`
 represented as a 400 pixel square.
 
-```scala mdoc
+```scala mdoc:silent
 val pca = PixelatedColoredArea(f, toColor, 400, 400, 0d, 1000d, 0d, 1000d)
 ```
 
 Create PNG
 
-```scala mdoc
+```scala mdoc:silent
 import axle.awt._
 import cats.effect._
 
@@ -57,12 +60,14 @@ pca.png[IO]("@DOCWD@/images/roy_diagonal.png").unsafeRunSync()
 
 More compactly:
 
-```scala mdoc
+```scala mdoc:silent
 import spire.math.sqrt
 
 val m = 200
 
-val greens = (0 until m).map(i => Color(0, ((i / m.toDouble) * 255).toInt, 0)).toArray
+val greens = (0 until m).map( i =>
+  Color(0, ((i / m.toDouble) * 255).toInt, 0)
+).toArray
 
 val gpPca = PixelatedColoredArea(
     (x0: Double, x1: Double, y0: Double, y1: Double) => sqrt(x0*x0 + y0*y0),
@@ -70,7 +75,11 @@ val gpPca = PixelatedColoredArea(
     400, 400,
     0d, 1000d,
     0d, 1000d)
+```
 
+Create the PNG
+
+```scala mdoc:silent
 import axle.awt._
 import cats.effect._
 

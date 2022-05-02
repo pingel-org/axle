@@ -125,15 +125,19 @@ And then the `.sample` syntax:
 import axle.syntax.sampler._
 ```
 
-Note that it must be provided with a Spire `Generator`.
+`sample` requires a Spire `Generator`.
 It also requires context bounds on the value type `V` that give the method
 the ability to produces values with a distribution conforming to the probability model.
 
 ```scala mdoc
 (1 to 10) map { _ => fairCoin.sample(rng) }
+```
 
+```scala mdoc
 (1 to 10) map { _ => biasedCoin.sample(rng) }
+```
 
+```scala mdoc
 (1 to 10) map { _ => d6.sample(rng) }
 ```
 
@@ -145,11 +149,13 @@ val rolls = (0 until 1000) map { _ => d6.sample(rng) }
 
 Then tally them
 
-```scala mdoc
+```scala mdoc:silent
 implicit val ringInt: CRing[Int] = spire.implicits.IntAlgebra
 
 import axle.syntax.talliable._
+```
 
+```scala mdoc
 val oneKd6Histogram = rolls.tally
 ```
 
@@ -165,9 +171,9 @@ val d6oneKvis = BarChart[Int, Int, Map[Int, Int], String](
   drawKey = false)
 ```
 
-Create SVG
+Create the SVG
 
-```scala mdoc
+```scala mdoc:silent
 d6oneKvis.svg[IO]("@DOCWD@/images/d6-1Ksamples.svg").unsafeRunSync()
 ```
 
@@ -350,7 +356,9 @@ first parameter group.
 
 ```scala mdoc:silent
 val monad = ConditionalProbabilityTable.monadWitness[Rational]
+```
 
+```scala mdoc
 monad.flatMap(d6) { a => monad.map(d6) { b => a + b } }
 ```
 
@@ -449,7 +457,7 @@ def iffy[A, B, M[_]: Monad](
 
 An example of that pattern: "if heads, d6+d6, otherwise d10+d10"
 
-```scala mdoc
+```scala mdoc:silent
 import cats.Eq
 
 val headsD6D6taildD10D10 = monad.flatMap(fairCoin) { side =>
@@ -473,7 +481,7 @@ val iffyChart = BarChart[Int, Rational, ConditionalProbabilityTable[Int, Rationa
   drawKey = false)
 ```
 
-Create SVG
+Create the SVG
 
 ```scala mdoc:silent
 iffyChart.svg[IO]("@DOCWD@/images/iffy.svg").unsafeRunSync()
