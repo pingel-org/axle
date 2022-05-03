@@ -16,8 +16,12 @@ Demonstrate it uniformly sampling 15 of the first 100 integers
 
 ```scala mdoc
 val sample = reservoirSampleK(15, LazyList.from(1), rng).drop(100).head
+```
 
+The mean of the sample should be in the ballpark of the mean of the entire list (50.5):
+
+```scala
 arithmeticMean(sample.map(_.toDouble))
 ```
 
-The mean of the sample should be in the ballpark of the mean of the entire list -- 50.
+Indeed it is.
