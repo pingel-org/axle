@@ -6,7 +6,7 @@ See the Wikipedia page on [Bayesian networks](https://en.wikipedia.org/wiki/Baye
 
 Define random variables
 
-```scala mdoc
+```scala mdoc:silent
 import axle.probability._
 
 val bools = Vector(true, false)
@@ -20,7 +20,7 @@ val M = Variable[Boolean]("Mary Calls")
 
 Define Factor for each variable
 
-```scala mdoc
+```scala mdoc:silent
 import spire.math._
 import cats.implicits._
 
@@ -62,7 +62,7 @@ val mFactor =
 
 Arrange into a graph
 
-```scala mdoc
+```scala mdoc:silent
 import axle.pgm._
 import axle.jung._
 import edu.uci.ics.jung.graph.DirectedSparseGraph
@@ -81,7 +81,7 @@ val bn: BayesianNetwork[Boolean, Rational, DirectedSparseGraph[BayesianNetworkNo
 
 Create an SVG visualization
 
-```scala mdoc
+```scala mdoc:silent
 import axle.visualize._
 
 val bnVis  = BayesianNetworkVisualization(bn, 1000, 1000, 20)
@@ -89,7 +89,7 @@ val bnVis  = BayesianNetworkVisualization(bn, 1000, 1000, 20)
 
 Render as SVG file
 
-```scala mdoc
+```scala mdoc:silent
 import axle.web._
 import cats.effect._
 
@@ -100,11 +100,13 @@ bnVis.svg[IO]("@DOCWD@/images/alarm_bayes.svg").unsafeRunSync()
 
 The network can be used to compute the joint probability table:
 
-```scala mdoc
+```scala mdoc:silent
 import axle.math.showRational
 
 val jpt = bn.jointProbabilityTable
+```
 
+```scala mdoc
 jpt.show
 ```
 
@@ -113,20 +115,24 @@ Variables can be summed out of the factor:
 ```scala mdoc
 import axle._
 
-jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
+jpt.sumOut(M).sumOut(J).sumOut(A).sumOut(B).sumOut(E)
 ```
 
+Also written as:
+
 ```scala mdoc
-jpt.sumOut(M).sumOut(J).sumOut(A).sumOut(B).sumOut(E)
+jpt.Σ(M).Σ(J).Σ(A).Σ(B).Σ(E)
 ```
 
 Multiplication of factors also works:
 
-```scala mdoc
+```scala mdoc:silent
 import spire.implicits.multiplicativeSemigroupOps
 
 val f = (bn.factorFor(A) * bn.factorFor(B)) * bn.factorFor(E)
+```
 
+```scala mdoc
 f.show
 ```
 
