@@ -35,7 +35,7 @@ implicit val bitDouble = id.bit
 
 Create dataset
 
-```scala mdoc
+```scala mdoc:silent
 val hm: D =
   new TreeMap[Rational, UnittedQuantity[Information, Double]]() ++
     (0 to 100).map({ i =>
@@ -46,7 +46,7 @@ val hm: D =
 
 Define visualization
 
-```scala mdoc
+```scala mdoc:silent
 import axle.visualize._
 
 implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
