@@ -73,8 +73,11 @@
 ### Near term
 
 * Look for opportunities to use `mdoc:silent`
+
 * How to make chapters more prominent in pdf?
   * See [this example](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
+
+* Cats, Scala, etc are at end -- how to get them in correct order?
 
 * Writing
   * A few words in README for each section
@@ -83,7 +86,6 @@
     * Smaller images for Gallery
     * !!! Simplify "Installation"
   * Foundation
-    * Cats, Scala, etc are at end -- how to get them in correct order
     * Architecture
     * Functional Programming
     * Scala
