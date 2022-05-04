@@ -192,68 +192,17 @@
 }
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">bitDouble</span><span> = </span><span class="identifier">id</span><span>.</span><span class="identifier">bit</span></code></pre>
         <p>Create dataset</p>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">hm</span><span>: </span><span class="type-name">D</span><span> =
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">hm</span><span>: </span><span class="type-name">D</span><span> =
   </span><span class="keyword">new</span><span> </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">Rational</span><span>, </span><span class="type-name">UnittedQuantity</span><span>[</span><span class="type-name">Information</span><span>, </span><span class="type-name">Double</span><span>]]() ++
     (</span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">100</span><span>).</span><span class="identifier">map</span><span>({ </span><span class="identifier">i</span><span> =&gt;
       </span><span class="keyword">val</span><span> </span><span class="identifier">r</span><span> = </span><span class="type-name">Rational</span><span>(</span><span class="identifier">i</span><span>.</span><span class="identifier">toLong</span><span>, </span><span class="number-literal">100L</span><span>)
       </span><span class="identifier">r</span><span> -&gt; </span><span class="type-name">H</span><span>[</span><span class="type-name">Symbol</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="type-name">Coin</span><span>.</span><span class="identifier">flipModel</span><span>(</span><span class="identifier">r</span><span>))
-    }).</span><span class="identifier">toMap</span><span>
-</span><span class="comment">// hm: D = TreeMap(
-//   0 -&gt; UnittedQuantity(
-//     magnitude = 0.0,
-//     unit = UnitOfMeasurement(name = &quot;bit&quot;, symbol = &quot;b&quot;, wikipediaUrl = None)
-//   ),
-//   1/100 -&gt; UnittedQuantity(
-//     magnitude = 0.08079313589591118,
-//     unit = UnitOfMeasurement(name = &quot;bit&quot;, symbol = &quot;b&quot;, wikipediaUrl = None)
-//   ),
-//   1/50 -&gt; UnittedQuantity(
-//     magnitude = 0.14144054254182067,
-//     unit = UnitOfMeasurement(name = &quot;bit&quot;, symbol = &quot;b&quot;, wikipediaUrl = None)
-//   ),
-//   3/100 -&gt; UnittedQuantity(
-//     magnitude = 0.19439185783157623,
-//     unit = UnitOfMeasurement(name = &quot;bit&quot;, symbol = &quot;b&quot;, wikipediaUrl = None)
-//   ),
-//   1/25 -&gt; UnittedQuantity(
-//     magnitude = 0.24229218908241482,
-//     unit = UnitOfMeasurement(name = &quot;bit&quot;, symbol = &quot;b&quot;, wikipediaUrl = None)
-//   ),
-//   1/20 -&gt; UnittedQuantity(
-//     magnitude = 0.28639695711595625,
-//     unit = UnitOfMeasurement(name = &quot;bit&quot;, symbol = &quot;b&quot;, wikipediaUrl = None)
-//   ),
-//   3/50 -&gt; UnittedQuantity(
-//     magnitude = 0.32744491915447627,
-//     unit = UnitOfMeasurement(name = &quot;bit&quot;, symbol = &quot;b&quot;, wikipediaUrl = None)
-//   ),
-//   7/100 -&gt; UnittedQuantity(
-//     magnitude = 0.36592365090022316,
-//     unit = UnitOfMeasurement(name = &quot;bit&quot;, symbol = &quot;b&quot;, wikipediaUrl = None)
-//   ),
-//   2/25 -&gt; UnittedQuantity(
-//     magnitude = 0.4021791902022729,
-//     unit = UnitOfMeasurement(name = &quot;bit&quot;, symbol = &quot;b&quot;, wikipediaUrl = None)
-//   ),
-//   9/100 -&gt; UnittedQuantity(
-//     magnitude = 0.4364698170641029,
-//     unit = UnitOfMeasurement(name = &quot;bit&quot;, symbol = &quot;b&quot;, wikipediaUrl = None)
-//   ),
-//   1/10 -&gt; UnittedQuantity(
-//     magnitude = 0.4689955935892812,
-//     unit = UnitOfMeasurement(name = &quot;bit&quot;, symbol = &quot;b&quot;, wikipediaUrl = None)
-//   ),
-//   11/100 -&gt; UnittedQuantity(
-//     magnitude = 0.499915958164528,
-//     unit = UnitOfMeasurement(name = &quot;bit&quot;, symbol = &quot;b&quot;, wikipediaUrl = None)
-//   ),
-// ...</span></code></pre>
+    }).</span><span class="identifier">toMap</span></code></pre>
         <p>Define visualization</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
-</span><span class="comment">// fieldDouble: Field[Double] = spire.std.DoubleAlgebra@35b96035
-</span><span>
+
 </span><span class="keyword">val</span><span> </span><span class="identifier">plot</span><span> = </span><span class="type-name">Plot</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Rational</span><span>, </span><span class="type-name">UnittedQuantity</span><span>[</span><span class="type-name">Information</span><span>, </span><span class="type-name">Double</span><span>], </span><span class="type-name">D</span><span>](
   () =&gt; </span><span class="type-name">List</span><span>((</span><span class="string-literal">&quot;h&quot;</span><span>, </span><span class="identifier">hm</span><span>)),
   </span><span class="identifier">connect</span><span> = </span><span class="boolean-literal">true</span><span>,
@@ -261,40 +210,7 @@
   </span><span class="identifier">drawKey</span><span> = </span><span class="boolean-literal">false</span><span>,
   </span><span class="identifier">xAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;p(x=&#39;HEAD)&quot;</span><span>),
   </span><span class="identifier">yAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;H&quot;</span><span>),
-  </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;Entropy&quot;</span><span>)).</span><span class="identifier">zeroAxes</span><span>
-</span><span class="comment">// plot: Plot[String, Rational, UnittedQuantity[Information, Double], D] = Plot(
-//   dataFn = &lt;function0&gt;,
-//   connect = true,
-//   drawKey = false,
-//   width = 700,
-//   height = 600,
-//   border = 50,
-//   pointDiameter = 4,
-//   keyLeftPadding = 20,
-//   keyTopPadding = 50,
-//   keyWidth = 80,
-//   fontName = &quot;Courier New&quot;,
-//   fontSize = 12,
-//   bold = false,
-//   titleFontName = &quot;Palatino&quot;,
-//   titleFontSize = 20,
-//   colorOf = &lt;function1&gt;,
-//   title = Some(value = &quot;Entropy&quot;),
-//   keyTitle = None,
-//   xAxis = Some(
-//     value = UnittedQuantity(
-//       magnitude = 0.0,
-//       unit = UnitOfMeasurement(
-//         name = &quot;byte&quot;,
-//         symbol = &quot;B&quot;,
-//         wikipediaUrl = Some(value = &quot;http://en.wikipedia.org/wiki/Byte&quot;)
-//       )
-//     )
-//   ),
-//   xAxisLabel = Some(value = &quot;p(x=&#39;HEAD)&quot;),
-//   yAxis = Some(value = 0),
-//   yAxisLabel = Some(value = &quot;H&quot;)
-// )</span></code></pre>
+  </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;Entropy&quot;</span><span>)).</span><span class="identifier">zeroAxes</span></code></pre>
         <p>Create the SVG</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
