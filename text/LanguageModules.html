@@ -169,20 +169,13 @@
         <h2 id="english" class="section"><a class="anchor-link left" href="#english"><i class="icofont-laika">&#xef71;</i></a>English</h2>
         <p>Currently English is the only language module.  A language modules supports tokenization, stemming, and stop words.  The stemmer is from tartarus.org, which is released under a compatible BSD license.  (It is not yet available via Maven, so its source has been checked into the Axle github repo.)</p>
         <p>Example</p>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">text</span><span> = </span><span class="string-literal">&quot;&quot;&quot;
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">text</span><span> = </span><span class="string-literal">&quot;&quot;&quot;
 Now we are engaged in a great civil war, testing whether that nation, or any nation,
 so conceived and so dedicated, can long endure. We are met on a great battle-field of
 that war. We have come to dedicate a portion of that field, as a final resting place
 for those who here gave their lives that that nation might live. It is altogether
 fitting and proper that we should do this.
-&quot;&quot;&quot;</span><span>
-</span><span class="comment">// text: String = &quot;&quot;&quot;
-// Now we are engaged in a great civil war, testing whether that nation, or any nation,
-// so conceived and so dedicated, can long endure. We are met on a great battle-field of
-// that war. We have come to dedicate a portion of that field, as a final resting place
-// for those who here gave their lives that that nation might live. It is altogether
-// fitting and proper that we should do this.
-// &quot;&quot;&quot;</span></code></pre>
+&quot;&quot;&quot;</span></code></pre>
         <p>Usage</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">nlp</span><span>.</span><span class="identifier">language</span><span>.</span><span class="type-name">English</span><span>
 

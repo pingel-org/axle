@@ -183,57 +183,7 @@
   </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Sunny&quot;</span><span>, </span><span class="string-literal">&quot;Mild&quot;</span><span>, </span><span class="string-literal">&quot;Normal&quot;</span><span>, </span><span class="string-literal">&quot;Strong&quot;</span><span>, </span><span class="boolean-literal">true</span><span>),
   </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Overcast&quot;</span><span>, </span><span class="string-literal">&quot;Mild&quot;</span><span>, </span><span class="string-literal">&quot;High&quot;</span><span>, </span><span class="string-literal">&quot;Strong&quot;</span><span>, </span><span class="boolean-literal">true</span><span>),
   </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Overcast&quot;</span><span>, </span><span class="string-literal">&quot;Hot&quot;</span><span>, </span><span class="string-literal">&quot;Normal&quot;</span><span>, </span><span class="string-literal">&quot;Weak&quot;</span><span>, </span><span class="boolean-literal">true</span><span>),
-  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Rain&quot;</span><span>, </span><span class="string-literal">&quot;Mild&quot;</span><span>, </span><span class="string-literal">&quot;High&quot;</span><span>, </span><span class="string-literal">&quot;Strong&quot;</span><span>, </span><span class="boolean-literal">false</span><span>))
-</span><span class="comment">// events: List[Tennis] = List(
-//   Tennis(
-//     outlook = &quot;Sunny&quot;,
-//     temperature = &quot;Hot&quot;,
-//     humidity = &quot;High&quot;,
-//     wind = &quot;Weak&quot;,
-//     play = false
-//   ),
-//   Tennis(
-//     outlook = &quot;Sunny&quot;,
-//     temperature = &quot;Hot&quot;,
-//     humidity = &quot;High&quot;,
-//     wind = &quot;Strong&quot;,
-//     play = false
-//   ),
-//   Tennis(
-//     outlook = &quot;Overcast&quot;,
-//     temperature = &quot;Hot&quot;,
-//     humidity = &quot;High&quot;,
-//     wind = &quot;Weak&quot;,
-//     play = true
-//   ),
-//   Tennis(
-//     outlook = &quot;Rain&quot;,
-//     temperature = &quot;Mild&quot;,
-//     humidity = &quot;High&quot;,
-//     wind = &quot;Weak&quot;,
-//     play = true
-//   ),
-//   Tennis(
-//     outlook = &quot;Rain&quot;,
-//     temperature = &quot;Cool&quot;,
-//     humidity = &quot;Normal&quot;,
-//     wind = &quot;Weak&quot;,
-//     play = true
-//   ),
-//   Tennis(
-//     outlook = &quot;Rain&quot;,
-//     temperature = &quot;Cool&quot;,
-//     humidity = &quot;Normal&quot;,
-//     wind = &quot;Strong&quot;,
-//     play = false
-//   ),
-//   Tennis(
-//     outlook = &quot;Overcast&quot;,
-//     temperature = &quot;Cool&quot;,
-//     humidity = &quot;Normal&quot;,
-//     wind = &quot;Strong&quot;,
-//     play = true
-// ...</span></code></pre>
+  </span><span class="type-name">Tennis</span><span>(</span><span class="string-literal">&quot;Rain&quot;</span><span>, </span><span class="string-literal">&quot;Mild&quot;</span><span>, </span><span class="string-literal">&quot;High&quot;</span><span>, </span><span class="string-literal">&quot;Strong&quot;</span><span>, </span><span class="boolean-literal">false</span><span>))</span></code></pre>
         <p>Build a classifier to predict the Boolean feature &#39;play&#39; given all the other features of the observations</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 
@@ -242,7 +192,7 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">probability</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">NaiveBayesClassifier</span></code></pre>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">classifier</span><span> = </span><span class="type-name">NaiveBayesClassifier</span><span>[</span><span class="type-name">Tennis</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Boolean</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">Rational</span><span>](
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">classifier</span><span> = </span><span class="type-name">NaiveBayesClassifier</span><span>[</span><span class="type-name">Tennis</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Boolean</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">Rational</span><span>](
   </span><span class="identifier">events</span><span>,
   </span><span class="type-name">List</span><span>(
     (</span><span class="type-name">Variable</span><span>[</span><span class="type-name">String</span><span>](</span><span class="string-literal">&quot;Outlook&quot;</span><span>) -&gt; </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;Sunny&quot;</span><span>, </span><span class="string-literal">&quot;Overcast&quot;</span><span>, </span><span class="string-literal">&quot;Rain&quot;</span><span>)),
@@ -251,57 +201,7 @@
     (</span><span class="type-name">Variable</span><span>[</span><span class="type-name">String</span><span>](</span><span class="string-literal">&quot;Wind&quot;</span><span>) -&gt; </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;Weak&quot;</span><span>, </span><span class="string-literal">&quot;Strong&quot;</span><span>))),
   (</span><span class="type-name">Variable</span><span>[</span><span class="type-name">Boolean</span><span>](</span><span class="string-literal">&quot;Play&quot;</span><span>) -&gt; </span><span class="type-name">Vector</span><span>(</span><span class="boolean-literal">true</span><span>, </span><span class="boolean-literal">false</span><span>)),
   (</span><span class="identifier">t</span><span>: </span><span class="type-name">Tennis</span><span>) =&gt; </span><span class="identifier">t</span><span>.</span><span class="identifier">outlook</span><span> :: </span><span class="identifier">t</span><span>.</span><span class="identifier">temperature</span><span> :: </span><span class="identifier">t</span><span>.</span><span class="identifier">humidity</span><span> :: </span><span class="identifier">t</span><span>.</span><span class="identifier">wind</span><span> :: </span><span class="type-name">Nil</span><span>,
-  (</span><span class="identifier">t</span><span>: </span><span class="type-name">Tennis</span><span>) =&gt; </span><span class="identifier">t</span><span>.</span><span class="identifier">play</span><span>)
-</span><span class="comment">// classifier: NaiveBayesClassifier[Tennis, String, Boolean, List, Rational] = NaiveBayesClassifier(
-//   data = List(
-//     Tennis(
-//       outlook = &quot;Sunny&quot;,
-//       temperature = &quot;Hot&quot;,
-//       humidity = &quot;High&quot;,
-//       wind = &quot;Weak&quot;,
-//       play = false
-//     ),
-//     Tennis(
-//       outlook = &quot;Sunny&quot;,
-//       temperature = &quot;Hot&quot;,
-//       humidity = &quot;High&quot;,
-//       wind = &quot;Strong&quot;,
-//       play = false
-//     ),
-//     Tennis(
-//       outlook = &quot;Overcast&quot;,
-//       temperature = &quot;Hot&quot;,
-//       humidity = &quot;High&quot;,
-//       wind = &quot;Weak&quot;,
-//       play = true
-//     ),
-//     Tennis(
-//       outlook = &quot;Rain&quot;,
-//       temperature = &quot;Mild&quot;,
-//       humidity = &quot;High&quot;,
-//       wind = &quot;Weak&quot;,
-//       play = true
-//     ),
-//     Tennis(
-//       outlook = &quot;Rain&quot;,
-//       temperature = &quot;Cool&quot;,
-//       humidity = &quot;Normal&quot;,
-//       wind = &quot;Weak&quot;,
-//       play = true
-//     ),
-//     Tennis(
-//       outlook = &quot;Rain&quot;,
-//       temperature = &quot;Cool&quot;,
-//       humidity = &quot;Normal&quot;,
-//       wind = &quot;Strong&quot;,
-//       play = false
-//     ),
-//     Tennis(
-//       outlook = &quot;Overcast&quot;,
-//       temperature = &quot;Cool&quot;,
-//       humidity = &quot;Normal&quot;,
-//       wind = &quot;Strong&quot;,
-// ...</span></code></pre>
+  (</span><span class="identifier">t</span><span>: </span><span class="type-name">Tennis</span><span>) =&gt; </span><span class="identifier">t</span><span>.</span><span class="identifier">play</span><span>)</span></code></pre>
         <p>Use the classifier to predict:</p>
         <pre><code class="nohighlight"><span class="identifier">events</span><span> </span><span class="identifier">map</span><span> { </span><span class="identifier">datum</span><span> =&gt; </span><span class="identifier">datum</span><span>.</span><span class="identifier">toString</span><span> + </span><span class="string-literal">&quot;</span><span class="escape-sequence">\t</span><span class="string-literal">&quot;</span><span> + </span><span class="identifier">classifier</span><span>(</span><span class="identifier">datum</span><span>) } </span><span class="identifier">mkString</span><span>(</span><span class="string-literal">&quot;</span><span class="escape-sequence">\n</span><span class="string-literal">&quot;</span><span>)
 </span><span class="comment">// res0: String = &quot;&quot;&quot;Tennis(Sunny,Hot,High,Weak,false)	false
@@ -319,61 +219,9 @@
 // Tennis(Overcast,Hot,Normal,Weak,true)	true
 // Tennis(Rain,Mild,High,Strong,false)	false&quot;&quot;&quot;</span></code></pre>
         <p>Measure the classifier&#39;s performance</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">ClassifierPerformance</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">ClassifierPerformance</span><span>
 
-</span><span class="keyword">val</span><span> </span><span class="identifier">perf</span><span> = </span><span class="type-name">ClassifierPerformance</span><span>[</span><span class="type-name">Rational</span><span>, </span><span class="type-name">Tennis</span><span>, </span><span class="type-name">List</span><span>](</span><span class="identifier">events</span><span>, </span><span class="identifier">classifier</span><span>, </span><span class="identifier">_</span><span>.</span><span class="identifier">play</span><span>)
-</span><span class="comment">// perf: ClassifierPerformance[Rational, Tennis, List] = ClassifierPerformance(
-//   data = List(
-//     Tennis(
-//       outlook = &quot;Sunny&quot;,
-//       temperature = &quot;Hot&quot;,
-//       humidity = &quot;High&quot;,
-//       wind = &quot;Weak&quot;,
-//       play = false
-//     ),
-//     Tennis(
-//       outlook = &quot;Sunny&quot;,
-//       temperature = &quot;Hot&quot;,
-//       humidity = &quot;High&quot;,
-//       wind = &quot;Strong&quot;,
-//       play = false
-//     ),
-//     Tennis(
-//       outlook = &quot;Overcast&quot;,
-//       temperature = &quot;Hot&quot;,
-//       humidity = &quot;High&quot;,
-//       wind = &quot;Weak&quot;,
-//       play = true
-//     ),
-//     Tennis(
-//       outlook = &quot;Rain&quot;,
-//       temperature = &quot;Mild&quot;,
-//       humidity = &quot;High&quot;,
-//       wind = &quot;Weak&quot;,
-//       play = true
-//     ),
-//     Tennis(
-//       outlook = &quot;Rain&quot;,
-//       temperature = &quot;Cool&quot;,
-//       humidity = &quot;Normal&quot;,
-//       wind = &quot;Weak&quot;,
-//       play = true
-//     ),
-//     Tennis(
-//       outlook = &quot;Rain&quot;,
-//       temperature = &quot;Cool&quot;,
-//       humidity = &quot;Normal&quot;,
-//       wind = &quot;Strong&quot;,
-//       play = false
-//     ),
-//     Tennis(
-//       outlook = &quot;Overcast&quot;,
-//       temperature = &quot;Cool&quot;,
-//       humidity = &quot;Normal&quot;,
-//       wind = &quot;Strong&quot;,
-// ...
-</span><span>
-</span><span class="identifier">perf</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="type-name">ClassifierPerformance</span><span>[</span><span class="type-name">Rational</span><span>, </span><span class="type-name">Tennis</span><span>, </span><span class="type-name">List</span><span>](</span><span class="identifier">events</span><span>, </span><span class="identifier">classifier</span><span>, </span><span class="identifier">_</span><span>.</span><span class="identifier">play</span><span>).</span><span class="identifier">show</span><span>
 </span><span class="comment">// res1: String = &quot;&quot;&quot;Precision   9/10
 // Recall      1
 // Specificity 4/5

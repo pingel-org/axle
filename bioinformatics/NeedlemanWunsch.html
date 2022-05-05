@@ -192,9 +192,7 @@
   </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
 }</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">dna1</span><span> = </span><span class="string-literal">&quot;ATGCGGCC&quot;</span><span>
-</span><span class="comment">// dna1: String = &quot;ATGCGGCC&quot;
-</span><span class="keyword">val</span><span> </span><span class="identifier">dna2</span><span> = </span><span class="string-literal">&quot;ATCGCCGG&quot;</span><span>
-</span><span class="comment">// dna2: String = &quot;ATCGCCGG&quot;</span></code></pre>
+</span><span class="keyword">val</span><span> </span><span class="identifier">dna2</span><span> = </span><span class="string-literal">&quot;ATCGCCGG&quot;</span></code></pre>
         <p>Setup</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">nwAlignment</span><span> = </span><span class="identifier">optimalAlignment</span><span>[</span><span class="type-name">IndexedSeq</span><span>, </span><span class="type-name">Char</span><span>, </span><span class="type-name">DoubleMatrix</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Double</span><span>](
   </span><span class="identifier">dna1</span><span>, </span><span class="identifier">dna2</span><span>, </span><span class="identifier">similarity</span><span>, </span><span class="identifier">gap</span><span>, </span><span class="identifier">gapPenalty</span><span>)

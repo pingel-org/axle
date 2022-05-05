@@ -185,9 +185,7 @@
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">laJblasInt</span><span> = </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Int</span><span>]</span></code></pre>
         <p>Setup</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">dna3</span><span> = </span><span class="string-literal">&quot;ACACACTA&quot;</span><span>
-</span><span class="comment">// dna3: String = &quot;ACACACTA&quot;
-</span><span class="keyword">val</span><span> </span><span class="identifier">dna4</span><span> = </span><span class="string-literal">&quot;AGCACACA&quot;</span><span>
-</span><span class="comment">// dna4: String = &quot;AGCACACA&quot;</span></code></pre>
+</span><span class="keyword">val</span><span> </span><span class="identifier">dna4</span><span> = </span><span class="string-literal">&quot;AGCACACA&quot;</span></code></pre>
         <p>Align the sequences</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">swAlignment</span><span> = </span><span class="identifier">optimalAlignment</span><span>[</span><span class="type-name">IndexedSeq</span><span>, </span><span class="type-name">Char</span><span>, </span><span class="type-name">DoubleMatrix</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>](
   </span><span class="identifier">dna3</span><span>, </span><span class="identifier">dna4</span><span>, </span><span class="identifier">w</span><span>, </span><span class="identifier">mismatchPenalty</span><span>, </span><span class="identifier">gap</span><span>)

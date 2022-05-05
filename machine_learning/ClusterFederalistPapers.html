@@ -170,136 +170,24 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">FederalistPapers</span><span>
 </span><span class="keyword">import</span><span> </span><span class="type-name">FederalistPapers</span><span>.</span><span class="type-name">Article</span></code></pre>
         <p>Download (and cache) the Federalist articles downloader:</p>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ec</span><span> = </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="identifier">global</span><span>
-</span><span class="comment">// ec: concurrent.ExecutionContextExecutor = scala.concurrent.impl.ExecutionContextImpl$$anon$3@6b0cd692[Running, parallelism = 4, size = 4, active = 0, running = 0, steals = 6, tasks = 0, submissions = 0]
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ec</span><span> = </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="identifier">global</span><span>
 </span><span class="keyword">val</span><span> </span><span class="identifier">blocker</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">Blocker</span><span>.</span><span class="identifier">liftExecutionContext</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// blocker: cats.effect.Blocker = cats.effect.Blocker@6b0cd692
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">cs</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">contextShift</span><span>(</span><span class="identifier">ec</span><span>)
-</span><span class="comment">// cs: cats.effect.ContextShift[cats.effect.IO] = cats.effect.internals.IOContextShift@640e8a9e
-</span><span>
+
 </span><span class="keyword">val</span><span> </span><span class="identifier">articlesIO</span><span> = </span><span class="type-name">FederalistPapers</span><span>.</span><span class="identifier">articles</span><span>[</span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>](</span><span class="identifier">blocker</span><span>)
-</span><span class="comment">// articlesIO: cats.effect.IO[List[Article]] = Map(
-//   source = Async(
-//     k = cats.effect.internals.IOBracket$$$Lambda$9050/1934519269@53c6ec15,
-//     trampolineAfter = false
-//   ),
-//   f = axle.data.FederalistPapers$$$Lambda$9063/631160458@5988677e,
-//   index = 0
-// )
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">articles</span><span> = </span><span class="identifier">articlesIO</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()
-</span><span class="comment">// articles: List[Article] = List(
-//   Article(
-//     id = 1,
-//     author = &quot;HAMILTON&quot;,
-//     text = &quot;&quot;&quot;
-// 
-// To the People of the State of New York:
-// 
-// AFTER an unequivocal experience of the inefficacy of the
-// subsisting federal government, you are called upon to deliberate on
-// a new Constitution for the United States of America. The subject
-// speaks its own importance; comprehending in its consequences
-// nothing less than the existence of the UNION, the safety and welfare
-// of the parts of which it is composed, the fate of an empire in many
-// respects the most interesting in the world. It has been frequently
-// remarked that it seems to have been reserved to the people of this
-// country, by their conduct and example, to decide the important
-// question, whether societies of men are really capable or not of
-// establishing good government from reflection and choice, or whether
-// they are forever destined to depend for their political
-// constitutions on accident and force. If there be any truth in the
-// remark, the crisis at which we are arrived may with propriety be
-// regarded as the era in which that decision is to be made; and a
-// wrong election of the part we shall act may, in this view, deserve
-// to be considered as the general misfortune of mankind.
-// 
-// This idea will add the inducements of philanthropy to those of
-// patriotism, to heighten the solicitude which all considerate and
-// good men must feel for the event. Happy will it be if our choice
-// should be directed by a judicious estimate of our true interests,
-// unperplexed and unbiased by considerations not connected with the
-// public good. But this is a thing more ardently to be wished than
-// seriously to be expected. The plan offered to our deliberations
-// affects too many particular interests, innovates upon too many local
-// institutions, not to involve in its discussion a variety of objects
-// foreign to its merits, and of views, passions and prejudices little
-// favorable to the discovery of truth.
-// 
-// Among the most formidable of the obstacles which the new
-// Constitution will have to encounter may readily be distinguished the
-// obvious interest of a certain class of men in every State to resist
-// all changes which may hazard a diminution of the power, emolument,
-// and consequence of the offices they hold under the State
-// establishments; and the perverted ambition of another class of men,
-// who will either hope to aggrandize themselves by the confusions of
-// their country, or will flatter themselves with fairer prospects of
-// elevation from the subdivision of the empire into several partial
-// confederacies than from its union under one government.
-// 
-// ...</span></code></pre>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">articles</span><span> = </span><span class="identifier">articlesIO</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
         <p>The result is a <code>List[Article]</code>.  How many articles are there?</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">articles</span><span>.</span><span class="identifier">size</span><span>
 </span><span class="comment">// res0: Int = 86</span></code></pre>
         <p>Construct a <code>Corpus</code> object to assist with content analysis</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">nlp</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">nlp</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">nlp</span><span>.</span><span class="identifier">language</span><span>.</span><span class="type-name">English</span><span>
 
 </span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">CRing</span><span>
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringLong</span><span>: </span><span class="type-name">CRing</span><span>[</span><span class="type-name">Long</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">LongAlgebra</span><span>
-</span><span class="comment">// ringLong: CRing[Long] = spire.std.LongAlgebra@20b55227
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">corpus</span><span> = </span><span class="type-name">Corpus</span><span>[</span><span class="type-name">Vector</span><span>, </span><span class="type-name">Long</span><span>](</span><span class="identifier">articles</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">text</span><span>).</span><span class="identifier">toVector</span><span>, </span><span class="type-name">English</span><span>)
-</span><span class="comment">// corpus: Corpus[Vector, Long] = Corpus(
-//   documents = Vector(
-//     &quot;&quot;&quot;
-// 
-// To the People of the State of New York:
-// 
-// AFTER an unequivocal experience of the inefficacy of the
-// subsisting federal government, you are called upon to deliberate on
-// a new Constitution for the United States of America. The subject
-// speaks its own importance; comprehending in its consequences
-// nothing less than the existence of the UNION, the safety and welfare
-// of the parts of which it is composed, the fate of an empire in many
-// respects the most interesting in the world. It has been frequently
-// remarked that it seems to have been reserved to the people of this
-// country, by their conduct and example, to decide the important
-// question, whether societies of men are really capable or not of
-// establishing good government from reflection and choice, or whether
-// they are forever destined to depend for their political
-// constitutions on accident and force. If there be any truth in the
-// remark, the crisis at which we are arrived may with propriety be
-// regarded as the era in which that decision is to be made; and a
-// wrong election of the part we shall act may, in this view, deserve
-// to be considered as the general misfortune of mankind.
-// 
-// This idea will add the inducements of philanthropy to those of
-// patriotism, to heighten the solicitude which all considerate and
-// good men must feel for the event. Happy will it be if our choice
-// should be directed by a judicious estimate of our true interests,
-// unperplexed and unbiased by considerations not connected with the
-// public good. But this is a thing more ardently to be wished than
-// seriously to be expected. The plan offered to our deliberations
-// affects too many particular interests, innovates upon too many local
-// institutions, not to involve in its discussion a variety of objects
-// foreign to its merits, and of views, passions and prejudices little
-// favorable to the discovery of truth.
-// 
-// Among the most formidable of the obstacles which the new
-// Constitution will have to encounter may readily be distinguished the
-// obvious interest of a certain class of men in every State to resist
-// all changes which may hazard a diminution of the power, emolument,
-// and consequence of the offices they hold under the State
-// establishments; and the perverted ambition of another class of men,
-// who will either hope to aggrandize themselves by the confusions of
-// their country, or will flatter themselves with fairer prospects of
-// elevation from the subdivision of the empire into several partial
-// confederacies than from its union under one government.
-// 
-// It is not, however, my design to dwell upon observations of this
-// nature. I am well aware that it would be disingenuous to resolve
-// ...</span></code></pre>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">corpus</span><span> = </span><span class="type-name">Corpus</span><span>[</span><span class="type-name">Vector</span><span>, </span><span class="type-name">Long</span><span>](</span><span class="identifier">articles</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">text</span><span>).</span><span class="identifier">toVector</span><span>, </span><span class="type-name">English</span><span>)</span></code></pre>
         <p>Define a feature extractor using top words and bigrams.</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">frequentWords</span><span> = </span><span class="identifier">corpus</span><span>.</span><span class="identifier">wordsMoreFrequentThan</span><span>(</span><span class="number-literal">100</span><span>)
 </span><span class="comment">// frequentWords: List[String] = List(
@@ -316,44 +204,8 @@
 //   &quot;which&quot;,
 //   &quot;by&quot;,
 //   &quot;as&quot;,
-//   &quot;this&quot;,
-//   &quot;would&quot;,
-//   &quot;have&quot;,
-//   &quot;will&quot;,
-//   &quot;for&quot;,
-//   &quot;or&quot;,
-//   &quot;not&quot;,
-//   &quot;their&quot;,
-//   &quot;with&quot;,
-//   &quot;from&quot;,
-//   &quot;are&quot;,
-//   &quot;on&quot;,
-//   &quot;they&quot;,
-//   &quot;an&quot;,
-//   &quot;states&quot;,
-//   &quot;government&quot;,
-//   &quot;may&quot;,
-//   &quot;been&quot;,
-//   &quot;state&quot;,
-//   &quot;all&quot;,
-//   &quot;but&quot;,
-//   &quot;its&quot;,
-//   &quot;other&quot;,
-//   &quot;people&quot;,
-//   &quot;power&quot;,
-//   &quot;has&quot;,
-//   &quot;no&quot;,
-//   &quot;more&quot;,
-//   &quot;at&quot;,
-//   &quot;if&quot;,
-//   &quot;than&quot;,
-//   &quot;any&quot;,
-//   &quot;them&quot;,
-//   &quot;one&quot;,
-//   &quot;those&quot;,
-// ...
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">topBigrams</span><span> = </span><span class="identifier">corpus</span><span>.</span><span class="identifier">topKBigrams</span><span>(</span><span class="number-literal">200</span><span>)
+// ...</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">topBigrams</span><span> = </span><span class="identifier">corpus</span><span>.</span><span class="identifier">topKBigrams</span><span>(</span><span class="number-literal">200</span><span>)
 </span><span class="comment">// topBigrams: List[(String, String)] = List(
 //   (&quot;of&quot;, &quot;the&quot;),
 //   (&quot;to&quot;, &quot;the&quot;),
@@ -368,47 +220,10 @@
 //   (&quot;would&quot;, &quot;be&quot;),
 //   (&quot;will&quot;, &quot;be&quot;),
 //   (&quot;for&quot;, &quot;the&quot;),
-//   (&quot;from&quot;, &quot;the&quot;),
-//   (&quot;the&quot;, &quot;state&quot;),
-//   (&quot;may&quot;, &quot;be&quot;),
-//   (&quot;have&quot;, &quot;been&quot;),
-//   (&quot;and&quot;, &quot;the&quot;),
-//   (&quot;the&quot;, &quot;same&quot;),
-//   (&quot;in&quot;, &quot;a&quot;),
-//   (&quot;with&quot;, &quot;the&quot;),
-//   (&quot;the&quot;, &quot;union&quot;),
-//   (&quot;has&quot;, &quot;been&quot;),
-//   (&quot;of&quot;, &quot;their&quot;),
-//   (&quot;the&quot;, &quot;states&quot;),
-//   (&quot;of&quot;, &quot;this&quot;),
-//   (&quot;the&quot;, &quot;constitution&quot;),
-//   (&quot;as&quot;, &quot;the&quot;),
-//   (&quot;the&quot;, &quot;federal&quot;),
-//   (&quot;the&quot;, &quot;government&quot;),
-//   (&quot;power&quot;, &quot;of&quot;),
-//   (&quot;the&quot;, &quot;national&quot;),
-//   (&quot;the&quot;, &quot;most&quot;),
-//   (&quot;the&quot;, &quot;other&quot;),
-//   (&quot;which&quot;, &quot;the&quot;),
-//   (&quot;all&quot;, &quot;the&quot;),
-//   (&quot;the&quot;, &quot;united&quot;),
-//   (&quot;to&quot;, &quot;a&quot;),
-//   (&quot;united&quot;, &quot;states&quot;),
-//   (&quot;the&quot;, &quot;executive&quot;),
-//   (&quot;it&quot;, &quot;will&quot;),
-//   (&quot;the&quot;, &quot;public&quot;),
-//   (&quot;is&quot;, &quot;to&quot;),
-//   (&quot;ought&quot;, &quot;to&quot;),
-//   (&quot;in&quot;, &quot;this&quot;),
-//   (&quot;the&quot;, &quot;power&quot;),
-//   (&quot;and&quot;, &quot;to&quot;),
-//   (&quot;must&quot;, &quot;be&quot;),
-// ...
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">numDimensions</span><span> = </span><span class="identifier">frequentWords</span><span>.</span><span class="identifier">size</span><span> + </span><span class="identifier">topBigrams</span><span>.</span><span class="identifier">size</span><span>
-</span><span class="comment">// numDimensions: Int = 403
-</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">talliable</span><span>.</span><span class="identifier">talliableOps</span><span>
+// ...</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">numDimensions</span><span> = </span><span class="identifier">frequentWords</span><span>.</span><span class="identifier">size</span><span> + </span><span class="identifier">topBigrams</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// numDimensions: Int = 403</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">talliable</span><span>.</span><span class="identifier">talliableOps</span><span>
 
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">featureExtractor</span><span>(</span><span class="identifier">fp</span><span>: </span><span class="type-name">Article</span><span>): </span><span class="type-name">List</span><span>[</span><span class="type-name">Double</span><span>] = {
 
@@ -439,135 +254,34 @@
         <p>Create 4 clusters using k-Means</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">KMeans</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">PCAFeatureNormalizer</span></code></pre>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">normalizer</span><span> = (</span><span class="type-name">PCAFeatureNormalizer</span><span>[</span><span class="type-name">DoubleMatrix</span><span>] </span><span class="identifier">_</span><span>).</span><span class="identifier">curried</span><span>.</span><span class="identifier">apply</span><span>(</span><span class="number-literal">0.98</span><span>)
-</span><span class="comment">// normalizer: DoubleMatrix =&gt; PCAFeatureNormalizer[DoubleMatrix] = scala.Function2$$Lambda$9097/2124204253@7b444e8b
-</span><span>
+
 </span><span class="keyword">val</span><span> </span><span class="identifier">classifier</span><span> = </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Article</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
   </span><span class="identifier">articles</span><span>,
   </span><span class="type-name">N</span><span> = </span><span class="identifier">numDimensions</span><span>,
   </span><span class="identifier">featureExtractor</span><span>,
   </span><span class="identifier">normalizer</span><span>,
   </span><span class="type-name">K</span><span> = </span><span class="number-literal">4</span><span>,
-  </span><span class="identifier">iterations</span><span> = </span><span class="number-literal">100</span><span>)(</span><span class="identifier">rng</span><span>)
-</span><span class="comment">// classifier: KMeans[Article, List, DoubleMatrix] = KMeans(
-//   data = List(
-//     Article(
-//       id = 1,
-//       author = &quot;HAMILTON&quot;,
-//       text = &quot;&quot;&quot;
-// 
-// To the People of the State of New York:
-// 
-// AFTER an unequivocal experience of the inefficacy of the
-// subsisting federal government, you are called upon to deliberate on
-// a new Constitution for the United States of America. The subject
-// speaks its own importance; comprehending in its consequences
-// nothing less than the existence of the UNION, the safety and welfare
-// of the parts of which it is composed, the fate of an empire in many
-// respects the most interesting in the world. It has been frequently
-// remarked that it seems to have been reserved to the people of this
-// country, by their conduct and example, to decide the important
-// question, whether societies of men are really capable or not of
-// establishing good government from reflection and choice, or whether
-// they are forever destined to depend for their political
-// constitutions on accident and force. If there be any truth in the
-// remark, the crisis at which we are arrived may with propriety be
-// regarded as the era in which that decision is to be made; and a
-// wrong election of the part we shall act may, in this view, deserve
-// to be considered as the general misfortune of mankind.
-// 
-// This idea will add the inducements of philanthropy to those of
-// patriotism, to heighten the solicitude which all considerate and
-// good men must feel for the event. Happy will it be if our choice
-// should be directed by a judicious estimate of our true interests,
-// unperplexed and unbiased by considerations not connected with the
-// public good. But this is a thing more ardently to be wished than
-// seriously to be expected. The plan offered to our deliberations
-// affects too many particular interests, innovates upon too many local
-// institutions, not to involve in its discussion a variety of objects
-// foreign to its merits, and of views, passions and prejudices little
-// favorable to the discovery of truth.
-// 
-// Among the most formidable of the obstacles which the new
-// Constitution will have to encounter may readily be distinguished the
-// obvious interest of a certain class of men in every State to resist
-// all changes which may hazard a diminution of the power, emolument,
-// and consequence of the offices they hold under the State
-// establishments; and the perverted ambition of another class of men,
-// who will either hope to aggrandize themselves by the confusions of
-// their country, or will flatter themselves with fairer prospects of
-// elevation from the subdivision of the empire into several partial
-// confederacies than from its union under one government.
-// ...</span></code></pre>
+  </span><span class="identifier">iterations</span><span> = </span><span class="number-literal">100</span><span>)(</span><span class="identifier">rng</span><span>)</span></code></pre>
         <p>Show cluster vs author in a confusion matrix:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">ConfusionMatrix</span></code></pre>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">confusion</span><span> = </span><span class="type-name">ConfusionMatrix</span><span>[</span><span class="type-name">Article</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Vector</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">ConfusionMatrix</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">confusion</span><span> = </span><span class="type-name">ConfusionMatrix</span><span>[</span><span class="type-name">Article</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Vector</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
   </span><span class="identifier">classifier</span><span>,
   </span><span class="identifier">articles</span><span>.</span><span class="identifier">toVector</span><span>,
   </span><span class="identifier">_</span><span>.</span><span class="identifier">author</span><span>,
-  </span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">3</span><span>)
-</span><span class="comment">// confusion: ConfusionMatrix[Article, Int, String, Vector, DoubleMatrix] = ConfusionMatrix(
-//   classifier = KMeans(
-//     data = List(
-//       Article(
-//         id = 1,
-//         author = &quot;HAMILTON&quot;,
-//         text = &quot;&quot;&quot;
+  </span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">3</span><span>)</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">confusion</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res1: String = &quot;&quot;&quot;35 10  1  6 : 52 HAMILTON
+//  3  0  0  0 :  3 HAMILTON AND MADISON
+//  7  6  2  0 : 15 MADISON
+//  4  0  0  1 :  5 JAY
+//  7  0  0  4 : 11 HAMILTON OR MADISON
 // 
-// To the People of the State of New York:
-// 
-// AFTER an unequivocal experience of the inefficacy of the
-// subsisting federal government, you are called upon to deliberate on
-// a new Constitution for the United States of America. The subject
-// speaks its own importance; comprehending in its consequences
-// nothing less than the existence of the UNION, the safety and welfare
-// of the parts of which it is composed, the fate of an empire in many
-// respects the most interesting in the world. It has been frequently
-// remarked that it seems to have been reserved to the people of this
-// country, by their conduct and example, to decide the important
-// question, whether societies of men are really capable or not of
-// establishing good government from reflection and choice, or whether
-// they are forever destined to depend for their political
-// constitutions on accident and force. If there be any truth in the
-// remark, the crisis at which we are arrived may with propriety be
-// regarded as the era in which that decision is to be made; and a
-// wrong election of the part we shall act may, in this view, deserve
-// to be considered as the general misfortune of mankind.
-// 
-// This idea will add the inducements of philanthropy to those of
-// patriotism, to heighten the solicitude which all considerate and
-// good men must feel for the event. Happy will it be if our choice
-// should be directed by a judicious estimate of our true interests,
-// unperplexed and unbiased by considerations not connected with the
-// public good. But this is a thing more ardently to be wished than
-// seriously to be expected. The plan offered to our deliberations
-// affects too many particular interests, innovates upon too many local
-// institutions, not to involve in its discussion a variety of objects
-// foreign to its merits, and of views, passions and prejudices little
-// favorable to the discovery of truth.
-// 
-// Among the most formidable of the obstacles which the new
-// Constitution will have to encounter may readily be distinguished the
-// obvious interest of a certain class of men in every State to resist
-// all changes which may hazard a diminution of the power, emolument,
-// and consequence of the offices they hold under the State
-// establishments; and the perverted ambition of another class of men,
-// who will either hope to aggrandize themselves by the confusions of
-// their country, or will flatter themselves with fairer prospects of
-// elevation from the subdivision of the empire into several partial
-// ...
-</span><span>
-</span><span class="identifier">confusion</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res1: String = &quot;&quot;&quot; 0 19 30  3 : 52 HAMILTON
-//  0  0  3  0 :  3 HAMILTON AND MADISON
-//  4  2  4  5 : 15 MADISON
-//  0  1  4  0 :  5 JAY
-//  1  2  8  0 : 11 HAMILTON OR MADISON
-// 
-//  5 24 49  8
+// 56 16  3 11
 // &quot;&quot;&quot;</span></code></pre>
 
       </main>
