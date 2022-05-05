@@ -8,7 +8,7 @@ Currently English is the only language module.  A language modules supports toke
 
 Example
 
-```scala mdoc
+```scala mdoc:silent
 val text = """
 Now we are engaged in a great civil war, testing whether that nation, or any nation,
 so conceived and so dedicated, can long endure. We are met on a great battle-field of

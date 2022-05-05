@@ -11,7 +11,7 @@ import FederalistPapers.Article
 
 Download (and cache) the Federalist articles downloader:
 
-```scala mdoc
+```scala mdoc:silent
 val ec = scala.concurrent.ExecutionContext.global
 val blocker = cats.effect.Blocker.liftExecutionContext(ec)
 implicit val cs = cats.effect.IO.contextShift(ec)
@@ -29,7 +29,7 @@ articles.size
 
 Construct a `Corpus` object to assist with content analysis
 
-```scala mdoc
+```scala mdoc:silent
 import axle.nlp._
 import axle.nlp.language.English
 
@@ -41,13 +41,19 @@ val corpus = Corpus[Vector, Long](articles.map(_.text).toVector, English)
 
 Define a feature extractor using top words and bigrams.
 
-```scala mdoc
+```scala mdoc:height=15
 val frequentWords = corpus.wordsMoreFrequentThan(100)
+```
 
+```scala mdoc:height=15
 val topBigrams = corpus.topKBigrams(200)
+```
 
+```scala mdoc
 val numDimensions = frequentWords.size + topBigrams.size
+```
 
+```scala mdoc:silent
 import axle.syntax.talliable.talliableOps
 
 def featureExtractor(fp: Article): List[Double] = {
@@ -89,7 +95,7 @@ import axle.ml.KMeans
 import axle.ml.PCAFeatureNormalizer
 ```
 
-```scala mdoc
+```scala mdoc:silent
 import cats.implicits._
 import spire.random.Generator.rng
 
@@ -108,14 +114,14 @@ Show cluster vs author in a confusion matrix:
 
 ```scala mdoc:silent
 import axle.ml.ConfusionMatrix
-```
 
-```scala mdoc
 val confusion = ConfusionMatrix[Article, Int, String, Vector, DoubleMatrix](
   classifier,
   articles.toVector,
   _.author,
   0 to 3)
+```
 
+```scala mdoc
 confusion.show
 ```

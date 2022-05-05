@@ -32,7 +32,7 @@ implicit val laJblasInt = {
 }
 ```
 
-```scala mdoc
+```scala mdoc:silent
 val dna1 = "ATGCGGCC"
 val dna2 = "ATCGCCGG"
 ```

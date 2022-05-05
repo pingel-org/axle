@@ -32,7 +32,7 @@ import axle.data.Irises
 import axle.data.Iris
 ```
 
-```scala mdoc
+```scala mdoc:silent
 val ec = scala.concurrent.ExecutionContext.global
 val blocker = cats.effect.Blocker.liftExecutionContext(ec)
 implicit val cs = cats.effect.IO.contextShift(ec)
@@ -67,7 +67,7 @@ import axle.ml.PCAFeatureNormalizer
 import distanceConverter.cm
 ```
 
-```scala mdoc
+```scala mdoc:silent
 val irisFeaturizer =
   (iris: Iris) => List((iris.sepalLength in cm).magnitude.toDouble, (iris.sepalWidth in cm).magnitude.toDouble)
 
@@ -89,15 +89,15 @@ Produce a "confusion matrix"
 
 ```scala mdoc:silent
 import axle.ml.ConfusionMatrix
-```
 
-```scala mdoc
 val confusion = ConfusionMatrix[Iris, Int, String, Vector, DoubleMatrix](
   classifier,
   irises.toVector,
   _.species,
   0 to 2)
+```
 
+```scala mdoc
 confusion.show
 ```
 
@@ -106,13 +106,15 @@ Visualize the final (two dimensional) centroid positions
 ```scala mdoc:silent
 import axle.visualize.KMeansVisualization
 import axle.visualize.Color._
-```
 
-```scala mdoc
 val colors = Vector(red, blue, green)
 
 val vis = KMeansVisualization[Iris, List, DoubleMatrix](classifier, colors)
+```
 
+Create the SVG
+
+```scala mdoc:silent
 import axle.web._
 import cats.effect._
 
@@ -126,9 +128,7 @@ Average centroid/cluster vs iteration:
 ```scala mdoc:silent
 import scala.collection.immutable.TreeMap
 import axle.visualize._
-```
 
-```scala mdoc
 val plot = Plot(
   () => classifier.distanceLogSeries,
   connect = true,
@@ -139,7 +139,11 @@ val plot = Plot(
   xAxisLabel = Some("step"),
   yAxis = Some(0),
   yAxisLabel = Some("average distance to centroid"))
+```
 
+Create the SVG
+
+```scala mdoc:silent
 import axle.web._
 import cats.effect._
 

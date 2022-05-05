@@ -6,7 +6,7 @@ See the wikipedia page on [Linear Regression](https://en.wikipedia.org/wiki/Line
 
 ## Predicting Home Prices
 
-```scala mdoc
+```scala mdoc:silent
 case class RealtyListing(size: Double, bedrooms: Int, floors: Int, age: Int, price: Double)
 
 val listings = List(
@@ -18,7 +18,7 @@ val listings = List(
 
 Create a price estimator using linear regression.
 
-```scala mdoc
+```scala mdoc:silent
 import cats.implicits._
 import spire.algebra.Rng
 import spire.algebra.NRoot
@@ -46,9 +46,9 @@ Use the estimator
 priceEstimator(RealtyListing(1416, 3, 2, 40, 0d))
 ```
 
-Plot the error during the training
+Create a Plot of the error during the training
 
-```scala mdoc
+```scala mdoc:silent
 import axle.visualize._
 import axle.algebra.Plottable._
 
@@ -62,7 +62,11 @@ val errorPlot = Plot(
   xAxisLabel = Some("step"),
   yAxis = Some(0),
   yAxisLabel = Some("error"))
+```
 
+Create the SVG
+
+```scala mdoc:silent
 import axle.web._
 import cats.effect._
 

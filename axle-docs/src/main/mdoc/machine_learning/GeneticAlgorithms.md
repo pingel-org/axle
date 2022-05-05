@@ -6,14 +6,14 @@ See the wikipedia page on [Genetic Algorithms](https://en.wikipedia.org/wiki/Gen
 
 Consider a `Rabbit` class
 
-```scala mdoc
+```scala mdoc:silent
 case class Rabbit(a: Int, b: Double, c: Double, d: Double, e: Double, f: Double, g: Double, h: Double)
 ```
 
 Define the `Species` for a Genetic Algorithm, which requires a random generator and
 a fitness function.
 
-```scala mdoc
+```scala mdoc:silent
 import shapeless._
 
 val gen = Generic[Rabbit]
@@ -50,19 +50,21 @@ implicit val rabbitSpecies = new Species[gen.Repr] {
 
 Run the genetic algorithm
 
-```scala mdoc
+```scala mdoc:silent
 import cats.implicits._
 
 val ga = GeneticAlgorithm(populationSize = 100, numGenerations = 100)
 
 val log = ga.run(spire.random.Generator.rng)
+```
 
+```scala mdoc
 val winner = log.winners.last
 ```
 
 Plot the min, average, and max fitness function by generation
 
-```scala mdoc
+```scala mdoc:silent
 import scala.collection.immutable.TreeMap
 import axle.visualize._
 

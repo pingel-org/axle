@@ -26,7 +26,7 @@ implicit val laJblasInt = axle.jblas.linearAlgebraDoubleMatrix[Int]
 
 Setup
 
-```scala mdoc
+```scala mdoc:silent
 val dna3 = "ACACACTA"
 val dna4 = "AGCACACA"
 ```

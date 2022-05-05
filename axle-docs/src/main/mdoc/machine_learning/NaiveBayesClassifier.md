@@ -4,7 +4,7 @@ Naïve Bayes
 
 ## Tennis Example
 
-```scala mdoc
+```scala mdoc:silent
 case class Tennis(outlook: String, temperature: String, humidity: String, wind: String, play: Boolean)
 
 val events = List(
@@ -36,7 +36,7 @@ import axle.probability._
 import axle.ml.NaiveBayesClassifier
 ```
 
-```scala mdoc
+```scala mdoc:silent
 val classifier = NaiveBayesClassifier[Tennis, String, Boolean, List, Rational](
   events,
   List(
@@ -60,9 +60,7 @@ Measure the classifier's performance
 ```scala mdoc
 import axle.ml.ClassifierPerformance
 
-val perf = ClassifierPerformance[Rational, Tennis, List](events, classifier, _.play)
-
-perf.show
+ClassifierPerformance[Rational, Tennis, List](events, classifier, _.play).show
 ```
 
 See [Precision and Recall](http://en.wikipedia.org/wiki/Precision_and_recall)
