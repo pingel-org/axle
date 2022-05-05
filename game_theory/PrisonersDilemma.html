@@ -165,19 +165,13 @@
         <h1 id="prisoner-s-dilemma" class="title">Prisoner&#39;s Dilemma</h1>
         <p>See the Wikipedia page on the <a href="https://en.wikipedia.org/wiki/Prisoner%27s_dilemma">Prisoner&#39;s Dilemma</a></p>
         <p>The <code>axl.game.prisoner._</code> package uses <code>axle.game</code> typeclasses to model the game:</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">_</span><span>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">prisoner</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">p1</span><span> = </span><span class="type-name">Player</span><span>(</span><span class="string-literal">&quot;P1&quot;</span><span>, </span><span class="string-literal">&quot;Player 1&quot;</span><span>)
-</span><span class="comment">// p1: Player = Player(id = &quot;P1&quot;, description = &quot;Player 1&quot;)
 </span><span class="keyword">val</span><span> </span><span class="identifier">p2</span><span> = </span><span class="type-name">Player</span><span>(</span><span class="string-literal">&quot;P2&quot;</span><span>, </span><span class="string-literal">&quot;Player 2&quot;</span><span>)
-</span><span class="comment">// p2: Player = Player(id = &quot;P2&quot;, description = &quot;Player 2&quot;)
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">game</span><span> = </span><span class="type-name">PrisonersDilemma</span><span>(</span><span class="identifier">p1</span><span>, </span><span class="identifier">p2</span><span>)
-</span><span class="comment">// game: PrisonersDilemma = PrisonersDilemma(
-//   p1 = Player(id = &quot;P1&quot;, description = &quot;Player 1&quot;),
-//   p2 = Player(id = &quot;P2&quot;, description = &quot;Player 2&quot;)
-// )</span></code></pre>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">game</span><span> = </span><span class="type-name">PrisonersDilemma</span><span>(</span><span class="identifier">p1</span><span>, </span><span class="identifier">p2</span><span>)</span></code></pre>
         <p>Create a <code>writer</code> for each player that prefixes the player id to all output.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">printMultiLinePrefixed</span><span>
@@ -185,19 +179,14 @@
 </span><span class="keyword">val</span><span> </span><span class="identifier">playerToWriter</span><span>: </span><span class="type-name">Map</span><span>[</span><span class="type-name">Player</span><span>, </span><span class="type-name">String</span><span> =&gt; </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>]] =
   </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">map</span><span> { </span><span class="identifier">player</span><span> =&gt;
     </span><span class="identifier">player</span><span> -&gt; (</span><span class="identifier">printMultiLinePrefixed</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="identifier">player</span><span>.</span><span class="identifier">id</span><span>) </span><span class="identifier">_</span><span>)
-  } </span><span class="identifier">toMap</span><span>
-</span><span class="comment">// playerToWriter: Map[Player, String =&gt; IO[Unit]] = Map(
-//   Player(id = &quot;P1&quot;, description = &quot;Player 1&quot;) -&gt; &lt;function1&gt;,
-//   Player(id = &quot;P2&quot;, description = &quot;Player 2&quot;) -&gt; &lt;function1&gt;
-// )</span></code></pre>
+  } </span><span class="identifier">toMap</span></code></pre>
         <p>Use a uniform distribution on moves as the demo strategy:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">probability</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">Rational</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">randomMove</span><span> =
   (</span><span class="identifier">state</span><span>: </span><span class="type-name">PrisonersDilemmaState</span><span>) =&gt;
-    </span><span class="type-name">ConditionalProbabilityTable</span><span>.</span><span class="identifier">uniform</span><span>[</span><span class="type-name">PrisonersDilemmaMove</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="identifier">evGame</span><span>.</span><span class="identifier">moves</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>))
-</span><span class="comment">// randomMove: PrisonersDilemmaState =&gt; ConditionalProbabilityTable[PrisonersDilemmaMove, Rational] = &lt;function1&gt;</span></code></pre>
+    </span><span class="type-name">ConditionalProbabilityTable</span><span>.</span><span class="identifier">uniform</span><span>[</span><span class="type-name">PrisonersDilemmaMove</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="identifier">evGame</span><span>.</span><span class="identifier">moves</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>))</span></code></pre>
         <p>Wrap the strategies in the calls to <code>writer</code> that log the transitions from state to state.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">strategies</span><span>: </span><span class="type-name">Player</span><span> =&gt; </span><span class="type-name">PrisonersDilemmaState</span><span> =&gt; </span><span class="type-name">IO</span><span>[</span><span class="type-name">ConditionalProbabilityTable</span><span>[</span><span class="type-name">PrisonersDilemmaMove</span><span>, </span><span class="type-name">Rational</span><span>]] = 
   (</span><span class="identifier">player</span><span>: </span><span class="type-name">Player</span><span>) =&gt;
@@ -205,8 +194,7 @@
       </span><span class="keyword">for</span><span> {
         </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayStateTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>, </span><span class="identifier">player</span><span>))
         </span><span class="identifier">move</span><span> &lt;- </span><span class="identifier">randomMove</span><span>.</span><span class="identifier">andThen</span><span>( </span><span class="identifier">m</span><span> =&gt; </span><span class="type-name">IO</span><span> { </span><span class="identifier">m</span><span> })(</span><span class="identifier">state</span><span>)
-      } </span><span class="keyword">yield</span><span> </span><span class="identifier">move</span><span>
-</span><span class="comment">// strategies: Player =&gt; PrisonersDilemmaState =&gt; IO[ConditionalProbabilityTable[PrisonersDilemmaMove, Rational]] = &lt;function1&gt;</span></code></pre>
+      } </span><span class="keyword">yield</span><span> </span><span class="identifier">move</span></code></pre>
         <p>Play the game -- compute the end state from the start state.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
 
@@ -216,22 +204,22 @@
 // endState: PrisonersDilemmaState = PrisonersDilemmaState(
 //   p1Move = Some(value = Betrayal()),
 //   p1Moved = true,
-//   p2Move = Some(value = Silence())
+//   p2Move = Some(value = Betrayal())
 // )</span></code></pre>
         <p>Display outcome to each player</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
 </span><span class="comment">// outcome: PrisonersDilemmaOutcome = PrisonersDilemmaOutcome(
-//   p1YearsInPrison = 0,
-//   p2YearsInPrison = 3
+//   p1YearsInPrison = 2,
+//   p2YearsInPrison = 2
 // )
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// P1&gt; You is imprisoned for 0 years
-// P1&gt; Player 2 is imprisoned for 3 years
-// P2&gt; Player 1 is imprisoned for 0 years
-// P2&gt; You is imprisoned for 3 years</span></code></pre>
+</span><span class="comment">// P1&gt; You is imprisoned for 2 years
+// P1&gt; Player 2 is imprisoned for 2 years
+// P2&gt; Player 1 is imprisoned for 2 years
+// P2&gt; You is imprisoned for 2 years</span></code></pre>
 
       </main>
 
