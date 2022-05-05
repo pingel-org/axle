@@ -181,8 +181,7 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">montyhall</span><span>.</span><span class="identifier">_</span><span>
 
-</span><span class="keyword">val</span><span> </span><span class="identifier">game</span><span> = </span><span class="type-name">MontyHall</span><span>()
-</span><span class="comment">// game: MontyHall = MontyHall()</span></code></pre>
+</span><span class="keyword">val</span><span> </span><span class="identifier">game</span><span> = </span><span class="type-name">MontyHall</span><span>()</span></code></pre>
         <p>Create a <code>writer</code> for each player that prefixes the player id to all output.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">printMultiLinePrefixed</span><span>
@@ -190,16 +189,12 @@
 </span><span class="keyword">val</span><span> </span><span class="identifier">playerToWriter</span><span>: </span><span class="type-name">Map</span><span>[</span><span class="type-name">Player</span><span>, </span><span class="type-name">String</span><span> =&gt; </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>]] =
   </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">map</span><span> { </span><span class="identifier">player</span><span> =&gt;
     </span><span class="identifier">player</span><span> -&gt; (</span><span class="identifier">printMultiLinePrefixed</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="identifier">player</span><span>.</span><span class="identifier">id</span><span>) </span><span class="identifier">_</span><span>)
-  } </span><span class="identifier">toMap</span><span>
-</span><span class="comment">// playerToWriter: Map[Player, String =&gt; IO[Unit]] = Map(
-//   Player(id = &quot;C&quot;, description = &quot;Contestant&quot;) -&gt; &lt;function1&gt;,
-//   Player(id = &quot;M&quot;, description = &quot;Monty Hall&quot;) -&gt; &lt;function1&gt;
-// )</span></code></pre>
+  } </span><span class="identifier">toMap</span></code></pre>
         <p>Use a uniform distribution on moves as the demo strategy:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">randomMove</span><span> =
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">randomMove</span><span>: </span><span class="type-name">MontyHallState</span><span> =&gt; </span><span class="type-name">ConditionalProbabilityTable</span><span>[</span><span class="type-name">MontyHallMove</span><span>,
+ </span><span class="type-name">Rational</span><span>] =
   (</span><span class="identifier">state</span><span>: </span><span class="type-name">MontyHallState</span><span>) =&gt;
-    </span><span class="type-name">ConditionalProbabilityTable</span><span>.</span><span class="identifier">uniform</span><span>[</span><span class="type-name">MontyHallMove</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="identifier">evGame</span><span>.</span><span class="identifier">moves</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>))
-</span><span class="comment">// randomMove: MontyHallState =&gt; ConditionalProbabilityTable[MontyHallMove, Rational] = &lt;function1&gt;</span></code></pre>
+    </span><span class="type-name">ConditionalProbabilityTable</span><span>.</span><span class="identifier">uniform</span><span>[</span><span class="type-name">MontyHallMove</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="identifier">evGame</span><span>.</span><span class="identifier">moves</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>))</span></code></pre>
         <p>Wrap the strategies in the calls to <code>writer</code> that log the transitions from state to state.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">strategies</span><span>: </span><span class="type-name">Player</span><span> =&gt; </span><span class="type-name">MontyHallState</span><span> =&gt; </span><span class="type-name">IO</span><span>[</span><span class="type-name">ConditionalProbabilityTable</span><span>[</span><span class="type-name">MontyHallMove</span><span>, </span><span class="type-name">Rational</span><span>]] = 
   (</span><span class="identifier">player</span><span>: </span><span class="type-name">Player</span><span>) =&gt;
@@ -207,40 +202,23 @@
       </span><span class="keyword">for</span><span> {
         </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayStateTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>, </span><span class="identifier">player</span><span>))
         </span><span class="identifier">move</span><span> &lt;- </span><span class="identifier">randomMove</span><span>.</span><span class="identifier">andThen</span><span>( </span><span class="identifier">m</span><span> =&gt; </span><span class="type-name">IO</span><span> { </span><span class="identifier">m</span><span> })(</span><span class="identifier">state</span><span>)
-      } </span><span class="keyword">yield</span><span> </span><span class="identifier">move</span><span>
-</span><span class="comment">// strategies: Player =&gt; MontyHallState =&gt; IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = &lt;function1&gt;</span></code></pre>
+      } </span><span class="keyword">yield</span><span> </span><span class="identifier">move</span></code></pre>
         <p>Play the game -- compute the end state from the start state.</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
-
-</span><span class="keyword">val</span><span> </span><span class="identifier">endState</span><span> = </span><span class="identifier">play</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">strategies</span><span>, </span><span class="identifier">evGame</span><span>.</span><span class="identifier">startState</span><span>(</span><span class="identifier">game</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()
-</span><span class="comment">// M&gt; Door #1: ???
-// M&gt; Door #2: ???
-// M&gt; Door #3: ???
-// C&gt; Door #1: 
-// C&gt; Door #2: 
-// C&gt; Door #3: 
-// M&gt; Door #1: car
-// M&gt; Door #2: goat
-// M&gt; Door #3: goat, first choice
-// C&gt; Door #1: 
-// C&gt; Door #2: , revealed goat
-// C&gt; Door #3: first choice
-// endState: MontyHallState = MontyHallState(
-//   placement = Some(value = PlaceCar(door = 1)),
-//   placed = true,
-//   firstChoice = Some(value = FirstChoice(door = 3)),
-//   reveal = Some(value = Reveal(door = 2)),
-//   secondChoice = Some(value = Left(value = Change()))
-// )</span></code></pre>
+        <p>M&gt; Door #1: ???
+        M&gt; Door #2: ???
+        M&gt; Door #3: ???
+        C&gt; Door #1: 
+        C&gt; Door #2: 
+        C&gt; Door #3: 
+        M&gt; Door #1: car
+        M&gt; Door #2: goat
+        M&gt; Door #3: goat, first choice
+        C&gt; Door #1: 
+        C&gt; Door #2: , revealed goat
+        C&gt; Door #3: first choice</p>
         <p>Display outcome to each player</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
-</span><span class="comment">// outcome: MontyHallOutcome = MontyHallOutcome(car = true)
-</span><span>
-</span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
-  </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
-}
-</span><span class="comment">// C&gt; You won the car!
-// M&gt; Contestant won the car!</span></code></pre>
+        <p>C&gt; You won a goat
+        M&gt; Contestant won a goat</p>
 
       </main>
 
