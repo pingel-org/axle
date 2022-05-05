@@ -204,21 +204,39 @@
         </span><span class="identifier">move</span><span> &lt;- </span><span class="identifier">randomMove</span><span>.</span><span class="identifier">andThen</span><span>( </span><span class="identifier">m</span><span> =&gt; </span><span class="type-name">IO</span><span> { </span><span class="identifier">m</span><span> })(</span><span class="identifier">state</span><span>)
       } </span><span class="keyword">yield</span><span> </span><span class="identifier">move</span></code></pre>
         <p>Play the game -- compute the end state from the start state.</p>
-        <p>M&gt; Door #1: ???
-        M&gt; Door #2: ???
-        M&gt; Door #3: ???
-        C&gt; Door #1: 
-        C&gt; Door #2: 
-        C&gt; Door #3: 
-        M&gt; Door #1: car
-        M&gt; Door #2: goat
-        M&gt; Door #3: goat, first choice
-        C&gt; Door #1: 
-        C&gt; Door #2: , revealed goat
-        C&gt; Door #3: first choice</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">endState</span><span>: </span><span class="type-name">MontyHallState</span><span> =
+  </span><span class="identifier">play</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">strategies</span><span>, </span><span class="identifier">evGame</span><span>.</span><span class="identifier">startState</span><span>(</span><span class="identifier">game</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()
+</span><span class="comment">// M&gt; Door #1: ???
+// M&gt; Door #2: ???
+// M&gt; Door #3: ???
+// C&gt; Door #1: 
+// C&gt; Door #2: 
+// C&gt; Door #3: 
+// M&gt; Door #1: car
+// M&gt; Door #2: goat
+// M&gt; Door #3: goat, first choice
+// C&gt; Door #1: 
+// C&gt; Door #2: , revealed goat
+// C&gt; Door #3: first choice
+// endState: MontyHallState = MontyHallState(
+//   placement = Some(value = PlaceCar(door = 1)),
+//   placed = true,
+//   firstChoice = Some(value = FirstChoice(door = 3)),
+//   reveal = Some(value = Reveal(door = 2)),
+//   secondChoice = Some(value = Right(value = Stay()))
+// )</span></code></pre>
         <p>Display outcome to each player</p>
-        <p>C&gt; You won a goat
-        M&gt; Contestant won a goat</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span>: </span><span class="type-name">MontyHallOutcome</span><span> =
+  </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
+</span><span class="comment">// outcome: MontyHallOutcome = MontyHallOutcome(car = false)
+</span><span>
+</span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
+  </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
+}
+</span><span class="comment">// C&gt; You won a goat
+// M&gt; Contestant won a goat</span></code></pre>
 
       </main>
 
