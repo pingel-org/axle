@@ -28,7 +28,7 @@ chanceOfWinning(Rational(0))
 
 The newer `axl.game.montyhall._` package uses `axle.game` typeclasses to model the game:
 
-```scala mdoc
+```scala mdoc:silent
 import axle.game._
 import axle.game.montyhall._
 
@@ -37,7 +37,7 @@ val game = MontyHall()
 
 Create a `writer` for each player that prefixes the player id to all output.
 
-```scala mdoc
+```scala mdoc:silent
 import cats.effect.IO
 import axle.IO.printMultiLinePrefixed
 
@@ -49,15 +49,16 @@ val playerToWriter: Map[Player, String => IO[Unit]] =
 
 Use a uniform distribution on moves as the demo strategy:
 
-```scala mdoc
-val randomMove =
+```scala mdoc:silent
+val randomMove: MontyHallState => ConditionalProbabilityTable[MontyHallMove,
+ Rational] =
   (state: MontyHallState) =>
     ConditionalProbabilityTable.uniform[MontyHallMove, Rational](evGame.moves(game, state))
 ```
 
 Wrap the strategies in the calls to `writer` that log the transitions from state to state.
 
-```scala mdoc
+```scala mdoc:silent
 val strategies: Player => MontyHallState => IO[ConditionalProbabilityTable[MontyHallMove, Rational]] = 
   (player: Player) =>
     (state: MontyHallState) =>
@@ -72,13 +73,15 @@ Play the game -- compute the end state from the start state.
 ```scala mdoc
 import spire.random.Generator.rng
 
-val endState = play(game, strategies, evGame.startState(game), rng).unsafeRunSync()
+val endState: MontyHallState =
+  play(game, strategies, evGame.startState(game), rng).unsafeRunSync()
 ```
 
 Display outcome to each player
 
 ```scala mdoc
-val outcome = evGame.mover(game, endState).swap.toOption.get
+val outcome: MontyHallOutcome =
+  evGame.mover(game, endState).swap.toOption.get
 
 evGame.players(game).foreach { player =>
   playerToWriter(player)(evGameIO.displayOutcomeTo(game, outcome, player)).unsafeRunSync()
