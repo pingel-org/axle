@@ -96,6 +96,8 @@
     * Quanta: fix Distance, Energy, Time links
   * Math
     * Intro section bullets not nesting
+  * Random, Uncertain
+    * Bayesian network rendering is missing tables
   * Quantum Circuits
     * !!! Copy some test cases to QuantumCircuits.md
 

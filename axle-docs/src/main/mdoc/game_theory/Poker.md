@@ -23,15 +23,17 @@ winnerFromHandSize(7).show
 
 20 simulated 5-card hands made of 7-card hands.  Sorted.
 
-```scala mdoc
+```scala mdoc:silent
 val hands = (1 to 20).map(n => winnerFromHandSize(7)).sorted
+```
 
+```scala mdoc
 hands.map({ hand => hand.show + "  " + hand.description }).mkString("\n")
 ```
 
 Record 1000 simulated hands for each drawn hand size from 5 to 9
 
-```scala mdoc
+```scala mdoc:silent
 import axle.game.poker.PokerHandCategory
 
 val data: IndexedSeq[(PokerHandCategory, Int)] =
@@ -43,7 +45,7 @@ val data: IndexedSeq[(PokerHandCategory, Int)] =
 
 BarChartGrouped to visualize the results
 
-```scala mdoc
+```scala mdoc:silent
 import spire.algebra.CRing
 
 import axle.visualize.BarChartGrouped
@@ -79,7 +81,7 @@ chart.svg[IO]("@DOCWD@/images/poker_hands.svg").unsafeRunSync()
 
 As a game of "imperfect information", poker introduces the concept of Information Set.
 
-```scala mdoc
+```scala mdoc:silent
 import axle.game._
 import axle.game.poker._
 
@@ -91,7 +93,7 @@ val game = Poker(Vector(p1, p2))
 
 Create a `writer` for each player that prefixes the player id to all output.
 
-```scala mdoc
+```scala mdoc:silent
 import cats.effect.IO
 import axle.IO.printMultiLinePrefixed
 
@@ -103,7 +105,7 @@ val playerToWriter: Map[Player, String => IO[Unit]] =
 
 Use a uniform distribution on moves as the demo strategy:
 
-```scala mdoc
+```scala mdoc:silent
 import axle.probability._
 import spire.math.Rational
 
@@ -114,7 +116,7 @@ val randomMove =
 
 Wrap the strategies in the calls to `writer` that log the transitions from state to state.
 
-```scala mdoc
+```scala mdoc:silent
 val strategies: Player => PokerStateMasked => IO[ConditionalProbabilityTable[PokerMove, Rational]] = 
   (player: Player) =>
     (state: PokerStateMasked) =>

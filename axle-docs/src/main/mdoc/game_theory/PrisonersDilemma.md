@@ -4,7 +4,7 @@ See the Wikipedia page on the [Prisoner's Dilemma](https://en.wikipedia.org/wiki
 
 The `axl.game.prisoner._` package uses `axle.game` typeclasses to model the game:
 
-```scala mdoc
+```scala mdoc:silent
 import axle.game._
 import axle.game.prisoner._
 
@@ -16,7 +16,7 @@ val game = PrisonersDilemma(p1, p2)
 
 Create a `writer` for each player that prefixes the player id to all output.
 
-```scala mdoc
+```scala mdoc:silent
 import cats.effect.IO
 import axle.IO.printMultiLinePrefixed
 
@@ -28,7 +28,7 @@ val playerToWriter: Map[Player, String => IO[Unit]] =
 
 Use a uniform distribution on moves as the demo strategy:
 
-```scala mdoc
+```scala mdoc:silent
 import axle.probability._
 import spire.math.Rational
 
@@ -39,7 +39,7 @@ val randomMove =
 
 Wrap the strategies in the calls to `writer` that log the transitions from state to state.
 
-```scala mdoc
+```scala mdoc:silent
 val strategies: Player => PrisonersDilemmaState => IO[ConditionalProbabilityTable[PrisonersDilemmaMove, Rational]] = 
   (player: Player) =>
     (state: PrisonersDilemmaState) =>

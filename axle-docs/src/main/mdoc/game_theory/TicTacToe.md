@@ -4,7 +4,7 @@ A Perfect Information, Zero-sum game
 
 ## Example
 
-```scala mdoc
+```scala mdoc:silent
 import axle.game._
 import axle.game.ttt._
 
@@ -16,7 +16,7 @@ val game = TicTacToe(3, x, o)
 
 Create a `writer` for each player that prefixes the player id to all output.
 
-```scala mdoc
+```scala mdoc:silent
 import cats.effect.IO
 import axle.IO.printMultiLinePrefixed
 
@@ -28,7 +28,7 @@ val playerToWriter: Map[Player, String => IO[Unit]] =
 
 Use a uniform distribution on moves as the demo strategy:
 
-```scala mdoc
+```scala mdoc:silent
 import axle.probability._
 import spire.math.Rational
 
@@ -39,7 +39,7 @@ val randomMove =
 
 Wrap the strategies in the calls to `writer` that log the transitions from state to state.
 
-```scala mdoc
+```scala mdoc:silent
 val strategies: Player => TicTacToeState => IO[ConditionalProbabilityTable[TicTacToeMove, Rational]] = 
   (player: Player) =>
     (state: TicTacToeState) =>
