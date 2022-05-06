@@ -72,19 +72,21 @@
 
 ### Near term
 
-* Look for opportunities to use `mdoc:silent`
+* Copy some test cases to QuantumCircuits.md
 
 * How to make chapters more prominent in pdf?
   * See [this example](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
 
 * Cats, Scala, etc are at end -- how to get them in correct order?
 
-* Writing
-  * A few words in README for each section
+* Docs
+  * General
+    * A few words in README for each section
+    * Expand acronyms and include wikipedia links in "Future Work" sections
+    * Make dependencies clear in each section
   * Introduction
     * Write "Objectives"
     * Smaller images for Gallery
-    * !!! Simplify "Installation"
   * Foundation
     * Architecture
     * Functional Programming
@@ -98,10 +100,8 @@
     * Intro section bullets not nesting
   * Random, Uncertain
     * Bayesian network rendering is missing tables
-  * Quantum Circuits
-    * !!! Copy some test cases to QuantumCircuits.md
-
-* Make dependencies clear in each section
+  * Text
+    * Say more about Python Grammar
 
 ### Later
 
@@ -111,6 +111,9 @@
 * Timestamp / version to site footer
 * GitHub "Releases" in sidebar should show "latest"
 * update google analytics version
+* test animation with monix 3.4.0
+
+* make axle.g8 more axle-flavored (use cats.IO App as parent for HelloWorld)
 
 * stop hard-coding PDF_VERSION n build.sbt
 * ghpagesCleanSite leaving stale files?
