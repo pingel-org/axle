@@ -26,9 +26,9 @@ lazy val scoverageSettings = Seq(
   coverageHighlighting := true
 )
 
-scalaVersion := "2.13.3"
+scalaVersion := "2.13.8"
 
-ThisBuild / crossScalaVersions := Seq("2.13.3")
+ThisBuild / crossScalaVersions := Seq("2.13.8")
 
 publish / skip := true
 
@@ -36,8 +36,8 @@ autoCompilerPlugins := true
 
 lazy val buildSettings = Seq(
   organization := "org.axle-lang",
-  scalaVersion := "2.13.3",
-  crossScalaVersions := Seq("2.13.3")
+  scalaVersion := "2.13.8",
+  crossScalaVersions := Seq("2.13.8")
 )
 
 lazy val axleDoctestSettings = Seq(
