@@ -17,7 +17,7 @@ lazy val jblasVersion = "1.2.5"
 lazy val jacksonVersion = "2.11.2"
 lazy val jodaTimeVersion = "2.9.4"
 lazy val jodaConvertVersion = "1.8.1"
-lazy val monixVersion = "3.1.0"
+lazy val monixVersion = "3.4.0"
 lazy val jogampVersion = "2.3.2"
 
 lazy val scoverageSettings = Seq(
