@@ -9,7 +9,7 @@ lazy val disciplineVersion = "1.0.0"
 lazy val scalaCheckVersion = "1.14.1"
 lazy val scalaTestVersion = "3.2.5"
 
-lazy val scalaXmlVersion = "1.3.0"
+lazy val scalaXmlVersion = "2.0.1"
 lazy val scalaParserCombinatorsVersion = "1.1.2"
 lazy val scalaParallelCollectionsVersion = "0.2.0"
 lazy val jungVersion = "2.1"
