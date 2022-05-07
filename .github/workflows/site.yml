@@ -11,5 +11,6 @@ jobs:
         with:
           fetch-depth: 0
       - uses: olafurpg/setup-scala@v13
-      - run: sbt -J-Xmx8G 'project axle-docs' clean mdoc
+      - run: sbt 'project axle-docs' clean
+      - run: sbt 'project axle-docs' mdoc
       - run: sbt 'project axle-docs' laikaSite
