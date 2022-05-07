@@ -140,7 +140,7 @@ package object game {
     prob:   Sampler[PM],
     kolm:   Kolmogorov[PM],
     bayes:  Bayes[PM],
-    monad:  Monad[PM[?, V]],
+    monad:  Monad[Lambda[Z => PM[Z, V]]],
     eqS:    cats.kernel.Eq[S],
     eqM:    cats.kernel.Eq[M],
     distV:  Dist[V],

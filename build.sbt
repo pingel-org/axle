@@ -253,6 +253,7 @@ lazy val commonScalacOptions = Seq(
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
   "-Ywarn-value-discard"
+//  "-Xsource:3"
 )
 
 sonatypeProfileName := "org.axle-lang"

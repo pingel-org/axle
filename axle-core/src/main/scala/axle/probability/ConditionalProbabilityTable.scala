@@ -90,8 +90,8 @@ object ConditionalProbabilityTable {
 
   import cats.Monad
 
-  implicit def monadWitness[V: Ring]: Monad[ConditionalProbabilityTable[?, V]] =
-    new Monad[ConditionalProbabilityTable[?, V]] {
+  implicit def monadWitness[V: Ring]: Monad[Lambda[Z => ConditionalProbabilityTable[Z, V]]] =
+    new Monad[Lambda[Z => ConditionalProbabilityTable[Z, V]]] {
 
       def pure[A](a: A): ConditionalProbabilityTable[A, V] =
         ConditionalProbabilityTable(Map(a -> Ring[V].one))

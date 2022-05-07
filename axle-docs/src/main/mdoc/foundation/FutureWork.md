@@ -72,6 +72,8 @@
 
 ### Near term
 
+* publish site with newer Installation.md (it's hitting OOM errors)
+
 * Copy some test cases to QuantumCircuits.md
 
 * How to make chapters more prominent in pdf?
@@ -90,6 +92,14 @@
   * Foundation
     * Architecture
     * Functional Programming
+      * Typeclasses
+      * Curry-Howard
+      * Theorems for Free
+      * Referential Transparency
+      * Equational Reasoning
+      * Life After Monoids
+      * Algebird
+      * Kmett's mapping of abstract algebra to software patterns
     * Scala
     * Cats: Show, EQ, IO, Algebra, Spire
     * rename "Spokes"
@@ -115,10 +125,14 @@
 
 * make axle.g8 more axle-flavored (use cats.IO App as parent for HelloWorld)
 
-* stop hard-coding PDF_VERSION n build.sbt
 * ghpagesCleanSite leaving stale files?
 * Friend of Spire
 * README: data sets from `axle.data` (Astronomy, Evolution, Federalist Papers, Irises)
 * what to do about empty right sidebars? convert bullets into sections? disable somehow?
 * merge mdoc and site directories?
-* site build via github action?
+
+## Build
+
+* keep axle.g8 and axle versions in sync
+* stop hard-coding PDF_VERSION n build.sbt
+* site publish (`git push`) via github action?
