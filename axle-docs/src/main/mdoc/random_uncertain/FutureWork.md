@@ -60,6 +60,10 @@
 * Abadi Plotkin pathology
 * Jacobian Vector Products (JVP)
 
+* FLDR probability
+  * [probcomp github](https://github.com/probcomp/fast-loaded-dice-roller/)
+  * [MIT FSAAD slides](http://fsaad.mit.edu/assets/2020-08-20-fldr-slides.pdf)
+
 ## Docs
 
 * Reorder Probability mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)?
