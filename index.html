@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
-    <title>Axle</title>
+    <title>axle-docs</title>
     
     
       <meta name="description" content="axle-docs"/>
@@ -19,172 +19,71 @@
     <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
     <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
     <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    
+    <link rel="stylesheet" type="text/css" href="helium/landing.page.css" />
+    
     <script src="helium/laika-helium.js"></script>
     <script src="js/ga.js"></script>
-    
-    
     <script> /* for avoiding page load transitions */ </script>
   </head>
 
   <body>
 
-    <header id="top-bar">
-
-      <div class="row">
-        <a id="nav-icon">
-          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
-        </a>
+    <div id="header">
+      <div id="header-left">
+        
+         <h1>Axle</h1> 
+         <h2>Lawful Scientific Computing for Scala</h2> 
+      </div>
+      <div id="header-right">
+        
+          <p>Latest Stable Release</p>
+          <p class="large">0.6.5</p>
+        
+        
+          <p>License</p>
+          <p class="large">Apache 2.0</p>
+        
+        
+          <div id="docs">
+            <p>Documentation</p>
+            <ul>
+              
+                <li><a class="text-link" href="introduction/Introduction.html">Introduction</a></li>
+              
+                <li><a class="text-link" href="foundation/Foundation.html">Foundation</a></li>
+              
+                <li><a class="text-link" href="units/Units.html">Units of Measurement</a></li>
+              
+                <li><a class="text-link" href="math/Math.html">Math</a></li>
+              
+                <li><a class="text-link" href="visualization/Visualize.html">Visualization</a></li>
+              
+                <li><a class="text-link" href="random_uncertain/RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
+              
+                <li><a class="text-link" href="game_theory/GameTheory.html">Game Theory</a></li>
+              
+                <li><a class="text-link" href="chaos_theory/ChaosTheory.html">Chaos Theory</a></li>
+              
+                <li><a class="text-link" href="machine_learning/MachineLearning.html">Machine Learning</a></li>
+              
+                <li><a class="text-link" href="bioinformatics/Bioinformatics.html">Bioinformatics</a></li>
+              
+                <li><a class="text-link" href="text/Text.html">Text</a></li>
+              
+                <li><a class="text-link" href="quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
+              
+                <li><a class="text-link" href="appendix/Appendix.html">Appendix</a></li>
+              
+            </ul>
+          </div>
+        
         
       </div>
-  
-      <a class="icon-link" href="#"><i class="icofont-laika" title="Home">&#xef47;</i></a>
-      
-      <span class="row links"></span>
-      
-    </header>
-
-    <nav id="sidebar">
-
-      <div class="row">
-        
-      </div>
-      
-      <ul class="nav-list">
-        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
-        <li class="level1 nav-header">Introduction</li>
-        <li class="level2"><a href="introduction/Introduction.html">Introduction</a></li>
-        <li class="level2"><a href="introduction/Objectives.html">Objectives</a></li>
-        <li class="level2"><a href="introduction/Installation.html">Installation</a></li>
-        <li class="level2"><a href="introduction/Gallery.html">Gallery</a></li>
-        <li class="level2"><a href="introduction/Resources.html">Resources</a></li>
-        <li class="level1 nav-header">Foundation</li>
-        <li class="level2"><a href="foundation/Foundation.html">Foundation</a></li>
-        <li class="level2"><a href="foundation/Functional.html">Functional</a></li>
-        <li class="level2"><a href="foundation/Scala.html">Scala</a></li>
-        <li class="level2"><a href="foundation/Cats.html">Cats</a></li>
-        <li class="level2"><a href="foundation/Architecture.html">Architecture</a></li>
-        <li class="level2"><a href="foundation/PackageObject.html">Package Objects</a></li>
-        <li class="level2"><a href="foundation/Algebra.html">Algebra</a></li>
-        <li class="level2"><a href="foundation/LinearAlgebra.html">Linear Algebra</a></li>
-        <li class="level2"><a href="foundation/Graph.html">Graph</a></li>
-        <li class="level2"><a href="foundation/Logic.html">Logic</a></li>
-        <li class="level2"><a href="foundation/Spokes.html">Spokes</a></li>
-        <li class="level2"><a href="foundation/FutureWork.html">Future Work</a></li>
-        <li class="level1 nav-header">Units of Measurement</li>
-        <li class="level2"><a href="units/Units.html">Units of Measurement</a></li>
-        <li class="level2"><a href="units/Quanta.html">Quanta</a></li>
-        <li class="level2"><a href="units/UnittedTrigonometry.html">Unitted Trigonometry</a></li>
-        <li class="level2"><a href="units/GeoCoordinates.html">Geo Coordinates</a></li>
-        <li class="level2"><a href="units/FutureWork.html">Future Work</a></li>
-        <li class="level1 nav-header">Math</li>
-        <li class="level2"><a href="math/Math.html">Math</a></li>
-        <li class="level2"><a href="math/PythagoreanMeans.html">Pythagorean Means</a></li>
-        <li class="level2"><a href="math/MeanAveragePrecisionAtK.html">Mean Average Precision at K</a></li>
-        <li class="level2"><a href="math/Pi.html">Pi</a></li>
-        <li class="level2"><a href="math/Fibonacci.html">Fibonacci</a></li>
-        <li class="level2"><a href="math/Ackermann.html">Ackermann</a></li>
-        <li class="level2"><a href="math/FutureWork.html">Future Work</a></li>
-        <li class="level1 nav-header">Visualization</li>
-        <li class="level2"><a href="visualization/Visualize.html">Visualization</a></li>
-        <li class="level2"><a href="visualization/Plots.html">Plots</a></li>
-        <li class="level2"><a href="visualization/ScatterPlot.html">Scatter Plot</a></li>
-        <li class="level2"><a href="visualization/BarCharts.html">Bar Charts</a></li>
-        <li class="level2"><a href="visualization/GroupedBarCharts.html">Grouped Bar Charts</a></li>
-        <li class="level2"><a href="visualization/PixelatedColoredArea.html">Pixelated Colored Area</a></li>
-        <li class="level2"><a href="visualization/FutureWork.html">Future Work</a></li>
-        <li class="level1 nav-header">Randomness and Uncertainty</li>
-        <li class="level2"><a href="random_uncertain/RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
-        <li class="level2"><a href="random_uncertain/ProbabilityModel.html">Probability Model</a></li>
-        <li class="level2"><a href="random_uncertain/Statistics.html">Statistics</a></li>
-        <li class="level2"><a href="random_uncertain/RootMeanSquareDeviation.html">Root-mean-square deviation</a></li>
-        <li class="level2"><a href="random_uncertain/ReservoirSampling.html">Reservoir Sampling</a></li>
-        <li class="level2"><a href="random_uncertain/InformationTheory.html">Information Theory</a></li>
-        <li class="level2"><a href="random_uncertain/CoinEntropy.html">Entropy of a Biased Coin</a></li>
-        <li class="level2"><a href="random_uncertain/ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
-        <li class="level2"><a href="random_uncertain/BayesianNetworks.html">Bayesian Networks</a></li>
-        <li class="level2"><a href="random_uncertain/FutureWork.html">Future Work</a></li>
-        <li class="level1 nav-header">Game Theory</li>
-        <li class="level2"><a href="game_theory/GameTheory.html">Game Theory</a></li>
-        <li class="level2"><a href="game_theory/MontyHall.html">Monty Hall</a></li>
-        <li class="level2"><a href="game_theory/Poker.html">Poker</a></li>
-        <li class="level2"><a href="game_theory/PrisonersDilemma.html">Prisoner&#39;s Dilemma</a></li>
-        <li class="level2"><a href="game_theory/TicTacToe.html">Tic Tac Toe</a></li>
-        <li class="level2"><a href="game_theory/FutureWork.html">Future Work</a></li>
-        <li class="level1 nav-header">Chaos Theory</li>
-        <li class="level2"><a href="chaos_theory/ChaosTheory.html">Chaos Theory</a></li>
-        <li class="level2"><a href="chaos_theory/LogisticMap.html">Logistic Map</a></li>
-        <li class="level2"><a href="chaos_theory/Mandelbrot.html">Mandelbrot Set</a></li>
-        <li class="level1 nav-header">Machine Learning</li>
-        <li class="level2"><a href="machine_learning/MachineLearning.html">Machine Learning</a></li>
-        <li class="level2"><a href="machine_learning/LinearRegression.html">Linear Regression</a></li>
-        <li class="level2"><a href="machine_learning/NaiveBayesClassifier.html">Naive Bayes</a></li>
-        <li class="level2"><a href="machine_learning/ClusterIrises.html">Cluster Irises</a></li>
-        <li class="level2"><a href="machine_learning/ClusterFederalistPapers.html">Clusters Federalist Papers</a></li>
-        <li class="level2"><a href="machine_learning/GeneticAlgorithms.html">Genetic Algorithms</a></li>
-        <li class="level2"><a href="machine_learning/FutureWork.html">Future Work</a></li>
-        <li class="level1 nav-header">Bioinformatics</li>
-        <li class="level2"><a href="bioinformatics/Bioinformatics.html">Bioinformatics</a></li>
-        <li class="level2"><a href="bioinformatics/NeedlemanWunsch.html">Needleman-Wunsch</a></li>
-        <li class="level2"><a href="bioinformatics/SmithWaterman.html">Smith-Waterman</a></li>
-        <li class="level1 nav-header">Text</li>
-        <li class="level2"><a href="text/Text.html">Text</a></li>
-        <li class="level2"><a href="text/LanguageModules.html">Language Modules</a></li>
-        <li class="level2"><a href="text/EditDistance.html">Edit Distance</a></li>
-        <li class="level2"><a href="text/VectorSpaceModel.html">Vector Space Model</a></li>
-        <li class="level2"><a href="text/AngluinLearner.html">Angluin Learner</a></li>
-        <li class="level2"><a href="text/GoldParadigm.html">Gold Paradigm</a></li>
-        <li class="level2"><a href="text/PythonGrammar.html">Python Grammar</a></li>
-        <li class="level2"><a href="text/FutureWork.html">Future Work</a></li>
-        <li class="level1 nav-header">Quantum Circuits</li>
-        <li class="level2"><a href="quantum_circuits/FutureWork.html">Future Work</a></li>
-        <li class="level2"><a href="quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
-        <li class="level1 nav-header">Appendix</li>
-        <li class="level2"><a href="appendix/Appendix.html">Appendix</a></li>
-        <li class="level2"><a href="appendix/ReleaseNotes.html">Release Notes</a></li>
-        <li class="level2"><a href="appendix/RoadMap.html">Road Map</a></li>
-        <li class="level2"><a href="appendix/BuildDeploy.html">Build and Deploy</a></li>
-        <li class="level2"><a href="appendix/History.html">History</a></li>
-        <li class="level2"><a href="appendix/Author.html">Author</a></li>
-        <li class="level2"><a href="appendix/Videos.html">Videos</a></li>
-      </ul>
-      
-    </nav>
-
-    <div id="container">
-
-      <nav id="page-nav">
-        <p class="header"><a href="#">Axle</a></p>
-        
-        <ul class="nav-list">
-        </ul>
-        
-        <p class="footer"></p>
-      </nav>
-
-      <main class="content">
-
-        <h1 id="axle" class="title">Axle</h1>
-        <p><img src="/images/axle.png" alt="axle"></p>
-        <p>Axle is an open-source Scala-embedded domain specific language for scientific computing.</p>
-        <ul>
-          <li><a href="introduction/Introduction.html">Introduction</a></li>
-          <li><a href="foundation/Foundation.html">Foundation</a></li>
-          <li><a href="units/Units.html">Units of measurement</a></li>
-          <li><a href="math/Math.html">Math</a></li>
-          <li><a href="visualization/Visualize.html">Visualization</a></li>
-          <li><a href="random_uncertain/RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
-          <li><a href="game_theory/GameTheory.html">Game Theory</a></li>
-          <li><a href="chaos_theory/ChaosTheory.html">Chaos Thoery</a></li>
-          <li><a href="machine_learning/MachineLearning.html">Machine Learning</a></li>
-          <li><a href="bioinformatics/Bioinformatics.html">Bioinformatics</a></li>
-          <li><a href="text/Text.html">Text</a></li>
-          <li><a href="quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
-          <li><a href="appendix/Appendix.html">Appendix</a></li>
-        </ul>
-
-      </main>
-
     </div>
+    
+    
+    
 
   </body>
 </html>

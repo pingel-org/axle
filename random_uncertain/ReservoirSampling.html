@@ -175,26 +175,26 @@
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sample</span><span> = </span><span class="identifier">reservoirSampleK</span><span>(</span><span class="number-literal">15</span><span>, </span><span class="type-name">LazyList</span><span>.</span><span class="identifier">from</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">drop</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">head</span><span>
 </span><span class="comment">// sample: List[Int] = List(
 //   101,
-//   94,
-//   88,
-//   78,
-//   68,
-//   66,
-//   57,
-//   45,
-//   35,
-//   34,
-//   29,
-//   25,
-//   23,
-//   13,
-//   7
+//   90,
+//   87,
+//   86,
+//   79,
+//   76,
+//   63,
+//   53,
+//   52,
+//   42,
+//   30,
+//   24,
+//   20,
+//   18,
+//   13
 // )</span></code></pre>
         <p>The mean of the sample should be in the ballpark of the mean of the entire list (50.5):</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">arithmeticMean</span><span>
 
 </span><span class="identifier">arithmeticMean</span><span>(</span><span class="identifier">sample</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>))
-</span><span class="comment">// res0: Double = 50.86666666666667</span></code></pre>
+</span><span class="comment">// res0: Double = 55.6</span></code></pre>
         <p>Indeed it is.</p>
 
       </main>
