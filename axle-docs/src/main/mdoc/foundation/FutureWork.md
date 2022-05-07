@@ -72,6 +72,7 @@
 
 ### Near term
 
+* TOC with `.site.tableOfContent(title = "Contents", depth = 3)`
 * Copy some test cases to QuantumCircuits.md
 
 * Docs
@@ -79,6 +80,8 @@
     * A few words in README for each section
     * Expand acronyms and include wikipedia links in "Future Work" sections
     * Make dependencies clear in each section
+  * Landing Page
+    * More teasers
   * Introduction
     * Write "Objectives"
     * Smaller images for Gallery

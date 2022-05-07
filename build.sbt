@@ -196,18 +196,6 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
 
 lazy val docwd = "docwork"
 
-lazy val theme =
-  laika.helium.Helium
-  .defaults
-  .site
-  .downloadPage(
-    title = "Documentation Downloads",
-    description = Some("PDFs"),
-    downloadPath = laika.ast.Path.Root / "downloads",
-    includeEPUB = false,
-    includePDF = true
-  ).build
-
 lazy val docs = Project("axle-docs", file("axle-docs"))
   .enablePlugins(MdocPlugin, LaikaPlugin, SitePlugin, GhpagesPlugin)
   .settings(axleSettings)
@@ -234,7 +222,7 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
       laika.parse.code.SyntaxHighlighting),
     laikaIncludePDF := true,
     // laikaIncludeAPI := true, // TODO
-    laikaTheme := theme,
+    laikaTheme := AxleLaika.theme((ThisBuild / previousStableVersion).value.get),
     ghpagesNoJekyll := true,
     ghpagesCleanSite / excludeFilter :=
       new FileFilter {
