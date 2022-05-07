@@ -196,6 +196,18 @@ lazy val axleWheel = Project("axle-wheel", file("axle-wheel"))
 
 lazy val docwd = "docwork"
 
+lazy val theme =
+  laika.helium.Helium
+  .defaults
+  .site
+  .downloadPage(
+    title = "Documentation Downloads",
+    description = Some("PDFs"),
+    downloadPath = laika.ast.Path.Root / "downloads",
+    includeEPUB = false,
+    includePDF = true
+  ).build
+
 lazy val docs = Project("axle-docs", file("axle-docs"))
   .enablePlugins(MdocPlugin, LaikaPlugin, SitePlugin, GhpagesPlugin)
   .settings(axleSettings)
@@ -205,8 +217,7 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
     publish / skip := true,
     mdocVariables := Map(
       "DOCWD" -> docwd,
-      "RELEASE_VERSION" -> (ThisBuild / previousStableVersion).value.get,
-      "PDF_VERSION" -> "0.6"
+      "RELEASE_VERSION" -> (ThisBuild / previousStableVersion).value.get
     ),
     mdocIn := file("axle-docs/src/main/mdoc"),
     mdocOut := file("axle-docs/target/mdoc"),
@@ -222,8 +233,8 @@ lazy val docs = Project("axle-docs", file("axle-docs"))
       laika.markdown.github.GitHubFlavor,
       laika.parse.code.SyntaxHighlighting),
     laikaIncludePDF := true,
-    // laikaIncludeAPI := false, // TODO
-//    laikaTheme := laika.helium.Helium.defaults.build,
+    // laikaIncludeAPI := true, // TODO
+    laikaTheme := theme,
     ghpagesNoJekyll := true,
     ghpagesCleanSite / excludeFilter :=
       new FileFilter {

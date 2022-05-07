@@ -72,8 +72,7 @@
 
 ### Near term
 
-* How to make chapters more prominent in pdf?
-  * See [this example](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
+* Copy some test cases to QuantumCircuits.md
 
 * Docs
   * General
@@ -104,8 +103,12 @@
     * Intro section bullets not nesting
   * Random, Uncertain
     * Bayesian network rendering is missing tables
+  * Bioinformatics
+    * rename to Biology
   * Text
     * Say more about Python Grammar
+  * Appendix
+    * Fix video iframes
 
 ### Later
 
@@ -116,6 +119,9 @@
 * GitHub "Releases" in sidebar should show "latest"
 * update google analytics version
 * test animation with monix 3.4.0
+
+* How to make chapters more prominent in pdf?
+  * See [this example](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
 
 * make axle.g8 more axle-flavored (use cats.IO App as parent for HelloWorld)
 
