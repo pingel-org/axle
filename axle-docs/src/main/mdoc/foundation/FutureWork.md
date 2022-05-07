@@ -72,7 +72,7 @@
 
 ### Near term
 
-* TOC with `.site.tableOfContent(title = "Contents", depth = 3)`
+* Logo
 * Copy some test cases to QuantumCircuits.md
 
 * Docs

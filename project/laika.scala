@@ -7,11 +7,11 @@ import laika.theme.ThemeProvider
 
 object AxleLaika {
 
-    def theme(version: String): ThemeProvider = {
+    def theme(version: String): ThemeProvider =
         Helium
         .defaults
-        .site
-        .landingPage(
+        .site.tableOfContent(title = "Contents", depth = 3)
+        .site.landingPage(
           // logo = Some(Image(Root / "images" / "axle.png")),
           title = Some("Axle"),
           subtitle = Some("Lawful Scientific Computing for Scala"),
@@ -40,13 +40,13 @@ object AxleLaika {
           ),
           teasers = Seq(
             // Teaser("Teaser 1", "Description 1"),
-          )
-      ).site.downloadPage(
-        title = "Documentation Downloads",
-        description = Some("PDFs"),
-        downloadPath = laika.ast.Path.Root / "downloads",
-        includeEPUB = false,
-        includePDF = true
-      ).build
-    }
+          ))
+        .site.downloadPage(
+          title = "Documentation Downloads",
+          description = Some("PDFs"),
+          downloadPath = laika.ast.Path.Root / "downloads",
+          includeEPUB = false,
+          includePDF = true)
+        .pdf.tableOfContent(title = "Contents", depth = 4)
+        .build
 }
