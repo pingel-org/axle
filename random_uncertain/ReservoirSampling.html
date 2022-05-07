@@ -56,6 +56,19 @@
         <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
         <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
         <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
+        <li class="level1 nav-header">Foundation</li>
+        <li class="level2"><a href="../foundation/Foundation.html">Foundation</a></li>
+        <li class="level2"><a href="../foundation/Functional.html">Functional</a></li>
+        <li class="level2"><a href="../foundation/Scala.html">Scala</a></li>
+        <li class="level2"><a href="../foundation/Cats.html">Cats</a></li>
+        <li class="level2"><a href="../foundation/Architecture.html">Architecture</a></li>
+        <li class="level2"><a href="../foundation/PackageObject.html">Package Objects</a></li>
+        <li class="level2"><a href="../foundation/Algebra.html">Algebra</a></li>
+        <li class="level2"><a href="../foundation/LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level2"><a href="../foundation/Graph.html">Graph</a></li>
+        <li class="level2"><a href="../foundation/Logic.html">Logic</a></li>
+        <li class="level2"><a href="../foundation/Spokes.html">Spokes</a></li>
+        <li class="level2"><a href="../foundation/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Units of Measurement</li>
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
@@ -121,6 +134,9 @@
         <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
         <li class="level2"><a href="../text/PythonGrammar.html">Python Grammar</a></li>
         <li class="level2"><a href="../text/FutureWork.html">Future Work</a></li>
+        <li class="level1 nav-header">Quantum Circuits</li>
+        <li class="level2"><a href="../quantum_circuits/FutureWork.html">Future Work</a></li>
+        <li class="level2"><a href="../quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
         <li class="level1 nav-header">Appendix</li>
         <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
@@ -129,22 +145,6 @@
         <li class="level2"><a href="../appendix/History.html">History</a></li>
         <li class="level2"><a href="../appendix/Author.html">Author</a></li>
         <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
-        <li class="level1 nav-header">Foundation</li>
-        <li class="level2"><a href="../foundation/Foundation.html">Foundation</a></li>
-        <li class="level2"><a href="../foundation/Functional.html">Functional</a></li>
-        <li class="level2"><a href="../foundation/Scala.html">Scala</a></li>
-        <li class="level2"><a href="../foundation/Cats.html">Cats</a></li>
-        <li class="level2"><a href="../foundation/Architecture.html">Architecture</a></li>
-        <li class="level2"><a href="../foundation/PackageObject.html">Package Objects</a></li>
-        <li class="level2"><a href="../foundation/Algebra.html">Algebra</a></li>
-        <li class="level2"><a href="../foundation/LinearAlgebra.html">Linear Algebra</a></li>
-        <li class="level2"><a href="../foundation/Graph.html">Graph</a></li>
-        <li class="level2"><a href="../foundation/Logic.html">Logic</a></li>
-        <li class="level2"><a href="../foundation/Spokes.html">Spokes</a></li>
-        <li class="level2"><a href="../foundation/FutureWork.html">Future Work</a></li>
-        <li class="level1 nav-header">Quantum Circuits</li>
-        <li class="level2"><a href="../quantum_circuits/FutureWork.html">Future Work</a></li>
-        <li class="level2"><a href="../quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
       </ul>
       
     </nav>
@@ -173,27 +173,27 @@
         <p>Demonstrate it uniformly sampling 15 of the first 100 integers</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sample</span><span> = </span><span class="identifier">reservoirSampleK</span><span>(</span><span class="number-literal">15</span><span>, </span><span class="type-name">LazyList</span><span>.</span><span class="identifier">from</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">drop</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">head</span><span>
 </span><span class="comment">// sample: List[Int] = List(
-//   99,
-//   98,
-//   94,
-//   80,
-//   78,
+//   100,
+//   96,
+//   85,
+//   84,
+//   83,
 //   77,
-//   62,
-//   59,
-//   47,
-//   44,
-//   34,
-//   32,
-//   24,
-//   19,
+//   60,
+//   55,
+//   40,
+//   36,
+//   35,
+//   33,
+//   31,
+//   15,
 //   4
 // )</span></code></pre>
         <p>The mean of the sample should be in the ballpark of the mean of the entire list (50.5):</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">arithmeticMean</span><span>
 
 </span><span class="identifier">arithmeticMean</span><span>(</span><span class="identifier">sample</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>))
-</span><span class="comment">// res0: Double = 56.733333333333334</span></code></pre>
+</span><span class="comment">// res0: Double = 55.6</span></code></pre>
         <p>Indeed it is.</p>
 
       </main>

@@ -56,6 +56,19 @@
         <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
         <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
         <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
+        <li class="level1 nav-header">Foundation</li>
+        <li class="level2"><a href="../foundation/Foundation.html">Foundation</a></li>
+        <li class="level2"><a href="../foundation/Functional.html">Functional</a></li>
+        <li class="level2"><a href="../foundation/Scala.html">Scala</a></li>
+        <li class="level2"><a href="../foundation/Cats.html">Cats</a></li>
+        <li class="level2"><a href="../foundation/Architecture.html">Architecture</a></li>
+        <li class="level2"><a href="../foundation/PackageObject.html">Package Objects</a></li>
+        <li class="level2"><a href="../foundation/Algebra.html">Algebra</a></li>
+        <li class="level2"><a href="../foundation/LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level2"><a href="../foundation/Graph.html">Graph</a></li>
+        <li class="level2"><a href="../foundation/Logic.html">Logic</a></li>
+        <li class="level2"><a href="../foundation/Spokes.html">Spokes</a></li>
+        <li class="level2"><a href="../foundation/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Units of Measurement</li>
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
@@ -121,6 +134,9 @@
         <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
         <li class="level2"><a href="../text/PythonGrammar.html">Python Grammar</a></li>
         <li class="level2"><a href="../text/FutureWork.html">Future Work</a></li>
+        <li class="level1 nav-header">Quantum Circuits</li>
+        <li class="level2"><a href="../quantum_circuits/FutureWork.html">Future Work</a></li>
+        <li class="level2"><a href="../quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
         <li class="level1 nav-header">Appendix</li>
         <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
@@ -129,22 +145,6 @@
         <li class="level2"><a href="../appendix/History.html">History</a></li>
         <li class="level2"><a href="../appendix/Author.html">Author</a></li>
         <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
-        <li class="level1 nav-header">Foundation</li>
-        <li class="level2"><a href="../foundation/Foundation.html">Foundation</a></li>
-        <li class="level2"><a href="../foundation/Functional.html">Functional</a></li>
-        <li class="level2"><a href="../foundation/Scala.html">Scala</a></li>
-        <li class="level2"><a href="../foundation/Cats.html">Cats</a></li>
-        <li class="level2"><a href="../foundation/Architecture.html">Architecture</a></li>
-        <li class="level2"><a href="../foundation/PackageObject.html">Package Objects</a></li>
-        <li class="level2"><a href="../foundation/Algebra.html">Algebra</a></li>
-        <li class="level2"><a href="../foundation/LinearAlgebra.html">Linear Algebra</a></li>
-        <li class="level2"><a href="../foundation/Graph.html">Graph</a></li>
-        <li class="level2"><a href="../foundation/Logic.html">Logic</a></li>
-        <li class="level2"><a href="../foundation/Spokes.html">Spokes</a></li>
-        <li class="level2"><a href="../foundation/FutureWork.html">Future Work</a></li>
-        <li class="level1 nav-header">Quantum Circuits</li>
-        <li class="level2"><a href="../quantum_circuits/FutureWork.html">Future Work</a></li>
-        <li class="level2"><a href="../quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
       </ul>
       
     </nav>
@@ -188,7 +188,7 @@
 </span><span class="comment">// res0: Double = 3.5</span></code></pre>
         <p>Geometric mean</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">geometricMean</span><span>[</span><span class="type-name">Real</span><span>, </span><span class="type-name">List</span><span>](</span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>))
-</span><span class="comment">// res1: Real = Inexact(f = spire.math.Real$$Lambda$9534/778047805@42fa4530)</span></code></pre>
+</span><span class="comment">// res1: Real = Inexact(f = spire.math.Real$$Lambda$9591/1445569468@7f98e2e2)</span></code></pre>
         <p>Harmonic mean</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">harmonicMean</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>))
 </span><span class="comment">// res2: Double = 3.116883116883117</span></code></pre>
@@ -231,9 +231,9 @@
     </span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>, </span><span class="number-literal">125d</span><span>, </span><span class="number-literal">625d</span><span>),
     </span><span class="number-literal">3</span><span>)
 </span><span class="comment">// res7: List[Real] = List(
-//   Inexact(f = spire.math.Real$$Lambda$9534/778047805@354f3182),
-//   Inexact(f = spire.math.Real$$Lambda$9539/606525903@2dfbe57f),
-//   Inexact(f = spire.math.Real$$Lambda$9539/606525903@78c6f4ac)
+//   Inexact(f = spire.math.Real$$Lambda$9591/1445569468@64b9a38f),
+//   Inexact(f = spire.math.Real$$Lambda$9596/1975977718@3ccbf899),
+//   Inexact(f = spire.math.Real$$Lambda$9596/1975977718@428c9822)
 // )</span></code></pre>
         <p>Moving harmonic mean</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">movingHarmonicMean</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Real</span><span>](

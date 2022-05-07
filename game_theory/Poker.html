@@ -56,6 +56,19 @@
         <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
         <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
         <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
+        <li class="level1 nav-header">Foundation</li>
+        <li class="level2"><a href="../foundation/Foundation.html">Foundation</a></li>
+        <li class="level2"><a href="../foundation/Functional.html">Functional</a></li>
+        <li class="level2"><a href="../foundation/Scala.html">Scala</a></li>
+        <li class="level2"><a href="../foundation/Cats.html">Cats</a></li>
+        <li class="level2"><a href="../foundation/Architecture.html">Architecture</a></li>
+        <li class="level2"><a href="../foundation/PackageObject.html">Package Objects</a></li>
+        <li class="level2"><a href="../foundation/Algebra.html">Algebra</a></li>
+        <li class="level2"><a href="../foundation/LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level2"><a href="../foundation/Graph.html">Graph</a></li>
+        <li class="level2"><a href="../foundation/Logic.html">Logic</a></li>
+        <li class="level2"><a href="../foundation/Spokes.html">Spokes</a></li>
+        <li class="level2"><a href="../foundation/FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Units of Measurement</li>
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
@@ -121,6 +134,9 @@
         <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
         <li class="level2"><a href="../text/PythonGrammar.html">Python Grammar</a></li>
         <li class="level2"><a href="../text/FutureWork.html">Future Work</a></li>
+        <li class="level1 nav-header">Quantum Circuits</li>
+        <li class="level2"><a href="../quantum_circuits/FutureWork.html">Future Work</a></li>
+        <li class="level2"><a href="../quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
         <li class="level1 nav-header">Appendix</li>
         <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
@@ -129,22 +145,6 @@
         <li class="level2"><a href="../appendix/History.html">History</a></li>
         <li class="level2"><a href="../appendix/Author.html">Author</a></li>
         <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
-        <li class="level1 nav-header">Foundation</li>
-        <li class="level2"><a href="../foundation/Foundation.html">Foundation</a></li>
-        <li class="level2"><a href="../foundation/Functional.html">Functional</a></li>
-        <li class="level2"><a href="../foundation/Scala.html">Scala</a></li>
-        <li class="level2"><a href="../foundation/Cats.html">Cats</a></li>
-        <li class="level2"><a href="../foundation/Architecture.html">Architecture</a></li>
-        <li class="level2"><a href="../foundation/PackageObject.html">Package Objects</a></li>
-        <li class="level2"><a href="../foundation/Algebra.html">Algebra</a></li>
-        <li class="level2"><a href="../foundation/LinearAlgebra.html">Linear Algebra</a></li>
-        <li class="level2"><a href="../foundation/Graph.html">Graph</a></li>
-        <li class="level2"><a href="../foundation/Logic.html">Logic</a></li>
-        <li class="level2"><a href="../foundation/Spokes.html">Spokes</a></li>
-        <li class="level2"><a href="../foundation/FutureWork.html">Future Work</a></li>
-        <li class="level1 nav-header">Quantum Circuits</li>
-        <li class="level2"><a href="../quantum_circuits/FutureWork.html">Future Work</a></li>
-        <li class="level2"><a href="../quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
       </ul>
       
     </nav>
@@ -180,30 +180,30 @@
   </span><span class="type-name">Deck</span><span>().</span><span class="identifier">cards</span><span>.</span><span class="identifier">take</span><span>(</span><span class="identifier">handSize</span><span>).</span><span class="identifier">combinations</span><span>(</span><span class="number-literal">5</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">cs</span><span> =&gt; </span><span class="type-name">PokerHand</span><span>(</span><span class="identifier">cs</span><span>.</span><span class="identifier">toVector</span><span>)).</span><span class="identifier">toList</span><span>.</span><span class="identifier">max</span><span>
 
 </span><span class="identifier">winnerFromHandSize</span><span>(</span><span class="number-literal">7</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res0: String = &quot;5♣ 7♢ 8♢ J♡ A♣&quot;</span></code></pre>
+</span><span class="comment">// res0: String = &quot;6♠ 6♡ Q♠ Q♡ A♠&quot;</span></code></pre>
         <p>20 simulated 5-card hands made of 7-card hands.  Sorted.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">hands</span><span> = (</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">20</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">n</span><span> =&gt; </span><span class="identifier">winnerFromHandSize</span><span>(</span><span class="number-literal">7</span><span>)).</span><span class="identifier">sorted</span></code></pre>
         <pre><code class="nohighlight"><span class="identifier">hands</span><span>.</span><span class="identifier">map</span><span>({ </span><span class="identifier">hand</span><span> =&gt; </span><span class="identifier">hand</span><span>.</span><span class="identifier">show</span><span> + </span><span class="string-literal">&quot;  &quot;</span><span> + </span><span class="identifier">hand</span><span>.</span><span class="identifier">description</span><span> }).</span><span class="identifier">mkString</span><span>(</span><span class="string-literal">&quot;</span><span class="escape-sequence">\n</span><span class="string-literal">&quot;</span><span>)
-</span><span class="comment">// res1: String = &quot;&quot;&quot;5♡ 7♣ 8♢ 9♠ K♣  high K high
-// 4♡ 4♣ 8♠ 9♢ K♡  pair of 4
-// 4♠ 4♢ T♣ J♠ K♢  pair of 4
-// 5♠ 5♣ 9♡ J♣ Q♣  pair of 5
-// 6♡ 6♣ Q♡ K♢ A♡  pair of 6
-// 7♠ 7♢ T♢ J♢ K♠  pair of 7
-// 8♢ T♠ T♣ Q♣ K♢  pair of T
-// T♡ T♢ J♣ Q♢ K♣  pair of T
-// 4♣ 8♢ Q♠ Q♡ A♠  pair of Q
-// 7♠ 7♡ 8♢ 8♣ K♢  two pair 8 and 7
-// 5♢ 5♣ 9♠ 9♡ J♡  two pair 9 and 5
-// 5♢ 8♠ 8♢ J♠ J♣  two pair J and 8
-// 4♡ 4♣ T♡ Q♡ Q♣  two pair Q and 4
-// 9♠ T♠ T♡ Q♢ Q♣  two pair Q and T
-// 9♠ 9♡ 9♢ T♢ A♡  three of a kind of 9
-// 2♢ 3♠ 4♠ 5♢ 6♡  straight to 6
-// 5♠ 5♡ 5♢ A♠ A♢  full house 5 over A
-// 3♢ 3♣ 7♠ 7♢ 7♣  full house 7 over 3
-// 6♠ 6♡ 8♡ 8♢ 8♣  full house 8 over 6
-// 8♠ 8♡ 8♢ 8♣ K♣  four of a kind of 8&quot;&quot;&quot;</span></code></pre>
+</span><span class="comment">// res1: String = &quot;&quot;&quot;6♢ 7♠ 8♡ 9♣ K♣  high K high
+// 8♠ 9♣ T♣ J♣ A♢  high A high
+// 7♣ 9♠ J♡ K♣ A♡  high A high
+// 4♡ 4♢ 9♠ T♠ J♡  pair of 4
+// 5♠ 5♡ T♣ J♢ A♣  pair of 5
+// 6♠ 6♣ 9♣ Q♠ A♣  pair of 6
+// 7♢ 7♣ J♡ Q♡ K♢  pair of 7
+// 7♣ 9♠ 9♣ K♠ A♠  pair of 9
+// J♣ Q♠ Q♢ K♡ A♡  pair of Q
+// T♢ J♠ K♢ K♣ A♣  pair of K
+// T♣ Q♢ K♠ K♢ A♣  pair of K
+// 9♢ T♡ K♣ A♢ A♣  pair of A
+// T♠ Q♢ K♡ A♡ A♢  pair of A
+// J♠ Q♢ K♡ A♡ A♢  pair of A
+// 3♠ 3♣ 9♠ 9♢ Q♠  two pair 9 and 3
+// 5♠ 5♣ T♠ J♡ J♣  two pair J and 5
+// J♣ Q♠ Q♢ K♠ K♣  two pair K and Q
+// 6♠ 6♢ Q♠ A♠ A♢  two pair A and 6
+// 4♣ 5♣ 6♠ 7♣ 8♡  straight to 8
+// 8♡ 9♡ T♠ J♢ Q♠  straight to Q&quot;&quot;&quot;</span></code></pre>
         <p>Record 1000 simulated hands for each drawn hand size from 5 to 9</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">poker</span><span>.</span><span class="type-name">PokerHandCategory</span><span>
 
@@ -286,122 +286,101 @@
 // P1&gt; Pot: 3
 // P1&gt; Shared: 
 // P1&gt; 
-// P1&gt; P1:  hand T♢ 5♡ in for $1, $99 remaining
+// P1&gt; P1:  hand 7♠ 8♠ in for $1, $99 remaining
 // P1&gt; P2:  hand -- in for $2, $98 remaining
 // P2&gt; To: You
-// P2&gt; Current bet: 23
-// P2&gt; Pot: 25
+// P2&gt; Current bet: 13
+// P2&gt; Pot: 15
 // P2&gt; Shared: 
 // P2&gt; 
-// P2&gt; P1:  hand -- in for $23, $77 remaining
-// P2&gt; P2:  hand 4♠ 6♡ in for $2, $98 remaining
+// P2&gt; P1:  hand -- in for $13, $87 remaining
+// P2&gt; P2:  hand 4♠ T♠ in for $2, $98 remaining
 // P1&gt; To: You
-// P1&gt; Current bet: 81
-// P1&gt; Pot: 104
+// P1&gt; Current bet: 29
+// P1&gt; Pot: 42
 // P1&gt; Shared: 
 // P1&gt; 
-// P1&gt; P1:  hand T♢ 5♡ in for $23, $77 remaining
-// P1&gt; P2:  hand -- in for $81, $19 remaining
+// P1&gt; P1:  hand 7♠ 8♠ in for $13, $87 remaining
+// P1&gt; P2:  hand -- in for $29, $71 remaining
 // P2&gt; To: You
-// P2&gt; Current bet: 86
-// P2&gt; Pot: 167
+// P2&gt; Current bet: 84
+// P2&gt; Pot: 113
 // P2&gt; Shared: 
 // P2&gt; 
-// P2&gt; P1:  hand -- in for $86, $14 remaining
-// P2&gt; P2:  hand 4♠ 6♡ in for $81, $19 remaining
-// P1&gt; To: You
-// P1&gt; Current bet: 100
-// P1&gt; Pot: 186
-// P1&gt; Shared: 
-// P1&gt; 
-// P1&gt; P1:  hand T♢ 5♡ in for $86, $14 remaining
-// P1&gt; P2:  hand -- in for $100, $0 remaining
+// P2&gt; P1:  hand -- in for $84, $16 remaining
+// P2&gt; P2:  hand 4♠ T♠ in for $29, $71 remaining
 // D&gt; To: You
-// D&gt; Current bet: 100
-// D&gt; Pot: 200
+// D&gt; Current bet: 84
+// D&gt; Pot: 113
 // D&gt; Shared: 
 // D&gt; 
-// D&gt; P1:  hand -- in for $100, $0 remaining
-// D&gt; P2:  hand -- in for $100, $0 remaining
-// P1&gt; To: You
-// P1&gt; Current bet: 0
-// P1&gt; Pot: 200
-// P1&gt; Shared: Q♣ 4♢ K♢
-// P1&gt; 
-// P1&gt; P1:  hand T♢ 5♡ in for $--, $0 remaining
-// P1&gt; P2:  hand -- in for $--, $0 remaining
-// D&gt; To: You
-// D&gt; Current bet: 0
-// D&gt; Pot: 200
-// D&gt; Shared: Q♣ 4♢ K♢
-// D&gt; 
-// D&gt; P1:  hand -- out, $0 remaining
-// D&gt; P2:  hand -- in for $--, $0 remaining
+// D&gt; P1:  hand -- in for $84, $16 remaining
+// D&gt; P2:  hand -- out, $71 remaining
 // endState: PokerState = PokerState(
-//   moverFn = axle.game.poker.package$$anon$1$$Lambda$9198/1307124829@70a32158,
+//   moverFn = axle.game.poker.package$$anon$1$$Lambda$9255/566935497@4cb257b3,
 //   deck = Deck(
 //     cards = List(
 //       Card(
-//         rank = axle.game.cards.R7$@382b63ea,
-//         suit = axle.game.cards.Diamonds$@5519f36b
+//         rank = axle.game.cards.Queen$@557b8071,
+//         suit = axle.game.cards.Spades$@5c1172e9
 //       ),
 //       Card(
-//         rank = axle.game.cards.R5$@70f187d1,
-//         suit = axle.game.cards.Clubs$@13a6927c
+//         rank = axle.game.cards.R10$@31d4a82,
+//         suit = axle.game.cards.Clubs$@2419e806
 //       ),
 //       Card(
-//         rank = axle.game.cards.King$@41021ed8,
-//         suit = axle.game.cards.Spades$@10b3618a
+//         rank = axle.game.cards.King$@71137be9,
+//         suit = axle.game.cards.Hearts$@7f28d53b
 //       ),
 //       Card(
-//         rank = axle.game.cards.R2$@4de92fcd,
-//         suit = axle.game.cards.Spades$@10b3618a
+//         rank = axle.game.cards.R7$@5e7608f0,
+//         suit = axle.game.cards.Clubs$@2419e806
 //       ),
 //       Card(
-//         rank = axle.game.cards.Jack$@5aa8ca0d,
-//         suit = axle.game.cards.Spades$@10b3618a
+//         rank = axle.game.cards.Ace$@6529f27a,
+//         suit = axle.game.cards.Hearts$@7f28d53b
 //       ),
 //       Card(
-//         rank = axle.game.cards.R8$@12a8863a,
-//         suit = axle.game.cards.Spades$@10b3618a
+//         rank = axle.game.cards.R6$@6cd89f98,
+//         suit = axle.game.cards.Spades$@5c1172e9
 //       ),
 //       Card(
-//         rank = axle.game.cards.R3$@9beba8b,
-//         suit = axle.game.cards.Diamonds$@5519f36b
+//         rank = axle.game.cards.King$@71137be9,
+//         suit = axle.game.cards.Spades$@5c1172e9
 //       ),
 //       Card(
-//         rank = axle.game.cards.R3$@9beba8b,
-//         suit = axle.game.cards.Clubs$@13a6927c
+//         rank = axle.game.cards.Ace$@6529f27a,
+//         suit = axle.game.cards.Spades$@5c1172e9
 //       ),
 //       Card(
-//         rank = axle.game.cards.R10$@4b5b5a36,
-//         suit = axle.game.cards.Clubs$@13a6927c
+//         rank = axle.game.cards.R8$@37d61dd2,
+//         suit = axle.game.cards.Hearts$@7f28d53b
 //       ),
 //       Card(
-//         rank = axle.game.cards.R3$@9beba8b,
-//         suit = axle.game.cards.Hearts$@7d3a8656
+//         rank = axle.game.cards.King$@71137be9,
+//         suit = axle.game.cards.Clubs$@2419e806
 //       ),
 //       Card(
-//         rank = axle.game.cards.R4$@7538bd7,
-//         suit = axle.game.cards.Clubs$@13a6927c
+//         rank = axle.game.cards.R9$@41b1af55,
+//         suit = axle.game.cards.Diamonds$@381adcfc
 //       ),
 //       Card(
 // ...</span></code></pre>
         <p>Display outcome to each player</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
 </span><span class="comment">// outcome: PokerOutcome = PokerOutcome(
-//   winner = Some(value = Player(id = &quot;P2&quot;, description = &quot;Player 2&quot;)),
+//   winner = Some(value = Player(id = &quot;P1&quot;, description = &quot;Player 1&quot;)),
 //   hand = None
 // )
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// D&gt; Winner: Player 2
+</span><span class="comment">// D&gt; Winner: Player 1
 // D&gt; Hand  : not shown
-// P1&gt; Winner: Player 2
+// P1&gt; Winner: Player 1
 // P1&gt; Hand  : not shown
-// P2&gt; Winner: Player 2
+// P2&gt; Winner: Player 1
 // P2&gt; Hand  : not shown</span></code></pre>
 
       </main>

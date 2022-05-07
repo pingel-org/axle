@@ -56,6 +56,19 @@
         <li class="level2"><a href="../introduction/Installation.html">Installation</a></li>
         <li class="level2"><a href="../introduction/Gallery.html">Gallery</a></li>
         <li class="level2"><a href="../introduction/Resources.html">Resources</a></li>
+        <li class="level1 nav-header">Foundation</li>
+        <li class="level2"><a href="Foundation.html">Foundation</a></li>
+        <li class="level2"><a href="Functional.html">Functional</a></li>
+        <li class="level2"><a href="Scala.html">Scala</a></li>
+        <li class="level2"><a href="Cats.html">Cats</a></li>
+        <li class="level2"><a href="Architecture.html">Architecture</a></li>
+        <li class="level2"><a href="PackageObject.html">Package Objects</a></li>
+        <li class="level2"><a href="Algebra.html">Algebra</a></li>
+        <li class="level2"><a href="LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level2 active"><a href="#">Graph</a></li>
+        <li class="level2"><a href="Logic.html">Logic</a></li>
+        <li class="level2"><a href="Spokes.html">Spokes</a></li>
+        <li class="level2"><a href="FutureWork.html">Future Work</a></li>
         <li class="level1 nav-header">Units of Measurement</li>
         <li class="level2"><a href="../units/Units.html">Units of Measurement</a></li>
         <li class="level2"><a href="../units/Quanta.html">Quanta</a></li>
@@ -121,6 +134,9 @@
         <li class="level2"><a href="../text/GoldParadigm.html">Gold Paradigm</a></li>
         <li class="level2"><a href="../text/PythonGrammar.html">Python Grammar</a></li>
         <li class="level2"><a href="../text/FutureWork.html">Future Work</a></li>
+        <li class="level1 nav-header">Quantum Circuits</li>
+        <li class="level2"><a href="../quantum_circuits/FutureWork.html">Future Work</a></li>
+        <li class="level2"><a href="../quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
         <li class="level1 nav-header">Appendix</li>
         <li class="level2"><a href="../appendix/Appendix.html">Appendix</a></li>
         <li class="level2"><a href="../appendix/ReleaseNotes.html">Release Notes</a></li>
@@ -129,22 +145,6 @@
         <li class="level2"><a href="../appendix/History.html">History</a></li>
         <li class="level2"><a href="../appendix/Author.html">Author</a></li>
         <li class="level2"><a href="../appendix/Videos.html">Videos</a></li>
-        <li class="level1 nav-header">Foundation</li>
-        <li class="level2"><a href="Foundation.html">Foundation</a></li>
-        <li class="level2"><a href="Functional.html">Functional</a></li>
-        <li class="level2"><a href="Scala.html">Scala</a></li>
-        <li class="level2"><a href="Cats.html">Cats</a></li>
-        <li class="level2"><a href="Architecture.html">Architecture</a></li>
-        <li class="level2"><a href="PackageObject.html">Package Objects</a></li>
-        <li class="level2"><a href="Algebra.html">Algebra</a></li>
-        <li class="level2"><a href="LinearAlgebra.html">Linear Algebra</a></li>
-        <li class="level2 active"><a href="#">Graph</a></li>
-        <li class="level2"><a href="Logic.html">Logic</a></li>
-        <li class="level2"><a href="Spokes.html">Spokes</a></li>
-        <li class="level2"><a href="FutureWork.html">Future Work</a></li>
-        <li class="level1 nav-header">Quantum Circuits</li>
-        <li class="level2"><a href="../quantum_circuits/FutureWork.html">Future Work</a></li>
-        <li class="level2"><a href="../quantum_circuits/QuantumCircuits.html">Quantum Circuits</a></li>
       </ul>
       
     </nav>
@@ -184,7 +184,7 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">jdg</span><span> = </span><span class="type-name">DirectedGraph</span><span>.</span><span class="identifier">k2</span><span>[</span><span class="type-name">DirectedSparseGraph</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>]
-</span><span class="comment">// jdg: DirectedGraph[DirectedSparseGraph[String, Edge], String, Edge] = axle.jung.package$$anon$7@18f33785</span></code></pre>
+</span><span class="comment">// jdg: DirectedGraph[DirectedSparseGraph[String, Edge], String, Edge] = axle.jung.package$$anon$7@6fa78720</span></code></pre>
         <p>Use the <code>jdg</code> witness&#39;s <code>make</code> method to create the directed graph</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">dg</span><span> = </span><span class="identifier">jdg</span><span>.</span><span class="identifier">make</span><span>(</span><span class="type-name">List</span><span>(</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>),
   </span><span class="type-name">List</span><span>(
@@ -195,7 +195,7 @@
     (</span><span class="identifier">a</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;!&quot;</span><span>, </span><span class="number-literal">7</span><span>)),
     (</span><span class="identifier">b</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hey&quot;</span><span>, </span><span class="number-literal">2</span><span>))))
 </span><span class="comment">// dg: DirectedSparseGraph[String, Edge] = Vertices:a,b,c,d
-// Edges:repl.MdocSession$App$Edge@2b58f2de[a,c] repl.MdocSession$App$Edge@282a5f82[a,b] repl.MdocSession$App$Edge@5b67ad1f[b,d] repl.MdocSession$App$Edge@4726fd2f[b,c] repl.MdocSession$App$Edge@5174613d[d,a] repl.MdocSession$App$Edge@45b0286b[c,d]</span></code></pre>
+// Edges:repl.MdocSession$App$Edge@5f922911[a,c] repl.MdocSession$App$Edge@1aa23af6[c,d] repl.MdocSession$App$Edge@5901a2e4[a,b] repl.MdocSession$App$Edge@22a6ec2e[b,d] repl.MdocSession$App$Edge@63f3d74a[b,c] repl.MdocSession$App$Edge@b50ac1d[d,a]</span></code></pre>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">directedgraph</span><span>.</span><span class="identifier">directedGraphOps</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">finite</span><span>.</span><span class="identifier">finiteOps</span><span>
@@ -223,7 +223,7 @@
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showEdge</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] {
   </span><span class="keyword">def</span><span> </span><span class="declaration-name">show</span><span>(</span><span class="identifier">e</span><span>: </span><span class="type-name">Edge</span><span>): </span><span class="type-name">String</span><span> = </span><span class="identifier">e</span><span>.</span><span class="identifier">s</span><span> + </span><span class="string-literal">&quot; &quot;</span><span> + </span><span class="identifier">e</span><span>.</span><span class="identifier">i</span><span>
 }
-</span><span class="comment">// showEdge: Show[Edge] = repl.MdocSession$App$$anon$1@3901fb9c
+</span><span class="comment">// showEdge: Show[Edge] = repl.MdocSession$App$$anon$1@555be766
 </span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
 
@@ -240,7 +240,7 @@
 )
 </span><span class="comment">// dVis: DirectedGraphVisualization[DirectedSparseGraph[String, Edge], String, Edge] = DirectedGraphVisualization(
 //   dg = Vertices:a,b,c,d
-// Edges:repl.MdocSession$App$Edge@2b58f2de[a,c] repl.MdocSession$App$Edge@282a5f82[a,b] repl.MdocSession$App$Edge@5b67ad1f[b,d] repl.MdocSession$App$Edge@4726fd2f[b,c] repl.MdocSession$App$Edge@5174613d[d,a] repl.MdocSession$App$Edge@45b0286b[c,d] ,
+// Edges:repl.MdocSession$App$Edge@5f922911[a,c] repl.MdocSession$App$Edge@1aa23af6[c,d] repl.MdocSession$App$Edge@5901a2e4[a,b] repl.MdocSession$App$Edge@22a6ec2e[b,d] repl.MdocSession$App$Edge@63f3d74a[b,c] repl.MdocSession$App$Edge@b50ac1d[d,a] ,
 //   width = 300,
 //   height = 300,
 //   border = 10,
@@ -275,7 +275,7 @@
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">jug</span><span> = </span><span class="type-name">UndirectedGraph</span><span>.</span><span class="identifier">k2</span><span>[</span><span class="type-name">UndirectedSparseGraph</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>]
-</span><span class="comment">// jug: UndirectedGraph[UndirectedSparseGraph[String, Edge], String, Edge] = axle.jung.package$$anon$11@70eaeb46</span></code></pre>
+</span><span class="comment">// jug: UndirectedGraph[UndirectedSparseGraph[String, Edge], String, Edge] = axle.jung.package$$anon$11@724ad027</span></code></pre>
         <p>Use the <code>jug</code> witness&#39;s <code>make</code> method to create the undirected graph</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ug</span><span> = </span><span class="identifier">jug</span><span>.</span><span class="identifier">make</span><span>(</span><span class="type-name">List</span><span>(</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>),
   </span><span class="type-name">List</span><span>(
@@ -286,7 +286,7 @@
     (</span><span class="identifier">a</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;!&quot;</span><span>, </span><span class="number-literal">1</span><span>)),
     (</span><span class="identifier">b</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hey&quot;</span><span>, </span><span class="number-literal">2</span><span>))))
 </span><span class="comment">// ug: UndirectedSparseGraph[String, Edge] = Vertices:a,b,c,d
-// Edges:repl.MdocSession$App7$Edge@5f513321[b,d] repl.MdocSession$App7$Edge@5a8ceb98[c,d] repl.MdocSession$App7$Edge@72a582c0[a,c] repl.MdocSession$App7$Edge@49e151a7[d,a] repl.MdocSession$App7$Edge@722bee43[b,c] repl.MdocSession$App7$Edge@3d50c5ee[a,b]</span></code></pre>
+// Edges:repl.MdocSession$App7$Edge@2d55d595[a,b] repl.MdocSession$App7$Edge@39e28d46[d,a] repl.MdocSession$App7$Edge@25129df7[b,c] repl.MdocSession$App7$Edge@bd4d103[b,d] repl.MdocSession$App7$Edge@3a181e92[a,c] repl.MdocSession$App7$Edge@3ae639bb[c,d]</span></code></pre>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">undirectedgraph</span><span>.</span><span class="identifier">undirectedGraphOps</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">finite</span><span>.</span><span class="identifier">finiteOps</span><span>
@@ -308,7 +308,7 @@
 </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showEdge</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] {
   </span><span class="keyword">def</span><span> </span><span class="declaration-name">show</span><span>(</span><span class="identifier">e</span><span>: </span><span class="type-name">Edge</span><span>): </span><span class="type-name">String</span><span> = </span><span class="identifier">e</span><span>.</span><span class="identifier">s</span><span> + </span><span class="string-literal">&quot; &quot;</span><span> + </span><span class="identifier">e</span><span>.</span><span class="identifier">i</span><span>
 }
-</span><span class="comment">// showEdge: Show[Edge] = repl.MdocSession$App7$$anon$2@4f1b25fa
+</span><span class="comment">// showEdge: Show[Edge] = repl.MdocSession$App7$$anon$2@41de24e1
 </span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
 
@@ -320,7 +320,7 @@
   </span><span class="identifier">color</span><span> = </span><span class="type-name">Color</span><span>.</span><span class="identifier">yellow</span><span>)
 </span><span class="comment">// uVis: UndirectedGraphVisualization[UndirectedSparseGraph[String, Edge], String, Edge] = UndirectedGraphVisualization(
 //   ug = Vertices:a,b,c,d
-// Edges:repl.MdocSession$App7$Edge@5f513321[b,d] repl.MdocSession$App7$Edge@5a8ceb98[c,d] repl.MdocSession$App7$Edge@72a582c0[a,c] repl.MdocSession$App7$Edge@49e151a7[d,a] repl.MdocSession$App7$Edge@722bee43[b,c] repl.MdocSession$App7$Edge@3d50c5ee[a,b] ,
+// Edges:repl.MdocSession$App7$Edge@2d55d595[a,b] repl.MdocSession$App7$Edge@39e28d46[d,a] repl.MdocSession$App7$Edge@25129df7[b,c] repl.MdocSession$App7$Edge@bd4d103[b,d] repl.MdocSession$App7$Edge@3a181e92[a,c] repl.MdocSession$App7$Edge@3ae639bb[c,d] ,
 //   width = 300,
 //   height = 300,
 //   border = 10,
