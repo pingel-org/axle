@@ -163,6 +163,7 @@
           <li class="level1"><a href="#site">Site</a></li>
           <li class="level2"><a href="#near-term">Near term</a></li>
           <li class="level2"><a href="#later">Later</a></li>
+          <li class="level1"><a href="#build">Build</a></li>
         </ul>
         
         <p class="footer"></p>
@@ -283,7 +284,10 @@
         <h3 id="near-term" class="section"><a class="anchor-link left" href="#near-term"><i class="icofont-laika">&#xef71;</i></a>Near term</h3>
         <ul>
           <li>
-            <p>Look for opportunities to use <code>mdoc:silent</code></p>
+            <p>publish site with newer Installation.md (it&#39;s hitting OOM errors)</p>
+          </li>
+          <li>
+            <p>Copy some test cases to QuantumCircuits.md</p>
           </li>
           <li>
             <p>How to make chapters more prominent in pdf?</p>
@@ -297,11 +301,18 @@
             <p>Cats, Scala, etc are at end -- how to get them in correct order?</p>
           </li>
           <li>
-            <p>Writing</p>
+            <p>Docs</p>
           </li>
         </ul>
         <ul>
-          <li>A few words in README for each section</li>
+          <li>
+            General
+            <ul>
+              <li>A few words in README for each section</li>
+              <li>Expand acronyms and include wikipedia links in &quot;Future Work&quot; sections</li>
+              <li>Make dependencies clear in each section</li>
+            </ul>
+          </li>
         </ul>
         <ul>
           <li>
@@ -309,7 +320,6 @@
             <ul>
               <li>Write &quot;Objectives&quot;</li>
               <li>Smaller images for Gallery</li>
-              <li>!!! Simplify &quot;Installation&quot;</li>
             </ul>
           </li>
         </ul>
@@ -319,6 +329,30 @@
             <ul>
               <li>Architecture</li>
               <li>Functional Programming</li>
+            </ul>
+            <ul>
+              <li>Typeclasses</li>
+            </ul>
+            <ul>
+              <li>Curry-Howard</li>
+            </ul>
+            <ul>
+              <li>Theorems for Free</li>
+            </ul>
+            <ul>
+              <li>Referential Transparency</li>
+            </ul>
+            <ul>
+              <li>Equational Reasoning</li>
+            </ul>
+            <ul>
+              <li>Life After Monoids</li>
+            </ul>
+            <ul>
+              <li>Algebird</li>
+            </ul>
+            <ul>
+              <li>Kmett&#39;s mapping of abstract algebra to software patterns</li>
               <li>Scala</li>
               <li>Cats: Show, EQ, IO, Algebra, Spire</li>
               <li>rename &quot;Spokes&quot;</li>
@@ -352,13 +386,10 @@
         </ul>
         <ul>
           <li>
-            <p>Quantum Circuits</p>
+            Text
             <ul>
-              <li>!!! Copy some test cases to QuantumCircuits.md</li>
+              <li>Say more about Python Grammar</li>
             </ul>
-          </li>
-          <li>
-            <p>Make dependencies clear in each section</p>
           </li>
         </ul>
         
@@ -383,7 +414,10 @@
             <p>update google analytics version</p>
           </li>
           <li>
-            <p>stop hard-coding PDF_VERSION n build.sbt</p>
+            <p>test animation with monix 3.4.0</p>
+          </li>
+          <li>
+            <p>make axle.g8 more axle-flavored (use cats.IO App as parent for HelloWorld)</p>
           </li>
           <li>
             <p>ghpagesCleanSite leaving stale files?</p>
@@ -400,9 +434,13 @@
           <li>
             <p>merge mdoc and site directories?</p>
           </li>
-          <li>
-            <p>site build via github action?</p>
-          </li>
+        </ul>
+        
+        <h2 id="build" class="section"><a class="anchor-link left" href="#build"><i class="icofont-laika">&#xef71;</i></a>Build</h2>
+        <ul>
+          <li>keep axle.g8 and axle versions in sync</li>
+          <li>stop hard-coding PDF_VERSION n build.sbt</li>
+          <li>site publish (<code>git push</code>) via github action?</li>
         </ul>
 
       </main>
