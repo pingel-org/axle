@@ -72,14 +72,8 @@
 
 ### Near term
 
-* publish site with newer Installation.md (it's hitting OOM errors)
-
-* Copy some test cases to QuantumCircuits.md
-
 * How to make chapters more prominent in pdf?
   * See [this example](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
-
-* Cats, Scala, etc are at end -- how to get them in correct order?
 
 * Docs
   * General
