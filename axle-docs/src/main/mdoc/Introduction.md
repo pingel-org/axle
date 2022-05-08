@@ -51,13 +51,13 @@ hosted on the [Sonatype snapshot repo](https://oss.sonatype.org/content/reposito
 
 ## Gallery
 
-[![mandelbrot](/images/mandelbrot.png)](ChaosTheory.md)
+[![mandelbrot](/images/mandelbrot.png)](ChaosTheory.md#mandelbrot-set)
 
 [![coin entropy](/images/coinentropy.svg)](random_uncertain/CoinEntropy.md)
 
 [![alarm bayes](/images/alarm_bayes.svg)](random_uncertain/BayesianNetworks.md)
 
-[![logistic map](/images/logMap.png)](ChaosTheory.md)
+[![logistic map](/images/logMap.png)](ChaosTheory.md#logistic-map)
 
 [![poker hands](/images/poker_hands.svg)](game_theory/Poker.md)
 

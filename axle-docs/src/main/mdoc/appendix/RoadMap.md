@@ -2,7 +2,7 @@
 
 See [Release Notes](ReleaseNotes.md) for the record of previously released features.
 
-* Near term [items](../Foundation.md) in site todo
+* Near term [items](../Foundation.md#future-work) in site todo
 * tweet / post
 
 ## 0.6.5
@@ -11,7 +11,7 @@ See [Release Notes](ReleaseNotes.md) for the record of previously released featu
 
 ## 0.7.x Scala 3
 
-See Scala 3 section of [future work](../Foundation.md) for foundation
+See Scala 3 section of [future work](../Foundation.md#future-work) for foundation
 
 ## 0.8.x Game
 
@@ -25,7 +25,7 @@ See [Future Work](../random_uncertain/FutureWork.md) for Randomness and Uncertai
 
 ## 0.10.x Bugs and adoption barriers
 
-See [Future work](../Foundation.md) for Foundation
+See [Future work](../Foundation.md#future-work) for Foundation
 
 ## 0.11.x Text improvements
 
