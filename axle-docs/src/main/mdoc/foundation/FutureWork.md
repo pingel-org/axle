@@ -73,7 +73,14 @@
 ### Near term
 
 * Logo
+
+* How to make chapters more prominent in pdf?
+  * See [this example](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
+
 * Copy some test cases to QuantumCircuits.md
+
+* links from Gallery should be to deeper, anchored position in target .md file
+  * Eg ChaosTheory.md (logistic map and mandelbrot)
 
 * Docs
   * General
@@ -122,9 +129,6 @@
 * GitHub "Releases" in sidebar should show "latest"
 * update google analytics version
 * test animation with monix 3.4.0
-
-* How to make chapters more prominent in pdf?
-  * See [this example](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
 
 * make axle.g8 more axle-flavored (use cats.IO App as parent for HelloWorld)
 

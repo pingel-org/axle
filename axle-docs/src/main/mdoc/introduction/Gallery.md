@@ -1,12 +1,12 @@
 # Gallery
 
-[![mandelbrot](/images/mandelbrot.png)](../chaos_theory/Mandelbrot.md)
+[![mandelbrot](/images/mandelbrot.png)](../ChaosTheory.md)
 
 [![coin entropy](/images/coinentropy.svg)](../random_uncertain/CoinEntropy.md)
 
 [![alarm bayes](/images/alarm_bayes.svg)](../random_uncertain/BayesianNetworks.md)
 
-[![logistic map](/images/logMap.png)](../chaos_theory/LogisticMap.md)
+[![logistic map](/images/logMap.png)](../ChaosTheory.md)
 
 [![poker hands](/images/poker_hands.svg)](../game_theory/Poker.md)
 

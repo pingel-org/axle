@@ -10,7 +10,7 @@ object AxleLaika {
     def theme(version: String): ThemeProvider =
         Helium
         .defaults
-        .site.tableOfContent(title = "Contents", depth = 3)
+        .site.tableOfContent(title = "Contents", depth = 4)
         .site.landingPage(
           // logo = Some(Image(Root / "images" / "axle.png")),
           title = Some("Axle"),
@@ -27,7 +27,7 @@ object AxleLaika {
             TextLink.internal(Root / "visualization" / "Visualize.md", "Visualization"),
             TextLink.internal(Root / "random_uncertain" / "RandomnessUncertainty.md", "Randomness and Uncertainty"),
             TextLink.internal(Root / "game_theory" / "GameTheory.md", "Game Theory"),
-            TextLink.internal(Root / "chaos_theory" / "ChaosTheory.md", "Chaos Theory"),
+            TextLink.internal(Root / "ChaosTheory.md", "Chaos Theory"),
             TextLink.internal(Root / "machine_learning" / "MachineLearning.md", "Machine Learning"),
             TextLink.internal(Root / "bioinformatics" / "Bioinformatics.md", "Bioinformatics"),
             TextLink.internal(Root / "text" / "Text.md", "Text"),
