@@ -1,6 +1,6 @@
 # Visualization
 
-See the [Gallery](../introduction/Gallery.md) for more examples.
+See the [Gallery](../Introduction.md) for more examples.
 
 See [Future Work](FutureWork.md)
 

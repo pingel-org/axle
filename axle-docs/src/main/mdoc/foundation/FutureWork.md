@@ -72,15 +72,16 @@
 
 ### Near term
 
-* Logo
+* Convert to single-document chapters
+* Logo for Laika site
+* Cover image for Laika PDF
 
-* How to make chapters more prominent in pdf?
-  * See [this example](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
 
 * Copy some test cases to QuantumCircuits.md
 
 * links from Gallery should be to deeper, anchored position in target .md file
   * Eg ChaosTheory.md (logistic map and mandelbrot)
+  * Visualization.md's reference to Introduction's Gallery
 
 * Docs
   * General

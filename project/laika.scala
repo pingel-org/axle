@@ -20,7 +20,7 @@ object AxleLaika {
           ),
           license = Some("Apache 2.0"),
           documentationLinks = Seq(
-            TextLink.internal(Root / "introduction" / "Introduction.md", "Introduction"),
+            TextLink.internal(Root / "Introduction.md", "Introduction"),
             TextLink.internal(Root / "foundation" / "Foundation.md", "Foundation"),
             TextLink.internal(Root / "units" / "Units.md", "Units of Measurement"),
             TextLink.internal(Root / "math" / "Math.md", "Math"),
