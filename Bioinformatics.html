@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Bioinformatics</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1"><a href="Introduction.html">Introduction</a></li>
+        <li class="level1"><a href="Foundation.html">Foundation</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
+        <li class="level1"><a href="MachineLearning.html">Machine Learning</a></li>
+        <li class="level1 active"><a href="#">Bioinformatics</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1"><a href="Appendix.html">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Bioinformatics</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#needleman-wunsch">Needleman-Wunsch</a></li>
+          <li class="level2"><a href="#example">Example</a></li>
+          <li class="level1"><a href="#smith-waterman">Smith-Waterman</a></li>
+          <li class="level2"><a href="#smith-waterman-example">Smith-Waterman Example</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="bioinformatics" class="title">Bioinformatics</h1>
+        
+        <h2 id="needleman-wunsch" class="section"><a class="anchor-link left" href="#needleman-wunsch"><i class="icofont-laika">&#xef71;</i></a>Needleman-Wunsch</h2>
+        <p>See the Wikipedia page on the
+        <a href="https://en.wikipedia.org/wiki/Needleman%E2%80%93Wunsch_algorithm">Needleman-Wunsch</a> algorithm.</p>
+        
+        <h3 id="example" class="section"><a class="anchor-link left" href="#example"><i class="icofont-laika">&#xef71;</i></a>Example</h3>
+        <p>Imports and implicits</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="type-name">DoubleMatrix</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Ring</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">NRoot</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">functors</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">bio</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="type-name">NeedlemanWunsch</span><span>.</span><span class="identifier">optimalAlignment</span><span>
+</span><span class="keyword">import</span><span> </span><span class="type-name">NeedlemanWunschDefaults</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringInt</span><span>: </span><span class="type-name">Ring</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">modules</span><span>.</span><span class="identifier">doubleIntModule</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">laJblasInt</span><span> = {
+  </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+  </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
+}</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">dna1</span><span> = </span><span class="string-literal">&quot;ATGCGGCC&quot;</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">dna2</span><span> = </span><span class="string-literal">&quot;ATCGCCGG&quot;</span></code></pre>
+        <p>Setup</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">nwAlignment</span><span> = </span><span class="identifier">optimalAlignment</span><span>[</span><span class="type-name">IndexedSeq</span><span>, </span><span class="type-name">Char</span><span>, </span><span class="type-name">DoubleMatrix</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Double</span><span>](
+  </span><span class="identifier">dna1</span><span>, </span><span class="identifier">dna2</span><span>, </span><span class="identifier">similarity</span><span>, </span><span class="identifier">gap</span><span>, </span><span class="identifier">gapPenalty</span><span>)
+</span><span class="comment">// nwAlignment: (IndexedSeq[Char], IndexedSeq[Char]) = (
+//   Vector(&#39;A&#39;, &#39;T&#39;, &#39;G&#39;, &#39;C&#39;, &#39;G&#39;, &#39;G&#39;, &#39;C&#39;, &#39;C&#39;, &#39;-&#39;, &#39;-&#39;),
+//   Vector(&#39;A&#39;, &#39;T&#39;, &#39;-&#39;, &#39;C&#39;, &#39;-&#39;, &#39;G&#39;, &#39;C&#39;, &#39;C&#39;, &#39;G&#39;, &#39;G&#39;)
+// )</span></code></pre>
+        <p>Score aligment</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="type-name">NeedlemanWunsch</span><span>.</span><span class="identifier">alignmentScore</span><span>
+
+</span><span class="identifier">alignmentScore</span><span>(</span><span class="identifier">nwAlignment</span><span class="number-literal">._1</span><span>, </span><span class="identifier">nwAlignment</span><span class="number-literal">._2</span><span>, </span><span class="identifier">gap</span><span>, </span><span class="identifier">similarity</span><span>, </span><span class="identifier">gapPenalty</span><span>)
+</span><span class="comment">// res0: Double = 32.0</span></code></pre>
+        <p>Compute distance</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">space</span><span> = </span><span class="type-name">NeedlemanWunschSimilaritySpace</span><span>[</span><span class="type-name">IndexedSeq</span><span>, </span><span class="type-name">Char</span><span>, </span><span class="type-name">DoubleMatrix</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Double</span><span>](</span><span class="identifier">similarity</span><span>, </span><span class="identifier">gapPenalty</span><span>)
+</span><span class="comment">// space: NeedlemanWunschSimilaritySpace[IndexedSeq, Char, DoubleMatrix, Int, Double] = NeedlemanWunschSimilaritySpace(
+//   baseSimilarity = &lt;function2&gt;,
+//   gapPenalty = -5.0
+// )
+</span><span>
+</span><span class="identifier">space</span><span>.</span><span class="identifier">similarity</span><span>(</span><span class="identifier">dna1</span><span>, </span><span class="identifier">dna2</span><span>)
+</span><span class="comment">// res1: Double = 32.0</span></code></pre>
+        
+        <h2 id="smith-waterman" class="section"><a class="anchor-link left" href="#smith-waterman"><i class="icofont-laika">&#xef71;</i></a>Smith-Waterman</h2>
+        <p>See the Wikipedia page on the
+        <a href="https://en.wikipedia.org/wiki/Smith%E2%80%93Waterman_algorithm">Smith-Waterman</a> algorithm.</p>
+        
+        <h3 id="smith-waterman-example" class="section"><a class="anchor-link left" href="#smith-waterman-example"><i class="icofont-laika">&#xef71;</i></a>Smith-Waterman Example</h3>
+        <p>Imports and implicits</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="type-name">DoubleMatrix</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Ring</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">NRoot</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">bio</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="type-name">SmithWatermanDefaults</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="type-name">SmithWaterman</span><span>.</span><span class="identifier">optimalAlignment</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringInt</span><span>: </span><span class="type-name">Ring</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootInt</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">laJblasInt</span><span> = </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Int</span><span>]</span></code></pre>
+        <p>Setup</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">dna3</span><span> = </span><span class="string-literal">&quot;ACACACTA&quot;</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">dna4</span><span> = </span><span class="string-literal">&quot;AGCACACA&quot;</span></code></pre>
+        <p>Align the sequences</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">swAlignment</span><span> = </span><span class="identifier">optimalAlignment</span><span>[</span><span class="type-name">IndexedSeq</span><span>, </span><span class="type-name">Char</span><span>, </span><span class="type-name">DoubleMatrix</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>](
+  </span><span class="identifier">dna3</span><span>, </span><span class="identifier">dna4</span><span>, </span><span class="identifier">w</span><span>, </span><span class="identifier">mismatchPenalty</span><span>, </span><span class="identifier">gap</span><span>)
+</span><span class="comment">// swAlignment: (IndexedSeq[Char], IndexedSeq[Char]) = (
+//   Vector(&#39;A&#39;, &#39;-&#39;, &#39;C&#39;, &#39;A&#39;, &#39;C&#39;, &#39;A&#39;, &#39;C&#39;, &#39;T&#39;, &#39;A&#39;),
+//   Vector(&#39;A&#39;, &#39;G&#39;, &#39;C&#39;, &#39;A&#39;, &#39;C&#39;, &#39;A&#39;, &#39;C&#39;, &#39;-&#39;, &#39;A&#39;)
+// )</span></code></pre>
+        <p>Compute distance of the sequences</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">space</span><span> = </span><span class="type-name">SmithWatermanSimilaritySpace</span><span>[</span><span class="type-name">IndexedSeq</span><span>, </span><span class="type-name">Char</span><span>, </span><span class="type-name">DoubleMatrix</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>](</span><span class="identifier">w</span><span>, </span><span class="identifier">mismatchPenalty</span><span>)
+</span><span class="comment">// space: SmithWatermanSimilaritySpace[IndexedSeq, Char, DoubleMatrix, Int, Int] = SmithWatermanSimilaritySpace(
+//   w = &lt;function3&gt;,
+//   mismatchPenalty = -1
+// )
+</span><span>
+</span><span class="identifier">space</span><span>.</span><span class="identifier">similarity</span><span>(</span><span class="identifier">dna3</span><span>, </span><span class="identifier">dna4</span><span>)
+</span><span class="comment">// res3: Int = 12</span></code></pre>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

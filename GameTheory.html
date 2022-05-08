@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Game Theory</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1"><a href="Introduction.html">Introduction</a></li>
+        <li class="level1"><a href="Foundation.html">Foundation</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
+        <li class="level1 active"><a href="#">Game Theory</a></li>
+        <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
+        <li class="level1"><a href="MachineLearning.html">Machine Learning</a></li>
+        <li class="level1"><a href="Bioinformatics.html">Bioinformatics</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1"><a href="Appendix.html">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Game Theory</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#monty-hall">Monty Hall</a></li>
+          <li class="level1"><a href="#poker">Poker</a></li>
+          <li class="level2"><a href="#poker-analytics-example">Poker Analytics Example</a></li>
+          <li class="level2"><a href="#playing-texas-hold-em-poker">Playing Texas Hold &#39;Em Poker</a></li>
+          <li class="level1"><a href="#prisoner-s-dilemma">Prisoner&#39;s Dilemma</a></li>
+          <li class="level1"><a href="#tic-tac-toe">Tic-Tac-Toe</a></li>
+          <li class="level2"><a href="#playing-tic-tac-toe">Playing Tic-Tac-Toe</a></li>
+          <li class="level1"><a href="#future-work">Future Work</a></li>
+          <li class="level2"><a href="#missing-functionality">Missing functionality</a></li>
+          <li class="level2"><a href="#motivating-examples">Motivating Examples</a></li>
+          <li class="level2"><a href="#deeper-changes-to-axle-game">Deeper changes to axle.game</a></li>
+          <li class="level2"><a href="#hygeine">Hygeine</a></li>
+          <li class="level2"><a href="#game-theory-and-examples">Game Theory and Examples</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="game-theory" class="title">Game Theory</h1>
+        <p>Framework for expressing arbitrary games.</p>
+        
+        <h2 id="monty-hall" class="section"><a class="anchor-link left" href="#monty-hall"><i class="icofont-laika">&#xef71;</i></a>Monty Hall</h2>
+        <p>See the Wikipedia page on the <a href="https://en.wikipedia.org/wiki/Monty_Hall_problem">Monty Hall problem</a></p>
+        <p>The <code>axle.game.OldMontyHall</code> object contains a model of the rules of the game.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">Rational</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">probability</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="type-name">OldMontyHall</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>The models supports querying the chance of winning given the odds that the
+        player switches his or her initial choice.</p>
+        <p>At one extreme, the odds of winning given that the other door is always chosen:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">chanceOfWinning</span><span>(</span><span class="type-name">Rational</span><span>(</span><span class="number-literal">1</span><span>))
+</span><span class="comment">// res0: Rational = 2/3</span></code></pre>
+        <p>At the other extreme, the player always sticks with the initial choice.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">chanceOfWinning</span><span>(</span><span class="type-name">Rational</span><span>(</span><span class="number-literal">0</span><span>))
+</span><span class="comment">// res1: Rational = 1/3</span></code></pre>
+        <p>The newer <code>axl.game.montyhall._</code> package uses <code>axle.game</code> typeclasses to model the game:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">montyhall</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">game</span><span> = </span><span class="type-name">MontyHall</span><span>()</span></code></pre>
+        <p>Create a <code>writer</code> for each player that prefixes the player id to all output.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">printMultiLinePrefixed</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">playerToWriter</span><span>: </span><span class="type-name">Map</span><span>[</span><span class="type-name">Player</span><span>, </span><span class="type-name">String</span><span> =&gt; </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>]] =
+  </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">map</span><span> { </span><span class="identifier">player</span><span> =&gt;
+    </span><span class="identifier">player</span><span> -&gt; (</span><span class="identifier">printMultiLinePrefixed</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="identifier">player</span><span>.</span><span class="identifier">id</span><span>) </span><span class="identifier">_</span><span>)
+  } </span><span class="identifier">toMap</span></code></pre>
+        <p>Use a uniform distribution on moves as the demo strategy:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">randomMove</span><span>: </span><span class="type-name">MontyHallState</span><span> =&gt; </span><span class="type-name">ConditionalProbabilityTable</span><span>[</span><span class="type-name">MontyHallMove</span><span>,
+ </span><span class="type-name">Rational</span><span>] =
+  (</span><span class="identifier">state</span><span>: </span><span class="type-name">MontyHallState</span><span>) =&gt;
+    </span><span class="type-name">ConditionalProbabilityTable</span><span>.</span><span class="identifier">uniform</span><span>[</span><span class="type-name">MontyHallMove</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="identifier">evGame</span><span>.</span><span class="identifier">moves</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>))</span></code></pre>
+        <p>Wrap the strategies in the calls to <code>writer</code> that log the transitions from state to state.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">strategies</span><span>: </span><span class="type-name">Player</span><span> =&gt; </span><span class="type-name">MontyHallState</span><span> =&gt; </span><span class="type-name">IO</span><span>[</span><span class="type-name">ConditionalProbabilityTable</span><span>[</span><span class="type-name">MontyHallMove</span><span>, </span><span class="type-name">Rational</span><span>]] = 
+  (</span><span class="identifier">player</span><span>: </span><span class="type-name">Player</span><span>) =&gt;
+    (</span><span class="identifier">state</span><span>: </span><span class="type-name">MontyHallState</span><span>) =&gt;
+      </span><span class="keyword">for</span><span> {
+        </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayStateTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>, </span><span class="identifier">player</span><span>))
+        </span><span class="identifier">move</span><span> &lt;- </span><span class="identifier">randomMove</span><span>.</span><span class="identifier">andThen</span><span>( </span><span class="identifier">m</span><span> =&gt; </span><span class="type-name">IO</span><span> { </span><span class="identifier">m</span><span> })(</span><span class="identifier">state</span><span>)
+      } </span><span class="keyword">yield</span><span> </span><span class="identifier">move</span></code></pre>
+        <p>Play the game -- compute the end state from the start state.</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">endState</span><span>: </span><span class="type-name">MontyHallState</span><span> =
+  </span><span class="identifier">play</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">strategies</span><span>, </span><span class="identifier">evGame</span><span>.</span><span class="identifier">startState</span><span>(</span><span class="identifier">game</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()
+</span><span class="comment">// M&gt; Door #1: ???
+// M&gt; Door #2: ???
+// M&gt; Door #3: ???
+// C&gt; Door #1: 
+// C&gt; Door #2: 
+// C&gt; Door #3: 
+// M&gt; Door #1: goat
+// M&gt; Door #2: car, first choice
+// M&gt; Door #3: goat
+// C&gt; Door #1: , revealed goat
+// C&gt; Door #2: first choice
+// C&gt; Door #3: 
+// endState: MontyHallState = MontyHallState(
+//   placement = Some(value = PlaceCar(door = 2)),
+//   placed = true,
+//   firstChoice = Some(value = FirstChoice(door = 2)),
+//   reveal = Some(value = Reveal(door = 1)),
+//   secondChoice = Some(value = Left(value = Change()))
+// )</span></code></pre>
+        <p>Display outcome to each player</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span>: </span><span class="type-name">MontyHallOutcome</span><span> =
+  </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
+</span><span class="comment">// outcome: MontyHallOutcome = MontyHallOutcome(car = false)
+</span><span>
+</span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
+  </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
+}
+</span><span class="comment">// C&gt; You won a goat
+// M&gt; Contestant won a goat</span></code></pre>
+        
+        <h2 id="poker" class="section"><a class="anchor-link left" href="#poker"><i class="icofont-laika">&#xef71;</i></a>Poker</h2>
+        <p>An N-Player, Imperfect Information, Zero-sum game</p>
+        
+        <h3 id="poker-analytics-example" class="section"><a class="anchor-link left" href="#poker-analytics-example"><i class="icofont-laika">&#xef71;</i></a>Poker Analytics Example</h3>
+        <p>The <code>axle.game.cards</code> package models decks, cards, ranks, suits, and ordering.</p>
+        <p>Define a function that takes the hand size and returns the best 5-card hand</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Order</span><span>.</span><span class="identifier">catsKernelOrderingForOrder</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">cards</span><span>.</span><span class="type-name">Deck</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">poker</span><span>.</span><span class="type-name">PokerHand</span><span>
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">winnerFromHandSize</span><span>(</span><span class="identifier">handSize</span><span>: </span><span class="type-name">Int</span><span>) =
+  </span><span class="type-name">Deck</span><span>().</span><span class="identifier">cards</span><span>.</span><span class="identifier">take</span><span>(</span><span class="identifier">handSize</span><span>).</span><span class="identifier">combinations</span><span>(</span><span class="number-literal">5</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">cs</span><span> =&gt; </span><span class="type-name">PokerHand</span><span>(</span><span class="identifier">cs</span><span>.</span><span class="identifier">toVector</span><span>)).</span><span class="identifier">toList</span><span>.</span><span class="identifier">max</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">winnerFromHandSize</span><span>(</span><span class="number-literal">7</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res4: String = &quot;T♡ T♣ Q♡ A♠ A♣&quot;</span></code></pre>
+        <p>20 simulated 5-card hands made of 7-card hands.  Sorted.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">hands</span><span> = (</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">20</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">n</span><span> =&gt; </span><span class="identifier">winnerFromHandSize</span><span>(</span><span class="number-literal">7</span><span>)).</span><span class="identifier">sorted</span></code></pre>
+        <pre><code class="nohighlight"><span class="identifier">hands</span><span>.</span><span class="identifier">map</span><span>({ </span><span class="identifier">hand</span><span> =&gt; </span><span class="identifier">hand</span><span>.</span><span class="identifier">show</span><span> + </span><span class="string-literal">&quot;  &quot;</span><span> + </span><span class="identifier">hand</span><span>.</span><span class="identifier">description</span><span> }).</span><span class="identifier">mkString</span><span>(</span><span class="string-literal">&quot;</span><span class="escape-sequence">\n</span><span class="string-literal">&quot;</span><span>)
+</span><span class="comment">// res5: String = &quot;&quot;&quot;2♠ 2♡ 7♢ J♠ Q♣  pair of 2
+// 2♡ 2♣ T♡ Q♢ K♣  pair of 2
+// 2♠ 2♣ T♠ J♢ A♡  pair of 2
+// 4♡ 4♢ 7♡ 9♠ K♢  pair of 4
+// 5♡ 5♣ 8♡ T♢ Q♢  pair of 5
+// 5♠ 5♡ 9♣ T♠ A♡  pair of 5
+// 9♢ J♠ K♠ K♡ A♠  pair of K
+// T♠ Q♢ K♠ K♡ A♣  pair of K
+// 6♠ T♠ K♠ A♠ A♣  pair of A
+// 4♢ 4♣ 7♠ 7♢ 9♠  two pair 7 and 4
+// 6♠ 6♢ 8♠ 8♢ 9♠  two pair 8 and 6
+// 2♡ 2♢ 9♠ 9♡ J♢  two pair 9 and 2
+// 2♠ 2♡ 9♢ 9♣ A♢  two pair 9 and 2
+// 4♡ 4♢ 8♢ 9♡ 9♣  two pair 9 and 4
+// 7♠ 7♡ T♡ T♢ A♢  two pair T and 7
+// J♡ J♢ Q♠ Q♢ A♢  two pair Q and J
+// 8♢ T♠ T♡ K♠ K♢  two pair K and T
+// 9♠ Q♡ Q♢ Q♣ K♢  three of a kind of Q
+// 3♢ 5♢ 7♢ 8♢ 9♢  flush in ♢
+// 8♠ 8♡ 8♣ 9♠ 9♢  full house 8 over 9&quot;&quot;&quot;</span></code></pre>
+        <p>Record 1000 simulated hands for each drawn hand size from 5 to 9</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">poker</span><span>.</span><span class="type-name">PokerHandCategory</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">data</span><span>: </span><span class="type-name">IndexedSeq</span><span>[(</span><span class="type-name">PokerHandCategory</span><span>, </span><span class="type-name">Int</span><span>)] =
+  </span><span class="keyword">for</span><span> {
+    </span><span class="identifier">handSize</span><span> &lt;- </span><span class="number-literal">5</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">9</span><span>
+    </span><span class="identifier">trial</span><span> &lt;- </span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">1000</span><span>
+  } </span><span class="keyword">yield</span><span> (</span><span class="identifier">winnerFromHandSize</span><span>(</span><span class="identifier">handSize</span><span>).</span><span class="identifier">category</span><span>, </span><span class="identifier">handSize</span><span>)</span></code></pre>
+        <p>BarChartGrouped to visualize the results</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">CRing</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">BarChartGrouped</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">Color</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">talliable</span><span>.</span><span class="identifier">talliableOps</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringInt</span><span>: </span><span class="type-name">CRing</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">colors</span><span> = </span><span class="type-name">List</span><span>(</span><span class="identifier">black</span><span>, </span><span class="identifier">red</span><span>, </span><span class="identifier">blue</span><span>, </span><span class="identifier">yellow</span><span>, </span><span class="identifier">green</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">chart</span><span> = </span><span class="type-name">BarChartGrouped</span><span>[</span><span class="type-name">PokerHandCategory</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Map</span><span>[(</span><span class="type-name">PokerHandCategory</span><span>, </span><span class="type-name">Int</span><span>), </span><span class="type-name">Int</span><span>], </span><span class="type-name">String</span><span>](
+  () =&gt; </span><span class="identifier">data</span><span>.</span><span class="identifier">tally</span><span>.</span><span class="identifier">withDefaultValue</span><span>(</span><span class="number-literal">0</span><span>),
+  </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;Poker Hands&quot;</span><span>),
+  </span><span class="identifier">drawKey</span><span> = </span><span class="boolean-literal">false</span><span>,
+  </span><span class="identifier">yAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;instances of category by hand size (1000 trials each)&quot;</span><span>),
+  </span><span class="identifier">colorOf</span><span> = (</span><span class="identifier">cat</span><span>: </span><span class="type-name">PokerHandCategory</span><span>, </span><span class="identifier">handSize</span><span>: </span><span class="type-name">Int</span><span>) =&gt; </span><span class="identifier">colors</span><span>( (</span><span class="identifier">handSize</span><span> - </span><span class="number-literal">5</span><span>) % </span><span class="identifier">colors</span><span>.</span><span class="identifier">size</span><span>),
+  </span><span class="identifier">hoverOf</span><span> = (</span><span class="identifier">cat</span><span>: </span><span class="type-name">PokerHandCategory</span><span>, </span><span class="identifier">handSize</span><span>: </span><span class="type-name">Int</span><span>) =&gt; </span><span class="type-name">Some</span><span>(</span><span class="string-literal">s&quot;</span><span class="substitution">${cat.show}</span><span class="string-literal"> from </span><span class="substitution">$handSize</span><span class="string-literal">&quot;</span><span>)
+)</span></code></pre>
+        <p>Render as SVG file</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">chart</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/poker_hands.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/poker_hands.svg" alt="poker hands"></p>
+        
+        <h3 id="playing-texas-hold-em-poker" class="section"><a class="anchor-link left" href="#playing-texas-hold-em-poker"><i class="icofont-laika">&#xef71;</i></a>Playing Texas Hold &#39;Em Poker</h3>
+        <p>As a game of &quot;imperfect information&quot;, poker introduces the concept of Information Set.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">poker</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">p1</span><span> = </span><span class="type-name">Player</span><span>(</span><span class="string-literal">&quot;P1&quot;</span><span>, </span><span class="string-literal">&quot;Player 1&quot;</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">p2</span><span> = </span><span class="type-name">Player</span><span>(</span><span class="string-literal">&quot;P2&quot;</span><span>, </span><span class="string-literal">&quot;Player 2&quot;</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">game</span><span> = </span><span class="type-name">Poker</span><span>(</span><span class="type-name">Vector</span><span>(</span><span class="identifier">p1</span><span>, </span><span class="identifier">p2</span><span>))</span></code></pre>
+        <p>Create a <code>writer</code> for each player that prefixes the player id to all output.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">printMultiLinePrefixed</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">playerToWriter</span><span>: </span><span class="type-name">Map</span><span>[</span><span class="type-name">Player</span><span>, </span><span class="type-name">String</span><span> =&gt; </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>]] =
+  </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">map</span><span> { </span><span class="identifier">player</span><span> =&gt;
+    </span><span class="identifier">player</span><span> -&gt; (</span><span class="identifier">printMultiLinePrefixed</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="identifier">player</span><span>.</span><span class="identifier">id</span><span>) </span><span class="identifier">_</span><span>)
+  } </span><span class="identifier">toMap</span></code></pre>
+        <p>Use a uniform distribution on moves as the demo strategy:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">probability</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">Rational</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">randomMove</span><span> =
+  (</span><span class="identifier">state</span><span>: </span><span class="type-name">PokerStateMasked</span><span>) =&gt;
+    </span><span class="type-name">ConditionalProbabilityTable</span><span>.</span><span class="identifier">uniform</span><span>[</span><span class="type-name">PokerMove</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="identifier">evGame</span><span>.</span><span class="identifier">moves</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>))</span></code></pre>
+        <p>Wrap the strategies in the calls to <code>writer</code> that log the transitions from state to state.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">strategies</span><span>: </span><span class="type-name">Player</span><span> =&gt; </span><span class="type-name">PokerStateMasked</span><span> =&gt; </span><span class="type-name">IO</span><span>[</span><span class="type-name">ConditionalProbabilityTable</span><span>[</span><span class="type-name">PokerMove</span><span>, </span><span class="type-name">Rational</span><span>]] = 
+  (</span><span class="identifier">player</span><span>: </span><span class="type-name">Player</span><span>) =&gt;
+    (</span><span class="identifier">state</span><span>: </span><span class="type-name">PokerStateMasked</span><span>) =&gt;
+      </span><span class="keyword">for</span><span> {
+        </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayStateTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>, </span><span class="identifier">player</span><span>))
+        </span><span class="identifier">move</span><span> &lt;- </span><span class="identifier">randomMove</span><span>.</span><span class="identifier">andThen</span><span>( </span><span class="identifier">m</span><span> =&gt; </span><span class="type-name">IO</span><span> { </span><span class="identifier">m</span><span> })(</span><span class="identifier">state</span><span>)
+      } </span><span class="keyword">yield</span><span> </span><span class="identifier">move</span></code></pre>
+        <p>Play the game -- compute the end state from the start state.</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">endState</span><span> = </span><span class="identifier">play</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">strategies</span><span>, </span><span class="identifier">evGame</span><span>.</span><span class="identifier">startState</span><span>(</span><span class="identifier">game</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()
+</span><span class="comment">// D&gt; To: You
+// D&gt; Current bet: 0
+// D&gt; Pot: 0
+// D&gt; Shared: 
+// D&gt; 
+// D&gt; P1:  hand -- in for $--, $100 remaining
+// D&gt; P2:  hand -- in for $--, $100 remaining
+// P1&gt; To: You
+// P1&gt; Current bet: 2
+// P1&gt; Pot: 3
+// P1&gt; Shared: 
+// P1&gt; 
+// P1&gt; P1:  hand 9♣ J♠ in for $1, $99 remaining
+// P1&gt; P2:  hand -- in for $2, $98 remaining
+// P2&gt; To: You
+// P2&gt; Current bet: 15
+// P2&gt; Pot: 17
+// P2&gt; Shared: 
+// P2&gt; 
+// P2&gt; P1:  hand -- in for $15, $85 remaining
+// P2&gt; P2:  hand Q♠ 5♣ in for $2, $98 remaining
+// P1&gt; To: You
+// P1&gt; Current bet: 68
+// P1&gt; Pot: 83
+// P1&gt; Shared: 
+// P1&gt; 
+// P1&gt; P1:  hand 9♣ J♠ in for $15, $85 remaining
+// P1&gt; P2:  hand -- in for $68, $32 remaining
+// P2&gt; To: You
+// P2&gt; Current bet: 81
+// P2&gt; Pot: 149
+// P2&gt; Shared: 
+// P2&gt; 
+// P2&gt; P1:  hand -- in for $81, $19 remaining
+// P2&gt; P2:  hand Q♠ 5♣ in for $68, $32 remaining
+// P1&gt; To: You
+// P1&gt; Current bet: 100
+// P1&gt; Pot: 181
+// P1&gt; Shared: 
+// P1&gt; 
+// P1&gt; P1:  hand 9♣ J♠ in for $81, $19 remaining
+// P1&gt; P2:  hand -- in for $100, $0 remaining
+// D&gt; To: You
+// D&gt; Current bet: 100
+// D&gt; Pot: 200
+// D&gt; Shared: 
+// D&gt; 
+// D&gt; P1:  hand -- in for $100, $0 remaining
+// D&gt; P2:  hand -- in for $100, $0 remaining
+// P1&gt; To: You
+// P1&gt; Current bet: 0
+// P1&gt; Pot: 200
+// P1&gt; Shared: 2♣ 2♠ 4♠
+// P1&gt; 
+// P1&gt; P1:  hand 9♣ J♠ in for $--, $0 remaining
+// P1&gt; P2:  hand -- in for $--, $0 remaining
+// P2&gt; To: You
+// P2&gt; Current bet: 0
+// P2&gt; Pot: 200
+// P2&gt; Shared: 2♣ 2♠ 4♠
+// P2&gt; 
+// P2&gt; P1:  hand -- in for $0, $0 remaining
+// P2&gt; P2:  hand Q♠ 5♣ in for $--, $0 remaining
+// D&gt; To: You
+// D&gt; Current bet: 0
+// D&gt; Pot: 200
+// D&gt; Shared: 2♣ 2♠ 4♠
+// D&gt; 
+// D&gt; P1:  hand -- in for $0, $0 remaining
+// D&gt; P2:  hand -- out, $0 remaining
+// endState: PokerState = PokerState(
+//   moverFn = axle.game.poker.package$$anon$1$$Lambda$10359/0x00000008026fb510@1df57d0d,
+//   deck = Deck(
+//     cards = List(
+//       Card(
+//         rank = axle.game.cards.R8$@24f0a4d8,
+//         suit = axle.game.cards.Diamonds$@255087e5
+//       ),
+//       Card(
+//         rank = axle.game.cards.Queen$@4d4c46e2,
+//         suit = axle.game.cards.Clubs$@5f3ae1a0
+//       ),
+//       Card(
+//         rank = axle.game.cards.R6$@23a18cfe,
+//         suit = axle.game.cards.Spades$@5e47685f
+//       ),
+//       Card(
+//         rank = axle.game.cards.R9$@2d6f4409,
+//         suit = axle.game.cards.Spades$@5e47685f
+//       ),
+//       Card(
+//         rank = axle.game.cards.R8$@24f0a4d8,
+//         suit = axle.game.cards.Hearts$@2be7307d
+//       ),
+//       Card(
+//         rank = axle.game.cards.R7$@76d7ed54,
+//         suit = axle.game.cards.Spades$@5e47685f
+//       ),
+//       Card(
+//         rank = axle.game.cards.R3$@1722c872,
+//         suit = axle.game.cards.Clubs$@5f3ae1a0
+//       ),
+//       Card(
+//         rank = axle.game.cards.R6$@23a18cfe,
+//         suit = axle.game.cards.Diamonds$@255087e5
+//       ),
+//       Card(
+//         rank = axle.game.cards.King$@102e3753,
+//         suit = axle.game.cards.Clubs$@5f3ae1a0
+//       ),
+//       Card(
+//         rank = axle.game.cards.R6$@23a18cfe,
+//         suit = axle.game.cards.Hearts$@2be7307d
+//       ),
+//       Card(
+//         rank = axle.game.cards.Ace$@14bcfcf2,
+//         suit = axle.game.cards.Diamonds$@255087e5
+//       ),
+// ...</span></code></pre>
+        <p>Display outcome to each player</p>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
+</span><span class="comment">// outcome: PokerOutcome = PokerOutcome(
+//   winner = Some(value = Player(id = &quot;P1&quot;, description = &quot;Player 1&quot;)),
+//   hand = None
+// )
+</span><span>
+</span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
+  </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
+}
+</span><span class="comment">// D&gt; Winner: Player 1
+// D&gt; Hand  : not shown
+// P1&gt; Winner: Player 1
+// P1&gt; Hand  : not shown
+// P2&gt; Winner: Player 1
+// P2&gt; Hand  : not shown</span></code></pre>
+        
+        <h2 id="prisoner-s-dilemma" class="section"><a class="anchor-link left" href="#prisoner-s-dilemma"><i class="icofont-laika">&#xef71;</i></a>Prisoner&#39;s Dilemma</h2>
+        <p>See the Wikipedia page on the <a href="https://en.wikipedia.org/wiki/Prisoner%27s_dilemma">Prisoner&#39;s Dilemma</a></p>
+        <p>The <code>axl.game.prisoner._</code> package uses <code>axle.game</code> typeclasses to model the game:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">prisoner</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">p1</span><span> = </span><span class="type-name">Player</span><span>(</span><span class="string-literal">&quot;P1&quot;</span><span>, </span><span class="string-literal">&quot;Player 1&quot;</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">p2</span><span> = </span><span class="type-name">Player</span><span>(</span><span class="string-literal">&quot;P2&quot;</span><span>, </span><span class="string-literal">&quot;Player 2&quot;</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">game</span><span> = </span><span class="type-name">PrisonersDilemma</span><span>(</span><span class="identifier">p1</span><span>, </span><span class="identifier">p2</span><span>)</span></code></pre>
+        <p>Create a <code>writer</code> for each player that prefixes the player id to all output.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">printMultiLinePrefixed</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">playerToWriter</span><span>: </span><span class="type-name">Map</span><span>[</span><span class="type-name">Player</span><span>, </span><span class="type-name">String</span><span> =&gt; </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>]] =
+  </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">map</span><span> { </span><span class="identifier">player</span><span> =&gt;
+    </span><span class="identifier">player</span><span> -&gt; (</span><span class="identifier">printMultiLinePrefixed</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="identifier">player</span><span>.</span><span class="identifier">id</span><span>) </span><span class="identifier">_</span><span>)
+  } </span><span class="identifier">toMap</span></code></pre>
+        <p>Use a uniform distribution on moves as the demo strategy:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">probability</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">Rational</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">randomMove</span><span> =
+  (</span><span class="identifier">state</span><span>: </span><span class="type-name">PrisonersDilemmaState</span><span>) =&gt;
+    </span><span class="type-name">ConditionalProbabilityTable</span><span>.</span><span class="identifier">uniform</span><span>[</span><span class="type-name">PrisonersDilemmaMove</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="identifier">evGame</span><span>.</span><span class="identifier">moves</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>))</span></code></pre>
+        <p>Wrap the strategies in the calls to <code>writer</code> that log the transitions from state to state.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">strategies</span><span>: </span><span class="type-name">Player</span><span> =&gt; </span><span class="type-name">PrisonersDilemmaState</span><span> =&gt; </span><span class="type-name">IO</span><span>[</span><span class="type-name">ConditionalProbabilityTable</span><span>[</span><span class="type-name">PrisonersDilemmaMove</span><span>, </span><span class="type-name">Rational</span><span>]] = 
+  (</span><span class="identifier">player</span><span>: </span><span class="type-name">Player</span><span>) =&gt;
+    (</span><span class="identifier">state</span><span>: </span><span class="type-name">PrisonersDilemmaState</span><span>) =&gt;
+      </span><span class="keyword">for</span><span> {
+        </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayStateTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>, </span><span class="identifier">player</span><span>))
+        </span><span class="identifier">move</span><span> &lt;- </span><span class="identifier">randomMove</span><span>.</span><span class="identifier">andThen</span><span>( </span><span class="identifier">m</span><span> =&gt; </span><span class="type-name">IO</span><span> { </span><span class="identifier">m</span><span> })(</span><span class="identifier">state</span><span>)
+      } </span><span class="keyword">yield</span><span> </span><span class="identifier">move</span></code></pre>
+        <p>Play the game -- compute the end state from the start state.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">endState</span><span> = </span><span class="identifier">play</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">strategies</span><span>, </span><span class="identifier">evGame</span><span>.</span><span class="identifier">startState</span><span>(</span><span class="identifier">game</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()
+</span><span class="comment">// P1&gt; You have been caught
+// P2&gt; You have been caught
+// endState: PrisonersDilemmaState = PrisonersDilemmaState(
+//   p1Move = Some(value = Betrayal()),
+//   p1Moved = true,
+//   p2Move = Some(value = Silence())
+// )</span></code></pre>
+        <p>Display outcome to each player</p>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
+</span><span class="comment">// outcome: PrisonersDilemmaOutcome = PrisonersDilemmaOutcome(
+//   p1YearsInPrison = 0,
+//   p2YearsInPrison = 3
+// )
+</span><span>
+</span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
+  </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
+}
+</span><span class="comment">// P1&gt; You is imprisoned for 0 years
+// P1&gt; Player 2 is imprisoned for 3 years
+// P2&gt; Player 1 is imprisoned for 0 years
+// P2&gt; You is imprisoned for 3 years</span></code></pre>
+        
+        <h2 id="tic-tac-toe" class="section"><a class="anchor-link left" href="#tic-tac-toe"><i class="icofont-laika">&#xef71;</i></a>Tic-Tac-Toe</h2>
+        <p>A Perfect Information, Zero-sum game</p>
+        
+        <h3 id="playing-tic-tac-toe" class="section"><a class="anchor-link left" href="#playing-tic-tac-toe"><i class="icofont-laika">&#xef71;</i></a>Playing Tic-Tac-Toe</h3>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">ttt</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">x</span><span> = </span><span class="type-name">Player</span><span>(</span><span class="string-literal">&quot;X&quot;</span><span>, </span><span class="string-literal">&quot;Player X&quot;</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">o</span><span> = </span><span class="type-name">Player</span><span>(</span><span class="string-literal">&quot;O&quot;</span><span>, </span><span class="string-literal">&quot;Player O&quot;</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">game</span><span> = </span><span class="type-name">TicTacToe</span><span>(</span><span class="number-literal">3</span><span>, </span><span class="identifier">x</span><span>, </span><span class="identifier">o</span><span>)</span></code></pre>
+        <p>Create a <code>writer</code> for each player that prefixes the player id to all output.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">printMultiLinePrefixed</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">playerToWriter</span><span>: </span><span class="type-name">Map</span><span>[</span><span class="type-name">Player</span><span>, </span><span class="type-name">String</span><span> =&gt; </span><span class="type-name">IO</span><span>[</span><span class="type-name">Unit</span><span>]] =
+  </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">map</span><span> { </span><span class="identifier">player</span><span> =&gt;
+    </span><span class="identifier">player</span><span> -&gt; (</span><span class="identifier">printMultiLinePrefixed</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="identifier">player</span><span>.</span><span class="identifier">id</span><span>) </span><span class="identifier">_</span><span>)
+  } </span><span class="identifier">toMap</span></code></pre>
+        <p>Use a uniform distribution on moves as the demo strategy:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">probability</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">Rational</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">randomMove</span><span> =
+  (</span><span class="identifier">state</span><span>: </span><span class="type-name">TicTacToeState</span><span>) =&gt;
+    </span><span class="type-name">ConditionalProbabilityTable</span><span>.</span><span class="identifier">uniform</span><span>[</span><span class="type-name">TicTacToeMove</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="identifier">evGame</span><span>.</span><span class="identifier">moves</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>))</span></code></pre>
+        <p>Wrap the strategies in the calls to <code>writer</code> that log the transitions from state to state.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">strategies</span><span>: </span><span class="type-name">Player</span><span> =&gt; </span><span class="type-name">TicTacToeState</span><span> =&gt; </span><span class="type-name">IO</span><span>[</span><span class="type-name">ConditionalProbabilityTable</span><span>[</span><span class="type-name">TicTacToeMove</span><span>, </span><span class="type-name">Rational</span><span>]] = 
+  (</span><span class="identifier">player</span><span>: </span><span class="type-name">Player</span><span>) =&gt;
+    (</span><span class="identifier">state</span><span>: </span><span class="type-name">TicTacToeState</span><span>) =&gt;
+      </span><span class="keyword">for</span><span> {
+        </span><span class="identifier">_</span><span> &lt;- </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayStateTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">state</span><span>, </span><span class="identifier">player</span><span>))
+        </span><span class="identifier">move</span><span> &lt;- </span><span class="identifier">randomMove</span><span>.</span><span class="identifier">andThen</span><span>( </span><span class="identifier">m</span><span> =&gt; </span><span class="type-name">IO</span><span> { </span><span class="identifier">m</span><span> })(</span><span class="identifier">state</span><span>)
+      } </span><span class="keyword">yield</span><span> </span><span class="identifier">move</span></code></pre>
+        <p>Play the game -- compute the end state from the start state.</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">endState</span><span> = </span><span class="identifier">play</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">strategies</span><span>, </span><span class="identifier">evGame</span><span>.</span><span class="identifier">startState</span><span>(</span><span class="identifier">game</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()
+</span><span class="comment">// X&gt; Board:         Movement Key:
+// X&gt;  | |           1|2|3
+// X&gt;  | |           4|5|6
+// X&gt;  | |           7|8|9
+// O&gt; Board:         Movement Key:
+// O&gt;  | |           1|2|3
+// O&gt;  |X|           4|5|6
+// O&gt;  | |           7|8|9
+// X&gt; Board:         Movement Key:
+// X&gt; O| |           1|2|3
+// X&gt;  |X|           4|5|6
+// X&gt;  | |           7|8|9
+// O&gt; Board:         Movement Key:
+// O&gt; O| |           1|2|3
+// O&gt;  |X|           4|5|6
+// O&gt;  | |X          7|8|9
+// X&gt; Board:         Movement Key:
+// X&gt; O| |           1|2|3
+// X&gt;  |X|           4|5|6
+// X&gt;  |O|X          7|8|9
+// O&gt; Board:         Movement Key:
+// O&gt; O| |X          1|2|3
+// O&gt;  |X|           4|5|6
+// O&gt;  |O|X          7|8|9
+// X&gt; Board:         Movement Key:
+// X&gt; O|O|X          1|2|3
+// X&gt;  |X|           4|5|6
+// X&gt;  |O|X          7|8|9
+// endState: TicTacToeState = TicTacToeState(
+//   moverOpt = None,
+//   board = Array(
+//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
+//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     None,
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     None,
+//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;))
+//   ),
+//   boardSize = 3
+// )</span></code></pre>
+        <p>Display outcome to each player</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
+</span><span class="comment">// outcome: TicTacToeOutcome = TicTacToeOutcome(
+//   winner = Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;))
+// )
+</span><span>
+</span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
+  </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
+}
+</span><span class="comment">// X&gt; You beat Player O!
+// O&gt; Player X beat You!</span></code></pre>
+        
+        <h2 id="future-work" class="section"><a class="anchor-link left" href="#future-work"><i class="icofont-laika">&#xef71;</i></a>Future Work</h2>
+        
+        <h3 id="missing-functionality" class="section"><a class="anchor-link left" href="#missing-functionality"><i class="icofont-laika">&#xef71;</i></a>Missing functionality</h3>
+        <ul>
+          <li>
+            <p>Remove moveStateStream</p>
+          </li>
+          <li>
+            <p>For one game (probably Poker)</p>
+          </li>
+        </ul>
+        <ul>
+          <li>Record witnessed and unwitnessed history <code>Seq[(M, S)]</code> in <code>State</code></li>
+        </ul>
+        <ul>
+          <li>
+            Display to user in interactiveMove
+            <ul>
+              <li><code>val mm = evGame.maskMove(game, move, mover, observer)</code></li>
+              <li><code>evGameIO.displayMoveTo(game, mm, mover, observer)</code></li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>Then generalize and pull into framework</li>
+        </ul>
+        
+        <h3 id="motivating-examples" class="section"><a class="anchor-link left" href="#motivating-examples"><i class="icofont-laika">&#xef71;</i></a>Motivating Examples</h3>
+        <ul>
+          <li>
+            <p>Generalize <code>OldMontyHall.chanceOfWinning</code></p>
+          </li>
+          <li>
+            <p>GuessRiffle.md</p>
+          </li>
+        </ul>
+        <ul>
+          <li>Walk through game</li>
+        </ul>
+        <ul>
+          <li>Plot distribution of sum(entropy) for both strategies</li>
+        </ul>
+        <ul>
+          <li>Plot entropy by turn # for each strategy</li>
+        </ul>
+        <ul>
+          <li>
+            <p>Plot simulated score distribution for each strategy</p>
+          </li>
+          <li>
+            <p>GuessRiffleSpec: use <code>moveFromRandomState</code></p>
+          </li>
+          <li>
+            <p>Gerrymandering sensitivity</p>
+          </li>
+          <li>
+            <p>&quot;You split, I choose&quot; as game</p>
+          </li>
+        </ul>
+        
+        <h3 id="deeper-changes-to-axle-game" class="section"><a class="anchor-link left" href="#deeper-changes-to-axle-game"><i class="icofont-laika">&#xef71;</i></a>Deeper changes to axle.game</h3>
+        <ul>
+          <li><code>aiMover.unmask</code> prevents <code>MontyHallSpec</code> &quot;AI vs. AI game produces moveStateStream&quot; from working</li>
+        </ul>
+        <ul>
+          <li>
+            <p>will be an issue for all non-perfect information</p>
+          </li>
+          <li>
+            <p>Identify all uses of <code>spire.random.Generator</code> (and other random value generation)</p>
+          </li>
+          <li>
+            <p>See uses of <code>seed</code> in <code>GuessRiffleProperties</code></p>
+          </li>
+          <li>
+            <p>Eliminate entropy consumption of <code>rng</code> side-effect (eg <code>applyMove(Riffle())</code>)</p>
+          </li>
+        </ul>
+        <ul>
+          <li><code>Chance</code> should be its own player</li>
+        </ul>
+        <ul>
+          <li>
+            Consider whether <code>PM</code> should be a part of <code>Strategy</code> type (<code>MS =&gt; PM[M, V]</code>)
+            <ul>
+              <li>More abstractly, more many intents and purposes, all we are about is that resolving PM to M consumes entropy</li>
+              <li>In which cases should the <code>PM</code> be retained?</li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>Each N bits consumed during <code>Riffle()</code> is its own move</li>
+        </ul>
+        <ul>
+          <li>
+            <p>Chance moves consume <code>UnittedQuantity[Information, N]</code></p>
+          </li>
+          <li>
+            <p><code>perceive</code> could return a lower-entropy probability model</p>
+          </li>
+        </ul>
+        <ul>
+          <li>Perhaps in exchange for a given amount of energy</li>
+        </ul>
+        <ul>
+          <li>
+            <p>Or ask for a 0-entropy model and be told how expensive that was</p>
+          </li>
+          <li>
+            <p>Game theory axioms (Nash, etc)</p>
+          </li>
+          <li>
+            <p><code>axle.game</code>: <code>Observable[T]</code></p>
+          </li>
+        </ul>
+        
+        <h3 id="hygeine" class="section"><a class="anchor-link left" href="#hygeine"><i class="icofont-laika">&#xef71;</i></a>Hygeine</h3>
+        <ul>
+          <li>
+            <p>performance benchmark</p>
+          </li>
+          <li>
+            <p>Replace <code>axle.game.moveFromRandomState.mapToProb</code></p>
+          </li>
+          <li>
+            <p>Clean up <code>axle.game.playWithIntroAndOutcomes</code></p>
+          </li>
+          <li>
+            <p>The references to <code>movesMap</code> in <code>MoveFromRandomStateSpec.scala</code> illustrate a need for a cleaner way to create a hard-coded strategy -- which could just be in the form of a couple utility functions from <code>movesMap</code> to the data needed by <code>evGame.{moves,applyMove}</code> and <code>rm</code> strategy</p>
+          </li>
+          <li>
+            <p>Generalize <code>ConditionalProbabilityTable.uniform</code> into typeclass</p>
+          </li>
+          <li>
+            <p>Simplify <code>GuessRiffleProperties</code> (especially second property)</p>
+          </li>
+          <li>
+            <p>stateStreamMap only used in GuessRiffleProperties -- stop using chain?</p>
+          </li>
+          <li>
+            <p>stateStrategyMoveStream only used in GuessRiffleProperties</p>
+          </li>
+          <li>
+            <p><code>Game.players</code> should be a part of GameState (or take it as an argument)?  Will wait for pressing use case.</p>
+          </li>
+        </ul>
+        
+        <h3 id="game-theory-and-examples" class="section"><a class="anchor-link left" href="#game-theory-and-examples"><i class="icofont-laika">&#xef71;</i></a>Game Theory and Examples</h3>
+        <ul>
+          <li>
+            <p>Game Theory: information sets, equilibria</p>
+          </li>
+          <li>
+            <p>Factor <code>axle.game.moveFromRandomState</code> in terms of a random walk on a graph.</p>
+          </li>
+        </ul>
+        <ul>
+          <li>See &quot;TODO scale mass down&quot;</li>
+        </ul>
+        <ul>
+          <li>Compare to Brownian motion, Random walk, Ito process, ...</li>
+        </ul>
+        <ul>
+          <li>
+            Provide some axioms
+            <ul>
+              <li>no outgoing with path in from non-zero mass monotonically increases</li>
+              <li>no incoming with path out monotonically decreases</li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>possibly provide a version for acyclic graphs</li>
+          <li>Iterative game playing algorithm is intractible, but shares intent with sequential monte carlo</li>
+          <li>Think about Information Theory&#39;s &quot;Omega&quot; vis-a-vis Sequential Monte Carlo</li>
+          <li>Improve <code>axle.stats.rationalProbabilityDist</code> as probabilities become smaller</li>
+          <li>SimpsonsParadox.md</li>
+          <li>Axioms of partial differentiation</li>
+        </ul>
+        <ul>
+          <li><a href="https://math.ucr.edu/home/baez/mathematical/ACTUCR/Plotkin_Partial_Differentiation.pdf">Plotkin Partial Differentiation</a></li>
+          <li>Conal Elliott: Efficient automatic differentiation made easy via category theory</li>
+          <li>Max bet for Poker</li>
+          <li>syntax for <code>Game</code> typeclass</li>
+        </ul>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Chaos Theory</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1"><a href="Introduction.html">Introduction</a></li>
+        <li class="level1"><a href="Foundation.html">Foundation</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1 active"><a href="#">Chaos Theory</a></li>
+        <li class="level1"><a href="MachineLearning.html">Machine Learning</a></li>
+        <li class="level1"><a href="Bioinformatics.html">Bioinformatics</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1"><a href="Appendix.html">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Chaos Theory</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#mandelbrot-set">Mandelbrot Set</a></li>
+          <li class="level1"><a href="#logistic-map">Logistic Map</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="chaos-theory" class="title">Chaos Theory</h1>
+        
+        <h2 id="mandelbrot-set" class="section"><a class="anchor-link left" href="#mandelbrot-set"><i class="icofont-laika">&#xef71;</i></a>Mandelbrot Set</h2>
+        <p>See the wikipedia page on the <a href="https://en.wikipedia.org/wiki/Mandelbrot_set">Mandelbrot Set</a></p>
+        <p>First a couple imports:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>Define a function to compute the Mandelbrot velocity at point on the plane <code>(x, y)</code></p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] =
+  </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">f</span><span>: (</span><span class="type-name">Double</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Double</span><span>) =&gt; </span><span class="type-name">Int</span><span> =
+  (</span><span class="identifier">x0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">x1</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y1</span><span>: </span><span class="type-name">Double</span><span>) =&gt;
+    </span><span class="identifier">inMandelbrotSetAt</span><span>(</span><span class="number-literal">4d</span><span>, </span><span class="identifier">x0</span><span>, </span><span class="identifier">y0</span><span>, </span><span class="number-literal">1000</span><span>).</span><span class="identifier">getOrElse</span><span>(-</span><span class="number-literal">1</span><span>)</span></code></pre>
+        <p>Import visualization package</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>Define a &quot;velocity to color&quot; function</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">colors</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">255</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">g</span><span> =&gt; </span><span class="type-name">Color</span><span>(</span><span class="number-literal">0</span><span>, </span><span class="identifier">g</span><span>, </span><span class="number-literal">255</span><span>)).</span><span class="identifier">toArray</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">v2c</span><span>: </span><span class="type-name">Int</span><span> =&gt; </span><span class="type-name">Color</span><span> =
+  (</span><span class="identifier">v</span><span>: </span><span class="type-name">Int</span><span>) =&gt; </span><span class="keyword">if</span><span>( </span><span class="identifier">v</span><span> == -</span><span class="number-literal">1</span><span> ) </span><span class="type-name">Color</span><span>.</span><span class="identifier">black</span><span> </span><span class="keyword">else</span><span> </span><span class="identifier">colors</span><span>((</span><span class="identifier">v</span><span>*</span><span class="number-literal">5</span><span>) % </span><span class="number-literal">256</span><span>)</span></code></pre>
+        <p>Define a <code>PixelatedColoredArea</code> to show a range of the Mandelbrot Set.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Int</span><span>](
+  </span><span class="identifier">f</span><span>,
+  </span><span class="identifier">v2c</span><span>,
+  </span><span class="identifier">width</span><span> = </span><span class="number-literal">500</span><span>,
+  </span><span class="identifier">height</span><span> = </span><span class="number-literal">500</span><span>,
+  </span><span class="identifier">minX</span><span> = </span><span class="number-literal">0.25</span><span>,
+  </span><span class="identifier">maxX</span><span> = </span><span class="number-literal">0.45</span><span>,
+  </span><span class="identifier">minY</span><span> = </span><span class="number-literal">0.50</span><span>,
+  </span><span class="identifier">maxY</span><span> = </span><span class="number-literal">0.70</span><span>)</span></code></pre>
+        <p>Create PNG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">awt</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">pca</span><span>.</span><span class="identifier">png</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/mandelbrot.png&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/mandelbrot.png" alt="Mandelbrot Set"></p>
+        <p>Some other parts of the set to explore:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(</span><span class="identifier">f</span><span>, </span><span class="identifier">v2c</span><span>, </span><span class="number-literal">1600</span><span>, </span><span class="number-literal">1600</span><span>, </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1d</span><span>, </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1d</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(</span><span class="identifier">f</span><span>, </span><span class="identifier">v2c</span><span>, </span><span class="number-literal">1600</span><span>, </span><span class="number-literal">1600</span><span>, </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">0.5</span><span>, </span><span class="number-literal">0.5</span><span>, </span><span class="number-literal">1d</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(</span><span class="identifier">f</span><span>, </span><span class="identifier">v2c</span><span>, </span><span class="number-literal">1600</span><span>, </span><span class="number-literal">1600</span><span>, </span><span class="number-literal">0.25d</span><span>, </span><span class="number-literal">0.5</span><span>, </span><span class="number-literal">0.5</span><span>, </span><span class="number-literal">0.75d</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(</span><span class="identifier">f</span><span>, </span><span class="identifier">v2c</span><span>, </span><span class="number-literal">3000</span><span>, </span><span class="number-literal">3000</span><span>, </span><span class="number-literal">0.20d</span><span>, </span><span class="number-literal">0.45</span><span>, </span><span class="number-literal">0.45</span><span>, </span><span class="number-literal">0.70d</span><span>)</span></code></pre>
+        
+        <h2 id="logistic-map" class="section"><a class="anchor-link left" href="#logistic-map"><i class="icofont-laika">&#xef71;</i></a>Logistic Map</h2>
+        <p>See the wikipedia page on <a href="https://en.wikipedia.org/wiki/Logistic_map">Logistic Map</a> function</p>
+        <p>Create data for a range of the logistic map function</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">initial</span><span> = </span><span class="number-literal">0.3</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">java</span><span>.</span><span class="identifier">util</span><span>.</span><span class="type-name">TreeSet</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">memo</span><span> = </span><span class="identifier">collection</span><span>.</span><span class="identifier">mutable</span><span>.</span><span class="type-name">Map</span><span>.</span><span class="identifier">empty</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">TreeSet</span><span>[</span><span class="type-name">Double</span><span>]]
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringDouble</span><span>: </span><span class="type-name">Ring</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">lhsContainsMark</span><span>(</span><span class="identifier">minX</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">maxX</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">maxY</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">minY</span><span>: </span><span class="type-name">Double</span><span>): </span><span class="type-name">Boolean</span><span> = {
+  </span><span class="keyword">val</span><span> λ = </span><span class="identifier">minX</span><span>
+  </span><span class="keyword">val</span><span> </span><span class="identifier">f</span><span> = </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">logisticMap</span><span>(λ)
+  </span><span class="keyword">val</span><span> </span><span class="identifier">set</span><span> = </span><span class="identifier">memo</span><span>.</span><span class="identifier">get</span><span>(λ).</span><span class="identifier">getOrElse</span><span> {
+    </span><span class="keyword">val</span><span> </span><span class="identifier">set</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">TreeSet</span><span>[</span><span class="type-name">Double</span><span>]()
+    </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">applyForever</span><span>(</span><span class="identifier">f</span><span>, </span><span class="identifier">initial</span><span>).</span><span class="identifier">drop</span><span>(</span><span class="number-literal">10000</span><span>).</span><span class="identifier">take</span><span>(</span><span class="number-literal">200</span><span>) </span><span class="identifier">foreach</span><span> { </span><span class="identifier">set</span><span>.</span><span class="identifier">add</span><span> }
+    </span><span class="identifier">memo</span><span> += </span><span class="identifier">minX</span><span> -&gt; </span><span class="identifier">set</span><span>
+    </span><span class="identifier">set</span><span>
+  }
+  !</span><span class="identifier">set</span><span>.</span><span class="identifier">tailSet</span><span>(</span><span class="identifier">minY</span><span>).</span><span class="identifier">headSet</span><span>(</span><span class="identifier">maxY</span><span>).</span><span class="identifier">isEmpty</span><span>
+}</span></code></pre>
+        <p>Define a &quot;value to color&quot; function.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">v2c</span><span>: </span><span class="type-name">Boolean</span><span> =&gt; </span><span class="type-name">Color</span><span> =
+  (</span><span class="identifier">v</span><span>: </span><span class="type-name">Boolean</span><span>) =&gt; </span><span class="keyword">if</span><span> (</span><span class="identifier">v</span><span>) </span><span class="type-name">Color</span><span>.</span><span class="identifier">black</span><span> </span><span class="keyword">else</span><span> </span><span class="type-name">Color</span><span>.</span><span class="identifier">white</span></code></pre>
+        <p>Define a <code>PixelatedColoredArea</code> to show a range of Logistic Map.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Boolean</span><span>](
+  </span><span class="identifier">lhsContainsMark</span><span>,
+  </span><span class="identifier">v2c</span><span>,
+  </span><span class="identifier">width</span><span> = </span><span class="number-literal">500</span><span>,
+  </span><span class="identifier">height</span><span> = </span><span class="number-literal">500</span><span>,
+  </span><span class="identifier">minX</span><span> = </span><span class="number-literal">2.9</span><span>,
+  </span><span class="identifier">maxX</span><span> = </span><span class="number-literal">4d</span><span>,
+  </span><span class="identifier">minY</span><span> = </span><span class="number-literal">0d</span><span>,
+  </span><span class="identifier">maxY</span><span> = </span><span class="number-literal">1d</span><span>
+)</span></code></pre>
+        <p>Create the PNG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">awt</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">pca</span><span>.</span><span class="identifier">png</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/logMap.png&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/logMap.png" alt="Logistic Map"></p>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

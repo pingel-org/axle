@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Foundation</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1"><a href="Introduction.html">Introduction</a></li>
+        <li class="level1 active"><a href="#">Foundation</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
+        <li class="level1"><a href="MachineLearning.html">Machine Learning</a></li>
+        <li class="level1"><a href="Bioinformatics.html">Bioinformatics</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1"><a href="Appendix.html">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Foundation</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#functional">Functional</a></li>
+          <li class="level1"><a href="#scala">Scala</a></li>
+          <li class="level1"><a href="#cats">Cats</a></li>
+          <li class="level1"><a href="#architecture">Architecture</a></li>
+          <li class="level2"><a href="#remaining-design-issues">Remaining Design Issues</a></li>
+          <li class="level1"><a href="#package-objects">Package Objects</a></li>
+          <li class="level2"><a href="#permutations">Permutations</a></li>
+          <li class="level2"><a href="#combinations">Combinations</a></li>
+          <li class="level2"><a href="#indexed-cross-product">Indexed Cross Product</a></li>
+          <li class="level1"><a href="#algebra">Algebra</a></li>
+          <li class="level1"><a href="#linear-algebra">Linear Algebra</a></li>
+          <li class="level2"><a href="#imports-and-implicits">Imports and implicits</a></li>
+          <li class="level2"><a href="#creating-matrices">Creating Matrices</a></li>
+          <li class="level2"><a href="#creating-matrices-from-arrays">Creating matrices from arrays</a></li>
+          <li class="level2"><a href="#random-matrices">Random matrices</a></li>
+          <li class="level2"><a href="#matrices-defined-by-functions">Matrices defined by functions</a></li>
+          <li class="level2"><a href="#metadata">Metadata</a></li>
+          <li class="level2"><a href="#accessing-columns-rows-and-elements">Accessing columns, rows, and elements</a></li>
+          <li class="level2"><a href="#negate-transpose-power">Negate, Transpose, Power</a></li>
+          <li class="level2"><a href="#mins-maxs-ranges-and-sorts">Mins, Maxs, Ranges, and Sorts</a></li>
+          <li class="level2"><a href="#statistics">Statistics</a></li>
+          <li class="level2"><a href="#principal-component-analysis">Principal Component Analysis</a></li>
+          <li class="level2"><a href="#horizontal-and-vertical-concatenation">Horizontal and vertical concatenation</a></li>
+          <li class="level2"><a href="#addition-and-subtraction">Addition and subtraction</a></li>
+          <li class="level2"><a href="#multiplication-and-division">Multiplication and Division</a></li>
+          <li class="level2"><a href="#map-element-values">Map element values</a></li>
+          <li class="level2"><a href="#boolean-operators">Boolean operators</a></li>
+          <li class="level2"><a href="#higher-order-methods">Higher order methods</a></li>
+          <li class="level1"><a href="#graph">Graph</a></li>
+          <li class="level2"><a href="#directed-graph">Directed Graph</a></li>
+          <li class="level2"><a href="#undirected-graph">Undirected Graph</a></li>
+          <li class="level1"><a href="#logic">Logic</a></li>
+          <li class="level2"><a href="#conjunctive-normal-form-converter">Conjunctive Normal Form Converter</a></li>
+          <li class="level1"><a href="#spokes">Spokes</a></li>
+          <li class="level2"><a href="#parallel-collections">Parallel Collections</a></li>
+          <li class="level2"><a href="#xml">XML</a></li>
+          <li class="level2"><a href="#jblas">JBLAS</a></li>
+          <li class="level2"><a href="#joda">JODA</a></li>
+          <li class="level2"><a href="#jung">JUNG</a></li>
+          <li class="level2"><a href="#awt">AWT</a></li>
+          <li class="level1"><a href="#future-work">Future Work</a></li>
+          <li class="level2"><a href="#scala-3">Scala 3</a></li>
+          <li class="level2"><a href="#bugs-and-adoption-barriers">Bugs and adoption barriers</a></li>
+          <li class="level2"><a href="#types-and-axioms">Types and Axioms</a></li>
+          <li class="level2"><a href="#compute-engines">Compute Engines</a></li>
+          <li class="level2"><a href="#hygiene">Hygiene</a></li>
+          <li class="level2"><a href="#site">Site</a></li>
+          <li class="level2"><a href="#build">Build</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="foundation" class="title">Foundation</h1>
+        <p>Data structures and functions</p>
+        
+        <h2 id="functional" class="section"><a class="anchor-link left" href="#functional"><i class="icofont-laika">&#xef71;</i></a>Functional</h2>
+        <p>To be written</p>
+        
+        <h2 id="scala" class="section"><a class="anchor-link left" href="#scala"><i class="icofont-laika">&#xef71;</i></a>Scala</h2>
+        <p>To be written...</p>
+        
+        <h2 id="cats" class="section"><a class="anchor-link left" href="#cats"><i class="icofont-laika">&#xef71;</i></a>Cats</h2>
+        <p>To be written</p>
+        <p>Axle makes use of several Typelevel libraries including</p>
+        <ul>
+          <li>Cats</li>
+          <li>Cats Effect</li>
+          <li>Spire</li>
+          <li>Monix</li>
+          <li>...</li>
+        </ul>
+        
+        <h2 id="architecture" class="section"><a class="anchor-link left" href="#architecture"><i class="icofont-laika">&#xef71;</i></a>Architecture</h2>
+        <p>Axle generally strives to follow the patterns established
+        by the <a href="http://typelevel.org/">Typelevel</a> projects.</p>
+        <p>With few exceptions, the functions are side-effect free.</p>
+        <p>The typeclass patterns are drawn from two traditions:</p>
+        <ol class="arabic">
+          <li><a href="https://wiki.haskell.org/Typeclassopedia">Typeclassopedia</a></li>
+          <li>Abstract Algebra</li>
+        </ol>
+        <p>The algorithms are increasingly defined only in terms of these typeclasses.
+        Concrete runtime implementations will require witnesses that map non-Axle data structures
+        onto the typeclass methods and laws.
+        Laws are organized into a separate <code>axle-laws</code> jar for use in tests by code that builds
+        upon these typeclasses.
+        Many such witnesses are provided by Axle for native Scala collections.</p>
+        <p>Witnesses are also defined for other common jars from the Java and Scala ecosystems.
+        Read more about these <a href="#spokes">&quot;spokes&quot;</a>.</p>
+        
+        <h3 id="remaining-design-issues" class="section"><a class="anchor-link left" href="#remaining-design-issues"><i class="icofont-laika">&#xef71;</i></a>Remaining Design Issues</h3>
+        <p>Please get in touch if you&#39;d like to discuss these or other questions.</p>
+        
+        <h2 id="package-objects" class="section"><a class="anchor-link left" href="#package-objects"><i class="icofont-laika">&#xef71;</i></a>Package Objects</h2>
+        <p>This page describes functions in <code>axle.logic</code> and <code>axle.math</code> package objects.</p>
+        <p>Imports</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">logic</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">rngInt</span><span>: </span><span class="type-name">Rng</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringLong</span><span>: </span><span class="type-name">Ring</span><span>[</span><span class="type-name">Long</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">LongAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">boolBoolean</span><span>: </span><span class="type-name">Bool</span><span>[</span><span class="type-name">Boolean</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">BooleanStructure</span></code></pre>
+        <p>Logic aggregators <code>∃</code> and <code>∀</code>:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>∃(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>)) { </span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span> =&gt; </span><span class="identifier">i</span><span> % </span><span class="number-literal">2</span><span> == </span><span class="number-literal">0</span><span> }
+</span><span class="comment">// res1: Boolean = true
+</span><span>
+∀(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>)) { </span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span> =&gt; </span><span class="identifier">i</span><span> % </span><span class="number-literal">2</span><span> == </span><span class="number-literal">0</span><span> }
+</span><span class="comment">// res2: Boolean = false</span></code></pre>
+        <p>Sum and multiply aggregators <code>Σ</code> and <code>Π</code>.
+        Note that <code>Σ</code> and <code>Π</code> are also available in <code>spire.optional.unicode._</code>.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>Σ((</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">10</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> * </span><span class="number-literal">2</span><span> })
+</span><span class="comment">// res3: Int = 110
+</span><span>
+Π((</span><span class="number-literal">1L</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">10L</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> * </span><span class="number-literal">2</span><span> })
+</span><span class="comment">// res4: Long = 3715891200L</span></code></pre>
+        <p>Doubles, triples, and cross-products</p>
+        <pre><code class="nohighlight"><span class="identifier">doubles</span><span>(</span><span class="type-name">Set</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))
+</span><span class="comment">// res5: Seq[(Int, Int)] = List((1, 2), (1, 3), (2, 1), (2, 3), (3, 1), (3, 2))
+</span><span>
+</span><span class="identifier">triples</span><span>(</span><span class="type-name">Set</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))
+</span><span class="comment">// res6: Seq[(Int, Int, Int)] = List(
+//   (1, 2, 3),
+//   (1, 3, 2),
+//   (2, 1, 3),
+//   (2, 3, 1),
+//   (3, 1, 2),
+//   (3, 2, 1)
+// )
+</span><span>
+⨯(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))(</span><span class="type-name">List</span><span>(</span><span class="number-literal">4</span><span>, </span><span class="number-literal">5</span><span>, </span><span class="number-literal">6</span><span>)).</span><span class="identifier">toList</span><span>
+</span><span class="comment">// res7: List[(Int, Int)] = List(
+//   (1, 4),
+//   (1, 5),
+//   (1, 6),
+//   (2, 4),
+//   (2, 5),
+//   (2, 6),
+//   (3, 4),
+//   (3, 5),
+//   (3, 6)
+// )</span></code></pre>
+        <p>Powerset</p>
+        <pre><code class="nohighlight"><span>℘(</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">4</span><span>)
+</span><span class="comment">// res8: IndexedPowerSet[Int] = Iterable(
+//   Set(),
+//   Set(0),
+//   Set(1),
+//   Set(0, 1),
+//   Set(2),
+//   Set(0, 2),
+//   Set(1, 2),
+//   Set(0, 1, 2),
+//   Set(3),
+//   Set(0, 3),
+//   Set(1, 3),
+//   Set(0, 1, 3),
+//   Set(2, 3),
+//   Set(0, 2, 3),
+//   Set(1, 2, 3),
+//   Set(0, 1, 2, 3)
+// )
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">ps</span><span> = ℘(</span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>, </span><span class="string-literal">&quot;c&quot;</span><span>))
+</span><span class="comment">// ps: IndexedPowerSet[String] = Iterable(
+//   Set(),
+//   Set(&quot;a&quot;),
+//   Set(&quot;b&quot;),
+//   Set(&quot;a&quot;, &quot;b&quot;),
+//   Set(&quot;c&quot;),
+//   Set(&quot;a&quot;, &quot;c&quot;),
+//   Set(&quot;b&quot;, &quot;c&quot;),
+//   Set(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)
+// )
+</span><span>
+</span><span class="identifier">ps</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// res9: Int = 8
+</span><span>
+</span><span class="identifier">ps</span><span>(</span><span class="number-literal">7</span><span>)
+</span><span class="comment">// res10: Set[String] = Set(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)</span></code></pre>
+        
+        <h3 id="permutations" class="section"><a class="anchor-link left" href="#permutations"><i class="icofont-laika">&#xef71;</i></a>Permutations</h3>
+        <pre><code class="nohighlight"><span class="identifier">permutations</span><span>(</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">4</span><span>)(</span><span class="number-literal">2</span><span>).</span><span class="identifier">toList</span><span>
+</span><span class="comment">// res11: List[IndexedSeq[Int]] = List(
+//   Vector(0, 1),
+//   Vector(0, 2),
+//   Vector(0, 3),
+//   Vector(1, 0),
+//   Vector(1, 2),
+//   Vector(1, 3),
+//   Vector(2, 0),
+//   Vector(2, 1),
+//   Vector(2, 3),
+//   Vector(3, 0),
+//   Vector(3, 1),
+//   Vector(3, 2)
+// )</span></code></pre>
+        
+        <h3 id="combinations" class="section"><a class="anchor-link left" href="#combinations"><i class="icofont-laika">&#xef71;</i></a>Combinations</h3>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">combinations</span><span>(</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">4</span><span>)(</span><span class="number-literal">2</span><span>).</span><span class="identifier">toList</span><span>
+</span><span class="comment">// res12: List[IndexedSeq[Int]] = List(
+//   Vector(0, 1),
+//   Vector(0, 2),
+//   Vector(0, 3),
+//   Vector(1, 2),
+//   Vector(1, 3),
+//   Vector(2, 3)
+// )</span></code></pre>
+        
+        <h3 id="indexed-cross-product" class="section"><a class="anchor-link left" href="#indexed-cross-product"><i class="icofont-laika">&#xef71;</i></a>Indexed Cross Product</h3>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">icp</span><span> = </span><span class="type-name">IndexedCrossProduct</span><span>(</span><span class="type-name">Vector</span><span>(
+  </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>, </span><span class="string-literal">&quot;c&quot;</span><span>),
+  </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;d&quot;</span><span>, </span><span class="string-literal">&quot;e&quot;</span><span>),
+  </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;f&quot;</span><span>, </span><span class="string-literal">&quot;g&quot;</span><span>, </span><span class="string-literal">&quot;h&quot;</span><span>)))
+</span><span class="comment">// icp: IndexedCrossProduct[String] = Iterable(
+//   List(&quot;a&quot;, &quot;d&quot;, &quot;f&quot;),
+//   List(&quot;a&quot;, &quot;d&quot;, &quot;g&quot;),
+//   List(&quot;a&quot;, &quot;d&quot;, &quot;h&quot;),
+//   List(&quot;a&quot;, &quot;e&quot;, &quot;f&quot;),
+//   List(&quot;a&quot;, &quot;e&quot;, &quot;g&quot;),
+//   List(&quot;a&quot;, &quot;e&quot;, &quot;h&quot;),
+//   List(&quot;b&quot;, &quot;d&quot;, &quot;f&quot;),
+//   List(&quot;b&quot;, &quot;d&quot;, &quot;g&quot;),
+//   List(&quot;b&quot;, &quot;d&quot;, &quot;h&quot;),
+//   List(&quot;b&quot;, &quot;e&quot;, &quot;f&quot;),
+//   List(&quot;b&quot;, &quot;e&quot;, &quot;g&quot;),
+//   List(&quot;b&quot;, &quot;e&quot;, &quot;h&quot;),
+//   List(&quot;c&quot;, &quot;d&quot;, &quot;f&quot;),
+//   List(&quot;c&quot;, &quot;d&quot;, &quot;g&quot;),
+//   List(&quot;c&quot;, &quot;d&quot;, &quot;h&quot;),
+//   List(&quot;c&quot;, &quot;e&quot;, &quot;f&quot;),
+//   List(&quot;c&quot;, &quot;e&quot;, &quot;g&quot;),
+//   List(&quot;c&quot;, &quot;e&quot;, &quot;h&quot;)
+// )
+</span><span>
+</span><span class="identifier">icp</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// res13: Int = 18
+</span><span>
+</span><span class="identifier">icp</span><span>(</span><span class="number-literal">4</span><span>)
+</span><span class="comment">// res14: Seq[String] = List(&quot;a&quot;, &quot;e&quot;, &quot;g&quot;)</span></code></pre>
+        
+        <h2 id="algebra" class="section"><a class="anchor-link left" href="#algebra"><i class="icofont-laika">&#xef71;</i></a>Algebra</h2>
+        <p>The <a href="http://github.com/non/spire">spire</a> project is a dependency of Axle.
+        <code>spire.algebra</code> defines typeclasses for Monoid, Group, Ring, Field, VectorSpace, etc, and
+        witnesses for many common numeric types as well as those defined in <code>spire.math</code></p>
+        <p>The <code>axle.algebra</code> package defines several categories of typeclasses:</p>
+        <ul>
+          <li>higher-kinded: Functor, Finite, Indexed, Aggregatable</li>
+          <li>mathematical: LinearAlgebra, LengthSpace</li>
+          <li>visualization: Tics, Plottable</li>
+        </ul>
+        <p>Axioms are defined in the
+        <a href="https://github.com/axlelang/axle/tree/master/axle-core/src/main/scala/axle/algebra/laws">axle.algebra.laws</a> package
+        as <a href="http://scalacheck.org/">ScalaCheck</a> properties.</p>
+        <p>They are organized with <a href="https://github.com/typelevel/discipline">Discipline</a>.</p>
+        
+        <h2 id="linear-algebra" class="section"><a class="anchor-link left" href="#linear-algebra"><i class="icofont-laika">&#xef71;</i></a>Linear Algebra</h2>
+        <p>A <code>LinearAlgebra</code> typeclass.</p>
+        <p>The <code>axle-jblas</code> spoke provides witnesses for JBLAS matrices.</p>
+        <p>The default jblas matrix <code>toString</code> isn&#39;t very readable,
+        so this tutorial wraps most results in the Axle <code>string</code> function,
+        invoking the <code>cats.Show</code> witness for those matrices.</p>
+        
+        <h3 id="imports-and-implicits" class="section"><a class="anchor-link left" href="#imports-and-implicits"><i class="icofont-laika">&#xef71;</i></a>Imports and implicits</h3>
+        <p>Import JBLAS and Axle&#39;s <code>LinearAlgebra</code> witness for it.</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">NRoot</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">linearalgebra</span><span>.</span><span class="identifier">matrixOps</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">laJblasDouble</span><span> = </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
+</span><span class="keyword">import</span><span> </span><span class="identifier">laJblasDouble</span><span>.</span><span class="identifier">_</span></code></pre>
+        
+        <h3 id="creating-matrices" class="section"><a class="anchor-link left" href="#creating-matrices"><i class="icofont-laika">&#xef71;</i></a>Creating Matrices</h3>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">ones</span><span>(</span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res16: String = &quot;&quot;&quot;1.000000 1.000000 1.000000
+// 1.000000 1.000000 1.000000&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">ones</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">4</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res17: String = &quot;1.000000 1.000000 1.000000 1.000000&quot;
+</span><span>
+</span><span class="identifier">ones</span><span>(</span><span class="number-literal">4</span><span>, </span><span class="number-literal">1</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res18: String = &quot;&quot;&quot;1.000000
+// 1.000000
+// 1.000000
+// 1.000000&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="creating-matrices-from-arrays" class="section"><a class="anchor-link left" href="#creating-matrices-from-arrays"><i class="icofont-laika">&#xef71;</i></a>Creating matrices from arrays</h3>
+        <pre><code class="nohighlight"><span class="identifier">fromColumnMajorArray</span><span>(</span><span class="number-literal">2</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="type-name">List</span><span>(</span><span class="number-literal">1.1</span><span>, </span><span class="number-literal">2.2</span><span>, </span><span class="number-literal">3.3</span><span>, </span><span class="number-literal">4.4</span><span>).</span><span class="identifier">toArray</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res19: String = &quot;&quot;&quot;1.100000 3.300000
+// 2.200000 4.400000&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">fromColumnMajorArray</span><span>(</span><span class="number-literal">2</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="type-name">List</span><span>(</span><span class="number-literal">1.1</span><span>, </span><span class="number-literal">2.2</span><span>, </span><span class="number-literal">3.3</span><span>, </span><span class="number-literal">4.4</span><span>).</span><span class="identifier">toArray</span><span>).</span><span class="identifier">t</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res20: String = &quot;&quot;&quot;1.100000 2.200000
+// 3.300000 4.400000&quot;&quot;&quot;
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">m</span><span> = </span><span class="identifier">fromColumnMajorArray</span><span>(</span><span class="number-literal">4</span><span>, </span><span class="number-literal">5</span><span>, (</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">20</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>).</span><span class="identifier">toArray</span><span>)
+</span><span class="comment">// m: org.jblas.DoubleMatrix = [1.000000, 5.000000, 9.000000, 13.000000, 17.000000; 2.000000, 6.000000, 10.000000, 14.000000, 18.000000; 3.000000, 7.000000, 11.000000, 15.000000, 19.000000; 4.000000, 8.000000, 12.000000, 16.000000, 20.000000]
+</span><span class="identifier">m</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res21: String = &quot;&quot;&quot;1.000000 5.000000 9.000000 13.000000 17.000000
+// 2.000000 6.000000 10.000000 14.000000 18.000000
+// 3.000000 7.000000 11.000000 15.000000 19.000000
+// 4.000000 8.000000 12.000000 16.000000 20.000000&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="random-matrices" class="section"><a class="anchor-link left" href="#random-matrices"><i class="icofont-laika">&#xef71;</i></a>Random matrices</h3>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">r</span><span> = </span><span class="identifier">rand</span><span>(</span><span class="number-literal">3</span><span>, </span><span class="number-literal">3</span><span>)
+</span><span class="comment">// r: org.jblas.DoubleMatrix = [0.610574, 0.323742, 0.208110; 0.642532, 0.243911, 0.353564; 0.691849, 0.417901, 0.735770]
+</span><span>
+</span><span class="identifier">r</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res22: String = &quot;&quot;&quot;0.610574 0.323742 0.208110
+// 0.642532 0.243911 0.353564
+// 0.691849 0.417901 0.735770&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="matrices-defined-by-functions" class="section"><a class="anchor-link left" href="#matrices-defined-by-functions"><i class="icofont-laika">&#xef71;</i></a>Matrices defined by functions</h3>
+        <pre><code class="nohighlight"><span class="identifier">matrix</span><span>(</span><span class="number-literal">4</span><span>, </span><span class="number-literal">5</span><span>, (</span><span class="identifier">r</span><span>, </span><span class="identifier">c</span><span>) =&gt; </span><span class="identifier">r</span><span> / (</span><span class="identifier">c</span><span> + </span><span class="number-literal">1d</span><span>)).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res23: String = &quot;&quot;&quot;0.000000 0.000000 0.000000 0.000000 0.000000
+// 1.000000 0.500000 0.333333 0.250000 0.200000
+// 2.000000 1.000000 0.666667 0.500000 0.400000
+// 3.000000 1.500000 1.000000 0.750000 0.600000&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">matrix</span><span>(</span><span class="number-literal">4</span><span>, </span><span class="number-literal">5</span><span>, </span><span class="number-literal">1d</span><span>,
+  (</span><span class="identifier">r</span><span>: </span><span class="type-name">Int</span><span>) =&gt; </span><span class="identifier">r</span><span> + </span><span class="number-literal">0.5</span><span>,
+  (</span><span class="identifier">c</span><span>: </span><span class="type-name">Int</span><span>) =&gt; </span><span class="identifier">c</span><span> + </span><span class="number-literal">0.6</span><span>,
+  (</span><span class="identifier">r</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">c</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">diag</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">left</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">right</span><span>: </span><span class="type-name">Double</span><span>) =&gt; </span><span class="identifier">diag</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res24: String = &quot;&quot;&quot;1.000000 1.600000 2.600000 3.600000 4.600000
+// 1.500000 1.000000 1.600000 2.600000 3.600000
+// 2.500000 1.500000 1.000000 1.600000 2.600000
+// 3.500000 2.500000 1.500000 1.000000 1.600000&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="metadata" class="section"><a class="anchor-link left" href="#metadata"><i class="icofont-laika">&#xef71;</i></a>Metadata</h3>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">x</span><span> = </span><span class="identifier">fromColumnMajorArray</span><span>(</span><span class="number-literal">3</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="type-name">Vector</span><span>(</span><span class="number-literal">4.0</span><span>, </span><span class="number-literal">5.1</span><span>, </span><span class="number-literal">6.2</span><span>).</span><span class="identifier">toArray</span><span>)
+</span><span class="comment">// x: org.jblas.DoubleMatrix = [4.000000; 5.100000; 6.200000]
+</span><span class="identifier">x</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res25: String = &quot;&quot;&quot;4.000000
+// 5.100000
+// 6.200000&quot;&quot;&quot;
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">y</span><span> = </span><span class="identifier">fromColumnMajorArray</span><span>(</span><span class="number-literal">3</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="type-name">Vector</span><span>(</span><span class="number-literal">7.3</span><span>, </span><span class="number-literal">8.4</span><span>, </span><span class="number-literal">9.5</span><span>).</span><span class="identifier">toArray</span><span>)
+</span><span class="comment">// y: org.jblas.DoubleMatrix = [7.300000; 8.400000; 9.500000]
+</span><span class="identifier">y</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res26: String = &quot;&quot;&quot;7.300000
+// 8.400000
+// 9.500000&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">x</span><span>.</span><span class="identifier">isEmpty</span><span>
+</span><span class="comment">// res27: Boolean = false
+</span><span>
+</span><span class="identifier">x</span><span>.</span><span class="identifier">isRowVector</span><span>
+</span><span class="comment">// res28: Boolean = false
+</span><span>
+</span><span class="identifier">x</span><span>.</span><span class="identifier">isColumnVector</span><span>
+</span><span class="comment">// res29: Boolean = true
+</span><span>
+</span><span class="identifier">x</span><span>.</span><span class="identifier">isSquare</span><span>
+</span><span class="comment">// res30: Boolean = false
+</span><span>
+</span><span class="identifier">x</span><span>.</span><span class="identifier">isScalar</span><span>
+</span><span class="comment">// res31: Boolean = false
+</span><span>
+</span><span class="identifier">x</span><span>.</span><span class="identifier">rows</span><span>
+</span><span class="comment">// res32: Int = 3
+</span><span>
+</span><span class="identifier">x</span><span>.</span><span class="identifier">columns</span><span>
+</span><span class="comment">// res33: Int = 1
+</span><span>
+</span><span class="identifier">x</span><span>.</span><span class="identifier">length</span><span>
+</span><span class="comment">// res34: Int = 3</span></code></pre>
+        
+        <h3 id="accessing-columns-rows-and-elements" class="section"><a class="anchor-link left" href="#accessing-columns-rows-and-elements"><i class="icofont-laika">&#xef71;</i></a>Accessing columns, rows, and elements</h3>
+        <pre><code class="nohighlight"><span class="identifier">x</span><span>.</span><span class="identifier">column</span><span>(</span><span class="number-literal">0</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res35: String = &quot;&quot;&quot;4.000000
+// 5.100000
+// 6.200000&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">x</span><span>.</span><span class="identifier">row</span><span>(</span><span class="number-literal">1</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res36: String = &quot;5.100000&quot;
+</span><span>
+</span><span class="identifier">x</span><span>.</span><span class="identifier">get</span><span>(</span><span class="number-literal">2</span><span>, </span><span class="number-literal">0</span><span>)
+</span><span class="comment">// res37: Double = 6.2
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">fiveByFive</span><span> = </span><span class="identifier">fromColumnMajorArray</span><span>(</span><span class="number-literal">5</span><span>, </span><span class="number-literal">5</span><span>, (</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">25</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>).</span><span class="identifier">toArray</span><span>)
+</span><span class="comment">// fiveByFive: org.jblas.DoubleMatrix = [1.000000, 6.000000, 11.000000, 16.000000, 21.000000; 2.000000, 7.000000, 12.000000, 17.000000, 22.000000; 3.000000, 8.000000, 13.000000, 18.000000, 23.000000; 4.000000, 9.000000, 14.000000, 19.000000, 24.000000; 5.000000, 10.000000, 15.000000, 20.000000, 25.000000]
+</span><span>
+</span><span class="identifier">fiveByFive</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res38: String = &quot;&quot;&quot;1.000000 6.000000 11.000000 16.000000 21.000000
+// 2.000000 7.000000 12.000000 17.000000 22.000000
+// 3.000000 8.000000 13.000000 18.000000 23.000000
+// 4.000000 9.000000 14.000000 19.000000 24.000000
+// 5.000000 10.000000 15.000000 20.000000 25.000000&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">fiveByFive</span><span>.</span><span class="identifier">slice</span><span>(</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">3</span><span>, </span><span class="number-literal">2</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">4</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res39: String = &quot;&quot;&quot;12.000000 17.000000 22.000000
+// 13.000000 18.000000 23.000000
+// 14.000000 19.000000 24.000000&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">fiveByFive</span><span>.</span><span class="identifier">slice</span><span>(</span><span class="number-literal">0</span><span>.</span><span class="identifier">until</span><span>(</span><span class="number-literal">5</span><span>,</span><span class="number-literal">2</span><span>), </span><span class="number-literal">0</span><span>.</span><span class="identifier">until</span><span>(</span><span class="number-literal">5</span><span>,</span><span class="number-literal">2</span><span>)).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res40: String = &quot;&quot;&quot;1.000000 11.000000 21.000000
+// 3.000000 13.000000 23.000000
+// 5.000000 15.000000 25.000000&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="negate-transpose-power" class="section"><a class="anchor-link left" href="#negate-transpose-power"><i class="icofont-laika">&#xef71;</i></a>Negate, Transpose, Power</h3>
+        <pre><code class="nohighlight"><span class="identifier">x</span><span>.</span><span class="identifier">negate</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res41: String = &quot;&quot;&quot;-4.000000
+// -5.100000
+// -6.200000&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">x</span><span>.</span><span class="identifier">transpose</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res42: String = &quot;4.000000 5.100000 6.200000&quot;
+</span><span>
+</span><span class="comment">// x.log
+// x.log10
+</span><span>
+</span><span class="identifier">x</span><span>.</span><span class="identifier">pow</span><span>(</span><span class="number-literal">2d</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res43: String = &quot;&quot;&quot;16.000000
+// 26.010000
+// 38.440000&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="mins-maxs-ranges-and-sorts" class="section"><a class="anchor-link left" href="#mins-maxs-ranges-and-sorts"><i class="icofont-laika">&#xef71;</i></a>Mins, Maxs, Ranges, and Sorts</h3>
+        <pre><code class="nohighlight"><span class="identifier">r</span><span>.</span><span class="identifier">max</span><span>
+</span><span class="comment">// res44: Double = 0.7357704075625194
+</span><span>
+</span><span class="identifier">r</span><span>.</span><span class="identifier">min</span><span>
+</span><span class="comment">// res45: Double = 0.20810981047477906
+</span><span>
+</span><span class="comment">// r.ceil
+// r.floor
+</span><span>
+</span><span class="identifier">r</span><span>.</span><span class="identifier">rowMaxs</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res46: String = &quot;&quot;&quot;0.610574
+// 0.642532
+// 0.735770&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">r</span><span>.</span><span class="identifier">rowMins</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res47: String = &quot;&quot;&quot;0.208110
+// 0.243911
+// 0.417901&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">r</span><span>.</span><span class="identifier">columnMaxs</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res48: String = &quot;0.691849 0.417901 0.735770&quot;
+</span><span>
+</span><span class="identifier">r</span><span>.</span><span class="identifier">columnMins</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res49: String = &quot;0.610574 0.243911 0.208110&quot;
+</span><span>
+</span><span class="identifier">rowRange</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res50: String = &quot;&quot;&quot;0.402464
+// 0.398621
+// 0.317870&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">columnRange</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res51: String = &quot;0.081275 0.173990 0.527661&quot;
+</span><span>
+</span><span class="identifier">r</span><span>.</span><span class="identifier">sortRows</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res52: String = &quot;&quot;&quot;0.208110 0.323742 0.610574
+// 0.243911 0.353564 0.642532
+// 0.417901 0.691849 0.735770&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">r</span><span>.</span><span class="identifier">sortColumns</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res53: String = &quot;&quot;&quot;0.610574 0.243911 0.208110
+// 0.642532 0.323742 0.353564
+// 0.691849 0.417901 0.735770&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">r</span><span>.</span><span class="identifier">sortRows</span><span>.</span><span class="identifier">sortColumns</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res54: String = &quot;&quot;&quot;0.208110 0.323742 0.610574
+// 0.243911 0.353564 0.642532
+// 0.417901 0.691849 0.735770&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="statistics" class="section"><a class="anchor-link left" href="#statistics"><i class="icofont-laika">&#xef71;</i></a>Statistics</h3>
+        <pre><code class="nohighlight"><span class="identifier">r</span><span>.</span><span class="identifier">rowMeans</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res55: String = &quot;&quot;&quot;0.380809
+// 0.413335
+// 0.615173&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">r</span><span>.</span><span class="identifier">columnMeans</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res56: String = &quot;0.648318 0.328518 0.432481&quot;
+</span><span>
+</span><span class="comment">// median(r)
+</span><span>
+</span><span class="identifier">sumsq</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res57: String = &quot;1.264303 0.338942 0.709675&quot;
+</span><span>
+</span><span class="identifier">std</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res58: String = &quot;0.033432 0.071111 0.222527&quot;
+</span><span>
+</span><span class="identifier">cov</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res59: String = &quot;&quot;&quot;0.000475 0.000009 -0.003256
+// 0.000009 0.002386 -0.002351
+// -0.003256 -0.002351 0.030661&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">centerRows</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res60: String = &quot;&quot;&quot;0.229766 -0.057067 -0.172699
+// 0.229196 -0.169425 -0.059771
+// 0.076676 -0.197273 0.120597&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">centerColumns</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res61: String = &quot;&quot;&quot;-0.037744 -0.004776 -0.224372
+// -0.005787 -0.084607 -0.078917
+// 0.043531 0.089383 0.303289&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">zscore</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res62: String = &quot;&quot;&quot;-1.128992 -0.067159 -1.008290
+// -0.173090 -1.189784 -0.354642
+// 1.302082 1.256943 1.362931&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="principal-component-analysis" class="section"><a class="anchor-link left" href="#principal-component-analysis"><i class="icofont-laika">&#xef71;</i></a>Principal Component Analysis</h3>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> (</span><span class="identifier">u</span><span>, </span><span class="identifier">s</span><span>) = </span><span class="identifier">pca</span><span>(</span><span class="identifier">r</span><span>)
+</span><span class="comment">// u: org.jblas.DoubleMatrix = [-0.105056, 0.121356, 0.987034; -0.080920, -0.990278, 0.113142; 0.991169, -0.067985, 0.113855]
+// s: org.jblas.DoubleMatrix = [0.031198; 0.002224; 0.000100]
+</span><span>
+</span><span class="identifier">u</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res63: String = &quot;&quot;&quot;-0.105056 0.121356 0.987034
+// -0.080920 -0.990278 0.113142
+// 0.991169 -0.067985 0.113855&quot;&quot;&quot;
+</span><span>
+</span><span class="identifier">s</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res64: String = &quot;&quot;&quot;0.031198
+// 0.002224
+// 0.000100&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="horizontal-and-vertical-concatenation" class="section"><a class="anchor-link left" href="#horizontal-and-vertical-concatenation"><i class="icofont-laika">&#xef71;</i></a>Horizontal and vertical concatenation</h3>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span>(</span><span class="identifier">x</span><span> </span><span class="identifier">aside</span><span> </span><span class="identifier">y</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res65: String = &quot;&quot;&quot;4.000000 7.300000
+// 5.100000 8.400000
+// 6.200000 9.500000&quot;&quot;&quot;
+</span><span>
+(</span><span class="identifier">x</span><span> </span><span class="identifier">atop</span><span> </span><span class="identifier">y</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res66: String = &quot;&quot;&quot;4.000000
+// 5.100000
+// 6.200000
+// 7.300000
+// 8.400000
+// 9.500000&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="addition-and-subtraction" class="section"><a class="anchor-link left" href="#addition-and-subtraction"><i class="icofont-laika">&#xef71;</i></a>Addition and subtraction</h3>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">z</span><span> = </span><span class="identifier">ones</span><span>(</span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>)
+</span><span class="comment">// z: org.jblas.DoubleMatrix = [1.000000, 1.000000, 1.000000; 1.000000, 1.000000, 1.000000]
+</span><span>
+</span><span class="identifier">z</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res67: String = &quot;&quot;&quot;1.000000 1.000000 1.000000
+// 1.000000 1.000000 1.000000&quot;&quot;&quot;</span></code></pre>
+        <p>Matrix addition</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">additiveSemigroupOps</span><span>
+
+(</span><span class="identifier">z</span><span> + </span><span class="identifier">z</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res68: String = &quot;&quot;&quot;2.000000 2.000000 2.000000
+// 2.000000 2.000000 2.000000&quot;&quot;&quot;</span></code></pre>
+        <p>Scalar addition (JBLAS method)</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">z</span><span>.</span><span class="identifier">addScalar</span><span>(</span><span class="number-literal">1.1</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res69: String = &quot;&quot;&quot;2.100000 2.100000 2.100000
+// 2.100000 2.100000 2.100000&quot;&quot;&quot;</span></code></pre>
+        <p>Matrix subtraction</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">additiveGroupOps</span><span>
+
+(</span><span class="identifier">z</span><span> - </span><span class="identifier">z</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res70: String = &quot;&quot;&quot;0.000000 0.000000 0.000000
+// 0.000000 0.000000 0.000000&quot;&quot;&quot;</span></code></pre>
+        <p>Scalar subtraction (JBLAS method)</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">z</span><span>.</span><span class="identifier">subtractScalar</span><span>(</span><span class="number-literal">0.2</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res71: String = &quot;&quot;&quot;0.800000 0.800000 0.800000
+// 0.800000 0.800000 0.800000&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="multiplication-and-division" class="section"><a class="anchor-link left" href="#multiplication-and-division"><i class="icofont-laika">&#xef71;</i></a>Multiplication and Division</h3>
+        <p>Scalar multiplication</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">z</span><span>.</span><span class="identifier">multiplyScalar</span><span>(</span><span class="number-literal">3d</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res72: String = &quot;&quot;&quot;3.000000 3.000000 3.000000
+// 3.000000 3.000000 3.000000&quot;&quot;&quot;</span></code></pre>
+        <p>Matrix multiplication</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">multiplicativeSemigroupOps</span><span>
+
+(</span><span class="identifier">z</span><span> * </span><span class="identifier">z</span><span>.</span><span class="identifier">transpose</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res73: String = &quot;&quot;&quot;3.000000 3.000000
+// 3.000000 3.000000&quot;&quot;&quot;</span></code></pre>
+        <p>Scalar division (JBLAS method)</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">z</span><span>.</span><span class="identifier">divideScalar</span><span>(</span><span class="number-literal">100d</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res74: String = &quot;&quot;&quot;0.010000 0.010000 0.010000
+// 0.010000 0.010000 0.010000&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="map-element-values" class="section"><a class="anchor-link left" href="#map-element-values"><i class="icofont-laika">&#xef71;</i></a>Map element values</h3>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">endo</span><span> = </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">endoFunctorDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
+</span><span class="comment">// endo: algebra.Endofunctor[org.jblas.DoubleMatrix, Double] = axle.jblas.package$$anon$1@6f443f7e
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">endofunctor</span><span>.</span><span class="identifier">endofunctorOps</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">half</span><span> = </span><span class="identifier">ones</span><span>(</span><span class="number-literal">3</span><span>, </span><span class="number-literal">3</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> / </span><span class="number-literal">2d</span><span>)
+</span><span class="comment">// half: org.jblas.DoubleMatrix = [0.500000, 0.500000, 0.500000; 0.500000, 0.500000, 0.500000; 0.500000, 0.500000, 0.500000]
+</span><span>
+</span><span class="identifier">half</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res75: String = &quot;&quot;&quot;0.500000 0.500000 0.500000
+// 0.500000 0.500000 0.500000
+// 0.500000 0.500000 0.500000&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="boolean-operators" class="section"><a class="anchor-link left" href="#boolean-operators"><i class="icofont-laika">&#xef71;</i></a>Boolean operators</h3>
+        <pre><code class="nohighlight"><span>(</span><span class="identifier">r</span><span> </span><span class="identifier">lt</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res76: String = &quot;&quot;&quot;0.000000 1.000000 1.000000
+// 0.000000 1.000000 1.000000
+// 0.000000 1.000000 0.000000&quot;&quot;&quot;
+</span><span>
+(</span><span class="identifier">r</span><span> </span><span class="identifier">le</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res77: String = &quot;&quot;&quot;0.000000 1.000000 1.000000
+// 0.000000 1.000000 1.000000
+// 0.000000 1.000000 0.000000&quot;&quot;&quot;
+</span><span>
+(</span><span class="identifier">r</span><span> </span><span class="identifier">gt</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res78: String = &quot;&quot;&quot;1.000000 0.000000 0.000000
+// 1.000000 0.000000 0.000000
+// 1.000000 0.000000 1.000000&quot;&quot;&quot;
+</span><span>
+(</span><span class="identifier">r</span><span> </span><span class="identifier">ge</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res79: String = &quot;&quot;&quot;1.000000 0.000000 0.000000
+// 1.000000 0.000000 0.000000
+// 1.000000 0.000000 1.000000&quot;&quot;&quot;
+</span><span>
+(</span><span class="identifier">r</span><span> </span><span class="identifier">eq</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res80: String = &quot;&quot;&quot;0.000000 0.000000 0.000000
+// 0.000000 0.000000 0.000000
+// 0.000000 0.000000 0.000000&quot;&quot;&quot;
+</span><span>
+(</span><span class="identifier">r</span><span> </span><span class="identifier">ne</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res81: String = &quot;&quot;&quot;1.000000 1.000000 1.000000
+// 1.000000 1.000000 1.000000
+// 1.000000 1.000000 1.000000&quot;&quot;&quot;
+</span><span>
+((</span><span class="identifier">r</span><span> </span><span class="identifier">lt</span><span> </span><span class="identifier">half</span><span>) </span><span class="identifier">or</span><span> (</span><span class="identifier">r</span><span> </span><span class="identifier">gt</span><span> </span><span class="identifier">half</span><span>)).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res82: String = &quot;&quot;&quot;1.000000 1.000000 1.000000
+// 1.000000 1.000000 1.000000
+// 1.000000 1.000000 1.000000&quot;&quot;&quot;
+</span><span>
+((</span><span class="identifier">r</span><span> </span><span class="identifier">lt</span><span> </span><span class="identifier">half</span><span>) </span><span class="identifier">and</span><span> (</span><span class="identifier">r</span><span> </span><span class="identifier">gt</span><span> </span><span class="identifier">half</span><span>)).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res83: String = &quot;&quot;&quot;0.000000 0.000000 0.000000
+// 0.000000 0.000000 0.000000
+// 0.000000 0.000000 0.000000&quot;&quot;&quot;
+</span><span>
+((</span><span class="identifier">r</span><span> </span><span class="identifier">lt</span><span> </span><span class="identifier">half</span><span>) </span><span class="identifier">xor</span><span> (</span><span class="identifier">r</span><span> </span><span class="identifier">gt</span><span> </span><span class="identifier">half</span><span>)).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res84: String = &quot;&quot;&quot;1.000000 1.000000 1.000000
+// 1.000000 1.000000 1.000000
+// 1.000000 1.000000 1.000000&quot;&quot;&quot;
+</span><span>
+((</span><span class="identifier">r</span><span> </span><span class="identifier">lt</span><span> </span><span class="identifier">half</span><span>) </span><span class="identifier">not</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res85: String = &quot;&quot;&quot;1.000000 0.000000 0.000000
+// 1.000000 0.000000 0.000000
+// 1.000000 0.000000 1.000000&quot;&quot;&quot;</span></code></pre>
+        
+        <h3 id="higher-order-methods" class="section"><a class="anchor-link left" href="#higher-order-methods"><i class="icofont-laika">&#xef71;</i></a>Higher order methods</h3>
+        <pre><code class="nohighlight"><span>(</span><span class="identifier">m</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> + </span><span class="number-literal">1</span><span>)).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res86: String = &quot;&quot;&quot;2.000000 6.000000 10.000000 14.000000 18.000000
+// 3.000000 7.000000 11.000000 15.000000 19.000000
+// 4.000000 8.000000 12.000000 16.000000 20.000000
+// 5.000000 9.000000 13.000000 17.000000 21.000000&quot;&quot;&quot;
+</span><span>
+(</span><span class="identifier">m</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> * </span><span class="number-literal">10</span><span>)).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res87: String = &quot;&quot;&quot;10.000000 50.000000 90.000000 130.000000 170.000000
+// 20.000000 60.000000 100.000000 140.000000 180.000000
+// 30.000000 70.000000 110.000000 150.000000 190.000000
+// 40.000000 80.000000 120.000000 160.000000 200.000000&quot;&quot;&quot;
+</span><span>
+</span><span class="comment">// m.foldLeft(zeros(4, 1))(_ + _)
+</span><span>
+(</span><span class="identifier">m</span><span>.</span><span class="identifier">foldLeft</span><span>(</span><span class="identifier">ones</span><span>(</span><span class="number-literal">4</span><span>, </span><span class="number-literal">1</span><span>))(</span><span class="identifier">_</span><span> </span><span class="identifier">mulPointwise</span><span> </span><span class="identifier">_</span><span>)).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res88: String = &quot;&quot;&quot;9945.000000
+// 30240.000000
+// 65835.000000
+// 122880.000000&quot;&quot;&quot;
+</span><span>
+</span><span class="comment">// m.foldTop(zeros(1, 5))(_ + _)
+</span><span>
+(</span><span class="identifier">m</span><span>.</span><span class="identifier">foldTop</span><span>(</span><span class="identifier">ones</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">5</span><span>))(</span><span class="identifier">_</span><span> </span><span class="identifier">mulPointwise</span><span> </span><span class="identifier">_</span><span>)).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res89: String = &quot;24.000000 1680.000000 11880.000000 43680.000000 116280.000000&quot;</span></code></pre>
+        
+        <h2 id="graph" class="section"><a class="anchor-link left" href="#graph"><i class="icofont-laika">&#xef71;</i></a>Graph</h2>
+        <p>DirectedGraph typeclass and witnesses for the Jung package</p>
+        
+        <h3 id="directed-graph" class="section"><a class="anchor-link left" href="#directed-graph"><i class="icofont-laika">&#xef71;</i></a>Directed Graph</h3>
+        <p>Example with <code>String</code> is the vertex value and an <code>Edge</code> type with two values (a <code>String</code> and an <code>Int</code>) to represent the edges</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> (</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>) = (</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>, </span><span class="string-literal">&quot;c&quot;</span><span>, </span><span class="string-literal">&quot;d&quot;</span><span>)
+
+</span><span class="keyword">class</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="keyword">val</span><span> </span><span class="identifier">s</span><span>: </span><span class="type-name">String</span><span>, </span><span class="keyword">val</span><span> </span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span>)</span></code></pre>
+        <p>Invoke the <code>DirectedGraph</code> typeclass with type parameters that denote
+        that we will use Jung&#39;s <code>DirectedSparseGraph</code> as the graph type, with
+        <code>String</code> and <code>Edge</code> as vertex and edge values, respectively.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">DirectedSparseGraph</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">jdg</span><span> = </span><span class="type-name">DirectedGraph</span><span>.</span><span class="identifier">k2</span><span>[</span><span class="type-name">DirectedSparseGraph</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>]</span></code></pre>
+        <p>Use the <code>jdg</code> witness&#39;s <code>make</code> method to create the directed graph</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">dg</span><span> = </span><span class="identifier">jdg</span><span>.</span><span class="identifier">make</span><span>(</span><span class="type-name">List</span><span>(</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>),
+  </span><span class="type-name">List</span><span>(
+    (</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hello&quot;</span><span>, </span><span class="number-literal">1</span><span>)),
+    (</span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;world&quot;</span><span>, </span><span class="number-literal">4</span><span>)),
+    (</span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hi&quot;</span><span>, </span><span class="number-literal">3</span><span>)),
+    (</span><span class="identifier">d</span><span>, </span><span class="identifier">a</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;earth&quot;</span><span>, </span><span class="number-literal">1</span><span>)),
+    (</span><span class="identifier">a</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;!&quot;</span><span>, </span><span class="number-literal">7</span><span>)),
+    (</span><span class="identifier">b</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hey&quot;</span><span>, </span><span class="number-literal">2</span><span>))))</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">directedgraph</span><span>.</span><span class="identifier">directedGraphOps</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">finite</span><span>.</span><span class="identifier">finiteOps</span><span>
+
+</span><span class="identifier">dg</span><span>.</span><span class="identifier">vertexProjection</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// res91: Int = 4
+</span><span>
+</span><span class="identifier">dg</span><span>.</span><span class="identifier">edgeProjection</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// res92: Int = 6
+</span><span>
+</span><span class="identifier">dg</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> === </span><span class="string-literal">&quot;a&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">dg</span><span>.</span><span class="identifier">successors</span><span>(</span><span class="identifier">v</span><span>))
+</span><span class="comment">// res93: Option[Set[String]] = Some(value = Set(&quot;b&quot;, &quot;c&quot;))
+</span><span>
+</span><span class="identifier">dg</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> === </span><span class="string-literal">&quot;c&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">dg</span><span>.</span><span class="identifier">successors</span><span>(</span><span class="identifier">v</span><span>))
+</span><span class="comment">// res94: Option[Set[String]] = Some(value = Set(&quot;d&quot;))
+</span><span>
+</span><span class="identifier">dg</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> === </span><span class="string-literal">&quot;c&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">dg</span><span>.</span><span class="identifier">predecessors</span><span>(</span><span class="identifier">v</span><span>))
+</span><span class="comment">// res95: Option[Set[String]] = Some(value = Set(&quot;a&quot;, &quot;b&quot;))
+</span><span>
+</span><span class="identifier">dg</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> === </span><span class="string-literal">&quot;c&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">dg</span><span>.</span><span class="identifier">neighbors</span><span>(</span><span class="identifier">v</span><span>))
+</span><span class="comment">// res96: Option[Set[String]] = Some(value = Set(&quot;a&quot;, &quot;b&quot;, &quot;d&quot;))</span></code></pre>
+        <p>Create a Visualization of the graph</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Show</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showEdge</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">show</span><span>(</span><span class="identifier">e</span><span>: </span><span class="type-name">Edge</span><span>): </span><span class="type-name">String</span><span> = </span><span class="identifier">e</span><span>.</span><span class="identifier">s</span><span> + </span><span class="string-literal">&quot; &quot;</span><span> + </span><span class="identifier">e</span><span>.</span><span class="identifier">i</span><span>
+}
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">dVis</span><span> = </span><span class="type-name">DirectedGraphVisualization</span><span>[</span><span class="type-name">DirectedSparseGraph</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>], </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>](
+  </span><span class="identifier">dg</span><span>,
+  </span><span class="identifier">width</span><span> = </span><span class="number-literal">300</span><span>,
+  </span><span class="identifier">height</span><span> = </span><span class="number-literal">300</span><span>,
+  </span><span class="identifier">border</span><span> = </span><span class="number-literal">10</span><span>,
+  </span><span class="identifier">radius</span><span> = </span><span class="number-literal">10</span><span>,
+  </span><span class="identifier">arrowLength</span><span> = </span><span class="number-literal">10</span><span>,
+  </span><span class="identifier">color</span><span> = </span><span class="type-name">Color</span><span>.</span><span class="identifier">green</span><span>,
+  </span><span class="identifier">borderColor</span><span> = </span><span class="type-name">Color</span><span>.</span><span class="identifier">black</span><span>,
+  </span><span class="identifier">fontSize</span><span> = </span><span class="number-literal">12</span><span>
+)</span></code></pre>
+        <p>Render as sn SVG file</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">dVis</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/SimpleDirectedGraph.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/SimpleDirectedGraph.svg" alt="directed graph"></p>
+        
+        <h3 id="undirected-graph" class="section"><a class="anchor-link left" href="#undirected-graph"><i class="icofont-laika">&#xef71;</i></a>Undirected Graph</h3>
+        <p>An undirected graph using the same dataa:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> (</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>) = (</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>, </span><span class="string-literal">&quot;c&quot;</span><span>, </span><span class="string-literal">&quot;d&quot;</span><span>)
+
+</span><span class="keyword">class</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="keyword">val</span><span> </span><span class="identifier">s</span><span>: </span><span class="type-name">String</span><span>, </span><span class="keyword">val</span><span> </span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span>)</span></code></pre>
+        <p>Invoke the <code>UndirectedGraph</code> typeclass with type parameters that denote
+        that we will use Jung&#39;s <code>UndirectedSparseGraph</code> as the graph type, with
+        <code>String</code> and <code>Edge</code> as vertex and edge values, respectively.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">UndirectedSparseGraph</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">jug</span><span> = </span><span class="type-name">UndirectedGraph</span><span>.</span><span class="identifier">k2</span><span>[</span><span class="type-name">UndirectedSparseGraph</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>]</span></code></pre>
+        <p>Use the <code>jug</code> witness&#39;s <code>make</code> method to create the undirected graph</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ug</span><span> = </span><span class="identifier">jug</span><span>.</span><span class="identifier">make</span><span>(</span><span class="type-name">List</span><span>(</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>),
+  </span><span class="type-name">List</span><span>(
+    (</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hello&quot;</span><span>, </span><span class="number-literal">10</span><span>)),
+    (</span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;world&quot;</span><span>, </span><span class="number-literal">1</span><span>)),
+    (</span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hi&quot;</span><span>, </span><span class="number-literal">3</span><span>)),
+    (</span><span class="identifier">d</span><span>, </span><span class="identifier">a</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;earth&quot;</span><span>, </span><span class="number-literal">7</span><span>)),
+    (</span><span class="identifier">a</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;!&quot;</span><span>, </span><span class="number-literal">1</span><span>)),
+    (</span><span class="identifier">b</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hey&quot;</span><span>, </span><span class="number-literal">2</span><span>))))</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">undirectedgraph</span><span>.</span><span class="identifier">undirectedGraphOps</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">finite</span><span>.</span><span class="identifier">finiteOps</span><span>
+
+</span><span class="identifier">ug</span><span>.</span><span class="identifier">vertexProjection</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// res99: Int = 4
+</span><span>
+</span><span class="identifier">ug</span><span>.</span><span class="identifier">edgeProjection</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// res100: Int = 6
+</span><span>
+</span><span class="identifier">ug</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> == </span><span class="string-literal">&quot;c&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">ug</span><span>.</span><span class="identifier">neighbors</span><span>(</span><span class="identifier">v</span><span>))
+</span><span class="comment">// res101: Option[Iterable[String]] = Some(value = Iterable(&quot;a&quot;, &quot;b&quot;, &quot;d&quot;))
+</span><span>
+</span><span class="identifier">ug</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> == </span><span class="string-literal">&quot;a&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">ug</span><span>.</span><span class="identifier">neighbors</span><span>(</span><span class="identifier">v</span><span>))
+</span><span class="comment">// res102: Option[Iterable[String]] = Some(value = Iterable(&quot;b&quot;, &quot;c&quot;, &quot;d&quot;))</span></code></pre>
+        <p>Create a Visualization of the graph</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Show</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showEdge</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">show</span><span>(</span><span class="identifier">e</span><span>: </span><span class="type-name">Edge</span><span>): </span><span class="type-name">String</span><span> = </span><span class="identifier">e</span><span>.</span><span class="identifier">s</span><span> + </span><span class="string-literal">&quot; &quot;</span><span> + </span><span class="identifier">e</span><span>.</span><span class="identifier">i</span><span>
+}
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">uVis</span><span> = </span><span class="type-name">UndirectedGraphVisualization</span><span>[</span><span class="type-name">UndirectedSparseGraph</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>], </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>](
+  </span><span class="identifier">ug</span><span>,
+  </span><span class="identifier">width</span><span> = </span><span class="number-literal">300</span><span>,
+  </span><span class="identifier">height</span><span> = </span><span class="number-literal">300</span><span>,
+  </span><span class="identifier">border</span><span> = </span><span class="number-literal">10</span><span>,
+  </span><span class="identifier">color</span><span> = </span><span class="type-name">Color</span><span>.</span><span class="identifier">yellow</span><span>)</span></code></pre>
+        <p>Render as an SVG file</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">uVis</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/SimpleUndirectedGraph.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/SimpleUndirectedGraph.svg" alt="undirected graph"></p>
+        
+        <h2 id="logic" class="section"><a class="anchor-link left" href="#logic"><i class="icofont-laika">&#xef71;</i></a>Logic</h2>
+        
+        <h3 id="conjunctive-normal-form-converter" class="section"><a class="anchor-link left" href="#conjunctive-normal-form-converter"><i class="icofont-laika">&#xef71;</i></a>Conjunctive Normal Form Converter</h3>
+        <p>Imports</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">logic</span><span>.</span><span class="type-name">FirstOrderPredicateLogic</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>Example CNF conversion</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">logic</span><span>.</span><span class="identifier">example</span><span>.</span><span class="type-name">SamplePredicates</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">z</span><span> = </span><span class="type-name">Symbol</span><span>(</span><span class="string-literal">&quot;z&quot;</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">s</span><span> = ∃(</span><span class="identifier">z</span><span> ∈ </span><span class="type-name">Z</span><span>, (</span><span class="type-name">A</span><span>(</span><span class="identifier">z</span><span>) ∧ </span><span class="type-name">G</span><span>(</span><span class="identifier">z</span><span>)) ⇔ (</span><span class="type-name">B</span><span>(</span><span class="identifier">z</span><span>) ∨ </span><span class="type-name">H</span><span>(</span><span class="identifier">z</span><span>)))
+
+</span><span class="keyword">val</span><span> (</span><span class="identifier">cnf</span><span>, </span><span class="identifier">skolemMap</span><span>) = </span><span class="identifier">conjunctiveNormalForm</span><span>(</span><span class="identifier">s</span><span>)</span></code></pre>
+        <pre><code class="nohighlight"><span class="identifier">cnf</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res105: String = &quot;((¬A(Symbol(sk0)) ∨ (¬G(Symbol(sk1)) ∨ (B(Symbol(sk2)) ∨ H(Symbol(sk3))))) ∧ (((¬B(Symbol(sk4)) ∧ ¬H(Symbol(sk5))) ∨ A(Symbol(sk6))) ∧ ((¬B(Symbol(sk4)) ∧ ¬H(Symbol(sk5))) ∨ G(Symbol(sk7)))))&quot;
+</span><span>
+</span><span class="identifier">skolemMap</span><span>
+</span><span class="comment">// res106: Map[Symbol, Set[Symbol]] = HashMap(
+//   &#39;sk2 -&gt; Set(),
+//   &#39;sk6 -&gt; Set(),
+//   &#39;sk7 -&gt; Set(),
+//   &#39;sk3 -&gt; Set(),
+//   &#39;sk4 -&gt; Set(),
+//   &#39;sk1 -&gt; Set(),
+//   &#39;sk0 -&gt; Set(),
+//   &#39;sk5 -&gt; Set()
+// )</span></code></pre>
+        
+        <h2 id="spokes" class="section"><a class="anchor-link left" href="#spokes"><i class="icofont-laika">&#xef71;</i></a>Spokes</h2>
+        <p>Witnesses for 3rd party libraries: The &quot;Spokes&quot;</p>
+        
+        <h3 id="parallel-collections" class="section"><a class="anchor-link left" href="#parallel-collections"><i class="icofont-laika">&#xef71;</i></a>Parallel Collections</h3>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-parallel&quot; % &quot;0.6.5&quot;</code></pre>
+        <p>For use with Scala <a href="https://github.com/scala/scala-parallel-collections">Parallel Collections</a> library
+        (<code>&quot;org.scala-lang.modules&quot; %% &quot;scala-parallel-collections&quot; % ...</code>)</p>
+        
+        <h3 id="xml" class="section"><a class="anchor-link left" href="#xml"><i class="icofont-laika">&#xef71;</i></a>XML</h3>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-xml&quot; % &quot;0.6.5&quot;</code></pre>
+        <p>For use with Scala <a href="https://github.com/scala/scala-xml">XML</a> library
+        (<code>&quot;org.scala-lang.modules&quot; %% &quot;scala-xml&quot; % ...</code>)</p>
+        <p>XML includes <code>axle.web</code>, where HTML and SVG visualizations reside.</p>
+        
+        <h3 id="jblas" class="section"><a class="anchor-link left" href="#jblas"><i class="icofont-laika">&#xef71;</i></a>JBLAS</h3>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-jblas&quot; % &quot;0.6.5&quot;</code></pre>
+        <p><a href="#linear-algebra">Linear Algebra</a> and other witnesses for <a href="http://jblas.org/">JBLAS</a> which itself is a wrapper for <a href="http://www.netlib.org/lapack/">LAPACK</a>.
+        Includes Principal Component Analysis (PCA).</p>
+        
+        <h3 id="joda" class="section"><a class="anchor-link left" href="#joda"><i class="icofont-laika">&#xef71;</i></a>JODA</h3>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-joda&quot; % &quot;0.6.5&quot;</code></pre>
+        <p>Witnesses for the <a href="http://www.joda.org/joda-time/">Joda</a> time library.</p>
+        
+        <h3 id="jung" class="section"><a class="anchor-link left" href="#jung"><i class="icofont-laika">&#xef71;</i></a>JUNG</h3>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-jung&quot; % &quot;0.6.5&quot;</code></pre>
+        <p>Directed and Undirected <a href="#graph">Graph</a> witnesses for the <a href="http://jung.sourceforge.net/">JUNG</a> library.</p>
+        
+        <h3 id="awt" class="section"><a class="anchor-link left" href="#awt"><i class="icofont-laika">&#xef71;</i></a>AWT</h3>
+        <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-awt&quot; % &quot;0.6.5&quot;</code></pre>
+        <p>Witnesses for <a href="https://docs.oracle.com/javase/7/docs/api/java/awt/package-summary.html">AWT</a></p>
+        
+        <h2 id="future-work" class="section"><a class="anchor-link left" href="#future-work"><i class="icofont-laika">&#xef71;</i></a>Future Work</h2>
+        
+        <h3 id="scala-3" class="section"><a class="anchor-link left" href="#scala-3"><i class="icofont-laika">&#xef71;</i></a>Scala 3</h3>
+        <ul>
+          <li>Scala 3</li>
+          <li>convert to scalameta munit</li>
+          <li>correct &quot;Package Objects&quot; doc</li>
+        </ul>
+        
+        <h3 id="bugs-and-adoption-barriers" class="section"><a class="anchor-link left" href="#bugs-and-adoption-barriers"><i class="icofont-laika">&#xef71;</i></a>Bugs and adoption barriers</h3>
+        <ul>
+          <li>
+            <p>Fix <code>LogisticRegression</code> and move <code>LogisticRegression.md</code> back</p>
+          </li>
+          <li>
+            <p>Fix <code>GeneticAlgorithmSpec</code></p>
+          </li>
+          <li>
+            <p>Featurizing functions should return HLists or other typelevel sequences in order to avoid being told the number of features</p>
+          </li>
+          <li>
+            <p>Redo Logic using Abstract Algebra</p>
+          </li>
+          <li>
+            <p>Simple graph implementation so that <code>axle-core</code> can avoid including <code>axle-jung</code></p>
+          </li>
+          <li>
+            <p><code>svgJungDirectedGraphVisualization</code> move to a <code>axle-jung-xml</code> jar?</p>
+          </li>
+        </ul>
+        <ul>
+          <li>Will require externalizing the layout to its own.... typeclass?</li>
+        </ul>
+        <ul>
+          <li>
+            <p>Layout of bayesian network is quite bad -- check ABE SVG</p>
+          </li>
+          <li>
+            <p><code>axle-png</code> to avoid Xvfb requirement during tests</p>
+          </li>
+          <li>
+            <p>Chicklet borders / colors on site</p>
+          </li>
+          <li>
+            <p>Factor <code>axle.algebra.chain</code> in terms of well-known combinators</p>
+          </li>
+        </ul>
+        
+        <h3 id="types-and-axioms" class="section"><a class="anchor-link left" href="#types-and-axioms"><i class="icofont-laika">&#xef71;</i></a>Types and Axioms</h3>
+        <ul>
+          <li>Replace <code>Finite</code> with Shapeless&#39;s version (eg <code>Sized[Vector[_], nat.2]</code>)</li>
+          <li>Delete <code>Finite</code> conversions for jung</li>
+          <li>Replace with Cats: <code>FoldLeft</code>, <code>Bijection</code>, <code>FunctionPair</code>, <code>Endofunctor</code></li>
+          <li>Define laws for <code>Scanner</code>, <code>Aggregator</code>, <code>Zipper</code>, <code>Indexed</code>, <code>Talliable</code>, <code>Finite</code>?</li>
+          <li>Sort out <code>MapFrom</code>, <code>FromStream</code>, <code>FromSet</code></li>
+          <li>Test <code>axle.algebra.tuple2Field</code></li>
+          <li><code>similarity</code> syntax for <code>SimilaritySpace</code> (see <code>axle.bio.*</code>)</li>
+          <li>Projections of jung graphs for <code>Finite</code></li>
+          <li>kittens or magnolia</li>
+        </ul>
+        <ul>
+          <li>pattern match in <code>FirstOrderPredicateLogic</code></li>
+        </ul>
+        <ul>
+          <li>
+            <p>subtyping for <code>Suit</code> and <code>Rank</code></p>
+          </li>
+          <li>
+            <p>Machinist?</p>
+          </li>
+          <li>
+            <p>Type-level matrix dimension using <code>-Yliteral-types</code> and <code>singleton-ops</code> in <code>LinearAlgebra</code> typeclass</p>
+          </li>
+          <li>
+            <p>Make the <code>Int</code> abstract in <code>KMeans{,Visualization}</code>, <code>LinearAlgebra</code>, etc</p>
+          </li>
+          <li>
+            <p>Eigenvectors</p>
+          </li>
+          <li>
+            <p>Σ ⊣ Δ ⊣ Π means &quot;sums are left adjoint to diagonals, which are left adjoint to products.&quot;</p>
+          </li>
+        </ul>
+        
+        <h3 id="compute-engines" class="section"><a class="anchor-link left" href="#compute-engines"><i class="icofont-laika">&#xef71;</i></a>Compute Engines</h3>
+        <ul>
+          <li>Bring back Spark spoke -- Solve the Spark ClassTag issue (see Frameless?)</li>
+          <li>Performance benchmarking</li>
+          <li>netlib-java Matrix</li>
+          <li>GPU/CUDA support</li>
+          <li>Algebird/Scalding for distributed matrices, HyperLogLog, etc</li>
+          <li>Most MapRedicible witnesses are inefficient (eg calling toVector, toSeq, etc)</li>
+        </ul>
+        
+        <h3 id="hygiene" class="section"><a class="anchor-link left" href="#hygiene"><i class="icofont-laika">&#xef71;</i></a>Hygiene</h3>
+        <ul>
+          <li>Get rid of implicit arg passing to KMeans in <code>ClusterIrises.md</code> (and KMeansSpecification)</li>
+          <li>Factor tics and tics-{joda,algebra,spire} into separate libs?</li>
+          <li>remove unnecessary implicit Field, R{,i}ng, {Additive, Multiplicative}Monoid once spire/cats play well</li>
+          <li>Fix &quot;unreachable&quot; default pattern match cases</li>
+          <li>Review remaining usage of: <code>asInstanceOf</code>, <code>ClassTag</code>, and <code>Manifest</code></li>
+          <li>Review <code>groupBy</code> uses -- they use university equality.  Replace with <code>Eq</code></li>
+          <li>axle.algorithms coverage &gt; 80%</li>
+          <li>axle.core coverage &gt; 80%</li>
+          <li>Rm throws from axle.jung</li>
+          <li>Rm throws from axle.pgm.BayesianNetwork</li>
+        </ul>
+        
+        <h3 id="site" class="section"><a class="anchor-link left" href="#site"><i class="icofont-laika">&#xef71;</i></a>Site</h3>
+        
+        <h4 id="near-term" class="section"><a class="anchor-link left" href="#near-term"><i class="icofont-laika">&#xef71;</i></a>Near term</h4>
+        <ul>
+          <li>
+            <p>Logo for Laika site</p>
+          </li>
+          <li>
+            <p>Cover image for Laika PDF</p>
+          </li>
+          <li>
+            <p>Copy some test cases to QuantumCircuits.md</p>
+          </li>
+          <li>
+            <p>Docs</p>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            General
+            <ul>
+              <li>A few words in README for each section</li>
+              <li>Expand acronyms and include wikipedia links in &quot;Future Work&quot; sections</li>
+              <li>Make dependencies clear in each section</li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            Landing Page
+            <ul>
+              <li>More teasers (including a warning about rate of change)</li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            Introduction
+            <ul>
+              <li>Write &quot;Objectives&quot;</li>
+              <li>Smaller images for Gallery</li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            Foundation
+            <ul>
+              <li>Architecture</li>
+              <li>Functional Programming</li>
+            </ul>
+            <ul>
+              <li>Typeclasses</li>
+            </ul>
+            <ul>
+              <li>Curry-Howard</li>
+            </ul>
+            <ul>
+              <li>Theorems for Free</li>
+            </ul>
+            <ul>
+              <li>Referential Transparency</li>
+            </ul>
+            <ul>
+              <li>Equational Reasoning</li>
+            </ul>
+            <ul>
+              <li>Life After Monoids</li>
+            </ul>
+            <ul>
+              <li>Algebird</li>
+            </ul>
+            <ul>
+              <li>Kmett&#39;s mapping of abstract algebra to software patterns</li>
+              <li>Scala</li>
+              <li>Cats: Show, EQ, IO, Algebra, Spire</li>
+              <li>rename &quot;Spokes&quot;</li>
+              <li>rename &quot;Resources&quot;</li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            Units
+            <ul>
+              <li>Quanta: fix Distance, Energy, Time links</li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            Math
+            <ul>
+              <li>Intro section bullets not nesting</li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            Random, Uncertain
+            <ul>
+              <li>Bayesian network rendering is missing tables</li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            Bioinformatics
+            <ul>
+              <li>rename to Biology</li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            Text
+            <ul>
+              <li>Say more about Python Grammar</li>
+            </ul>
+          </li>
+        </ul>
+        <ul>
+          <li>
+            Appendix
+            <ul>
+              <li>Fix video iframes</li>
+            </ul>
+          </li>
+        </ul>
+        
+        <h4 id="later" class="section"><a class="anchor-link left" href="#later"><i class="icofont-laika">&#xef71;</i></a>Later</h4>
+        <ul>
+          <li>
+            <p><code>laikaIncludeAPI := true</code> in <code>build.sbt</code></p>
+          </li>
+          <li>
+            <p>look at more of <a href="https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html">these options</a></p>
+          </li>
+          <li>
+            <p>Meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel</p>
+          </li>
+          <li>
+            <p>Timestamp / version to site footer</p>
+          </li>
+          <li>
+            <p>GitHub &quot;Releases&quot; in sidebar should show &quot;latest&quot;</p>
+          </li>
+          <li>
+            <p>update google analytics version</p>
+          </li>
+          <li>
+            <p>test animation with monix 3.4.0</p>
+          </li>
+          <li>
+            <p>make axle.g8 more axle-flavored (use cats.IO App as parent for HelloWorld)</p>
+          </li>
+          <li>
+            <p>ghpagesCleanSite leaving stale files?</p>
+          </li>
+          <li>
+            <p>Friend of Spire</p>
+          </li>
+          <li>
+            <p>README: data sets from <code>axle.data</code> (Astronomy, Evolution, Federalist Papers, Irises)</p>
+          </li>
+          <li>
+            <p>what to do about empty right sidebars? convert bullets into sections? disable somehow?</p>
+          </li>
+        </ul>
+        
+        <h3 id="build" class="section"><a class="anchor-link left" href="#build"><i class="icofont-laika">&#xef71;</i></a>Build</h3>
+        <ul>
+          <li>keep axle.g8 and axle versions in sync</li>
+          <li>site publish (<code>git push</code>) via github action?</li>
+        </ul>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

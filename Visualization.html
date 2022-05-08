@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Visualization</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1"><a href="Introduction.html">Introduction</a></li>
+        <li class="level1"><a href="Foundation.html">Foundation</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1 active"><a href="#">Visualization</a></li>
+        <li class="level1"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
+        <li class="level1"><a href="MachineLearning.html">Machine Learning</a></li>
+        <li class="level1"><a href="Bioinformatics.html">Bioinformatics</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1"><a href="Appendix.html">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Visualization</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#output-formats">Output Formats</a></li>
+          <li class="level1"><a href="#animation">Animation</a></li>
+          <li class="level1"><a href="#plot">Plot</a></li>
+          <li class="level2"><a href="#example-plot-random-waves-over-time">Example: Plot Random Waves Over Time</a></li>
+          <li class="level2"><a href="#plot-animation">Plot Animation</a></li>
+          <li class="level1"><a href="#scatterplot">ScatterPlot</a></li>
+          <li class="level1"><a href="#barchart">BarChart</a></li>
+          <li class="level2"><a href="#example-fruit-sales-barchart">Example: Fruit Sales BarChart</a></li>
+          <li class="level2"><a href="#barchart-animation">BarChart Animation</a></li>
+          <li class="level1"><a href="#groupedbarchart">GroupedBarChart</a></li>
+          <li class="level2"><a href="#example-fruit-sales-grouped-by-year">Example: Fruit Sales Grouped By Year</a></li>
+          <li class="level1"><a href="#pixelated-colored-area">Pixelated Colored Area</a></li>
+          <li class="level1"><a href="#example-red-to-yellow-diagonal">Example: Red to Yellow Diagonal</a></li>
+          <li class="level2"><a href="#example-green-polar">Example: Green Polar</a></li>
+          <li class="level1"><a href="#future-work">Future Work</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="visualization" class="title">Visualization</h1>
+        <p>See the <a href="Introduction.html#gallery">Gallery</a> for more examples.</p>
+        
+        <h2 id="output-formats" class="section"><a class="anchor-link left" href="#output-formats"><i class="icofont-laika">&#xef71;</i></a>Output Formats</h2>
+        <p>The <code>show</code> function is available in the <code>axle._</code> package.
+        It can be applied to several types of Axle objects.</p>
+        <p>The package <code>axle.awt._</code> contains functions for creating files from the images: <code>png</code>, <code>jpeg</code>, <code>gif</code>, <code>bmp</code>.</p>
+        <p>The package <code>axle.web._</code> contains a <code>svg</code> function for creating svg files.</p>
+        <p>For example:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">vis</span><span>.</span><span class="identifier">show</span><span>
+
+</span><span class="identifier">vis</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;filename.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()
+
+</span><span class="identifier">vis</span><span>.</span><span class="identifier">png</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;filename.png&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        
+        <h2 id="animation" class="section"><a class="anchor-link left" href="#animation"><i class="icofont-laika">&#xef71;</i></a>Animation</h2>
+        <p><code>Plot</code>, <code>BarChart</code>, <code>BarChartGrouped</code>, and <code>ScatterPlot</code> support animation.
+        The visualizing frame polls for updates at a rate of approximately 24 Hz (every 42 ms).</p>
+        <p>The <code>play</code> command requires the same first argument as <code>show</code> does.
+        Additionally, <code>play</code> requires a <code>Observable[D]</code> function that represents the stream of data updates.
+        The implicit argument is a <code>monix.execution.Scheduler</code>.</p>
+        <p>An <code>axle.reactive.CurrentValueSubscriber</code> based on the <code>Observable[D]</code> can be used to create the
+        <code>dataFn</code> read by the visualization.</p>
+        <p>See <a href="#barchart-animation">Bar Chart Animation</a> for a full example of animation.</p>
+        
+        <h2 id="plot" class="section"><a class="anchor-link left" href="#plot"><i class="icofont-laika">&#xef71;</i></a>Plot</h2>
+        <p>Two-dimensional plots</p>
+        
+        <h3 id="example-plot-random-waves-over-time" class="section"><a class="anchor-link left" href="#example-plot-random-waves-over-time"><i class="icofont-laika">&#xef71;</i></a>Example: Plot Random Waves Over Time</h3>
+        <p>Imports</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">joda</span><span>.</span><span class="identifier">time</span><span>.</span><span class="type-name">DateTime</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">collection</span><span>.</span><span class="identifier">immutable</span><span>.</span><span class="type-name">TreeMap</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">sin</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">joda</span><span>.</span><span class="identifier">dateTimeOrder</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">Color</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>Generate the time-series to plot</p>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">now</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">DateTime</span><span>()
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">colors</span><span> = </span><span class="type-name">Vector</span><span>(</span><span class="identifier">red</span><span>, </span><span class="identifier">blue</span><span>, </span><span class="identifier">green</span><span>, </span><span class="identifier">yellow</span><span>, </span><span class="identifier">orange</span><span>)
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">randomTimeSeries</span><span>(</span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">gen</span><span>: </span><span class="type-name">Generator</span><span>) = {
+  </span><span class="keyword">val</span><span> φ = </span><span class="identifier">gen</span><span>.</span><span class="identifier">nextDouble</span><span>()
+  </span><span class="keyword">val</span><span> </span><span class="type-name">A</span><span> = </span><span class="identifier">gen</span><span>.</span><span class="identifier">nextDouble</span><span>()
+  </span><span class="keyword">val</span><span> ω = </span><span class="number-literal">0.1</span><span> / </span><span class="identifier">gen</span><span>.</span><span class="identifier">nextDouble</span><span>()
+  (</span><span class="string-literal">&quot;series %d %1.2f %1.2f %1.2f&quot;</span><span>.</span><span class="identifier">format</span><span>(</span><span class="identifier">i</span><span>, φ, </span><span class="type-name">A</span><span>, ω),
+    </span><span class="keyword">new</span><span> </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>]() ++
+      (</span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">100</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">t</span><span> =&gt; (</span><span class="identifier">now</span><span>.</span><span class="identifier">plusMinutes</span><span>(</span><span class="number-literal">2</span><span> * </span><span class="identifier">t</span><span>) -&gt; </span><span class="type-name">A</span><span> * </span><span class="identifier">sin</span><span>(ω * </span><span class="identifier">t</span><span> + φ))).</span><span class="identifier">toMap</span><span>)
+}
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">waves</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">20</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">i</span><span> =&gt; </span><span class="identifier">randomTimeSeries</span><span>(</span><span class="identifier">i</span><span>, </span><span class="identifier">rng</span><span>)).</span><span class="identifier">toList</span></code></pre>
+        <p>Imports for visualization</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Show</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">Plot</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Plottable</span><span>.</span><span class="identifier">doublePlottable</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">joda</span><span>.</span><span class="identifier">dateTimeOrder</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">joda</span><span>.</span><span class="identifier">dateTimePlottable</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">joda</span><span>.</span><span class="identifier">dateTimeTics</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">joda</span><span>.</span><span class="identifier">dateTimeDurationLengthSpace</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span></code></pre>
+        <p>Define the visualization</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">plot</span><span> = </span><span class="type-name">Plot</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>]](
+  () =&gt; </span><span class="identifier">waves</span><span>,
+  </span><span class="identifier">connect</span><span> = </span><span class="boolean-literal">true</span><span>,
+  </span><span class="identifier">colorOf</span><span> = </span><span class="identifier">s</span><span> =&gt; </span><span class="identifier">colors</span><span>(</span><span class="identifier">s</span><span>.</span><span class="identifier">hash</span><span>.</span><span class="identifier">abs</span><span> % </span><span class="identifier">colors</span><span>.</span><span class="identifier">length</span><span>),
+  </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;Random Waves&quot;</span><span>),
+  </span><span class="identifier">xAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;time (t)&quot;</span><span>),
+  </span><span class="identifier">yAxis</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="identifier">now</span><span>),
+  </span><span class="identifier">yAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;A·sin(ω·t + φ)&quot;</span><span>)).</span><span class="identifier">zeroXAxis</span></code></pre>
+        <p>If instead we had supplied <code>(Color, String)</code> pairs, we would have needed something like preciding the <code>Plot</code> definition:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showCL</span><span>: </span><span class="type-name">Show</span><span>[(</span><span class="type-name">Color</span><span>, </span><span class="type-name">String</span><span>)] =
+  </span><span class="keyword">new</span><span> </span><span class="type-name">Show</span><span>[(</span><span class="type-name">Color</span><span>, </span><span class="type-name">String</span><span>)] {
+    </span><span class="keyword">def</span><span> </span><span class="declaration-name">show</span><span>(</span><span class="identifier">cl</span><span>: (</span><span class="type-name">Color</span><span>, </span><span class="type-name">String</span><span>)): </span><span class="type-name">String</span><span> = </span><span class="identifier">cl</span><span class="number-literal">._2</span><span>
+  }
+</span><span class="comment">// showCL: Show[(Color, String)] = repl.MdocSession$App$$anon$1@5742b90b</span></code></pre>
+        <p>Create the SVG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">plot</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/random_waves.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/random_waves.svg" alt="waves"></p>
+        
+        <h3 id="plot-animation" class="section"><a class="anchor-link left" href="#plot-animation"><i class="icofont-laika">&#xef71;</i></a>Plot Animation</h3>
+        <p>This example traces two &quot;saw&quot; functions vs time:</p>
+        <p>Imports</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">joda</span><span>.</span><span class="identifier">time</span><span>.</span><span class="type-name">DateTime</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">DirectedSparseGraph</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">collection</span><span>.</span><span class="identifier">immutable</span><span>.</span><span class="type-name">TreeMap</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">monix</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quanta</span><span>.</span><span class="type-name">Time</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="identifier">intervalScan</span></code></pre>
+        <p>Define stream of data updates refreshing every 500 milliseconds</p>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">initialData</span><span> = </span><span class="type-name">List</span><span>(
+  (</span><span class="string-literal">&quot;saw 1&quot;</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>]()),
+  (</span><span class="string-literal">&quot;saw 2&quot;</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>]())
+)
+</span><span class="comment">// initialData: List[(String, TreeMap[DateTime, Double])] = List(
+//   (&quot;saw 1&quot;, TreeMap()),
+//   (&quot;saw 2&quot;, TreeMap())
+// )
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">saw1</span><span> = (</span><span class="identifier">t</span><span>: </span><span class="type-name">Long</span><span>) =&gt; (</span><span class="identifier">t</span><span> % </span><span class="number-literal">10000</span><span>) / </span><span class="number-literal">10000d</span><span>
+</span><span class="comment">// saw1: Long =&gt; Double = &lt;function1&gt;
+</span><span class="keyword">val</span><span> </span><span class="identifier">saw2</span><span> = (</span><span class="identifier">t</span><span>: </span><span class="type-name">Long</span><span>) =&gt; (</span><span class="identifier">t</span><span> % </span><span class="number-literal">100000</span><span>) / </span><span class="number-literal">50000d</span><span>
+</span><span class="comment">// saw2: Long =&gt; Double = &lt;function1&gt;
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">fs</span><span> = </span><span class="type-name">List</span><span>(</span><span class="identifier">saw1</span><span>, </span><span class="identifier">saw2</span><span>)
+</span><span class="comment">// fs: List[Long =&gt; Double] = List(&lt;function1&gt;, &lt;function1&gt;)
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">refreshFn</span><span> = (</span><span class="identifier">previous</span><span>: </span><span class="type-name">List</span><span>[(</span><span class="type-name">String</span><span>, </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>])]) =&gt; {
+  </span><span class="keyword">val</span><span> </span><span class="identifier">now</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">DateTime</span><span>()
+  </span><span class="identifier">previous</span><span>.</span><span class="identifier">zip</span><span>(</span><span class="identifier">fs</span><span>).</span><span class="identifier">map</span><span>({ </span><span class="keyword">case</span><span> (</span><span class="identifier">old</span><span>, </span><span class="identifier">f</span><span>) =&gt; (</span><span class="identifier">old</span><span class="number-literal">._1</span><span>, </span><span class="identifier">old</span><span class="number-literal">._2</span><span> ++ </span><span class="type-name">Vector</span><span>(</span><span class="identifier">now</span><span> -&gt; </span><span class="identifier">f</span><span>(</span><span class="identifier">now</span><span>.</span><span class="identifier">getMillis</span><span>))) })
+}
+</span><span class="comment">// refreshFn: List[(String, TreeMap[DateTime, Double])] =&gt; List[(String, TreeMap[DateTime, Double])] = &lt;function1&gt;
+</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">timeConverter</span><span> = {
+  </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">modules</span><span>.</span><span class="identifier">doubleRationalModule</span><span>
+  </span><span class="type-name">Time</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
+}
+</span><span class="comment">// timeConverter: quanta.UnitConverterGraph[Time, Double, DirectedSparseGraph[quanta.UnitOfMeasurement[Time], Double =&gt; Double]] with quanta.TimeConverter[Double] = axle.quanta.Time$$anon$1@63ecc59c
+</span><span class="keyword">import</span><span> </span><span class="identifier">timeConverter</span><span>.</span><span class="identifier">millisecond</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">dataUpdates</span><span>: </span><span class="type-name">Observable</span><span>[</span><span class="type-name">Seq</span><span>[(</span><span class="type-name">String</span><span>, </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>])]] =
+  </span><span class="identifier">intervalScan</span><span>(</span><span class="identifier">initialData</span><span>, </span><span class="identifier">refreshFn</span><span>, </span><span class="number-literal">500d</span><span> *: </span><span class="identifier">millisecond</span><span>)
+</span><span class="comment">// dataUpdates: Observable[Seq[(String, TreeMap[DateTime, Double])]] = monix.reactive.internal.operators.ScanObservable@2cb8ee2f</span></code></pre>
+        <p>Create <code>CurrentValueSubscriber</code>, which will be used by the <code>Plot</code> to get the latest values</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">monix</span><span>.</span><span class="identifier">execution</span><span>.</span><span class="type-name">Scheduler</span><span>.</span><span class="type-name">Implicits</span><span>.</span><span class="identifier">global</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="type-name">CurrentValueSubscriber</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">cvSub</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">CurrentValueSubscriber</span><span>[</span><span class="type-name">Seq</span><span>[(</span><span class="type-name">String</span><span>, </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>])]]()
+</span><span class="keyword">val</span><span> </span><span class="identifier">cvCancellable</span><span> = </span><span class="identifier">dataUpdates</span><span>.</span><span class="identifier">subscribe</span><span>(</span><span class="identifier">cvSub</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">plot</span><span> = </span><span class="type-name">Plot</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">DateTime</span><span>, </span><span class="type-name">Double</span><span>]](
+  () =&gt; </span><span class="identifier">cvSub</span><span>.</span><span class="identifier">currentValue</span><span>.</span><span class="identifier">getOrElse</span><span>(</span><span class="identifier">initialData</span><span>),
+  </span><span class="identifier">connect</span><span> = </span><span class="boolean-literal">true</span><span>,
+  </span><span class="identifier">colorOf</span><span> = (</span><span class="identifier">label</span><span>: </span><span class="type-name">String</span><span>) =&gt; </span><span class="type-name">Color</span><span>.</span><span class="identifier">black</span><span>,
+  </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;Saws&quot;</span><span>),
+  </span><span class="identifier">xAxis</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="number-literal">0d</span><span>),
+  </span><span class="identifier">xAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;time (t)&quot;</span><span>),
+  </span><span class="identifier">yAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;y&quot;</span><span>)
+)</span></code></pre>
+        <p>Animate</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">awt</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> (</span><span class="identifier">frame</span><span>, </span><span class="identifier">paintCancellable</span><span>) = </span><span class="identifier">play</span><span>(</span><span class="identifier">plot</span><span>, </span><span class="identifier">dataUpdates</span><span>)</span></code></pre>
+        <p>Tear down resources</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">paintCancellable</span><span>.</span><span class="identifier">cancel</span><span>()
+</span><span class="identifier">cvCancellable</span><span>.</span><span class="identifier">cancel</span><span>()
+</span><span class="identifier">frame</span><span>.</span><span class="identifier">dispose</span><span>()</span></code></pre>
+        
+        <h2 id="scatterplot" class="section"><a class="anchor-link left" href="#scatterplot"><i class="icofont-laika">&#xef71;</i></a>ScatterPlot</h2>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">data</span><span> = </span><span class="type-name">Map</span><span>(
+  (</span><span class="number-literal">1</span><span>, </span><span class="number-literal">1</span><span>) -&gt; </span><span class="number-literal">0</span><span>,
+  (</span><span class="number-literal">2</span><span>, </span><span class="number-literal">2</span><span>) -&gt; </span><span class="number-literal">0</span><span>,
+  (</span><span class="number-literal">3</span><span>, </span><span class="number-literal">3</span><span>) -&gt; </span><span class="number-literal">0</span><span>,
+  (</span><span class="number-literal">2</span><span>, </span><span class="number-literal">1</span><span>) -&gt; </span><span class="number-literal">1</span><span>,
+  (</span><span class="number-literal">3</span><span>, </span><span class="number-literal">2</span><span>) -&gt; </span><span class="number-literal">1</span><span>,
+  (</span><span class="number-literal">0</span><span>, </span><span class="number-literal">1</span><span>) -&gt; </span><span class="number-literal">2</span><span>,
+  (</span><span class="number-literal">0</span><span>, </span><span class="number-literal">2</span><span>) -&gt; </span><span class="number-literal">2</span><span>,
+  (</span><span class="number-literal">1</span><span>, </span><span class="number-literal">3</span><span>) -&gt; </span><span class="number-literal">2</span><span>)</span></code></pre>
+        <p>Define the ScatterPlot</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">Color</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">plot</span><span> = </span><span class="type-name">ScatterPlot</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Map</span><span>[(</span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>), </span><span class="type-name">Int</span><span>]](
+  () =&gt; </span><span class="identifier">data</span><span>,
+  </span><span class="identifier">colorOf</span><span> = (</span><span class="identifier">x</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">y</span><span>: </span><span class="type-name">Int</span><span>) =&gt; </span><span class="identifier">data</span><span>((</span><span class="identifier">x</span><span>, </span><span class="identifier">y</span><span>)) </span><span class="keyword">match</span><span> {
+    </span><span class="keyword">case</span><span> </span><span class="number-literal">0</span><span> =&gt; </span><span class="identifier">red</span><span>
+    </span><span class="keyword">case</span><span> </span><span class="number-literal">1</span><span> =&gt; </span><span class="identifier">blue</span><span>
+    </span><span class="keyword">case</span><span> </span><span class="number-literal">2</span><span> =&gt; </span><span class="identifier">green</span><span>
+  },
+  </span><span class="identifier">labelOf</span><span> = (</span><span class="identifier">x</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">y</span><span>: </span><span class="type-name">Int</span><span>) =&gt; </span><span class="identifier">data</span><span>.</span><span class="identifier">get</span><span>((</span><span class="identifier">x</span><span>, </span><span class="identifier">y</span><span>)).</span><span class="identifier">map</span><span>(</span><span class="identifier">s</span><span> =&gt; (</span><span class="identifier">s</span><span>.</span><span class="identifier">toString</span><span>, </span><span class="boolean-literal">false</span><span>)))</span></code></pre>
+        <p>Create the SVG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">plot</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/scatter.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/scatter.svg" alt="scatter plot"></p>
+        
+        <h2 id="barchart" class="section"><a class="anchor-link left" href="#barchart"><i class="icofont-laika">&#xef71;</i></a>BarChart</h2>
+        <p>Two-dimensional bar charts.</p>
+        
+        <h3 id="example-fruit-sales-barchart" class="section"><a class="anchor-link left" href="#example-fruit-sales-barchart"><i class="icofont-laika">&#xef71;</i></a>Example: Fruit Sales BarChart</h3>
+        <p>The dataset:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sales</span><span> = </span><span class="type-name">Map</span><span>(
+  </span><span class="string-literal">&quot;apple&quot;</span><span> -&gt; </span><span class="number-literal">83.8</span><span>,
+  </span><span class="string-literal">&quot;banana&quot;</span><span> -&gt; </span><span class="number-literal">77.9</span><span>,
+  </span><span class="string-literal">&quot;coconut&quot;</span><span> -&gt; </span><span class="number-literal">10.1</span><span>
+)</span></code></pre>
+        <p>Define a bar chart visualization</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">BarChart</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">Color</span><span>.</span><span class="identifier">lightGray</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">chart</span><span> = </span><span class="type-name">BarChart</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>], </span><span class="type-name">String</span><span>](
+  () =&gt; </span><span class="identifier">sales</span><span>,
+  </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;fruit sales&quot;</span><span>),
+  </span><span class="identifier">hoverOf</span><span> = (</span><span class="identifier">c</span><span>: </span><span class="type-name">String</span><span>) =&gt; </span><span class="type-name">Some</span><span>(</span><span class="identifier">c</span><span>),
+  </span><span class="identifier">linkOf</span><span> = (</span><span class="identifier">c</span><span>: </span><span class="type-name">String</span><span>) =&gt; </span><span class="type-name">Some</span><span>((</span><span class="keyword">new</span><span> </span><span class="identifier">java</span><span>.</span><span class="identifier">net</span><span>.</span><span class="type-name">URL</span><span>(</span><span class="string-literal">s&quot;http://wikipedia.org/wiki/</span><span class="substitution">$c</span><span class="string-literal">&quot;</span><span>), </span><span class="identifier">lightGray</span><span>))
+)</span></code></pre>
+        <p>Create the SVG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">chart</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/fruitsales.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/fruitsales.svg" alt="fruitsales"></p>
+        
+        <h3 id="barchart-animation" class="section"><a class="anchor-link left" href="#barchart-animation"><i class="icofont-laika">&#xef71;</i></a>BarChart Animation</h3>
+        <p>This example keeps the &quot;bar&quot; value steady at 1.0 while assigning a new random Double (between 0 and 1) to &quot;foo&quot; every second.</p>
+        <p>Imports</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">util</span><span>.</span><span class="type-name">Random</span><span>.</span><span class="identifier">nextDouble</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quanta</span><span>.</span><span class="type-name">Time</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">DirectedSparseGraph</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">monix</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="identifier">intervalScan</span></code></pre>
+        <p>Define stream of data updates</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">groups</span><span> = </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;foo&quot;</span><span>, </span><span class="string-literal">&quot;bar&quot;</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">initial</span><span> = </span><span class="type-name">Map</span><span>(</span><span class="string-literal">&quot;foo&quot;</span><span> -&gt; </span><span class="number-literal">1d</span><span>, </span><span class="string-literal">&quot;bar&quot;</span><span> -&gt; </span><span class="number-literal">1d</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">tick</span><span> = (</span><span class="identifier">previous</span><span>: </span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>]) =&gt; </span><span class="identifier">previous</span><span> + (</span><span class="string-literal">&quot;foo&quot;</span><span> -&gt; </span><span class="identifier">nextDouble</span><span>())
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">timeConverter</span><span> = {
+  </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">modules</span><span>.</span><span class="identifier">doubleRationalModule</span><span>
+  </span><span class="type-name">Time</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
+}
+</span><span class="keyword">import</span><span> </span><span class="identifier">timeConverter</span><span>.</span><span class="identifier">second</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">dataUpdates</span><span>: </span><span class="type-name">Observable</span><span>[</span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>]] = </span><span class="identifier">intervalScan</span><span>(</span><span class="identifier">initial</span><span>, </span><span class="identifier">tick</span><span>, </span><span class="number-literal">1d</span><span> *: </span><span class="identifier">second</span><span>)</span></code></pre>
+        <p>Create <code>CurrentValueSubscriber</code>, which will be used by the <code>BarChart</code> to get the latest value</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">reactive</span><span>.</span><span class="type-name">CurrentValueSubscriber</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">monix</span><span>.</span><span class="identifier">execution</span><span>.</span><span class="type-name">Scheduler</span><span>.</span><span class="type-name">Implicits</span><span>.</span><span class="identifier">global</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">cvSub</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">CurrentValueSubscriber</span><span>[</span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>]]()
+</span><span class="keyword">val</span><span> </span><span class="identifier">cvCancellable</span><span> = </span><span class="identifier">dataUpdates</span><span>.</span><span class="identifier">subscribe</span><span>(</span><span class="identifier">cvSub</span><span>)
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">BarChart</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">chart</span><span> = </span><span class="type-name">BarChart</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Map</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>], </span><span class="type-name">String</span><span>](
+  () =&gt; </span><span class="identifier">cvSub</span><span>.</span><span class="identifier">currentValue</span><span>.</span><span class="identifier">getOrElse</span><span>(</span><span class="identifier">initial</span><span>),
+  </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;random&quot;</span><span>)
+)</span></code></pre>
+        <p>Animate</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">awt</span><span>.</span><span class="identifier">play</span><span>
+
+</span><span class="keyword">val</span><span> (</span><span class="identifier">frame</span><span>, </span><span class="identifier">paintCancellable</span><span>) = </span><span class="identifier">play</span><span>(</span><span class="identifier">chart</span><span>, </span><span class="identifier">dataUpdates</span><span>)</span></code></pre>
+        <p>Tear down the resources</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">paintCancellable</span><span>.</span><span class="identifier">cancel</span><span>()
+</span><span class="identifier">cvCancellable</span><span>.</span><span class="identifier">cancel</span><span>()
+</span><span class="identifier">frame</span><span>.</span><span class="identifier">dispose</span><span>()</span></code></pre>
+        
+        <h2 id="groupedbarchart" class="section"><a class="anchor-link left" href="#groupedbarchart"><i class="icofont-laika">&#xef71;</i></a>GroupedBarChart</h2>
+        <p>Two-dimensional grouped bar charts</p>
+        
+        <h3 id="example-fruit-sales-grouped-by-year" class="section"><a class="anchor-link left" href="#example-fruit-sales-grouped-by-year"><i class="icofont-laika">&#xef71;</i></a>Example: Fruit Sales Grouped By Year</h3>
+        <p>The following example dataset:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sales</span><span> = </span><span class="type-name">Map</span><span>(
+  (</span><span class="string-literal">&quot;apple&quot;</span><span>, </span><span class="number-literal">2011</span><span>) -&gt; </span><span class="number-literal">43.0</span><span>,
+  (</span><span class="string-literal">&quot;apple&quot;</span><span>, </span><span class="number-literal">2012</span><span>) -&gt; </span><span class="number-literal">83.8</span><span>,
+  (</span><span class="string-literal">&quot;banana&quot;</span><span>, </span><span class="number-literal">2011</span><span>) -&gt; </span><span class="number-literal">11.3</span><span>,
+  (</span><span class="string-literal">&quot;banana&quot;</span><span>, </span><span class="number-literal">2012</span><span>) -&gt; </span><span class="number-literal">77.9</span><span>,
+  (</span><span class="string-literal">&quot;coconut&quot;</span><span>, </span><span class="number-literal">2011</span><span>) -&gt; </span><span class="number-literal">88.0</span><span>,
+  (</span><span class="string-literal">&quot;coconut&quot;</span><span>, </span><span class="number-literal">2012</span><span>) -&gt; </span><span class="number-literal">10.1</span><span>
+)</span></code></pre>
+        <p>Shared imports</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">BarChartGrouped</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">Color</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span></code></pre>
+        <p>The data can be grouped in two ways to produce bar charts:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">chart</span><span> = </span><span class="type-name">BarChartGrouped</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Map</span><span>[(</span><span class="type-name">String</span><span>, </span><span class="type-name">Int</span><span>), </span><span class="type-name">Double</span><span>], </span><span class="type-name">String</span><span>](
+  () =&gt; </span><span class="identifier">sales</span><span>,
+  </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;fruit sales&quot;</span><span>),
+  </span><span class="identifier">colorOf</span><span> = (</span><span class="identifier">label</span><span>: </span><span class="type-name">String</span><span>, </span><span class="identifier">year</span><span>: </span><span class="type-name">Int</span><span>) =&gt; </span><span class="identifier">year</span><span> </span><span class="keyword">match</span><span> {
+    </span><span class="keyword">case</span><span> </span><span class="number-literal">2011</span><span> =&gt; </span><span class="identifier">red</span><span>
+    </span><span class="keyword">case</span><span> </span><span class="number-literal">2012</span><span> =&gt; </span><span class="identifier">blue</span><span>
+  }
+)</span></code></pre>
+        <p>Create the SVG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">chart</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/barchart1.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/barchart1.svg" alt="barchart1"></p>
+        <p>Or alternatively</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">chart2</span><span> = </span><span class="type-name">BarChartGrouped</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Double</span><span>, </span><span class="type-name">Map</span><span>[(</span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>), </span><span class="type-name">Double</span><span>], </span><span class="type-name">String</span><span>](
+  () =&gt; </span><span class="identifier">sales</span><span> </span><span class="identifier">map</span><span> { </span><span class="keyword">case</span><span> (</span><span class="identifier">k</span><span>, </span><span class="identifier">v</span><span>) =&gt; (</span><span class="identifier">k</span><span class="number-literal">._2</span><span>, </span><span class="identifier">k</span><span class="number-literal">._1</span><span>) -&gt; </span><span class="identifier">v</span><span>},
+  </span><span class="identifier">colorOf</span><span> = (</span><span class="identifier">year</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">label</span><span>: </span><span class="type-name">String</span><span>) =&gt; </span><span class="identifier">label</span><span> </span><span class="keyword">match</span><span> {
+    </span><span class="keyword">case</span><span> </span><span class="string-literal">&quot;apple&quot;</span><span> =&gt; </span><span class="identifier">red</span><span>
+    </span><span class="keyword">case</span><span> </span><span class="string-literal">&quot;banana&quot;</span><span> =&gt; </span><span class="identifier">yellow</span><span>
+    </span><span class="keyword">case</span><span> </span><span class="string-literal">&quot;coconut&quot;</span><span> =&gt; </span><span class="identifier">brown</span><span>
+  },
+  </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;fruit sales&quot;</span><span>)
+)</span></code></pre>
+        <p>Create the second SVG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">chart</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/barchart2.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/barchart2.svg" alt="barchart2"></p>
+        
+        <h2 id="pixelated-colored-area" class="section"><a class="anchor-link left" href="#pixelated-colored-area"><i class="icofont-laika">&#xef71;</i></a>Pixelated Colored Area</h2>
+        <p>This visualization shows the composition of a function <code>f: (X, Y) =&gt; V</code> with a
+        colorizing function <code>c: V =&gt; Color</code>
+        over a rectangular range on the <code>(X, Y)</code> plane.
+        <code>LengthSpace[X, X, Double]</code> and
+        <code>LengthSpace[Y, Y, Double]</code> must be implicitly in scope.</p>
+        
+        <h2 id="example-red-to-yellow-diagonal" class="section"><a class="anchor-link left" href="#example-red-to-yellow-diagonal"><i class="icofont-laika">&#xef71;</i></a>Example: Red to Yellow Diagonal</h2>
+        <p>A few imports:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>Define a function to compute an <code>Double</code> for each point on the plane <code>(x, y): (Double, Double)</code></p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">f</span><span>(</span><span class="identifier">x0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">x1</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y1</span><span>: </span><span class="type-name">Double</span><span>) =
+  </span><span class="identifier">x0</span><span> + </span><span class="identifier">y0</span></code></pre>
+        <p>Define a <code>toColor</code> function.
+        Here we first prepare an array of colors to avoid creating the objects during rendering.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">n</span><span> = </span><span class="number-literal">100</span><span>
+
+</span><span class="comment">// red to orange to yellow
+</span><span class="keyword">val</span><span> </span><span class="identifier">roy</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="identifier">n</span><span>).</span><span class="identifier">map</span><span>( </span><span class="identifier">i</span><span> =&gt;
+  </span><span class="type-name">Color</span><span>(</span><span class="number-literal">255</span><span>, ((</span><span class="identifier">i</span><span> / </span><span class="identifier">n</span><span>.</span><span class="identifier">toDouble</span><span>) * </span><span class="number-literal">255</span><span>).</span><span class="identifier">toInt</span><span>, </span><span class="number-literal">0</span><span>)
+).</span><span class="identifier">toArray</span><span>
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">toColor</span><span>(</span><span class="identifier">v</span><span>: </span><span class="type-name">Double</span><span>) = </span><span class="identifier">roy</span><span>(</span><span class="identifier">v</span><span>.</span><span class="identifier">toInt</span><span> % </span><span class="identifier">n</span><span>)</span></code></pre>
+        <p>Define a <code>PixelatedColoredArea</code> to show <code>toColor ∘ f</code> over the range <code>(0,0)</code> to <code>(1000,1000)</code>
+        represented as a 400 pixel square.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">pca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(</span><span class="identifier">f</span><span>, </span><span class="identifier">toColor</span><span>, </span><span class="number-literal">400</span><span>, </span><span class="number-literal">400</span><span>, </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1000d</span><span>, </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1000d</span><span>)</span></code></pre>
+        <p>Create PNG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">awt</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">pca</span><span>.</span><span class="identifier">png</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/roy_diagonal.png&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/roy_diagonal.png" alt="ROY Diagonal"></p>
+        
+        <h3 id="example-green-polar" class="section"><a class="anchor-link left" href="#example-green-polar"><i class="icofont-laika">&#xef71;</i></a>Example: Green Polar</h3>
+        <p>More compactly:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">sqrt</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">m</span><span> = </span><span class="number-literal">200</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">greens</span><span> = (</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="identifier">m</span><span>).</span><span class="identifier">map</span><span>( </span><span class="identifier">i</span><span> =&gt;
+  </span><span class="type-name">Color</span><span>(</span><span class="number-literal">0</span><span>, ((</span><span class="identifier">i</span><span> / </span><span class="identifier">m</span><span>.</span><span class="identifier">toDouble</span><span>) * </span><span class="number-literal">255</span><span>).</span><span class="identifier">toInt</span><span>, </span><span class="number-literal">0</span><span>)
+).</span><span class="identifier">toArray</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">gpPca</span><span> = </span><span class="type-name">PixelatedColoredArea</span><span>(
+    (</span><span class="identifier">x0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">x1</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y0</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">y1</span><span>: </span><span class="type-name">Double</span><span>) =&gt; </span><span class="identifier">sqrt</span><span>(</span><span class="identifier">x0</span><span>*</span><span class="identifier">x0</span><span> + </span><span class="identifier">y0</span><span>*</span><span class="identifier">y0</span><span>),
+    (</span><span class="identifier">v</span><span>: </span><span class="type-name">Double</span><span>) =&gt; </span><span class="identifier">greens</span><span>(</span><span class="identifier">v</span><span>.</span><span class="identifier">toInt</span><span> % </span><span class="identifier">m</span><span>),
+    </span><span class="number-literal">400</span><span>, </span><span class="number-literal">400</span><span>,
+    </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1000d</span><span>,
+    </span><span class="number-literal">0d</span><span>, </span><span class="number-literal">1000d</span><span>)</span></code></pre>
+        <p>Create the PNG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">awt</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">gpPca</span><span>.</span><span class="identifier">png</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/green_polar.png&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/green_polar.png" alt="Green Polar"></p>
+        
+        <h2 id="future-work" class="section"><a class="anchor-link left" href="#future-work"><i class="icofont-laika">&#xef71;</i></a>Future Work</h2>
+        <ul>
+          <li>WebGL</li>
+          <li>SVG Animation</li>
+          <li>Box Plot</li>
+          <li>Candlestick Chart</li>
+          <li>Honor graph vis params in awt graph visualizations</li>
+          <li><code>axle.web.Table</code> and <code>HtmlFrom[Table[T]]</code></li>
+          <li>Log scale</li>
+          <li><code>SVG[Matrix]</code></li>
+          <li><code>BarChart</code> Variable width bars</li>
+          <li>Horizontal barchart</li>
+          <li><code>KMeansVisualization</code> / <code>ScatterPlot</code> similarity (at least DataPoints)</li>
+          <li><code>SVG[H]</code> for BarChart hover (wrap with \&lt;g&gt; to do getBBox)</li>
+          <li>Background box for <code>ScatterPlot</code> hover text?</li>
+          <li>Fix multi-color cube rendering</li>
+          <li>Bloom filter surface</li>
+          <li>Factor similarity between SVG and Draw?</li>
+          <li>Re-enable <code>axle-jogl</code></li>
+        </ul>
+        <ul>
+          <li>May require jogamop 2.4, which is not yet released</li>
+        </ul>
+        <ul>
+          <li>Or possibly use <a href="https://jogamp.org/deployment/archive/rc/v2.4.0-rc-20200307/jar/">jogamp archive</a></li>
+        </ul>
+        <ul>
+          <li>
+            <p>See processing&#39;s approach in <a href="https://github.com/processing/processing4/pull/85/commits/17a20bea37e7bcfa5589dbcb2f4a58c4174f7fe0">this commit</a></p>
+          </li>
+          <li>
+            <p>Unchecked constraint in PlotDataView</p>
+          </li>
+        </ul>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

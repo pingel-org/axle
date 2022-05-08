@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Introduction</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1 active"><a href="#">Introduction</a></li>
+        <li class="level1"><a href="Foundation.html">Foundation</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
+        <li class="level1"><a href="MachineLearning.html">Machine Learning</a></li>
+        <li class="level1"><a href="Bioinformatics.html">Bioinformatics</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1"><a href="Appendix.html">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Introduction</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#objectives">Objectives</a></li>
+          <li class="level1"><a href="#installation">Installation</a></li>
+          <li class="level2"><a href="#install-sbt">Install SBT</a></li>
+          <li class="level2"><a href="#create-sbt-project-from-giter8-template">Create SBT Project from Giter8 Template</a></li>
+          <li class="level2"><a href="#next-steps">Next Steps</a></li>
+          <li class="level2"><a href="#releases">Releases</a></li>
+          <li class="level2"><a href="#snapshots">Snapshots</a></li>
+          <li class="level1"><a href="#gallery">Gallery</a></li>
+          <li class="level1"><a href="#resources">Resources</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="introduction" class="title">Introduction</h1>
+        
+        <h2 id="objectives" class="section"><a class="anchor-link left" href="#objectives"><i class="icofont-laika">&#xef71;</i></a>Objectives</h2>
+        <p>Practice coding in a strongly functional style and writing about it</p>
+        <p>No doubles (easy path to &quot;theorems for free&quot;)</p>
+        <p>Lawful AI</p>
+        
+        <h2 id="installation" class="section"><a class="anchor-link left" href="#installation"><i class="icofont-laika">&#xef71;</i></a>Installation</h2>
+        <p>Axle as a dependency of an SBT project.</p>
+        
+        <h3 id="install-sbt" class="section"><a class="anchor-link left" href="#install-sbt"><i class="icofont-laika">&#xef71;</i></a>Install SBT</h3>
+        <p>See <a href="http://www.scala-sbt.org/">SBT</a></p>
+        
+        <h3 id="create-sbt-project-from-giter8-template" class="section"><a class="anchor-link left" href="#create-sbt-project-from-giter8-template"><i class="icofont-laika">&#xef71;</i></a>Create SBT Project from Giter8 Template</h3>
+        <pre class="keep-together pdf epub"><code class="bash">sbt new axlelang/axle.g8</code></pre>
+        <p>(Less commonly used <code>axle-laws</code>, <code>axle-awt</code>, and <code>axle-parallel</code> are not included in seed project.)</p>
+        <p>In addition to the axle-lang.org jars are several other third party jars.
+        Axle is compiled with these jars in <code>provided</code> scope,
+        meaning that they are compiled and packaged with the expectation that the user of the Axle
+        jars will explicitly provide those dependencies.</p>
+        
+        <h3 id="next-steps" class="section"><a class="anchor-link left" href="#next-steps"><i class="icofont-laika">&#xef71;</i></a>Next Steps</h3>
+        <p>Run <code>sbt console</code> to launch the Scala REPL with the Axle jars in the classpath.
+        Axle works well interactively -- especially during prototyping, debugging, and testing.
+        Any of the Axle tutorials can be copied and pasted into the REPL.</p>
+        <p>To start writing code, check out <code>src/main/scala/example/Hello.scala</code>,
+        and go from there.</p>
+        
+        <h3 id="releases" class="section"><a class="anchor-link left" href="#releases"><i class="icofont-laika">&#xef71;</i></a>Releases</h3>
+        <p>0.6.5 is the most recent released version:</p>
+        <p>See the <a href="Appendix.html#road-map">Road Map</a> for more information on the release schedule.</p>
+        
+        <h3 id="snapshots" class="section"><a class="anchor-link left" href="#snapshots"><i class="icofont-laika">&#xef71;</i></a>Snapshots</h3>
+        <p>Snapshot versions are created for every commit and
+        hosted on the <a href="https://oss.sonatype.org/content/repositories/snapshots">Sonatype snapshot repo</a>.</p>
+        
+        <h2 id="gallery" class="section"><a class="anchor-link left" href="#gallery"><i class="icofont-laika">&#xef71;</i></a>Gallery</h2>
+        <p><a href="ChaosTheory.html#mandelbrot-set"><img src="/images/mandelbrot.png" alt="mandelbrot"></a></p>
+        <p><a href="RandomnessUncertainty.html#example-entropy-of-a-biased-coin"><img src="/images/coinentropy.svg" alt="coin entropy"></a></p>
+        <p><a href="RandomnessUncertainty.html#bayesian-networks"><img src="/images/alarm_bayes.svg" alt="alarm bayes"></a></p>
+        <p><a href="ChaosTheory.html#logistic-map"><img src="/images/logMap.png" alt="logistic map"></a></p>
+        <p><a href="GameTheory.html#poker"><img src="/images/poker_hands.svg" alt="poker hands"></a></p>
+        <p><a href="RandomnessUncertainty.html#probability-model"><img src="/images/iffy.svg" alt="probability monad"></a></p>
+        <p><a href="MachineLearning.html#example-irises"><img src="/images/k_means.svg" alt="cluster irises"></a></p>
+        <p><a href="MachineLearning.html#linear-regression"><img src="/images/lrerror.svg" alt="linear regression"></a></p>
+        <p><a href="Units.html#geo-coordinates"><img src="/images/sfo_hel_small.png" alt="geo coordinates"></a></p>
+        <p><a href="Visualization.html#example-plot-random-waves-over-time"><img src="/images/random_waves.svg" alt="random waves"></a></p>
+        
+        <h2 id="resources" class="section"><a class="anchor-link left" href="#resources"><i class="icofont-laika">&#xef71;</i></a>Resources</h2>
+        <ul>
+          <li>Chat on the gitter channel: <a href="https://gitter.im/axlelang/axle?utm_source=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="gitter"></a></li>
+          <li><a href="https://twitter.com/axledsl">@axledsl</a> Twitter handle</li>
+        </ul>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Appendix</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1"><a href="Introduction.html">Introduction</a></li>
+        <li class="level1"><a href="Foundation.html">Foundation</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
+        <li class="level1"><a href="MachineLearning.html">Machine Learning</a></li>
+        <li class="level1"><a href="Bioinformatics.html">Bioinformatics</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1 active"><a href="#">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Appendix</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#release-notes">Release Notes</a></li>
+          <li class="level2"><a href="#_0-6-1-5-april-may-2022">0.6.1-5 (April-May 2022)</a></li>
+          <li class="level2"><a href="#_0-6-0-cats-effect-for-axle-game-december-31-2020">0.6.0 cats.effect for axle.game (December 31, 2020)</a></li>
+          <li class="level2"><a href="#_0-5-4-sampler-axioms-package-reorg-september-28-2020">0.5.4 Sampler Axioms + package reorg (September 28, 2020)</a></li>
+          <li class="level2"><a href="#_0-5-3-september-13-2020">0.5.3 (September 13, 2020)</a></li>
+          <li class="level2"><a href="#_0-5-2-september-7-2020">0.5.2 (September 7, 2020)</a></li>
+          <li class="level2"><a href="#_0-4-1-june-4-2017">0.4.1 (June 4, 2017)</a></li>
+          <li class="level2"><a href="#_0-4-0-may-30-2017">0.4.0 (May 30, 2017)</a></li>
+          <li class="level2"><a href="#_0-3-6-may-29-2017">0.3.6 (May 29, 2017)</a></li>
+          <li class="level2"><a href="#_0-3-5-may-23-2017">0.3.5 (May 23, 2017)</a></li>
+          <li class="level2"><a href="#_0-3-4-may-22-2017">0.3.4 (May 22, 2017)</a></li>
+          <li class="level2"><a href="#_0-3-3-may-7-2017">0.3.3 (May 7, 2017)</a></li>
+          <li class="level2"><a href="#_0-3-2-may-6-2017">0.3.2 (May 6, 2017)</a></li>
+          <li class="level2"><a href="#_0-3-1-may-1-2017">0.3.1 (May 1, 2017)</a></li>
+          <li class="level2"><a href="#_0-3-0-april-12-2017">0.3.0 (April 12, 2017)</a></li>
+          <li class="level2"><a href="#_0-2-8-march-28-2016">0.2.8 (March 28, 2016)</a></li>
+          <li class="level2"><a href="#_0-2-7-january-2016">0.2.7 (January 2016)</a></li>
+          <li class="level2"><a href="#_0-2-6-november-2016">0.2.6 (November 2016)</a></li>
+          <li class="level2"><a href="#_0-2-5-october-2016">0.2.5 (October 2016)</a></li>
+          <li class="level2"><a href="#_0-2-4-september-5-2016">0.2.4 (September 5, 2016)</a></li>
+          <li class="level2"><a href="#_0-2-3-july-30-2016">0.2.3 (July 30, 2016)</a></li>
+          <li class="level2"><a href="#_0-2-2-october-10-2015">0.2.2 (October 10, 2015)</a></li>
+          <li class="level2"><a href="#_0-2-0-august-12-2015">0.2.0 (August 12, 2015)</a></li>
+          <li class="level2"><a href="#_0-1-13-through-0-1-17-october-12-2014">0.1.13 through 0.1.17 (October 12, 2014)</a></li>
+          <li class="level2"><a href="#_0-1-m12-june-26-2014">0.1-M12 (June 26, 2014)</a></li>
+          <li class="level2"><a href="#_0-1-m11-february-26-2014">0.1-M11 (February 26, 2014)</a></li>
+          <li class="level2"><a href="#_0-1-m10-may-14-2013">0.1-M10 (May 14, 2013)</a></li>
+          <li class="level2"><a href="#_0-1-m9-april-7-2013">0.1-M9 (April 7, 2013)</a></li>
+          <li class="level2"><a href="#_0-1-m8-march-11-2013">0.1-M8 (March 11, 2013)</a></li>
+          <li class="level2"><a href="#_0-1-m7-february-19-2013">0.1-M7 (February 19, 2013)</a></li>
+          <li class="level2"><a href="#_0-1-m6-february-13-2013">0.1-M6 (February 13, 2013)</a></li>
+          <li class="level2"><a href="#_0-1-m5-january-1-2013">0.1-M5 (January 1, 2013)</a></li>
+          <li class="level2"><a href="#_0-1-m4-december-16-2013">0.1-M4 (December 16, 2013)</a></li>
+          <li class="level2"><a href="#_0-1-m3-december-11-2012">0.1-M3 (December 11, 2012)</a></li>
+          <li class="level1"><a href="#_0-1-m2-october-24-2012">0.1.M2 (October 24, 2012)</a></li>
+          <li class="level2"><a href="#_0-1-m1-july-15-2012">0.1.M1 (July 15, 2012)</a></li>
+          <li class="level1"><a href="#road-map">Road Map</a></li>
+          <li class="level2"><a href="#_0-6-5">0.6.5</a></li>
+          <li class="level2"><a href="#_0-7-x-scala-3">0.7.x Scala 3</a></li>
+          <li class="level2"><a href="#_0-8-x-game">0.8.x Game</a></li>
+          <li class="level2"><a href="#_0-9-x-randomness-and-uncertainty">0.9.x Randomness and Uncertainty</a></li>
+          <li class="level2"><a href="#_0-10-x-bugs-and-adoption-barriers">0.10.x Bugs and adoption barriers</a></li>
+          <li class="level2"><a href="#_0-11-x-text-improvements">0.11.x Text improvements</a></li>
+          <li class="level2"><a href="#_0-12-x-visualization">0.12.x Visualization</a></li>
+          <li class="level2"><a href="#_0-13-x-mathematics">0.13.x Mathematics</a></li>
+          <li class="level1"><a href="#build-and-deploy">Build and Deploy</a></li>
+          <li class="level2"><a href="#publish-snapshots">Publish snapshots</a></li>
+          <li class="level2"><a href="#release-new-version">Release new version</a></li>
+          <li class="level2"><a href="#update-site">Update Site</a></li>
+          <li class="level2"><a href="#verify-before-update">Verify before update</a></li>
+          <li class="level2"><a href="#references-for-build-and-deploy">References for Build and Deploy</a></li>
+          <li class="level1"><a href="#history">History</a></li>
+          <li class="level2"><a href="#αχλε">αχλε</a></li>
+          <li class="level2"><a href="#project-history-references">Project History References</a></li>
+          <li class="level1"><a href="#author">Author</a></li>
+          <li class="level1"><a href="#videos">Videos</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="appendix" class="title">Appendix</h1>
+        
+        <h2 id="release-notes" class="section"><a class="anchor-link left" href="#release-notes"><i class="icofont-laika">&#xef71;</i></a>Release Notes</h2>
+        <p>See <a href="#road-map">Road Map</a> for the plan of upcoming releases and features.</p>
+        
+        <h3 id="_0-6-1-5-april-may-2022" class="section"><a class="anchor-link left" href="#_0-6-1-5-april-may-2022"><i class="icofont-laika">&#xef71;</i></a>0.6.1-5 (April-May 2022)</h3>
+        <ul>
+          <li>CI/CD and Site enhancements</li>
+        </ul>
+        <ul>
+          <li>Automated releases via <code>sbt-ci-release</code></li>
+        </ul>
+        <ul>
+          <li>Move away from PRs</li>
+        </ul>
+        <ul>
+          <li>Adopt Laika for site and PDF generation</li>
+        </ul>
+        
+        <h3 id="_0-6-0-cats-effect-for-axle-game-december-31-2020" class="section"><a class="anchor-link left" href="#_0-6-0-cats-effect-for-axle-game-december-31-2020"><i class="icofont-laika">&#xef71;</i></a>0.6.0 cats.effect for axle.game (December 31, 2020)</h3>
+        <ul>
+          <li>Wrap <code>axle.IO.getLine</code> in <code>F[_]</code></li>
+          <li>Remove from <code>Game</code>: method <code>probabilityDist</code>, <code>sampler</code>, and type params <code>V</code> and <code>PM[_, _]</code></li>
+          <li>Move <code>strategyFor</code> from <code>Game</code> to <code>strategies</code> argument in <code>axle.game</code> package methods</li>
+          <li>Define <code>Indexed.slyce</code> for non-1-step Ranges</li>
+          <li>Improve <code>axle.lx.{Gold, Angluin}</code> coverage</li>
+          <li><code>axle.laws.generator</code> includes generators for GeoCoordinates, UnittedQuantities, and Units</li>
+          <li>Simpler <code>hardCodedStrategy</code> and <code>aiMover</code> signatures</li>
+          <li>Replace <code>randomMove</code> with <code>ConditionalProbabilityTable.uniform</code></li>
+        </ul>
+        
+        <h3 id="_0-5-4-sampler-axioms-package-reorg-september-28-2020" class="section"><a class="anchor-link left" href="#_0-5-4-sampler-axioms-package-reorg-september-28-2020"><i class="icofont-laika">&#xef71;</i></a>0.5.4 Sampler Axioms + package reorg (September 28, 2020)</h3>
+        <ul>
+          <li>
+            <p>Sampler Axioms</p>
+            <ol class="arabic">
+              <li>ProbabilityOf(RegionEq(sample(gen))) &gt; 0?</li>
+              <li>Sampled distribution converges to model&#39;s</li>
+            </ol>
+          </li>
+          <li>
+            <p>Pre-compute <code>ConditionalProbabilityTable.bars</code> for <code>Sampler</code> witness</p>
+          </li>
+          <li>
+            <p>Move everything from <code>axle._</code> into sub-packages (<code>algebra</code>, <code>math</code>, <code>logic</code>)</p>
+          </li>
+          <li>
+            <p>Organize <code>axle.algebra._</code> package object</p>
+          </li>
+          <li>
+            <p><code>axle.laws.generator</code></p>
+          </li>
+          <li>
+            <p><code>rationalProbabilityDist</code> is now implicitly available</p>
+          </li>
+        </ul>
+        
+        <h3 id="_0-5-3-september-13-2020" class="section"><a class="anchor-link left" href="#_0-5-3-september-13-2020"><i class="icofont-laika">&#xef71;</i></a>0.5.3 (September 13, 2020)</h3>
+        <ul>
+          <li>
+            <p>Split <code>ProbabilityModel</code> into three new typeclasses
+            -- <code>Bayes</code>, <code>Kolmogorov</code>, <code>Sampler</code> --
+            as well as <code>cats.Monad</code>.
+            The three axle typeclasses include syntax.</p>
+          </li>
+          <li>
+            <p>Rename <code>ConditionalProbabilityTable.values</code> to <code>domain</code></p>
+          </li>
+          <li>
+            <p>Bugs fixed</p>
+          </li>
+        </ul>
+        <ul>
+          <li>Bayes axiom should avoid P(A) == P(B) == 0</li>
+        </ul>
+        <ul>
+          <li><code>UnittedQuantity</code> <code>LengthSpace</code> unit mismatch</li>
+        </ul>
+        <ul>
+          <li>
+            <p><code>BarChart</code> was missing <code>Order[C]</code></p>
+          </li>
+          <li>
+            <p>Expanded documentation</p>
+          </li>
+        </ul>
+        
+        <h3 id="_0-5-2-september-7-2020" class="section"><a class="anchor-link left" href="#_0-5-2-september-7-2020"><i class="icofont-laika">&#xef71;</i></a>0.5.2 (September 7, 2020)</h3>
+        <ul>
+          <li>Move to Scala 2.12 and 2.13</li>
+          <li>Changes in <code>axle.game</code> to provide <code>Generator</code> where needed, and return a <code>ConditionalProbabilityTable0</code></li>
+          <li>Redo <code>axle.stats</code></li>
+        </ul>
+        <ul>
+          <li><code>ProbabilityModel</code> typeclass (refactored from <code>Distribution</code>) including syntactic support</li>
+        </ul>
+        <ul>
+          <li>Implicitly conjurable <code>cats.Monad</code> from a <code>ProbabilityModel</code>, which supports for comprehensions via cats syntax support</li>
+        </ul>
+        <ul>
+          <li><code>Variable</code> instead of <code>RandomVariable</code></li>
+        </ul>
+        <ul>
+          <li>remove <code>Bayes</code></li>
+          <li><code>axle.quantumcircuit</code> package for modelling computing with quantum circuits</li>
+          <li>Replace <code>axle.agebra.Zero</code> with <code>spire.algebra.AdditiveMonoid.zero</code></li>
+          <li>Remove <code>axle-spark</code> (Spark &quot;spoke&quot;) for now</li>
+          <li>Move <code>axle.ml.distance</code> to <code>axle.algebra.distance</code></li>
+          <li><code>axle.dummy</code> for a handful of scanLeft calls</li>
+          <li>Remove Spark impacts on typeclasses in <code>axle.algebra</code>. Eg: Spark&#39;s <code>ClassTag</code> requirement <code>map</code> created the difficulty:</li>
+        </ul>
+        <ul>
+          <li><code>Functor</code>: removed and replaced with <code>cats.Functor</code></li>
+        </ul>
+        <ul>
+          <li><code>Scanner</code>, <code>Aggregator</code>, <code>Zipper</code>, <code>Indexed</code>, <code>Talliable</code>, <code>Finite</code>: Refactored as Kind-1 typeclasses</li>
+          <li>Vertex and Edge projections for jung graphs</li>
+          <li>Fix <code>axle.joda.TicsSpec</code> handling of timezones</li>
+          <li>ScaleExp works with negative exponent</li>
+          <li>ScalaCheck tests for</li>
+        </ul>
+        <ul>
+          <li>Group and Module of UnittedQuantity</li>
+        </ul>
+        <ul>
+          <li>MetricSpace axle.algebra.GeoMetricSpace</li>
+          <li><code>axle.ml.GeneticAlgorithm</code> rewritten in terms of <a href="https://github.com/milessabin/kittens">kittens</a></li>
+          <li><code>Show</code>, <code>Order</code>, <code>Eq</code> witnesses</li>
+        </ul>
+        <ul>
+          <li>Eq.fromUniversalEquals where applicable</li>
+        </ul>
+        <ul>
+          <li>SAM inference elsewhere</li>
+          <li>Remove <code>axle.string</code> and <code>axle.show</code>.</li>
+        </ul>
+        <ul>
+          <li>Replace uses with <code>.show</code> from <code>cats.implicits</code> or show string interpolation</li>
+          <li>Remove extraneous <code>cutoff</code> argument for <code>PCA</code></li>
+          <li>Replace Tut with MDoc</li>
+          <li>Lawful ScalaCheck tests for</li>
+        </ul>
+        <ul>
+          <li><code>Module</code>s in <code>axle.algebra</code></li>
+        </ul>
+        <ul>
+          <li><code>SimilaritySpace</code>s for <code>SmithWaterman</code> &amp; <code>NeedlemanWunsch</code></li>
+          <li>Fix <code>Order[Card]</code></li>
+          <li><code>Deck.riffleShuffle</code></li>
+          <li><code>GuessRiffle</code> game</li>
+          <li><code>axle.algebra.etc</code> via <code>axle.algebra.EnrichedRinged</code></li>
+          <li><code>bernoulliDistribution</code></li>
+          <li><code>axle.stats.expectation(CPT)</code></li>
+          <li><code>axle.IO</code> consolidates IO to <code>cats.effect</code> (eg <code>[F[_]: ContextShift: Sync]</code>)</li>
+          <li>Create <code>axle-awt</code>, <code>axle-xml</code>, and <code>axle-jogl</code> (leaving <code>axle.scene.{Shape,Color}</code> in <code>axle-core</code>)</li>
+          <li>Remove <code>axle-jogl</code> due to instability of underlying dependencies</li>
+        </ul>
+        
+        <h3 id="_0-4-1-june-4-2017" class="section"><a class="anchor-link left" href="#_0-4-1-june-4-2017"><i class="icofont-laika">&#xef71;</i></a>0.4.1 (June 4, 2017)</h3>
+        <ul>
+          <li>Fix all warnings, and turn on fatal warnings</li>
+          <li>DrawPanel typeclass</li>
+          <li>Configurable visualization parameters for {un,}directedGraph and BayesianNetwork</li>
+          <li>Make Monix &quot;provided&quot;</li>
+        </ul>
+        
+        <h3 id="_0-4-0-may-30-2017" class="section"><a class="anchor-link left" href="#_0-4-0-may-30-2017"><i class="icofont-laika">&#xef71;</i></a>0.4.0 (May 30, 2017)</h3>
+        <ul>
+          <li>axle-core gets axle-visualize and most of axle-algorithm</li>
+          <li>new axle-wheel formed from axle-{test, games, languages} and parts of axle-algorithms</li>
+        </ul>
+        
+        <h3 id="_0-3-6-may-29-2017" class="section"><a class="anchor-link left" href="#_0-3-6-may-29-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.6 (May 29, 2017)</h3>
+        <ul>
+          <li>Replace Akka with Monix for animating visualizations</li>
+          <li><code>ScatterPlot</code> <code>play</code> to awt</li>
+        </ul>
+        
+        <h3 id="_0-3-5-may-23-2017" class="section"><a class="anchor-link left" href="#_0-3-5-may-23-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.5 (May 23, 2017)</h3>
+        <ul>
+          <li>Move math methods from <code>axle.algebra._</code> package object to <code>axle.math._</code></li>
+        </ul>
+        
+        <h3 id="_0-3-4-may-22-2017" class="section"><a class="anchor-link left" href="#_0-3-4-may-22-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.4 (May 22, 2017)</h3>
+        <ul>
+          <li>Move mathy methods from <code>axle._</code> package object to new <code>axle.math._</code> package object</li>
+          <li>Sieve of Eratosthenes</li>
+          <li>Remove some <code>Eq</code> and <code>Order</code> witnesses from <code>axle._</code> as they are now available in <code>cats._</code></li>
+          <li>Revert Tut to version 0.4.8</li>
+        </ul>
+        
+        <h3 id="_0-3-3-may-7-2017" class="section"><a class="anchor-link left" href="#_0-3-3-may-7-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.3 (May 7, 2017)</h3>
+        <ul>
+          <li><code>BarChart.hoverof</code> -- center text in bar</li>
+          <li><code>BarChart{,Grouped}.linkOf</code></li>
+        </ul>
+        
+        <h3 id="_0-3-2-may-6-2017" class="section"><a class="anchor-link left" href="#_0-3-2-may-6-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.2 (May 6, 2017)</h3>
+        <ul>
+          <li>Remove `axle.jblas.{additiveCMonoidDoubleMatrix, multiplicativeMonoidDoubleMatrix, module, ring}</li>
+          <li><code>axle.math.exponentiateByRecursiveSquaring</code></li>
+          <li>Rename <code>fibonacci*</code> methods</li>
+          <li><code>PixelatedColoredArea</code> should take a function that is given a rectangle (not just a point)</li>
+          <li>Logistic Map vis using <code>PixelatedColoredArea</code> (documentation)</li>
+        </ul>
+        
+        <h3 id="_0-3-1-may-1-2017" class="section"><a class="anchor-link left" href="#_0-3-1-may-1-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.1 (May 1, 2017)</h3>
+        <ul>
+          <li><code>BarChart*.hoverOf</code></li>
+          <li><code>BarChart*</code> label angle is Option. None indicates no labels below bars.</li>
+          <li><code>axle.xml</code> package in axle-visualize</li>
+        </ul>
+        
+        <h3 id="_0-3-0-april-12-2017" class="section"><a class="anchor-link left" href="#_0-3-0-april-12-2017"><i class="icofont-laika">&#xef71;</i></a>0.3.0 (April 12, 2017)</h3>
+        <ul>
+          <li>Scala org to Typelevel</li>
+          <li>Fix malformed distribution in ConditionalProbabilityTable and TallyDistribution0</li>
+          <li>Depend on Spire 0.14.1 (fix mistaken dependency on snapshot release in 0.2.8)</li>
+        </ul>
+        
+        <h3 id="_0-2-8-march-28-2016" class="section"><a class="anchor-link left" href="#_0-2-8-march-28-2016"><i class="icofont-laika">&#xef71;</i></a>0.2.8 (March 28, 2016)</h3>
+        <ul>
+          <li>Fix SVG rendering of negative values in BarChart</li>
+          <li>Make more arguments to vis components functions (colorOf, labelOf, diameterOf)</li>
+          <li>Depend on Spire 0.13.1-SNAPSHOT (which depends on Typelevel Algebra)</li>
+        </ul>
+        
+        <h3 id="_0-2-7-january-2016" class="section"><a class="anchor-link left" href="#_0-2-7-january-2016"><i class="icofont-laika">&#xef71;</i></a>0.2.7 (January 2016)</h3>
+        <ul>
+          <li>Use cats-kernel&#39;s Eq and Order in favor of Spire&#39;s (with Shims to continue to work with Spire)</li>
+          <li>Convert tests to use scalatest (to match Cats and Spire)</li>
+        </ul>
+        
+        <h3 id="_0-2-6-november-2016" class="section"><a class="anchor-link left" href="#_0-2-6-november-2016"><i class="icofont-laika">&#xef71;</i></a>0.2.6 (November 2016)</h3>
+        <ul>
+          <li>Depends on cats-core (initially just for Show typeclass)</li>
+          <li>Strategy: <code>(G, MS) =&gt; Distribution[M, Rational]</code></li>
+          <li>LinearAlgebra.from{Column,Row}MajorArray</li>
+          <li>Implementation of Monty Hall using axle.game typeclasses</li>
+          <li>Implementaiton of Prisoner&#39;s Dilemma using axle.game typeclasses</li>
+          <li>Minor Poker fixes</li>
+        </ul>
+        
+        <h3 id="_0-2-5-october-2016" class="section"><a class="anchor-link left" href="#_0-2-5-october-2016"><i class="icofont-laika">&#xef71;</i></a>0.2.5 (October 2016)</h3>
+        <ul>
+          <li>Typeclasses for axle.game</li>
+          <li>Increase test coverage to 78%</li>
+        </ul>
+        
+        <h3 id="_0-2-4-september-5-2016" class="section"><a class="anchor-link left" href="#_0-2-4-september-5-2016"><i class="icofont-laika">&#xef71;</i></a>0.2.4 (September 5, 2016)</h3>
+        <ul>
+          <li>Redo all and extend documentation using Tut</li>
+          <li>Convert Build.scala to build.sbt</li>
+          <li>LinearAlgebra doc fixes / clarification</li>
+          <li>Make some axle.nlp.Corpus methods more consistent</li>
+          <li>Avoid using wget in axle.data._</li>
+          <li>float*Module witnesses in axle._</li>
+        </ul>
+        
+        <h3 id="_0-2-3-july-30-2016" class="section"><a class="anchor-link left" href="#_0-2-3-july-30-2016"><i class="icofont-laika">&#xef71;</i></a>0.2.3 (July 30, 2016)</h3>
+        <ul>
+          <li>ScatterPlot</li>
+          <li>Logistic Map and Mandelbrot</li>
+          <li>PixelatedColoredArea</li>
+        </ul>
+        
+        <h3 id="_0-2-2-october-10-2015" class="section"><a class="anchor-link left" href="#_0-2-2-october-10-2015"><i class="icofont-laika">&#xef71;</i></a>0.2.2 (October 10, 2015)</h3>
+        <ul>
+          <li>Pythagorean means</li>
+        </ul>
+        
+        <h3 id="_0-2-0-august-12-2015" class="section"><a class="anchor-link left" href="#_0-2-0-august-12-2015"><i class="icofont-laika">&#xef71;</i></a>0.2.0 (August 12, 2015)</h3>
+        <ul>
+          <li>reorganize to minimize dependencies from axle-core, with witnesses in the axle-X jars (axle.X package) for library X</li>
+          <li>LinearAlgebra typeclass</li>
+          <li>Functor, Aggregatable typeclasses</li>
+          <li>Show, Draw, Play typeclasses</li>
+          <li><a href="mailto:MAP@k">MAP@k</a>, harmonicMean</li>
+          <li>axle-spark</li>
+          <li>Apache 2.0 license</li>
+        </ul>
+        
+        <h3 id="_0-1-13-through-0-1-17-october-12-2014" class="section"><a class="anchor-link left" href="#_0-1-13-through-0-1-17-october-12-2014"><i class="icofont-laika">&#xef71;</i></a>0.1.13 through 0.1.17 (October 12, 2014)</h3>
+        <ul>
+          <li>Distribution as a Monad</li>
+          <li>Spire &#39;Module&#39; for axle.quanta</li>
+        </ul>
+        
+        <h3 id="_0-1-m12-june-26-2014" class="section"><a class="anchor-link left" href="#_0-1-m12-june-26-2014"><i class="icofont-laika">&#xef71;</i></a>0.1-M12 (June 26, 2014)</h3>
+        <ul>
+          <li>Upgrade to Scala 2.11.1</li>
+          <li>Field context bound for classes in axle.stats and pgm</li>
+          <li>axle.quanta conversions as Rational</li>
+        </ul>
+        
+        <h3 id="_0-1-m11-february-26-2014" class="section"><a class="anchor-link left" href="#_0-1-m11-february-26-2014"><i class="icofont-laika">&#xef71;</i></a>0.1-M11 (February 26, 2014)</h3>
+        <ul>
+          <li>REPL</li>
+          <li>3d visualizations using OpenGL (via jogl)</li>
+          <li>More prevalent use of Spire typeclasses and number types</li>
+        </ul>
+        
+        <h3 id="_0-1-m10-may-14-2013" class="section"><a class="anchor-link left" href="#_0-1-m10-may-14-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M10 (May 14, 2013)</h3>
+        <ul>
+          <li>bug fixes in cards and poker</li>
+          <li>api changes and bug fixes to visualizations required by hammer</li>
+          <li>upgrade to akka 2.2-M3 and spire 0.4.0</li>
+        </ul>
+        
+        <h3 id="_0-1-m9-april-7-2013" class="section"><a class="anchor-link left" href="#_0-1-m9-april-7-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M9 (April 7, 2013)</h3>
+        <ul>
+          <li>DNA sequence alignment algorithms in <code>axle.bio</code></li>
+          <li><code>axle.logic</code></li>
+          <li>multi-project build, rename axle to axle-core, and split out axle-visualize</li>
+        </ul>
+        
+        <h3 id="_0-1-m8-march-11-2013" class="section"><a class="anchor-link left" href="#_0-1-m8-march-11-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M8 (March 11, 2013)</h3>
+        <ul>
+          <li>Akka for streaming data updates to Plot and Chart</li>
+          <li>Tartarus English stemmer</li>
+          <li>Create <code>axle.nlp</code> package and move much of <code>axle.lx</code> there</li>
+          <li>Move Bayesian Networks code to <code>axle.pgm</code></li>
+          <li><code>axle.actor</code> for Akka-related code</li>
+        </ul>
+        
+        <h3 id="_0-1-m7-february-19-2013" class="section"><a class="anchor-link left" href="#_0-1-m7-february-19-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M7 (February 19, 2013)</h3>
+        <ul>
+          <li>Use <code>spire.math.Number</code> in <code>axle.quanta</code></li>
+          <li>Use <code>spire.algebra.MetricSpace</code> for <code>axle.lx.*VectorSpace</code> and <code>axle.ml.distance.*</code></li>
+        </ul>
+        
+        <h3 id="_0-1-m6-february-13-2013" class="section"><a class="anchor-link left" href="#_0-1-m6-february-13-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M6 (February 13, 2013)</h3>
+        <ul>
+          <li>Initial version of <code>axle.algebra</code></li>
+          <li>No mutable state (except for permutations, combinations, and mutable buffer enrichment)</li>
+          <li><code>axle.quanta</code> conversion graph edges as functions</li>
+          <li>Redoing <code>JblasMatrixFactory</code> as <code>JblasMatrixModule</code> (preparing for &quot;cake&quot; pattern&quot;)</li>
+        </ul>
+        
+        <h3 id="_0-1-m5-january-1-2013" class="section"><a class="anchor-link left" href="#_0-1-m5-january-1-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M5 (January 1, 2013)</h3>
+        <ul>
+          <li>Bar Chart</li>
+          <li>Minimax</li>
+          <li>Texas Hold Em Poker</li>
+        </ul>
+        
+        <h3 id="_0-1-m4-december-16-2013" class="section"><a class="anchor-link left" href="#_0-1-m4-december-16-2013"><i class="icofont-laika">&#xef71;</i></a>0.1-M4 (December 16, 2013)</h3>
+        <ul>
+          <li>Clean up <code>axle.graph</code> by scrapping attempt at family polymorphism</li>
+          <li>Generalize InfoPlottable to QuantaPlottable</li>
+        </ul>
+        
+        <h3 id="_0-1-m3-december-11-2012" class="section"><a class="anchor-link left" href="#_0-1-m3-december-11-2012"><i class="icofont-laika">&#xef71;</i></a>0.1-M3 (December 11, 2012)</h3>
+        <ul>
+          <li>Immutable graphs</li>
+        </ul>
+        
+        <h2 id="_0-1-m2-october-24-2012" class="section"><a class="anchor-link left" href="#_0-1-m2-october-24-2012"><i class="icofont-laika">&#xef71;</i></a>0.1.M2 (October 24, 2012)</h2>
+        <ul>
+          <li>Genetic Algorithms</li>
+          <li>Bug: x and y axis outside of plot area</li>
+          <li>Naive Bayes</li>
+          <li><code>show()</code> in <code>axle.visualize</code></li>
+          <li>PCA</li>
+          <li>Immutable matrices</li>
+          <li>Optimize Plot of <code>axle.quanta</code></li>
+        </ul>
+        
+        <h3 id="_0-1-m1-july-15-2012" class="section"><a class="anchor-link left" href="#_0-1-m1-july-15-2012"><i class="icofont-laika">&#xef71;</i></a>0.1.M1 (July 15, 2012)</h3>
+        <ul>
+          <li>Jblas-backed Matrix</li>
+          <li>Jung-backed Graph</li>
+          <li>Quanta (units of measurement)</li>
+          <li>Linear Regression</li>
+          <li>K-means</li>
+        </ul>
+        
+        <h2 id="road-map" class="section"><a class="anchor-link left" href="#road-map"><i class="icofont-laika">&#xef71;</i></a>Road Map</h2>
+        <p>See <a href="#release-notes">Release Notes</a> for the record of previously released features.</p>
+        <ul>
+          <li>Near term <a href="Foundation.html#future-work">items</a> in site todo</li>
+          <li>tweet / post</li>
+        </ul>
+        
+        <h3 id="_0-6-5" class="section"><a class="anchor-link left" href="#_0-6-5"><i class="icofont-laika">&#xef71;</i></a>0.6.5</h3>
+        <ul>
+          <li>Near-term stuff from <a href="QuantumCircuits.html#future-work">quantum circuit future work</a></li>
+        </ul>
+        
+        <h3 id="_0-7-x-scala-3" class="section"><a class="anchor-link left" href="#_0-7-x-scala-3"><i class="icofont-laika">&#xef71;</i></a>0.7.x Scala 3</h3>
+        <p>See Scala 3 section of <a href="Foundation.html#future-work">future work</a> for foundation</p>
+        
+        <h3 id="_0-8-x-game" class="section"><a class="anchor-link left" href="#_0-8-x-game"><i class="icofont-laika">&#xef71;</i></a>0.8.x Game</h3>
+        <p>See <a href="GameTheory.html#future-work">Future Work</a> for Axle Game</p>
+        
+        <h3 id="_0-9-x-randomness-and-uncertainty" class="section"><a class="anchor-link left" href="#_0-9-x-randomness-and-uncertainty"><i class="icofont-laika">&#xef71;</i></a>0.9.x Randomness and Uncertainty</h3>
+        <p>Factoring and Bayesian Networks</p>
+        <p>See <a href="RandomnessUncertainty.html#future-work">Future Work</a> for Randomness and Uncertainty</p>
+        
+        <h3 id="_0-10-x-bugs-and-adoption-barriers" class="section"><a class="anchor-link left" href="#_0-10-x-bugs-and-adoption-barriers"><i class="icofont-laika">&#xef71;</i></a>0.10.x Bugs and adoption barriers</h3>
+        <p>See <a href="Foundation.html#future-work">Future work</a> for Foundation</p>
+        
+        <h3 id="_0-11-x-text-improvements" class="section"><a class="anchor-link left" href="#_0-11-x-text-improvements"><i class="icofont-laika">&#xef71;</i></a>0.11.x Text improvements</h3>
+        <ul>
+          <li>Near-term stuff from <a href="Text.html#future-work">text</a></li>
+        </ul>
+        
+        <h3 id="_0-12-x-visualization" class="section"><a class="anchor-link left" href="#_0-12-x-visualization"><i class="icofont-laika">&#xef71;</i></a>0.12.x Visualization</h3>
+        <p>See <a href="Visualization.html#future-work">future work</a> for axle visualization</p>
+        
+        <h3 id="_0-13-x-mathematics" class="section"><a class="anchor-link left" href="#_0-13-x-mathematics"><i class="icofont-laika">&#xef71;</i></a>0.13.x Mathematics</h3>
+        <p>See <a href="Math.html#future-work">future work</a></p>
+        
+        <h2 id="build-and-deploy" class="section"><a class="anchor-link left" href="#build-and-deploy"><i class="icofont-laika">&#xef71;</i></a>Build and Deploy</h2>
+        <p>For contributors</p>
+        <ul>
+          <li><a href="https://github.com/axlelang/axle">Source code</a> on GitHub</li>
+          <li>Build status on Github Actions <a href="https://github.com/axlelang/axle/actions?query=workflow%3A%22CI+Release%22"><img src="https://github.com/axlelang/axle/workflows/CI%20Release/badge.svg" alt="Build status"></a></li>
+          <li>Code coverage <a href="http://codecov.io/github/axlelang/axle?branch=main"><img src="http://codecov.io/github/axlelang/axle/coverage.svg?branch=main" alt="codecov"></a></li>
+        </ul>
+        
+        <h3 id="publish-snapshots" class="section"><a class="anchor-link left" href="#publish-snapshots"><i class="icofont-laika">&#xef71;</i></a>Publish snapshots</h3>
+        <p>Push commits to repo.</p>
+        <p>Monitor <a href="https://github.com/axlelang/axle/actions/workflows/ci_release.yml">progress</a> of github action.</p>
+        <p>Confirm jars are present at the <a href="https://oss.sonatype.org/content/repositories/snapshots/org/axle-lang/">sonatype snapshot repo</a></p>
+        
+        <h3 id="release-new-version" class="section"><a class="anchor-link left" href="#release-new-version"><i class="icofont-laika">&#xef71;</i></a>Release new version</h3>
+        <p>For example, tag with a version:</p>
+        <pre class="keep-together pdf epub"><code class="bash">git tag -a v0.1.6 -m &quot;v.0.1.6&quot;
+git push origin v0.1.6</code></pre>
+        <p>Monitor <a href="https://github.com/axlelang/axle/actions/workflows/ci_release.yml">progress</a></p>
+        <p>Confirm jars are present at the <a href="https://oss.sonatype.org/content/repositories/releases/org/axle-lang/">sonatype repo</a></p>
+        
+        <h3 id="update-site" class="section"><a class="anchor-link left" href="#update-site"><i class="icofont-laika">&#xef71;</i></a>Update Site</h3>
+        <p>Run the <code>site-update.sh</code> script</p>
+        <p>Monitor <a href="https://github.com/axlelang/axle/actions/workflows/pages/pages-build-deployment">progress</a> of action.</p>
+        <p>Verify by browsing to the <a href="https://www.axle-lang.org">site</a> or look at
+        the <code>gh-pages</code> <a href="https://github.com/axlelang/axle/tree/gh-pages">branch</a></p>
+        
+        <h3 id="verify-before-update" class="section"><a class="anchor-link left" href="#verify-before-update"><i class="icofont-laika">&#xef71;</i></a>Verify before update</h3>
+        <p>Just to do the build locally, run</p>
+        <pre class="keep-together pdf epub"><code class="bash">sbt -J-Xmx8G &#39;project axle-docs&#39; mdoc
+sbt &#39;project axle-docs&#39; laikaSite</code></pre>
+        <p>To preview the changes, do:</p>
+        <pre class="keep-together pdf epub"><code class="bash">sbt &#39;project axle-docs&#39; laikaPreview</code></pre>
+        <p>then browse to <a href="https://localhost:4242"><a href="https://localhost:4242">https://localhost:4242</a></a></p>
+        <p>If it looks good, push with:</p>
+        <pre class="keep-together pdf epub"><code class="bash">sbt &#39;project axle-docs&#39; ghpagesCleanSite ghpagesPushSite</code></pre>
+        <p>Monitor and verify as before.</p>
+        
+        <h3 id="references-for-build-and-deploy" class="section"><a class="anchor-link left" href="#references-for-build-and-deploy"><i class="icofont-laika">&#xef71;</i></a>References for Build and Deploy</h3>
+        <ul>
+          <li><a href="https://planet42.github.io/Laika/index.html">Laika</a></li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/http4s/http4s/pull/5313">http4s Laika PR</a></li>
+          <li><a href="https://www.scala-sbt.org/sbt-site/">sbt-site</a></li>
+          <li><a href="https://github.com/sbt/sbt-ghpages">sbt-ghpages</a></li>
+        </ul>
+        <ul>
+          <li>Note the instructions to set up a <code>gh-pages</code> branch</li>
+          <li><a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site">custom domain for github pages</a></li>
+        </ul>
+        <ul>
+          <li>Note instructions for apex domains</li>
+          <li><a href="https://github.com/xerial/sbt-sonatype">sbt-sonatype</a></li>
+        </ul>
+        <ul>
+          <li><a href="https://oss.sonatype.org/">sonatype</a> using credentials in <code>~/.sbt/1.0/sonatype.sbt</code></li>
+          <li><a href="https://github.com/sbt/sbt-ci-release">sbt-ci-release</a></li>
+        </ul>
+        
+        <h2 id="history" class="section"><a class="anchor-link left" href="#history"><i class="icofont-laika">&#xef71;</i></a>History</h2>
+        
+        <h3 id="αχλε" class="section"><a class="anchor-link left" href="#αχλε"><i class="icofont-laika">&#xef71;</i></a>αχλε</h3>
+        <p>Axle models a set of formal subjects that the author has encountered throughout his lifetime.
+        They take the form of functioning code that allows the reader to experiment with alternative examples.</p>
+        <p>Although the primary aim of this code is education and clarity, scalability and performance
+        are secondary goals.</p>
+        <p>The name &quot;axle&quot; was originally chosen because it sounds like &quot;Haskell&quot;.
+        Given the use of UTF symbols, I tried spelling it using Greek letters to get &quot;αχλε&quot;.
+        It turns out that this is the Etruscan spelling of
+        <a href="http://en.wikipedia.org/wiki/Achilles">Achilles</a></p>
+        <p><img src="https://upload.wikimedia.org/wikipedia/commons/4/4c/Etruscan_mural_achilles_Troilus.gif" alt="Achilles"></p>
+        <p>(<a href="http://en.wikipedia.org/wiki/File:Etruscan_mural_achilles_Troilus.gif">image context</a>)</p>
+        <p>Follow <a href="https://twitter.com/axledsl">@axledsl</a> on Twitter.</p>
+        
+        <h3 id="project-history-references" class="section"><a class="anchor-link left" href="#project-history-references"><i class="icofont-laika">&#xef71;</i></a>Project History References</h3>
+        
+        <h4 id="quanta" class="section"><a class="anchor-link left" href="#quanta"><i class="icofont-laika">&#xef71;</i></a>Quanta</h4>
+        <p>The first time I had the idea to group units into quanta was at NOCpulse (2000-2002).
+        NOCpulse was bought by Red Hat, which open-sourced the code.
+        There is still <a href="http://spacewalk.redhat.com/documentation/schema-doc/sql_sources/table/rhn_quanta.sql">evidence</a> of that early code online.</p>
+        <p>In a 2006 class given by <a href="http://en.wikipedia.org/wiki/Alan_Kay">Alan Kay</a> at UCLA,
+        I proposed a system for exploring and learning about scale.
+        The idea occurred to me after reading a news article about a new rocket engine that used the Hoover Dam as a
+        point of reference.
+        I wound up implementing another idea, but always meant to come back to it.</p>
+        
+        <h4 id="machine-learning" class="section"><a class="anchor-link left" href="#machine-learning"><i class="icofont-laika">&#xef71;</i></a>Machine Learning</h4>
+        <p>Based on many classes at Stanford (in the 90&#39;s) and UCLA (in the 00&#39;s),
+        and more recently the Coursera machine learning course in the Fall of 2011.
+        The inimitable <a href="http://www.amazon.com/Artificial-Intelligence-Modern-Approach-Edition/dp/0136042597/ref=sr_1_1?ie=UTF8">Artificial Intelligence: A Modern Approach</a> has been a mainstay throughout.</p>
+        
+        <h4 id="statistics-information-theory-bayesian-networks-amp-causality" class="section"><a class="anchor-link left" href="#statistics-information-theory-bayesian-networks-amp-causality"><i class="icofont-laika">&#xef71;</i></a>Statistics, Information Theory, Bayesian Networks, &amp;amp; Causality</h4>
+        <p>The Information Theory code is based on <a href="https://en.wikipedia.org/wiki/Thomas_M._Cover">Thomas Cover</a>&#39;s
+        <a href="http://www.amazon.com/Elements-Information-Theory-Telecommunications-Processing/dp/0471241954/ref=sr_1_1?ie=UTF8">Elements of Information Theory</a>
+        and his EE 376A course.</p>
+        <p>I implemented some Bayesian Networks code in Java around 2006 while
+        <a href="http://www.cs.ucla.edu/~darwiche/">Adnan Darwiche</a> class on the subject at UCLA.
+        The Axle version is based on his book,
+        <a href="http://www.amazon.com/Modeling-Reasoning-Bayesian-Networks-Darwiche/dp/0521884381/ref=sr_1_1?ie=UTF8">Modeling and Reasoning with Bayesian Networks</a></p>
+        <p>Similarly, I implemented ideas from <a href="http://bayes.cs.ucla.edu/jp_home.html">Judea Pearl</a>
+        UCLA course on Causality in Java.
+        The Axle version is based on his classic text <a href="http://www.amazon.com/Causality-Reasoning-Inference-Judea-Pearl/dp/052189560X/ref=sr_1_1?ie=UTF8">Causality</a></p>
+        
+        <h4 id="game-theory" class="section"><a class="anchor-link left" href="#game-theory"><i class="icofont-laika">&#xef71;</i></a>Game Theory</h4>
+        <p>As a senior CS major at Stanford in 1996, I did some
+        independent research with
+        Professor <a href="http://ai.stanford.edu/~koller/">Daphne Koller</a> and
+        PhD student <a href="http://www.gelberpfeffer.net/avi">Avi Pfeffer</a>.</p>
+        <p>This work spanned two quarters.
+        The first quarter involved using Koller and Pfeffer&#39;s
+        <a href="http://ai.stanford.edu/~koller/Papers/Koller+Pfeffer:AIJ97.pdf">Gala</a> language
+        (a Prolog-based DSL for describing games) to study a small
+        version of Poker and solve for the <a href="http://en.wikipedia.org/wiki/Nash_equilibrium">Nash equilibria</a>.
+        The second (still unfinished) piece was to extend the
+        solver to handle non-zero-sum games.</p>
+        <p>The text I was using at the time was
+        <a href="http://www.rasmusen.org/">Eric Rasmusen</a>&#39;s
+        <a href="http://www.amazon.com/Games-Information-Introduction-Game-Theory/dp/1405136669/ref=sr_1_1?ie=UTF8">Games and Information</a></p>
+        
+        <h4 id="linguistics" class="section"><a class="anchor-link left" href="#linguistics"><i class="icofont-laika">&#xef71;</i></a>Linguistics</h4>
+        <p>Based on notes from <a href="http://www.linguistics.ucla.edu/people/stabler/">Ed Stabler</a>&#39;s
+        graduate courses on language evolution and
+        computational linguistics (Lx 212 08) at UCLA.</p>
+        
+        <h2 id="author" class="section"><a class="anchor-link left" href="#author"><i class="icofont-laika">&#xef71;</i></a>Author</h2>
+        <p><img src="http://www.gravatar.com/avatar/e6a25e87deb4da4ff6aa52d3376d3767.png" alt="Adam Pingel"></p>
+        <p>Adam Pingel is an Iowa native who wrote his first lines of code on an Apple ][ in 1983.</p>
+        <p>He moved to the San Francisco Bay Area in 1992 to study Computer Science at Stanford.
+        After graduating in 1996, spent several years at Excite.com, helping it scale to become the 3rd largest site on the web at the time.  After Excite he spent two years at NOCpulse -- a startup acquired by Red Hat.</p>
+        <p>In 2002 he left Silicon Valley to join the UCLA Computer Science department&#39;s PhD program.
+        His major field was programming languages and systems, and his minor fields were AI and Linguistics.
+        His first year he worked as a TA for the undergraduate Artificial Intelligence class.
+        The second was spent as a graduate student researcher working on programming tools for artists at
+        the Hypermedia Lab (a part of the UCLA School of Theater, Film, and Television).
+        From 2005 - 2009 he mixed graduate studies with consulting.
+        He received an MS along the way, and ultimately decided to pursue his research interests in the open source community.</p>
+        <p>In April 2009 he moved to San Francisco and joined the Independent Online Distribution Alliance (IODA) as the Lead Systems Engineer.
+        During his time there, IODA was acquired by Sony Music and then The Orchard.
+        In April 2012 he co-founded Eddgy.
+        In May 2013 he joined VigLink as Staff Software Engineer and later managed a team there.
+        In September 2015 he became VP of Engineering at Ravel Law.
+        In June 2017 Ravel Law was acquired by LexisNexis, where he became a Sr. Director.
+        In late 2019, he became the CTO of Global Platforms.
+        In early 2022, he joined IBM&#39;s <a href="https://research.ibm.com/teams/accelerated-discovery">Accelerated Science</a> team as a technical lead.</p>
+        <p>For more background, see his accounts on:</p>
+        <ul>
+          <li><a href="http://www.linkedin.com/in/adampingel">LinkedIn</a></li>
+          <li><a href="http://stackoverflow.com/users/528536/adam-p">StackOverflow</a></li>
+          <li><a href="https://twitter.com/#!/pingel">@pingel</a> on Twitter</li>
+          <li><a href="http://scholar.google.com/citations?user=xj0ZeKQAAAAJ">Google Scholar</a></li>
+        </ul>
+        <p>He can be reached at <code>adam@axle-lang.org</code>.</p>
+        
+        <h2 id="videos" class="section"><a class="anchor-link left" href="#videos"><i class="icofont-laika">&#xef71;</i></a>Videos</h2>
+        <p>Talk at Scala by the Bay 2015
+        &lt;iframe
+          width=&quot;320&quot;
+          height=&quot;195&quot;
+          src=&quot;http://www.youtube.com/embed/Y6NiPx-YpdE&quot;
+          frameborder=&quot;0&quot;&gt;
+        &lt;/iframe&gt;</p>
+        <p>Scala Introduction using the REPL
+        &lt;iframe
+          width=&quot;320&quot;
+          height=&quot;195&quot;
+          src=&quot;http://www.youtube.com/embed/N97GxqTFKAI&quot;
+          frameborder=&quot;0&quot;&gt;
+        &lt;/iframe&gt;</p>
+        <p>Higher Order Scala Part 1: Functions as Arguments
+        &lt;iframe
+          width=&quot;320&quot;
+          height=&quot;195&quot;
+          src=&quot;http://www.youtube.com/embed/a6t7BYj4ZHo&quot;
+          frameborder=&quot;0&quot;&gt;
+        &lt;/iframe&gt;</p>
+        <p>Higher Order Scala Part 2: Map &amp; Functors
+        &lt;iframe
+          width=&quot;320&quot;
+          height=&quot;195&quot;
+          src=&quot;http://www.youtube.com/embed/YblKDlPqLnc&quot;
+          frameborder=&quot;0&quot;&gt;
+        &lt;/iframe&gt;</p>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>
