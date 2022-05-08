@@ -73,23 +73,33 @@
 ### Near term
 
 * Convert to single-document chapters
+  * foundation
+  * units
+  * math
+  * visualization
+  * random_uncertain
+  * game_theory
+  * machine_learning
+  * bioinformatics
+  * text
+  * quantum_circuits
+  * appendix
+
 * Logo for Laika site
 * Cover image for Laika PDF
 
-
 * Copy some test cases to QuantumCircuits.md
-
-* links from Gallery should be to deeper, anchored position in target .md file
-  * Eg ChaosTheory.md (logistic map and mandelbrot)
-  * Visualization.md's reference to Introduction's Gallery
 
 * Docs
   * General
     * A few words in README for each section
     * Expand acronyms and include wikipedia links in "Future Work" sections
     * Make dependencies clear in each section
+    * Some links should point to anchored position in target
+      * Gallery to ChaosTheory.md (logistic map and mandelbrot)
+      * Visualization.md's reference to Introduction's Gallery
   * Landing Page
-    * More teasers
+    * More teasers (including a warning about rate of change)
   * Introduction
     * Write "Objectives"
     * Smaller images for Gallery
