@@ -22,7 +22,7 @@ object AxleLaika {
           documentationLinks = Seq(
             TextLink.internal(Root / "Introduction.md", "Introduction"),
             TextLink.internal(Root / "Foundation.md", "Foundation"),
-            TextLink.internal(Root / "units" / "Units.md", "Units of Measurement"),
+            TextLink.internal(Root / "Units.md", "Units of Measurement"),
             TextLink.internal(Root / "math" / "Math.md", "Math"),
             TextLink.internal(Root / "visualization" / "Visualize.md", "Visualization"),
             TextLink.internal(Root / "random_uncertain" / "RandomnessUncertainty.md", "Randomness and Uncertainty"),

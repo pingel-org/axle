@@ -1,6 +1,8 @@
-# Quanta
+# Units of Measurement
 
-## Quanta, Units, and Conversions
+## Quanta
+
+### Quanta, Units, and Conversions
 
 `UnittedQuantity` is the primary case class in `axle.quanta`
 
@@ -59,7 +61,10 @@ implicit val showDDAt1 = new Show[Double => Double] {
 
 import axle.visualize._
 
-val dgVis = DirectedGraphVisualization[DirectedSparseGraph[UnitOfMeasurement[Distance],Double => Double], UnitOfMeasurement[Distance], Double => Double](distanceConverter.conversionGraph)
+val dgVis =
+  DirectedGraphVisualization[
+    DirectedSparseGraph[UnitOfMeasurement[Distance],Double => Double],
+    UnitOfMeasurement[Distance], Double => Double](distanceConverter.conversionGraph)
 ```
 
 Render to an SVG.
@@ -73,7 +78,7 @@ dgVis.svg[IO]("@DOCWD@/images/Distance.svg").unsafeRunSync()
 
 ![Distance conversions](/images/Distance.svg)
 
-## Units
+### Units
 
 A conversion graph must be created with type parameters specifying the numeric type to
 be used in unitted quantity, as well as a directed graph type that will store the conversion
@@ -107,7 +112,7 @@ foot
 meter
 ```
 
-## Construction
+### Construction
 
 Values with units are constructed with the right-associative `*:` method on any spire `Number` type
 as long as a spire `Field` is implicitly available.
@@ -124,7 +129,7 @@ as long as a spire `Field` is implicitly available.
 200d *: watt
 ```
 
-## Show
+### Show
 
 A witness for the `cats.Show` typeclass is defined.
 `show` will return a `String` representation.
@@ -135,11 +140,11 @@ import cats.implicits._
 (10d *: gram).show
 ```
 
-## Conversion
+### Conversion
 
 A Quantum defines a directed graph, where the UnitsOfMeasurement
 are the vertices, and the Conversions define the directed edges.
-See the [Graph](../Foundation.md#graph) package for more on how graphs work.
+See the [Graph](Foundation.md#graph) package for more on how graphs work.
 
 Quantities can be converted into other units of measurement.
 This is possible as long as 1) the values are in the same
@@ -155,7 +160,7 @@ Converting between quanta is not allowed, and is caught at compile time:
 (1 *: gram) in mile
 ```
 
-## Math
+### Math
 
 Addition and subtraction are defined on Quantity by converting the
 right Quantity to the unit of the left.
@@ -190,3 +195,116 @@ import spire.implicits.rightModuleOps
 ```scala mdoc
 ((32d *: century) :* (1d/3)).show
 ```
+
+## Unitted Trigonometry
+
+Versions of the trigonometric functions sine, cosine, and tangent, require that the arguments are Angles.
+
+### Preamble
+
+Imports, implicits, etc
+
+```scala mdoc:silent:reset
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+
+import cats.implicits._
+
+import spire.algebra.Field
+import spire.algebra.Trig
+
+import axle.math._
+import axle.quanta.Angle
+import axle.quanta.UnitOfMeasurement
+import axle.algebra.modules.doubleRationalModule
+import axle.jung.directedGraphJung
+
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
+
+implicit val angleConverter = Angle.converterGraphK2[Double, DirectedSparseGraph]
+
+import angleConverter.degree
+import angleConverter.radian
+```
+
+### Examples
+
+```scala mdoc
+cosine(10d *: degree)
+
+sine(3d *: radian)
+
+tangent(40d *: degree)
+```
+
+## Geo Coordinates
+
+Imports and implicits
+
+```scala mdoc:silent:reset
+import edu.uci.ics.jung.graph.DirectedSparseGraph
+
+import cats.implicits._
+
+import spire.algebra.Field
+import spire.algebra.Trig
+import spire.algebra.NRoot
+
+import axle._
+import axle.quanta._
+import axle.algebra.GeoCoordinates
+import axle.jung.directedGraphJung
+import axle.algebra.modules.doubleRationalModule
+
+implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
+implicit val trigDouble: Trig[Double] = spire.implicits.DoubleAlgebra
+implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
+
+implicit val angleConverter = Angle.converterGraphK2[Double, DirectedSparseGraph]
+import angleConverter.°
+```
+
+Locations of SFO and HEL airports:
+
+```scala mdoc:silent
+val sfo = GeoCoordinates(37.6189 *: °, 122.3750 *: °)
+```
+
+```scala mdoc
+sfo.show
+```
+
+```scala mdoc:silent
+val hel = GeoCoordinates(60.3172 *: °, -24.9633 *: °)
+```
+
+```scala mdoc
+hel.show
+```
+
+Import the `LengthSpace`
+
+```scala mdoc
+import axle.algebra.GeoCoordinates.geoCoordinatesLengthSpace
+```
+
+Use it to compute the points at 10% increments from SFO to HEL
+
+```scala mdoc:silent
+val midpoints = (0 to 10).map(i => geoCoordinatesLengthSpace.onPath(sfo, hel, i / 10d))
+```
+
+```scala mdoc
+midpoints.map(_.show)
+```
+
+![SFO to HEL](/images/sfo_hel.png)
+
+## Future Work
+
+The methods `over` and `by` are used to multiply and divide other values with units.
+This behavior is not yet implemented.
+
+* Shapeless for compound Quanta and Bayesian Networks
+* Physics (eg, how Volume relates to Flow)
+* Rm throws from axle.quanta.UnitConverterGraph
