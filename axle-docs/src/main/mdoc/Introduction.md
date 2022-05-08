@@ -42,7 +42,7 @@ and go from there.
 
 @RELEASE_VERSION@ is the most recent released version:
 
-See the [Road Map](appendix/RoadMap.md) for more information on the release schedule.
+See the [Road Map](Appendix.md#road-map) for more information on the release schedule.
 
 ### Snapshots
 
@@ -53,23 +53,23 @@ hosted on the [Sonatype snapshot repo](https://oss.sonatype.org/content/reposito
 
 [![mandelbrot](/images/mandelbrot.png)](ChaosTheory.md#mandelbrot-set)
 
-[![coin entropy](/images/coinentropy.svg)](random_uncertain/CoinEntropy.md)
+[![coin entropy](/images/coinentropy.svg)](RandomnessUncertainty.md#example-entropy-of-a-biased-coin)
 
-[![alarm bayes](/images/alarm_bayes.svg)](random_uncertain/BayesianNetworks.md)
+[![alarm bayes](/images/alarm_bayes.svg)](RandomnessUncertainty.md#bayesian-networks)
 
 [![logistic map](/images/logMap.png)](ChaosTheory.md#logistic-map)
 
-[![poker hands](/images/poker_hands.svg)](game_theory/Poker.md)
+[![poker hands](/images/poker_hands.svg)](GameTheory.md#poker)
 
-[![probability monad](/images/iffy.svg)](random_uncertain/ProbabilityModel.md)
+[![probability monad](/images/iffy.svg)](RandomnessUncertainty.md#probability-model)
 
-[![cluster irises](/images/k_means.svg)](machine_learning/ClusterIrises.md)
+[![cluster irises](/images/k_means.svg)](MachineLearning.md#example-irises)
 
-[![linear regression](/images/lrerror.svg)](machine_learning/LinearRegression.md)
+[![linear regression](/images/lrerror.svg)](MachineLearning.md#linear-regression)
 
 [![geo coordinates](/images/sfo_hel_small.png)](Units.md#geo-coordinates)
 
-[![random waves](/images/random_waves.svg)](visualization/Plots.md)
+[![random waves](/images/random_waves.svg)](Visualization.md#example-plot-random-waves-over-time)
 
 ## Resources
 

@@ -786,8 +786,6 @@ Witnesses for [AWT](https://docs.oracle.com/javase/7/docs/api/java/awt/package-s
 
 #### Near term
 
-* Convert to single-document chapters
-
 * Logo for Laika site
 * Cover image for Laika PDF
 

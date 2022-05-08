@@ -24,15 +24,15 @@ object AxleLaika {
             TextLink.internal(Root / "Foundation.md", "Foundation"),
             TextLink.internal(Root / "Units.md", "Units of Measurement"),
             TextLink.internal(Root / "Math.md", "Math"),
-            TextLink.internal(Root / "visualization" / "Visualize.md", "Visualization"),
-            TextLink.internal(Root / "random_uncertain" / "RandomnessUncertainty.md", "Randomness and Uncertainty"),
-            TextLink.internal(Root / "game_theory" / "GameTheory.md", "Game Theory"),
+            TextLink.internal(Root / "Visualization.md", "Visualization"),
+            TextLink.internal(Root / "RandomnessUncertainty.md", "Randomness and Uncertainty"),
+            TextLink.internal(Root / "GameTheory.md", "Game Theory"),
             TextLink.internal(Root / "ChaosTheory.md", "Chaos Theory"),
-            TextLink.internal(Root / "machine_learning" / "MachineLearning.md", "Machine Learning"),
-            TextLink.internal(Root / "bioinformatics" / "Bioinformatics.md", "Bioinformatics"),
-            TextLink.internal(Root / "text" / "Text.md", "Text"),
-            TextLink.internal(Root / "quantum_circuits" / "QuantumCircuits.md", "Quantum Circuits"),
-            TextLink.internal(Root / "appendix" / "Appendix.md", "Appendix")
+            TextLink.internal(Root / "MachineLearning.md", "Machine Learning"),
+            TextLink.internal(Root / "Bioinformatics.md", "Bioinformatics"),
+            TextLink.internal(Root / "Text.md", "Text"),
+            TextLink.internal(Root / "QuantumCircuits.md", "Quantum Circuits"),
+            TextLink.internal(Root / "Appendix.md", "Appendix")
           ),
           projectLinks = Seq(
             // IconLink.internal(Root / "doc-2.md", HeliumIcon.demo),

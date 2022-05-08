@@ -1,4 +1,16 @@
-# Future Work
+# Quantum Circuits
+
+To be written...
+
+## Future Work
+
+### Soon
+
+* `QBit2.factor`
+* Fix and enable `DeutschOracleSpec`
+* QBit CCNot
+
+### Later
 
 * Shor's algorithm
 * Property test reversibility (& own inverse)
