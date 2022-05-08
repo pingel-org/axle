@@ -37,4 +37,4 @@ See [future work](../visualization/FutureWork.md) for axle visualization
 
 ## 0.13.x Mathematics
 
-See [future work](../math/FutureWork.md)
+See [future work](../Math.md#future-work)

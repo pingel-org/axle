@@ -23,7 +23,7 @@ object AxleLaika {
             TextLink.internal(Root / "Introduction.md", "Introduction"),
             TextLink.internal(Root / "Foundation.md", "Foundation"),
             TextLink.internal(Root / "Units.md", "Units of Measurement"),
-            TextLink.internal(Root / "math" / "Math.md", "Math"),
+            TextLink.internal(Root / "Math.md", "Math"),
             TextLink.internal(Root / "visualization" / "Visualize.md", "Visualization"),
             TextLink.internal(Root / "random_uncertain" / "RandomnessUncertainty.md", "Randomness and Uncertainty"),
             TextLink.internal(Root / "game_theory" / "GameTheory.md", "Game Theory"),
