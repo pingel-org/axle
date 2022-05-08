@@ -1,3 +1,0 @@
-# Functional
-
-To be written

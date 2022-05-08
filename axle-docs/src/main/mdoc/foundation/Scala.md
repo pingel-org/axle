@@ -1,3 +1,0 @@
-# Scala
-
-To be written...
