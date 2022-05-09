@@ -159,29 +159,29 @@
 // C&gt; Door #1: 
 // C&gt; Door #2: 
 // C&gt; Door #3: 
-// M&gt; Door #1: car, first choice
-// M&gt; Door #2: goat
+// M&gt; Door #1: goat
+// M&gt; Door #2: car, first choice
 // M&gt; Door #3: goat
-// C&gt; Door #1: first choice
-// C&gt; Door #2: , revealed goat
-// C&gt; Door #3: 
+// C&gt; Door #1: 
+// C&gt; Door #2: first choice
+// C&gt; Door #3: , revealed goat
 // endState: MontyHallState = MontyHallState(
-//   placement = Some(value = PlaceCar(door = 1)),
+//   placement = Some(value = PlaceCar(door = 2)),
 //   placed = true,
-//   firstChoice = Some(value = FirstChoice(door = 1)),
-//   reveal = Some(value = Reveal(door = 2)),
-//   secondChoice = Some(value = Right(value = Stay()))
+//   firstChoice = Some(value = FirstChoice(door = 2)),
+//   reveal = Some(value = Reveal(door = 3)),
+//   secondChoice = Some(value = Left(value = Change()))
 // )</span></code></pre>
         <p>Display outcome to each player</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span>: </span><span class="type-name">MontyHallOutcome</span><span> =
   </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
-</span><span class="comment">// outcome: MontyHallOutcome = MontyHallOutcome(car = true)
+</span><span class="comment">// outcome: MontyHallOutcome = MontyHallOutcome(car = false)
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// C&gt; You won the car!
-// M&gt; Contestant won the car!</span></code></pre>
+</span><span class="comment">// C&gt; You won a goat
+// M&gt; Contestant won a goat</span></code></pre>
         
         <h2 id="poker" class="section"><a class="anchor-link left" href="#poker"><i class="icofont-laika">&#xef71;</i></a>Poker</h2>
         <p>An N-Player, Imperfect Information, Zero-sum game</p>
@@ -198,30 +198,30 @@
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">winnerFromHandSize</span><span>(</span><span class="identifier">handSize</span><span>: </span><span class="type-name">Int</span><span>) =
   </span><span class="type-name">Deck</span><span>().</span><span class="identifier">cards</span><span>.</span><span class="identifier">take</span><span>(</span><span class="identifier">handSize</span><span>).</span><span class="identifier">combinations</span><span>(</span><span class="number-literal">5</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">cs</span><span> =&gt; </span><span class="type-name">PokerHand</span><span>(</span><span class="identifier">cs</span><span>.</span><span class="identifier">toVector</span><span>)).</span><span class="identifier">toList</span><span>.</span><span class="identifier">max</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">winnerFromHandSize</span><span>(</span><span class="number-literal">7</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res4: String = &quot;5♡ 5♣ 6♡ 9♠ J♢&quot;</span></code></pre>
+</span><span class="comment">// res4: String = &quot;9♠ T♠ J♣ A♡ A♢&quot;</span></code></pre>
         <p>20 simulated 5-card hands made of 7-card hands.  Sorted.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">hands</span><span> = (</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">20</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">n</span><span> =&gt; </span><span class="identifier">winnerFromHandSize</span><span>(</span><span class="number-literal">7</span><span>)).</span><span class="identifier">sorted</span></code></pre>
         <pre><code class="nohighlight"><span class="identifier">hands</span><span>.</span><span class="identifier">map</span><span>({ </span><span class="identifier">hand</span><span> =&gt; </span><span class="identifier">hand</span><span>.</span><span class="identifier">show</span><span> + </span><span class="string-literal">&quot;  &quot;</span><span> + </span><span class="identifier">hand</span><span>.</span><span class="identifier">description</span><span> }).</span><span class="identifier">mkString</span><span>(</span><span class="string-literal">&quot;</span><span class="escape-sequence">\n</span><span class="string-literal">&quot;</span><span>)
-</span><span class="comment">// res5: String = &quot;&quot;&quot;6♢ T♠ J♣ Q♡ K♢  high K high
-// 7♠ T♠ J♡ Q♣ K♢  high K high
-// 9♠ T♡ J♢ K♡ A♣  high A high
-// 9♣ J♡ Q♣ K♡ A♢  high A high
-// 2♠ 2♣ 9♠ J♠ Q♠  pair of 2
-// 3♠ 3♣ T♠ Q♠ K♣  pair of 3
-// 7♠ 7♣ 8♢ T♣ J♠  pair of 7
-// 6♢ 8♡ 8♢ 9♡ A♡  pair of 8
-// 7♢ 8♡ T♢ T♣ K♢  pair of T
-// 7♢ T♣ J♡ J♢ A♠  pair of J
-// 9♡ J♠ Q♢ K♡ K♣  pair of K
-// 5♢ 6♡ K♡ K♣ A♢  pair of K
-// 5♣ 8♡ T♢ A♡ A♣  pair of A
-// 8♡ 9♣ J♣ A♠ A♢  pair of A
-// 2♠ 2♡ 8♠ 8♣ T♡  two pair 8 and 2
-// 5♠ 5♣ T♡ Q♡ Q♣  two pair Q and 5
-// J♠ J♣ Q♡ Q♣ A♠  two pair Q and J
-// 9♢ J♡ J♣ A♠ A♢  two pair A and J
-// J♢ J♣ Q♢ A♠ A♢  two pair A and J
-// 2♠ 2♣ 3♠ 3♡ 3♣  full house 3 over 2&quot;&quot;&quot;</span></code></pre>
+</span><span class="comment">// res5: String = &quot;&quot;&quot;4♢ 8♠ 9♢ T♢ A♣  high A high
+// 6♡ 7♢ 8♣ K♢ A♠  high A high
+// 7♢ 8♣ J♡ K♠ A♢  high A high
+// 8♣ T♣ J♠ K♡ A♢  high A high
+// 5♠ J♠ Q♠ K♡ A♠  high A high
+// 5♠ 5♣ T♣ Q♠ K♢  pair of 5
+// 7♠ 7♢ 9♣ J♢ Q♢  pair of 7
+// 6♡ 8♠ 8♢ J♡ K♡  pair of 8
+// 4♡ 5♠ 8♣ T♠ T♢  pair of T
+// 5♠ T♠ T♢ Q♡ A♣  pair of T
+// T♠ T♣ J♢ K♠ A♡  pair of T
+// 5♠ 5♣ 9♠ 9♢ T♣  two pair 9 and 5
+// 9♠ 9♣ T♡ T♢ J♣  two pair T and 9
+// 6♠ 6♢ Q♣ K♡ K♣  two pair K and 6
+// 8♢ 8♣ T♢ K♠ K♣  two pair K and 8
+// J♣ Q♠ Q♡ A♠ A♢  two pair A and Q
+// 2♡ 2♢ 2♣ 6♣ T♠  three of a kind of 2
+// 7♢ 8♡ 9♣ T♡ J♣  straight to J
+// 2♣ 6♣ 8♣ J♣ K♣  flush in ♣
+// 2♡ 5♡ 6♡ 7♡ A♡  flush in ♡&quot;&quot;&quot;</span></code></pre>
         <p>Record 1000 simulated hands for each drawn hand size from 5 to 9</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">poker</span><span>.</span><span class="type-name">PokerHandCategory</span><span>
 
@@ -304,128 +304,135 @@
 // P1&gt; Pot: 3
 // P1&gt; Shared: 
 // P1&gt; 
-// P1&gt; P1:  hand 9♠ 7♡ in for $1, $99 remaining
+// P1&gt; P1:  hand 5♣ K♣ in for $1, $99 remaining
 // P1&gt; P2:  hand -- in for $2, $98 remaining
 // P2&gt; To: You
-// P2&gt; Current bet: 76
-// P2&gt; Pot: 78
+// P2&gt; Current bet: 52
+// P2&gt; Pot: 54
 // P2&gt; Shared: 
 // P2&gt; 
-// P2&gt; P1:  hand -- in for $76, $24 remaining
-// P2&gt; P2:  hand 4♣ A♠ in for $2, $98 remaining
+// P2&gt; P1:  hand -- in for $52, $48 remaining
+// P2&gt; P2:  hand 2♢ 4♢ in for $2, $98 remaining
 // P1&gt; To: You
-// P1&gt; Current bet: 83
-// P1&gt; Pot: 159
+// P1&gt; Current bet: 69
+// P1&gt; Pot: 121
 // P1&gt; Shared: 
 // P1&gt; 
-// P1&gt; P1:  hand 9♠ 7♡ in for $76, $24 remaining
-// P1&gt; P2:  hand -- in for $83, $17 remaining
+// P1&gt; P1:  hand 5♣ K♣ in for $52, $48 remaining
+// P1&gt; P2:  hand -- in for $69, $31 remaining
 // P2&gt; To: You
-// P2&gt; Current bet: 92
-// P2&gt; Pot: 175
+// P2&gt; Current bet: 95
+// P2&gt; Pot: 164
 // P2&gt; Shared: 
 // P2&gt; 
-// P2&gt; P1:  hand -- in for $92, $8 remaining
-// P2&gt; P2:  hand 4♣ A♠ in for $83, $17 remaining
+// P2&gt; P1:  hand -- in for $95, $5 remaining
+// P2&gt; P2:  hand 2♢ 4♢ in for $69, $31 remaining
 // P1&gt; To: You
-// P1&gt; Current bet: 99
-// P1&gt; Pot: 191
+// P1&gt; Current bet: 97
+// P1&gt; Pot: 192
 // P1&gt; Shared: 
 // P1&gt; 
-// P1&gt; P1:  hand 9♠ 7♡ in for $92, $8 remaining
-// P1&gt; P2:  hand -- in for $99, $1 remaining
+// P1&gt; P1:  hand 5♣ K♣ in for $95, $5 remaining
+// P1&gt; P2:  hand -- in for $97, $3 remaining
+// P2&gt; To: You
+// P2&gt; Current bet: 98
+// P2&gt; Pot: 195
+// P2&gt; Shared: 
+// P2&gt; 
+// P2&gt; P1:  hand -- in for $98, $2 remaining
+// P2&gt; P2:  hand 2♢ 4♢ in for $97, $3 remaining
+// P1&gt; To: You
+// P1&gt; Current bet: 100
+// P1&gt; Pot: 198
+// P1&gt; Shared: 
+// P1&gt; 
+// P1&gt; P1:  hand 5♣ K♣ in for $98, $2 remaining
+// P1&gt; P2:  hand -- in for $100, $0 remaining
 // D&gt; To: You
-// D&gt; Current bet: 99
-// D&gt; Pot: 198
+// D&gt; Current bet: 100
+// D&gt; Pot: 200
 // D&gt; Shared: 
 // D&gt; 
-// D&gt; P1:  hand -- in for $99, $1 remaining
-// D&gt; P2:  hand -- in for $99, $1 remaining
+// D&gt; P1:  hand -- in for $100, $0 remaining
+// D&gt; P2:  hand -- in for $100, $0 remaining
 // P1&gt; To: You
 // P1&gt; Current bet: 0
-// P1&gt; Pot: 198
-// P1&gt; Shared: 2♢ 4♢ T♣
+// P1&gt; Pot: 200
+// P1&gt; Shared: Q♢ 9♣ J♠
 // P1&gt; 
-// P1&gt; P1:  hand 9♠ 7♡ in for $--, $1 remaining
-// P1&gt; P2:  hand -- in for $--, $1 remaining
-// P2&gt; To: You
-// P2&gt; Current bet: 0
-// P2&gt; Pot: 198
-// P2&gt; Shared: 2♢ 4♢ T♣
-// P2&gt; 
-// P2&gt; P1:  hand -- in for $0, $1 remaining
-// P2&gt; P2:  hand 4♣ A♠ in for $--, $1 remaining
+// P1&gt; P1:  hand 5♣ K♣ in for $--, $0 remaining
+// P1&gt; P2:  hand -- in for $--, $0 remaining
 // D&gt; To: You
 // D&gt; Current bet: 0
-// D&gt; Pot: 198
-// D&gt; Shared: 2♢ 4♢ T♣
+// D&gt; Pot: 200
+// D&gt; Shared: Q♢ 9♣ J♠
 // D&gt; 
-// D&gt; P1:  hand -- in for $0, $1 remaining
-// D&gt; P2:  hand -- out, $1 remaining
+// D&gt; P1:  hand -- out, $0 remaining
+// D&gt; P2:  hand -- in for $--, $0 remaining
 // endState: PokerState = PokerState(
-//   moverFn = axle.game.poker.package$$anon$1$$Lambda$10265/0x00000008027314e0@7c1f78a5,
+//   moverFn = axle.game.poker.package$$anon$1$$Lambda$10301/0x000000080271a110@493620e2,
 //   deck = Deck(
 //     cards = List(
 //       Card(
-//         rank = axle.game.cards.R10$@63561274,
-//         suit = axle.game.cards.Hearts$@4344a711
+//         rank = axle.game.cards.Queen$@6ac6bafc,
+//         suit = axle.game.cards.Clubs$@19e4947d
 //       ),
 //       Card(
-//         rank = axle.game.cards.R4$@49bff0b6,
-//         suit = axle.game.cards.Spades$@132d6211
+//         rank = axle.game.cards.R7$@eb0b50d,
+//         suit = axle.game.cards.Hearts$@55d475a6
 //       ),
 //       Card(
-//         rank = axle.game.cards.R3$@4f9abaa8,
-//         suit = axle.game.cards.Diamonds$@1b642187
+//         rank = axle.game.cards.R7$@eb0b50d,
+//         suit = axle.game.cards.Clubs$@19e4947d
 //       ),
 //       Card(
-//         rank = axle.game.cards.R2$@4380d45c,
-//         suit = axle.game.cards.Hearts$@4344a711
+//         rank = axle.game.cards.Ace$@4dbcb079,
+//         suit = axle.game.cards.Hearts$@55d475a6
 //       ),
 //       Card(
-//         rank = axle.game.cards.R2$@4380d45c,
-//         suit = axle.game.cards.Spades$@132d6211
+//         rank = axle.game.cards.King$@7eef86a6,
+//         suit = axle.game.cards.Spades$@2a32d439
 //       ),
 //       Card(
-//         rank = axle.game.cards.R8$@62ff9769,
-//         suit = axle.game.cards.Clubs$@7537334a
+//         rank = axle.game.cards.R8$@5054960,
+//         suit = axle.game.cards.Diamonds$@181ef41a
 //       ),
 //       Card(
-//         rank = axle.game.cards.King$@42db1afa,
-//         suit = axle.game.cards.Clubs$@7537334a
+//         rank = axle.game.cards.R5$@38164907,
+//         suit = axle.game.cards.Diamonds$@181ef41a
 //       ),
 //       Card(
-//         rank = axle.game.cards.R5$@393caae0,
-//         suit = axle.game.cards.Spades$@132d6211
+//         rank = axle.game.cards.R8$@5054960,
+//         suit = axle.game.cards.Clubs$@19e4947d
 //       ),
 //       Card(
-//         rank = axle.game.cards.R8$@62ff9769,
-//         suit = axle.game.cards.Hearts$@4344a711
+//         rank = axle.game.cards.Queen$@6ac6bafc,
+//         suit = axle.game.cards.Hearts$@55d475a6
 //       ),
 //       Card(
-//         rank = axle.game.cards.Queen$@5c818917,
-//         suit = axle.game.cards.Hearts$@4344a711
+//         rank = axle.game.cards.R3$@2151b3f2,
+//         suit = axle.game.cards.Hearts$@55d475a6
 //       ),
 //       Card(
-//         rank = axle.game.cards.R3$@4f9abaa8,
-//         suit = axle.game.cards.Spades$@132d6211
+//         rank = axle.game.cards.R7$@eb0b50d,
+//         suit = axle.game.cards.Diamonds$@181ef41a
 //       ),
 // ...</span></code></pre>
         <p>Display outcome to each player</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
 </span><span class="comment">// outcome: PokerOutcome = PokerOutcome(
-//   winner = Some(value = Player(id = &quot;P1&quot;, description = &quot;Player 1&quot;)),
+//   winner = Some(value = Player(id = &quot;P2&quot;, description = &quot;Player 2&quot;)),
 //   hand = None
 // )
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// D&gt; Winner: Player 1
+</span><span class="comment">// D&gt; Winner: Player 2
 // D&gt; Hand  : not shown
-// P1&gt; Winner: Player 1
+// P1&gt; Winner: Player 2
 // P1&gt; Hand  : not shown
-// P2&gt; Winner: Player 1
+// P2&gt; Winner: Player 2
 // P2&gt; Hand  : not shown</span></code></pre>
         
         <h2 id="prisoner-s-dilemma" class="section"><a class="anchor-link left" href="#prisoner-s-dilemma"><i class="icofont-laika">&#xef71;</i></a>Prisoner&#39;s Dilemma</h2>
@@ -470,22 +477,22 @@
 // endState: PrisonersDilemmaState = PrisonersDilemmaState(
 //   p1Move = Some(value = Betrayal()),
 //   p1Moved = true,
-//   p2Move = Some(value = Betrayal())
+//   p2Move = Some(value = Silence())
 // )</span></code></pre>
         <p>Display outcome to each player</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
 </span><span class="comment">// outcome: PrisonersDilemmaOutcome = PrisonersDilemmaOutcome(
-//   p1YearsInPrison = 2,
-//   p2YearsInPrison = 2
+//   p1YearsInPrison = 0,
+//   p2YearsInPrison = 3
 // )
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// P1&gt; You is imprisoned for 2 years
-// P1&gt; Player 2 is imprisoned for 2 years
-// P2&gt; Player 1 is imprisoned for 2 years
-// P2&gt; You is imprisoned for 2 years</span></code></pre>
+</span><span class="comment">// P1&gt; You is imprisoned for 0 years
+// P1&gt; Player 2 is imprisoned for 3 years
+// P2&gt; Player 1 is imprisoned for 0 years
+// P2&gt; You is imprisoned for 3 years</span></code></pre>
         
         <h2 id="tic-tac-toe" class="section"><a class="anchor-link left" href="#tic-tac-toe"><i class="icofont-laika">&#xef71;</i></a>Tic-Tac-Toe</h2>
         <p>A Perfect Information, Zero-sum game</p>
@@ -530,48 +537,40 @@
 // X&gt;  | |           4|5|6
 // X&gt;  | |           7|8|9
 // O&gt; Board:         Movement Key:
-// O&gt;  | |           1|2|3
-// O&gt;  | |X          4|5|6
+// O&gt; X| |           1|2|3
+// O&gt;  | |           4|5|6
 // O&gt;  | |           7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt;  |O|           1|2|3
-// X&gt;  | |X          4|5|6
+// X&gt; X| |O          1|2|3
+// X&gt;  | |           4|5|6
 // X&gt;  | |           7|8|9
 // O&gt; Board:         Movement Key:
-// O&gt;  |O|           1|2|3
-// O&gt; X| |X          4|5|6
-// O&gt;  | |           7|8|9
+// O&gt; X| |O          1|2|3
+// O&gt;  | |           4|5|6
+// O&gt;  | |X          7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt;  |O|           1|2|3
-// X&gt; X| |X          4|5|6
-// X&gt; O| |           7|8|9
+// X&gt; X| |O          1|2|3
+// X&gt; O| |           4|5|6
+// X&gt;  | |X          7|8|9
 // O&gt; Board:         Movement Key:
-// O&gt;  |O|           1|2|3
-// O&gt; X| |X          4|5|6
-// O&gt; O|X|           7|8|9
+// O&gt; X| |O          1|2|3
+// O&gt; O| |X          4|5|6
+// O&gt;  | |X          7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt; O|O|           1|2|3
-// X&gt; X| |X          4|5|6
-// X&gt; O|X|           7|8|9
-// O&gt; Board:         Movement Key:
-// O&gt; O|O|X          1|2|3
-// O&gt; X| |X          4|5|6
-// O&gt; O|X|           7|8|9
-// X&gt; Board:         Movement Key:
-// X&gt; O|O|X          1|2|3
-// X&gt; X|O|X          4|5|6
-// X&gt; O|X|           7|8|9
+// X&gt; X| |O          1|2|3
+// X&gt; O| |X          4|5|6
+// X&gt;  |O|X          7|8|9
 // endState: TicTacToeState = TicTacToeState(
 //   moverOpt = None,
 //   board = Array(
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     None,
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     None,
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
-//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
-//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
-//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;))
 //   ),
 //   boardSize = 3

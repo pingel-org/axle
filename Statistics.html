@@ -127,7 +127,7 @@
         <p>Geometric mean</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">geometricMean</span><span>[</span><span class="type-name">Real</span><span>, </span><span class="type-name">List</span><span>](</span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>))
 </span><span class="comment">// res1: Real = Inexact(
-//   f = spire.math.Real$$Lambda$10569/0x00000008027f7a58@6c60d993
+//   f = spire.math.Real$$Lambda$10605/0x00000008027ddcb8@1379c4f3
 // )</span></code></pre>
         <p>Harmonic mean</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">harmonicMean</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>))
@@ -171,9 +171,9 @@
     </span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>, </span><span class="number-literal">125d</span><span>, </span><span class="number-literal">625d</span><span>),
     </span><span class="number-literal">3</span><span>)
 </span><span class="comment">// res7: List[Real] = List(
-//   Inexact(f = spire.math.Real$$Lambda$10569/0x00000008027f7a58@3bef9974),
-//   Inexact(f = spire.math.Real$$Lambda$10461/0x00000008027b1d80@1159a3b2),
-//   Inexact(f = spire.math.Real$$Lambda$10461/0x00000008027b1d80@70ad1f36)
+//   Inexact(f = spire.math.Real$$Lambda$10605/0x00000008027ddcb8@1516b370),
+//   Inexact(f = spire.math.Real$$Lambda$10497/0x00000008027928f0@6c9e983e),
+//   Inexact(f = spire.math.Real$$Lambda$10497/0x00000008027928f0@40b24620)
 // )</span></code></pre>
         <p>Moving harmonic mean</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">movingHarmonicMean</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Real</span><span>](
@@ -252,27 +252,27 @@
         <p>Demonstrate it uniformly sampling 15 of the first 100 integers</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sample</span><span> = </span><span class="identifier">reservoirSampleK</span><span>(</span><span class="number-literal">15</span><span>, </span><span class="type-name">LazyList</span><span>.</span><span class="identifier">from</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">drop</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">head</span><span>
 </span><span class="comment">// sample: List[Int] = List(
-//   95,
-//   93,
-//   86,
-//   58,
-//   56,
+//   99,
+//   91,
+//   74,
+//   70,
+//   68,
+//   61,
+//   59,
 //   48,
-//   44,
-//   42,
-//   40,
-//   32,
+//   45,
+//   36,
+//   34,
+//   33,
+//   28,
 //   23,
-//   17,
-//   16,
-//   10,
-//   9
+//   1
 // )</span></code></pre>
         <p>The mean of the sample should be in the ballpark of the mean of the entire list (50.5):</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">arithmeticMean</span><span>
 
 </span><span class="identifier">arithmeticMean</span><span>(</span><span class="identifier">sample</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>))
-</span><span class="comment">// res19: Double = 44.6</span></code></pre>
+</span><span class="comment">// res19: Double = 51.333333333333336</span></code></pre>
         <p>Indeed it is.</p>
         
         <h2 id="future-work" class="section"><a class="anchor-link left" href="#future-work"><i class="icofont-laika">&#xef71;</i></a>Future Work</h2>
