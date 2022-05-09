@@ -1,42 +1,40 @@
 # Foundation
 
-Data structures and functions
+## Functional Programming
 
-## Functional
-
-To be written
+* Typeclasses
+* Curry-Howard Isomorphism
+* Theorems for Free
+* Referential Transparency
+* Equational Reasoning
+* Life After Monoids
+* Algebird
+* Kmett's mapping of abstract algebra to software patterns
 
 ## Scala
 
-To be written...
+Scala is the host of Axle for many reasons, principled and not.
 
-## Cats
+It's support for functional programming is chief among them.
 
-To be written
+Axle makes extensive use of Scala 2's "Context Bounds".
+
+When Axle moves to Scala 3, much of this will use the enw `given` / `using` syntax.
+
+## Typelevel and Cats
 
 Axle makes use of several Typelevel libraries including
 
-* Cats
-* Cats Effect
-* Spire
+* Cats (`Show`, `Eq`)
+* Cats Effect (`IO`, `Async`)
+* Spire (`Field`, `Ring`)
 * Monix
 * ...
 
 ## Architecture
 
-Axle generally strives to follow the patterns established
-by the [Typelevel](http://typelevel.org/) projects.
+### Ideal
 
-With few exceptions, the functions are side-effect free.
-
-The typeclass patterns are drawn from two traditions:
-
-1. [Typeclassopedia](https://wiki.haskell.org/Typeclassopedia)
-2. Abstract Algebra
-
-The algorithms are increasingly defined only in terms of these typeclasses.
-Concrete runtime implementations will require witnesses that map non-Axle data structures
-onto the typeclass methods and laws.
 Laws are organized into a separate `axle-laws` jar for use in tests by code that builds
 upon these typeclasses.
 Many such witnesses are provided by Axle for native Scala collections.
@@ -47,89 +45,6 @@ Read more about ["these third party libraries"](#support-for-third-party-librari
 ### Remaining Design Issues
 
 Please get in touch if you'd like to discuss these or other questions.
-
-## Package Objects
-
-This page describes functions in `axle.logic` and `axle.math` package objects.
-
-Imports
-
-```scala mdoc:silent:reset
-import cats.implicits._
-
-import spire.algebra._
-
-import axle.logic._
-import axle.math._
-
-implicit val rngInt: Rng[Int] = spire.implicits.IntAlgebra
-implicit val ringLong: Ring[Long] = spire.implicits.LongAlgebra
-implicit val boolBoolean: Bool[Boolean] = spire.implicits.BooleanStructure
-```
-
-Logic aggregators `∃` and `∀`:
-
-```scala mdoc
-∃(List(1, 2, 3)) { i: Int => i % 2 == 0 }
-
-∀(List(1, 2, 3)) { i: Int => i % 2 == 0 }
-```
-
-Sum and multiply aggregators `Σ` and `Π`.
-Note that `Σ` and `Π` are also available in `spire.optional.unicode._`.
-
-```scala mdoc
-Σ((1 to 10) map { _ * 2 })
-
-Π((1L to 10L) map { _ * 2 })
-```
-
-Doubles, triples, and cross-products
-
-```scala mdoc
-doubles(Set(1, 2, 3))
-
-triples(Set(1, 2, 3))
-
-⨯(List(1, 2, 3))(List(4, 5, 6)).toList
-```
-
-Powerset
-
-```scala mdoc
-℘(0 until 4)
-
-val ps = ℘(Vector("a", "b", "c"))
-
-ps.size
-
-ps(7)
-```
-
-### Permutations
-
-```scala mdoc
-permutations(0 until 4)(2).toList
-```
-
-### Combinations
-
-```scala mdoc
-combinations(0 until 4)(2).toList
-```
-
-### Indexed Cross Product
-
-```scala mdoc
-val icp = IndexedCrossProduct(Vector(
-  Vector("a", "b", "c"),
-  Vector("d", "e"),
-  Vector("f", "g", "h")))
-
-icp.size
-
-icp(4)
-```
 
 ## Algebra
 
