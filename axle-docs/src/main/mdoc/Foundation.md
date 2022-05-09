@@ -64,35 +64,6 @@ as [ScalaCheck](http://scalacheck.org/) properties.
 
 They are organized with [Discipline](https://github.com/typelevel/discipline).
 
-## Logic
-
-### Conjunctive Normal Form Converter
-
-Imports
-
-```scala mdoc:silent:reset
-import cats.implicits._
-import axle.logic.FirstOrderPredicateLogic._
-```
-
-Example CNF conversion
-
-```scala mdoc:silent
-import axle.logic.example.SamplePredicates._
-
-val z = Symbol("z")
-
-val s = ∃(z ∈ Z, (A(z) ∧ G(z)) ⇔ (B(z) ∨ H(z)))
-
-val (cnf, skolemMap) = conjunctiveNormalForm(s)
-```
-
-```scala mdoc
-cnf.show
-
-skolemMap
-```
-
 ## Support for Third Party Libraries
 
 Witnesses for 3rd party libraries.

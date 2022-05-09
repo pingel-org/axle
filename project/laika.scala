@@ -40,6 +40,7 @@ object AxleLaika {
             TextLink.internal(Root / "ChaosTheory.md", "Chaos Theory"),
             TextLink.internal(Root / "Biology.md", "Biology"),
             TextLink.internal(Root / "Text.md", "Text"),
+            TextLink.internal(Root / "Logic.md", "Logic"),
             TextLink.internal(Root / "QuantumCircuits.md", "Quantum Circuits"),
             TextLink.internal(Root / "Appendix.md", "Appendix")
           ),
