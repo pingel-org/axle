@@ -61,7 +61,7 @@
         <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
         <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
         <li class="level1"><a href="MachineLearning.html">Machine Learning</a></li>
-        <li class="level1"><a href="Bioinformatics.html">Bioinformatics</a></li>
+        <li class="level1"><a href="Biology.html">Biology</a></li>
         <li class="level1"><a href="Text.html">Text</a></li>
         <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
         <li class="level1"><a href="Appendix.html">Appendix</a></li>
@@ -208,7 +208,7 @@
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="identifier">_</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">rng</span><span> = </span><span class="type-name">Random</span><span>.</span><span class="identifier">generatorFromSeed</span><span>(</span><span class="type-name">Seed</span><span>(</span><span class="number-literal">42</span><span>))
-</span><span class="comment">// rng: spire.random.rng.Cmwc5 = spire.random.rng.Cmwc5@45ea83d9</span></code></pre>
+</span><span class="comment">// rng: spire.random.rng.Cmwc5 = spire.random.rng.Cmwc5@32a030b1</span></code></pre>
         <p>And then the <code>.sample</code> syntax:</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">sampler</span><span>.</span><span class="identifier">_</span></code></pre>
         <p><code>sample</code> requires a Spire <code>Generator</code>.
@@ -586,27 +586,27 @@
         <p>Demonstrate it uniformly sampling 15 of the first 100 integers</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sample</span><span> = </span><span class="identifier">reservoirSampleK</span><span>(</span><span class="number-literal">15</span><span>, </span><span class="type-name">LazyList</span><span>.</span><span class="identifier">from</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">drop</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">head</span><span>
 </span><span class="comment">// sample: List[Int] = List(
+//   101,
+//   99,
 //   94,
-//   84,
-//   79,
-//   72,
+//   91,
+//   83,
 //   66,
-//   64,
-//   58,
-//   50,
-//   43,
-//   33,
-//   23,
-//   18,
-//   15,
-//   9,
-//   6
+//   62,
+//   46,
+//   41,
+//   37,
+//   36,
+//   26,
+//   24,
+//   17,
+//   9
 // )</span></code></pre>
         <p>The mean of the sample should be in the ballpark of the mean of the entire list (50.5):</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">arithmeticMean</span><span>
 
 </span><span class="identifier">arithmeticMean</span><span>(</span><span class="identifier">sample</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>))
-</span><span class="comment">// res23: Double = 47.6</span></code></pre>
+</span><span class="comment">// res23: Double = 55.46666666666667</span></code></pre>
         <p>Indeed it is.</p>
         
         <h2 id="information-theory" class="section"><a class="anchor-link left" href="#information-theory"><i class="icofont-laika">&#xef71;</i></a>Information Theory</h2>
