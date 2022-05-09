@@ -24,6 +24,18 @@ distribution.P(RegionEq(CBit0))
 distribution.P(RegionEq(CBit1))
 ```
 
+## Dirac Vector Notation
+
+```scala mdoc:silent:reset
+import axle.quantumcircuit._
+```
+
+```scala mdoc
+|("00").>().unindex
+
+Vector[Binary](1, 0) ⊗ Vector[Binary](1, 0)
+```
+
 ## CNOT
 
 ```scala mdoc:silent:reset
