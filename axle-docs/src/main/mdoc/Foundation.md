@@ -784,69 +784,37 @@ Witnesses for [AWT](https://docs.oracle.com/javase/7/docs/api/java/awt/package-s
 
 ### Site
 
-#### Near term
+#### Near term / minor
 
-* Logo for Laika site
-* Cover image for Laika PDF
-
-* Copy some test cases to QuantumCircuits.md
-
-* Docs
   * General
-    * A few words in README for each section
     * Expand acronyms and include wikipedia links in "Future Work" sections
     * Make dependencies clear in each section
-  * Landing Page
-    * More teasers (including a warning about rate of change)
   * Introduction
-    * Write "Objectives"
     * Smaller images for Gallery
   * Foundation
     * Architecture
-    * Functional Programming
-      * Typeclasses
-      * Curry-Howard
-      * Theorems for Free
-      * Referential Transparency
-      * Equational Reasoning
-      * Life After Monoids
-      * Algebird
-      * Kmett's mapping of abstract algebra to software patterns
-    * Scala
-    * Cats: Show, EQ, IO, Algebra, Spire
-    * rename "Spokes"
-    * rename "Resources"
-  * Units
-    * Quanta: fix Distance, Energy, Time links
   * Math
     * Intro section bullets not nesting
   * Random, Uncertain
     * Bayesian network rendering is missing tables
-  * Bioinformatics
-    * rename to Biology
   * Text
     * Say more about Python Grammar
-  * Appendix
-    * Fix video iframes
 
 #### Later
 
 * `laikaIncludeAPI := true` in `build.sbt`
 * look at more of [these options](https://planet42.github.io/Laika/0.18/03-preparing-content/03-theme-settings.html)
 * Meta tag with keywords: axle, scala, dsl, data, analysis, science, open-source, adam pingel
-* Timestamp / version to site footer
-* GitHub "Releases" in sidebar should show "latest"
 * update google analytics version
 * test animation with monix 3.4.0
 
-* make axle.g8 more axle-flavored (use cats.IO App as parent for HelloWorld)
-
-* ghpagesCleanSite leaving stale files?
 * Friend of Spire
 * README: data sets from `axle.data` (Astronomy, Evolution, Federalist Papers, Irises)
-* what to do about empty right sidebars? convert bullets into sections? disable somehow?
 
 ### Build
 
+* ghpagesCleanSite leaving stale files?
+* GitHub "Releases" in sidebar should show "latest"
 * keep axle.g8 and axle versions in sync
 * site publish (`git push`) via github action?
+* make axle.g8 more axle-flavored (use cats.IO App as parent for HelloWorld)
