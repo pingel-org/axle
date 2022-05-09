@@ -4,6 +4,7 @@ import laika.ast._
 import laika.ast.Path.Root
 import laika.helium.Helium
 import laika.theme.ThemeProvider
+import laika.rewrite.nav.CoverImage
 
 object AxleLaika {
 
@@ -48,5 +49,6 @@ object AxleLaika {
           includeEPUB = false,
           includePDF = true)
         .pdf.tableOfContent(title = "Contents", depth = 4)
+        .pdf.coverImages(CoverImage(Root / "images" / "axle.png"))
         .build
 }
