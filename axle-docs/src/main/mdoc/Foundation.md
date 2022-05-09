@@ -531,7 +531,7 @@ Witnesses for the [Joda](http://www.joda.org/joda-time/) time library.
 "org.axle-lang" %% "axle-jung" % "@RELEASE_VERSION@"
 ```
 
-Directed and Undirected [Graph](#graph) witnesses for the [JUNG](http://jung.sourceforge.net/) library.
+Directed and Undirected [Graph](GraphTheory.md) witnesses for the [JUNG](http://jung.sourceforge.net/) library.
 
 ### AWT
 
