@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Information Theory</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1"><a href="Introduction.html">Introduction</a></li>
+        <li class="level1"><a href="Foundation.html">Foundation</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="Statistics.html">Statistics</a></li>
+        <li class="level1"><a href="GraphTheory.html">Graph Theory</a></li>
+        <li class="level1"><a href="LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level1"><a href="RegressionAnalysis.html">Regression Analysis</a></li>
+        <li class="level1"><a href="Classification.html">Classification</a></li>
+        <li class="level1"><a href="Clustering.html">Clustering</a></li>
+        <li class="level1"><a href="EvolutionaryAlgorithms.html">Evolutionary Algorithms</a></li>
+        <li class="level1"><a href="ProbabilityModel.html">Probability Model</a></li>
+        <li class="level1 active"><a href="#">Information Theory</a></li>
+        <li class="level1"><a href="ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
+        <li class="level1"><a href="Biology.html">Biology</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="Logic.html">Logic</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1"><a href="Appendix.html">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Information Theory</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#entropy">Entropy</a></li>
+          <li class="level1"><a href="#example-entropy-of-a-biased-coin">Example: Entropy of a Biased Coin</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="information-theory" class="title">Information Theory</h1>
+        
+        <h2 id="entropy" class="section"><a class="anchor-link left" href="#entropy"><i class="icofont-laika">&#xef71;</i></a>Entropy</h2>
+        <p>The calculation of the entropy of a distribution is available as a function called <code>entropy</code>
+        as well as the traditional <code>H</code>:</p>
+        <p>Imports and implicits</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">DirectedSparseGraph</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">probability</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">stats</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quanta</span><span>.</span><span class="type-name">Information</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">directedGraphJung</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Coin</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="type-name">Dice</span><span>.</span><span class="identifier">die</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">informationConverter</span><span> = </span><span class="type-name">Information</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]</span></code></pre>
+        <p>Usage</p>
+        <p>Entropy of fair 6-sided die</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">d6</span><span> = </span><span class="identifier">die</span><span>(</span><span class="number-literal">6</span><span>)
+</span><span class="comment">// d6: ConditionalProbabilityTable[Int, Rational] = ConditionalProbabilityTable(
+//   p = HashMap(5 -&gt; 1/6, 1 -&gt; 1/6, 6 -&gt; 1/6, 2 -&gt; 1/6, 3 -&gt; 1/6, 4 -&gt; 1/6)
+// )
+</span><span>
+</span><span class="type-name">H</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="identifier">d6</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res1: String = &quot;2.5849625007211565 b&quot;</span></code></pre>
+        <p>Entropy of fair and biased coins</p>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">fairCoin</span><span> = </span><span class="type-name">Coin</span><span>.</span><span class="identifier">flipModel</span><span>()
+</span><span class="comment">// fairCoin: ConditionalProbabilityTable[Symbol, Rational] = ConditionalProbabilityTable(
+//   p = Map(&#39;HEAD -&gt; 1/2, &#39;TAIL -&gt; 1/2)
+// )
+</span><span>
+</span><span class="type-name">H</span><span>[</span><span class="type-name">Symbol</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="identifier">fairCoin</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res2: String = &quot;1.0 b&quot;
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">biasedCoin</span><span> = </span><span class="type-name">Coin</span><span>.</span><span class="identifier">flipModel</span><span>(</span><span class="type-name">Rational</span><span>(</span><span class="number-literal">7</span><span>, </span><span class="number-literal">10</span><span>))
+</span><span class="comment">// biasedCoin: ConditionalProbabilityTable[Symbol, Rational] = ConditionalProbabilityTable(
+//   p = Map(&#39;HEAD -&gt; 7/10, &#39;TAIL -&gt; 3/10)
+// )
+</span><span>
+</span><span class="identifier">entropy</span><span>[</span><span class="type-name">Symbol</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="identifier">biasedCoin</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res3: String = &quot;0.8812908992306927 b&quot;</span></code></pre>
+        <p>See also the following example of the entropy of a biased coin.</p>
+        
+        <h2 id="example-entropy-of-a-biased-coin" class="section"><a class="anchor-link left" href="#example-entropy-of-a-biased-coin"><i class="icofont-laika">&#xef71;</i></a>Example: Entropy of a Biased Coin</h2>
+        <p>Visualize the relationship of a coin&#39;s bias to its entropy with this code snippet.</p>
+        <p>Imports and implicits:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">collection</span><span>.</span><span class="identifier">immutable</span><span>.</span><span class="type-name">TreeMap</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">Rational</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">stats</span><span>.</span><span class="type-name">H</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Coin</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quanta</span><span>.</span><span class="type-name">UnittedQuantity</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quanta</span><span>.</span><span class="type-name">Information</span><span>
+
+</span><span class="keyword">type</span><span> </span><span class="type-name">D</span><span> = </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">Rational</span><span>, </span><span class="type-name">UnittedQuantity</span><span>[</span><span class="type-name">Information</span><span>, </span><span class="type-name">Double</span><span>]]
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">DirectedSparseGraph</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">directedGraphJung</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">kernel</span><span>.</span><span class="type-name">Order</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quanta</span><span>.</span><span class="identifier">unittedTics</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">id</span><span> = {
+  </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+  </span><span class="type-name">Information</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
+}
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">or</span><span>: </span><span class="type-name">Order</span><span>[</span><span class="type-name">Rational</span><span>] = </span><span class="keyword">new</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">kernel</span><span>.</span><span class="type-name">Order</span><span>[</span><span class="type-name">Rational</span><span>] {
+  </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">doubleOrder</span><span> = </span><span class="type-name">Order</span><span>.</span><span class="identifier">fromOrdering</span><span>[</span><span class="type-name">Double</span><span>]
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">compare</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">Rational</span><span>, </span><span class="identifier">y</span><span>: </span><span class="type-name">Rational</span><span>): </span><span class="type-name">Int</span><span> = </span><span class="identifier">doubleOrder</span><span>.</span><span class="identifier">compare</span><span>(</span><span class="identifier">x</span><span>.</span><span class="identifier">toDouble</span><span>, </span><span class="identifier">y</span><span>.</span><span class="identifier">toDouble</span><span>)
+}
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">bitDouble</span><span> = </span><span class="identifier">id</span><span>.</span><span class="identifier">bit</span></code></pre>
+        <p>Create dataset</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">hm</span><span>: </span><span class="type-name">D</span><span> =
+  </span><span class="keyword">new</span><span> </span><span class="type-name">TreeMap</span><span>[</span><span class="type-name">Rational</span><span>, </span><span class="type-name">UnittedQuantity</span><span>[</span><span class="type-name">Information</span><span>, </span><span class="type-name">Double</span><span>]]() ++
+    (</span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">100</span><span>).</span><span class="identifier">map</span><span>({ </span><span class="identifier">i</span><span> =&gt;
+      </span><span class="keyword">val</span><span> </span><span class="identifier">r</span><span> = </span><span class="type-name">Rational</span><span>(</span><span class="identifier">i</span><span>.</span><span class="identifier">toLong</span><span>, </span><span class="number-literal">100L</span><span>)
+      </span><span class="identifier">r</span><span> -&gt; </span><span class="type-name">H</span><span>[</span><span class="type-name">Symbol</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="type-name">Coin</span><span>.</span><span class="identifier">flipModel</span><span>(</span><span class="identifier">r</span><span>))
+    }).</span><span class="identifier">toMap</span></code></pre>
+        <p>Define visualization</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">plot</span><span> = </span><span class="type-name">Plot</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Rational</span><span>, </span><span class="type-name">UnittedQuantity</span><span>[</span><span class="type-name">Information</span><span>, </span><span class="type-name">Double</span><span>], </span><span class="type-name">D</span><span>](
+  () =&gt; </span><span class="type-name">List</span><span>((</span><span class="string-literal">&quot;h&quot;</span><span>, </span><span class="identifier">hm</span><span>)),
+  </span><span class="identifier">connect</span><span> = </span><span class="boolean-literal">true</span><span>,
+  </span><span class="identifier">colorOf</span><span> = </span><span class="identifier">_</span><span> =&gt; </span><span class="type-name">Color</span><span>.</span><span class="identifier">black</span><span>,
+  </span><span class="identifier">drawKey</span><span> = </span><span class="boolean-literal">false</span><span>,
+  </span><span class="identifier">xAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;p(x=&#39;HEAD)&quot;</span><span>),
+  </span><span class="identifier">yAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;H&quot;</span><span>),
+  </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;Entropy&quot;</span><span>)).</span><span class="identifier">zeroAxes</span></code></pre>
+        <p>Create the SVG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">plot</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/coinentropy.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p>The result is the classic Claude Shannon graph</p>
+        <p><img src="/images/coinentropy.svg" alt="coin entropy"></p>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

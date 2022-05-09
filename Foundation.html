@@ -57,14 +57,21 @@
         <li class="level1"><a href="Math.html">Math</a></li>
         <li class="level1"><a href="Units.html">Units of Measurement</a></li>
         <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="Statistics.html">Statistics</a></li>
         <li class="level1"><a href="GraphTheory.html">Graph Theory</a></li>
-        <li class="level1"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
-        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
         <li class="level1"><a href="LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level1"><a href="RegressionAnalysis.html">Regression Analysis</a></li>
+        <li class="level1"><a href="Classification.html">Classification</a></li>
+        <li class="level1"><a href="Clustering.html">Clustering</a></li>
+        <li class="level1"><a href="EvolutionaryAlgorithms.html">Evolutionary Algorithms</a></li>
+        <li class="level1"><a href="ProbabilityModel.html">Probability Model</a></li>
+        <li class="level1"><a href="InformationTheory.html">Information Theory</a></li>
+        <li class="level1"><a href="ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
         <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
-        <li class="level1"><a href="MachineLearning.html">Machine Learning</a></li>
         <li class="level1"><a href="Biology.html">Biology</a></li>
         <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="Logic.html">Logic</a></li>
         <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
         <li class="level1"><a href="Appendix.html">Appendix</a></li>
       </ul>
@@ -77,18 +84,13 @@
         <p class="header"><a href="#">Foundation</a></p>
         
         <ul class="nav-list">
-          <li class="level1"><a href="#functional">Functional</a></li>
+          <li class="level1"><a href="#functional-programming">Functional Programming</a></li>
           <li class="level1"><a href="#scala">Scala</a></li>
-          <li class="level1"><a href="#cats">Cats</a></li>
+          <li class="level1"><a href="#typelevel-and-cats">Typelevel and Cats</a></li>
           <li class="level1"><a href="#architecture">Architecture</a></li>
+          <li class="level2"><a href="#ideal">Ideal</a></li>
           <li class="level2"><a href="#remaining-design-issues">Remaining Design Issues</a></li>
-          <li class="level1"><a href="#package-objects">Package Objects</a></li>
-          <li class="level2"><a href="#permutations">Permutations</a></li>
-          <li class="level2"><a href="#combinations">Combinations</a></li>
-          <li class="level2"><a href="#indexed-cross-product">Indexed Cross Product</a></li>
           <li class="level1"><a href="#algebra">Algebra</a></li>
-          <li class="level1"><a href="#logic">Logic</a></li>
-          <li class="level2"><a href="#conjunctive-normal-form-converter">Conjunctive Normal Form Converter</a></li>
           <li class="level1"><a href="#support-for-third-party-libraries">Support for Third Party Libraries</a></li>
           <li class="level2"><a href="#parallel-collections">Parallel Collections</a></li>
           <li class="level2"><a href="#xml">XML</a></li>
@@ -112,38 +114,39 @@
       <main class="content">
 
         <h1 id="foundation" class="title">Foundation</h1>
-        <p>Data structures and functions</p>
         
-        <h2 id="functional" class="section"><a class="anchor-link left" href="#functional"><i class="icofont-laika">&#xef71;</i></a>Functional</h2>
-        <p>To be written</p>
+        <h2 id="functional-programming" class="section"><a class="anchor-link left" href="#functional-programming"><i class="icofont-laika">&#xef71;</i></a>Functional Programming</h2>
+        <ul>
+          <li>Typeclasses</li>
+          <li>Curry-Howard Isomorphism</li>
+          <li>Theorems for Free</li>
+          <li>Referential Transparency</li>
+          <li>Equational Reasoning</li>
+          <li>Life After Monoids</li>
+          <li>Algebird</li>
+          <li>Kmett&#39;s mapping of abstract algebra to software patterns</li>
+        </ul>
         
         <h2 id="scala" class="section"><a class="anchor-link left" href="#scala"><i class="icofont-laika">&#xef71;</i></a>Scala</h2>
-        <p>To be written...</p>
+        <p>Scala is the host of Axle for many reasons, principled and not.</p>
+        <p>It&#39;s support for functional programming is chief among them.</p>
+        <p>Axle makes extensive use of Scala 2&#39;s &quot;Context Bounds&quot;.</p>
+        <p>When Axle moves to Scala 3, much of this will use the enw <code>given</code> / <code>using</code> syntax.</p>
         
-        <h2 id="cats" class="section"><a class="anchor-link left" href="#cats"><i class="icofont-laika">&#xef71;</i></a>Cats</h2>
-        <p>To be written</p>
+        <h2 id="typelevel-and-cats" class="section"><a class="anchor-link left" href="#typelevel-and-cats"><i class="icofont-laika">&#xef71;</i></a>Typelevel and Cats</h2>
         <p>Axle makes use of several Typelevel libraries including</p>
         <ul>
-          <li>Cats</li>
-          <li>Cats Effect</li>
-          <li>Spire</li>
+          <li>Cats (<code>Show</code>, <code>Eq</code>)</li>
+          <li>Cats Effect (<code>IO</code>, <code>Async</code>)</li>
+          <li>Spire (<code>Field</code>, <code>Ring</code>)</li>
           <li>Monix</li>
           <li>...</li>
         </ul>
         
         <h2 id="architecture" class="section"><a class="anchor-link left" href="#architecture"><i class="icofont-laika">&#xef71;</i></a>Architecture</h2>
-        <p>Axle generally strives to follow the patterns established
-        by the <a href="http://typelevel.org/">Typelevel</a> projects.</p>
-        <p>With few exceptions, the functions are side-effect free.</p>
-        <p>The typeclass patterns are drawn from two traditions:</p>
-        <ol class="arabic">
-          <li><a href="https://wiki.haskell.org/Typeclassopedia">Typeclassopedia</a></li>
-          <li>Abstract Algebra</li>
-        </ol>
-        <p>The algorithms are increasingly defined only in terms of these typeclasses.
-        Concrete runtime implementations will require witnesses that map non-Axle data structures
-        onto the typeclass methods and laws.
-        Laws are organized into a separate <code>axle-laws</code> jar for use in tests by code that builds
+        
+        <h3 id="ideal" class="section"><a class="anchor-link left" href="#ideal"><i class="icofont-laika">&#xef71;</i></a>Ideal</h3>
+        <p>Laws are organized into a separate <code>axle-laws</code> jar for use in tests by code that builds
         upon these typeclasses.
         Many such witnesses are provided by Axle for native Scala collections.</p>
         <p>Witnesses are also defined for other common jars from the Java and Scala ecosystems.
@@ -151,157 +154,6 @@
         
         <h3 id="remaining-design-issues" class="section"><a class="anchor-link left" href="#remaining-design-issues"><i class="icofont-laika">&#xef71;</i></a>Remaining Design Issues</h3>
         <p>Please get in touch if you&#39;d like to discuss these or other questions.</p>
-        
-        <h2 id="package-objects" class="section"><a class="anchor-link left" href="#package-objects"><i class="icofont-laika">&#xef71;</i></a>Package Objects</h2>
-        <p>This page describes functions in <code>axle.logic</code> and <code>axle.math</code> package objects.</p>
-        <p>Imports</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">logic</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">rngInt</span><span>: </span><span class="type-name">Rng</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
-</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringLong</span><span>: </span><span class="type-name">Ring</span><span>[</span><span class="type-name">Long</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">LongAlgebra</span><span>
-</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">boolBoolean</span><span>: </span><span class="type-name">Bool</span><span>[</span><span class="type-name">Boolean</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">BooleanStructure</span></code></pre>
-        <p>Logic aggregators <code>∃</code> and <code>∀</code>:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span>∃(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>)) { </span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span> =&gt; </span><span class="identifier">i</span><span> % </span><span class="number-literal">2</span><span> == </span><span class="number-literal">0</span><span> }
-</span><span class="comment">// res1: Boolean = true
-</span><span>
-∀(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>)) { </span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span> =&gt; </span><span class="identifier">i</span><span> % </span><span class="number-literal">2</span><span> == </span><span class="number-literal">0</span><span> }
-</span><span class="comment">// res2: Boolean = false</span></code></pre>
-        <p>Sum and multiply aggregators <code>Σ</code> and <code>Π</code>.
-        Note that <code>Σ</code> and <code>Π</code> are also available in <code>spire.optional.unicode._</code>.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span>Σ((</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">10</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> * </span><span class="number-literal">2</span><span> })
-</span><span class="comment">// res3: Int = 110
-</span><span>
-Π((</span><span class="number-literal">1L</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">10L</span><span>) </span><span class="identifier">map</span><span> { </span><span class="identifier">_</span><span> * </span><span class="number-literal">2</span><span> })
-</span><span class="comment">// res4: Long = 3715891200L</span></code></pre>
-        <p>Doubles, triples, and cross-products</p>
-        <pre><code class="nohighlight"><span class="identifier">doubles</span><span>(</span><span class="type-name">Set</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))
-</span><span class="comment">// res5: Seq[(Int, Int)] = List((1, 2), (1, 3), (2, 1), (2, 3), (3, 1), (3, 2))
-</span><span>
-</span><span class="identifier">triples</span><span>(</span><span class="type-name">Set</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))
-</span><span class="comment">// res6: Seq[(Int, Int, Int)] = List(
-//   (1, 2, 3),
-//   (1, 3, 2),
-//   (2, 1, 3),
-//   (2, 3, 1),
-//   (3, 1, 2),
-//   (3, 2, 1)
-// )
-</span><span>
-⨯(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>))(</span><span class="type-name">List</span><span>(</span><span class="number-literal">4</span><span>, </span><span class="number-literal">5</span><span>, </span><span class="number-literal">6</span><span>)).</span><span class="identifier">toList</span><span>
-</span><span class="comment">// res7: List[(Int, Int)] = List(
-//   (1, 4),
-//   (1, 5),
-//   (1, 6),
-//   (2, 4),
-//   (2, 5),
-//   (2, 6),
-//   (3, 4),
-//   (3, 5),
-//   (3, 6)
-// )</span></code></pre>
-        <p>Powerset</p>
-        <pre><code class="nohighlight"><span>℘(</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">4</span><span>)
-</span><span class="comment">// res8: IndexedPowerSet[Int] = Iterable(
-//   Set(),
-//   Set(0),
-//   Set(1),
-//   Set(0, 1),
-//   Set(2),
-//   Set(0, 2),
-//   Set(1, 2),
-//   Set(0, 1, 2),
-//   Set(3),
-//   Set(0, 3),
-//   Set(1, 3),
-//   Set(0, 1, 3),
-//   Set(2, 3),
-//   Set(0, 2, 3),
-//   Set(1, 2, 3),
-//   Set(0, 1, 2, 3)
-// )
-</span><span>
-</span><span class="keyword">val</span><span> </span><span class="identifier">ps</span><span> = ℘(</span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>, </span><span class="string-literal">&quot;c&quot;</span><span>))
-</span><span class="comment">// ps: IndexedPowerSet[String] = Iterable(
-//   Set(),
-//   Set(&quot;a&quot;),
-//   Set(&quot;b&quot;),
-//   Set(&quot;a&quot;, &quot;b&quot;),
-//   Set(&quot;c&quot;),
-//   Set(&quot;a&quot;, &quot;c&quot;),
-//   Set(&quot;b&quot;, &quot;c&quot;),
-//   Set(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)
-// )
-</span><span>
-</span><span class="identifier">ps</span><span>.</span><span class="identifier">size</span><span>
-</span><span class="comment">// res9: Int = 8
-</span><span>
-</span><span class="identifier">ps</span><span>(</span><span class="number-literal">7</span><span>)
-</span><span class="comment">// res10: Set[String] = Set(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)</span></code></pre>
-        
-        <h3 id="permutations" class="section"><a class="anchor-link left" href="#permutations"><i class="icofont-laika">&#xef71;</i></a>Permutations</h3>
-        <pre><code class="nohighlight"><span class="identifier">permutations</span><span>(</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">4</span><span>)(</span><span class="number-literal">2</span><span>).</span><span class="identifier">toList</span><span>
-</span><span class="comment">// res11: List[IndexedSeq[Int]] = List(
-//   Vector(0, 1),
-//   Vector(0, 2),
-//   Vector(0, 3),
-//   Vector(1, 0),
-//   Vector(1, 2),
-//   Vector(1, 3),
-//   Vector(2, 0),
-//   Vector(2, 1),
-//   Vector(2, 3),
-//   Vector(3, 0),
-//   Vector(3, 1),
-//   Vector(3, 2)
-// )</span></code></pre>
-        
-        <h3 id="combinations" class="section"><a class="anchor-link left" href="#combinations"><i class="icofont-laika">&#xef71;</i></a>Combinations</h3>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">combinations</span><span>(</span><span class="number-literal">0</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">4</span><span>)(</span><span class="number-literal">2</span><span>).</span><span class="identifier">toList</span><span>
-</span><span class="comment">// res12: List[IndexedSeq[Int]] = List(
-//   Vector(0, 1),
-//   Vector(0, 2),
-//   Vector(0, 3),
-//   Vector(1, 2),
-//   Vector(1, 3),
-//   Vector(2, 3)
-// )</span></code></pre>
-        
-        <h3 id="indexed-cross-product" class="section"><a class="anchor-link left" href="#indexed-cross-product"><i class="icofont-laika">&#xef71;</i></a>Indexed Cross Product</h3>
-        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">icp</span><span> = </span><span class="type-name">IndexedCrossProduct</span><span>(</span><span class="type-name">Vector</span><span>(
-  </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>, </span><span class="string-literal">&quot;c&quot;</span><span>),
-  </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;d&quot;</span><span>, </span><span class="string-literal">&quot;e&quot;</span><span>),
-  </span><span class="type-name">Vector</span><span>(</span><span class="string-literal">&quot;f&quot;</span><span>, </span><span class="string-literal">&quot;g&quot;</span><span>, </span><span class="string-literal">&quot;h&quot;</span><span>)))
-</span><span class="comment">// icp: IndexedCrossProduct[String] = Iterable(
-//   List(&quot;a&quot;, &quot;d&quot;, &quot;f&quot;),
-//   List(&quot;a&quot;, &quot;d&quot;, &quot;g&quot;),
-//   List(&quot;a&quot;, &quot;d&quot;, &quot;h&quot;),
-//   List(&quot;a&quot;, &quot;e&quot;, &quot;f&quot;),
-//   List(&quot;a&quot;, &quot;e&quot;, &quot;g&quot;),
-//   List(&quot;a&quot;, &quot;e&quot;, &quot;h&quot;),
-//   List(&quot;b&quot;, &quot;d&quot;, &quot;f&quot;),
-//   List(&quot;b&quot;, &quot;d&quot;, &quot;g&quot;),
-//   List(&quot;b&quot;, &quot;d&quot;, &quot;h&quot;),
-//   List(&quot;b&quot;, &quot;e&quot;, &quot;f&quot;),
-//   List(&quot;b&quot;, &quot;e&quot;, &quot;g&quot;),
-//   List(&quot;b&quot;, &quot;e&quot;, &quot;h&quot;),
-//   List(&quot;c&quot;, &quot;d&quot;, &quot;f&quot;),
-//   List(&quot;c&quot;, &quot;d&quot;, &quot;g&quot;),
-//   List(&quot;c&quot;, &quot;d&quot;, &quot;h&quot;),
-//   List(&quot;c&quot;, &quot;e&quot;, &quot;f&quot;),
-//   List(&quot;c&quot;, &quot;e&quot;, &quot;g&quot;),
-//   List(&quot;c&quot;, &quot;e&quot;, &quot;h&quot;)
-// )
-</span><span>
-</span><span class="identifier">icp</span><span>.</span><span class="identifier">size</span><span>
-</span><span class="comment">// res13: Int = 18
-</span><span>
-</span><span class="identifier">icp</span><span>(</span><span class="number-literal">4</span><span>)
-</span><span class="comment">// res14: Seq[String] = List(&quot;a&quot;, &quot;e&quot;, &quot;g&quot;)</span></code></pre>
         
         <h2 id="algebra" class="section"><a class="anchor-link left" href="#algebra"><i class="icofont-laika">&#xef71;</i></a>Algebra</h2>
         <p>The <a href="http://github.com/non/spire">spire</a> project is a dependency of Axle.
@@ -317,35 +169,6 @@
         <a href="https://github.com/axlelang/axle/tree/master/axle-core/src/main/scala/axle/algebra/laws">axle.algebra.laws</a> package
         as <a href="http://scalacheck.org/">ScalaCheck</a> properties.</p>
         <p>They are organized with <a href="https://github.com/typelevel/discipline">Discipline</a>.</p>
-        
-        <h2 id="logic" class="section"><a class="anchor-link left" href="#logic"><i class="icofont-laika">&#xef71;</i></a>Logic</h2>
-        
-        <h3 id="conjunctive-normal-form-converter" class="section"><a class="anchor-link left" href="#conjunctive-normal-form-converter"><i class="icofont-laika">&#xef71;</i></a>Conjunctive Normal Form Converter</h3>
-        <p>Imports</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">logic</span><span>.</span><span class="type-name">FirstOrderPredicateLogic</span><span>.</span><span class="identifier">_</span></code></pre>
-        <p>Example CNF conversion</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">logic</span><span>.</span><span class="identifier">example</span><span>.</span><span class="type-name">SamplePredicates</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">val</span><span> </span><span class="identifier">z</span><span> = </span><span class="type-name">Symbol</span><span>(</span><span class="string-literal">&quot;z&quot;</span><span>)
-
-</span><span class="keyword">val</span><span> </span><span class="identifier">s</span><span> = ∃(</span><span class="identifier">z</span><span> ∈ </span><span class="type-name">Z</span><span>, (</span><span class="type-name">A</span><span>(</span><span class="identifier">z</span><span>) ∧ </span><span class="type-name">G</span><span>(</span><span class="identifier">z</span><span>)) ⇔ (</span><span class="type-name">B</span><span>(</span><span class="identifier">z</span><span>) ∨ </span><span class="type-name">H</span><span>(</span><span class="identifier">z</span><span>)))
-
-</span><span class="keyword">val</span><span> (</span><span class="identifier">cnf</span><span>, </span><span class="identifier">skolemMap</span><span>) = </span><span class="identifier">conjunctiveNormalForm</span><span>(</span><span class="identifier">s</span><span>)</span></code></pre>
-        <pre><code class="nohighlight"><span class="identifier">cnf</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res16: String = &quot;((¬A(Symbol(sk0)) ∨ (¬G(Symbol(sk1)) ∨ (B(Symbol(sk2)) ∨ H(Symbol(sk3))))) ∧ (((¬B(Symbol(sk4)) ∧ ¬H(Symbol(sk5))) ∨ A(Symbol(sk6))) ∧ ((¬B(Symbol(sk4)) ∧ ¬H(Symbol(sk5))) ∨ G(Symbol(sk7)))))&quot;
-</span><span>
-</span><span class="identifier">skolemMap</span><span>
-</span><span class="comment">// res17: Map[Symbol, Set[Symbol]] = HashMap(
-//   &#39;sk2 -&gt; Set(),
-//   &#39;sk6 -&gt; Set(),
-//   &#39;sk7 -&gt; Set(),
-//   &#39;sk3 -&gt; Set(),
-//   &#39;sk4 -&gt; Set(),
-//   &#39;sk1 -&gt; Set(),
-//   &#39;sk0 -&gt; Set(),
-//   &#39;sk5 -&gt; Set()
-// )</span></code></pre>
         
         <h2 id="support-for-third-party-libraries" class="section"><a class="anchor-link left" href="#support-for-third-party-libraries"><i class="icofont-laika">&#xef71;</i></a>Support for Third Party Libraries</h2>
         <p>Witnesses for 3rd party libraries.</p>

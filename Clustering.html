@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Clustering</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1"><a href="Introduction.html">Introduction</a></li>
+        <li class="level1"><a href="Foundation.html">Foundation</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="Statistics.html">Statistics</a></li>
+        <li class="level1"><a href="GraphTheory.html">Graph Theory</a></li>
+        <li class="level1"><a href="LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level1"><a href="RegressionAnalysis.html">Regression Analysis</a></li>
+        <li class="level1"><a href="Classification.html">Classification</a></li>
+        <li class="level1 active"><a href="#">Clustering</a></li>
+        <li class="level1"><a href="EvolutionaryAlgorithms.html">Evolutionary Algorithms</a></li>
+        <li class="level1"><a href="ProbabilityModel.html">Probability Model</a></li>
+        <li class="level1"><a href="InformationTheory.html">Information Theory</a></li>
+        <li class="level1"><a href="ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
+        <li class="level1"><a href="Biology.html">Biology</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="Logic.html">Logic</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1"><a href="Appendix.html">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Clustering</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#k-means-clustering">k-Means Clustering</a></li>
+          <li class="level2"><a href="#example-irises">Example: Irises</a></li>
+          <li class="level1"><a href="#example-federalist-papers">Example: Federalist Papers</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="clustering" class="title">Clustering</h1>
+        
+        <h2 id="k-means-clustering" class="section"><a class="anchor-link left" href="#k-means-clustering"><i class="icofont-laika">&#xef71;</i></a>k-Means Clustering</h2>
+        
+        <h3 id="example-irises" class="section"><a class="anchor-link left" href="#example-irises"><i class="icofont-laika">&#xef71;</i></a>Example: Irises</h3>
+        <p>See the wikipedia page on <a href="https://en.wikipedia.org/wiki/K-means_clustering">k-Means Clustering</a></p>
+        <p>A demonstration of k-Means Clustering using the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set">Iris flower data set</a></p>
+        <p>Imports for Distance quanta</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">DirectedSparseGraph</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quanta</span><span>.</span><span class="type-name">Distance</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quanta</span><span>.</span><span class="type-name">DistanceConverter</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">distanceConverter</span><span> = {
+  </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">modules</span><span>.</span><span class="identifier">doubleRationalModule</span><span>
+  </span><span class="type-name">Distance</span><span>.</span><span class="identifier">converterGraphK2</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>]
+}</span></code></pre>
+        <p>Import the Irises data set</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Irises</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">Iris</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ec</span><span> = </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="identifier">global</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">blocker</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">Blocker</span><span>.</span><span class="identifier">liftExecutionContext</span><span>(</span><span class="identifier">ec</span><span>)
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">cs</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">contextShift</span><span>(</span><span class="identifier">ec</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">irisesIO</span><span> = </span><span class="keyword">new</span><span> </span><span class="type-name">Irises</span><span>[</span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>](</span><span class="identifier">blocker</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="identifier">irises</span><span> = </span><span class="identifier">irisesIO</span><span>.</span><span class="identifier">irises</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p>Make a 2-D Euclidean space implicitly available for clustering</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="type-name">DoubleMatrix</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">distance</span><span>.</span><span class="type-name">Euclidean</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">linearAlgebraDoubleMatrix</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">rowVectorInnerProductSpace</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">space</span><span>: </span><span class="type-name">Euclidean</span><span>[</span><span class="type-name">DoubleMatrix</span><span>, </span><span class="type-name">Double</span><span>] = {
+  </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringInt</span><span>: </span><span class="type-name">Ring</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
+  </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">inner</span><span> = </span><span class="identifier">rowVectorInnerProductSpace</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Double</span><span>](</span><span class="number-literal">2</span><span>)
+  </span><span class="keyword">new</span><span> </span><span class="type-name">Euclidean</span><span>[</span><span class="type-name">DoubleMatrix</span><span>, </span><span class="type-name">Double</span><span>]
+}</span></code></pre>
+        <p>Build a classifier of irises based on sepal length and width using the K-Means algorithm</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">KMeans</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">PCAFeatureNormalizer</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">distanceConverter</span><span>.</span><span class="identifier">cm</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">irisFeaturizer</span><span> =
+  (</span><span class="identifier">iris</span><span>: </span><span class="type-name">Iris</span><span>) =&gt; </span><span class="type-name">List</span><span>((</span><span class="identifier">iris</span><span>.</span><span class="identifier">sepalLength</span><span> </span><span class="identifier">in</span><span> </span><span class="identifier">cm</span><span>).</span><span class="identifier">magnitude</span><span>.</span><span class="identifier">toDouble</span><span>, (</span><span class="identifier">iris</span><span>.</span><span class="identifier">sepalWidth</span><span> </span><span class="identifier">in</span><span> </span><span class="identifier">cm</span><span>).</span><span class="identifier">magnitude</span><span>.</span><span class="identifier">toDouble</span><span>)
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">la</span><span> = </span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">normalizer</span><span> = (</span><span class="type-name">PCAFeatureNormalizer</span><span>[</span><span class="type-name">DoubleMatrix</span><span>] </span><span class="identifier">_</span><span>).</span><span class="identifier">curried</span><span>.</span><span class="identifier">apply</span><span>(</span><span class="number-literal">0.98</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">classifier</span><span>: </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>] =
+  </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
+    </span><span class="identifier">irises</span><span>,
+    </span><span class="type-name">N</span><span> = </span><span class="number-literal">2</span><span>,
+    </span><span class="identifier">irisFeaturizer</span><span>,
+    </span><span class="identifier">normalizer</span><span>,
+    </span><span class="type-name">K</span><span> = </span><span class="number-literal">3</span><span>,
+    </span><span class="identifier">iterations</span><span> = </span><span class="number-literal">20</span><span>)(</span><span class="identifier">rng</span><span>)</span></code></pre>
+        <p>Produce a &quot;confusion matrix&quot;</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">ConfusionMatrix</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">confusion</span><span> = </span><span class="type-name">ConfusionMatrix</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Vector</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
+  </span><span class="identifier">classifier</span><span>,
+  </span><span class="identifier">irises</span><span>.</span><span class="identifier">toVector</span><span>,
+  </span><span class="identifier">_</span><span>.</span><span class="identifier">species</span><span>,
+  </span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">2</span><span>)</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">confusion</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res1: String = &quot;&quot;&quot;  0  49   1 :  50 Iris-setosa
+//  12   2  36 :  50 Iris-versicolor
+//  30   0  20 :  50 Iris-virginica
+// 
+//  42  51  57
+// &quot;&quot;&quot;</span></code></pre>
+        <p>Visualize the final (two dimensional) centroid positions</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">KMeansVisualization</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">Color</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">colors</span><span> = </span><span class="type-name">Vector</span><span>(</span><span class="identifier">red</span><span>, </span><span class="identifier">blue</span><span>, </span><span class="identifier">green</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">vis</span><span> = </span><span class="type-name">KMeansVisualization</span><span>[</span><span class="type-name">Iris</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](</span><span class="identifier">classifier</span><span>, </span><span class="identifier">colors</span><span>)</span></code></pre>
+        <p>Create the SVG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">vis</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/k_means.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/k_means.svg" alt="kmeans"></p>
+        <p>Average centroid/cluster vs iteration:</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">collection</span><span>.</span><span class="identifier">immutable</span><span>.</span><span class="type-name">TreeMap</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">plot</span><span> = </span><span class="type-name">Plot</span><span>(
+  () =&gt; </span><span class="identifier">classifier</span><span>.</span><span class="identifier">distanceLogSeries</span><span>,
+  </span><span class="identifier">connect</span><span> = </span><span class="boolean-literal">true</span><span>,
+  </span><span class="identifier">drawKey</span><span> = </span><span class="boolean-literal">true</span><span>,
+  </span><span class="identifier">colorOf</span><span> = </span><span class="identifier">colors</span><span>,
+  </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;KMeans Mean Centroid Distances&quot;</span><span>),
+  </span><span class="identifier">xAxis</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="number-literal">0d</span><span>),
+  </span><span class="identifier">xAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;step&quot;</span><span>),
+  </span><span class="identifier">yAxis</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="number-literal">0</span><span>),
+  </span><span class="identifier">yAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;average distance to centroid&quot;</span><span>))</span></code></pre>
+        <p>Create the SVG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">plot</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/kmeansvsiteration.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/kmeansvsiteration.svg" alt="kmeans"></p>
+        
+        <h2 id="example-federalist-papers" class="section"><a class="anchor-link left" href="#example-federalist-papers"><i class="icofont-laika">&#xef71;</i></a>Example: Federalist Papers</h2>
+        <p>Imports</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">data</span><span>.</span><span class="type-name">FederalistPapers</span><span>
+</span><span class="keyword">import</span><span> </span><span class="type-name">FederalistPapers</span><span>.</span><span class="type-name">Article</span></code></pre>
+        <p>Download (and cache) the Federalist articles downloader:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ec</span><span> = </span><span class="identifier">scala</span><span>.</span><span class="identifier">concurrent</span><span>.</span><span class="type-name">ExecutionContext</span><span>.</span><span class="identifier">global</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">blocker</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">Blocker</span><span>.</span><span class="identifier">liftExecutionContext</span><span>(</span><span class="identifier">ec</span><span>)
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">cs</span><span> = </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>.</span><span class="identifier">contextShift</span><span>(</span><span class="identifier">ec</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">articlesIO</span><span> = </span><span class="type-name">FederalistPapers</span><span>.</span><span class="identifier">articles</span><span>[</span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="type-name">IO</span><span>](</span><span class="identifier">blocker</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">articles</span><span> = </span><span class="identifier">articlesIO</span><span>.</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p>The result is a <code>List[Article]</code>.  How many articles are there?</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">articles</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// res5: Int = 86</span></code></pre>
+        <p>Construct a <code>Corpus</code> object to assist with content analysis</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">nlp</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">nlp</span><span>.</span><span class="identifier">language</span><span>.</span><span class="type-name">English</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">CRing</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringLong</span><span>: </span><span class="type-name">CRing</span><span>[</span><span class="type-name">Long</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">LongAlgebra</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">corpus</span><span> = </span><span class="type-name">Corpus</span><span>[</span><span class="type-name">Vector</span><span>, </span><span class="type-name">Long</span><span>](</span><span class="identifier">articles</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">text</span><span>).</span><span class="identifier">toVector</span><span>, </span><span class="type-name">English</span><span>)</span></code></pre>
+        <p>Define a feature extractor using top words and bigrams.</p>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">frequentWords</span><span> = </span><span class="identifier">corpus</span><span>.</span><span class="identifier">wordsMoreFrequentThan</span><span>(</span><span class="number-literal">100</span><span>)
+</span><span class="comment">// frequentWords: List[String] = List(
+//   &quot;the&quot;,
+//   &quot;of&quot;,
+//   &quot;to&quot;,
+//   &quot;and&quot;,
+//   &quot;in&quot;,
+//   &quot;a&quot;,
+//   &quot;be&quot;,
+//   &quot;that&quot;,
+//   &quot;it&quot;,
+//   &quot;is&quot;,
+//   &quot;which&quot;,
+//   &quot;by&quot;,
+//   &quot;as&quot;,
+// ...</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">topBigrams</span><span> = </span><span class="identifier">corpus</span><span>.</span><span class="identifier">topKBigrams</span><span>(</span><span class="number-literal">200</span><span>)
+</span><span class="comment">// topBigrams: List[(String, String)] = List(
+//   (&quot;of&quot;, &quot;the&quot;),
+//   (&quot;to&quot;, &quot;the&quot;),
+//   (&quot;in&quot;, &quot;the&quot;),
+//   (&quot;to&quot;, &quot;be&quot;),
+//   (&quot;that&quot;, &quot;the&quot;),
+//   (&quot;it&quot;, &quot;is&quot;),
+//   (&quot;by&quot;, &quot;the&quot;),
+//   (&quot;of&quot;, &quot;a&quot;),
+//   (&quot;the&quot;, &quot;people&quot;),
+//   (&quot;on&quot;, &quot;the&quot;),
+//   (&quot;would&quot;, &quot;be&quot;),
+//   (&quot;will&quot;, &quot;be&quot;),
+//   (&quot;for&quot;, &quot;the&quot;),
+// ...</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">numDimensions</span><span> = </span><span class="identifier">frequentWords</span><span>.</span><span class="identifier">size</span><span> + </span><span class="identifier">topBigrams</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// numDimensions: Int = 403</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">talliable</span><span>.</span><span class="identifier">talliableOps</span><span>
+
+</span><span class="keyword">def</span><span> </span><span class="declaration-name">featureExtractor</span><span>(</span><span class="identifier">fp</span><span>: </span><span class="type-name">Article</span><span>): </span><span class="type-name">List</span><span>[</span><span class="type-name">Double</span><span>] = {
+
+  </span><span class="keyword">val</span><span> </span><span class="identifier">tokens</span><span> = </span><span class="type-name">English</span><span>.</span><span class="identifier">tokenize</span><span>(</span><span class="identifier">fp</span><span>.</span><span class="identifier">text</span><span>.</span><span class="identifier">toLowerCase</span><span>)
+  </span><span class="keyword">val</span><span> </span><span class="identifier">wordCounts</span><span> = </span><span class="identifier">tokens</span><span>.</span><span class="identifier">tally</span><span>[</span><span class="type-name">Long</span><span>]
+  </span><span class="keyword">val</span><span> </span><span class="identifier">bigramCounts</span><span> =  </span><span class="identifier">bigrams</span><span>(</span><span class="identifier">tokens</span><span>).</span><span class="identifier">tally</span><span>[</span><span class="type-name">Long</span><span>]
+  </span><span class="keyword">val</span><span> </span><span class="identifier">wordFeatures</span><span> = </span><span class="identifier">frequentWords</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">wordCounts</span><span>(</span><span class="identifier">_</span><span>) + </span><span class="number-literal">0.1</span><span>)
+  </span><span class="keyword">val</span><span> </span><span class="identifier">bigramFeatures</span><span> = </span><span class="identifier">topBigrams</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">bigramCounts</span><span>(</span><span class="identifier">_</span><span>) + </span><span class="number-literal">0.1</span><span>)
+  </span><span class="identifier">wordFeatures</span><span> ++ </span><span class="identifier">bigramFeatures</span><span>
+}</span></code></pre>
+        <p>Place a <code>MetricSpace</code> implicitly in scope that defines the space in which to
+        measure similarity of Articles.</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">distance</span><span>.</span><span class="type-name">Euclidean</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">org</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="type-name">DoubleMatrix</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">linearAlgebraDoubleMatrix</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">space</span><span> = {
+  </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">ringInt</span><span>: </span><span class="type-name">Ring</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
+  </span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">inner</span><span> = </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">rowVectorInnerProductSpace</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Double</span><span>](</span><span class="identifier">numDimensions</span><span>)
+  </span><span class="keyword">new</span><span> </span><span class="type-name">Euclidean</span><span>[</span><span class="type-name">DoubleMatrix</span><span>, </span><span class="type-name">Double</span><span>]
+}</span></code></pre>
+        <p>Create 4 clusters using k-Means</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">KMeans</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">PCAFeatureNormalizer</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">normalizer</span><span> = (</span><span class="type-name">PCAFeatureNormalizer</span><span>[</span><span class="type-name">DoubleMatrix</span><span>] </span><span class="identifier">_</span><span>).</span><span class="identifier">curried</span><span>.</span><span class="identifier">apply</span><span>(</span><span class="number-literal">0.98</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">classifier</span><span> = </span><span class="type-name">KMeans</span><span>[</span><span class="type-name">Article</span><span>, </span><span class="type-name">List</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
+  </span><span class="identifier">articles</span><span>,
+  </span><span class="type-name">N</span><span> = </span><span class="identifier">numDimensions</span><span>,
+  </span><span class="identifier">featureExtractor</span><span>,
+  </span><span class="identifier">normalizer</span><span>,
+  </span><span class="type-name">K</span><span> = </span><span class="number-literal">4</span><span>,
+  </span><span class="identifier">iterations</span><span> = </span><span class="number-literal">100</span><span>)(</span><span class="identifier">rng</span><span>)</span></code></pre>
+        <p>Show cluster vs author in a confusion matrix:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">ConfusionMatrix</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">confusion</span><span> = </span><span class="type-name">ConfusionMatrix</span><span>[</span><span class="type-name">Article</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Vector</span><span>, </span><span class="type-name">DoubleMatrix</span><span>](
+  </span><span class="identifier">classifier</span><span>,
+  </span><span class="identifier">articles</span><span>.</span><span class="identifier">toVector</span><span>,
+  </span><span class="identifier">_</span><span>.</span><span class="identifier">author</span><span>,
+  </span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">3</span><span>)</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">confusion</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res6: String = &quot;&quot;&quot;26 12  8  6 : 52 HAMILTON
+//  3  0  0  0 :  3 HAMILTON AND MADISON
+//  3  4  7  1 : 15 MADISON
+//  5  0  0  0 :  5 JAY
+//  6  3  2  0 : 11 HAMILTON OR MADISON
+// 
+// 43 19 17  7
+// &quot;&quot;&quot;</span></code></pre>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

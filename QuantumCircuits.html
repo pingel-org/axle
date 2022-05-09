@@ -57,14 +57,21 @@
         <li class="level1"><a href="Math.html">Math</a></li>
         <li class="level1"><a href="Units.html">Units of Measurement</a></li>
         <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="Statistics.html">Statistics</a></li>
         <li class="level1"><a href="GraphTheory.html">Graph Theory</a></li>
-        <li class="level1"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
-        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
         <li class="level1"><a href="LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level1"><a href="RegressionAnalysis.html">Regression Analysis</a></li>
+        <li class="level1"><a href="Classification.html">Classification</a></li>
+        <li class="level1"><a href="Clustering.html">Clustering</a></li>
+        <li class="level1"><a href="EvolutionaryAlgorithms.html">Evolutionary Algorithms</a></li>
+        <li class="level1"><a href="ProbabilityModel.html">Probability Model</a></li>
+        <li class="level1"><a href="InformationTheory.html">Information Theory</a></li>
+        <li class="level1"><a href="ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
         <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
-        <li class="level1"><a href="MachineLearning.html">Machine Learning</a></li>
         <li class="level1"><a href="Biology.html">Biology</a></li>
         <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="Logic.html">Logic</a></li>
         <li class="level1 active"><a href="#">Quantum Circuits</a></li>
         <li class="level1"><a href="Appendix.html">Appendix</a></li>
       </ul>
@@ -77,8 +84,10 @@
         <p class="header"><a href="#">Quantum Circuits</a></p>
         
         <ul class="nav-list">
+          <li class="level1"><a href="#qbit">QBit</a></li>
+          <li class="level1"><a href="#dirac-vector-notation">Dirac Vector Notation</a></li>
+          <li class="level1"><a href="#cnot">CNOT</a></li>
           <li class="level1"><a href="#future-work">Future Work</a></li>
-          <li class="level2"><a href="#soon">Soon</a></li>
           <li class="level2"><a href="#later">Later</a></li>
         </ul>
         
@@ -88,11 +97,90 @@
       <main class="content">
 
         <h1 id="quantum-circuits" class="title">Quantum Circuits</h1>
-        <p>To be written...</p>
+        
+        <h2 id="qbit" class="section"><a class="anchor-link left" href="#qbit"><i class="icofont-laika">&#xef71;</i></a>QBit</h2>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quantumcircuit</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">kolmogorov</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">RegionEq</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">sqrtHalf</span><span> = </span><span class="type-name">Complex</span><span>(</span><span class="type-name">Real</span><span>(</span><span class="number-literal">1</span><span>) / </span><span class="identifier">sqrt</span><span>(</span><span class="type-name">Real</span><span>(</span><span class="number-literal">2</span><span>)), </span><span class="type-name">Real</span><span>(</span><span class="number-literal">0</span><span>))
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">qEven</span><span> = </span><span class="type-name">QBit</span><span>[</span><span class="type-name">Real</span><span>](</span><span class="identifier">sqrtHalf</span><span>, </span><span class="identifier">sqrtHalf</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">distribution</span><span> = </span><span class="identifier">qEven</span><span>.</span><span class="identifier">cpt</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">distribution</span><span>.</span><span class="type-name">P</span><span>(</span><span class="type-name">RegionEq</span><span>(</span><span class="type-name">CBit0</span><span>))
+</span><span class="comment">// res0: Real = Inexact(
+//   f = spire.math.Real$$Lambda$10841/0x0000000802805d80@726f9eae
+// )
+</span><span>
+</span><span class="identifier">distribution</span><span>.</span><span class="type-name">P</span><span>(</span><span class="type-name">RegionEq</span><span>(</span><span class="type-name">CBit1</span><span>))
+</span><span class="comment">// res1: Real = Inexact(
+//   f = spire.math.Real$$Lambda$10841/0x0000000802805d80@58a3656f
+// )</span></code></pre>
+        
+        <h2 id="dirac-vector-notation" class="section"><a class="anchor-link left" href="#dirac-vector-notation"><i class="icofont-laika">&#xef71;</i></a>Dirac Vector Notation</h2>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quantumcircuit</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Binary</span></code></pre>
+        <pre><code class="nohighlight"><span>|(</span><span class="string-literal">&quot;00&quot;</span><span>).&gt;().</span><span class="identifier">unindex</span><span>
+</span><span class="comment">// res3: Vector[Binary] = Vector(
+//   axle.algebra.B1$@374ca7b9,
+//   axle.algebra.B0$@4f14481b,
+//   axle.algebra.B0$@4f14481b,
+//   axle.algebra.B0$@4f14481b
+// )
+</span><span>
+</span><span class="type-name">Vector</span><span>[</span><span class="type-name">Binary</span><span>](</span><span class="number-literal">1</span><span>, </span><span class="number-literal">0</span><span>) ⊗ </span><span class="type-name">Vector</span><span>[</span><span class="type-name">Binary</span><span>](</span><span class="number-literal">1</span><span>, </span><span class="number-literal">0</span><span>)
+</span><span class="comment">// res4: Vector[Binary] = Vector(
+//   axle.algebra.B1$@374ca7b9,
+//   axle.algebra.B0$@4f14481b,
+//   axle.algebra.B0$@4f14481b,
+//   axle.algebra.B0$@4f14481b
+// )</span></code></pre>
+        
+        <h2 id="cnot" class="section"><a class="anchor-link left" href="#cnot"><i class="icofont-laika">&#xef71;</i></a>CNOT</h2>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quantumcircuit</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">quantumcircuit</span><span>.</span><span class="type-name">QBit</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">Real</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldReal</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Real</span><span>] = </span><span class="keyword">new</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">RealAlgebra</span><span>()
+</span><span class="keyword">val</span><span> </span><span class="type-name">QBit0</span><span> = </span><span class="identifier">constant0</span><span>[</span><span class="type-name">Real</span><span>]
+</span><span class="keyword">val</span><span> </span><span class="type-name">QBit1</span><span> = </span><span class="identifier">constant1</span><span>[</span><span class="type-name">Real</span><span>]</span></code></pre>
+        <pre><code class="nohighlight"><span class="type-name">QBit2</span><span>.</span><span class="identifier">cnot</span><span>(</span><span class="type-name">QBit2</span><span>(</span><span class="type-name">QBit0</span><span>.</span><span class="identifier">unindex</span><span> ⊗ </span><span class="type-name">QBit0</span><span>.</span><span class="identifier">unindex</span><span>)).</span><span class="identifier">unindex</span><span>
+</span><span class="comment">// res6: Vector[spire.math.Complex[Real]] = Vector(
+//   Complex(real = Exact(n = 1), imag = Exact(n = 0)),
+//   Complex(real = Exact(n = 0), imag = Exact(n = 0)),
+//   Complex(real = Exact(n = 0), imag = Exact(n = 0)),
+//   Complex(real = Exact(n = 0), imag = Exact(n = 0))
+// )
+</span><span>
+</span><span class="type-name">QBit2</span><span>.</span><span class="identifier">cnot</span><span>(</span><span class="type-name">QBit2</span><span>(</span><span class="type-name">QBit0</span><span>.</span><span class="identifier">unindex</span><span> ⊗ </span><span class="type-name">QBit1</span><span>.</span><span class="identifier">unindex</span><span>)).</span><span class="identifier">unindex</span><span>
+</span><span class="comment">// res7: Vector[spire.math.Complex[Real]] = Vector(
+//   Complex(real = Exact(n = 0), imag = Exact(n = 0)),
+//   Complex(real = Exact(n = 1), imag = Exact(n = 0)),
+//   Complex(real = Exact(n = 0), imag = Exact(n = 0)),
+//   Complex(real = Exact(n = 0), imag = Exact(n = 0))
+// )
+</span><span>
+</span><span class="type-name">QBit2</span><span>.</span><span class="identifier">cnot</span><span>(</span><span class="type-name">QBit2</span><span>(</span><span class="type-name">QBit1</span><span>.</span><span class="identifier">unindex</span><span> ⊗ </span><span class="type-name">QBit0</span><span>.</span><span class="identifier">unindex</span><span>)).</span><span class="identifier">unindex</span><span>
+</span><span class="comment">// res8: Vector[spire.math.Complex[Real]] = Vector(
+//   Complex(real = Exact(n = 0), imag = Exact(n = 0)),
+//   Complex(real = Exact(n = 0), imag = Exact(n = 0)),
+//   Complex(real = Exact(n = 0), imag = Exact(n = 0)),
+//   Complex(real = Exact(n = 1), imag = Exact(n = 0))
+// )
+</span><span>
+</span><span class="type-name">QBit2</span><span>.</span><span class="identifier">cnot</span><span>(</span><span class="type-name">QBit2</span><span>(</span><span class="type-name">QBit1</span><span>.</span><span class="identifier">unindex</span><span> ⊗ </span><span class="type-name">QBit1</span><span>.</span><span class="identifier">unindex</span><span>)).</span><span class="identifier">unindex</span><span>
+</span><span class="comment">// res9: Vector[spire.math.Complex[Real]] = Vector(
+//   Complex(real = Exact(n = 0), imag = Exact(n = 0)),
+//   Complex(real = Exact(n = 0), imag = Exact(n = 0)),
+//   Complex(real = Exact(n = 1), imag = Exact(n = 0)),
+//   Complex(real = Exact(n = 0), imag = Exact(n = 0))
+// )</span></code></pre>
         
         <h2 id="future-work" class="section"><a class="anchor-link left" href="#future-work"><i class="icofont-laika">&#xef71;</i></a>Future Work</h2>
-        
-        <h3 id="soon" class="section"><a class="anchor-link left" href="#soon"><i class="icofont-laika">&#xef71;</i></a>Soon</h3>
         <ul>
           <li><code>QBit2.factor</code></li>
           <li>Fix and enable <code>DeutschOracleSpec</code></li>

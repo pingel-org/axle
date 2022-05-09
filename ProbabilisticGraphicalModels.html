@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Probabilistic Graphical Models</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1"><a href="Introduction.html">Introduction</a></li>
+        <li class="level1"><a href="Foundation.html">Foundation</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="Statistics.html">Statistics</a></li>
+        <li class="level1"><a href="GraphTheory.html">Graph Theory</a></li>
+        <li class="level1"><a href="LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level1"><a href="RegressionAnalysis.html">Regression Analysis</a></li>
+        <li class="level1"><a href="Classification.html">Classification</a></li>
+        <li class="level1"><a href="Clustering.html">Clustering</a></li>
+        <li class="level1"><a href="EvolutionaryAlgorithms.html">Evolutionary Algorithms</a></li>
+        <li class="level1"><a href="ProbabilityModel.html">Probability Model</a></li>
+        <li class="level1"><a href="InformationTheory.html">Information Theory</a></li>
+        <li class="level1 active"><a href="#">Probabilistic Graphical Models</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
+        <li class="level1"><a href="Biology.html">Biology</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="Logic.html">Logic</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1"><a href="Appendix.html">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Probabilistic Graphical Models</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#bayesian-networks">Bayesian Networks</a></li>
+          <li class="level2"><a href="#example-alarm">Example: Alarm</a></li>
+          <li class="level1"><a href="#future-work">Future Work</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="probabilistic-graphical-models" class="title">Probabilistic Graphical Models</h1>
+        <p>Currently only Bayesian Networks</p>
+        <p>Eventually others including Pearl&#39;s causal models.</p>
+        
+        <h2 id="bayesian-networks" class="section"><a class="anchor-link left" href="#bayesian-networks"><i class="icofont-laika">&#xef71;</i></a>Bayesian Networks</h2>
+        <p>See the Wikipedia page on <a href="https://en.wikipedia.org/wiki/Bayesian_network">Bayesian networks</a></p>
+        
+        <h3 id="example-alarm" class="section"><a class="anchor-link left" href="#example-alarm"><i class="icofont-laika">&#xef71;</i></a>Example: Alarm</h3>
+        <p>Define random variables</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">probability</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">bools</span><span> = </span><span class="type-name">Vector</span><span>(</span><span class="boolean-literal">true</span><span>, </span><span class="boolean-literal">false</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="type-name">B</span><span> = </span><span class="type-name">Variable</span><span>[</span><span class="type-name">Boolean</span><span>](</span><span class="string-literal">&quot;Burglary&quot;</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="type-name">E</span><span> = </span><span class="type-name">Variable</span><span>[</span><span class="type-name">Boolean</span><span>](</span><span class="string-literal">&quot;Earthquake&quot;</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="type-name">A</span><span> = </span><span class="type-name">Variable</span><span>[</span><span class="type-name">Boolean</span><span>](</span><span class="string-literal">&quot;Alarm&quot;</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="type-name">J</span><span> = </span><span class="type-name">Variable</span><span>[</span><span class="type-name">Boolean</span><span>](</span><span class="string-literal">&quot;John Calls&quot;</span><span>)
+</span><span class="keyword">val</span><span> </span><span class="type-name">M</span><span> = </span><span class="type-name">Variable</span><span>[</span><span class="type-name">Boolean</span><span>](</span><span class="string-literal">&quot;Mary Calls&quot;</span><span>)</span></code></pre>
+        <p>Define Factor for each variable</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">bFactor</span><span> =
+  </span><span class="type-name">Factor</span><span>(</span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> -&gt; </span><span class="identifier">bools</span><span>), </span><span class="type-name">Map</span><span>(
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">999</span><span>, </span><span class="number-literal">1000</span><span>)))
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">eFactor</span><span> =
+  </span><span class="type-name">Factor</span><span>(</span><span class="type-name">Vector</span><span>(</span><span class="type-name">E</span><span> -&gt; </span><span class="identifier">bools</span><span>), </span><span class="type-name">Map</span><span>(
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">500</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">499</span><span>, </span><span class="number-literal">500</span><span>)))
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">aFactor</span><span> =
+  </span><span class="type-name">Factor</span><span>(</span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> -&gt; </span><span class="identifier">bools</span><span>, </span><span class="type-name">E</span><span> -&gt; </span><span class="identifier">bools</span><span>, </span><span class="type-name">A</span><span> -&gt; </span><span class="identifier">bools</span><span>), </span><span class="type-name">Map</span><span>(
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">999</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">940</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">60</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">290</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">710</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">950</span><span>, </span><span class="number-literal">1000</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">B</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">E</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">50</span><span>, </span><span class="number-literal">1000</span><span>)))
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">jFactor</span><span> =
+  </span><span class="type-name">Factor</span><span>(</span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> -&gt; </span><span class="identifier">bools</span><span>, </span><span class="type-name">J</span><span> -&gt; </span><span class="identifier">bools</span><span>), </span><span class="type-name">Map</span><span>(
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">J</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">9</span><span>, </span><span class="number-literal">10</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">J</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">10</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">J</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">5</span><span>, </span><span class="number-literal">100</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">J</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">95</span><span>, </span><span class="number-literal">100</span><span>)))
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">mFactor</span><span> =
+  </span><span class="type-name">Factor</span><span>(</span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> -&gt; </span><span class="identifier">bools</span><span>, </span><span class="type-name">M</span><span> -&gt; </span><span class="identifier">bools</span><span>), </span><span class="type-name">Map</span><span>(
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">M</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">7</span><span>, </span><span class="number-literal">10</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>, </span><span class="type-name">M</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">3</span><span>, </span><span class="number-literal">10</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">M</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">true</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">100</span><span>),
+    </span><span class="type-name">Vector</span><span>(</span><span class="type-name">A</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>, </span><span class="type-name">M</span><span> </span><span class="identifier">is</span><span> </span><span class="boolean-literal">false</span><span>) -&gt; </span><span class="type-name">Rational</span><span>(</span><span class="number-literal">99</span><span>, </span><span class="number-literal">100</span><span>)))</span></code></pre>
+        <p>Arrange into a graph</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">pgm</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">DirectedSparseGraph</span><span>
+
+</span><span class="comment">// edges: ba, ea, aj, am
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">bn</span><span>: </span><span class="type-name">BayesianNetwork</span><span>[</span><span class="type-name">Boolean</span><span>, </span><span class="type-name">Rational</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>[</span><span class="type-name">BayesianNetworkNode</span><span>[</span><span class="type-name">Boolean</span><span>, </span><span class="type-name">Rational</span><span>], </span><span class="type-name">Edge</span><span>]] =
+  </span><span class="type-name">BayesianNetwork</span><span>.</span><span class="identifier">withGraphK2</span><span>[</span><span class="type-name">Boolean</span><span>, </span><span class="type-name">Rational</span><span>, </span><span class="type-name">DirectedSparseGraph</span><span>](
+    </span><span class="type-name">Map</span><span>(
+      </span><span class="type-name">B</span><span> -&gt; </span><span class="identifier">bFactor</span><span>,
+      </span><span class="type-name">E</span><span> -&gt; </span><span class="identifier">eFactor</span><span>,
+      </span><span class="type-name">A</span><span> -&gt; </span><span class="identifier">aFactor</span><span>,
+      </span><span class="type-name">J</span><span> -&gt; </span><span class="identifier">jFactor</span><span>,
+      </span><span class="type-name">M</span><span> -&gt; </span><span class="identifier">mFactor</span><span>))</span></code></pre>
+        <p>Create an SVG visualization</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">bnVis</span><span>  = </span><span class="type-name">BayesianNetworkVisualization</span><span>(</span><span class="identifier">bn</span><span>, </span><span class="number-literal">1000</span><span>, </span><span class="number-literal">1000</span><span>, </span><span class="number-literal">20</span><span>)</span></code></pre>
+        <p>Render as SVG file</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">bnVis</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/alarm_bayes.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/alarm_bayes.svg" alt="alarm bayes network"></p>
+        <p>The network can be used to compute the joint probability table:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">showRational</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">jpt</span><span> = </span><span class="identifier">bn</span><span>.</span><span class="identifier">jointProbabilityTable</span></code></pre>
+        <pre><code class="nohighlight"><span class="identifier">jpt</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res2: String = &quot;&quot;&quot;John Calls Alarm Earthquake Burglary Mary Calls
+// true       true  true       true     true       1197/1000000000
+// true       true  true       true     false      513/1000000000
+// true       true  true       false    true       1825173/5000000000
+// true       true  true       false    false      782217/5000000000
+// true       true  false      true     true       1477539/2500000000
+// true       true  false      true     false      633231/2500000000
+// true       true  false      false    true       31405563/50000000000
+// true       true  false      false    false      13459527/50000000000
+// true       false true       true     true       1/20000000000
+// true       false true       true     false      99/20000000000
+// true       false true       false    true       70929/100000000000
+// true       false true       false    false      7021971/100000000000
+// true       false false      true     true       1497/50000000000
+// true       false false      true     false      148203/50000000000
+// true       false false      false    true       498002499/1000000000000
+// true       false false      false    false      49302247401/1000000000000
+// false      true  true       true     true       133/1000000000
+// false      true  true       true     false      57/1000000000
+// false      true  true       false    true       202797/5000000000
+// false      true  true       false    false      86913/5000000000
+// false      true  false      true     true       164171/2500000000
+// false      true  false      true     false      70359/2500000000
+// false      true  false      false    true       3489507/50000000000
+// false      true  false      false    false      1495503/50000000000
+// false      false true       true     true       19/20000000000
+// false      false true       true     false      1881/20000000000
+// false      false true       false    true       1347651/100000000000
+// false      false true       false    false      133417449/100000000000
+// false      false false      true     true       28443/50000000000
+// false      false false      true     false      2815857/50000000000
+// false      false false      false    true       9462047481/1000000000000
+// false      false false      false    false      936742700619/1000000000000&quot;&quot;&quot;</span></code></pre>
+        <p>Variables can be summed out of the factor:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">jpt</span><span>.</span><span class="identifier">sumOut</span><span>(</span><span class="type-name">M</span><span>).</span><span class="identifier">sumOut</span><span>(</span><span class="type-name">J</span><span>).</span><span class="identifier">sumOut</span><span>(</span><span class="type-name">A</span><span>).</span><span class="identifier">sumOut</span><span>(</span><span class="type-name">B</span><span>).</span><span class="identifier">sumOut</span><span>(</span><span class="type-name">E</span><span>)
+</span><span class="comment">// res3: Factor[Boolean, Rational] = Factor(
+//   variablesWithValues = Vector(),
+//   probabilities = Map(Vector() -&gt; 1)
+// )</span></code></pre>
+        <p>Also written as:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">jpt</span><span>.Σ(</span><span class="type-name">M</span><span>).Σ(</span><span class="type-name">J</span><span>).Σ(</span><span class="type-name">A</span><span>).Σ(</span><span class="type-name">B</span><span>).Σ(</span><span class="type-name">E</span><span>)
+</span><span class="comment">// res4: Factor[Boolean, Rational] = Factor(
+//   variablesWithValues = Vector(),
+//   probabilities = Map(Vector() -&gt; 1)
+// )</span></code></pre>
+        <p>Multiplication of factors also works:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">multiplicativeSemigroupOps</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">f</span><span> = (</span><span class="identifier">bn</span><span>.</span><span class="identifier">factorFor</span><span>(</span><span class="type-name">A</span><span>) * </span><span class="identifier">bn</span><span>.</span><span class="identifier">factorFor</span><span>(</span><span class="type-name">B</span><span>)) * </span><span class="identifier">bn</span><span>.</span><span class="identifier">factorFor</span><span>(</span><span class="type-name">E</span><span>)</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">f</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res5: String = &quot;&quot;&quot;Burglary Earthquake Alarm
+// true     true       true  19/10000000
+// true     true       false 1/10000000
+// true     false      true  23453/25000000
+// true     false      false 1497/25000000
+// false    true       true  28971/50000000
+// false    true       false 70929/50000000
+// false    false      true  498501/500000000
+// false    false      false 498002499/500000000&quot;&quot;&quot;</span></code></pre>
+        <p>Markov assumptions:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">bn</span><span>.</span><span class="identifier">markovAssumptionsFor</span><span>(</span><span class="type-name">M</span><span>).</span><span class="identifier">show</span><span>
+</span><span class="comment">// res6: String = &quot;I({Mary Calls}, {Alarm}, {John Calls, Earthquake, Burglary})&quot;</span></code></pre>
+        
+        <h2 id="future-work" class="section"><a class="anchor-link left" href="#future-work"><i class="icofont-laika">&#xef71;</i></a>Future Work</h2>
+        <p>This is read as &quot;M is independent of E, B, and J given A&quot;.</p>
+        <ul>
+          <li>Test: start with <code>ABE.jointProbabilityTable</code> (monotype <code>tuple5[Boolean]</code>)</li>
+        </ul>
+        <ul>
+          <li>Factor out each variable until original 5-note network is reached</li>
+        </ul>
+        <ul>
+          <li>Basically the inverse of factor multiplication</li>
+        </ul>
+        <ul>
+          <li><code>bn.factorFor(B) * bn.factorFor(E)</code> should be defined? (It errors)</li>
+        </ul>
+        <ul>
+          <li>
+            <p><code>MonotypeBayesanNetwork.filter</code> collapase into a single BNN</p>
+          </li>
+          <li>
+            <p>Review <code>InteractionGraph</code>, <code>EliminationGraph</code>, <code>JoinTree</code> and the functions they power</p>
+          </li>
+          <li>
+            <p>Consider a &quot;case&quot; to be a <code>Map</code> vs a <code>Vector</code></p>
+          </li>
+          <li>
+            <p>Consider usefulness of <code>Factor</code> in terms of <code>Region</code></p>
+          </li>
+          <li>
+            <p><code>MonotypeBayesanNetwork</code>.{<code>pure</code>, <code>map</code>, <code>flatMap</code>, <code>tailRecR</code>}</p>
+          </li>
+          <li>
+            <p>Reconcile <code>MBN</code> <code>combine1</code> &amp; <code>combine2</code></p>
+          </li>
+          <li>
+            <p>Monad tests for <code>MonotypeBayesanNetwork[Alarm-Burglary-Earthquake]</code></p>
+          </li>
+          <li>
+            <p><code>Bayes[MonotypeBayesanNetwork]</code> -- could be viewed as &quot;belief updating&quot; (vs &quot;conditioning&quot;)</p>
+          </li>
+        </ul>
+        <ul>
+          <li>If it took a ProbabilityModel itself</li>
+        </ul>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Logic</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1"><a href="Introduction.html">Introduction</a></li>
+        <li class="level1"><a href="Foundation.html">Foundation</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="Statistics.html">Statistics</a></li>
+        <li class="level1"><a href="GraphTheory.html">Graph Theory</a></li>
+        <li class="level1"><a href="LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level1"><a href="RegressionAnalysis.html">Regression Analysis</a></li>
+        <li class="level1"><a href="Classification.html">Classification</a></li>
+        <li class="level1"><a href="Clustering.html">Clustering</a></li>
+        <li class="level1"><a href="EvolutionaryAlgorithms.html">Evolutionary Algorithms</a></li>
+        <li class="level1"><a href="ProbabilityModel.html">Probability Model</a></li>
+        <li class="level1"><a href="InformationTheory.html">Information Theory</a></li>
+        <li class="level1"><a href="ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
+        <li class="level1"><a href="Biology.html">Biology</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1 active"><a href="#">Logic</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1"><a href="Appendix.html">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Logic</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#conjunctive-normal-form-converter">Conjunctive Normal Form Converter</a></li>
+          <li class="level1"><a href="#future-work">Future Work</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="logic" class="title">Logic</h1>
+        <p>WARNING: This stuff is quite old and needs an overhaul</p>
+        
+        <h2 id="conjunctive-normal-form-converter" class="section"><a class="anchor-link left" href="#conjunctive-normal-form-converter"><i class="icofont-laika">&#xef71;</i></a>Conjunctive Normal Form Converter</h2>
+        <p>Imports</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">logic</span><span>.</span><span class="type-name">FirstOrderPredicateLogic</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>Example CNF conversion</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">logic</span><span>.</span><span class="identifier">example</span><span>.</span><span class="type-name">SamplePredicates</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">z</span><span> = </span><span class="type-name">Symbol</span><span>(</span><span class="string-literal">&quot;z&quot;</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">s</span><span> = ∃(</span><span class="identifier">z</span><span> ∈ </span><span class="type-name">Z</span><span>, (</span><span class="type-name">A</span><span>(</span><span class="identifier">z</span><span>) ∧ </span><span class="type-name">G</span><span>(</span><span class="identifier">z</span><span>)) ⇔ (</span><span class="type-name">B</span><span>(</span><span class="identifier">z</span><span>) ∨ </span><span class="type-name">H</span><span>(</span><span class="identifier">z</span><span>)))
+
+</span><span class="keyword">val</span><span> (</span><span class="identifier">cnf</span><span>, </span><span class="identifier">skolemMap</span><span>) = </span><span class="identifier">conjunctiveNormalForm</span><span>(</span><span class="identifier">s</span><span>)</span></code></pre>
+        <pre><code class="nohighlight"><span class="identifier">cnf</span><span>.</span><span class="identifier">show</span><span>
+</span><span class="comment">// res1: String = &quot;((¬A(Symbol(sk0)) ∨ (¬G(Symbol(sk1)) ∨ (B(Symbol(sk2)) ∨ H(Symbol(sk3))))) ∧ (((¬B(Symbol(sk4)) ∧ ¬H(Symbol(sk5))) ∨ A(Symbol(sk6))) ∧ ((¬B(Symbol(sk4)) ∧ ¬H(Symbol(sk5))) ∨ G(Symbol(sk7)))))&quot;
+</span><span>
+</span><span class="identifier">skolemMap</span><span>
+</span><span class="comment">// res2: Map[Symbol, Set[Symbol]] = HashMap(
+//   &#39;sk2 -&gt; Set(),
+//   &#39;sk6 -&gt; Set(),
+//   &#39;sk7 -&gt; Set(),
+//   &#39;sk3 -&gt; Set(),
+//   &#39;sk4 -&gt; Set(),
+//   &#39;sk1 -&gt; Set(),
+//   &#39;sk0 -&gt; Set(),
+//   &#39;sk5 -&gt; Set()
+// )</span></code></pre>
+        
+        <h2 id="future-work" class="section"><a class="anchor-link left" href="#future-work"><i class="icofont-laika">&#xef71;</i></a>Future Work</h2>
+        <p>Redo all of this in terms of Abstract Algebra</p>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

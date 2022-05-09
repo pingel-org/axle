@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Regression Analysis</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1"><a href="Introduction.html">Introduction</a></li>
+        <li class="level1"><a href="Foundation.html">Foundation</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="Statistics.html">Statistics</a></li>
+        <li class="level1"><a href="GraphTheory.html">Graph Theory</a></li>
+        <li class="level1"><a href="LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level1 active"><a href="#">Regression Analysis</a></li>
+        <li class="level1"><a href="Classification.html">Classification</a></li>
+        <li class="level1"><a href="Clustering.html">Clustering</a></li>
+        <li class="level1"><a href="EvolutionaryAlgorithms.html">Evolutionary Algorithms</a></li>
+        <li class="level1"><a href="ProbabilityModel.html">Probability Model</a></li>
+        <li class="level1"><a href="InformationTheory.html">Information Theory</a></li>
+        <li class="level1"><a href="ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
+        <li class="level1"><a href="Biology.html">Biology</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="Logic.html">Logic</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1"><a href="Appendix.html">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Regression Analysis</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#linear-regression">Linear Regression</a></li>
+          <li class="level2"><a href="#example-home-prices">Example: Home Prices</a></li>
+          <li class="level1"><a href="#logistic-regression">Logistic Regression</a></li>
+          <li class="level2"><a href="#example-test-pass-probability">Example: Test Pass Probability</a></li>
+          <li class="level1"><a href="#future-work">Future Work</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="regression-analysis" class="title">Regression Analysis</h1>
+        
+        <h2 id="linear-regression" class="section"><a class="anchor-link left" href="#linear-regression"><i class="icofont-laika">&#xef71;</i></a>Linear Regression</h2>
+        <p><code>axle.ml.LinearRegression</code> makes use of <code>axle.algebra.LinearAlgebra</code>.</p>
+        <p>See the wikipedia page on <a href="https://en.wikipedia.org/wiki/Linear_regression">Linear Regression</a></p>
+        
+        <h3 id="example-home-prices" class="section"><a class="anchor-link left" href="#example-home-prices"><i class="icofont-laika">&#xef71;</i></a>Example: Home Prices</h3>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">RealtyListing</span><span>(</span><span class="identifier">size</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">bedrooms</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">floors</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">age</span><span>: </span><span class="type-name">Int</span><span>, </span><span class="identifier">price</span><span>: </span><span class="type-name">Double</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">listings</span><span> = </span><span class="type-name">List</span><span>(
+  </span><span class="type-name">RealtyListing</span><span>(</span><span class="number-literal">2104</span><span>, </span><span class="number-literal">5</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">45</span><span>, </span><span class="number-literal">460d</span><span>),
+  </span><span class="type-name">RealtyListing</span><span>(</span><span class="number-literal">1416</span><span>, </span><span class="number-literal">3</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">40</span><span>, </span><span class="number-literal">232d</span><span>),
+  </span><span class="type-name">RealtyListing</span><span>(</span><span class="number-literal">1534</span><span>, </span><span class="number-literal">3</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">30</span><span>, </span><span class="number-literal">315d</span><span>),
+  </span><span class="type-name">RealtyListing</span><span>(</span><span class="number-literal">852</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">36</span><span>, </span><span class="number-literal">178d</span><span>))</span></code></pre>
+        <p>Create a price estimator using linear regression.</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Rng</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">NRoot</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">rngDouble</span><span>: </span><span class="type-name">Rng</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">laJblasDouble</span><span> = </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">rngInt</span><span>: </span><span class="type-name">Rng</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">LinearRegression</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">priceEstimator</span><span> = </span><span class="type-name">LinearRegression</span><span>(
+  </span><span class="identifier">listings</span><span>,
+  </span><span class="identifier">numFeatures</span><span> = </span><span class="number-literal">4</span><span>,
+  </span><span class="identifier">featureExtractor</span><span> = (</span><span class="identifier">rl</span><span>: </span><span class="type-name">RealtyListing</span><span>) =&gt; (</span><span class="identifier">rl</span><span>.</span><span class="identifier">size</span><span> :: </span><span class="identifier">rl</span><span>.</span><span class="identifier">bedrooms</span><span>.</span><span class="identifier">toDouble</span><span> :: </span><span class="identifier">rl</span><span>.</span><span class="identifier">floors</span><span>.</span><span class="identifier">toDouble</span><span> :: </span><span class="identifier">rl</span><span>.</span><span class="identifier">age</span><span>.</span><span class="identifier">toDouble</span><span> :: </span><span class="type-name">Nil</span><span>),
+  </span><span class="identifier">objectiveExtractor</span><span> = (</span><span class="identifier">rl</span><span>: </span><span class="type-name">RealtyListing</span><span>) =&gt; </span><span class="identifier">rl</span><span>.</span><span class="identifier">price</span><span>,
+  α = </span><span class="number-literal">0.1</span><span>,
+  </span><span class="identifier">iterations</span><span> = </span><span class="number-literal">100</span><span>)</span></code></pre>
+        <p>Use the estimator</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">priceEstimator</span><span>(</span><span class="type-name">RealtyListing</span><span>(</span><span class="number-literal">1416</span><span>, </span><span class="number-literal">3</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">40</span><span>, </span><span class="number-literal">0d</span><span>))
+</span><span class="comment">// res0: Double = 288.60017635814035</span></code></pre>
+        <p>Create a Plot of the error during the training</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Plottable</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">errorPlot</span><span> = </span><span class="type-name">Plot</span><span>(
+  () =&gt; </span><span class="type-name">List</span><span>((</span><span class="string-literal">&quot;error&quot;</span><span> -&gt; </span><span class="identifier">priceEstimator</span><span>.</span><span class="identifier">errTree</span><span>)),
+  </span><span class="identifier">connect</span><span> = </span><span class="boolean-literal">true</span><span>,
+  </span><span class="identifier">drawKey</span><span> = </span><span class="boolean-literal">true</span><span>,
+  </span><span class="identifier">colorOf</span><span> = (</span><span class="identifier">label</span><span>: </span><span class="type-name">String</span><span>) =&gt; </span><span class="type-name">Color</span><span>.</span><span class="identifier">black</span><span>,
+  </span><span class="identifier">title</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;Linear Regression Error&quot;</span><span>),
+  </span><span class="identifier">xAxis</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="number-literal">0d</span><span>),
+  </span><span class="identifier">xAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;step&quot;</span><span>),
+  </span><span class="identifier">yAxis</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="number-literal">0</span><span>),
+  </span><span class="identifier">yAxisLabel</span><span> = </span><span class="type-name">Some</span><span>(</span><span class="string-literal">&quot;error&quot;</span><span>))</span></code></pre>
+        <p>Create the SVG</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">errorPlot</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/lrerror.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/lrerror.svg" alt="lr error"></p>
+        
+        <h2 id="logistic-regression" class="section"><a class="anchor-link left" href="#logistic-regression"><i class="icofont-laika">&#xef71;</i></a>Logistic Regression</h2>
+        <p>WARNING: implementation is incorrect</p>
+        <p><code>axle.ml.LogisticRegression</code> makes use of <code>axle.algebra.LinearAlgebra</code>.</p>
+        <p>See the wikipedia page on <a href="https://en.wikipedia.org/wiki/Logistic_regression">Logistic Regression</a></p>
+        
+        <h3 id="example-test-pass-probability" class="section"><a class="anchor-link left" href="#example-test-pass-probability"><i class="icofont-laika">&#xef71;</i></a>Example: Test Pass Probability</h3>
+        <p>Predict Test Pass Probability as a Function of Hours Studied</p>
+        <pre><code class="nohighlight"><span class="keyword">case</span><span> </span><span class="keyword">class</span><span> </span><span class="type-name">Student</span><span>(</span><span class="identifier">hoursStudied</span><span>: </span><span class="type-name">Double</span><span>, </span><span class="identifier">testPassed</span><span>: </span><span class="type-name">Boolean</span><span>)
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">data</span><span> = </span><span class="type-name">List</span><span>(
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">0.50</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">0.75</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">1.00</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">1.25</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">1.50</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">1.75</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">1.75</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">2.00</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">2.25</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">2.50</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">2.75</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">3.00</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">3.25</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">3.50</span><span>, </span><span class="boolean-literal">false</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">4.00</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">4.25</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">4.50</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">4.75</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">5.00</span><span>, </span><span class="boolean-literal">true</span><span>),
+  </span><span class="type-name">Student</span><span>(</span><span class="number-literal">5.50</span><span>, </span><span class="boolean-literal">true</span><span>)
+)</span></code></pre>
+        <p>Create a test pass probability function using logistic regression.</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Rng</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">NRoot</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">rngDouble</span><span>: </span><span class="type-name">Rng</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+</span><span class="comment">// rngDouble: Rng[Double] = spire.std.DoubleAlgebra@e00d08e
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+</span><span class="comment">// nrootDouble: NRoot[Double] = spire.std.DoubleAlgebra@e00d08e
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">laJblasDouble</span><span> = </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">linearAlgebraDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
+</span><span class="comment">// laJblasDouble: axle.algebra.LinearAlgebra[org.jblas.DoubleMatrix, Int, Int, Double] = axle.jblas.package$$anon$5@1f46d034
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">rngInt</span><span>: </span><span class="type-name">Rng</span><span>[</span><span class="type-name">Int</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">IntAlgebra</span><span>
+</span><span class="comment">// rngInt: Rng[Int] = spire.std.IntAlgebra@7f3755a3
+</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">LogisticRegression</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">featureExtractor</span><span> = (</span><span class="identifier">s</span><span>: </span><span class="type-name">Student</span><span>) =&gt; (</span><span class="identifier">s</span><span>.</span><span class="identifier">hoursStudied</span><span> :: </span><span class="type-name">Nil</span><span>)
+</span><span class="comment">// featureExtractor: Student =&gt; List[Double] = &lt;function1&gt;
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">objectiveExtractor</span><span> = (</span><span class="identifier">s</span><span>: </span><span class="type-name">Student</span><span>) =&gt; </span><span class="identifier">s</span><span>.</span><span class="identifier">testPassed</span><span>
+</span><span class="comment">// objectiveExtractor: Student =&gt; Boolean = &lt;function1&gt;
+</span><span>
+</span><span class="keyword">val</span><span> </span><span class="identifier">pTestPass</span><span> = </span><span class="type-name">LogisticRegression</span><span>(
+  </span><span class="identifier">data</span><span>,
+  </span><span class="number-literal">1</span><span>,
+  </span><span class="identifier">featureExtractor</span><span>,
+  </span><span class="identifier">objectiveExtractor</span><span>,
+  </span><span class="number-literal">0.1</span><span>,
+  </span><span class="number-literal">10</span><span>)
+</span><span class="comment">// pTestPass: LogisticRegression[Student, org.jblas.DoubleMatrix] = LogisticRegression(
+//   examples = List(
+//     Student(hoursStudied = 0.5, testPassed = false),
+//     Student(hoursStudied = 0.75, testPassed = false),
+//     Student(hoursStudied = 1.0, testPassed = false),
+//     Student(hoursStudied = 1.25, testPassed = false),
+//     Student(hoursStudied = 1.5, testPassed = false),
+//     Student(hoursStudied = 1.75, testPassed = false),
+//     Student(hoursStudied = 1.75, testPassed = true),
+//     Student(hoursStudied = 2.0, testPassed = false),
+//     Student(hoursStudied = 2.25, testPassed = true),
+//     Student(hoursStudied = 2.5, testPassed = false),
+//     Student(hoursStudied = 2.75, testPassed = true),
+//     Student(hoursStudied = 3.0, testPassed = false),
+//     Student(hoursStudied = 3.25, testPassed = true),
+//     Student(hoursStudied = 3.5, testPassed = false),
+//     Student(hoursStudied = 4.0, testPassed = true),
+//     Student(hoursStudied = 4.25, testPassed = true),
+//     Student(hoursStudied = 4.5, testPassed = true),
+//     Student(hoursStudied = 4.75, testPassed = true),
+//     Student(hoursStudied = 5.0, testPassed = true),
+//     Student(hoursStudied = 5.5, testPassed = true)
+//   ),
+//   numFeatures = 1,
+//   featureExtractor = &lt;function1&gt;,
+//   objectiveExtractor = &lt;function1&gt;,
+//   α = 0.1,
+//   numIterations = 10
+// )</span></code></pre>
+        <p>Use the estimator</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">testPassProbability</span><span>(</span><span class="number-literal">2d</span><span> :: </span><span class="type-name">Nil</span><span>)</span></code></pre>
+        <p>(Note: The implementation is incorrect, so the result is elided until the error is fixed)</p>
+        
+        <h2 id="future-work" class="section"><a class="anchor-link left" href="#future-work"><i class="icofont-laika">&#xef71;</i></a>Future Work</h2>
+        <p>Fix Logistic Regression</p>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

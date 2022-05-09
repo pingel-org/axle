@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Statistics</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1"><a href="Introduction.html">Introduction</a></li>
+        <li class="level1"><a href="Foundation.html">Foundation</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1 active"><a href="#">Statistics</a></li>
+        <li class="level1"><a href="GraphTheory.html">Graph Theory</a></li>
+        <li class="level1"><a href="LinearAlgebra.html">Linear Algebra</a></li>
+        <li class="level1"><a href="RegressionAnalysis.html">Regression Analysis</a></li>
+        <li class="level1"><a href="Classification.html">Classification</a></li>
+        <li class="level1"><a href="Clustering.html">Clustering</a></li>
+        <li class="level1"><a href="EvolutionaryAlgorithms.html">Evolutionary Algorithms</a></li>
+        <li class="level1"><a href="ProbabilityModel.html">Probability Model</a></li>
+        <li class="level1"><a href="InformationTheory.html">Information Theory</a></li>
+        <li class="level1"><a href="ProbabilisticGraphicalModels.html">Probabilistic Graphical Models</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
+        <li class="level1"><a href="Biology.html">Biology</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="Logic.html">Logic</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1"><a href="Appendix.html">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Statistics</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#pythagorean-means">Pythagorean Means</a></li>
+          <li class="level2"><a href="#arithmetic-geometric-and-harmonic-mean-examples">Arithmetic, Geometric, and Harmonic Mean Examples</a></li>
+          <li class="level2"><a href="#generalized-mean">Generalized Mean</a></li>
+          <li class="level2"><a href="#moving-means">Moving means</a></li>
+          <li class="level1"><a href="#mean-average-precision-at-k">Mean Average Precision at K</a></li>
+          <li class="level1"><a href="#uniform-distribution">Uniform Distribution</a></li>
+          <li class="level1"><a href="#standard-deviation">Standard Deviation</a></li>
+          <li class="level1"><a href="#root-mean-square-deviation">Root-mean-square deviation</a></li>
+          <li class="level1"><a href="#reservoir-sampling">Reservoir Sampling</a></li>
+          <li class="level1"><a href="#future-work">Future Work</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="statistics" class="title">Statistics</h1>
+        
+        <h2 id="pythagorean-means" class="section"><a class="anchor-link left" href="#pythagorean-means"><i class="icofont-laika">&#xef71;</i></a>Pythagorean Means</h2>
+        <p>Arithmetic, Geometric, and Harmonic Means are all &#39;Pythagorean&#39;.</p>
+        <p>See the wikipedia page on <a href="https://en.wikipedia.org/wiki/Pythagorean_means">Pythagorean Means</a>
+        for more.</p>
+        
+        <h3 id="arithmetic-geometric-and-harmonic-mean-examples" class="section"><a class="anchor-link left" href="#arithmetic-geometric-and-harmonic-mean-examples"><i class="icofont-laika">&#xef71;</i></a>Arithmetic, Geometric, and Harmonic Mean Examples</h3>
+        <p>Imports</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">Real</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">NRoot</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span></code></pre>
+        <p>Examples</p>
+        <p>Arithmetic mean</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">arithmeticMean</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>))
+</span><span class="comment">// res0: Double = 3.5</span></code></pre>
+        <p>Geometric mean</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">geometricMean</span><span>[</span><span class="type-name">Real</span><span>, </span><span class="type-name">List</span><span>](</span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>))
+</span><span class="comment">// res1: Real = Inexact(
+//   f = spire.math.Real$$Lambda$10949/0x000000080284cfa8@77a0c664
+// )</span></code></pre>
+        <p>Harmonic mean</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">harmonicMean</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>))
+</span><span class="comment">// res2: Double = 3.116883116883117</span></code></pre>
+        
+        <h3 id="generalized-mean" class="section"><a class="anchor-link left" href="#generalized-mean"><i class="icofont-laika">&#xef71;</i></a>Generalized Mean</h3>
+        <p>See the wikipedia page on <a href="https://en.wikipedia.org/wiki/Generalized_mean">Generalized Mean</a>.</p>
+        <p>When the parameter <code>p</code> is 1, it is the arithmetic mean.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">generalizedMean</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">List</span><span>](</span><span class="number-literal">1d</span><span>, </span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>))
+</span><span class="comment">// res3: Double = 3.5</span></code></pre>
+        <p>As <code>p</code> approaches 0, it is the geometric mean.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">generalizedMean</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">List</span><span>](</span><span class="number-literal">0.0001</span><span>, </span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>))
+</span><span class="comment">// res4: Double = 5.00043173370165</span></code></pre>
+        <p>At -1 it is the harmonic mean.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">generalizedMean</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">List</span><span>](-</span><span class="number-literal">1d</span><span>, </span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>))
+</span><span class="comment">// res5: Double = 3.116883116883117</span></code></pre>
+        
+        <h3 id="moving-means" class="section"><a class="anchor-link left" href="#moving-means"><i class="icofont-laika">&#xef71;</i></a>Moving means</h3>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>Moving arithmetic mean</p>
+        <pre><code class="nohighlight"><span class="identifier">movingArithmeticMean</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Double</span><span>](
+    (</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">100</span><span>).</span><span class="identifier">toList</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>),
+    </span><span class="number-literal">5</span><span>)
+</span><span class="comment">// res6: List[Double] = List(
+//   3.0,
+//   4.0,
+//   5.0,
+//   6.0,
+//   7.0,
+//   8.0,
+//   9.0,
+//   10.0,
+//   11.0,
+//   12.0,
+//   13.0,
+//   14.0,
+//   15.0,
+// ...</span></code></pre>
+        <p>Moving geometric mean</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">movingGeometricMean</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Real</span><span>](
+    </span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>, </span><span class="number-literal">125d</span><span>, </span><span class="number-literal">625d</span><span>),
+    </span><span class="number-literal">3</span><span>)
+</span><span class="comment">// res7: List[Real] = List(
+//   Inexact(f = spire.math.Real$$Lambda$10949/0x000000080284cfa8@7a596aff),
+//   Inexact(f = spire.math.Real$$Lambda$10841/0x0000000802805d80@1c28ec2b),
+//   Inexact(f = spire.math.Real$$Lambda$10841/0x0000000802805d80@16a29d8b)
+// )</span></code></pre>
+        <p>Moving harmonic mean</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">movingHarmonicMean</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Real</span><span>](
+    (</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">5</span><span>).</span><span class="identifier">toList</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="type-name">Real</span><span>(</span><span class="identifier">v</span><span>)),
+    </span><span class="number-literal">3</span><span>)
+</span><span class="comment">// res8: List[Real] = List(
+//   Exact(n = 18/11),
+//   Exact(n = 36/13),
+//   Exact(n = 180/47)
+// )</span></code></pre>
+        
+        <h2 id="mean-average-precision-at-k" class="section"><a class="anchor-link left" href="#mean-average-precision-at-k"><i class="icofont-laika">&#xef71;</i></a>Mean Average Precision at K</h2>
+        <p>See the page on <a href="https://www.kaggle.com/wiki/MeanAveragePrecision">mean average precision</a> at Kaggle</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">math</span><span>.</span><span class="type-name">Rational</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">ml</span><span>.</span><span class="type-name">RankedClassifierPerformance</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>Examples (from <a href="https://github.com/benhamner/Metrics">benhamner/Metrics</a>)</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">meanAveragePrecisionAtK</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">5</span><span>), </span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">5</span><span>), </span><span class="number-literal">3</span><span>)
+</span><span class="comment">// res10: Rational = 1</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">meanAveragePrecisionAtK</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="type-name">List</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">3</span><span>, </span><span class="number-literal">4</span><span>), </span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">4</span><span>), </span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">3</span><span>)), </span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">6</span><span>, </span><span class="number-literal">1</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">6</span><span>, </span><span class="number-literal">1</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">6</span><span>), </span><span class="number-literal">3</span><span>)
+</span><span class="comment">// res11: Rational = 37/54</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">meanAveragePrecisionAtK</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">6</span><span>, </span><span class="number-literal">1</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">6</span><span>), </span><span class="type-name">List</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">6</span><span>, </span><span class="number-literal">4</span><span>, </span><span class="number-literal">7</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>), </span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">1</span><span>)), </span><span class="number-literal">5</span><span>)
+</span><span class="comment">// res12: Rational = 13/50</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">meanAveragePrecisionAtK</span><span>[</span><span class="type-name">Int</span><span>, </span><span class="type-name">Rational</span><span>](</span><span class="type-name">List</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">3</span><span>), </span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>), </span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">3</span><span>)), </span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span> </span><span class="identifier">until</span><span> </span><span class="number-literal">6</span><span>, </span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">1</span><span>, </span><span class="number-literal">1</span><span>), </span><span class="type-name">List</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">2</span><span>, </span><span class="number-literal">1</span><span>)), </span><span class="number-literal">3</span><span>)
+</span><span class="comment">// res13: Rational = 11/18</span></code></pre>
+        
+        <h2 id="uniform-distribution" class="section"><a class="anchor-link left" href="#uniform-distribution"><i class="icofont-laika">&#xef71;</i></a>Uniform Distribution</h2>
+        <p>Imports and implicits (for all sections below)</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">probability</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span></code></pre>
+        <p>Example</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="type-name">X</span><span> = </span><span class="identifier">uniformDistribution</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">7d</span><span>, </span><span class="number-literal">9d</span><span>))
+</span><span class="comment">// X: ConditionalProbabilityTable[Double, spire.math.Rational] = ConditionalProbabilityTable(
+//   p = HashMap(5.0 -&gt; 1/4, 9.0 -&gt; 1/8, 2.0 -&gt; 1/8, 7.0 -&gt; 1/8, 4.0 -&gt; 3/8)
+// )</span></code></pre>
+        
+        <h2 id="standard-deviation" class="section"><a class="anchor-link left" href="#standard-deviation"><i class="icofont-laika">&#xef71;</i></a>Standard Deviation</h2>
+        <p>Example</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">stats</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">standardDeviation</span><span>(</span><span class="type-name">X</span><span>)
+</span><span class="comment">// res15: Double = 2.0</span></code></pre>
+        <p>See also <a href="ProbabilityModel.html">Probability Model</a></p>
+        
+        <h2 id="root-mean-square-deviation" class="section"><a class="anchor-link left" href="#root-mean-square-deviation"><i class="icofont-laika">&#xef71;</i></a>Root-mean-square deviation</h2>
+        <p>See the Wikipedia page on
+        <a href="https://en.wikipedia.org/wiki/Root-mean-square_deviation">Root-mean-square deviation</a>.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">NRoot</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">stats</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">nrootDouble</span><span>: </span><span class="type-name">NRoot</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span></code></pre>
+        <p>Given four numbers and an estimator function, compute the RMSD:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">data</span><span> = </span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>)</span></code></pre>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">def</span><span> </span><span class="declaration-name">estimator</span><span>(</span><span class="identifier">x</span><span>: </span><span class="type-name">Double</span><span>): </span><span class="type-name">Double</span><span> =
+  </span><span class="identifier">x</span><span> + </span><span class="number-literal">0.2</span><span>
+
+</span><span class="identifier">rootMeanSquareDeviation</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">Double</span><span>](</span><span class="identifier">data</span><span>, </span><span class="identifier">estimator</span><span>)
+</span><span class="comment">// res17: Double = 0.4000000000000002</span></code></pre>
+        
+        <h2 id="reservoir-sampling" class="section"><a class="anchor-link left" href="#reservoir-sampling"><i class="icofont-laika">&#xef71;</i></a>Reservoir Sampling</h2>
+        <p>Reservoir Sampling is the answer to a common interview question.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">spire</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="type-name">Field</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">fieldDouble</span><span>: </span><span class="type-name">Field</span><span>[</span><span class="type-name">Double</span><span>] = </span><span class="identifier">spire</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="type-name">DoubleAlgebra</span><span>
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">stats</span><span>.</span><span class="identifier">_</span></code></pre>
+        <p>Demonstrate it uniformly sampling 15 of the first 100 integers</p>
+        <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sample</span><span> = </span><span class="identifier">reservoirSampleK</span><span>(</span><span class="number-literal">15</span><span>, </span><span class="type-name">LazyList</span><span>.</span><span class="identifier">from</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">drop</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">head</span><span>
+</span><span class="comment">// sample: List[Int] = List(
+//   100,
+//   96,
+//   95,
+//   84,
+//   77,
+//   71,
+//   70,
+//   68,
+//   63,
+//   55,
+//   42,
+//   37,
+//   26,
+//   22,
+//   8
+// )</span></code></pre>
+        <p>The mean of the sample should be in the ballpark of the mean of the entire list (50.5):</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">arithmeticMean</span><span>
+
+</span><span class="identifier">arithmeticMean</span><span>(</span><span class="identifier">sample</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>))
+</span><span class="comment">// res19: Double = 60.93333333333333</span></code></pre>
+        <p>Indeed it is.</p>
+        
+        <h2 id="future-work" class="section"><a class="anchor-link left" href="#future-work"><i class="icofont-laika">&#xef71;</i></a>Future Work</h2>
+        <p>Clarify imports starting with <code>uniformDistribution</code></p>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>
