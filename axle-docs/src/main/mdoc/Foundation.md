@@ -42,7 +42,7 @@ upon these typeclasses.
 Many such witnesses are provided by Axle for native Scala collections.
 
 Witnesses are also defined for other common jars from the Java and Scala ecosystems.
-Read more about these ["spokes"](#spokes).
+Read more about ["these third party libraries"](#support-for-third-party-libraries).
 
 ### Remaining Design Issues
 
@@ -484,9 +484,9 @@ cnf.show
 skolemMap
 ```
 
-## Spokes
+## Support for Third Party Libraries
 
-Witnesses for 3rd party libraries: The "Spokes"
+Witnesses for 3rd party libraries.
 
 ### Parallel Collections
 
