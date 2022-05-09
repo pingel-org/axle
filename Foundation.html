@@ -54,9 +54,10 @@
         <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
         <li class="level1"><a href="Introduction.html">Introduction</a></li>
         <li class="level1 active"><a href="#">Foundation</a></li>
-        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
         <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
         <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="GraphTheory.html">Graph Theory</a></li>
         <li class="level1"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
         <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
         <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
@@ -103,12 +104,9 @@
           <li class="level2"><a href="#map-element-values">Map element values</a></li>
           <li class="level2"><a href="#boolean-operators">Boolean operators</a></li>
           <li class="level2"><a href="#higher-order-methods">Higher order methods</a></li>
-          <li class="level1"><a href="#graph">Graph</a></li>
-          <li class="level2"><a href="#directed-graph">Directed Graph</a></li>
-          <li class="level2"><a href="#undirected-graph">Undirected Graph</a></li>
           <li class="level1"><a href="#logic">Logic</a></li>
           <li class="level2"><a href="#conjunctive-normal-form-converter">Conjunctive Normal Form Converter</a></li>
-          <li class="level1"><a href="#spokes">Spokes</a></li>
+          <li class="level1"><a href="#support-for-third-party-libraries">Support for Third Party Libraries</a></li>
           <li class="level2"><a href="#parallel-collections">Parallel Collections</a></li>
           <li class="level2"><a href="#xml">XML</a></li>
           <li class="level2"><a href="#jblas">JBLAS</a></li>
@@ -166,7 +164,7 @@
         upon these typeclasses.
         Many such witnesses are provided by Axle for native Scala collections.</p>
         <p>Witnesses are also defined for other common jars from the Java and Scala ecosystems.
-        Read more about these <a href="#spokes">&quot;spokes&quot;</a>.</p>
+        Read more about <a href="#support-for-third-party-libraries">&quot;these third party libraries&quot;</a>.</p>
         
         <h3 id="remaining-design-issues" class="section"><a class="anchor-link left" href="#remaining-design-issues"><i class="icofont-laika">&#xef71;</i></a>Remaining Design Issues</h3>
         <p>Please get in touch if you&#39;d like to discuss these or other questions.</p>
@@ -394,12 +392,12 @@
         
         <h3 id="random-matrices" class="section"><a class="anchor-link left" href="#random-matrices"><i class="icofont-laika">&#xef71;</i></a>Random matrices</h3>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">r</span><span> = </span><span class="identifier">rand</span><span>(</span><span class="number-literal">3</span><span>, </span><span class="number-literal">3</span><span>)
-</span><span class="comment">// r: org.jblas.DoubleMatrix = [0.127229, 0.286473, 0.495532; 0.014618, 0.577071, 0.452457; 0.331015, 0.553940, 0.262792]
+</span><span class="comment">// r: org.jblas.DoubleMatrix = [0.784904, 0.991025, 0.576887; 0.511421, 0.199427, 0.880304; 0.454225, 0.298775, 0.259226]
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res22: String = &quot;&quot;&quot;0.127229 0.286473 0.495532
-// 0.014618 0.577071 0.452457
-// 0.331015 0.553940 0.262792&quot;&quot;&quot;</span></code></pre>
+</span><span class="comment">// res22: String = &quot;&quot;&quot;0.784904 0.991025 0.576887
+// 0.511421 0.199427 0.880304
+// 0.454225 0.298775 0.259226&quot;&quot;&quot;</span></code></pre>
         
         <h3 id="matrices-defined-by-functions" class="section"><a class="anchor-link left" href="#matrices-defined-by-functions"><i class="icofont-laika">&#xef71;</i></a>Matrices defined by functions</h3>
         <pre><code class="nohighlight"><span class="identifier">matrix</span><span>(</span><span class="number-literal">4</span><span>, </span><span class="number-literal">5</span><span>, (</span><span class="identifier">r</span><span>, </span><span class="identifier">c</span><span>) =&gt; </span><span class="identifier">r</span><span> / (</span><span class="identifier">c</span><span> + </span><span class="number-literal">1d</span><span>)).</span><span class="identifier">show</span><span>
@@ -507,104 +505,104 @@
         
         <h3 id="mins-maxs-ranges-and-sorts" class="section"><a class="anchor-link left" href="#mins-maxs-ranges-and-sorts"><i class="icofont-laika">&#xef71;</i></a>Mins, Maxs, Ranges, and Sorts</h3>
         <pre><code class="nohighlight"><span class="identifier">r</span><span>.</span><span class="identifier">max</span><span>
-</span><span class="comment">// res44: Double = 0.5770709867648874
+</span><span class="comment">// res44: Double = 0.9910249644290331
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">min</span><span>
-</span><span class="comment">// res45: Double = 0.014617752442530163
+</span><span class="comment">// res45: Double = 0.19942686349533967
 </span><span>
 </span><span class="comment">// r.ceil
 // r.floor
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">rowMaxs</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res46: String = &quot;&quot;&quot;0.495532
-// 0.577071
-// 0.553940&quot;&quot;&quot;
+</span><span class="comment">// res46: String = &quot;&quot;&quot;0.991025
+// 0.880304
+// 0.454225&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">rowMins</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res47: String = &quot;&quot;&quot;0.127229
-// 0.014618
-// 0.262792&quot;&quot;&quot;
+</span><span class="comment">// res47: String = &quot;&quot;&quot;0.576887
+// 0.199427
+// 0.259226&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">columnMaxs</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res48: String = &quot;0.331015 0.577071 0.495532&quot;
+</span><span class="comment">// res48: String = &quot;0.784904 0.991025 0.880304&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">columnMins</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res49: String = &quot;0.014618 0.286473 0.262792&quot;
+</span><span class="comment">// res49: String = &quot;0.454225 0.199427 0.259226&quot;
 </span><span>
 </span><span class="identifier">rowRange</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res50: String = &quot;&quot;&quot;0.368303
-// 0.562453
-// 0.291148&quot;&quot;&quot;
+</span><span class="comment">// res50: String = &quot;&quot;&quot;0.414138
+// 0.680877
+// 0.194998&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">columnRange</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res51: String = &quot;0.316397 0.290598 0.232740&quot;
+</span><span class="comment">// res51: String = &quot;0.330680 0.791598 0.621078&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">sortRows</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res52: String = &quot;&quot;&quot;0.127229 0.286473 0.495532
-// 0.014618 0.452457 0.577071
-// 0.262792 0.331015 0.553940&quot;&quot;&quot;
+</span><span class="comment">// res52: String = &quot;&quot;&quot;0.576887 0.784904 0.991025
+// 0.199427 0.511421 0.880304
+// 0.259226 0.298775 0.454225&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">sortColumns</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res53: String = &quot;&quot;&quot;0.014618 0.286473 0.262792
-// 0.127229 0.553940 0.452457
-// 0.331015 0.577071 0.495532&quot;&quot;&quot;
+</span><span class="comment">// res53: String = &quot;&quot;&quot;0.454225 0.199427 0.259226
+// 0.511421 0.298775 0.576887
+// 0.784904 0.991025 0.880304&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">sortRows</span><span>.</span><span class="identifier">sortColumns</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res54: String = &quot;&quot;&quot;0.014618 0.286473 0.495532
-// 0.127229 0.331015 0.553940
-// 0.262792 0.452457 0.577071&quot;&quot;&quot;</span></code></pre>
+</span><span class="comment">// res54: String = &quot;&quot;&quot;0.199427 0.298775 0.454225
+// 0.259226 0.511421 0.880304
+// 0.576887 0.784904 0.991025&quot;&quot;&quot;</span></code></pre>
         
         <h3 id="statistics" class="section"><a class="anchor-link left" href="#statistics"><i class="icofont-laika">&#xef71;</i></a>Statistics</h3>
         <pre><code class="nohighlight"><span class="identifier">r</span><span>.</span><span class="identifier">rowMeans</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res55: String = &quot;&quot;&quot;0.303078
-// 0.348049
-// 0.382582&quot;&quot;&quot;
+</span><span class="comment">// res55: String = &quot;&quot;&quot;0.784272
+// 0.530384
+// 0.337409&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">r</span><span>.</span><span class="identifier">columnMeans</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res56: String = &quot;0.157621 0.472495 0.403594&quot;
+</span><span class="comment">// res56: String = &quot;0.583517 0.496409 0.572139&quot;
 </span><span>
 </span><span class="comment">// median(r)
 </span><span>
 </span><span class="identifier">sumsq</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res57: String = &quot;0.125972 0.721928 0.519329&quot;
+</span><span class="comment">// res57: String = &quot;1.083946 1.111168 1.174932&quot;
 </span><span>
 </span><span class="identifier">std</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res58: String = &quot;0.130944 0.131876 0.101103&quot;
+</span><span class="comment">// res58: String = &quot;0.144304 0.352090 0.253576&quot;
 </span><span>
 </span><span class="identifier">cov</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res59: String = &quot;&quot;&quot;0.000308 0.008867 0.005314
-// 0.008867 0.003645 0.001327
-// 0.005314 0.001327 0.006608&quot;&quot;&quot;
+</span><span class="comment">// res59: String = &quot;&quot;&quot;0.013519 -0.011887 -0.000205
+// -0.011887 0.029399 -0.020301
+// -0.000205 -0.020301 0.032638&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">centerRows</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res60: String = &quot;&quot;&quot;-0.175849 -0.016605 0.192454
-// -0.333431 0.229022 0.104409
-// -0.051567 0.171358 -0.119790&quot;&quot;&quot;
+</span><span class="comment">// res60: String = &quot;&quot;&quot;0.000632 0.206753 -0.207385
+// -0.018963 -0.330957 0.349920
+// 0.116816 -0.038634 -0.078182&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">centerColumns</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res61: String = &quot;&quot;&quot;-0.030392 -0.186021 0.091938
-// -0.143003 0.104576 0.048864
-// 0.173395 0.081445 -0.140802&quot;&quot;&quot;
+</span><span class="comment">// res61: String = &quot;&quot;&quot;0.201388 0.494616 0.004748
+// -0.072096 -0.296982 0.308165
+// -0.129292 -0.197634 -0.312913&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">zscore</span><span>(</span><span class="identifier">r</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res62: String = &quot;&quot;&quot;-0.232096 -1.410583 0.909352
-// -1.092090 0.792991 0.483306
-// 1.324186 0.617592 -1.392657&quot;&quot;&quot;</span></code></pre>
+</span><span class="comment">// res62: String = &quot;&quot;&quot;1.395576 1.404799 0.018724
+// -0.499608 -0.843483 1.215276
+// -0.895968 -0.561316 -1.234000&quot;&quot;&quot;</span></code></pre>
         
         <h3 id="principal-component-analysis" class="section"><a class="anchor-link left" href="#principal-component-analysis"><i class="icofont-laika">&#xef71;</i></a>Principal Component Analysis</h3>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> (</span><span class="identifier">u</span><span>, </span><span class="identifier">s</span><span>) = </span><span class="identifier">pca</span><span>(</span><span class="identifier">r</span><span>)
-</span><span class="comment">// u: org.jblas.DoubleMatrix = [-0.597743, 0.782134, -0.175979; -0.588557, -0.577175, -0.566101; -0.544337, -0.234809, 0.805333]
-// s: org.jblas.DoubleMatrix = [0.013878; 0.007831; 0.004515]
+</span><span class="comment">// u: org.jblas.DoubleMatrix = [-0.205393, -0.712497, 0.670941; 0.694886, 0.376584, 0.612632; -0.689164, 0.592057, 0.417757]
+// s: org.jblas.DoubleMatrix = [0.053047; 0.019972; 0.002538]
 </span><span>
 </span><span class="identifier">u</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res63: String = &quot;&quot;&quot;-0.597743 0.782134 -0.175979
-// -0.588557 -0.577175 -0.566101
-// -0.544337 -0.234809 0.805333&quot;&quot;&quot;
+</span><span class="comment">// res63: String = &quot;&quot;&quot;-0.205393 -0.712497 0.670941
+// 0.694886 0.376584 0.612632
+// -0.689164 0.592057 0.417757&quot;&quot;&quot;
 </span><span>
 </span><span class="identifier">s</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res64: String = &quot;&quot;&quot;0.013878
-// 0.007831
-// 0.004515&quot;&quot;&quot;</span></code></pre>
+</span><span class="comment">// res64: String = &quot;&quot;&quot;0.053047
+// 0.019972
+// 0.002538&quot;&quot;&quot;</span></code></pre>
         
         <h3 id="horizontal-and-vertical-concatenation" class="section"><a class="anchor-link left" href="#horizontal-and-vertical-concatenation"><i class="icofont-laika">&#xef71;</i></a>Horizontal and vertical concatenation</h3>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span>(</span><span class="identifier">x</span><span> </span><span class="identifier">aside</span><span> </span><span class="identifier">y</span><span>).</span><span class="identifier">show</span><span>
@@ -666,7 +664,7 @@
         
         <h3 id="map-element-values" class="section"><a class="anchor-link left" href="#map-element-values"><i class="icofont-laika">&#xef71;</i></a>Map element values</h3>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">endo</span><span> = </span><span class="identifier">axle</span><span>.</span><span class="identifier">jblas</span><span>.</span><span class="identifier">endoFunctorDoubleMatrix</span><span>[</span><span class="type-name">Double</span><span>]
-</span><span class="comment">// endo: algebra.Endofunctor[org.jblas.DoubleMatrix, Double] = axle.jblas.package$$anon$1@390a8cf8
+</span><span class="comment">// endo: algebra.Endofunctor[org.jblas.DoubleMatrix, Double] = axle.jblas.package$$anon$1@75b6c5b2
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">endofunctor</span><span>.</span><span class="identifier">endofunctorOps</span><span>
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">half</span><span> = </span><span class="identifier">ones</span><span>(</span><span class="number-literal">3</span><span>, </span><span class="number-literal">3</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> / </span><span class="number-literal">2d</span><span>)
@@ -679,24 +677,24 @@
         
         <h3 id="boolean-operators" class="section"><a class="anchor-link left" href="#boolean-operators"><i class="icofont-laika">&#xef71;</i></a>Boolean operators</h3>
         <pre><code class="nohighlight"><span>(</span><span class="identifier">r</span><span> </span><span class="identifier">lt</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res76: String = &quot;&quot;&quot;1.000000 1.000000 1.000000
-// 1.000000 0.000000 1.000000
-// 1.000000 0.000000 1.000000&quot;&quot;&quot;
+</span><span class="comment">// res76: String = &quot;&quot;&quot;0.000000 0.000000 0.000000
+// 0.000000 1.000000 0.000000
+// 1.000000 1.000000 1.000000&quot;&quot;&quot;
 </span><span>
 (</span><span class="identifier">r</span><span> </span><span class="identifier">le</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res77: String = &quot;&quot;&quot;1.000000 1.000000 1.000000
-// 1.000000 0.000000 1.000000
-// 1.000000 0.000000 1.000000&quot;&quot;&quot;
+</span><span class="comment">// res77: String = &quot;&quot;&quot;0.000000 0.000000 0.000000
+// 0.000000 1.000000 0.000000
+// 1.000000 1.000000 1.000000&quot;&quot;&quot;
 </span><span>
 (</span><span class="identifier">r</span><span> </span><span class="identifier">gt</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res78: String = &quot;&quot;&quot;0.000000 0.000000 0.000000
-// 0.000000 1.000000 0.000000
-// 0.000000 1.000000 0.000000&quot;&quot;&quot;
+</span><span class="comment">// res78: String = &quot;&quot;&quot;1.000000 1.000000 1.000000
+// 1.000000 0.000000 1.000000
+// 0.000000 0.000000 0.000000&quot;&quot;&quot;
 </span><span>
 (</span><span class="identifier">r</span><span> </span><span class="identifier">ge</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res79: String = &quot;&quot;&quot;0.000000 0.000000 0.000000
-// 0.000000 1.000000 0.000000
-// 0.000000 1.000000 0.000000&quot;&quot;&quot;
+</span><span class="comment">// res79: String = &quot;&quot;&quot;1.000000 1.000000 1.000000
+// 1.000000 0.000000 1.000000
+// 0.000000 0.000000 0.000000&quot;&quot;&quot;
 </span><span>
 (</span><span class="identifier">r</span><span> </span><span class="identifier">eq</span><span> </span><span class="identifier">half</span><span>).</span><span class="identifier">show</span><span>
 </span><span class="comment">// res80: String = &quot;&quot;&quot;0.000000 0.000000 0.000000
@@ -724,9 +722,9 @@
 // 1.000000 1.000000 1.000000&quot;&quot;&quot;
 </span><span>
 ((</span><span class="identifier">r</span><span> </span><span class="identifier">lt</span><span> </span><span class="identifier">half</span><span>) </span><span class="identifier">not</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res85: String = &quot;&quot;&quot;0.000000 0.000000 0.000000
-// 0.000000 1.000000 0.000000
-// 0.000000 1.000000 0.000000&quot;&quot;&quot;</span></code></pre>
+</span><span class="comment">// res85: String = &quot;&quot;&quot;1.000000 1.000000 1.000000
+// 1.000000 0.000000 1.000000
+// 0.000000 0.000000 0.000000&quot;&quot;&quot;</span></code></pre>
         
         <h3 id="higher-order-methods" class="section"><a class="anchor-link left" href="#higher-order-methods"><i class="icofont-laika">&#xef71;</i></a>Higher order methods</h3>
         <pre><code class="nohighlight"><span>(</span><span class="identifier">m</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span> + </span><span class="number-literal">1</span><span>)).</span><span class="identifier">show</span><span>
@@ -754,138 +752,6 @@
 (</span><span class="identifier">m</span><span>.</span><span class="identifier">foldTop</span><span>(</span><span class="identifier">ones</span><span>(</span><span class="number-literal">1</span><span>, </span><span class="number-literal">5</span><span>))(</span><span class="identifier">_</span><span> </span><span class="identifier">mulPointwise</span><span> </span><span class="identifier">_</span><span>)).</span><span class="identifier">show</span><span>
 </span><span class="comment">// res89: String = &quot;24.000000 1680.000000 11880.000000 43680.000000 116280.000000&quot;</span></code></pre>
         
-        <h2 id="graph" class="section"><a class="anchor-link left" href="#graph"><i class="icofont-laika">&#xef71;</i></a>Graph</h2>
-        <p>DirectedGraph typeclass and witnesses for the Jung package</p>
-        
-        <h3 id="directed-graph" class="section"><a class="anchor-link left" href="#directed-graph"><i class="icofont-laika">&#xef71;</i></a>Directed Graph</h3>
-        <p>Example with <code>String</code> is the vertex value and an <code>Edge</code> type with two values (a <code>String</code> and an <code>Int</code>) to represent the edges</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> (</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>) = (</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>, </span><span class="string-literal">&quot;c&quot;</span><span>, </span><span class="string-literal">&quot;d&quot;</span><span>)
-
-</span><span class="keyword">class</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="keyword">val</span><span> </span><span class="identifier">s</span><span>: </span><span class="type-name">String</span><span>, </span><span class="keyword">val</span><span> </span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span>)</span></code></pre>
-        <p>Invoke the <code>DirectedGraph</code> typeclass with type parameters that denote
-        that we will use Jung&#39;s <code>DirectedSparseGraph</code> as the graph type, with
-        <code>String</code> and <code>Edge</code> as vertex and edge values, respectively.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">DirectedSparseGraph</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">val</span><span> </span><span class="identifier">jdg</span><span> = </span><span class="type-name">DirectedGraph</span><span>.</span><span class="identifier">k2</span><span>[</span><span class="type-name">DirectedSparseGraph</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>]</span></code></pre>
-        <p>Use the <code>jdg</code> witness&#39;s <code>make</code> method to create the directed graph</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">dg</span><span> = </span><span class="identifier">jdg</span><span>.</span><span class="identifier">make</span><span>(</span><span class="type-name">List</span><span>(</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>),
-  </span><span class="type-name">List</span><span>(
-    (</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hello&quot;</span><span>, </span><span class="number-literal">1</span><span>)),
-    (</span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;world&quot;</span><span>, </span><span class="number-literal">4</span><span>)),
-    (</span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hi&quot;</span><span>, </span><span class="number-literal">3</span><span>)),
-    (</span><span class="identifier">d</span><span>, </span><span class="identifier">a</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;earth&quot;</span><span>, </span><span class="number-literal">1</span><span>)),
-    (</span><span class="identifier">a</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;!&quot;</span><span>, </span><span class="number-literal">7</span><span>)),
-    (</span><span class="identifier">b</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hey&quot;</span><span>, </span><span class="number-literal">2</span><span>))))</span></code></pre>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">directedgraph</span><span>.</span><span class="identifier">directedGraphOps</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">finite</span><span>.</span><span class="identifier">finiteOps</span><span>
-
-</span><span class="identifier">dg</span><span>.</span><span class="identifier">vertexProjection</span><span>.</span><span class="identifier">size</span><span>
-</span><span class="comment">// res91: Int = 4
-</span><span>
-</span><span class="identifier">dg</span><span>.</span><span class="identifier">edgeProjection</span><span>.</span><span class="identifier">size</span><span>
-</span><span class="comment">// res92: Int = 6
-</span><span>
-</span><span class="identifier">dg</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> === </span><span class="string-literal">&quot;a&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">dg</span><span>.</span><span class="identifier">successors</span><span>(</span><span class="identifier">v</span><span>))
-</span><span class="comment">// res93: Option[Set[String]] = Some(value = Set(&quot;b&quot;, &quot;c&quot;))
-</span><span>
-</span><span class="identifier">dg</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> === </span><span class="string-literal">&quot;c&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">dg</span><span>.</span><span class="identifier">successors</span><span>(</span><span class="identifier">v</span><span>))
-</span><span class="comment">// res94: Option[Set[String]] = Some(value = Set(&quot;d&quot;))
-</span><span>
-</span><span class="identifier">dg</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> === </span><span class="string-literal">&quot;c&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">dg</span><span>.</span><span class="identifier">predecessors</span><span>(</span><span class="identifier">v</span><span>))
-</span><span class="comment">// res95: Option[Set[String]] = Some(value = Set(&quot;a&quot;, &quot;b&quot;))
-</span><span>
-</span><span class="identifier">dg</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> === </span><span class="string-literal">&quot;c&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">dg</span><span>.</span><span class="identifier">neighbors</span><span>(</span><span class="identifier">v</span><span>))
-</span><span class="comment">// res96: Option[Set[String]] = Some(value = Set(&quot;a&quot;, &quot;b&quot;, &quot;d&quot;))</span></code></pre>
-        <p>Create a Visualization of the graph</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Show</span><span>
-
-</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showEdge</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] {
-  </span><span class="keyword">def</span><span> </span><span class="declaration-name">show</span><span>(</span><span class="identifier">e</span><span>: </span><span class="type-name">Edge</span><span>): </span><span class="type-name">String</span><span> = </span><span class="identifier">e</span><span>.</span><span class="identifier">s</span><span> + </span><span class="string-literal">&quot; &quot;</span><span> + </span><span class="identifier">e</span><span>.</span><span class="identifier">i</span><span>
-}
-
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">val</span><span> </span><span class="identifier">dVis</span><span> = </span><span class="type-name">DirectedGraphVisualization</span><span>[</span><span class="type-name">DirectedSparseGraph</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>], </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>](
-  </span><span class="identifier">dg</span><span>,
-  </span><span class="identifier">width</span><span> = </span><span class="number-literal">300</span><span>,
-  </span><span class="identifier">height</span><span> = </span><span class="number-literal">300</span><span>,
-  </span><span class="identifier">border</span><span> = </span><span class="number-literal">10</span><span>,
-  </span><span class="identifier">radius</span><span> = </span><span class="number-literal">10</span><span>,
-  </span><span class="identifier">arrowLength</span><span> = </span><span class="number-literal">10</span><span>,
-  </span><span class="identifier">color</span><span> = </span><span class="type-name">Color</span><span>.</span><span class="identifier">green</span><span>,
-  </span><span class="identifier">borderColor</span><span> = </span><span class="type-name">Color</span><span>.</span><span class="identifier">black</span><span>,
-  </span><span class="identifier">fontSize</span><span> = </span><span class="number-literal">12</span><span>
-)</span></code></pre>
-        <p>Render as sn SVG file</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="identifier">dVis</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/SimpleDirectedGraph.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
-        <p><img src="/images/SimpleDirectedGraph.svg" alt="directed graph"></p>
-        
-        <h3 id="undirected-graph" class="section"><a class="anchor-link left" href="#undirected-graph"><i class="icofont-laika">&#xef71;</i></a>Undirected Graph</h3>
-        <p>An undirected graph using the same dataa:</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> (</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>) = (</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>, </span><span class="string-literal">&quot;c&quot;</span><span>, </span><span class="string-literal">&quot;d&quot;</span><span>)
-
-</span><span class="keyword">class</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="keyword">val</span><span> </span><span class="identifier">s</span><span>: </span><span class="type-name">String</span><span>, </span><span class="keyword">val</span><span> </span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span>)</span></code></pre>
-        <p>Invoke the <code>UndirectedGraph</code> typeclass with type parameters that denote
-        that we will use Jung&#39;s <code>UndirectedSparseGraph</code> as the graph type, with
-        <code>String</code> and <code>Edge</code> as vertex and edge values, respectively.</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">UndirectedSparseGraph</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">val</span><span> </span><span class="identifier">jug</span><span> = </span><span class="type-name">UndirectedGraph</span><span>.</span><span class="identifier">k2</span><span>[</span><span class="type-name">UndirectedSparseGraph</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>]</span></code></pre>
-        <p>Use the <code>jug</code> witness&#39;s <code>make</code> method to create the undirected graph</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ug</span><span> = </span><span class="identifier">jug</span><span>.</span><span class="identifier">make</span><span>(</span><span class="type-name">List</span><span>(</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>),
-  </span><span class="type-name">List</span><span>(
-    (</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hello&quot;</span><span>, </span><span class="number-literal">10</span><span>)),
-    (</span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;world&quot;</span><span>, </span><span class="number-literal">1</span><span>)),
-    (</span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hi&quot;</span><span>, </span><span class="number-literal">3</span><span>)),
-    (</span><span class="identifier">d</span><span>, </span><span class="identifier">a</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;earth&quot;</span><span>, </span><span class="number-literal">7</span><span>)),
-    (</span><span class="identifier">a</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;!&quot;</span><span>, </span><span class="number-literal">1</span><span>)),
-    (</span><span class="identifier">b</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hey&quot;</span><span>, </span><span class="number-literal">2</span><span>))))</span></code></pre>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">undirectedgraph</span><span>.</span><span class="identifier">undirectedGraphOps</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">finite</span><span>.</span><span class="identifier">finiteOps</span><span>
-
-</span><span class="identifier">ug</span><span>.</span><span class="identifier">vertexProjection</span><span>.</span><span class="identifier">size</span><span>
-</span><span class="comment">// res99: Int = 4
-</span><span>
-</span><span class="identifier">ug</span><span>.</span><span class="identifier">edgeProjection</span><span>.</span><span class="identifier">size</span><span>
-</span><span class="comment">// res100: Int = 6
-</span><span>
-</span><span class="identifier">ug</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> == </span><span class="string-literal">&quot;c&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">ug</span><span>.</span><span class="identifier">neighbors</span><span>(</span><span class="identifier">v</span><span>))
-</span><span class="comment">// res101: Option[Iterable[String]] = Some(value = Iterable(&quot;a&quot;, &quot;b&quot;, &quot;d&quot;))
-</span><span>
-</span><span class="identifier">ug</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> == </span><span class="string-literal">&quot;a&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">ug</span><span>.</span><span class="identifier">neighbors</span><span>(</span><span class="identifier">v</span><span>))
-</span><span class="comment">// res102: Option[Iterable[String]] = Some(value = Iterable(&quot;b&quot;, &quot;c&quot;, &quot;d&quot;))</span></code></pre>
-        <p>Create a Visualization of the graph</p>
-        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Show</span><span>
-
-</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showEdge</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] {
-  </span><span class="keyword">def</span><span> </span><span class="declaration-name">show</span><span>(</span><span class="identifier">e</span><span>: </span><span class="type-name">Edge</span><span>): </span><span class="type-name">String</span><span> = </span><span class="identifier">e</span><span>.</span><span class="identifier">s</span><span> + </span><span class="string-literal">&quot; &quot;</span><span> + </span><span class="identifier">e</span><span>.</span><span class="identifier">i</span><span>
-}
-
-</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="keyword">val</span><span> </span><span class="identifier">uVis</span><span> = </span><span class="type-name">UndirectedGraphVisualization</span><span>[</span><span class="type-name">UndirectedSparseGraph</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>], </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>](
-  </span><span class="identifier">ug</span><span>,
-  </span><span class="identifier">width</span><span> = </span><span class="number-literal">300</span><span>,
-  </span><span class="identifier">height</span><span> = </span><span class="number-literal">300</span><span>,
-  </span><span class="identifier">border</span><span> = </span><span class="number-literal">10</span><span>,
-  </span><span class="identifier">color</span><span> = </span><span class="type-name">Color</span><span>.</span><span class="identifier">yellow</span><span>)</span></code></pre>
-        <p>Render as an SVG file</p>
-        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
-</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
-
-</span><span class="identifier">uVis</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/SimpleUndirectedGraph.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
-        <p><img src="/images/SimpleUndirectedGraph.svg" alt="undirected graph"></p>
-        
         <h2 id="logic" class="section"><a class="anchor-link left" href="#logic"><i class="icofont-laika">&#xef71;</i></a>Logic</h2>
         
         <h3 id="conjunctive-normal-form-converter" class="section"><a class="anchor-link left" href="#conjunctive-normal-form-converter"><i class="icofont-laika">&#xef71;</i></a>Conjunctive Normal Form Converter</h3>
@@ -901,10 +767,10 @@
 
 </span><span class="keyword">val</span><span> (</span><span class="identifier">cnf</span><span>, </span><span class="identifier">skolemMap</span><span>) = </span><span class="identifier">conjunctiveNormalForm</span><span>(</span><span class="identifier">s</span><span>)</span></code></pre>
         <pre><code class="nohighlight"><span class="identifier">cnf</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res105: String = &quot;((¬A(Symbol(sk0)) ∨ (¬G(Symbol(sk1)) ∨ (B(Symbol(sk2)) ∨ H(Symbol(sk3))))) ∧ (((¬B(Symbol(sk4)) ∧ ¬H(Symbol(sk5))) ∨ A(Symbol(sk6))) ∧ ((¬B(Symbol(sk4)) ∧ ¬H(Symbol(sk5))) ∨ G(Symbol(sk7)))))&quot;
+</span><span class="comment">// res91: String = &quot;((¬A(Symbol(sk0)) ∨ (¬G(Symbol(sk1)) ∨ (B(Symbol(sk2)) ∨ H(Symbol(sk3))))) ∧ (((¬B(Symbol(sk4)) ∧ ¬H(Symbol(sk5))) ∨ A(Symbol(sk6))) ∧ ((¬B(Symbol(sk4)) ∧ ¬H(Symbol(sk5))) ∨ G(Symbol(sk7)))))&quot;
 </span><span>
 </span><span class="identifier">skolemMap</span><span>
-</span><span class="comment">// res106: Map[Symbol, Set[Symbol]] = HashMap(
+</span><span class="comment">// res92: Map[Symbol, Set[Symbol]] = HashMap(
 //   &#39;sk2 -&gt; Set(),
 //   &#39;sk6 -&gt; Set(),
 //   &#39;sk7 -&gt; Set(),
@@ -915,8 +781,8 @@
 //   &#39;sk5 -&gt; Set()
 // )</span></code></pre>
         
-        <h2 id="spokes" class="section"><a class="anchor-link left" href="#spokes"><i class="icofont-laika">&#xef71;</i></a>Spokes</h2>
-        <p>Witnesses for 3rd party libraries: The &quot;Spokes&quot;</p>
+        <h2 id="support-for-third-party-libraries" class="section"><a class="anchor-link left" href="#support-for-third-party-libraries"><i class="icofont-laika">&#xef71;</i></a>Support for Third Party Libraries</h2>
+        <p>Witnesses for 3rd party libraries.</p>
         
         <h3 id="parallel-collections" class="section"><a class="anchor-link left" href="#parallel-collections"><i class="icofont-laika">&#xef71;</i></a>Parallel Collections</h3>
         <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-parallel&quot; % &quot;0.6.5&quot;</code></pre>
@@ -940,7 +806,7 @@
         
         <h3 id="jung" class="section"><a class="anchor-link left" href="#jung"><i class="icofont-laika">&#xef71;</i></a>JUNG</h3>
         <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-jung&quot; % &quot;0.6.5&quot;</code></pre>
-        <p>Directed and Undirected <a href="#graph">Graph</a> witnesses for the <a href="http://jung.sourceforge.net/">JUNG</a> library.</p>
+        <p>Directed and Undirected <a href="GraphTheory.html">Graph</a> witnesses for the <a href="http://jung.sourceforge.net/">JUNG</a> library.</p>
         
         <h3 id="awt" class="section"><a class="anchor-link left" href="#awt"><i class="icofont-laika">&#xef71;</i></a>AWT</h3>
         <pre class="keep-together pdf epub"><code class="sbt">&quot;org.axle-lang&quot; %% &quot;axle-awt&quot; % &quot;0.6.5&quot;</code></pre>

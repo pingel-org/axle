@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Laika 0.18.2 + Helium Theme" />
+    <title>Graph Theory</title>
+    
+    
+      <meta name="description" content="axle-docs"/>
+    
+    
+    
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700">
+    
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css">
+    
+    <link rel="stylesheet" type="text/css" href="helium/icofont.min.css" />
+    <link rel="stylesheet" type="text/css" href="helium/laika-helium.css" />
+    <link rel="stylesheet" type="text/css" href="css/main.scss" />
+    <script src="helium/laika-helium.js"></script>
+    <script src="js/ga.js"></script>
+    
+    
+    <script> /* for avoiding page load transitions */ </script>
+  </head>
+
+  <body>
+
+    <header id="top-bar">
+
+      <div class="row">
+        <a id="nav-icon">
+          <i class="icofont-laika" title="Navigation">&#xefa2;</i>
+        </a>
+        
+      </div>
+  
+      <a class="icon-link" href="index.html"><i class="icofont-laika" title="Home">&#xef47;</i></a>
+      
+      <span class="row links"></span>
+      
+    </header>
+
+    <nav id="sidebar">
+
+      <div class="row">
+        
+      </div>
+      
+      <ul class="nav-list">
+        <li class="level1"><a href="table-of-content.html">Contents</a></li>
+        <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
+        <li class="level1"><a href="Introduction.html">Introduction</a></li>
+        <li class="level1"><a href="Foundation.html">Foundation</a></li>
+        <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
+        <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1 active"><a href="#">Graph Theory</a></li>
+        <li class="level1"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
+        <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
+        <li class="level1"><a href="MachineLearning.html">Machine Learning</a></li>
+        <li class="level1"><a href="Biology.html">Biology</a></li>
+        <li class="level1"><a href="Text.html">Text</a></li>
+        <li class="level1"><a href="QuantumCircuits.html">Quantum Circuits</a></li>
+        <li class="level1"><a href="Appendix.html">Appendix</a></li>
+      </ul>
+      
+    </nav>
+
+    <div id="container">
+
+      <nav id="page-nav">
+        <p class="header"><a href="#">Graph Theory</a></p>
+        
+        <ul class="nav-list">
+          <li class="level1"><a href="#directed-graph">Directed Graph</a></li>
+          <li class="level1"><a href="#undirected-graph">Undirected Graph</a></li>
+        </ul>
+        
+        <p class="footer"></p>
+      </nav>
+
+      <main class="content">
+
+        <h1 id="graph-theory" class="title">Graph Theory</h1>
+        <p>Currently implemented for the Jung library.</p>
+        <p>Eventually Axle will provide its own basic Graph implementation, which will remove
+        Jung as a dependency of <code>axle-core</code>.</p>
+        
+        <h2 id="directed-graph" class="section"><a class="anchor-link left" href="#directed-graph"><i class="icofont-laika">&#xef71;</i></a>Directed Graph</h2>
+        <p>Example with <code>String</code> is the vertex value and an <code>Edge</code> type with two values (a <code>String</code> and an <code>Int</code>) to represent the edges</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> (</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>) = (</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>, </span><span class="string-literal">&quot;c&quot;</span><span>, </span><span class="string-literal">&quot;d&quot;</span><span>)
+
+</span><span class="keyword">class</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="keyword">val</span><span> </span><span class="identifier">s</span><span>: </span><span class="type-name">String</span><span>, </span><span class="keyword">val</span><span> </span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span>)</span></code></pre>
+        <p>Invoke the <code>DirectedGraph</code> typeclass with type parameters that denote
+        that we will use Jung&#39;s <code>DirectedSparseGraph</code> as the graph type, with
+        <code>String</code> and <code>Edge</code> as vertex and edge values, respectively.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">DirectedSparseGraph</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">jdg</span><span> = </span><span class="type-name">DirectedGraph</span><span>.</span><span class="identifier">k2</span><span>[</span><span class="type-name">DirectedSparseGraph</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>]</span></code></pre>
+        <p>Use the <code>jdg</code> witness&#39;s <code>make</code> method to create the directed graph</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">dg</span><span> = </span><span class="identifier">jdg</span><span>.</span><span class="identifier">make</span><span>(</span><span class="type-name">List</span><span>(</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>),
+  </span><span class="type-name">List</span><span>(
+    (</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hello&quot;</span><span>, </span><span class="number-literal">1</span><span>)),
+    (</span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;world&quot;</span><span>, </span><span class="number-literal">4</span><span>)),
+    (</span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hi&quot;</span><span>, </span><span class="number-literal">3</span><span>)),
+    (</span><span class="identifier">d</span><span>, </span><span class="identifier">a</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;earth&quot;</span><span>, </span><span class="number-literal">1</span><span>)),
+    (</span><span class="identifier">a</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;!&quot;</span><span>, </span><span class="number-literal">7</span><span>)),
+    (</span><span class="identifier">b</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hey&quot;</span><span>, </span><span class="number-literal">2</span><span>))))</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">directedgraph</span><span>.</span><span class="identifier">directedGraphOps</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">finite</span><span>.</span><span class="identifier">finiteOps</span><span>
+
+</span><span class="identifier">dg</span><span>.</span><span class="identifier">vertexProjection</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// res1: Int = 4
+</span><span>
+</span><span class="identifier">dg</span><span>.</span><span class="identifier">edgeProjection</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// res2: Int = 6
+</span><span>
+</span><span class="identifier">dg</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> === </span><span class="string-literal">&quot;a&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">dg</span><span>.</span><span class="identifier">successors</span><span>(</span><span class="identifier">v</span><span>))
+</span><span class="comment">// res3: Option[Set[String]] = Some(value = Set(&quot;b&quot;, &quot;c&quot;))
+</span><span>
+</span><span class="identifier">dg</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> === </span><span class="string-literal">&quot;c&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">dg</span><span>.</span><span class="identifier">successors</span><span>(</span><span class="identifier">v</span><span>))
+</span><span class="comment">// res4: Option[Set[String]] = Some(value = Set(&quot;d&quot;))
+</span><span>
+</span><span class="identifier">dg</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> === </span><span class="string-literal">&quot;c&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">dg</span><span>.</span><span class="identifier">predecessors</span><span>(</span><span class="identifier">v</span><span>))
+</span><span class="comment">// res5: Option[Set[String]] = Some(value = Set(&quot;a&quot;, &quot;b&quot;))
+</span><span>
+</span><span class="identifier">dg</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> === </span><span class="string-literal">&quot;c&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">dg</span><span>.</span><span class="identifier">neighbors</span><span>(</span><span class="identifier">v</span><span>))
+</span><span class="comment">// res6: Option[Set[String]] = Some(value = Set(&quot;a&quot;, &quot;b&quot;, &quot;d&quot;))</span></code></pre>
+        <p>Create a Visualization of the graph</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Show</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showEdge</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">show</span><span>(</span><span class="identifier">e</span><span>: </span><span class="type-name">Edge</span><span>): </span><span class="type-name">String</span><span> = </span><span class="identifier">e</span><span>.</span><span class="identifier">s</span><span> + </span><span class="string-literal">&quot; &quot;</span><span> + </span><span class="identifier">e</span><span>.</span><span class="identifier">i</span><span>
+}
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">dVis</span><span> = </span><span class="type-name">DirectedGraphVisualization</span><span>[</span><span class="type-name">DirectedSparseGraph</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>], </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>](
+  </span><span class="identifier">dg</span><span>,
+  </span><span class="identifier">width</span><span> = </span><span class="number-literal">300</span><span>,
+  </span><span class="identifier">height</span><span> = </span><span class="number-literal">300</span><span>,
+  </span><span class="identifier">border</span><span> = </span><span class="number-literal">10</span><span>,
+  </span><span class="identifier">radius</span><span> = </span><span class="number-literal">10</span><span>,
+  </span><span class="identifier">arrowLength</span><span> = </span><span class="number-literal">10</span><span>,
+  </span><span class="identifier">color</span><span> = </span><span class="type-name">Color</span><span>.</span><span class="identifier">green</span><span>,
+  </span><span class="identifier">borderColor</span><span> = </span><span class="type-name">Color</span><span>.</span><span class="identifier">black</span><span>,
+  </span><span class="identifier">fontSize</span><span> = </span><span class="number-literal">12</span><span>
+)</span></code></pre>
+        <p>Render as sn SVG file</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">dVis</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/SimpleDirectedGraph.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/SimpleDirectedGraph.svg" alt="directed graph"></p>
+        
+        <h2 id="undirected-graph" class="section"><a class="anchor-link left" href="#undirected-graph"><i class="icofont-laika">&#xef71;</i></a>Undirected Graph</h2>
+        <p>An undirected graph using the same dataa:</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> (</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>) = (</span><span class="string-literal">&quot;a&quot;</span><span>, </span><span class="string-literal">&quot;b&quot;</span><span>, </span><span class="string-literal">&quot;c&quot;</span><span>, </span><span class="string-literal">&quot;d&quot;</span><span>)
+
+</span><span class="keyword">class</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="keyword">val</span><span> </span><span class="identifier">s</span><span>: </span><span class="type-name">String</span><span>, </span><span class="keyword">val</span><span> </span><span class="identifier">i</span><span>: </span><span class="type-name">Int</span><span>)</span></code></pre>
+        <p>Invoke the <code>UndirectedGraph</code> typeclass with type parameters that denote
+        that we will use Jung&#39;s <code>UndirectedSparseGraph</code> as the graph type, with
+        <code>String</code> and <code>Edge</code> as vertex and edge values, respectively.</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">edu</span><span>.</span><span class="identifier">uci</span><span>.</span><span class="identifier">ics</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">graph</span><span>.</span><span class="type-name">UndirectedSparseGraph</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">algebra</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">jung</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">jug</span><span> = </span><span class="type-name">UndirectedGraph</span><span>.</span><span class="identifier">k2</span><span>[</span><span class="type-name">UndirectedSparseGraph</span><span>, </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>]</span></code></pre>
+        <p>Use the <code>jug</code> witness&#39;s <code>make</code> method to create the undirected graph</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">ug</span><span> = </span><span class="identifier">jug</span><span>.</span><span class="identifier">make</span><span>(</span><span class="type-name">List</span><span>(</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>),
+  </span><span class="type-name">List</span><span>(
+    (</span><span class="identifier">a</span><span>, </span><span class="identifier">b</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hello&quot;</span><span>, </span><span class="number-literal">10</span><span>)),
+    (</span><span class="identifier">b</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;world&quot;</span><span>, </span><span class="number-literal">1</span><span>)),
+    (</span><span class="identifier">c</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hi&quot;</span><span>, </span><span class="number-literal">3</span><span>)),
+    (</span><span class="identifier">d</span><span>, </span><span class="identifier">a</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;earth&quot;</span><span>, </span><span class="number-literal">7</span><span>)),
+    (</span><span class="identifier">a</span><span>, </span><span class="identifier">c</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;!&quot;</span><span>, </span><span class="number-literal">1</span><span>)),
+    (</span><span class="identifier">b</span><span>, </span><span class="identifier">d</span><span>, </span><span class="keyword">new</span><span> </span><span class="type-name">Edge</span><span>(</span><span class="string-literal">&quot;hey&quot;</span><span>, </span><span class="number-literal">2</span><span>))))</span></code></pre>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">implicits</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">undirectedgraph</span><span>.</span><span class="identifier">undirectedGraphOps</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">syntax</span><span>.</span><span class="identifier">finite</span><span>.</span><span class="identifier">finiteOps</span><span>
+
+</span><span class="identifier">ug</span><span>.</span><span class="identifier">vertexProjection</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// res9: Int = 4
+</span><span>
+</span><span class="identifier">ug</span><span>.</span><span class="identifier">edgeProjection</span><span>.</span><span class="identifier">size</span><span>
+</span><span class="comment">// res10: Int = 6
+</span><span>
+</span><span class="identifier">ug</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> == </span><span class="string-literal">&quot;c&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">ug</span><span>.</span><span class="identifier">neighbors</span><span>(</span><span class="identifier">v</span><span>))
+</span><span class="comment">// res11: Option[Iterable[String]] = Some(value = Iterable(&quot;a&quot;, &quot;b&quot;, &quot;d&quot;))
+</span><span>
+</span><span class="identifier">ug</span><span>.</span><span class="identifier">findVertex</span><span>(</span><span class="identifier">_</span><span> == </span><span class="string-literal">&quot;a&quot;</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">v</span><span> =&gt; </span><span class="identifier">ug</span><span>.</span><span class="identifier">neighbors</span><span>(</span><span class="identifier">v</span><span>))
+</span><span class="comment">// res12: Option[Iterable[String]] = Some(value = Iterable(&quot;b&quot;, &quot;c&quot;, &quot;d&quot;))</span></code></pre>
+        <p>Create a Visualization of the graph</p>
+        <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="type-name">Show</span><span>
+
+</span><span class="keyword">implicit</span><span> </span><span class="keyword">val</span><span> </span><span class="identifier">showEdge</span><span>: </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] = </span><span class="keyword">new</span><span> </span><span class="type-name">Show</span><span>[</span><span class="type-name">Edge</span><span>] {
+  </span><span class="keyword">def</span><span> </span><span class="declaration-name">show</span><span>(</span><span class="identifier">e</span><span>: </span><span class="type-name">Edge</span><span>): </span><span class="type-name">String</span><span> = </span><span class="identifier">e</span><span>.</span><span class="identifier">s</span><span> + </span><span class="string-literal">&quot; &quot;</span><span> + </span><span class="identifier">e</span><span>.</span><span class="identifier">i</span><span>
+}
+
+</span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="keyword">val</span><span> </span><span class="identifier">uVis</span><span> = </span><span class="type-name">UndirectedGraphVisualization</span><span>[</span><span class="type-name">UndirectedSparseGraph</span><span>[</span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>], </span><span class="type-name">String</span><span>, </span><span class="type-name">Edge</span><span>](
+  </span><span class="identifier">ug</span><span>,
+  </span><span class="identifier">width</span><span> = </span><span class="number-literal">300</span><span>,
+  </span><span class="identifier">height</span><span> = </span><span class="number-literal">300</span><span>,
+  </span><span class="identifier">border</span><span> = </span><span class="number-literal">10</span><span>,
+  </span><span class="identifier">color</span><span> = </span><span class="type-name">Color</span><span>.</span><span class="identifier">yellow</span><span>)</span></code></pre>
+        <p>Render as an SVG file</p>
+        <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">web</span><span>.</span><span class="identifier">_</span><span>
+</span><span class="keyword">import</span><span> </span><span class="identifier">cats</span><span>.</span><span class="identifier">effect</span><span>.</span><span class="identifier">_</span><span>
+
+</span><span class="identifier">uVis</span><span>.</span><span class="identifier">svg</span><span>[</span><span class="type-name">IO</span><span>](</span><span class="string-literal">&quot;docwork/images/SimpleUndirectedGraph.svg&quot;</span><span>).</span><span class="identifier">unsafeRunSync</span><span>()</span></code></pre>
+        <p><img src="/images/SimpleUndirectedGraph.svg" alt="undirected graph"></p>
+
+      </main>
+
+    </div>
+
+  </body>
+</html>

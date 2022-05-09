@@ -54,9 +54,10 @@
         <li class="level1"><a href="downloads.html">Documentation Downloads</a></li>
         <li class="level1"><a href="Introduction.html">Introduction</a></li>
         <li class="level1"><a href="Foundation.html">Foundation</a></li>
-        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
         <li class="level1"><a href="Math.html">Math</a></li>
+        <li class="level1"><a href="Units.html">Units of Measurement</a></li>
         <li class="level1"><a href="Visualization.html">Visualization</a></li>
+        <li class="level1"><a href="GraphTheory.html">Graph Theory</a></li>
         <li class="level1"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
         <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
         <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
@@ -288,11 +289,11 @@
   </span><span class="identifier">_</span><span>.</span><span class="identifier">species</span><span>,
   </span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">2</span><span>)</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">confusion</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res6: String = &quot;&quot;&quot; 16  34   0 :  50 Iris-setosa
-//   1   8  41 :  50 Iris-versicolor
-//   5   1  44 :  50 Iris-virginica
+</span><span class="comment">// res6: String = &quot;&quot;&quot;  0   1  49 :  50 Iris-setosa
+//  12  36   2 :  50 Iris-versicolor
+//  30  20   0 :  50 Iris-virginica
 // 
-//  22  43  85
+//  42  57  51
 // &quot;&quot;&quot;</span></code></pre>
         <p>Visualize the final (two dimensional) centroid positions</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="type-name">KMeansVisualization</span><span>
@@ -438,13 +439,13 @@
   </span><span class="identifier">_</span><span>.</span><span class="identifier">author</span><span>,
   </span><span class="number-literal">0</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">3</span><span>)</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">confusion</span><span>.</span><span class="identifier">show</span><span>
-</span><span class="comment">// res11: String = &quot;&quot;&quot; 1  1 44  6 : 52 HAMILTON
-//  0  0  3  0 :  3 HAMILTON AND MADISON
-//  0  8  1  6 : 15 MADISON
-//  0  0  5  0 :  5 JAY
-//  0  4  7  0 : 11 HAMILTON OR MADISON
+</span><span class="comment">// res11: String = &quot;&quot;&quot;21 19  8  4 : 52 HAMILTON
+//  3  0  0  0 :  3 HAMILTON AND MADISON
+// 10  0  5  0 : 15 MADISON
+//  2  0  0  3 :  5 JAY
+// 10  0  0  1 : 11 HAMILTON OR MADISON
 // 
-//  1 13 60 12
+// 46 19 13  8
 // &quot;&quot;&quot;</span></code></pre>
         
         <h2 id="genetic-algorithms" class="section"><a class="anchor-link left" href="#genetic-algorithms"><i class="icofont-laika">&#xef71;</i></a>Genetic Algorithms</h2>
@@ -494,7 +495,7 @@
 
 </span><span class="keyword">val</span><span> </span><span class="identifier">log</span><span> = </span><span class="identifier">ga</span><span>.</span><span class="identifier">run</span><span>(</span><span class="identifier">spire</span><span>.</span><span class="identifier">random</span><span>.</span><span class="type-name">Generator</span><span>.</span><span class="identifier">rng</span><span>)</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">winner</span><span> = </span><span class="identifier">log</span><span>.</span><span class="identifier">winners</span><span>.</span><span class="identifier">last</span><span>
-</span><span class="comment">// winner: gen.Repr = 2 :: 7.5645245810301525 :: 4.957718341745976 :: 12.92862917094304 :: 14.887161649538323 :: 2.0635037955500337 :: 7.625353869375088 :: 2.1285369577753293 :: HNil</span></code></pre>
+</span><span class="comment">// winner: gen.Repr = 2 :: 24.852843762333084 :: 4.588011179322346 :: 12.775841572444314 :: 14.70778125869996 :: 2.0249572093621238 :: 7.974308212270284 :: 2.08110277512107 :: HNil</span></code></pre>
         <p>Plot the min, average, and max fitness function by generation</p>
         <pre><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">scala</span><span>.</span><span class="identifier">collection</span><span>.</span><span class="identifier">immutable</span><span>.</span><span class="type-name">TreeMap</span><span>
 </span><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">visualize</span><span>.</span><span class="identifier">_</span><span>
