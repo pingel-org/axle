@@ -24,17 +24,17 @@ Axle intends to occupy a useful mid-point that can help build a bridge.
 
 [![coin entropy](/images/coinentropy.svg)](InformationTheory.md#example-entropy-of-a-biased-coin)
 
-[![alarm bayes](/images/alarm_bayes.svg)](RandomnessUncertainty.md#bayesian-networks)
+[![alarm bayes](/images/alarm_bayes.svg)](ProbabilisticGraphicalModels.md#example-alarm)
 
 [![logistic map](/images/logMap.png)](ChaosTheory.md#logistic-map)
 
 [![poker hands](/images/poker_hands.svg)](GameTheory.md#poker)
 
-[![probability monad](/images/iffy.svg)](RandomnessUncertainty.md#probability-model)
+[![probability monad](/images/iffy.svg)](ProbabilityModel.md#iffy)
 
-[![cluster irises](/images/k_means.svg)](MachineLearning.md#example-irises)
+[![cluster irises](/images/k_means.svg)](Clustering.md#example-irises)
 
-[![linear regression](/images/lrerror.svg)](MachineLearning.md#linear-regression)
+[![linear regression](/images/lrerror.svg)](RegressionAnalysis.md#linear-regression)
 
 [![geo coordinates](/images/sfo_hel_small.png)](Units.md#geo-coordinates)
 

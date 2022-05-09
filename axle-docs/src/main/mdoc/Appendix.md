@@ -20,7 +20,9 @@ See [Future Work](GameTheory.md#future-work) for Axle Game
 
 Factoring and Bayesian Networks
 
-See [Future Work](RandomnessUncertainty.md#future-work) for Randomness and Uncertainty
+And [Future Work](ProbabilityModel.md#future-work) for Probability Model
+
+See [Future Work](ProbabilisticGraphicalModels.md#future-work) for PGMs
 
 ### 0.10.x Bugs and adoption barriers
 

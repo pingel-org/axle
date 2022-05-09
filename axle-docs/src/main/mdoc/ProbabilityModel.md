@@ -513,7 +513,7 @@ As an alternative to Measure Theory, see Tobias Fritz's work on Markov Categorie
 
 In general, the explosion of work on probabilistic and differentible programming is fertile ground for Axle's lawful approach.
 
-## Future Work
+### Other Goals
 
 * `{CPT,TD}.tailRecM` then ScalaCheck `Monad[CPT,TD]`
 * Functor for CPT, TD

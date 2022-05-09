@@ -3,11 +3,9 @@
 ## QBit
 
 ```scala mdoc:silent
-package axle.quantumcircuit
-
-import cats.implicits._
 import spire.math._
 
+import axle.quantumcircuit._
 import axle.syntax.kolmogorov._
 import axle.algebra.RegionEq
 
@@ -28,6 +26,7 @@ distribution.P(RegionEq(CBit1))
 
 ```scala mdoc:silent:reset
 import axle.quantumcircuit._
+import axle.algebra.Binary
 ```
 
 ```scala mdoc
@@ -39,8 +38,11 @@ Vector[Binary](1, 0) ⊗ Vector[Binary](1, 0)
 ## CNOT
 
 ```scala mdoc:silent:reset
+import axle.quantumcircuit._
 import axle.quantumcircuit.QBit._
 import spire.algebra.Field
+import spire.math.Real
+
 implicit val fieldReal: Field[Real] = new spire.math.RealAlgebra()
 val QBit0 = constant0[Real]
 val QBit1 = constant1[Real]
@@ -57,8 +59,6 @@ QBit2.cnot(QBit2(QBit1.unindex ⊗ QBit1.unindex)).unindex
 ```
 
 ## Future Work
-
-### Soon
 
 * `QBit2.factor`
 * Fix and enable `DeutschOracleSpec`

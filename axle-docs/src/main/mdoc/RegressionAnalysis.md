@@ -119,7 +119,6 @@ val data = List(
 Create a test pass probability function using logistic regression.
 
 ```scala mdoc
-import cats.implicits._
 import spire.algebra.Rng
 import spire.algebra.NRoot
 import axle.jblas._
