@@ -12,12 +12,8 @@ a unit conversion operator `in`,
 and a right associative value constructor `*:`
 
 The "quanta" are
-Acceleration, Area, Angle,
-[Distance](https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Distance.scala),
-[Energy](https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Energy.scala),
-Flow, Force, Frequency, Information, Mass, Money, MoneyFlow, MoneyPerForce, Power, Speed, Temperature,
-[Time](https://github.com/adampingel/axle/blob/master/axle-core/src/main/scala/axle/quanta/Time.scala),
-and Volume.
+Acceleration, Area, Angle, Distance, Energy, 
+Flow, Force, Frequency, Information, Mass, Money, MoneyFlow, MoneyPerForce, Power, Speed, Temperature, Time, and Volume.
 Axle's values are represented in such a way that a value's "quantum" is present in the type,
 meaning that nonsensical expressions like `mile + gram` can be rejected at compile time.
 
