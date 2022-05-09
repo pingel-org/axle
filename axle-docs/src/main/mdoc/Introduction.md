@@ -2,11 +2,21 @@
 
 ## Objectives
 
-Practice coding in a strongly functional style and writing about it
+Practice coding in a strongly functional style and writing about it.
 
-No doubles (easy path to "theorems for free")
+Why pursue "lawful" "scientific computing"? (or "artificial intelligence"?)
 
-Lawful AI
+1. For all the same reasons that other software benefits
+2. Help us communicate with and leverage other fields
+3. Rich mathematics may be central to future learning algorithms
+
+On the first point: A policy of "no Doubles" is an easy but profoundly disorienting path to "Theorems for Free"
+
+There is a huge gulf between automated theorem provers (Coq, Lean, Agda) and the
+kinds of environments and languages used by professional software engineers.
+By adopting a stye that eschews even familiar types like `Double` in the core code
+(although `Double` is common in the surface-level examples in this document),
+Axle intends to occupy a useful mid-point that can help build a bridge.
 
 ## Gallery
 
