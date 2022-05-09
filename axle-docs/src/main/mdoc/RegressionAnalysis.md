@@ -79,6 +79,8 @@ errorPlot.svg[IO]("@DOCWD@/images/lrerror.svg").unsafeRunSync()
 
 ## Logistic Regression
 
+WARNING: implementation is incorrect
+
 `axle.ml.LogisticRegression` makes use of `axle.algebra.LinearAlgebra`.
 
 See the wikipedia page on [Logistic Regression](https://en.wikipedia.org/wiki/Logistic_regression)
@@ -117,8 +119,15 @@ val data = List(
 Create a test pass probability function using logistic regression.
 
 ```scala mdoc
+import cats.implicits._
+import spire.algebra.Rng
+import spire.algebra.NRoot
 import axle.jblas._
+
+implicit val rngDouble: Rng[Double] = spire.implicits.DoubleAlgebra
+implicit val nrootDouble: NRoot[Double] = spire.implicits.DoubleAlgebra
 implicit val laJblasDouble = axle.jblas.linearAlgebraDoubleMatrix[Double]
+implicit val rngInt: Rng[Int] = spire.implicits.IntAlgebra
 
 import axle.ml.LogisticRegression
 
