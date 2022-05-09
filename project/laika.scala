@@ -23,9 +23,10 @@ object AxleLaika {
           documentationLinks = Seq(
             TextLink.internal(Root / "Introduction.md", "Introduction"),
             TextLink.internal(Root / "Foundation.md", "Foundation"),
-            TextLink.internal(Root / "Units.md", "Units of Measurement"),
             TextLink.internal(Root / "Math.md", "Math"),
+            TextLink.internal(Root / "Units.md", "Units of Measurement"),
             TextLink.internal(Root / "Visualization.md", "Visualization"),
+            TextLink.internal(Root / "GraphTheory.md", "Graph Theory"),
             TextLink.internal(Root / "RandomnessUncertainty.md", "Randomness and Uncertainty"),
             TextLink.internal(Root / "GameTheory.md", "Game Theory"),
             TextLink.internal(Root / "ChaosTheory.md", "Chaos Theory"),

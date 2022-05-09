@@ -8,6 +8,28 @@ No doubles (easy path to "theorems for free")
 
 Lawful AI
 
+## Gallery
+
+[![mandelbrot](/images/mandelbrot.png)](ChaosTheory.md#mandelbrot-set)
+
+[![coin entropy](/images/coinentropy.svg)](RandomnessUncertainty.md#example-entropy-of-a-biased-coin)
+
+[![alarm bayes](/images/alarm_bayes.svg)](RandomnessUncertainty.md#bayesian-networks)
+
+[![logistic map](/images/logMap.png)](ChaosTheory.md#logistic-map)
+
+[![poker hands](/images/poker_hands.svg)](GameTheory.md#poker)
+
+[![probability monad](/images/iffy.svg)](RandomnessUncertainty.md#probability-model)
+
+[![cluster irises](/images/k_means.svg)](MachineLearning.md#example-irises)
+
+[![linear regression](/images/lrerror.svg)](MachineLearning.md#linear-regression)
+
+[![geo coordinates](/images/sfo_hel_small.png)](Units.md#geo-coordinates)
+
+[![random waves](/images/random_waves.svg)](Visualization.md#example-plot-random-waves-over-time)
+
 ## Installation
 
 Axle as a dependency of an SBT project.
@@ -48,28 +70,6 @@ See the [Road Map](Appendix.md#road-map) for more information on the release sch
 
 Snapshot versions are created for every commit and
 hosted on the [Sonatype snapshot repo](https://oss.sonatype.org/content/repositories/snapshots).
-
-## Gallery
-
-[![mandelbrot](/images/mandelbrot.png)](ChaosTheory.md#mandelbrot-set)
-
-[![coin entropy](/images/coinentropy.svg)](RandomnessUncertainty.md#example-entropy-of-a-biased-coin)
-
-[![alarm bayes](/images/alarm_bayes.svg)](RandomnessUncertainty.md#bayesian-networks)
-
-[![logistic map](/images/logMap.png)](ChaosTheory.md#logistic-map)
-
-[![poker hands](/images/poker_hands.svg)](GameTheory.md#poker)
-
-[![probability monad](/images/iffy.svg)](RandomnessUncertainty.md#probability-model)
-
-[![cluster irises](/images/k_means.svg)](MachineLearning.md#example-irises)
-
-[![linear regression](/images/lrerror.svg)](MachineLearning.md#linear-regression)
-
-[![geo coordinates](/images/sfo_hel_small.png)](Units.md#geo-coordinates)
-
-[![random waves](/images/random_waves.svg)](Visualization.md#example-plot-random-waves-over-time)
 
 ## Community Resources
 
