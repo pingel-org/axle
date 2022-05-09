@@ -71,7 +71,7 @@ hosted on the [Sonatype snapshot repo](https://oss.sonatype.org/content/reposito
 
 [![random waves](/images/random_waves.svg)](Visualization.md#example-plot-random-waves-over-time)
 
-## Resources
+## Community Resources
 
 * Chat on the gitter channel: [![gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/axlelang/axle?utm_source=badge)
 * [@axledsl](https://twitter.com/axledsl) Twitter handle
