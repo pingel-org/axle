@@ -40,7 +40,7 @@ See [future work](Visualization.md#future-work) for axle visualization
 
 See [future work](Math.md#future-work)
 
-## Build and Deploy
+## Build and Release
 
 For contributors
 
