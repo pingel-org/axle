@@ -1,6 +1,48 @@
 # Quantum Circuits
 
-To be written...
+## QBit
+
+```scala mdoc:silent
+package axle.quantumcircuit
+
+import cats.implicits._
+import spire.math._
+
+import axle.syntax.kolmogorov._
+import axle.algebra.RegionEq
+
+val sqrtHalf = Complex(Real(1) / sqrt(Real(2)), Real(0))
+
+val qEven = QBit[Real](sqrtHalf, sqrtHalf)
+
+val distribution = qEven.cpt
+```
+
+```scala mdoc
+distribution.P(RegionEq(CBit0))
+
+distribution.P(RegionEq(CBit1))
+```
+
+## CNOT
+
+```scala mdoc:silent:reset
+import axle.quantumcircuit.QBit._
+import spire.algebra.Field
+implicit val fieldReal: Field[Real] = new spire.math.RealAlgebra()
+val QBit0 = constant0[Real]
+val QBit1 = constant1[Real]
+```
+
+```scala mdoc
+QBit2.cnot(QBit2(QBit0.unindex ⊗ QBit0.unindex)).unindex
+
+QBit2.cnot(QBit2(QBit0.unindex ⊗ QBit1.unindex)).unindex
+
+QBit2.cnot(QBit2(QBit1.unindex ⊗ QBit0.unindex)).unindex
+
+QBit2.cnot(QBit2(QBit1.unindex ⊗ QBit1.unindex)).unindex
+```
 
 ## Future Work
 
