@@ -1,6 +1,4 @@
-# Randomness and Uncertainty
-
-## Statistics
+# Statistics
 
 Common imports and implicits
 
@@ -12,7 +10,7 @@ import axle.probability._
 implicit val fieldDouble: Field[Double] = spire.implicits.DoubleAlgebra
 ```
 
-### Uniform Distribution
+## Uniform Distribution
 
 Example
 
@@ -20,7 +18,7 @@ Example
 val X = uniformDistribution(List(2d, 4d, 4d, 4d, 5d, 5d, 7d, 9d))
 ```
 
-### Standard Deviation
+## Standard Deviation
 
 Example
 
