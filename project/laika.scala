@@ -32,7 +32,7 @@ object AxleLaika {
             TextLink.internal(Root / "RegressionAnalysis.md", "Regression Analysis"),
             TextLink.internal(Root / "Classification.md", "Classification"),
             TextLink.internal(Root / "Clustering.md", "Clustering"),
-            TextLink.internal(Root / "EvolutionaryAlgorithms.md", "Evoluationary Algorithms"),
+            TextLink.internal(Root / "EvolutionaryAlgorithms.md", "Evolutionary Algorithms"),
             TextLink.internal(Root / "ProbabilityModel.md", "Probability Model"),
             TextLink.internal(Root / "InformationTheory.md", "Information Theory"),
             TextLink.internal(Root / "ProbabilisticGraphicalModels.md", "Probabilistic Graphical Models"),
