@@ -49,6 +49,6 @@ object AxleLaika {
           includeEPUB = false,
           includePDF = true)
         .pdf.tableOfContent(title = "Contents", depth = 4)
-        .pdf.coverImages(CoverImage(Root / "images" / "axle.png"))
+        .pdf.coverImages(CoverImage(Root / "images" / "pdf-cover.png"))
         .build
 }
