@@ -11,7 +11,7 @@ object AxleLaika {
     def theme(version: String): ThemeProvider =
         Helium
         .defaults
-        .site.tableOfContent(title = "Contents", depth = 4)
+        .site.tableOfContent(title = "Contents", depth = 3)
         .site.landingPage(
           logo = Some(Image.internal(Root / "images" / "axle.png")),
           title = Some("Axle"),
