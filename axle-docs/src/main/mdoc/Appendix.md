@@ -528,8 +528,10 @@ He can be reached at `adam@axle-lang.org`.
 
 ## Videos
 
-"Axle" talk at Scala by the Bay 2015
-[![Adam at SBTB 2015](https://img.youtube.com/vi/Y6NiPx-YpdE/hqdefault.jpg)](http://www.youtube.com/embed/Y6NiPx-YpdE)
+### "Axle" talk at Scala by the Bay 2015
 
-"Lawful AI" talk at Scale by the Bay 2017
+[![Adam at SBTB 2015](https://img.youtube.com/vi/Y6NiPx-YpdE/hqdefault.jpg)](https://www.youtube.com/watch?v=Y6NiPx-YpdE)
+
+### "Lawful AI" talk at Scale by the Bay 2017
+
 [![Adam at SBTB 2017](https://img.youtube.com/vi/YfMmU4JA27c/hqdefault.jpg)](https://www.youtube.com/watch?v=YfMmU4JA27c)
