@@ -60,6 +60,7 @@
         <li class="level1"><a href="GraphTheory.html">Graph Theory</a></li>
         <li class="level1"><a href="RandomnessUncertainty.html">Randomness and Uncertainty</a></li>
         <li class="level1"><a href="GameTheory.html">Game Theory</a></li>
+        <li class="level1"><a href="LinearAlgebra.html">Linear Algebra</a></li>
         <li class="level1"><a href="ChaosTheory.html">Chaos Theory</a></li>
         <li class="level1"><a href="MachineLearning.html">Machine Learning</a></li>
         <li class="level1"><a href="Biology.html">Biology</a></li>
@@ -124,7 +125,7 @@
         <p>Geometric mean</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">geometricMean</span><span>[</span><span class="type-name">Real</span><span>, </span><span class="type-name">List</span><span>](</span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>))
 </span><span class="comment">// res1: Real = Inexact(
-//   f = spire.math.Real$$Lambda$10520/0x00000008026d0000@4843e38d
+//   f = spire.math.Real$$Lambda$10647/0x00000008027ad6c8@3f42a48d
 // )</span></code></pre>
         <p>Harmonic mean</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">harmonicMean</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>))
@@ -168,9 +169,9 @@
     </span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>, </span><span class="number-literal">125d</span><span>, </span><span class="number-literal">625d</span><span>),
     </span><span class="number-literal">3</span><span>)
 </span><span class="comment">// res7: List[Real] = List(
-//   Inexact(f = spire.math.Real$$Lambda$10520/0x00000008026d0000@41277929),
-//   Inexact(f = spire.math.Real$$Lambda$10525/0x00000008027745b0@2172af86),
-//   Inexact(f = spire.math.Real$$Lambda$10525/0x00000008027745b0@5cc0d8cd)
+//   Inexact(f = spire.math.Real$$Lambda$10647/0x00000008027ad6c8@6e5a7864),
+//   Inexact(f = spire.math.Real$$Lambda$10652/0x00000008027b4000@650e0947),
+//   Inexact(f = spire.math.Real$$Lambda$10652/0x00000008027b4000@1179605e)
 // )</span></code></pre>
         <p>Moving harmonic mean</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">movingHarmonicMean</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Real</span><span>](
@@ -235,7 +236,7 @@
         to be used to represent the number of trials and support the Monte Carlo simulation and
         resulting aggregation.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">monteCarloPiEstimate</span><span>((</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">10000</span><span>).</span><span class="identifier">toList</span><span>, (</span><span class="identifier">n</span><span>: </span><span class="type-name">Int</span><span>) =&gt; </span><span class="identifier">n</span><span>.</span><span class="identifier">toDouble</span><span>)
-</span><span class="comment">// res21: Double = 3.1428</span></code></pre>
+</span><span class="comment">// res21: Double = 3.1632</span></code></pre>
         
         <h2 id="fibonacci" class="section"><a class="anchor-link left" href="#fibonacci"><i class="icofont-laika">&#xef71;</i></a>Fibonacci</h2>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">_</span></code></pre>
