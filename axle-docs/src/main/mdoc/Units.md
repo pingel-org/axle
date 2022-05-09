@@ -298,8 +298,10 @@ midpoints.map(_.show)
 
 ## Future Work
 
-The methods `over` and `by` are used to multiply and divide other values with units.
-This behavior is not yet implemented.
+* List `Distance` `UnitsOfMeasurement` (or a table of conversions to meter) rather than
+  show the `DirectedGraph`, since its a forward reference (and doesn't look nice anyway)
+
+* Implement the methods `over` and `by` -- multiply and divide other values with units.
 
 * Shapeless for compound Quanta and Bayesian Networks
 * Physics (eg, how Volume relates to Flow)
