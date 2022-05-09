@@ -208,7 +208,7 @@ XML includes `axle.web`, where HTML and SVG visualizations reside.
 "org.axle-lang" %% "axle-jblas" % "@RELEASE_VERSION@"
 ```
 
-[Linear Algebra](#linear-algebra) and other witnesses for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/).
+[Linear Algebra](LinearAlgebra.md) and other witnesses for [JBLAS](http://jblas.org/) which itself is a wrapper for [LAPACK](http://www.netlib.org/lapack/).
 Includes Principal Component Analysis (PCA).
 
 ### JODA
