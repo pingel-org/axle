@@ -1,4 +1,4 @@
-# Bioinformatics
+# Biology
 
 ## Needleman-Wunsch
 

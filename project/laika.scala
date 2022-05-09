@@ -29,7 +29,7 @@ object AxleLaika {
             TextLink.internal(Root / "GameTheory.md", "Game Theory"),
             TextLink.internal(Root / "ChaosTheory.md", "Chaos Theory"),
             TextLink.internal(Root / "MachineLearning.md", "Machine Learning"),
-            TextLink.internal(Root / "Bioinformatics.md", "Bioinformatics"),
+            TextLink.internal(Root / "Biology.md", "Biology"),
             TextLink.internal(Root / "Text.md", "Text"),
             TextLink.internal(Root / "QuantumCircuits.md", "Quantum Circuits"),
             TextLink.internal(Root / "Appendix.md", "Appendix")
