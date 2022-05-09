@@ -87,7 +87,7 @@ See the wikipedia page on [Logistic Regression](https://en.wikipedia.org/wiki/Lo
 
 Predict Test Pass Probability as a Function of Hours Studied
 
-```scala mdoc:silent
+```scala mdoc:silent:reset
 case class Student(hoursStudied: Double, testPassed: Boolean)
 
 val data = List(
