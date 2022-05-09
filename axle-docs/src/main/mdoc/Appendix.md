@@ -528,34 +528,8 @@ He can be reached at `adam@axle-lang.org`.
 
 ## Videos
 
-Talk at Scala by the Bay 2015
-<iframe
-  width="320"
-  height="195"
-  src="http://www.youtube.com/embed/Y6NiPx-YpdE"
-  frameborder="0">
-</iframe>
+"Axle" talk at Scala by the Bay 2015
+[![Adam at SBTB 2015](https://img.youtube.com/vi/Y6NiPx-YpdE/hqdefault.jpg)](http://www.youtube.com/embed/Y6NiPx-YpdE)
 
-Scala Introduction using the REPL
-<iframe
-  width="320"
-  height="195"
-  src="http://www.youtube.com/embed/N97GxqTFKAI"
-  frameborder="0">
-</iframe>
-
-Higher Order Scala Part 1: Functions as Arguments
-<iframe
-  width="320"
-  height="195"
-  src="http://www.youtube.com/embed/a6t7BYj4ZHo"
-  frameborder="0">
-</iframe>
-
-Higher Order Scala Part 2: Map & Functors
-<iframe
-  width="320"
-  height="195"
-  src="http://www.youtube.com/embed/YblKDlPqLnc"
-  frameborder="0">
-</iframe>
+"Lawful AI" talk at Scale by the Bay 2017
+[![Adam at SBTB 2017](https://img.youtube.com/vi/YfMmU4JA27c/hqdefault.jpg)](https://www.youtube.com/watch?v=YfMmU4JA27c)
