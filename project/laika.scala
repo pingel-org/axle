@@ -34,6 +34,7 @@ object AxleLaika {
             TextLink.internal(Root / "EvolutionaryAlgorithms.md", "Evoluationary Algorithms"),
             TextLink.internal(Root / "ProbabilityModel.md", "Probability Model"),
             TextLink.internal(Root / "InformationTheory.md", "Information Theory"),
+            TextLink.internal(Root / "ProbabilisticGraphicalModels.md", "Probabilistic Graphical Models"),
             TextLink.internal(Root / "RandomnessUncertainty.md", "Randomness and Uncertainty"),
             TextLink.internal(Root / "GameTheory.md", "Game Theory"),
             TextLink.internal(Root / "ChaosTheory.md", "Chaos Theory"),

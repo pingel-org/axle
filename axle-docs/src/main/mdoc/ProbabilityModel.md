@@ -512,3 +512,48 @@ As an alternative to Measure Theory, see Tobias Fritz's work on Markov Categorie
 ### Probabilistic and Differentiable Programming
 
 In general, the explosion of work on probabilistic and differentible programming is fertile ground for Axle's lawful approach.
+
+## Future Work
+
+* `{CPT,TD}.tailRecM` then ScalaCheck `Monad[CPT,TD]`
+* Functor for CPT, TD
+
+* `SigmaAlgebra` for the CPT
+  * Clean up expressions like `RegionIf[TWOROLLS](_._1 == '⚃)`
+  * Laws for `Region` ("Sigma Algebra"? [video](https://www.youtube.com/watch?v=21a85f1YS5Q))
+  * `OrderedRegion` for the `Order` used in `RegionLTE` and `RegionGTE`?
+
+* Measure Theory
+
+* Rename `ConditionalProbabilityTable`?
+
+* Laws for `Factor`
+
+* Bettings odds
+
+* Multi-armed bandit
+* Recursive grid search
+* P-values
+* z & t scores
+* Correlation
+* Regression
+* Accuracy, Precision
+* Bias, Variance
+* Cohen's Kappa
+
+* Rm throws from axle.stats.TallyDistribution
+
+* do-calculus (Causality)
+
+* Stochastic Lambda Calculus
+* Abadi Plotkin pathology
+* Jacobian Vector Products (JVP)
+
+* FLDR probability
+  * [probcomp github](https://github.com/probcomp/fast-loaded-dice-roller/)
+  * [MIT FSAAD slides](http://fsaad.mit.edu/assets/2020-08-20-fldr-slides.pdf)
+
+### Docs
+
+* Reorder Probability mdoc (Creation, Kolmogorov/Region, Sampler, Bayes, Monad)?
+  * Footnotes (Giry, etc)
