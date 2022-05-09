@@ -12,7 +12,7 @@ Lawful AI
 
 [![mandelbrot](/images/mandelbrot.png)](ChaosTheory.md#mandelbrot-set)
 
-[![coin entropy](/images/coinentropy.svg)](RandomnessUncertainty.md#example-entropy-of-a-biased-coin)
+[![coin entropy](/images/coinentropy.svg)](InformationTheory.md#example-entropy-of-a-biased-coin)
 
 [![alarm bayes](/images/alarm_bayes.svg)](RandomnessUncertainty.md#bayesian-networks)
 

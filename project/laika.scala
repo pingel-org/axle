@@ -30,6 +30,7 @@ object AxleLaika {
             TextLink.internal(Root / "LinearAlgebra.md", "Linear Algebra"),
             TextLink.internal(Root / "RegressionAnalysis.md", "Regression Analysis"),
             TextLink.internal(Root / "ProbabilityModel.md", "Probability Model"),
+            TextLink.internal(Root / "InformationTheory.md", "Information Theory"),
             TextLink.internal(Root / "RandomnessUncertainty.md", "Randomness and Uncertainty"),
             TextLink.internal(Root / "GameTheory.md", "Game Theory"),
             TextLink.internal(Root / "ChaosTheory.md", "Chaos Theory"),
