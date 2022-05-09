@@ -12,7 +12,7 @@ object AxleLaika {
         .defaults
         .site.tableOfContent(title = "Contents", depth = 4)
         .site.landingPage(
-          // logo = Some(Image(Root / "images" / "axle.png")),
+          logo = Some(Image.internal(Root / "images" / "axle.png")),
           title = Some("Axle"),
           subtitle = Some("Lawful Scientific Computing for Scala"),
           latestReleases = Seq(
