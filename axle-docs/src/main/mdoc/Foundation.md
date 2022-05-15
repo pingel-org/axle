@@ -195,19 +195,19 @@ Witnesses for [AWT](https://docs.oracle.com/javase/7/docs/api/java/awt/package-s
 
 #### Near term / minor
 
-  * General
-    * Expand acronyms and include wikipedia links in "Future Work" sections
-    * Make dependencies clear in each section
-  * Introduction
-    * Smaller images for Gallery
-  * Foundation
-    * Architecture
-  * Math
-    * Intro section bullets not nesting
-  * Random, Uncertain
-    * Bayesian network rendering is missing tables
-  * Text
-    * Say more about Python Grammar
+* General
+  * Expand acronyms and include wikipedia links in "Future Work" sections
+  * Make dependencies clear in each section
+* Introduction
+  * Smaller images for Gallery
+* Foundation
+  * Architecture
+* Math
+  * Intro section bullets not nesting
+* Random, Uncertain
+  * Bayesian network rendering is missing tables
+* Text
+  * Say more about Python Grammar
 
 #### Later
 
