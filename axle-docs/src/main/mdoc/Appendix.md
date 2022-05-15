@@ -221,7 +221,7 @@ In May 2013 he joined VigLink as Staff Software Engineer and later managed a tea
 In September 2015 he became VP of Engineering at Ravel Law.
 In June 2017 Ravel Law was acquired by LexisNexis, where he became a Sr. Director.
 In late 2019, he became the CTO of Global Platforms.
-In early 2022, he joined IBM's [Accelerated Science](https://research.ibm.com/teams/accelerated-discovery) team as a technical lead.
+In early 2022, he joined IBM's [Accelerated Discovery](https://research.ibm.com/teams/accelerated-discovery) team as Technical Lead for Generative Discovery.
 
 For more background, see his accounts on:
 
