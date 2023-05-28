@@ -159,18 +159,18 @@
 // C&gt; Door #1: 
 // C&gt; Door #2: 
 // C&gt; Door #3: 
-// M&gt; Door #1: goat
-// M&gt; Door #2: goat, first choice
-// M&gt; Door #3: car
-// C&gt; Door #1: , revealed goat
-// C&gt; Door #2: first choice
+// M&gt; Door #1: car, first choice
+// M&gt; Door #2: goat
+// M&gt; Door #3: goat
+// C&gt; Door #1: first choice
+// C&gt; Door #2: , revealed goat
 // C&gt; Door #3: 
 // endState: MontyHallState = MontyHallState(
-//   placement = Some(value = PlaceCar(door = 3)),
+//   placement = Some(value = PlaceCar(door = 1)),
 //   placed = true,
-//   firstChoice = Some(value = FirstChoice(door = 2)),
-//   reveal = Some(value = Reveal(door = 1)),
-//   secondChoice = Some(value = Right(value = Stay()))
+//   firstChoice = Some(value = FirstChoice(door = 1)),
+//   reveal = Some(value = Reveal(door = 2)),
+//   secondChoice = Some(value = Left(value = Change()))
 // )</span></code></pre>
         <p>Display outcome to each player</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span>: </span><span class="type-name">MontyHallOutcome</span><span> =
@@ -198,30 +198,30 @@
 </span><span class="keyword">def</span><span> </span><span class="declaration-name">winnerFromHandSize</span><span>(</span><span class="identifier">handSize</span><span>: </span><span class="type-name">Int</span><span>) =
   </span><span class="type-name">Deck</span><span>().</span><span class="identifier">cards</span><span>.</span><span class="identifier">take</span><span>(</span><span class="identifier">handSize</span><span>).</span><span class="identifier">combinations</span><span>(</span><span class="number-literal">5</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">cs</span><span> =&gt; </span><span class="type-name">PokerHand</span><span>(</span><span class="identifier">cs</span><span>.</span><span class="identifier">toVector</span><span>)).</span><span class="identifier">toList</span><span>.</span><span class="identifier">max</span></code></pre>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">winnerFromHandSize</span><span>(</span><span class="number-literal">7</span><span>).</span><span class="identifier">show</span><span>
-</span><span class="comment">// res4: String = &quot;2♣ 7♣ 9♣ T♣ K♣&quot;</span></code></pre>
+</span><span class="comment">// res4: String = &quot;7♠ 8♣ T♣ K♢ A♢&quot;</span></code></pre>
         <p>20 simulated 5-card hands made of 7-card hands.  Sorted.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">hands</span><span> = (</span><span class="number-literal">1</span><span> </span><span class="identifier">to</span><span> </span><span class="number-literal">20</span><span>).</span><span class="identifier">map</span><span>(</span><span class="identifier">n</span><span> =&gt; </span><span class="identifier">winnerFromHandSize</span><span>(</span><span class="number-literal">7</span><span>)).</span><span class="identifier">sorted</span></code></pre>
         <pre><code class="nohighlight"><span class="identifier">hands</span><span>.</span><span class="identifier">map</span><span>({ </span><span class="identifier">hand</span><span> =&gt; </span><span class="identifier">hand</span><span>.</span><span class="identifier">show</span><span> + </span><span class="string-literal">&quot;  &quot;</span><span> + </span><span class="identifier">hand</span><span>.</span><span class="identifier">description</span><span> }).</span><span class="identifier">mkString</span><span>(</span><span class="string-literal">&quot;</span><span class="escape-sequence">\n</span><span class="string-literal">&quot;</span><span>)
-</span><span class="comment">// res5: String = &quot;&quot;&quot;5♡ 6♢ 9♣ T♠ K♡  high K high
-// 7♡ 8♠ 9♢ J♠ A♠  high A high
-// 4♡ 6♠ 7♠ K♢ A♣  high A high
-// 2♢ 2♣ 9♠ T♢ K♢  pair of 2
-// 2♢ 2♣ T♡ J♢ A♡  pair of 2
-// 3♡ 3♢ 8♢ J♢ A♣  pair of 3
-// 4♡ 4♣ 6♣ 7♣ T♠  pair of 4
-// 5♠ 5♣ 8♣ 9♡ Q♡  pair of 5
-// 5♠ 5♣ T♠ J♣ Q♢  pair of 5
-// 6♠ 6♡ J♣ K♣ A♡  pair of 6
-// 7♡ 7♢ T♡ J♣ K♡  pair of 7
-// 9♢ T♢ T♣ K♡ A♡  pair of T
-// 5♢ 5♣ 8♠ 8♡ A♣  two pair 8 and 5
-// J♢ J♣ Q♡ Q♣ A♢  two pair Q and J
-// 2♠ 2♡ K♡ K♣ A♡  two pair K and 2
-// 5♠ 5♢ J♠ K♠ K♣  two pair K and 5
-// 8♡ Q♠ Q♡ K♡ K♣  two pair K and Q
-// 7♣ 8♢ 9♠ T♠ J♠  straight to J
-// 2♣ 5♣ 6♣ 7♣ K♣  flush in ♣
-// K♡ K♢ K♣ A♢ A♣  full house K over A&quot;&quot;&quot;</span></code></pre>
+</span><span class="comment">// res5: String = &quot;&quot;&quot;7♠ 8♠ T♡ J♠ K♡  high K high
+// 6♡ 9♢ T♢ J♢ K♠  high K high
+// 7♠ 8♢ J♣ Q♣ A♣  high A high
+// 7♣ T♡ J♡ K♢ A♡  high A high
+// 6♠ 8♠ Q♠ K♠ A♣  high A high
+// 7♠ T♢ Q♡ K♡ A♢  high A high
+// 5♠ 5♡ T♢ J♢ A♣  pair of 5
+// 5♠ 5♣ Q♣ K♣ A♣  pair of 5
+// 6♠ 6♡ 7♢ 8♢ K♡  pair of 6
+// 9♡ 9♢ J♠ Q♣ A♡  pair of 9
+// 7♢ 9♢ T♠ T♡ Q♠  pair of T
+// J♡ Q♡ Q♢ K♢ A♡  pair of Q
+// T♡ J♣ K♠ K♢ A♠  pair of K
+// 3♡ 3♢ 8♠ 8♣ K♢  two pair 8 and 3
+// 7♠ 7♢ T♠ T♢ Q♠  two pair T and 7
+// 4♡ 4♣ K♢ A♡ A♢  two pair A and 4
+// T♣ K♡ K♣ A♡ A♢  two pair A and K
+// 5♣ 8♣ 9♠ 9♡ 9♣  three of a kind of 9
+// T♡ J♡ K♡ K♢ K♣  three of a kind of K
+// T♠ J♡ Q♠ K♡ A♣  straight to A&quot;&quot;&quot;</span></code></pre>
         <p>Record 1000 simulated hands for each drawn hand size from 5 to 9</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">game</span><span>.</span><span class="identifier">poker</span><span>.</span><span class="type-name">PokerHandCategory</span><span>
 
@@ -304,104 +304,153 @@
 // P1&gt; Pot: 3
 // P1&gt; Shared: 
 // P1&gt; 
-// P1&gt; P1:  hand 5♠ 2♠ in for $1, $99 remaining
+// P1&gt; P1:  hand 4♡ 5♣ in for $1, $99 remaining
 // P1&gt; P2:  hand -- in for $2, $98 remaining
 // P2&gt; To: You
-// P2&gt; Current bet: 74
-// P2&gt; Pot: 76
+// P2&gt; Current bet: 87
+// P2&gt; Pot: 89
 // P2&gt; Shared: 
 // P2&gt; 
-// P2&gt; P1:  hand -- in for $74, $26 remaining
-// P2&gt; P2:  hand J♡ 5♢ in for $2, $98 remaining
+// P2&gt; P1:  hand -- in for $87, $13 remaining
+// P2&gt; P2:  hand J♢ 4♣ in for $2, $98 remaining
 // P1&gt; To: You
-// P1&gt; Current bet: 87
-// P1&gt; Pot: 161
+// P1&gt; Current bet: 93
+// P1&gt; Pot: 180
 // P1&gt; Shared: 
 // P1&gt; 
-// P1&gt; P1:  hand 5♠ 2♠ in for $74, $26 remaining
-// P1&gt; P2:  hand -- in for $87, $13 remaining
-// P2&gt; To: You
-// P2&gt; Current bet: 100
-// P2&gt; Pot: 187
-// P2&gt; Shared: 
-// P2&gt; 
-// P2&gt; P1:  hand -- in for $100, $0 remaining
-// P2&gt; P2:  hand J♡ 5♢ in for $87, $13 remaining
+// P1&gt; P1:  hand 4♡ 5♣ in for $87, $13 remaining
+// P1&gt; P2:  hand -- in for $93, $7 remaining
 // D&gt; To: You
-// D&gt; Current bet: 100
-// D&gt; Pot: 200
+// D&gt; Current bet: 93
+// D&gt; Pot: 186
 // D&gt; Shared: 
 // D&gt; 
-// D&gt; P1:  hand -- in for $100, $0 remaining
-// D&gt; P2:  hand -- in for $100, $0 remaining
+// D&gt; P1:  hand -- in for $93, $7 remaining
+// D&gt; P2:  hand -- in for $93, $7 remaining
+// P1&gt; To: You
+// P1&gt; Current bet: 0
+// P1&gt; Pot: 186
+// P1&gt; Shared: 6♢ K♣ K♠
+// P1&gt; 
+// P1&gt; P1:  hand 4♡ 5♣ in for $--, $7 remaining
+// P1&gt; P2:  hand -- in for $--, $7 remaining
+// P2&gt; To: You
+// P2&gt; Current bet: 1
+// P2&gt; Pot: 187
+// P2&gt; Shared: 6♢ K♣ K♠
+// P2&gt; 
+// P2&gt; P1:  hand -- in for $1, $6 remaining
+// P2&gt; P2:  hand J♢ 4♣ in for $--, $7 remaining
+// P1&gt; To: You
+// P1&gt; Current bet: 5
+// P1&gt; Pot: 192
+// P1&gt; Shared: 6♢ K♣ K♠
+// P1&gt; 
+// P1&gt; P1:  hand 4♡ 5♣ in for $1, $6 remaining
+// P1&gt; P2:  hand -- in for $5, $2 remaining
+// D&gt; To: You
+// D&gt; Current bet: 5
+// D&gt; Pot: 196
+// D&gt; Shared: 6♢ K♣ K♠
+// D&gt; 
+// D&gt; P1:  hand -- in for $5, $2 remaining
+// D&gt; P2:  hand -- in for $5, $2 remaining
+// P1&gt; To: You
+// P1&gt; Current bet: 0
+// P1&gt; Pot: 196
+// P1&gt; Shared: 6♢ K♣ K♠ Q♢
+// P1&gt; 
+// P1&gt; P1:  hand 4♡ 5♣ in for $--, $2 remaining
+// P1&gt; P2:  hand -- in for $--, $2 remaining
+// P2&gt; To: You
+// P2&gt; Current bet: 1
+// P2&gt; Pot: 197
+// P2&gt; Shared: 6♢ K♣ K♠ Q♢
+// P2&gt; 
+// P2&gt; P1:  hand -- in for $1, $1 remaining
+// P2&gt; P2:  hand J♢ 4♣ in for $--, $2 remaining
+// P1&gt; To: You
+// P1&gt; Current bet: 2
+// P1&gt; Pot: 199
+// P1&gt; Shared: 6♢ K♣ K♠ Q♢
+// P1&gt; 
+// P1&gt; P1:  hand 4♡ 5♣ in for $1, $1 remaining
+// P1&gt; P2:  hand -- in for $2, $0 remaining
+// D&gt; To: You
+// D&gt; Current bet: 2
+// D&gt; Pot: 200
+// D&gt; Shared: 6♢ K♣ K♠ Q♢
+// D&gt; 
+// D&gt; P1:  hand -- in for $2, $0 remaining
+// D&gt; P2:  hand -- in for $2, $0 remaining
 // P1&gt; To: You
 // P1&gt; Current bet: 0
 // P1&gt; Pot: 200
-// P1&gt; Shared: 9♡ A♣ 4♣
+// P1&gt; Shared: 6♢ K♣ K♠ Q♢ 4♠
 // P1&gt; 
-// P1&gt; P1:  hand 5♠ 2♠ in for $--, $0 remaining
+// P1&gt; P1:  hand 4♡ 5♣ in for $--, $0 remaining
 // P1&gt; P2:  hand -- in for $--, $0 remaining
 // P2&gt; To: You
 // P2&gt; Current bet: 0
 // P2&gt; Pot: 200
-// P2&gt; Shared: 9♡ A♣ 4♣
+// P2&gt; Shared: 6♢ K♣ K♠ Q♢ 4♠
 // P2&gt; 
 // P2&gt; P1:  hand -- in for $0, $0 remaining
-// P2&gt; P2:  hand J♡ 5♢ in for $--, $0 remaining
+// P2&gt; P2:  hand J♢ 4♣ in for $--, $0 remaining
 // D&gt; To: You
 // D&gt; Current bet: 0
 // D&gt; Pot: 200
-// D&gt; Shared: 9♡ A♣ 4♣
+// D&gt; Shared: 6♢ K♣ K♠ Q♢ 4♠
 // D&gt; 
 // D&gt; P1:  hand -- in for $0, $0 remaining
 // D&gt; P2:  hand -- out, $0 remaining
 // endState: PokerState = PokerState(
-//   moverFn = axle.game.poker.package$$anon$1$$Lambda$10673/0x000000080277aa78@1727e458,
+//   moverFn = axle.game.poker.package$$anon$1$$Lambda$8759/0x0000000802932220@5f997431,
 //   deck = Deck(
 //     cards = List(
 //       Card(
-//         rank = axle.game.cards.R8$@24825c76,
-//         suit = axle.game.cards.Hearts$@3918498c
+//         rank = axle.game.cards.R6$@693e1998,
+//         suit = axle.game.cards.Hearts$@a85589b
 //       ),
 //       Card(
-//         rank = axle.game.cards.Queen$@7d6ba9f3,
-//         suit = axle.game.cards.Hearts$@3918498c
+//         rank = axle.game.cards.R8$@2803a285,
+//         suit = axle.game.cards.Spades$@47e30cf8
 //       ),
 //       Card(
-//         rank = axle.game.cards.King$@7bbcbb06,
-//         suit = axle.game.cards.Clubs$@149349c
+//         rank = axle.game.cards.R5$@107e6237,
+//         suit = axle.game.cards.Diamonds$@21d3be3
 //       ),
 //       Card(
-//         rank = axle.game.cards.R5$@4cfd92fd,
-//         suit = axle.game.cards.Clubs$@149349c
+//         rank = axle.game.cards.R2$@3f27d270,
+//         suit = axle.game.cards.Diamonds$@21d3be3
 //       ),
 //       Card(
-//         rank = axle.game.cards.R4$@9fe0aa2,
-//         suit = axle.game.cards.Diamonds$@4486f5f8
+//         rank = axle.game.cards.R7$@46d6f200,
+//         suit = axle.game.cards.Hearts$@a85589b
 //       ),
 //       Card(
-//         rank = axle.game.cards.R8$@24825c76,
-//         suit = axle.game.cards.Diamonds$@4486f5f8
+//         rank = axle.game.cards.R2$@3f27d270,
+//         suit = axle.game.cards.Clubs$@9768e2e
 //       ),
 //       Card(
-//         rank = axle.game.cards.Jack$@3fa990cd,
-//         suit = axle.game.cards.Clubs$@149349c
+//         rank = axle.game.cards.R3$@ab2b152,
+//         suit = axle.game.cards.Clubs$@9768e2e
 //       ),
 //       Card(
-//         rank = axle.game.cards.King$@7bbcbb06,
-//         suit = axle.game.cards.Hearts$@3918498c
+//         rank = axle.game.cards.R8$@2803a285,
+//         suit = axle.game.cards.Diamonds$@21d3be3
 //       ),
 //       Card(
-//         rank = axle.game.cards.R10$@66e1cec3,
-//         suit = axle.game.cards.Hearts$@3918498c
+//         rank = axle.game.cards.R2$@3f27d270,
+//         suit = axle.game.cards.Hearts$@a85589b
 //       ),
 //       Card(
-//         rank = axle.game.cards.R3$@4864d24,
-//         suit = axle.game.cards.Diamonds$@4486f5f8
+//         rank = axle.game.cards.R8$@2803a285,
+//         suit = axle.game.cards.Clubs$@9768e2e
 //       ),
 //       Card(
-//         rank = axle.game.cards.R9$@33198d39,
-//         suit = axle.game.cards.Clubs$@149349c
+//         rank = axle.game.cards.R8$@2803a285,
+//         suit = axle.game.cards.Hearts$@a85589b
 //       ),
 // ...</span></code></pre>
         <p>Display outcome to each player</p>
@@ -461,24 +510,24 @@
 </span><span class="comment">// P1&gt; You have been caught
 // P2&gt; You have been caught
 // endState: PrisonersDilemmaState = PrisonersDilemmaState(
-//   p1Move = Some(value = Silence()),
+//   p1Move = Some(value = Betrayal()),
 //   p1Moved = true,
 //   p2Move = Some(value = Betrayal())
 // )</span></code></pre>
         <p>Display outcome to each player</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
 </span><span class="comment">// outcome: PrisonersDilemmaOutcome = PrisonersDilemmaOutcome(
-//   p1YearsInPrison = 3,
-//   p2YearsInPrison = 0
+//   p1YearsInPrison = 2,
+//   p2YearsInPrison = 2
 // )
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// P1&gt; You is imprisoned for 3 years
-// P1&gt; Player 2 is imprisoned for 0 years
-// P2&gt; Player 1 is imprisoned for 3 years
-// P2&gt; You is imprisoned for 0 years</span></code></pre>
+</span><span class="comment">// P1&gt; You is imprisoned for 2 years
+// P1&gt; Player 2 is imprisoned for 2 years
+// P2&gt; Player 1 is imprisoned for 2 years
+// P2&gt; You is imprisoned for 2 years</span></code></pre>
         
         <h2 id="tic-tac-toe" class="section"><a class="anchor-link left" href="#tic-tac-toe"><i class="icofont-laika">&#xef71;</i></a>Tic-Tac-Toe</h2>
         <p>A Perfect Information, Zero-sum game</p>
@@ -524,38 +573,46 @@
 // X&gt;  | |           7|8|9
 // O&gt; Board:         Movement Key:
 // O&gt;  | |           1|2|3
-// O&gt;  | |           4|5|6
-// O&gt;  | |X          7|8|9
+// O&gt;  | |X          4|5|6
+// O&gt;  | |           7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt;  | |O          1|2|3
-// X&gt;  | |           4|5|6
-// X&gt;  | |X          7|8|9
+// X&gt;  | |           1|2|3
+// X&gt;  |O|X          4|5|6
+// X&gt;  | |           7|8|9
 // O&gt; Board:         Movement Key:
-// O&gt;  | |O          1|2|3
-// O&gt; X| |           4|5|6
-// O&gt;  | |X          7|8|9
+// O&gt;  | |           1|2|3
+// O&gt;  |O|X          4|5|6
+// O&gt; X| |           7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt;  | |O          1|2|3
-// X&gt; X| |           4|5|6
-// X&gt;  |O|X          7|8|9
+// X&gt;  | |           1|2|3
+// X&gt; O|O|X          4|5|6
+// X&gt; X| |           7|8|9
 // O&gt; Board:         Movement Key:
-// O&gt;  | |O          1|2|3
-// O&gt; X|X|           4|5|6
-// O&gt;  |O|X          7|8|9
+// O&gt;  |X|           1|2|3
+// O&gt; O|O|X          4|5|6
+// O&gt; X| |           7|8|9
 // X&gt; Board:         Movement Key:
-// X&gt;  |O|O          1|2|3
-// X&gt; X|X|           4|5|6
-// X&gt;  |O|X          7|8|9
+// X&gt;  |X|           1|2|3
+// X&gt; O|O|X          4|5|6
+// X&gt; X|O|           7|8|9
+// O&gt; Board:         Movement Key:
+// O&gt; X|X|           1|2|3
+// O&gt; O|O|X          4|5|6
+// O&gt; X|O|           7|8|9
+// X&gt; Board:         Movement Key:
+// X&gt; X|X|O          1|2|3
+// X&gt; O|O|X          4|5|6
+// X&gt; X|O|           7|8|9
 // endState: TicTacToeState = TicTacToeState(
-//   moverOpt = None,
+//   moverOpt = Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
 //   board = Array(
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
+//     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;)),
-//     None,
-//     None,
 //     Some(value = Player(id = &quot;O&quot;, description = &quot;Player O&quot;)),
 //     Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;))
 //   ),
@@ -563,15 +620,13 @@
 // )</span></code></pre>
         <p>Display outcome to each player</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">outcome</span><span> = </span><span class="identifier">evGame</span><span>.</span><span class="identifier">mover</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">endState</span><span>).</span><span class="identifier">swap</span><span>.</span><span class="identifier">toOption</span><span>.</span><span class="identifier">get</span><span>
-</span><span class="comment">// outcome: TicTacToeOutcome = TicTacToeOutcome(
-//   winner = Some(value = Player(id = &quot;X&quot;, description = &quot;Player X&quot;))
-// )
+</span><span class="comment">// outcome: TicTacToeOutcome = TicTacToeOutcome(winner = None)
 </span><span>
 </span><span class="identifier">evGame</span><span>.</span><span class="identifier">players</span><span>(</span><span class="identifier">game</span><span>).</span><span class="identifier">foreach</span><span> { </span><span class="identifier">player</span><span> =&gt;
   </span><span class="identifier">playerToWriter</span><span>(</span><span class="identifier">player</span><span>)(</span><span class="identifier">evGameIO</span><span>.</span><span class="identifier">displayOutcomeTo</span><span>(</span><span class="identifier">game</span><span>, </span><span class="identifier">outcome</span><span>, </span><span class="identifier">player</span><span>)).</span><span class="identifier">unsafeRunSync</span><span>()
 }
-</span><span class="comment">// X&gt; You beat Player O!
-// O&gt; Player X beat You!</span></code></pre>
+</span><span class="comment">// X&gt; The game was a draw.
+// O&gt; The game was a draw.</span></code></pre>
         
         <h2 id="future-work" class="section"><a class="anchor-link left" href="#future-work"><i class="icofont-laika">&#xef71;</i></a>Future Work</h2>
         

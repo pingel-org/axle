@@ -127,7 +127,7 @@
         <p>Geometric mean</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">geometricMean</span><span>[</span><span class="type-name">Real</span><span>, </span><span class="type-name">List</span><span>](</span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>))
 </span><span class="comment">// res1: Real = Inexact(
-//   f = spire.math.Real$$Lambda$10977/0x000000080284de60@3241785
+//   f = spire.math.Real$$Lambda$9061/0x00000008029f21f8@7c897b00
 // )</span></code></pre>
         <p>Harmonic mean</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">harmonicMean</span><span>(</span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>))
@@ -140,7 +140,7 @@
 </span><span class="comment">// res3: Double = 3.5</span></code></pre>
         <p>As <code>p</code> approaches 0, it is the geometric mean.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">generalizedMean</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">List</span><span>](</span><span class="number-literal">0.0001</span><span>, </span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>))
-</span><span class="comment">// res4: Double = 5.00043173370165</span></code></pre>
+</span><span class="comment">// res4: Double = 5.000431733701651</span></code></pre>
         <p>At -1 it is the harmonic mean.</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">generalizedMean</span><span>[</span><span class="type-name">Double</span><span>, </span><span class="type-name">List</span><span>](-</span><span class="number-literal">1d</span><span>, </span><span class="type-name">List</span><span>(</span><span class="number-literal">2d</span><span>, </span><span class="number-literal">3d</span><span>, </span><span class="number-literal">4d</span><span>, </span><span class="number-literal">5d</span><span>))
 </span><span class="comment">// res5: Double = 3.116883116883117</span></code></pre>
@@ -171,9 +171,9 @@
     </span><span class="type-name">List</span><span>(</span><span class="number-literal">1d</span><span>, </span><span class="number-literal">5d</span><span>, </span><span class="number-literal">25d</span><span>, </span><span class="number-literal">125d</span><span>, </span><span class="number-literal">625d</span><span>),
     </span><span class="number-literal">3</span><span>)
 </span><span class="comment">// res7: List[Real] = List(
-//   Inexact(f = spire.math.Real$$Lambda$10977/0x000000080284de60@56119b9b),
-//   Inexact(f = spire.math.Real$$Lambda$10869/0x00000008027fe1b8@30e2f156),
-//   Inexact(f = spire.math.Real$$Lambda$10869/0x00000008027fe1b8@717ac5da)
+//   Inexact(f = spire.math.Real$$Lambda$9061/0x00000008029f21f8@39749105),
+//   Inexact(f = spire.math.Real$$Lambda$8953/0x00000008029b6580@5ca9e6bb),
+//   Inexact(f = spire.math.Real$$Lambda$8953/0x00000008029b6580@7874dc8)
 // )</span></code></pre>
         <p>Moving harmonic mean</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="identifier">movingHarmonicMean</span><span>[</span><span class="type-name">List</span><span>, </span><span class="type-name">Int</span><span>, </span><span class="type-name">Real</span><span>](
@@ -252,27 +252,27 @@
         <p>Demonstrate it uniformly sampling 15 of the first 100 integers</p>
         <pre><code class="nohighlight"><span class="keyword">val</span><span> </span><span class="identifier">sample</span><span> = </span><span class="identifier">reservoirSampleK</span><span>(</span><span class="number-literal">15</span><span>, </span><span class="type-name">LazyList</span><span>.</span><span class="identifier">from</span><span>(</span><span class="number-literal">1</span><span>), </span><span class="identifier">rng</span><span>).</span><span class="identifier">drop</span><span>(</span><span class="number-literal">100</span><span>).</span><span class="identifier">head</span><span>
 </span><span class="comment">// sample: List[Int] = List(
-//   98,
-//   90,
-//   86,
+//   101,
+//   88,
+//   85,
+//   77,
 //   67,
-//   64,
-//   63,
-//   60,
+//   61,
 //   59,
-//   57,
-//   46,
-//   42,
-//   31,
-//   30,
-//   22,
-//   7
+//   56,
+//   55,
+//   51,
+//   45,
+//   40,
+//   39,
+//   23,
+//   4
 // )</span></code></pre>
         <p>The mean of the sample should be in the ballpark of the mean of the entire list (50.5):</p>
         <pre class="keep-together pdf epub"><code class="nohighlight"><span class="keyword">import</span><span> </span><span class="identifier">axle</span><span>.</span><span class="identifier">math</span><span>.</span><span class="identifier">arithmeticMean</span><span>
 
 </span><span class="identifier">arithmeticMean</span><span>(</span><span class="identifier">sample</span><span>.</span><span class="identifier">map</span><span>(</span><span class="identifier">_</span><span>.</span><span class="identifier">toDouble</span><span>))
-</span><span class="comment">// res19: Double = 54.8</span></code></pre>
+</span><span class="comment">// res19: Double = 56.733333333333334</span></code></pre>
         <p>Indeed it is.</p>
         
         <h2 id="future-work" class="section"><a class="anchor-link left" href="#future-work"><i class="icofont-laika">&#xef71;</i></a>Future Work</h2>
