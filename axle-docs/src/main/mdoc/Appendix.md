@@ -6,7 +6,9 @@ See [Release Notes](#release-notes) for the record of previously released featur
 
 ### 0.6.7
 
-* Near-term stuff from [quantum circuit future work](QuantumCircuits.md#future-work)
+Version upgrades
+
+Near-term stuff from [quantum circuit future work](QuantumCircuits.md#future-work)
 
 ### 0.7.x Scala 3
 
@@ -30,7 +32,7 @@ See [Future work](Foundation.md#future-work) for Foundation
 
 ### 0.11.x Text improvements
 
-* Near-term stuff from [text](Text.md#future-work)
+Near-term stuff from [text](Text.md#future-work)
 
 ### 0.12.x Visualization
 
